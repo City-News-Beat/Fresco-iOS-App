@@ -9,12 +9,24 @@
 /* Begin PBXBuildFile section */
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B81AA4CCC70082E08D /* AppDelegate.m */; };
-		1EDA44BC1AA4CCC70082E08D /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* FirstViewController.m */; };
+		1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */; };
 		1EDA44BF1AA4CCC70082E08D /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */; };
 		1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C01AA4CCC70082E08D /* Main.storyboard */; };
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
 		1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */; };
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
+		1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F61AA4D0730082E08D /* FRSPost.m */; };
+		1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F91AA4D0730082E08D /* FRSTag.m */; };
+		1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */; };
+		1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FF1AA4D0730082E08D /* FRSUser.m */; };
+		1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */; };
+		1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA450C1AA4E2BD0082E08D /* PostView.m */; };
+		1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* FRSStoryListCell.m */; };
+		1EDA45131AA4F8640082E08D /* FRSStoryListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA45111AA4F8640082E08D /* FRSStoryListCell.xib */; };
+		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
+		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
+		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
+		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,8 +45,8 @@
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44B71AA4CCC70082E08D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1EDA44B81AA4CCC70082E08D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1EDA44BA1AA4CCC70082E08D /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		1EDA44BB1AA4CCC70082E08D /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		1EDA44BD1AA4CCC70082E08D /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		1EDA44C11AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -43,6 +55,30 @@
 		1EDA44CC1AA4CCC70082E08D /* FrescoNewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrescoNewsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44D11AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrescoNewsTests.m; sourceTree = "<group>"; };
+		1EDA44F51AA4D0730082E08D /* FRSPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPost.h; sourceTree = "<group>"; };
+		1EDA44F61AA4D0730082E08D /* FRSPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPost.m; sourceTree = "<group>"; };
+		1EDA44F81AA4D0730082E08D /* FRSTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTag.h; sourceTree = "<group>"; };
+		1EDA44F91AA4D0730082E08D /* FRSTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTag.m; sourceTree = "<group>"; };
+		1EDA44FB1AA4D0730082E08D /* FRSTradionalSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTradionalSource.h; sourceTree = "<group>"; };
+		1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTradionalSource.m; sourceTree = "<group>"; };
+		1EDA44FE1AA4D0730082E08D /* FRSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUser.h; sourceTree = "<group>"; };
+		1EDA44FF1AA4D0730082E08D /* FRSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUser.m; sourceTree = "<group>"; };
+		1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RelativeDate.h"; sourceTree = "<group>"; };
+		1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RelativeDate.m"; sourceTree = "<group>"; };
+		1EDA450B1AA4E2BD0082E08D /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostView.h; path = Views/PostView.h; sourceTree = "<group>"; };
+		1EDA450C1AA4E2BD0082E08D /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostView.m; path = Views/PostView.m; sourceTree = "<group>"; };
+		1EDA450F1AA4F8640082E08D /* FRSStoryListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryListCell.h; sourceTree = "<group>"; };
+		1EDA45101AA4F8640082E08D /* FRSStoryListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryListCell.m; sourceTree = "<group>"; };
+		1EDA45111AA4F8640082E08D /* FRSStoryListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryListCell.xib; sourceTree = "<group>"; };
+		1EDA45141AA500EE0082E08D /* FRSDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDataManager.h; sourceTree = "<group>"; };
+		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
+		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
+		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
+		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
+		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
+		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80AA49FED257B703E367D68E /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,12 +100,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				96C32138EB19F136689A3D6B /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1EDA44A71AA4CCC70082E08D = {
 			isa = PBXGroup;
 			children = (
 				1EDA44B21AA4CCC70082E08D /* FrescoNews */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
 				1EDA44B11AA4CCC70082E08D /* Products */,
+				BE77E1E79885C4C61AC87E44 /* Pods */,
+				1B35C7E2C0D16DEBE7A411F8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,12 +131,13 @@
 		1EDA44B21AA4CCC70082E08D /* FrescoNews */ = {
 			isa = PBXGroup;
 			children = (
+				1EDA45041AA4D0B10082E08D /* Categories */,
+				1EDA44DF1AA4CD0D0082E08D /* Singletons */,
+				1EDA44F31AA4D0730082E08D /* Models */,
+				1EDA44DD1AA4CCF20082E08D /* Views */,
+				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
 				1EDA44B71AA4CCC70082E08D /* AppDelegate.h */,
 				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
-				1EDA44BA1AA4CCC70082E08D /* FirstViewController.h */,
-				1EDA44BB1AA4CCC70082E08D /* FirstViewController.m */,
-				1EDA44BD1AA4CCC70082E08D /* SecondViewController.h */,
-				1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */,
@@ -124,6 +172,115 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1EDA44DD1AA4CCF20082E08D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA450E1AA4F8640082E08D /* ListView */,
+				1EDA450B1AA4E2BD0082E08D /* PostView.h */,
+				1EDA450C1AA4E2BD0082E08D /* PostView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
+				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				1EDA44BD1AA4CCC70082E08D /* SecondViewController.h */,
+				1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1EDA44DF1AA4CD0D0082E08D /* Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA45141AA500EE0082E08D /* FRSDataManager.h */,
+				1EDA45151AA500EE0082E08D /* FRSDataManager.m */,
+			);
+			name = Singletons;
+			sourceTree = "<group>";
+		};
+		1EDA44F31AA4D0730082E08D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44F41AA4D0730082E08D /* News Story */,
+				1EDA44F71AA4D0730082E08D /* Tag */,
+				1EDA44FA1AA4D0730082E08D /* Traditional Source */,
+				1EDA44FD1AA4D0730082E08D /* User */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1EDA44F41AA4D0730082E08D /* News Story */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44F51AA4D0730082E08D /* FRSPost.h */,
+				1EDA44F61AA4D0730082E08D /* FRSPost.m */,
+			);
+			path = "News Story";
+			sourceTree = "<group>";
+		};
+		1EDA44F71AA4D0730082E08D /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44F81AA4D0730082E08D /* FRSTag.h */,
+				1EDA44F91AA4D0730082E08D /* FRSTag.m */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		1EDA44FA1AA4D0730082E08D /* Traditional Source */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44FB1AA4D0730082E08D /* FRSTradionalSource.h */,
+				1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */,
+			);
+			path = "Traditional Source";
+			sourceTree = "<group>";
+		};
+		1EDA44FD1AA4D0730082E08D /* User */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44FE1AA4D0730082E08D /* FRSUser.h */,
+				1EDA44FF1AA4D0730082E08D /* FRSUser.m */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		1EDA45041AA4D0B10082E08D /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */,
+				1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */,
+				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
+				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
+				1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */,
+				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		1EDA450E1AA4F8640082E08D /* ListView */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA450F1AA4F8640082E08D /* FRSStoryListCell.h */,
+				1EDA45101AA4F8640082E08D /* FRSStoryListCell.m */,
+				1EDA45111AA4F8640082E08D /* FRSStoryListCell.xib */,
+			);
+			path = ListView;
+			sourceTree = "<group>";
+		};
+		BE77E1E79885C4C61AC87E44 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */,
+				9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -131,9 +288,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoNews" */;
 			buildPhases = (
+				A712045BA4FF7C3ECD55DD1A /* Check Pods Manifest.lock */,
 				1EDA44AC1AA4CCC70082E08D /* Sources */,
 				1EDA44AD1AA4CCC70082E08D /* Frameworks */,
 				1EDA44AE1AA4CCC70082E08D /* Resources */,
+				BCA811ECB60B44FE48F07483 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -205,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
+				1EDA45131AA4F8640082E08D /* FRSStoryListCell.xib in Resources */,
 				1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 			);
@@ -219,14 +379,57 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A712045BA4FF7C3ECD55DD1A /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BCA811ECB60B44FE48F07483 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1EDA44AC1AA4CCC70082E08D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* SecondViewController.m in Sources */,
+				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
+				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
-				1EDA44BC1AA4CCC70082E08D /* FirstViewController.m in Sources */,
+				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
+				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
+				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
+				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
+				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
+				1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */,
+				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
+				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,6 +550,7 @@
 		};
 		1EDA44D71AA4CCC70082E08D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -357,6 +561,7 @@
 		};
 		1EDA44D81AA4CCC70082E08D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -418,6 +623,7 @@
 				1EDA44D81AA4CCC70082E08D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoNewsTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +632,7 @@
 				1EDA44DB1AA4CCC70082E08D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

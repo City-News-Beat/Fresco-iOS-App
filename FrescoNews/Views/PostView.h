@@ -1,5 +1,5 @@
 //
-//  FirstViewController.h
+//  PostView.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/2/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstViewController : UIViewController
-
+@interface PostView : UIView
 
 @end
-
