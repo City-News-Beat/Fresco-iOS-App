@@ -45,7 +45,20 @@
 #pragma mark - Utility methods
 - (void)setupAppearances
 {
-    [[UITabBar appearance] setTintColor:[UIColor yellowColor]];
+    [self setupTabBarAppearances];
 }
 
+- (void)setupTabBarAppearances
+{
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:@"FFB814"]];
+    
+    NSArray *highlightedTabNames = @[@"tab-home-highlighted", @"tab-stories-highlighted"];
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBar *tabBar = tabBarController.tabBar;
+    int i = 0;
+    for (UITabBarItem *item in tabBar.items) {
+        item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
+        ++i;
+    }
+}
 @end

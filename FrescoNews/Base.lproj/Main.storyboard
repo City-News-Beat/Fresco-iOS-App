@@ -7,7 +7,7 @@
         <!--Home Navigation-->
         <scene sceneID="WFY-08-iPs">
             <objects>
-                <navigationController title="Home Navigation" id="G0t-Ny-nTp" sceneMemberID="viewController">
+                <navigationController title="Home Navigation" id="G0t-Ny-nTp" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="tab-home" id="2v8-GA-Shr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="CeV-bX-2LY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -25,7 +25,7 @@
         <!--Stories Navigation-->
         <scene sceneID="Otg-Ku-LXh">
             <objects>
-                <navigationController id="nrD-Yo-BnT" userLabel="Stories Navigation" sceneMemberID="viewController">
+                <navigationController id="nrD-Yo-BnT" userLabel="Stories Navigation" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Stories" image="tab-stories" id="Ud2-P8-IOw"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Jhv-Lu-hVY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

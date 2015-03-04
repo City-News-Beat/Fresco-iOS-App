@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSTag.h"
 #import "FRSStoryListCell.h"
@@ -40,8 +41,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.navigationItem.title = @"HOME";
+
+    [self setFrescoImageHeader];
+
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     
