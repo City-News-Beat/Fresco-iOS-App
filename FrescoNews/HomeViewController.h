@@ -1,5 +1,5 @@
 //
-//  FirstViewController.h
+//  HomeViewController.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/2/15.

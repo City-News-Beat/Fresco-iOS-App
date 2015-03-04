@@ -1,5 +1,5 @@
 //
-//  FRSStoryDetailViewCell.h
+//  FRSStoryListCell.h
 //  Fresco
 //
 //  Created by Team Fresco on 2/9/14.
