@@ -1,5 +1,5 @@
 //
-//  FRSNewsStory.h
+//  FRSPost.h
 //  Fresco
 //
 //  Created by Moshe Berman on 2/2/14.

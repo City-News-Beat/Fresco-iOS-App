@@ -1,5 +1,5 @@
 //
-//  StoriesController.m
+//  StoriesViewController.m
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/4/15.
