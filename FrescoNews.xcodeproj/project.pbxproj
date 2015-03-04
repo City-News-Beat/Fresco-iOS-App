@@ -10,7 +10,7 @@
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B81AA4CCC70082E08D /* AppDelegate.m */; };
 		1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */; };
-		1EDA44BF1AA4CCC70082E08D /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */; };
+		1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */; };
 		1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C01AA4CCC70082E08D /* Main.storyboard */; };
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
 		1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */; };
@@ -47,8 +47,8 @@
 		1EDA44B81AA4CCC70082E08D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		1EDA44BD1AA4CCC70082E08D /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
-		1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StoriesViewController.h; sourceTree = "<group>"; };
+		1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoriesViewController.m; sourceTree = "<group>"; };
 		1EDA44C11AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EDA44C31AA4CCC70082E08D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1EDA44C61AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -187,8 +187,8 @@
 			children = (
 				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
-				1EDA44BD1AA4CCC70082E08D /* SecondViewController.h */,
-				1EDA44BE1AA4CCC70082E08D /* SecondViewController.m */,
+				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
+				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -418,7 +418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
-				1EDA44BF1AA4CCC70082E08D /* SecondViewController.m in Sources */,
+				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,

@@ -16,7 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [self setupAppearances];
     return YES;
 }
 
@@ -40,6 +40,12 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - Utility methods
+- (void)setupAppearances
+{
+    [[UITabBar appearance] setTintColor:[UIColor yellowColor]];
 }
 
 @end

@@ -4,52 +4,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
-        <!--Tabbed Home View Controller-->
-        <scene sceneID="hNz-n2-bh7">
-            <objects>
-                <viewController storyboardIdentifier="Home" title="Tabbed Home View Controller" id="9pv-A4-QxB" customClass="HomeViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
-                        <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="B0t-2P-3CV">
-                                <rect key="frame" x="0.0" y="20" width="600" height="531"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FsT-TI-tQW">
-                                    <size key="itemSize" width="541" height="191"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                            </collectionView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="B0t-2P-3CV" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" id="Ynz-fu-sSZ"/>
-                            <constraint firstAttribute="trailing" secondItem="B0t-2P-3CV" secondAttribute="trailing" id="ewM-ai-JjE"/>
-                            <constraint firstItem="B0t-2P-3CV" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" id="pDR-bD-eJb"/>
-                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="B0t-2P-3CV" secondAttribute="bottom" id="rQx-Py-Agt"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
-                    <connections>
-                        <outlet property="collectionView" destination="B0t-2P-3CV" id="t4g-5i-Hv0"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="720" y="-320"/>
-        </scene>
-        <!--Navigation-->
+        <!--Home Navigation-->
         <scene sceneID="WFY-08-iPs">
             <objects>
-                <navigationController id="G0t-Ny-nTp" userLabel="Navigation" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="NavBar" image="second" id="2v8-GA-Shr"/>
+                <navigationController title="Home Navigation" id="G0t-Ny-nTp" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="tab-home" id="2v8-GA-Shr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="CeV-bX-2LY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -61,7 +20,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wUI-hC-GD6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="720" y="336"/>
+            <point key="canvasLocation" x="703" y="0.0"/>
+        </scene>
+        <!--Stories Navigation-->
+        <scene sceneID="Otg-Ku-LXh">
+            <objects>
+                <navigationController id="nrD-Yo-BnT" userLabel="Stories Navigation" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Stories" image="tab-stories" id="Ud2-P8-IOw"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Jhv-Lu-hVY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="1" green="0.83137261870000001" blue="0.2823529541" alpha="0.47999999999999998" colorSpace="deviceRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ZA6-zD-xIQ" kind="relationship" relationship="rootViewController" id="uO6-ya-MwN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BVd-OD-SRw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="703" y="776"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="wg7-f3-ORb">
@@ -101,7 +78,47 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1397" y="336"/>
+            <point key="canvasLocation" x="1460" y="0.0"/>
+        </scene>
+        <!--Stories View Controller-->
+        <scene sceneID="DFa-lo-ERH">
+            <objects>
+                <viewController id="ZA6-zD-xIQ" userLabel="Stories View Controller" customClass="StoriesViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7n6-in-c6j"/>
+                        <viewControllerLayoutGuide type="bottom" id="CXo-IK-Qe3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L9y-q5-azQ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="87K-vD-90u">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Dp2-wx-cog">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="87K-vD-90u" secondAttribute="trailing" id="Ioa-r8-yNT"/>
+                            <constraint firstItem="87K-vD-90u" firstAttribute="leading" secondItem="L9y-q5-azQ" secondAttribute="leading" id="Zs8-3h-f4u"/>
+                            <constraint firstItem="CXo-IK-Qe3" firstAttribute="top" secondItem="87K-vD-90u" secondAttribute="bottom" constant="-49" id="av7-5X-WmF"/>
+                            <constraint firstItem="87K-vD-90u" firstAttribute="top" secondItem="7n6-in-c6j" secondAttribute="bottom" constant="-64" id="hgG-dh-Iix"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0iR-yg-grc"/>
+                    <connections>
+                        <outlet property="collectionView" destination="87K-vD-90u" id="hcX-HW-Dl9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="twO-ek-izW" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1460" y="776"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -114,8 +131,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="G0t-Ny-nTp" kind="relationship" relationship="viewControllers" id="ZvN-uJ-x5C"/>
+                        <segue destination="nrD-Yo-BnT" kind="relationship" relationship="viewControllers" id="WN6-Um-Asf"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -124,7 +141,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="tab-home" width="32" height="32"/>
+        <image name="tab-stories" width="28" height="28"/>
     </resources>
 </document>
