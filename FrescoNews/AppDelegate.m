@@ -70,3 +70,24 @@
     }
 }
 @end
+
+// Category for controlling all the view controllers
+@implementation UITabBarController (FrescoNews)
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
+-(NSUInteger)supportedInterfaceOrientations
+{
+ /*   if ([self.selectedViewController isKindOfClass:[CameraViewController class]])
+        return UIInterfaceOrientationMaskAllButUpsideDown;*/
+    
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+@end
