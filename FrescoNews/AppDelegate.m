@@ -53,9 +53,14 @@
 
 - (void)setupTabBarAppearances
 {
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:@"FFB814"]];
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
     
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted", @"tab-stories-highlighted"];
+    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
+                                     @"tab-stories-highlighted",
+                                     @"tab-camera-highlighted",
+                                     @"tab-assignments-highlighted",
+                                     @"tab-profile-highlighted"];
+    
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBar *tabBar = tabBarController.tabBar;
     int i = 0;

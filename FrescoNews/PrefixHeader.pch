@@ -10,5 +10,6 @@
 #define FrescoNews_PrefixHeader_pch
 
 #import "UIColor+Additions.h"
+#import "VariableStore.h"
 
 #endif

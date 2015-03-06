@@ -10,6 +10,10 @@
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
+		1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */; };
+		1ED9A3281AA9FFB6009BD7A3 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */; };
+		1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */; };
+		1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B81AA4CCC70082E08D /* AppDelegate.m */; };
 		1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */; };
@@ -50,6 +54,14 @@
 		1E408B791AA7A4580057AC16 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
+		1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableStore.h; sourceTree = "<group>"; };
+		1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VariableStore.m; sourceTree = "<group>"; };
+		1ED9A3261AA9FFB6009BD7A3 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentsViewController.h; sourceTree = "<group>"; };
+		1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentsViewController.m; sourceTree = "<group>"; };
+		1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		1EDA44B01AA4CCC70082E08D /* FrescoNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrescoNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B41AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -162,6 +174,8 @@
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
+				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
+				1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */,
 			);
 			path = FrescoNews;
 			sourceTree = "<group>";
@@ -210,6 +224,12 @@
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
+				1ED9A3261AA9FFB6009BD7A3 /* CameraViewController.h */,
+				1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */,
+				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
+				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
+				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
+				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -443,12 +463,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
+				1ED9A3281AA9FFB6009BD7A3 /* CameraViewController.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
+				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
+				1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
+				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
 				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
