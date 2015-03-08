@@ -45,8 +45,9 @@
 
     [self setFrescoImageHeader];
 
-    UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
-    [self.tableView registerNib:storyCellNib forCellReuseIdentifier:[FRSStoryListCell identifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[FRSStoryListCell identifier]];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 65.0;
 
     [self performNecessaryFetch:nil];
 }
@@ -156,10 +157,10 @@
     //If we are in the master list
     // if (collectionView == [self listCollectionView]) {
     
-    FRSStoryListCell *storyCell = [tableView dequeueReusableCellWithIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
-    [storyCell setPost:cellStory];
-    
-    return storyCell;
+    FRSStoryListCell *cell = [tableView dequeueReusableCellWithIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
+    [cell setPost:cellStory];
+
+    return cell;
     
     //}
     /*

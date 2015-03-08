@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSPost.h"
 
-@interface FRSStoryListCell: UITableViewCell
+@interface FRSStoryListCell : UITableViewCell
 
 // @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet UILabel *authorLabel;

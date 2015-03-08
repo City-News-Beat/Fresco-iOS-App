@@ -42,7 +42,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 {
     _post = post;
 
-    [self.captionLabel setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:self.post.relativeDateString]];
+    self.captionLabel.attributedText = [[self class] attributedStringForCaption:self.post.caption date:self.post.relativeDateString];
     self.authorLabel.text = self.post.byline;
     self.timePlaceLabel.text = [self.post relativeDateString];
     /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
@@ -51,7 +51,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
         [[self imageView] setImage:cachedImage];
     }
     else {*/
-        [[self imageView] setImageWithURL:[_post largeImageURL]];
+///        [[self imageView] setImageWithURL:[_post largeImageURL]];
    // }
 
 }
