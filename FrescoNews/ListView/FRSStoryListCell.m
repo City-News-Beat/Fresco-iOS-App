@@ -43,8 +43,8 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
     _post = post;
 
     self.captionLabel.attributedText = [[self class] attributedStringForCaption:self.post.caption date:self.post.relativeDateString];
-    self.authorLabel.text = self.post.byline;
-    self.timePlaceLabel.text = [self.post relativeDateString];
+    self.bylineLabel.text = self.post.byline;
+    self.timeAndPlaceLabel.text = [self.post relativeDateString];
     /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
     
     if (cachedImage) {
