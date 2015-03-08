@@ -55,12 +55,6 @@
                 <constraint firstItem="PL6-RG-rTk" firstAttribute="baseline" secondItem="u2m-AH-CMe" secondAttribute="baseline" id="ySG-lX-jon"/>
             </constraints>
             <size key="customSize" width="320" height="399"/>
-            <connections>
-                <outlet property="authorLabel" destination="PL6-RG-rTk" id="7wS-ty-G33"/>
-                <outlet property="captionLabel" destination="Ijd-Pg-3ER" id="2e2-mJ-75h"/>
-                <outlet property="imageView" destination="IHq-r4-fLv" id="7YH-C6-VPm"/>
-                <outlet property="timePlaceLabel" destination="u2m-AH-CMe" id="6ri-Ip-8D8"/>
-            </connections>
             <point key="canvasLocation" x="419" y="187.5"/>
         </collectionViewCell>
     </objects>
