@@ -15,8 +15,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 
 @implementation FRSStoryListCell
 
-
-+ (NSAttributedString *)attributedStringForCaption:(NSString *)caption :(NSString *)date
++ (NSAttributedString *)attributedStringForCaption:(NSString *)caption date:(NSString *)date
 {
     NSMutableAttributedString *relativeDate = [[NSMutableAttributedString alloc] initWithString:
                                                [NSString stringWithFormat:@"%@ ~ ",date]
@@ -39,11 +38,11 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
     [[self imageView] cancelImageRequestOperation];
 }
 
-- (void)setPost:(FRSPost *)post{
-    
+- (void)setPost:(FRSPost *)post
+{
     _post = post;
 
-    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:[self post].caption :[self post].relativeDateString]];
+    [self.captionLabel setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:self.post.relativeDateString]];
     self.authorLabel.text = self.post.byline;
     self.timePlaceLabel.text = [self.post relativeDateString];
     /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
@@ -55,12 +54,11 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
         [[self imageView] setImageWithURL:[_post largeImageURL]];
    // }
 
-    
 }
 
 + (NSString *)identifier
 {
     return kCellIdentifier;
 }
-@end
 
+@end
