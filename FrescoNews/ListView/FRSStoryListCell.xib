@@ -13,6 +13,18 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" tableViewCell="REc-bi-iha" id="hhG-HJ-GmR">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66y-bn-Sjb" userLabel="Time and Place">
+                        <rect key="frame" x="8" y="8" width="97" height="17"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TS1-ju-GI3" userLabel="By Line">
+                        <rect key="frame" x="273" y="8" width="39" height="17"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijd-Pg-3ER" userLabel="Caption">
                         <rect key="frame" x="14" y="355" width="277" height="47"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
@@ -23,12 +35,18 @@
                 <constraints>
                     <constraint firstItem="Ijd-Pg-3ER" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leadingMargin" constant="6" id="2xo-Et-HsK"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Ijd-Pg-3ER" secondAttribute="bottom" id="Kgi-J2-fGe"/>
+                    <constraint firstItem="66y-bn-Sjb" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leadingMargin" id="PMw-hv-6If"/>
                     <constraint firstItem="Ijd-Pg-3ER" firstAttribute="top" secondItem="hhG-HJ-GmR" secondAttribute="topMargin" constant="347" id="XI8-eZ-gSD"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Ijd-Pg-3ER" secondAttribute="trailing" constant="21" id="Y9R-Fh-95U"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="TS1-ju-GI3" secondAttribute="trailing" id="Zuo-Ek-sPv"/>
+                    <constraint firstItem="TS1-ju-GI3" firstAttribute="top" secondItem="hhG-HJ-GmR" secondAttribute="topMargin" id="wck-KV-zzO"/>
+                    <constraint firstItem="66y-bn-Sjb" firstAttribute="top" secondItem="hhG-HJ-GmR" secondAttribute="topMargin" id="yFT-Xr-9EA"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="bylineLabel" destination="TS1-ju-GI3" id="VrE-D3-zgv"/>
                 <outlet property="captionLabel" destination="Ijd-Pg-3ER" id="4uG-7C-Jl1"/>
+                <outlet property="timeAndPlaceLabel" destination="66y-bn-Sjb" id="TCg-Lh-n31"/>
             </connections>
             <point key="canvasLocation" x="230" y="85.5"/>
         </tableViewCell>

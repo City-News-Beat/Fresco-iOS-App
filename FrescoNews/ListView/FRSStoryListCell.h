@@ -11,10 +11,9 @@
 
 @interface FRSStoryListCell : UITableViewCell
 
-// @property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@property (nonatomic, weak) IBOutlet UILabel *bylineLabel;
-@property (nonatomic, weak) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeAndPlaceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *bylineLabel;
+@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (nonatomic) BOOL didTransition;
 
 @property (weak, nonatomic) FRSPost *post;
