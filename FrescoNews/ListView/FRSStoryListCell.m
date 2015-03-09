@@ -35,7 +35,8 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    [[self imageView] cancelImageRequestOperation];
+    [self.imageView cancelImageRequestOperation];
+    self.imageView.image = nil;
 }
 
 - (void)setPost:(FRSPost *)post
@@ -51,7 +52,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
         [[self imageView] setImage:cachedImage];
     }
     else {*/
-///        [[self imageView] setImageWithURL:[_post largeImageURL]];
+        [self.postImageView setImageWithURL:[_post largeImageURL]];
    // }
 
 }

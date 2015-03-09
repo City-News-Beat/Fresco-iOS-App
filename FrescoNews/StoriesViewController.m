@@ -131,7 +131,7 @@
     return [self.posts count];
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+-(FRSStoryListCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     NSUInteger index = [indexPath item];
     
