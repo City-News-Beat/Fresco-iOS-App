@@ -32,14 +32,14 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" text="Caption" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijd-Pg-3ER" userLabel="Caption">
-                        <rect key="frame" x="14" y="355" width="277" height="47"/>
+                        <rect key="frame" x="14" y="366" width="277" height="36"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Ijd-Pg-3ER" firstAttribute="top" secondItem="uyl-FY-XH7" secondAttribute="bottom" constant="-1" id="09A-Cv-AuZ"/>
+                    <constraint firstItem="Ijd-Pg-3ER" firstAttribute="top" secondItem="uyl-FY-XH7" secondAttribute="bottom" constant="10" id="09A-Cv-AuZ"/>
                     <constraint firstItem="Ijd-Pg-3ER" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leadingMargin" constant="6" id="2xo-Et-HsK"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Ijd-Pg-3ER" secondAttribute="bottom" id="Kgi-J2-fGe"/>
                     <constraint firstItem="66y-bn-Sjb" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leadingMargin" id="PMw-hv-6If"/>
