@@ -17,14 +17,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 
 + (NSAttributedString *)attributedStringForCaption:(NSString *)caption date:(NSString *)date
 {
-    NSMutableAttributedString *relativeDate = [[NSMutableAttributedString alloc] initWithString:
-                                               [NSString stringWithFormat:@"%@ ~ ",date]
-                                                                                     attributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0.20 green:0.63 blue:0.79 alpha:1.00]}];
-    NSMutableAttributedString *attrCaption = [[NSMutableAttributedString alloc] initWithString:caption attributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
-    
-    [relativeDate appendAttributedString:attrCaption];
-    
-    return relativeDate;
+    return [[NSMutableAttributedString alloc] initWithString:caption attributes:@{NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
 }
 
 - (void)dealloc
