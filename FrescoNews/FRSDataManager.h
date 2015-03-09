@@ -27,11 +27,13 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)logout;
 
-- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber*)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
 
-- (void)getPostsAfterId:(NSNumber*)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+- (void)getPostsWithTag:(FRSTag *)tag limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
 
-- (void)getPostsWithId:(NSNumber*)postId responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getPostsAfterId:(NSNumber *)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+
+- (void)getPostsWithId:(NSNumber *)postId responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 

@@ -12,14 +12,14 @@
 #import "FRSTag.h"
 #import "FRSStoryListCell.h"
 
-@interface HomeViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
+@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation HomeViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self setup];
     }
@@ -39,65 +39,57 @@
     _posts = [[NSMutableArray alloc] init];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     [self setFrescoImageHeader];
 
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    
-    UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
-    [_collectionView registerNib:storyCellNib forCellWithReuseIdentifier:[FRSStoryListCell identifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[FRSStoryListCell identifier]];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 65.0;
 
     [self performNecessaryFetch:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Data Loading
+
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-   // [self setActivityIndicatorVisible:YES];
-    
-    if([self tag] || !self.savedPosts){
-        NSArray *tags = [self tag] ? @[[self tag]] : nil;
-        [[FRSDataManager sharedManager] getPostsWithTags:tags limit:@5 responseBlock:^(NSArray *responseObject, NSError *error) {
+    // [self setActivityIndicatorVisible:YES];
+    if (self.tag || !self.savedPosts) {
+        [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@5 responseBlock:^(NSArray *responseObject, NSError *error) {
             if (!error) {
-                [[self posts] setArray:responseObject];
+                [self.posts setArray:responseObject];
                 [self cacheAndReload];
                 [self setActivityIndicatorVisible:NO];
-                if(responseBlock)
+                if (responseBlock) {
                     responseBlock(YES, nil);
+                }
             }
-            
         }];
     }
-    else if(self.savedPosts){
-        [[self posts] setArray:self.savedPosts];
+    else if (self.savedPosts) {
+        [self.posts setArray:self.savedPosts];
         [self cacheAndReload];
         [self setActivityIndicatorVisible:NO];
-        if(responseBlock)
+        if (responseBlock) {
             responseBlock(YES, nil);
+        }
     }
-    else
+    else {
         [self setActivityIndicatorVisible:NO];
-    
+    }
 }
--(void)refreshData
+
+- (void)refreshData
 {
-    NSArray *tags = [self tag] ? @[[self tag]] : nil;
-    
-    [[FRSDataManager sharedManager] getPostsWithTags:tags limit:@([_posts count]) responseBlock:^(NSArray *responseObject, NSError *error) {
-        if(!error){
-            [[self posts] setArray:responseObject];
+    [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@(self.posts.count) responseBlock:^(NSArray *responseObject, NSError *error) {
+        if (!error) {
+            [self.posts setArray:responseObject];
             [self cacheAndReload];
            // [self.refreshControl endRefreshing];
            // [[self listCollectionView] setContentOffset:CGPointZero animated:YES];
-            
         }
     }];
 }
@@ -105,10 +97,12 @@
 - (void)cacheImagesForCurrentStories
 {
     return;
-    NSMutableArray *imageURLs = [[NSMutableArray alloc] initWithCapacity:[[self posts] count] * 3];
+    NSMutableArray *imageURLs = [[NSMutableArray alloc] initWithCapacity:self.posts.count * 3];
     
-    for (FRSPost *story in [self posts]) {
-        if ([story largeImageURL]) [imageURLs addObject:[story largeImageURL]];
+    for (FRSPost *story in self.posts) {
+        if ([story largeImageURL]) {
+            [imageURLs addObject:[story largeImageURL]];
+        }
     }
     
    // [[FRSCacheManager sharedManager] precacheImages:imageURLs];
@@ -118,7 +112,7 @@
 {
   //  [[self listCollectionView] reloadData];
   //  [[self detailCollectionView] reloadData];
-    [self.collectionView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)cacheAndReload
@@ -129,7 +123,8 @@
 
 #pragma mark - loading view
 
-- (void)setActivityIndicatorVisible:(BOOL)visible{
+- (void)setActivityIndicatorVisible:(BOOL)visible
+{
 /*
     [_loadingView removeFromSuperview];
     
@@ -144,27 +139,28 @@
         [self setLoadingView:actIndicator];
     }*/
 }
-#pragma mark - UICollectionViewDataSource
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.posts count];
+    return self.posts.count;
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSUInteger index = [indexPath item];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger index = indexPath.item;
     
     //Get story for cell at this index
-    FRSPost *cellStory = [[self posts] objectAtIndex:index];
+    FRSPost *cellStory = [self.posts objectAtIndex:index];
    
     //If we are in the master list
     // if (collectionView == [self listCollectionView]) {
     
-    FRSStoryListCell *storyCell = [collectionView dequeueReusableCellWithReuseIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
-    [storyCell setPost:cellStory];
-    
-    return storyCell;
+    FRSStoryListCell *cell = [tableView dequeueReusableCellWithIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
+    [cell setPost:cellStory];
+
+    return cell;
     
     //}
     /*
@@ -200,9 +196,4 @@
     return nil;*/
 }
 
-#pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(collectionView.frame.size.width, 339);
-}
 @end

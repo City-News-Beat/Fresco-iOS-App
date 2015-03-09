@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
+typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @class FRSTag;
 

@@ -143,7 +143,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 }
 
-- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber*)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
 {
     NSString *path = @"frs-query.php";
     
@@ -182,6 +182,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
         
         if (responseBlock) responseBlock(nil, error);
     }];
+}
+
+- (void)getPostsWithTag:(FRSTag *)tag limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+{
+    NSArray *tags = tag ? @[tag] : nil;
+    [self getPostsWithTags:tags limit:limit responseBlock:responseBlock];
 }
 
 - (void)getPostsAfterId:(NSNumber*)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock{

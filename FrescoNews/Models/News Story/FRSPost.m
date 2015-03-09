@@ -134,5 +134,9 @@
     return 0;
 }
 
+- (NSURL *)largeImageURL
+{
+    return [NSURL URLWithString:[@"http://res.cloudinary.com/dnd5ngsax/image/fetch/w_375,h_375/" stringByAppendingString:[_largeImageURL absoluteString]]];
+}
 
 @end

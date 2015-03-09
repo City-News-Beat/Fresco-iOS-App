@@ -17,5 +17,6 @@ pod 'ASIHTTPRequest', '~> 1.8'
 #pod 'AAPullToRefresh'
 #pod 'Facebook-iOS-SDK' , '~> 3.18.0'
 #pod 'GRKGradientView', '~> 1.0'
+pod 'Cloudinary'
 
 inhibit_all_warnings!
