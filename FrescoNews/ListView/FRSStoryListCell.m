@@ -8,7 +8,6 @@
 
 #import "FRSStoryListCell.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-//#import "FRSCacheManager.h"
 #import "FRSUser.h"
 
 static NSString * const kCellIdentifier = @"Story List Cell Identifer";
