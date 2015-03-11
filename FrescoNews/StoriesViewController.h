@@ -13,7 +13,7 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @class FRSTag;
 
 @interface StoriesViewController : UIViewController
-@property (nonatomic, strong) NSMutableArray *tags;
+@property (nonatomic, strong) NSMutableArray *stories;
 @property (nonatomic, strong) FRSTag *tag;
 
 @end

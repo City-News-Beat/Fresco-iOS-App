@@ -264,6 +264,26 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     [self setSearchTask:nil];
 }
 
-
-
+#pragma mark - Stories
+- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    NSString *path = @"http://monorail.theburgg.com/fresco/stories.json";
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *stories = [responseObject map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
+        }];
+        if(responseBlock)
+            responseBlock(stories, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock)
+            responseBlock(nil, error);
+    }];
+    
+}
 @end

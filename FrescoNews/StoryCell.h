@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSTag.h"
 
+@class FRSStory;
 @interface StoryCell : UITableViewCell
-@property (weak, nonatomic) FRSTag *frsTag;
+@property (weak, nonatomic) FRSStory *story;
 @property (strong, nonatomic) NSMutableArray *imagesArray;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
+
 + (NSString *)identifier;
-- (void)setFRSTag:(FRSTag *)tag;
 @end
 

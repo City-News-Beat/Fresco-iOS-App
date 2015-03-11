@@ -207,7 +207,33 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BP4-ad-CmZ" id="SA0-Ix-fnD">
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lF-OT-bel" userLabel="Image container">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" priority="250" constant="44" id="tdN-uL-GYG"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" id="2Mu-kM-T5c"/>
+                                                <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" id="G2D-s2-TfB"/>
+                                                <constraint firstItem="5lF-OT-bel" firstAttribute="top" secondItem="SA0-Ix-fnD" secondAttribute="top" id="QQl-xq-tUl"/>
+                                                <constraint firstItem="5lF-OT-bel" firstAttribute="top" secondItem="SA0-Ix-fnD" secondAttribute="top" id="bTt-Qo-E9K"/>
+                                                <constraint firstAttribute="trailing" secondItem="5lF-OT-bel" secondAttribute="trailing" id="xHG-Ex-YNh"/>
+                                                <constraint firstItem="5lF-OT-bel" firstAttribute="leading" secondItem="SA0-Ix-fnD" secondAttribute="leading" id="xLn-za-jYl"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="2Mu-kM-T5c"/>
+                                                    <exclude reference="bTt-Qo-E9K"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="constraintHeight" destination="tdN-uL-GYG" id="tp3-an-orp"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

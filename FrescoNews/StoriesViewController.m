@@ -37,7 +37,7 @@
 
 - (void)setup
 {
-    _tags = [[NSMutableArray alloc] init];
+    _stories = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -47,6 +47,8 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 150;
     
     //UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
     //[_collectionView registerNib:storyCellNib forCellWithReuseIdentifier:[FRSStoryListCell identifier]];
@@ -62,9 +64,9 @@
 #pragma mark - Data Loading
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getTagsWithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
-            [self.tags setArray:responseObject];
+            [self.stories setArray:responseObject];
         }
         [self reloadData];
     }];
@@ -96,7 +98,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.tags count];
+    return [self.stories count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -112,22 +114,23 @@
     NSUInteger index = indexPath.section;
     
     // get story for cell at this index -- tags for now actually
-    FRSTag *cellStory = [[self tags] objectAtIndex:index];
+    FRSStory *story = [self.stories objectAtIndex:index];
     
     StoryCell *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
-    [storyCell setFRSTag:cellStory];
     
+    storyCell.story = story;
     
     return storyCell;
 }
 
 
 #pragma mark - UITableViewDelegate
+/*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 200;
 }
-
+*/
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 40;
@@ -137,7 +140,7 @@
     StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
     
     // remember, one story per section
-    FRSTag *cellStory = [[self tags] objectAtIndex:section];
+    FRSTag *cellStory = [self.stories objectAtIndex:section];
     [storyCellHeader populateViewWithStory:cellStory];
     
     return storyCellHeader;

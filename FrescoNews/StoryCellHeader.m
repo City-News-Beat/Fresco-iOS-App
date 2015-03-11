@@ -7,7 +7,7 @@
 //
 
 #import "StoryCellHeader.h"
-#import "FRSTag.h"
+#import "FRSStory.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
 static NSString * const kCellIdentifier = @"StoryCellHeader";
@@ -18,8 +18,8 @@ static NSString * const kCellIdentifier = @"StoryCellHeader";
     return kCellIdentifier;
 }
 
-- (void)populateViewWithStory:(FRSTag *)tag
+- (void)populateViewWithStory:(FRSStory *)story
 {
-    self.labelTitle.text = tag.identifier;
+    self.labelTitle.text = story.title;
 }
 @end

@@ -9,6 +9,7 @@
 #import "FRSStoryListCell.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FRSUser.h"
+#import "FRSImage.h"
 
 static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 
@@ -42,19 +43,11 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
     
     _post = post;
 
-    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:[self post].caption :[self post].relativeDateString]];
+    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:self.post.caption :[MTLModel relativeDateStringFromDate:self.post.date]]];
     self.authorLabel.text = self.post.byline;
-    self.timePlaceLabel.text = [self.post relativeDateString];
-    /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
-    
-    if (cachedImage) {
-        [[self imageView] setImage:cachedImage];
-    }
-    else {*/
-        [[self imageView] setImageWithURL:[_post largeImageURL]];
-   // }
+    self.timePlaceLabel.text = [MTLModel relativeDateStringFromDate:self.post.date];
 
-    
+    [[self imageView] setImageWithURL:post.largeImage.URL];
 }
 
 + (NSString *)identifier

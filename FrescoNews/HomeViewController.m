@@ -102,6 +102,7 @@
     }];
 }
 
+/*
 - (void)cacheImagesForCurrentStories
 {
     return;
@@ -113,6 +114,7 @@
     
    // [[FRSCacheManager sharedManager] precacheImages:imageURLs];
 }
+*/
 
 - (void)reloadData
 {
@@ -124,7 +126,7 @@
 - (void)cacheAndReload
 {
     [self reloadData];
-    [self cacheImagesForCurrentStories];
+    //[self cacheImagesForCurrentStories];
 }
 
 #pragma mark - loading view

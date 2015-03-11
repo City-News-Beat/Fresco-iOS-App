@@ -9,7 +9,10 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "StoryCell.h"
 #import "StoryThumbnailView.h"
-#import "FRSTag.h"
+#import "FRSStory.h"
+#import "FRSGallery.h"
+#import "FRSPost.h"
+#import "FRSImage.h"
 
 static NSString * const kCellIdentifier = @"StoryCell";
 
@@ -23,44 +26,52 @@ static CGFloat const kInterImageGap = 1.0f;
     return kCellIdentifier;
 }
 
-- (void)setFRSTag:(FRSTag *)tag
+- (void)setStory:(FRSStory *)story
 {
-    _frsTag = tag;
+    _story = story;
     
     self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
 
     CGRect frame;
     CGFloat x = 0.0f;
     CGFloat y = 0.0f;
-    CGFloat imageWidth = kImageWidthDefault + arc4random_uniform(100);
-    int count = 3 + arc4random_uniform(5);
-    for (int i = 0; i < count; ++i) {
-        // make the image view
-        frame = CGRectMake(x, y, imageWidth, kImageHeight);
-
-        // check for wrap
-        if (x > self.frame.size.width) {
-            y += kImageHeight;
-            x = -(imageWidth - (x - self.frame.size.width));
+    
+    self.constraintHeight.constant = kImageHeight;
+    
+    for (FRSGallery *gallery in story.galleries) {
+        int thumbIndex = 0;
+        for (FRSPost *post in gallery.posts) {
+            CGFloat scale = kImageHeight / [post.largeImage.height floatValue];
+            CGFloat imageWidth = [post.largeImage.width floatValue] * scale;
+            // make the image view
+            frame = CGRectMake(x, y, imageWidth, kImageHeight);
+            
+            // check for wrap
+            if (x > self.frame.size.width) {
+                y += kImageHeight;
+                self.constraintHeight.constant += kImageHeight;
+                x = 0.0f;
+            }
+            // only calculate a new width when NOT wrapping
+            // in target implementation this will keep current image
+            else 
+                // set offsets for the next iteration
+                x += imageWidth + kInterImageGap;
+            
+            // lay the view down
+            StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
+            [thumbnailView setImageWithURL:post.largeImage.URL];
+            [self.contentView addSubview:thumbnailView];
+            
+            thumbnailView.story_id = [story.storyID integerValue];
+            thumbnailView.thumbSequence = thumbIndex;
+            ++thumbIndex;
+            
+            [self setupTapHandlingForThumbnail:thumbnailView];
         }
-        // only calculate a new width when NOT wrapping
-        // in target implementation this will keep current image
-        else {
-            // set offsets for the next iteration
-            x += imageWidth + kInterImageGap;
-
-            imageWidth = kImageWidthDefault + arc4random_uniform(100);
-        }
-        
-        // lay the view down
-        StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
-        [thumbnailView setImageWithURL:tag.smallImagePath];
-        [self.contentView addSubview:thumbnailView];
-
-        thumbnailView.story_id = arc4random_uniform(10000);
-        thumbnailView.thumbSequence = i;
-        [self setupTapHandlingForThumbnail:thumbnailView];
     }
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
 
     self.contentView.backgroundColor = [UIColor whiteColor];
 }

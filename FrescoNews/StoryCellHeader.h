@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSTag.h"
 
+@class FRSStory;
 @interface StoryCellHeader : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 + (NSString *)identifier;
-- (void)populateViewWithStory:(FRSTag *)tag;
+- (void)populateViewWithStory:(FRSStory *)story;
 @end
