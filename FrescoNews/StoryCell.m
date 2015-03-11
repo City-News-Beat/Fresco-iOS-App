@@ -30,50 +30,71 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     _story = story;
     
-    self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
+    //self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
+    
+    self.constraintHeight.constant = kImageHeight;
+    
+    //[self setNeedsUpdateConstraints];
+    //[self setNeedsLayout];
 
+    self.contentView.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)layoutSubviews
+{
+    //if (!self.imagesArray)
+    //    self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
+    
+    for (UIView *view in self.contentView.subviews) {
+        if ([view isKindOfClass:[StoryThumbnailView class]])
+            [view removeFromSuperview];
+    }
+    
     CGRect frame;
     CGFloat x = 0.0f;
     CGFloat y = 0.0f;
     
     self.constraintHeight.constant = kImageHeight;
     
-    for (FRSGallery *gallery in story.galleries) {
-        int thumbIndex = 0;
-        for (FRSPost *post in gallery.posts) {
+    for (FRSGallery *gallery in self.story.galleries) {
+        for (int i = 0; i < [gallery.posts count]; ++i) {
+            // we don't want more than two rows of images
+            if (y > kImageHeight)
+                break;
+            
+            FRSPost *post = [gallery.posts objectAtIndex:i];
             CGFloat scale = kImageHeight / [post.largeImage.height floatValue];
             CGFloat imageWidth = [post.largeImage.width floatValue] * scale;
+            
             // make the image view
             frame = CGRectMake(x, y, imageWidth, kImageHeight);
-            
-            // check for wrap
-            if (x > self.frame.size.width) {
-                y += kImageHeight;
-                self.constraintHeight.constant += kImageHeight;
-                x = 0.0f;
-            }
-            // only calculate a new width when NOT wrapping
-            // in target implementation this will keep current image
-            else 
-                // set offsets for the next iteration
-                x += imageWidth + kInterImageGap;
             
             // lay the view down
             StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
             [thumbnailView setImageWithURL:post.largeImage.URL];
             [self.contentView addSubview:thumbnailView];
             
-            thumbnailView.story_id = [story.storyID integerValue];
-            thumbnailView.thumbSequence = thumbIndex;
-            ++thumbIndex;
-            
+            thumbnailView.story_id = [self.story.storyID integerValue];
+            thumbnailView.thumbSequence = i;
             [self setupTapHandlingForThumbnail:thumbnailView];
+            
+            // calculate offsets for the next iteration
+            x += imageWidth + kInterImageGap;
+            
+            // check for wrap
+            if (x > self.frame.size.width) {
+                y += kImageHeight;
+                self.constraintHeight.constant += kImageHeight;
+                x = 0.0f;
+                
+                // we almost always want to redo this image on the next row
+                // but check the edge case where the image is wider than the
+                // whole frame which would cause an endless loop
+                if (imageWidth + kInterImageGap < self.frame.size.width)
+                    --i;
+            }
         }
     }
-    [self setNeedsUpdateConstraints];
-    [self setNeedsLayout];
-
-    self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setupTapHandlingForThumbnail:(StoryThumbnailView *)thumbnailView

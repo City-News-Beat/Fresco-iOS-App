@@ -140,7 +140,7 @@
     StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
     
     // remember, one story per section
-    FRSTag *cellStory = [self.stories objectAtIndex:section];
+    FRSStory *cellStory = [self.stories objectAtIndex:section];
     [storyCellHeader populateViewWithStory:cellStory];
     
     return storyCellHeader;
