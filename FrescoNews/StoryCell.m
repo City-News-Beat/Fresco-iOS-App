@@ -17,7 +17,6 @@
 static NSString * const kCellIdentifier = @"StoryCell";
 
 static CGFloat const kImageHeight = 100.0f;
-static CGFloat const kImageWidthDefault = 80.0f;
 static CGFloat const kInterImageGap = 1.0f;
 
 @implementation StoryCell
@@ -29,22 +28,12 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)setStory:(FRSStory *)story
 {
     _story = story;
-    
-    //self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
-    
     self.constraintHeight.constant = kImageHeight;
-    
-    //[self setNeedsUpdateConstraints];
-    //[self setNeedsLayout];
-
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)layoutSubviews
 {
-    //if (!self.imagesArray)
-    //    self.imagesArray = [[NSMutableArray alloc] initWithCapacity:5];
-    
     for (UIView *view in self.contentView.subviews) {
         if ([view isKindOfClass:[StoryThumbnailView class]])
             [view removeFromSuperview];
@@ -85,6 +74,7 @@ static CGFloat const kInterImageGap = 1.0f;
             if (x > self.frame.size.width) {
                 y += kImageHeight;
                 self.constraintHeight.constant += kImageHeight;
+                [self updateConstraints];
                 x = 0.0f;
                 
                 // we almost always want to redo this image on the next row
@@ -125,5 +115,6 @@ static CGFloat const kInterImageGap = 1.0f;
         if ([v isKindOfClass:[StoryThumbnailView class]])
             [v removeFromSuperview];
     }
+    self.constraintHeight.constant = kImageHeight;
 }
 @end
