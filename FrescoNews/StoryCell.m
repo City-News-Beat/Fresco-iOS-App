@@ -35,8 +35,10 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)layoutSubviews
 {
     for (UIView *view in self.contentView.subviews) {
-        if ([view isKindOfClass:[StoryThumbnailView class]])
+        if ([view isKindOfClass:[StoryThumbnailView class]]) {
             [view removeFromSuperview];
+            NSLog(@"Removing view");
+        }
     }
     
     CGRect frame;
