@@ -10,10 +10,11 @@
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSTag.h"
-#import "FRSStoryListCell.h"
+#import "StoryCell.h"
+#import "StoryCellHeader.h"
 
-@interface StoriesViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -36,7 +37,7 @@
 
 - (void)setup
 {
-    _posts = [[NSMutableArray alloc] init];
+    _stories = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -44,11 +45,13 @@
     
     [self setFrescoImageHeader];
     
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 150;
     
-    UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
-    [_collectionView registerNib:storyCellNib forCellWithReuseIdentifier:[FRSStoryListCell identifier]];
+    //UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
+    //[_collectionView registerNib:storyCellNib forCellWithReuseIdentifier:[FRSStoryListCell identifier]];
     
     [self performNecessaryFetch:nil];
 }
@@ -61,50 +64,17 @@
 #pragma mark - Data Loading
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    // [self setActivityIndicatorVisible:YES];
-    
-    if([self tag] || !self.savedPosts){
-        NSArray *tags = [self tag] ? @[[self tag]] : nil;
-        [[FRSDataManager sharedManager] getPostsWithTags:tags limit:@10 responseBlock:^(NSArray *responseObject, NSError *error) {
-            if (!error) {
-                [[self posts] setArray:responseObject];
-                [self reloadData];
-                [self setActivityIndicatorVisible:NO];
-                if(responseBlock)
-                    responseBlock(YES, nil);
-            }
-            
-        }];
-    }
-    else if(self.savedPosts){
-        [[self posts] setArray:self.savedPosts];
-        [self reloadData];
-        [self setActivityIndicatorVisible:NO];
-        if(responseBlock)
-            responseBlock(YES, nil);
-    }
-    else
-        [self setActivityIndicatorVisible:NO];
-    
-}
--(void)refreshData
-{
-    NSArray *tags = [self tag] ? @[[self tag]] : nil;
-    
-    [[FRSDataManager sharedManager] getPostsWithTags:tags limit:@([_posts count]) responseBlock:^(NSArray *responseObject, NSError *error) {
-        if(!error){
-            [[self posts] setArray:responseObject];
-            [self reloadData];
-            // [self.refreshControl endRefreshing];
-            // [[self listCollectionView] setContentOffset:CGPointZero animated:YES];
-            
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            [self.stories setArray:responseObject];
         }
+        [self reloadData];
     }];
 }
 
 - (void)reloadData
 {
-    [self.collectionView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - loading view
@@ -124,66 +94,56 @@
      [self setLoadingView:actIndicator];
      }*/
 }
-#pragma mark - UICollectionViewDataSource
+#pragma mark - UITableViewDataSource
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.posts count];
+    return [self.stories count];
 }
 
--(FRSStoryListCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // since there is a section for every story
+    // and just one story per section
+    // the section will tell us the "row"
+    NSUInteger index = indexPath.section;
     
-    NSUInteger index = [indexPath item];
+    // get story for cell at this index -- tags for now actually
+    FRSStory *story = [self.stories objectAtIndex:index];
     
-    //Get story for cell at this index
-    FRSPost *cellStory = [[self posts] objectAtIndex:index];
+    StoryCell *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
     
-    //If we are in the master list
-    // if (collectionView == [self listCollectionView]) {
-    
-    FRSStoryListCell *storyCell = [collectionView dequeueReusableCellWithReuseIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
-    [storyCell setPost:cellStory];
+    storyCell.story = story;
+    [storyCell layoutIfNeeded];
     
     return storyCell;
-    
-    //}
-    /*
-     //If we are in the detail list
-     else if ([collectionView isEqual:[self detailCollectionView]]) {
-     
-     FRSStoryDetailCell *detailViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:[FRSStoryDetailCell identifier] forIndexPath:indexPath];
-     
-     if([[NSUserDefaults standardUserDefaults] boolForKey:@"photoClicked"]){
-     [detailViewCell.tapView setHidden:YES];
-     } else {
-     CABasicAnimation *pulseAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-     pulseAnimation.duration = .5;
-     pulseAnimation.toValue = [NSNumber numberWithFloat:1.1];
-     pulseAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-     pulseAnimation.autoreverses = YES;
-     pulseAnimation.repeatCount = FLT_MAX;
-     [detailViewCell.tapView.layer addAnimation:pulseAnimation forKey:nil];
-     }
-     UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
-     
-     [tapGestureRecognizer setCancelsTouchesInView:NO];
-     
-     [detailViewCell addGestureRecognizer:tapGestureRecognizer];
-     
-     [detailViewCell.scrollView setDelegate:self];
-     [detailViewCell setPost:cellStory];
-     detailViewCell.isWeb = false;
-     
-     return detailViewCell;
-     }
-     
-     return nil;*/
 }
 
-#pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+
+#pragma mark - UITableViewDelegate
+/*
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(collectionView.frame.size.width, 339);
+    return 200;
+}
+*/
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
 }
 
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+    
+    // remember, one story per section
+    FRSStory *cellStory = [self.stories objectAtIndex:section];
+    [storyCellHeader populateViewWithStory:cellStory];
+    
+    return storyCellHeader;
+}
 @end
