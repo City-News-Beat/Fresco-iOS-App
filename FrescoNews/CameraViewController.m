@@ -7,14 +7,15 @@
 //
 
 #import "CameraViewController.h"
-#import "CameraViewControllerLandscape.h"
+#import "CameraLandscapeViewController.h"
 
 @implementation CameraViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.parentViewController presentViewController:[[CameraViewControllerLandscape alloc] init] animated:NO completion:nil];
+    CameraLandscapeViewController *vc = (CameraLandscapeViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraLandscapeVC"];
+    [self.parentViewController presentViewController:vc animated:NO completion:nil];
 }
 
 @end
