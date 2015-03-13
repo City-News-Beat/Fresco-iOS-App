@@ -119,6 +119,7 @@
     StoryCell *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
     
     storyCell.story = story;
+    [storyCell layoutIfNeeded];
     
     return storyCell;
 }

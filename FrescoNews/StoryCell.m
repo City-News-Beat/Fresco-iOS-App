@@ -75,7 +75,7 @@ static CGFloat const kInterImageGap = 1.0f;
             // check for wrap
             if (x > self.frame.size.width) {
                 y += kImageHeight;
-                self.constraintHeight.constant += kImageHeight;
+                self.constraintHeight.constant = kImageHeight * 2;
                 [self updateConstraints];
                 x = 0.0f;
                 
