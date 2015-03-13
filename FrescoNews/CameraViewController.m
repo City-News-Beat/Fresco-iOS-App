@@ -7,7 +7,14 @@
 //
 
 #import "CameraViewController.h"
+#import "CameraViewControllerLandscape.h"
 
 @implementation CameraViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.parentViewController presentViewController:[[CameraViewControllerLandscape alloc] init] animated:NO completion:nil];
+}
 
 @end
