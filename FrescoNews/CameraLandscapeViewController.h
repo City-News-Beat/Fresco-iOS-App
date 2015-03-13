@@ -7,6 +7,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CameraLandscapeViewController : UIViewController
+@interface CameraLandscapeViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @end
