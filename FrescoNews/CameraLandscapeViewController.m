@@ -8,7 +8,7 @@
 #import "CameraLandscapeViewController.h"
 
 @interface CameraLandscapeViewController ()
-@property (strong, nonatomic) UIImagePickerController *imagePickerController;
+@property (strong, nonatomic) UIImagePickerController *picker;
 @end
 
 @implementation CameraLandscapeViewController
@@ -21,17 +21,16 @@
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = sourceType;
-    imagePickerController.delegate = self;
-    self.imagePickerController = imagePickerController;
-    [self presentViewController:self.imagePickerController animated:NO completion:nil];
+    self.picker = [[UIImagePickerController alloc] init];
+    self.picker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.picker.sourceType = sourceType;
+    self.picker.delegate = self;
+    [self presentViewController:self.picker animated:NO completion:nil];
 }
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
@@ -42,6 +41,19 @@
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
+}
+
+@end
+
+@interface UIImagePickerController (Nonrotating)
+- (BOOL)shouldAutorotate;
+@end
+
+@implementation UIImagePickerController (Nonrotating)
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 @end
