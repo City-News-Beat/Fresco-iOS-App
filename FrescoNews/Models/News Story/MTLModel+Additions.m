@@ -124,5 +124,23 @@
     return 0;
 }
 
+#pragma mark - Image CDN
 
+// makes a URL something like http://res.cloudinary.com/dnd5ngsax/image/fetch/w_375,h_375/
+- (NSURL *)cdnImageURLForURLString:(NSString *)url withSize:(CGSize)size
+{
+    NSString *sizeString;
+    if (size.width > 0) {
+        sizeString = [NSString stringWithFormat:@"w_%d", (int)size.width];
+        if (size.height)
+            sizeString = [sizeString stringByAppendingString:@","];
+    }
+    if (size.height > 0) {
+        sizeString = [NSString stringWithFormat:@"%@h_%d", sizeString, (int)size.height];
+    }
+    
+    NSString *fullURL = [NSString stringWithFormat:@"%@/%@/%@", [VariableStore sharedInstance].cdnBaseURL, sizeString, url];
+
+    return [NSURL URLWithString:fullURL];
+}
 @end

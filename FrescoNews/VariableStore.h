@@ -27,4 +27,6 @@
 @property CGFloat opacityInnerListDividers;
 @property CGFloat opacityUnreadNotificationHighlights;
 
+@property NSString *cdnBaseURL;
+
 @end

@@ -23,4 +23,9 @@
              };
 }
 
+- (NSURL *)cdnImageURL
+{
+    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue])];
+}
+
 @end

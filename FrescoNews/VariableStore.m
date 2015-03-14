@@ -35,6 +35,8 @@
         sharedInstance.opacityOuterListDividers = 0.26f;
         sharedInstance.opacityInnerListDividers = 0.08f;
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
+        
+        sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/dnd5ngsax/image/fetch/";
     });
     
     return sharedInstance;

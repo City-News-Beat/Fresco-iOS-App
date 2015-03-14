@@ -16,4 +16,6 @@
 @property (nonatomic, copy) NSNumber *width;
 @property (nonatomic, copy) NSNumber *height;
 
+- (NSURL *)cdnImageURL;
+
 @end

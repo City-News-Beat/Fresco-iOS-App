@@ -16,7 +16,7 @@
 
 static NSString * const kCellIdentifier = @"StoryCell";
 
-static CGFloat const kImageHeight = 100.0f;
+static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
 @implementation StoryCell
@@ -25,9 +25,8 @@ static CGFloat const kInterImageGap = 1.0f;
     return kCellIdentifier;
 }
 
-- (void)setStory:(FRSStory *)story
+- (void)awakeFromNib
 {
-    _story = story;
     self.constraintHeight.constant = kImageHeight;
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
@@ -37,20 +36,21 @@ static CGFloat const kInterImageGap = 1.0f;
     for (UIView *view in self.contentView.subviews) {
         if ([view isKindOfClass:[StoryThumbnailView class]]) {
             [view removeFromSuperview];
-            NSLog(@"Removing view");
+            //NSLog(@"Removing view -- we could optimize this to resize views");
         }
     }
     
     CGRect frame;
     CGFloat x = 0.0f;
     CGFloat y = 0.0f;
+    int rows = 1;
     
     self.constraintHeight.constant = kImageHeight;
     
     for (FRSGallery *gallery in self.story.galleries) {
         for (int i = 0; i < [gallery.posts count]; ++i) {
             // we don't want more than two rows of images
-            if (y > kImageHeight)
+            if (rows > 2)
                 break;
             
             FRSPost *post = [gallery.posts objectAtIndex:i];
@@ -62,7 +62,7 @@ static CGFloat const kInterImageGap = 1.0f;
             
             // lay the view down
             StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
-            [thumbnailView setImageWithURL:post.largeImage.URL];
+            [thumbnailView setImageWithURL:[post.largeImage cdnImageURL]];
             [self.contentView addSubview:thumbnailView];
             
             thumbnailView.story_id = [self.story.storyID integerValue];
@@ -74,8 +74,9 @@ static CGFloat const kInterImageGap = 1.0f;
             
             // check for wrap
             if (x > self.frame.size.width) {
-                y += kImageHeight;
-                self.constraintHeight.constant = kImageHeight * 2;
+                ++rows;
+                y += kImageHeight + kInterImageGap;
+                self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
                 [self updateConstraints];
                 x = 0.0f;
                 
