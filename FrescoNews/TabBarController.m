@@ -14,8 +14,9 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     if ([item.title isEqualToString:@"Camera"]) {
-         CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
-         [self presentViewController:vc animated:NO completion:nil];
+        self.savedIndex = self.selectedIndex;
+        CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+        [self presentViewController:vc animated:NO completion:nil];
     }
 }
 

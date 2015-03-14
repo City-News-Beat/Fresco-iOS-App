@@ -6,27 +6,54 @@
 //
 
 #import "CameraViewController.h"
+#import "TabBarController.h"
 
 @interface CameraViewController ()
-@property (strong, nonatomic) UIImagePickerController *picker;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIView *overlayView;
+@property (nonatomic) BOOL dismiss;
 @end
 
 @implementation CameraViewController
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+    [super viewWillAppear:animated];
+    if (self.dismiss) {
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+        ((UITabBarController *)self.presentingViewController).selectedIndex = ((TabBarController *)self.presentingViewController).savedIndex;
+    }
+    else {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+    }
 }
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
-    self.picker = [[UIImagePickerController alloc] init];
-    self.picker.modalPresentationStyle = UIModalPresentationCurrentContext;
-    self.picker.sourceType = sourceType;
-    self.picker.delegate = self;
-    [self presentViewController:self.picker animated:NO completion:nil];
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    picker.sourceType = sourceType;
+    picker.showsCameraControls = NO;
+    picker.delegate = self;
+    picker.cameraOverlayView = self.overlayView; // TODO: Move self.overlayView to xib
+
+    [self presentViewController:picker animated:NO completion:^{
+        picker.cameraOverlayView.frame = self.view.frame;
+    }];
 }
+
+- (IBAction)doneButtonTapped:(id)sender
+{
+    [self finishAndUpdate];
+}
+
+- (void)finishAndUpdate
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
+    self.dismiss = YES;
+}
+
+#pragma mark - UIViewController methods
 
 - (BOOL)shouldAutorotate
 {
