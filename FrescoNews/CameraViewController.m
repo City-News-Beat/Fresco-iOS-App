@@ -1,21 +1,46 @@
 //
 //  CameraViewController.m
-//  FrescoNews
-//
-//  Created by Jason Gresh on 3/6/15.
+//  
+//  Created by Joshua C. Lerner on 3/13/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
 #import "CameraViewController.h"
-#import "CameraLandscapeViewController.h"
+
+@interface CameraViewController ()
+@property (strong, nonatomic) UIImagePickerController *picker;
+@end
 
 @implementation CameraViewController
 
-- (void)viewDidLoad
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidLoad];
-    CameraLandscapeViewController *vc = (CameraLandscapeViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraLandscapeVC"];
-    [self.parentViewController presentViewController:vc animated:NO completion:nil];
+    [super viewDidAppear:animated];
+    [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+}
+
+- (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
+{
+    self.picker = [[UIImagePickerController alloc] init];
+    self.picker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.picker.sourceType = sourceType;
+    self.picker.delegate = self;
+    [self presentViewController:self.picker animated:NO completion:nil];
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationLandscapeRight;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 @end

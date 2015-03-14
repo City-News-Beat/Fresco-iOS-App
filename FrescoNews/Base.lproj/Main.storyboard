@@ -43,7 +43,7 @@
         <!--Camera View Controller-->
         <scene sceneID="kzR-KP-dyt">
             <objects>
-                <viewController id="H0q-0d-6ny" userLabel="Camera View Controller" customClass="CameraViewController" sceneMemberID="viewController">
+                <viewController id="H0q-0d-6ny" userLabel="Camera View Controller" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yUF-CR-CmE"/>
                         <viewControllerLayoutGuide type="bottom" id="1Zs-cf-Nhb"/>
@@ -54,6 +54,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="22D-aF-pAE"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EAi-Lq-GLX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -76,10 +77,10 @@
             </objects>
             <point key="canvasLocation" x="703" y="2160"/>
         </scene>
-        <!--Camera Landscape View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="Kk1-48-Rhn">
             <objects>
-                <viewController storyboardIdentifier="cameraLandscapeVC" id="u2e-a2-HhN" customClass="CameraLandscapeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="cameraVC" id="u2e-a2-HhN" customClass="CameraViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="F1U-jc-2kH"/>
                         <viewControllerLayoutGuide type="bottom" id="69r-4T-rpb"/>
@@ -198,7 +199,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                <tabBarController id="49e-Tb-3d3" customClass="TabBarController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
