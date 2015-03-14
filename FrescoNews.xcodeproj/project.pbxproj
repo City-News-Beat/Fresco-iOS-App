@@ -35,6 +35,7 @@
 		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
 		423A14551AB327CA0030DAF4 /* CameraLandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraLandscapeViewController.m */; };
 		423A14571AB329F40030DAF4 /* towel.png in Resources */ = {isa = PBXBuildFile; fileRef = 423A14561AB329F40030DAF4 /* towel.png */; };
+		424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */; };
 		42B743771AA7C15B003F2478 /* FRSStoryListCellOrig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -105,6 +106,8 @@
 		423A14531AB327CA0030DAF4 /* CameraLandscapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraLandscapeViewController.h; sourceTree = "<group>"; };
 		423A14541AB327CA0030DAF4 /* CameraLandscapeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraLandscapeViewController.m; sourceTree = "<group>"; };
 		423A14561AB329F40030DAF4 /* towel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = towel.png; sourceTree = "<group>"; };
+		424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+Rotation.h"; sourceTree = "<group>"; };
+		424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImagePickerController+Rotation.m"; sourceTree = "<group>"; };
 		42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryListCellOrig.xib; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -313,6 +316,8 @@
 				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
+				424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */,
+				424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -495,6 +500,7 @@
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
+				424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 			);

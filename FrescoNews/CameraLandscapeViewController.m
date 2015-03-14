@@ -44,16 +44,3 @@
 }
 
 @end
-
-@interface UIImagePickerController (Nonrotating)
-- (BOOL)shouldAutorotate;
-@end
-
-@implementation UIImagePickerController (Nonrotating)
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
-@end
