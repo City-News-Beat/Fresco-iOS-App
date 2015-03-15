@@ -14,9 +14,9 @@
 
 @implementation CameraViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     if (self.dismiss) {
         [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
         TabBarController *vc = ((TabBarController *)self.presentingViewController);
