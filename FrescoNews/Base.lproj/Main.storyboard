@@ -278,7 +278,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqM-m8-W9q" customClass="CameraPreviewView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7u-3o-GQy">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7u-3o-GQy">
                                         <rect key="frame" x="172" y="499" width="72" height="30"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -293,7 +293,7 @@
                                             <action selector="toggleMovieRecording:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="Bxc-re-Kkq"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f3M-8b-l5K">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f3M-8b-l5K">
                                         <rect key="frame" x="264" y="499" width="72" height="30"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -307,7 +307,7 @@
                                             <action selector="snapStillImage:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="uZ2-TA-IWT"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43k-T8-LRE">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="43k-T8-LRE">
                                         <rect key="frame" x="356" y="499" width="72" height="30"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -322,7 +322,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTr-jd-8qc">
-                                        <rect key="frame" x="8" y="8" width="37" height="30"/>
+                                        <rect key="frame" x="8" y="8" width="73" height="41"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                         <state key="normal" title="Done">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -330,12 +331,21 @@
                                             <action selector="doneButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="YDo-0U-z7J"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="6fN-AY-ap5">
+                                        <rect key="frame" x="481" y="0.0" width="119" height="375"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="375" id="Lxt-WB-qBu"/>
+                                            <constraint firstAttribute="width" constant="119" id="rVT-VK-86b"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="f3M-8b-l5K" firstAttribute="top" secondItem="j7u-3o-GQy" secondAttribute="top" id="01I-I8-170"/>
                                     <constraint firstItem="f3M-8b-l5K" firstAttribute="leading" secondItem="j7u-3o-GQy" secondAttribute="trailing" constant="20" id="CIW-mZ-e85"/>
+                                    <constraint firstAttribute="trailing" secondItem="6fN-AY-ap5" secondAttribute="trailing" id="a47-sN-juc"/>
+                                    <constraint firstItem="6fN-AY-ap5" firstAttribute="top" secondItem="xqM-m8-W9q" secondAttribute="top" id="aDL-Ny-8No"/>
                                     <constraint firstItem="j7u-3o-GQy" firstAttribute="bottom" secondItem="f3M-8b-l5K" secondAttribute="bottom" id="dPV-Ab-h7h"/>
                                     <constraint firstItem="43k-T8-LRE" firstAttribute="bottom" secondItem="f3M-8b-l5K" secondAttribute="bottom" id="ewc-iW-JyB"/>
                                     <constraint firstItem="43k-T8-LRE" firstAttribute="top" secondItem="f3M-8b-l5K" secondAttribute="top" id="fIy-EN-PjR"/>
@@ -343,6 +353,16 @@
                                     <constraint firstItem="43k-T8-LRE" firstAttribute="leading" secondItem="f3M-8b-l5K" secondAttribute="trailing" constant="20" id="ndY-Cc-qOY"/>
                                     <constraint firstItem="f3M-8b-l5K" firstAttribute="centerX" secondItem="xqM-m8-W9q" secondAttribute="centerX" id="xM6-tw-l9X"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="6fN-AY-ap5"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="6fN-AY-ap5"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="s6n-JD-gSH" appends="YES" id="fmZ-nj-73w"/>
                                 </connections>
@@ -374,10 +394,11 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="703" y="1477.5"/>
+            <point key="canvasLocation" x="703" y="1477"/>
         </scene>
     </scenes>
     <resources>
+        <image name="placeholder.png" width="238" height="750"/>
         <image name="tab-assignments" width="32" height="32"/>
         <image name="tab-camera" width="32" height="32"/>
         <image name="tab-home" width="32" height="32"/>
