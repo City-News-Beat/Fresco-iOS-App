@@ -9,8 +9,6 @@
 #import "TabBarController.h"
 
 @interface CameraViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) BOOL dismiss;
 @end
 
@@ -37,11 +35,8 @@
     picker.sourceType = sourceType;
     picker.showsCameraControls = NO;
     picker.delegate = self;
-    picker.cameraOverlayView = self.overlayView; // TODO: Move self.overlayView to xib
-
-    [self presentViewController:picker animated:NO completion:^{
-        picker.cameraOverlayView.frame = self.view.frame;
-    }];
+    picker.cameraOverlayView = [[[NSBundle mainBundle] loadNibNamed:@"CameraOverlay" owner:self options:nil] firstObject];
+    [self presentViewController:picker animated:NO completion:nil];
 }
 
 - (IBAction)doneButtonTapped:(id)sender
@@ -51,8 +46,8 @@
 
 - (void)finishAndUpdate
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
     self.dismiss = YES;
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark - UIViewController methods
