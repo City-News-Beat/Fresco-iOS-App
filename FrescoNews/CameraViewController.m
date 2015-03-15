@@ -14,6 +14,8 @@
 
 @implementation CameraViewController
 
+#define CAMERA_TRANSFORM 1.3
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -35,6 +37,7 @@
     picker.sourceType = sourceType;
     picker.showsCameraControls = NO;
     picker.delegate = self;
+    picker.cameraViewTransform = CGAffineTransformScale(picker.cameraViewTransform, CAMERA_TRANSFORM, CAMERA_TRANSFORM);
     picker.cameraOverlayView = [[[NSBundle mainBundle] loadNibNamed:@"CameraOverlay" owner:self options:nil] firstObject];
     [self presentViewController:picker animated:NO completion:nil];
 }
@@ -50,21 +53,26 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 #pragma mark - UIViewController methods
 
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
+//- (BOOL)shouldAutorotate
+//{
+//    return NO;
+//}
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationLandscapeRight;
-}
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+//{
+//    return UIInterfaceOrientationLandscapeRight;
+//}
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskLandscape;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 @end
