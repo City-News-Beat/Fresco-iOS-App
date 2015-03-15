@@ -21,7 +21,9 @@
     [super viewWillAppear:animated];
     if (self.dismiss) {
         [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
-        ((UITabBarController *)self.presentingViewController).selectedIndex = ((TabBarController *)self.presentingViewController).savedIndex;
+        TabBarController *vc = ((TabBarController *)self.presentingViewController);
+        vc.selectedIndex = vc.savedIndex;
+        vc.tabBar.hidden = NO;
     }
     else {
         [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
