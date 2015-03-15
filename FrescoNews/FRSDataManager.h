@@ -37,5 +37,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+# warning for video
+- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end

@@ -45,7 +45,17 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
         [[self imageView] setImage:cachedImage];
     }
     else {*/
-        [self.postImageView setImageWithURL:[_post largeImageURL]];
+    //[self.postImageView setImageWithURL:[_post largeImageURL]];
+    __weak FRSStoryListCell *weakSelf = self;
+    [self.postImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        self.postImageView.image = image;
+        [weakSelf updateConstraints];
+        [weakSelf layoutIfNeeded];
+        [weakSelf setNeedsLayout];
+        [weakSelf setNeedsDisplay];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        [weakSelf updateConstraints];
+    }];
    // }
 
 }

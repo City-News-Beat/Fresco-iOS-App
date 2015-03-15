@@ -270,6 +270,27 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     [self setSearchTask:nil];
 }
 
+#warning for video
+#pragma mark - For Video
+- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    NSString *path = @"http://monorail.theburgg.com/fresco/video_home_data.json";
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *posts = [responseObject map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSPost class] fromJSONDictionary:obj error:NULL];
+        }];
+        if (responseBlock) responseBlock(posts, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if (responseBlock) responseBlock(nil, error);
+    }];
+    
+}
 
 
 @end

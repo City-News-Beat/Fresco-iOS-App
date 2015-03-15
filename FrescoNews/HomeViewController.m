@@ -47,7 +47,7 @@
 
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[FRSStoryListCell identifier]];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 65.0;
+    self.tableView.estimatedRowHeight = 150.0;
 
     [self performNecessaryFetch:nil];
 }
@@ -58,7 +58,9 @@
 {
     // [self setActivityIndicatorVisible:YES];
     if (self.tag || !self.savedPosts) {
-        [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@5 responseBlock:^(NSArray *responseObject, NSError *error) {
+#warning for video
+        //[[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@15 responseBlock:^(NSArray *responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:^(NSArray *responseObject, NSError *error) {
             if (!error) {
                 [self.posts setArray:responseObject];
                 [self cacheAndReload];
