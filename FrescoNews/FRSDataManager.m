@@ -292,5 +292,22 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     
 }
 
-
+#pragma mark - Stories
+/*
+- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    NSString *path = @"http://monorail.theburgg.com/fresco/stories.json";
+        NSArray *stories = [responseObject map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
+        }];
+        if(responseBlock)
+            responseBlock(stories, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock)
+            responseBlock(nil, error);
+    }];
+    
+}
+ */
 @end

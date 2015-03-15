@@ -9,6 +9,7 @@
 @import Foundation;
 
 #import <AFNetworking/AFNetworking.h>
+#import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
@@ -39,5 +40,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 # warning for video
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end

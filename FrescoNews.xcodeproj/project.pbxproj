@@ -7,12 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD01AB090FD006F4965 /* FRSStory.m */; };
+		1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD41AB09F2C006F4965 /* FRSImage.m */; };
+		1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD81AB09FFF006F4965 /* FRSGallery.m */; };
+		1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407ADC1AB0B458006F4965 /* MTLModel+Additions.m */; };
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
 		1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */; };
 		1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */; };
 		1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
+		1ED9A3311AAA552B009BD7A3 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3301AAA552B009BD7A3 /* StoryCell.m */; };
+		1ED9A3341AAE01D9009BD7A3 /* StoryCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3331AAE01D9009BD7A3 /* StoryCellHeader.m */; };
+		1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */; };
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B81AA4CCC70082E08D /* AppDelegate.m */; };
 		1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */; };
@@ -52,6 +59,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E407ACF1AB090EE006F4965 /* FRSStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSStory.h; path = "News Story/FRSStory.h"; sourceTree = "<group>"; };
+		1E407AD01AB090FD006F4965 /* FRSStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSStory.m; path = "News Story/FRSStory.m"; sourceTree = "<group>"; };
+		1E407AD31AB09F25006F4965 /* FRSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSImage.h; path = "News Story/FRSImage.h"; sourceTree = "<group>"; };
+		1E407AD41AB09F2C006F4965 /* FRSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSImage.m; path = "News Story/FRSImage.m"; sourceTree = "<group>"; };
+		1E407AD71AB09FF7006F4965 /* FRSGallery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSGallery.h; path = "News Story/FRSGallery.h"; sourceTree = "<group>"; };
+		1E407AD81AB09FFF006F4965 /* FRSGallery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSGallery.m; path = "News Story/FRSGallery.m"; sourceTree = "<group>"; };
+		1E407ADB1AB0B451006F4965 /* MTLModel+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTLModel+Additions.h"; path = "News Story/MTLModel+Additions.h"; sourceTree = "<group>"; };
+		1E407ADC1AB0B458006F4965 /* MTLModel+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MTLModel+Additions.m"; path = "News Story/MTLModel+Additions.m"; sourceTree = "<group>"; };
 		1E408B731AA799750057AC16 /* UIColor+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Additions.h"; sourceTree = "<group>"; };
 		1E408B741AA799750057AC16 /* UIColor+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Additions.m"; sourceTree = "<group>"; };
 		1E408B761AA79A370057AC16 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
@@ -65,6 +80,12 @@
 		1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentsViewController.m; sourceTree = "<group>"; };
 		1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		1ED9A32F1AAA552B009BD7A3 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
+		1ED9A3301AAA552B009BD7A3 /* StoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCell.m; sourceTree = "<group>"; };
+		1ED9A3321AAE01D9009BD7A3 /* StoryCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCellHeader.h; sourceTree = "<group>"; };
+		1ED9A3331AAE01D9009BD7A3 /* StoryCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCellHeader.m; sourceTree = "<group>"; };
+		1ED9A3361AAE2E4B009BD7A3 /* StoryThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryThumbnailView.h; sourceTree = "<group>"; };
+		1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryThumbnailView.m; sourceTree = "<group>"; };
 		1EDA44B01AA4CCC70082E08D /* FrescoNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrescoNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B41AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -142,6 +163,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1E407AD21AB09107006F4965 /* Story */ = {
+			isa = PBXGroup;
+			children = (
+				1E407ACF1AB090EE006F4965 /* FRSStory.h */,
+				1E407AD01AB090FD006F4965 /* FRSStory.m */,
+			);
+			name = Story;
+			sourceTree = "<group>";
+		};
+		1E407AD61AB09F36006F4965 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				1E407AD31AB09F25006F4965 /* FRSImage.h */,
+				1E407AD41AB09F2C006F4965 /* FRSImage.m */,
+			);
+			name = Image;
+			sourceTree = "<group>";
+		};
+		1E407ADA1AB0A005006F4965 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				1E407AD71AB09FF7006F4965 /* FRSGallery.h */,
+				1E407AD81AB09FFF006F4965 /* FRSGallery.m */,
+			);
+			name = Gallery;
+			sourceTree = "<group>";
+		};
 		1E408B771AA7A40A0057AC16 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +197,19 @@
 				1E408B791AA7A4580057AC16 /* BaseNavigationController.m */,
 			);
 			name = "Base Classes";
+			sourceTree = "<group>";
+		};
+		1ED9A3351AAE01E0009BD7A3 /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+				1ED9A3321AAE01D9009BD7A3 /* StoryCellHeader.h */,
+				1ED9A3331AAE01D9009BD7A3 /* StoryCellHeader.m */,
+				1ED9A32F1AAA552B009BD7A3 /* StoryCell.h */,
+				1ED9A3301AAA552B009BD7A3 /* StoryCell.m */,
+				1ED9A3361AAE2E4B009BD7A3 /* StoryThumbnailView.h */,
+				1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */,
+			);
+			name = Stories;
 			sourceTree = "<group>";
 		};
 		1EDA44A71AA4CCC70082E08D = {
@@ -224,6 +285,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1ED9A3351AAE01E0009BD7A3 /* Stories */,
 				1EDA450E1AA4F8640082E08D /* ListView */,
 				1EDA450B1AA4E2BD0082E08D /* PostView.h */,
 				1EDA450C1AA4E2BD0082E08D /* PostView.m */,
@@ -262,7 +324,12 @@
 		1EDA44F31AA4D0730082E08D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44F41AA4D0730082E08D /* News Story */,
+				1E407ADB1AB0B451006F4965 /* MTLModel+Additions.h */,
+				1E407ADC1AB0B458006F4965 /* MTLModel+Additions.m */,
+				1E407ADA1AB0A005006F4965 /* Gallery */,
+				1E407AD61AB09F36006F4965 /* Image */,
+				1E407AD21AB09107006F4965 /* Story */,
+				1EDA44F41AA4D0730082E08D /* Post */,
 				1EDA44F71AA4D0730082E08D /* Tag */,
 				1EDA44FA1AA4D0730082E08D /* Traditional Source */,
 				1EDA44FD1AA4D0730082E08D /* User */,
@@ -270,12 +337,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		1EDA44F41AA4D0730082E08D /* News Story */ = {
+		1EDA44F41AA4D0730082E08D /* Post */ = {
 			isa = PBXGroup;
 			children = (
 				1EDA44F51AA4D0730082E08D /* FRSPost.h */,
 				1EDA44F61AA4D0730082E08D /* FRSPost.m */,
 			);
+			name = Post;
 			path = "News Story";
 			sourceTree = "<group>";
 		};
@@ -485,7 +553,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
+				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
+				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
+				1ED9A3311AAA552B009BD7A3 /* StoryCell.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				424323DB1AB3D64900646278 /* TabBarController.m in Sources */,
 				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
@@ -499,13 +570,17 @@
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
 				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
+				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
+				1ED9A3341AAE01D9009BD7A3 /* StoryCellHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */,
+				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
+				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,6 +706,7 @@
 			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -644,6 +720,7 @@
 			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;

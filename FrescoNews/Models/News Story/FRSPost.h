@@ -9,8 +9,9 @@
 @import Foundation;
 
 #import <Mantle/Mantle.h>
-#import "FRSUser.h"
-#import "FRSTag.h"
+#import "MTLModel+Additions.h"
+
+@class FRSUser, FRSTag, FRSImage;
 
 @interface FRSPost : MTLModel <MTLJSONSerializing>
 
@@ -18,14 +19,14 @@
 @property (nonatomic, strong) FRSUser *user;
 @property (nonatomic, copy) NSNumber *postID;
 @property (nonatomic, copy) NSString *caption;
-@property (nonatomic, copy) NSURL *imageURL;
-@property (nonatomic, copy) NSURL *largeImageURL;
+@property (nonatomic, copy) FRSImage *largeImage;
+@property (nonatomic, copy) FRSImage *smallImage;
 @property (nonatomic, copy) NSDate *date;
 @property (nonatomic, strong) NSArray *sources;
 @property (nonatomic, copy) NSString *byline;
 
-- (NSString *)relativeDateString;
-
-//@property (nonatomic, strong) NSMutableArray *traditionalSources;
+#warning part of reverse compatibility hack
+@property (nonatomic, copy) NSString *large_path;
+- (NSURL *)largeImageURL;
 
 @end

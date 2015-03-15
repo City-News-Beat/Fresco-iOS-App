@@ -22,5 +22,5 @@
 - (void)setPost:(FRSPost *)post;
 
 + (NSString *)identifier;
-
++ (NSAttributedString *)attributedStringForCaption:(NSString *)caption date:(NSString *)date;
 @end

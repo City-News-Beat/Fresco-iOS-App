@@ -45,7 +45,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworkActivityLogger
-  - AFNetworking (~> 2.0)
+  - AFNetworking (~> 2.1)
   - ASIHTTPRequest (~> 1.8)
   - Cloudinary
   - Functional.m (~> 1.0)
