@@ -1,5 +1,5 @@
 //
-//  CameraViewController.h
+//  UIImagePickerController+Rotation.h
 //  FrescoNews
 //
 //  Created by Joshua C. Lerner on 3/13/15.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CameraViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface UIImagePickerController (Rotation)
+
+- (BOOL)shouldAutorotate;
 
 @end
