@@ -26,7 +26,6 @@
 		1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */; };
 		1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C01AA4CCC70082E08D /* Main.storyboard */; };
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
-		1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */; };
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
 		1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F61AA4D0730082E08D /* FRSPost.m */; };
 		1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F91AA4D0730082E08D /* FRSTag.m */; };
@@ -40,11 +39,9 @@
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
-		424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
-		42B743771AA7C15B003F2478 /* FRSStoryListCellOrig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */; };
 		42BB68C41AB5349F003FC268 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 42BB68C31AB5349F003FC268 /* placeholder.png */; };
-		42D182101AB53B0D00D40668 /* CameraOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */; };
+		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -97,7 +94,6 @@
 		1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoriesViewController.m; sourceTree = "<group>"; };
 		1EDA44C11AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EDA44C31AA4CCC70082E08D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		1EDA44C61AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		1EDA44CC1AA4CCC70082E08D /* FrescoNewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrescoNewsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44D11AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrescoNewsTests.m; sourceTree = "<group>"; };
@@ -125,13 +121,11 @@
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		423A14531AB327CA0030DAF4 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
-		424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+Rotation.h"; sourceTree = "<group>"; };
-		424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImagePickerController+Rotation.m"; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
-		42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryListCellOrig.xib; sourceTree = "<group>"; };
 		42BB68C31AB5349F003FC268 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
-		42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraOverlay.xib; sourceTree = "<group>"; };
+		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraPreviewView.h; path = Views/CameraPreviewView.h; sourceTree = "<group>"; };
+		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -245,8 +239,6 @@
 				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
-				1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */,
-				42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */,
 				42BB68C31AB5349F003FC268 /* placeholder.png */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
@@ -289,6 +281,8 @@
 				1EDA450E1AA4F8640082E08D /* ListView */,
 				1EDA450B1AA4E2BD0082E08D /* PostView.h */,
 				1EDA450C1AA4E2BD0082E08D /* PostView.m */,
+				42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */,
+				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -387,8 +381,6 @@
 				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
-				424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */,
-				424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -399,7 +391,6 @@
 				1EDA450F1AA4F8640082E08D /* FRSStoryListCell.h */,
 				1EDA45101AA4F8640082E08D /* FRSStoryListCell.m */,
 				1EDA45111AA4F8640082E08D /* FRSStoryListCell.xib */,
-				42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */,
 			);
 			path = ListView;
 			sourceTree = "<group>";
@@ -464,6 +455,7 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 7Z242QD3TB;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -495,12 +487,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42D182101AB53B0D00D40668 /* CameraOverlay.xib in Resources */,
-				42B743771AA7C15B003F2478 /* FRSStoryListCellOrig.xib in Resources */,
 				42BB68C41AB5349F003FC268 /* placeholder.png in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA45131AA4F8640082E08D /* FRSStoryListCell.xib in Resources */,
-				1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,7 +567,7 @@
 				1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
-				424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */,
+				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
@@ -610,14 +599,6 @@
 				1EDA44C11AA4CCC70082E08D /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1EDA44C61AA4CCC70082E08D /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -707,6 +688,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -721,6 +703,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;

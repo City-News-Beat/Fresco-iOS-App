@@ -53,7 +53,10 @@
 
 - (NSURL *)largeImageURL
 {
-    return [self cdnImageURLForURLString:self.large_path withSize:CGSizeMake(375, 375)];
+    return [self cdnImageURLForURLString:self.large_path withSize:CGSizeMake(750, 0)];
+//    return [NSURL URLWithString:[@"http://res.cloudinary.com/dnd5ngsax/image/fetch/w_750/" stringByAppendingString:[_largeImageURL absoluteString]]];
+    //return [NSURL URLWithString:[@"http://res.cloudinary.com/dnd5ngsax/image/fetch/w_375,h_375/" stringByAppendingString:[_large_path absoluteString]]];
+//    return [NSURL URLWithString:[@"http://res.cloudinary.com/dnd5ngsax/image/fetch/w_750/" stringByAppendingString:self.large_path]];
 }
 
 @end

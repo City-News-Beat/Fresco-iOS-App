@@ -38,9 +38,29 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
 
     [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:[MTLModel relativeDateStringFromDate:self.post.date]]];
     self.bylineLabel.text = self.post.byline;
+
+   // self.timeAndPlaceLabel.text = [self.post relativeDateString];
+    /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
+    
+    if (cachedImage) {
+        [[self imageView] setImage:cachedImage];
+    }
+    else {*/
+    //[self.postImageView setImageWithURL:[_post largeImageURL]];
+    __weak FRSStoryListCell *weakSelf = self;
+    [self.postImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        self.postImageView.image = image;
+        [weakSelf updateConstraints];
+        [weakSelf layoutIfNeeded];
+        [weakSelf setNeedsLayout];
+        [weakSelf setNeedsDisplay];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        [weakSelf updateConstraints];
+    }];
+   // }
     self.timeAndPlaceLabel.text = [MTLModel relativeDateStringFromDate:self.post.date];
 
-    [[self imageView] setImageWithURL:[post largeImageURL]];
+    //[[self imageView] setImageWithURL:[post largeImageURL]];
 }
 
 + (NSString *)identifier
