@@ -15,7 +15,6 @@
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
 		1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */; };
-		1ED9A3281AA9FFB6009BD7A3 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */; };
 		1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */; };
 		1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
 		1ED9A3311AAA552B009BD7A3 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3301AAA552B009BD7A3 /* StoryCell.m */; };
@@ -40,9 +39,12 @@
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
-		423A14551AB327CA0030DAF4 /* CameraLandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraLandscapeViewController.m */; };
-		423A14571AB329F40030DAF4 /* towel.png in Resources */ = {isa = PBXBuildFile; fileRef = 423A14561AB329F40030DAF4 /* towel.png */; };
+		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
+		424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */; };
+		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
 		42B743771AA7C15B003F2478 /* FRSStoryListCellOrig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */; };
+		42BB68C41AB5349F003FC268 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 42BB68C31AB5349F003FC268 /* placeholder.png */; };
+		42D182101AB53B0D00D40668 /* CameraOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -74,8 +76,6 @@
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
 		1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableStore.h; sourceTree = "<group>"; };
 		1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VariableStore.m; sourceTree = "<group>"; };
-		1ED9A3261AA9FFB6009BD7A3 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
-		1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentsViewController.h; sourceTree = "<group>"; };
 		1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentsViewController.m; sourceTree = "<group>"; };
 		1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -123,10 +123,15 @@
 		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
 		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		423A14531AB327CA0030DAF4 /* CameraLandscapeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraLandscapeViewController.h; sourceTree = "<group>"; };
-		423A14541AB327CA0030DAF4 /* CameraLandscapeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraLandscapeViewController.m; sourceTree = "<group>"; };
-		423A14561AB329F40030DAF4 /* towel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = towel.png; sourceTree = "<group>"; };
+		423A14531AB327CA0030DAF4 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+Rotation.h"; sourceTree = "<group>"; };
+		424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImagePickerController+Rotation.m"; sourceTree = "<group>"; };
+		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		42B743761AA7C15B003F2478 /* FRSStoryListCellOrig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryListCellOrig.xib; sourceTree = "<group>"; };
+		42BB68C31AB5349F003FC268 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraOverlay.xib; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,12 +241,13 @@
 				1EDA44F31AA4D0730082E08D /* Models */,
 				1EDA44DD1AA4CCF20082E08D /* Views */,
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
-				423A14561AB329F40030DAF4 /* towel.png */,
 				1EDA44B71AA4CCC70082E08D /* AppDelegate.h */,
 				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44C51AA4CCC70082E08D /* LaunchScreen.xib */,
+				42D1820F1AB53B0D00D40668 /* CameraOverlay.xib */,
+				42BB68C31AB5349F003FC268 /* placeholder.png */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
 				1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */,
@@ -294,14 +300,14 @@
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
-				1ED9A3261AA9FFB6009BD7A3 /* CameraViewController.h */,
-				1ED9A3271AA9FFB6009BD7A3 /* CameraViewController.m */,
-				423A14531AB327CA0030DAF4 /* CameraLandscapeViewController.h */,
-				423A14541AB327CA0030DAF4 /* CameraLandscapeViewController.m */,
+				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
+				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
 				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
+				424323D91AB3D64900646278 /* TabBarController.h */,
+				424323DA1AB3D64900646278 /* TabBarController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -381,6 +387,8 @@
 				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
+				424323D61AB3CB7B00646278 /* UIImagePickerController+Rotation.h */,
+				424323D71AB3CB7B00646278 /* UIImagePickerController+Rotation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -487,12 +495,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42D182101AB53B0D00D40668 /* CameraOverlay.xib in Resources */,
 				42B743771AA7C15B003F2478 /* FRSStoryListCellOrig.xib in Resources */,
+				42BB68C41AB5349F003FC268 /* placeholder.png in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA45131AA4F8640082E08D /* FRSStoryListCell.xib in Resources */,
 				1EDA44C71AA4CCC70082E08D /* LaunchScreen.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
-				423A14571AB329F40030DAF4 /* towel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,15 +554,15 @@
 			files = (
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
-				1ED9A3281AA9FFB6009BD7A3 /* CameraViewController.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCell.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
+				424323DB1AB3D64900646278 /* TabBarController.m in Sources */,
 				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
-				423A14551AB327CA0030DAF4 /* CameraLandscapeViewController.m in Sources */,
+				423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */,
 				1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
@@ -569,6 +578,7 @@
 				1EDA45121AA4F8640082E08D /* FRSStoryListCell.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
+				424323D81AB3CB7B00646278 /* UIImagePickerController+Rotation.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
@@ -696,6 +706,7 @@
 			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -709,6 +720,7 @@
 			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
