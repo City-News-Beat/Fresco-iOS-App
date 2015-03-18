@@ -1,5 +1,5 @@
 //
-//  StoryCell.h
+//  StoryCellMosaic.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/6/15.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class FRSStory;
-@interface StoryCell : UITableViewCell
+@interface StoryCellMosaic : UITableViewCell
 @property (weak, nonatomic) FRSStory *story;
 @property (strong, nonatomic) NSMutableArray *imagesArray;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;

@@ -10,7 +10,8 @@
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSTag.h"
-#import "FRSStoryListCell.h"
+#import "StoryCell.h"
+#import "StoryCellHeader.h"
 
 @interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -45,7 +46,7 @@
 
     [self setFrescoImageHeader];
 
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[FRSStoryListCell identifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:@"StoryCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[StoryCell identifier]];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0;
 
@@ -145,15 +146,19 @@
 }
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self.posts count];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.posts.count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger index = indexPath.item;
+    NSUInteger index = indexPath.section;
     
     //Get story for cell at this index
     FRSPost *cellStory = [self.posts objectAtIndex:index];
@@ -161,7 +166,7 @@
     //If we are in the master list
     // if (collectionView == [self listCollectionView]) {
     
-    FRSStoryListCell *cell = [tableView dequeueReusableCellWithIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
+    StoryCell *cell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
     [cell setPost:cellStory];
 
     return cell;
@@ -198,6 +203,23 @@
     }
     
     return nil;*/
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 36;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+
+    // remember, one story per section
+    FRSPost *cellStory = [self.posts objectAtIndex:section];
+    [storyCellHeader setPost:cellStory];
+    
+    return storyCellHeader;
 }
 
 @end

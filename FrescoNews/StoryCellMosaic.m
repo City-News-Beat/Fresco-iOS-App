@@ -1,5 +1,5 @@
 //
-//  StoryCell.m
+//  StoryCellMosaic.m
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/6/15.
@@ -7,19 +7,19 @@
 //
 
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "StoryCell.h"
+#import "StoryCellMosaic.h"
 #import "StoryThumbnailView.h"
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
 
-static NSString * const kCellIdentifier = @"StoryCell";
+static NSString * const kCellIdentifier = @"StoryCellMosaic";
 
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
-@implementation StoryCell
+@implementation StoryCellMosaic
 + (NSString *)identifier
 {
     return kCellIdentifier;

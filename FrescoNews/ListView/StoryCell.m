@@ -1,19 +1,19 @@
 //
-//  FRSStoryListCell.m
+//  StoryCell.m
 //  Fresco
 //
 //  Created by Team Fresco on 2/9/14.
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import "FRSStoryListCell.h"
+#import "StoryCell.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FRSUser.h"
 #import "FRSImage.h"
 
-static NSString * const kCellIdentifier = @"Story List Cell Identifer";
+static NSString * const kCellIdentifier = @"StoryCell";
 
-@implementation FRSStoryListCell
+@implementation StoryCell
 
 + (NSAttributedString *)attributedStringForCaption:(NSString *)caption date:(NSString *)date
 {
@@ -37,7 +37,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
     _post = post;
 
     [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:[MTLModel relativeDateStringFromDate:self.post.date]]];
-    self.bylineLabel.text = self.post.byline;
+    //self.bylineLabel.text = self.post.byline;
 
    // self.timeAndPlaceLabel.text = [self.post relativeDateString];
     /*UIImage *cachedImage = [[FRSCacheManager sharedManager] cachedImageForURL:[_post largeImageURL]];
@@ -47,7 +47,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
     }
     else {*/
     //[self.postImageView setImageWithURL:[_post largeImageURL]];
-    __weak FRSStoryListCell *weakSelf = self;
+    __weak StoryCell *weakSelf = self;
     [self.postImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
         self.postImageView.image = image;
         [weakSelf updateConstraints];
@@ -58,7 +58,7 @@ static NSString * const kCellIdentifier = @"Story List Cell Identifer";
         [weakSelf updateConstraints];
     }];
    // }
-    self.timeAndPlaceLabel.text = [MTLModel relativeDateStringFromDate:self.post.date];
+    //self.timeAndPlaceLabel.text = [MTLModel relativeDateStringFromDate:self.post.date];
 
     //[[self imageView] setImageWithURL:[post largeImageURL]];
 }
