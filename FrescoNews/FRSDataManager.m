@@ -273,7 +273,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 #warning for video
 #pragma mark - For Video
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    NSString *path = @"http://monorail.theburgg.com/fresco/video_home_data.json";
+    NSString *path = @"http://monorail.theburgg.com/fresco/home_data.json";
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
