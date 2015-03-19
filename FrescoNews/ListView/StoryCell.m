@@ -67,19 +67,16 @@ static NSString * const kCellIdentifier = @"StoryCell";
 
 - (void)layoutSubviews
 {
-    CGSize size = [self imageSizeInPoints];
-    self.constraintHeight.priority = 999;
-    self.constraintHeight.constant = size.height;
-    [self updateConstraints];
     [super layoutSubviews];
 }
 
-/*
 - (void)updateConstraints
 {
+    CGSize size = [self imageSizeInPoints];
+    //self.constraintHeight.priority = 999;
+    self.constraintHeight.constant = size.height;
     [super updateConstraints];
-
-}*/
+}
 
 - (void)dealloc
 {
@@ -90,7 +87,7 @@ static NSString * const kCellIdentifier = @"StoryCell";
 {
     [super prepareForReuse];
     [self.imageView cancelImageRequestOperation];
-    self.constraintHeight.priority = 1;
+    //self.constraintHeight.priority = 1;
     self.constraintHeight.constant = 208;
     self.imageView.image = nil;
 }
@@ -99,6 +96,10 @@ static NSString * const kCellIdentifier = @"StoryCell";
 {
     CGFloat inverseAspectRatio = [self.post.largeImage.height floatValue] / [self.post.largeImage.width floatValue];
     CGFloat height = self.frame.size.width * inverseAspectRatio;
+    
+    if (height > self.frame.size.width)
+        height = self.frame.size.width;
+    
     NSLog(@"w: %f h: %f", self.frame.size.width, height);
     return CGSizeMake(self.frame.size.width, height);
 }

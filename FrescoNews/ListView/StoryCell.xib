@@ -13,19 +13,19 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" horizontalHuggingPriority="2" verticalHuggingPriority="2" tableViewCell="REc-bi-iha" id="hhG-HJ-GmR">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="3" verticalHuggingPriority="3" translatesAutoresizingMaskIntoConstraints="NO" id="uyl-FY-XH7">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="uyl-FY-XH7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="208"/>
                         <constraints>
-                            <constraint firstAttribute="height" priority="999" constant="208" id="jGE-NI-Gnc"/>
+                            <constraint firstAttribute="height" constant="208" id="jGE-NI-Gnc"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="100" horizontalCompressionResistancePriority="250" text="Caption" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijd-Pg-3ER" userLabel="Caption">
-                        <rect key="frame" x="8" y="216" width="304" height="17"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Caption" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ijd-Pg-3ER" userLabel="Caption">
+                        <rect key="frame" x="8" y="216" width="304" height="24"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVe-Kr-GQp" userLabel="Separator">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVe-Kr-GQp" userLabel="Separator" customClass="CustomCellDividerView">
                         <rect key="frame" x="0.0" y="250" width="320" height="1"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -37,7 +37,7 @@
                     <constraint firstItem="Ijd-Pg-3ER" firstAttribute="top" secondItem="uyl-FY-XH7" secondAttribute="bottom" constant="8" id="09A-Cv-AuZ"/>
                     <constraint firstItem="Ijd-Pg-3ER" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leadingMargin" id="2xo-Et-HsK"/>
                     <constraint firstItem="XVe-Kr-GQp" firstAttribute="leading" secondItem="hhG-HJ-GmR" secondAttribute="leading" id="7JI-nj-iaw"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Ijd-Pg-3ER" secondAttribute="bottom" constant="10" id="Kgi-J2-fGe"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Ijd-Pg-3ER" secondAttribute="bottom" constant="3" id="Kgi-J2-fGe"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Ijd-Pg-3ER" secondAttribute="trailing" id="Y9R-Fh-95U"/>
                     <constraint firstAttribute="trailing" secondItem="XVe-Kr-GQp" secondAttribute="trailing" id="c8L-FK-k1W"/>
                     <constraint firstAttribute="bottom" secondItem="XVe-Kr-GQp" secondAttribute="bottom" id="hfM-0F-7mR"/>

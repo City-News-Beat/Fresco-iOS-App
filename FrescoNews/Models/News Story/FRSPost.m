@@ -52,7 +52,7 @@
 
 - (NSURL *)largeImageURL
 {
-    return [self.largeImage cdnImageURL];
+    return [self.largeImage cdnImageInListURL];
 }
 
 @end
