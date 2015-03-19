@@ -45,8 +45,8 @@ static NSString * const kCellIdentifier = @"StoryCell";
     
     CGSize size = [self imageSizeInPoints];
     UIGraphicsBeginImageContextWithOptions(size, YES, 0);
-    [[UIColor redColor] setFill];
-    UIRectFill(CGRectMake(0, 0, size.width, size.height));
+    [[UIColor lightGrayColor] setFill];
+    UIRectFill(CGRectMake(0, 0, size.width * 2, size.height * 2));
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -71,13 +71,15 @@ static NSString * const kCellIdentifier = @"StoryCell";
     self.constraintHeight.priority = 999;
     self.constraintHeight.constant = size.height;
     [self updateConstraints];
+    [super layoutSubviews];
 }
 
+/*
 - (void)updateConstraints
 {
     [super updateConstraints];
 
-}
+}*/
 
 - (void)dealloc
 {

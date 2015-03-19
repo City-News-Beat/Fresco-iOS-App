@@ -59,12 +59,11 @@
 {
     // [self setActivityIndicatorVisible:YES];
     if (self.tag || !self.savedPosts) {
-#warning for video
-        //[[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@15 responseBlock:^(NSArray *responseObject, NSError *error) {
+
         [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:^(NSArray *responseObject, NSError *error) {
             if (!error) {
                 [self.posts setArray:responseObject];
-                [self cacheAndReload];
+                [self reloadData];
                 [self setActivityIndicatorVisible:NO];
                 if (responseBlock) {
                     responseBlock(YES, nil);
@@ -74,7 +73,7 @@
     }
     else if (self.savedPosts) {
         [self.posts setArray:self.savedPosts];
-        [self cacheAndReload];
+        [self reloadData];
         [self setActivityIndicatorVisible:NO];
         if (responseBlock) {
             responseBlock(YES, nil);
@@ -90,40 +89,18 @@
     [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@(self.posts.count) responseBlock:^(NSArray *responseObject, NSError *error) {
         if (!error) {
             [self.posts setArray:responseObject];
-            [self cacheAndReload];
+            [self reloadData];
            // [self.refreshControl endRefreshing];
            // [[self listCollectionView] setContentOffset:CGPointZero animated:YES];
         }
     }];
 }
 
-/*
-- (void)cacheImagesForCurrentStories
-{
-    return;
-    NSMutableArray *imageURLs = [[NSMutableArray alloc] initWithCapacity:self.posts.count * 3];
-    
-    for (FRSPost *story in self.posts) {
-        if ([story largeImageURL]) {
-            [imageURLs addObject:[story largeImageURL]];
-        }
-    }
-    
-   // [[FRSCacheManager sharedManager] precacheImages:imageURLs];
-}
-*/
-
 - (void)reloadData
 {
   //  [[self listCollectionView] reloadData];
   //  [[self detailCollectionView] reloadData];
     [self.tableView reloadData];
-}
-
-- (void)cacheAndReload
-{
-    [self reloadData];
-    //[self cacheImagesForCurrentStories];
 }
 
 #pragma mark - loading view
