@@ -537,6 +537,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
+                                        <exclude reference="oTr-jd-8qc"/>
                                         <exclude reference="taC-R8-hTs"/>
                                     </mask>
                                     <mask key="constraints">
@@ -548,6 +549,7 @@
                                 </variation>
                                 <variation key="heightClass=compact">
                                     <mask key="subviews">
+                                        <include reference="oTr-jd-8qc"/>
                                         <include reference="taC-R8-hTs"/>
                                     </mask>
                                     <mask key="constraints">
