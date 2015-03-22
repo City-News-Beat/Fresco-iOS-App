@@ -273,11 +273,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Rl9-vH-Ngs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="DRP-cH-rSB">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqM-m8-W9q" customClass="CameraPreviewView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTr-jd-8qc">
                                         <rect key="frame" x="8" y="8" width="73" height="41"/>
@@ -298,6 +298,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="PSn-d5-old" secondAttribute="height" multiplier="238:92" id="ON8-cW-7FY"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <state key="normal" title="Photo">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -319,6 +320,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="ez4-gP-F8Q" secondAttribute="height" multiplier="238:92" id="rVu-Uo-zSv"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                 <state key="normal" title="Video">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -448,24 +450,18 @@
                                                 <exclude reference="KC3-vo-SMa"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="D5s-1b-rE7"/>
+                                                <exclude reference="V0m-lF-gvh"/>
+                                                <exclude reference="VCp-yh-bJi"/>
                                                 <exclude reference="XwO-VG-WVd"/>
                                                 <exclude reference="Yrv-hF-B7y"/>
                                                 <exclude reference="crM-5u-Y5d"/>
                                                 <exclude reference="Caf-Zn-K28"/>
                                                 <exclude reference="QW1-ef-gsx"/>
                                                 <exclude reference="fiN-2g-O8M"/>
-                                                <exclude reference="D5s-1b-rE7"/>
-                                                <exclude reference="V0m-lF-gvh"/>
-                                                <exclude reference="VCp-yh-bJi"/>
-                                                <exclude reference="0Zn-Y9-LmS"/>
-                                                <exclude reference="Xvw-5D-c13"/>
-                                                <exclude reference="YK7-kO-knZ"/>
                                                 <exclude reference="3u7-wF-EjY"/>
                                                 <exclude reference="HlM-Zj-Un1"/>
                                                 <exclude reference="ZKf-kz-bxW"/>
-                                                <exclude reference="m73-OL-c1n"/>
-                                                <exclude reference="sQN-gh-oG7"/>
-                                                <exclude reference="zuA-4t-uff"/>
                                                 <exclude reference="5hS-zl-P5E"/>
                                                 <exclude reference="8tA-0z-Z8v"/>
                                                 <exclude reference="gfo-hK-XZP"/>
@@ -475,6 +471,12 @@
                                                 <exclude reference="izC-oV-7jZ"/>
                                                 <exclude reference="jFY-8e-PN9"/>
                                                 <exclude reference="lU7-jy-9IX"/>
+                                                <exclude reference="m73-OL-c1n"/>
+                                                <exclude reference="sQN-gh-oG7"/>
+                                                <exclude reference="zuA-4t-uff"/>
+                                                <exclude reference="0Zn-Y9-LmS"/>
+                                                <exclude reference="Xvw-5D-c13"/>
+                                                <exclude reference="YK7-kO-knZ"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
@@ -489,24 +491,18 @@
                                                 <include reference="KC3-vo-SMa"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <include reference="D5s-1b-rE7"/>
+                                                <include reference="V0m-lF-gvh"/>
+                                                <include reference="VCp-yh-bJi"/>
                                                 <include reference="XwO-VG-WVd"/>
                                                 <include reference="Yrv-hF-B7y"/>
                                                 <include reference="crM-5u-Y5d"/>
                                                 <include reference="Caf-Zn-K28"/>
                                                 <include reference="QW1-ef-gsx"/>
                                                 <include reference="fiN-2g-O8M"/>
-                                                <include reference="D5s-1b-rE7"/>
-                                                <include reference="V0m-lF-gvh"/>
-                                                <include reference="VCp-yh-bJi"/>
-                                                <include reference="0Zn-Y9-LmS"/>
-                                                <include reference="Xvw-5D-c13"/>
-                                                <include reference="YK7-kO-knZ"/>
                                                 <include reference="3u7-wF-EjY"/>
                                                 <include reference="HlM-Zj-Un1"/>
                                                 <include reference="ZKf-kz-bxW"/>
-                                                <include reference="m73-OL-c1n"/>
-                                                <include reference="sQN-gh-oG7"/>
-                                                <include reference="zuA-4t-uff"/>
                                                 <include reference="5hS-zl-P5E"/>
                                                 <include reference="8tA-0z-Z8v"/>
                                                 <include reference="gfo-hK-XZP"/>
@@ -516,6 +512,12 @@
                                                 <include reference="izC-oV-7jZ"/>
                                                 <include reference="jFY-8e-PN9"/>
                                                 <include reference="lU7-jy-9IX"/>
+                                                <include reference="m73-OL-c1n"/>
+                                                <include reference="sQN-gh-oG7"/>
+                                                <include reference="zuA-4t-uff"/>
+                                                <include reference="0Zn-Y9-LmS"/>
+                                                <include reference="Xvw-5D-c13"/>
+                                                <include reference="YK7-kO-knZ"/>
                                             </mask>
                                         </variation>
                                     </view>
