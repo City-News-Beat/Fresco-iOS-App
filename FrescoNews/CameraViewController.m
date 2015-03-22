@@ -60,6 +60,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [UIView setAnimationsEnabled:NO];
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
