@@ -23,6 +23,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, weak) IBOutlet UIButton *cameraButton;
 @property (nonatomic, weak) IBOutlet UIButton *stillButton;
 @property (nonatomic, weak) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIButton *flashButton;
 
 - (IBAction)toggleMovieRecording:(id)sender;
 - (IBAction)changeCamera:(id)sender;
@@ -370,6 +371,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (IBAction)doneButtonTapped:(id)sender
 {
     [self finishAndUpdate];
+}
+
+- (IBAction)flashButtonTapped:(UIButton *)button
+{
+    button.selected = !button.selected;
 }
 
 - (void)finishAndUpdate
