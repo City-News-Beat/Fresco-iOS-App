@@ -276,6 +276,53 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA1-19-jPS" userLabel="Portrait View">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please rotate your phone" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g8T-vW-fTR">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="8xS-bw-0OB"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="8xS-bw-0OB"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="8xS-bw-0OB"/>
+                                            </mask>
+                                        </variation>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="g8T-vW-fTR" secondAttribute="centerX" constant="2.5" id="8te-JV-5Bp"/>
+                                    <constraint firstAttribute="centerY" secondItem="g8T-vW-fTR" secondAttribute="centerY" constant="-0.5" id="9pZ-jN-kDi"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="g8T-vW-fTR"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="8te-JV-5Bp"/>
+                                        <exclude reference="9pZ-jN-kDi"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="g8T-vW-fTR"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <include reference="8te-JV-5Bp"/>
+                                        <include reference="9pZ-jN-kDi"/>
+                                    </mask>
+                                </variation>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xqM-m8-W9q" customClass="CameraPreviewView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
@@ -527,7 +574,7 @@
                                         </variation>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="taC-R8-hTs" firstAttribute="width" secondItem="xqM-m8-W9q" secondAttribute="height" multiplier="238:748" id="OFz-QX-OT1"/>
@@ -567,11 +614,43 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="CA1-19-jPS" firstAttribute="bottom" secondItem="Rl9-vH-Ngs" secondAttribute="top" id="1af-IZ-Msc"/>
                             <constraint firstAttribute="bottom" secondItem="xqM-m8-W9q" secondAttribute="bottom" id="5lH-lu-ikq"/>
+                            <constraint firstItem="CA1-19-jPS" firstAttribute="top" secondItem="g3c-6x-9TF" secondAttribute="bottom" id="CgE-eY-MnN"/>
+                            <constraint firstItem="CA1-19-jPS" firstAttribute="leading" secondItem="DRP-cH-rSB" secondAttribute="leading" id="JNV-zG-cEW"/>
                             <constraint firstItem="xqM-m8-W9q" firstAttribute="top" secondItem="DRP-cH-rSB" secondAttribute="top" id="NdX-cT-3LU"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="CA1-19-jPS" secondAttribute="trailing" constant="-21" id="QAs-gb-Lve"/>
                             <constraint firstAttribute="trailing" secondItem="xqM-m8-W9q" secondAttribute="trailing" id="cQB-bn-gGx"/>
                             <constraint firstItem="xqM-m8-W9q" firstAttribute="leading" secondItem="DRP-cH-rSB" secondAttribute="leading" id="do8-n2-yWq"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="CA1-19-jPS"/>
+                                <exclude reference="xqM-m8-W9q"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="1af-IZ-Msc"/>
+                                <exclude reference="CgE-eY-MnN"/>
+                                <exclude reference="JNV-zG-cEW"/>
+                                <exclude reference="QAs-gb-Lve"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact">
+                            <mask key="subviews">
+                                <include reference="xqM-m8-W9q"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="CA1-19-jPS"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="1af-IZ-Msc"/>
+                                <include reference="CgE-eY-MnN"/>
+                                <include reference="JNV-zG-cEW"/>
+                                <include reference="QAs-gb-Lve"/>
+                            </mask>
+                        </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="are-vO-thx"/>
@@ -589,7 +668,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="703" y="1476"/>
+            <point key="canvasLocation" x="702" y="1476"/>
         </scene>
     </scenes>
     <resources>
