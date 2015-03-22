@@ -359,13 +359,15 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="ez4-gP-F8Q" firstAttribute="top" secondItem="PSn-d5-old" secondAttribute="bottom" id="Caf-Zn-K28">
-                                                <variation key="heightClass=compact" constant="0.5"/>
+                                                <variation key="heightClass=compact" constant="-0.5"/>
                                             </constraint>
                                             <constraint firstItem="4zS-US-Aam" firstAttribute="leading" secondItem="taC-R8-hTs" secondAttribute="leading" id="D5s-1b-rE7"/>
                                             <constraint firstAttribute="trailing" secondItem="ez4-gP-F8Q" secondAttribute="trailing" constant="41.5" id="QW1-ef-gsx">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
-                                            <constraint firstItem="4zS-US-Aam" firstAttribute="top" secondItem="ez4-gP-F8Q" secondAttribute="bottom" constant="0.5" id="V0m-lF-gvh"/>
+                                            <constraint firstItem="4zS-US-Aam" firstAttribute="top" secondItem="ez4-gP-F8Q" secondAttribute="bottom" constant="0.5" id="V0m-lF-gvh">
+                                                <variation key="heightClass=compact" constant="-0.5"/>
+                                            </constraint>
                                             <constraint firstAttribute="trailing" secondItem="4zS-US-Aam" secondAttribute="trailing" id="VCp-yh-bJi"/>
                                             <constraint firstItem="PSn-d5-old" firstAttribute="top" secondItem="taC-R8-hTs" secondAttribute="top" id="XwO-VG-WVd"/>
                                             <constraint firstAttribute="trailing" secondItem="PSn-d5-old" secondAttribute="trailing" id="Yrv-hF-B7y"/>
