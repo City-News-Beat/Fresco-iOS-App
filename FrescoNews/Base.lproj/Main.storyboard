@@ -405,6 +405,9 @@
                                                         <include reference="dqs-d3-FhZ"/>
                                                     </mask>
                                                 </variation>
+                                                <connections>
+                                                    <action selector="snapStillImage:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="rJX-nT-XnW"/>
+                                                </connections>
                                             </button>
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
