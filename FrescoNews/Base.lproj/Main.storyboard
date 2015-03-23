@@ -406,7 +406,7 @@
                                                     </mask>
                                                 </variation>
                                                 <connections>
-                                                    <action selector="snapStillImage:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="rJX-nT-XnW"/>
+                                                    <action selector="shutterButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="z9S-2m-yzv"/>
                                                 </connections>
                                             </button>
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">

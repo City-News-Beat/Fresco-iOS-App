@@ -218,7 +218,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark Actions
 
-- (IBAction)toggleMovieRecording:(id)sender
+- (IBAction)shutterButtonTapped:(id)sender
+{
+    [self snapStillImage];
+}
+
+- (void)toggleMovieRecording
 {
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording])
@@ -248,7 +253,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-- (IBAction)snapStillImage:(id)sender
+- (void)snapStillImage
 {
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
