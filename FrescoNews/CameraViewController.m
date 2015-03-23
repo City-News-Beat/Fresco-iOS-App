@@ -19,14 +19,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 // For use in the storyboards.
 @property (nonatomic, weak) IBOutlet CameraPreviewView *previewView;
-@property (nonatomic, weak) IBOutlet UIButton *recordButton;
-@property (nonatomic, weak) IBOutlet UIButton *cameraButton;
-@property (nonatomic, weak) IBOutlet UIButton *stillButton;
 @property (nonatomic, weak) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 
 - (IBAction)toggleMovieRecording:(id)sender;
-- (IBAction)changeCamera:(id)sender;
 - (IBAction)snapStillImage:(id)sender;
 - (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer;
 
@@ -154,7 +150,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             dispatch_async([strongSelf sessionQueue], ^{
                 // Manually restarting the session since it must have been stopped due to an error.
                 [[strongSelf session] startRunning];
-                [[strongSelf recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
             });
         }]];
         [[self session] startRunning];
@@ -209,41 +204,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     else if (context == RecordingContext)
     {
-        BOOL isRecording = [change[NSKeyValueChangeNewKey] boolValue];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (isRecording)
-            {
-                [[self cameraButton] setEnabled:NO];
-                [[self recordButton] setTitle:NSLocalizedString(@"Stop", @"Recording button stop title") forState:UIControlStateNormal];
-                [[self recordButton] setEnabled:YES];
-            }
-            else
-            {
-                [[self cameraButton] setEnabled:YES];
-                [[self recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
-                [[self recordButton] setEnabled:YES];
-            }
-        });
+        //
     }
     else if (context == SessionRunningAndDeviceAuthorizedContext)
     {
-        BOOL isRunning = [change[NSKeyValueChangeNewKey] boolValue];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (isRunning)
-            {
-                [[self cameraButton] setEnabled:YES];
-                [[self recordButton] setEnabled:YES];
-                [[self stillButton] setEnabled:YES];
-            }
-            else
-            {
-                [[self cameraButton] setEnabled:NO];
-                [[self recordButton] setEnabled:NO];
-                [[self stillButton] setEnabled:NO];
-            }
-        });
+        //
     }
     else
     {
@@ -255,8 +220,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)toggleMovieRecording:(id)sender
 {
-    [[self recordButton] setEnabled:NO];
-
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording])
         {
@@ -282,61 +245,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         {
             [[self movieFileOutput] stopRecording];
         }
-    });
-}
-
-- (IBAction)changeCamera:(id)sender
-{
-    [[self cameraButton] setEnabled:NO];
-    [[self recordButton] setEnabled:NO];
-    [[self stillButton] setEnabled:NO];
-
-    dispatch_async([self sessionQueue], ^{
-        AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
-        AVCaptureDevicePosition preferredPosition = AVCaptureDevicePositionUnspecified;
-        AVCaptureDevicePosition currentPosition = [currentVideoDevice position];
-
-        switch (currentPosition)
-        {
-            case AVCaptureDevicePositionUnspecified:
-                preferredPosition = AVCaptureDevicePositionBack;
-                break;
-            case AVCaptureDevicePositionBack:
-                preferredPosition = AVCaptureDevicePositionFront;
-                break;
-            case AVCaptureDevicePositionFront:
-                preferredPosition = AVCaptureDevicePositionBack;
-                break;
-        }
-
-        AVCaptureDevice *videoDevice = [CameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:preferredPosition];
-        AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
-
-        [[self session] beginConfiguration];
-
-        [[self session] removeInput:[self videoDeviceInput]];
-        if ([[self session] canAddInput:videoDeviceInput])
-        {
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:currentVideoDevice];
-
-            [CameraViewController setFlashMode:AVCaptureFlashModeAuto forDevice:videoDevice];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:videoDevice];
-
-            [[self session] addInput:videoDeviceInput];
-            [self setVideoDeviceInput:videoDeviceInput];
-        }
-        else
-        {
-            [[self session] addInput:[self videoDeviceInput]];
-        }
-
-        [[self session] commitConfiguration];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[self cameraButton] setEnabled:YES];
-            [[self recordButton] setEnabled:YES];
-            [[self stillButton] setEnabled:YES];
-        });
     });
 }
 
