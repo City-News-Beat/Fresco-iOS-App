@@ -10,8 +10,9 @@
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSTag.h"
-#import "StoryCell.h"
-#import "StoryCellHeader.h"
+#import "StoryCellMosaic.h"
+#import "StoryCellMosaicHeader.h"
+#import "GalleryViewController.h"
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -116,7 +117,7 @@
     // get story for cell at this index -- tags for now actually
     FRSStory *story = [self.stories objectAtIndex:index];
     
-    StoryCell *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
+    StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     
     storyCell.story = story;
     [storyCell layoutIfNeeded];
@@ -132,18 +133,34 @@
     return 200;
 }
 */
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 40;
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+    StoryCellMosaicHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaicHeader identifier]];
     
     // remember, one story per section
     FRSStory *cellStory = [self.stories objectAtIndex:section];
     [storyCellHeader populateViewWithStory:cellStory];
     
     return storyCellHeader;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"showGallery"]) {
+        StoryCellMosaic *storyCell = (StoryCellMosaic *)sender;
+        GalleryViewController *gvc = [segue destinationViewController];
+        gvc.story = storyCell.story;
+    }
 }
 @end

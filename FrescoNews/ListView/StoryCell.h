@@ -1,5 +1,5 @@
 //
-//  FRSStoryListCell.h
+//  StoryCell.h
 //  Fresco
 //
 //  Created by Team Fresco on 2/9/14.
@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FRSPost.h"
 
-@interface FRSStoryListCell : UITableViewCell
+@interface StoryCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *postImageView;
-@property (weak, nonatomic) IBOutlet UILabel *timeAndPlaceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *bylineLabel;
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (nonatomic) BOOL didTransition;
 

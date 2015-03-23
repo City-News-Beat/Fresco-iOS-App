@@ -25,7 +25,21 @@
 
 - (NSURL *)cdnImageURL
 {
-    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue])];
+    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
+}
+
+- (NSURL *)cdnImageInListURL
+{
+    CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
+    NSString *transformString;
+    
+    // we don't want portrait aspect so square off
+    if ([self.height floatValue] > [self.width floatValue]) {
+        size.height = size.width;
+        transformString = @"c_fill,g_faces";
+    }
+    
+    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
 }
 
 @end

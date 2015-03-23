@@ -24,5 +24,5 @@
 + (NSValueTransformer *)dateJSONTransformer;
 
 + (NSString *)relativeDateStringFromDate:(NSDate *)date;
-- (NSURL *)cdnImageURLForURLString:(NSString *)url withSize:(CGSize)size;
+- (NSURL *)cdnImageURLForURLString:(NSString *)url withSize:(CGSize)size transformationString:(NSString *)transformationString;
 @end

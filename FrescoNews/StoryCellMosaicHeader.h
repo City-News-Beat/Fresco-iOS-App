@@ -1,5 +1,5 @@
 //
-//  StoryViewHeaderCell.h
+//  StoryCellMosaicHeader.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/9/15.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class FRSStory;
-@interface StoryCellHeader : UITableViewCell
+@interface StoryCellMosaicHeader : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 + (NSString *)identifier;
 - (void)populateViewWithStory:(FRSStory *)story;

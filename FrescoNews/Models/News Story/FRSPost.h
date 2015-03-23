@@ -24,9 +24,6 @@
 @property (nonatomic, copy) NSDate *date;
 @property (nonatomic, strong) NSArray *sources;
 @property (nonatomic, copy) NSString *byline;
-
-#warning part of reverse compatibility hack
-@property (nonatomic, copy) NSString *large_path;
 - (NSURL *)largeImageURL;
 
 @end

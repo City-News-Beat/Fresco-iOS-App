@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface GalleryView : UIView
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
 
 @end

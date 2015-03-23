@@ -1,18 +1,18 @@
 //
-//  StoryCellHeader.m
+//  StoryCellMosaicHeader.m
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/9/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "StoryCellHeader.h"
+#import "StoryCellMosaicHeader.h"
 #import "FRSStory.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
-static NSString * const kCellIdentifier = @"StoryCellHeader";
+static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
 
-@implementation StoryCellHeader
+@implementation StoryCellMosaicHeader
 + (NSString *)identifier
 {
     return kCellIdentifier;

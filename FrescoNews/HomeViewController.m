@@ -10,7 +10,8 @@
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSTag.h"
-#import "FRSStoryListCell.h"
+#import "StoryCell.h"
+#import "StoryCellHeader.h"
 
 @interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -45,7 +46,7 @@
 
     [self setFrescoImageHeader];
 
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[FRSStoryListCell identifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:@"StoryCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:[StoryCell identifier]];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0;
 
@@ -58,12 +59,11 @@
 {
     // [self setActivityIndicatorVisible:YES];
     if (self.tag || !self.savedPosts) {
-#warning for video
-        //[[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@15 responseBlock:^(NSArray *responseObject, NSError *error) {
+
         [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:^(NSArray *responseObject, NSError *error) {
             if (!error) {
                 [self.posts setArray:responseObject];
-                [self cacheAndReload];
+                [self reloadData];
                 [self setActivityIndicatorVisible:NO];
                 if (responseBlock) {
                     responseBlock(YES, nil);
@@ -73,7 +73,7 @@
     }
     else if (self.savedPosts) {
         [self.posts setArray:self.savedPosts];
-        [self cacheAndReload];
+        [self reloadData];
         [self setActivityIndicatorVisible:NO];
         if (responseBlock) {
             responseBlock(YES, nil);
@@ -89,40 +89,18 @@
     [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@(self.posts.count) responseBlock:^(NSArray *responseObject, NSError *error) {
         if (!error) {
             [self.posts setArray:responseObject];
-            [self cacheAndReload];
+            [self reloadData];
            // [self.refreshControl endRefreshing];
            // [[self listCollectionView] setContentOffset:CGPointZero animated:YES];
         }
     }];
 }
 
-/*
-- (void)cacheImagesForCurrentStories
-{
-    return;
-    NSMutableArray *imageURLs = [[NSMutableArray alloc] initWithCapacity:self.posts.count * 3];
-    
-    for (FRSPost *story in self.posts) {
-        if ([story largeImageURL]) {
-            [imageURLs addObject:[story largeImageURL]];
-        }
-    }
-    
-   // [[FRSCacheManager sharedManager] precacheImages:imageURLs];
-}
-*/
-
 - (void)reloadData
 {
   //  [[self listCollectionView] reloadData];
   //  [[self detailCollectionView] reloadData];
     [self.tableView reloadData];
-}
-
-- (void)cacheAndReload
-{
-    [self reloadData];
-    //[self cacheImagesForCurrentStories];
 }
 
 #pragma mark - loading view
@@ -145,15 +123,19 @@
 }
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self.posts count];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.posts.count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger index = indexPath.item;
+    NSUInteger index = indexPath.section;
     
     //Get story for cell at this index
     FRSPost *cellStory = [self.posts objectAtIndex:index];
@@ -161,7 +143,7 @@
     //If we are in the master list
     // if (collectionView == [self listCollectionView]) {
     
-    FRSStoryListCell *cell = [tableView dequeueReusableCellWithIdentifier:[FRSStoryListCell identifier] forIndexPath:indexPath];
+    StoryCell *cell = [tableView dequeueReusableCellWithIdentifier:[StoryCell identifier] forIndexPath:indexPath];
     [cell setPost:cellStory];
 
     return cell;
@@ -198,6 +180,23 @@
     }
     
     return nil;*/
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 36;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+
+    // remember, one story per section
+    FRSPost *cellStory = [self.posts objectAtIndex:section];
+    [storyCellHeader setPost:cellStory];
+    
+    return storyCellHeader;
 }
 
 @end
