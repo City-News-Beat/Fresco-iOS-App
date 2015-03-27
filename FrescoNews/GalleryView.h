@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class FRSGallery;
 @interface GalleryView : UIView
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
-
+@property (weak, nonatomic) FRSGallery *gallery;
 @end

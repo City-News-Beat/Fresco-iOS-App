@@ -24,4 +24,14 @@
     view.frame = self.bounds;
     [self addSubview:view];
 }
+
+- (UIView *)viewFromNib:(NSString *)nibName usingClass:(Class)className
+{
+    for (id object in [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil]) {
+        if ([[object class] isEqual:className]) {
+            return object;
+        }
+    }
+    return nil;
+}
 @end

@@ -12,7 +12,7 @@
 #import "FRSTag.h"
 #import "StoryCellMosaic.h"
 #import "StoryCellMosaicHeader.h"
-#import "GalleryViewController.h"
+#import "StoryViewController.h"
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -159,7 +159,7 @@
 {
     if ([[segue identifier] isEqualToString:@"showGallery"]) {
         StoryCellMosaic *storyCell = (StoryCellMosaic *)sender;
-        GalleryViewController *gvc = [segue destinationViewController];
+        StoryViewController *gvc = [segue destinationViewController];
         gvc.story = storyCell.story;
     }
 }

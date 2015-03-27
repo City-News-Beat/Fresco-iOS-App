@@ -7,38 +7,75 @@
 //
 
 #import "GalleryView.h"
-#import "UIView+Additions.h"
+#import "FRSGallery.h"
+#import "PostCollectionViewCell.h"
 
-@interface GalleryView ()
-@property (nonatomic, assign) BOOL nibIsLoaded;
+@interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
 @end
+
 @implementation GalleryView
 
-- (id)initWithFrame:(CGRect)frame
+- (void)awakeFromNib
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self addSubviewFromNib];
-    }
-    return self;
+    self.collectionPosts.dataSource = self;
+    self.collectionPosts.delegate = self;
+    self.pageControl.numberOfPages = 0;
+
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (void)setGallery:(FRSGallery *)gallery
 {
-    self = [self initWithFrame:CGRectZero];
-    return self;
+    _gallery = gallery;
+    self.labelCaption.text = self.gallery.caption;
+    self.pageControl.numberOfPages = [self.gallery.posts count];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section
+{
+    return [self.gallery.posts count];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
-    //if (self.nibIsLoaded) return self;
-    //Class class = [self class];
-    //NSString *nibName = NSStringFromClass(class);
-    NSArray *nibViews = [[NSBundle mainBundle] loadNibNamed:@"GalleryView" owner:self options:nil];
-    UIView *view = [nibViews objectAtIndex:0];
-    //self = [super initWithCoder:aDecoder];
-  //  self.nibIsLoaded = YES;
-    if (self) {
-        [self addSubviewFromNib];
-    }
-    return self;
+    cell.post = [self.gallery.posts objectAtIndex:indexPath.item];
+
+    return cell;
+}
+
+
+#pragma mark - UICollectionViewDelegate
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return collectionView.bounds.size;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0f;
+}
+
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0f;
+}
+
+#pragma mark - ScrollViewDelegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSIndexPath *index = [[self.collectionPosts indexPathsForVisibleItems] lastObject];
+    self.pageControl.currentPage = index.item;
 }
 
 @end

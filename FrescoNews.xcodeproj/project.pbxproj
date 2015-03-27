@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E3592831AC2FF3C00F60348 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleryViewController.m */; };
+		1E3592861AC30E7300F60348 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* StoryTableViewCell.m */; };
+		1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592891AC3329900F60348 /* PostCollectionViewCell.m */; };
 		1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD01AB090FD006F4965 /* FRSStory.m */; };
 		1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD41AB09F2C006F4965 /* FRSImage.m */; };
 		1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD81AB09FFF006F4965 /* FRSGallery.m */; };
@@ -17,8 +20,7 @@
 		1EA6F2E11AB8DE3000E74E68 /* StoryCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E01AB8DE3000E74E68 /* StoryCellHeader.m */; };
 		1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */; };
 		1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */; };
-		1EA6F2EA1ABB6CF200E74E68 /* GalleryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E91ABB6CF200E74E68 /* GalleryView.xib */; };
-		1EA6F2ED1ABB80AA00E74E68 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EC1ABB80AA00E74E68 /* GalleryViewController.m */; };
+		1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */; };
 		1EA6F2F01ABB830C00E74E68 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */; };
 		1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */; };
 		1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */; };
@@ -62,6 +64,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E3592811AC2FF3C00F60348 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
+		1E3592821AC2FF3C00F60348 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		1E3592841AC30E7300F60348 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
+		1E3592851AC30E7300F60348 /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
+		1E3592881AC3329900F60348 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
+		1E3592891AC3329900F60348 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		1E407ACF1AB090EE006F4965 /* FRSStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSStory.h; path = "News Story/FRSStory.h"; sourceTree = "<group>"; };
 		1E407AD01AB090FD006F4965 /* FRSStory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSStory.m; path = "News Story/FRSStory.m"; sourceTree = "<group>"; };
 		1E407AD31AB09F25006F4965 /* FRSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSImage.h; path = "News Story/FRSImage.h"; sourceTree = "<group>"; };
@@ -83,9 +91,8 @@
 		1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellDividerView.m; sourceTree = "<group>"; };
 		1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryView.h; sourceTree = "<group>"; };
 		1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryView.m; sourceTree = "<group>"; };
-		1EA6F2E91ABB6CF200E74E68 /* GalleryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GalleryView.xib; sourceTree = "<group>"; };
-		1EA6F2EB1ABB80AA00E74E68 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
-		1EA6F2EC1ABB80AA00E74E68 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		1EA6F2EB1ABB80AA00E74E68 /* StoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryViewController.h; sourceTree = "<group>"; };
+		1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
 		1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
 		1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableStore.h; sourceTree = "<group>"; };
@@ -174,6 +181,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1E3592871AC3327000F60348 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				1E3592881AC3329900F60348 /* PostCollectionViewCell.h */,
+				1E3592891AC3329900F60348 /* PostCollectionViewCell.m */,
+			);
+			name = Post;
+			sourceTree = "<group>";
+		};
 		1E407AD21AB09107006F4965 /* Story */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,7 +231,8 @@
 			children = (
 				1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */,
 				1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */,
-				1EA6F2E91ABB6CF200E74E68 /* GalleryView.xib */,
+				1E3592811AC2FF3C00F60348 /* GalleryViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleryViewController.m */,
 			);
 			name = Gallery;
 			sourceTree = "<group>";
@@ -304,6 +321,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1E3592871AC3327000F60348 /* Post */,
 				1EA6F2E51ABB6C5000E74E68 /* Gallery */,
 				1ED9A3351AAE01E0009BD7A3 /* Stories */,
 				1EDA450E1AA4F8640082E08D /* Story */,
@@ -332,8 +350,8 @@
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
-				1EA6F2EB1ABB80AA00E74E68 /* GalleryViewController.h */,
-				1EA6F2EC1ABB80AA00E74E68 /* GalleryViewController.m */,
+				1EA6F2EB1ABB80AA00E74E68 /* StoryViewController.h */,
+				1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -422,6 +440,8 @@
 		1EDA450E1AA4F8640082E08D /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				1E3592841AC30E7300F60348 /* StoryTableViewCell.h */,
+				1E3592851AC30E7300F60348 /* StoryTableViewCell.m */,
 				1EDA450F1AA4F8640082E08D /* StoryCell.h */,
 				1EDA45101AA4F8640082E08D /* StoryCell.m */,
 				1EA6F2DF1AB8DE3000E74E68 /* StoryCellHeader.h */,
@@ -525,7 +545,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42BB68C41AB5349F003FC268 /* placeholder.png in Resources */,
-				1EA6F2EA1ABB6CF200E74E68 /* GalleryView.xib in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA45131AA4F8640082E08D /* StoryCell.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
@@ -591,11 +610,13 @@
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
 				423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */,
 				1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */,
+				1E3592861AC30E7300F60348 /* StoryTableViewCell.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
+				1E3592831AC2FF3C00F60348 /* GalleryViewController.m in Sources */,
 				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
@@ -604,13 +625,14 @@
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* StoryCellHeader.m in Sources */,
-				1EA6F2ED1ABB80AA00E74E68 /* GalleryViewController.m in Sources */,
+				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
+				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				1EA6F2F01ABB830C00E74E68 /* UIView+Additions.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,

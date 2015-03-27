@@ -10,4 +10,6 @@
 
 @interface UIView (Additions)
 - (void)addSubviewFromNib;
+- (UIView *)viewFromNib:(NSString *)nibName usingClass:(Class)className;
+
 @end
