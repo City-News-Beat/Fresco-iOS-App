@@ -17,23 +17,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate>
 
-// For use in the storyboards.
-@property (nonatomic, weak) IBOutlet CameraPreviewView *previewView;
-@property (nonatomic, weak) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIButton *photoButton;
+@property (weak, nonatomic) IBOutlet UIButton *videoButton;
+@property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 
-- (IBAction)toggleMovieRecording:(id)sender;
-- (IBAction)snapStillImage:(id)sender;
-- (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer;
-
-// Session management.
+// Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 
-// Utilities.
+// Utilities
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
@@ -58,6 +55,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
+    self.photoButton.selected = YES;
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -303,6 +301,22 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     CGPoint devicePoint = CGPointMake(.5, .5);
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
+}
+
+- (IBAction)photoButtonTapped:(UIButton *)button
+{
+    if (!button.selected) {
+        button.selected = YES;
+        self.videoButton.selected = NO;
+    }
+}
+
+- (IBAction)videoButtonTapped:(UIButton *)button
+{
+    if (!button.selected) {
+        button.selected = YES;
+        self.photoButton.selected = NO;
+    }
 }
 
 #pragma mark File Output Delegate
