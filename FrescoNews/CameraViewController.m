@@ -218,18 +218,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)shutterButtonTapped:(id)sender
 {
-    [self snapStillImage];
+    if (self.photoButton.selected) {
+        [self snapStillImage];
+    }
+    else {
+        [self toggleMovieRecording];
+    }
 }
 
 - (void)toggleMovieRecording
 {
     dispatch_async([self sessionQueue], ^{
-        if (![[self movieFileOutput] isRecording])
-        {
+        if (![[self movieFileOutput] isRecording]) {
             [self setLockInterfaceRotation:YES];
 
-            if ([[UIDevice currentDevice] isMultitaskingSupported])
-            {
+            if ([[UIDevice currentDevice] isMultitaskingSupported]) {
                 // Setup background task. This is needed because the captureOutput:didFinishRecordingToOutputFileAtURL: callback is not received until AVCam returns to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error: after the recorded file has been saved.
                 [self setBackgroundRecordingID:[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil]];
             }
@@ -244,8 +247,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
             [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
         }
-        else
-        {
+        else {
             [[self movieFileOutput] stopRecording];
         }
     });
@@ -263,8 +265,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         // Capture a still image.
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
 
-            if (imageDataSampleBuffer)
-            {
+            if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
