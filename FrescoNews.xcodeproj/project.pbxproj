@@ -340,8 +340,6 @@
 			children = (
 				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
-				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
-				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
 				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
@@ -350,6 +348,8 @@
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
+				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
+				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
 				1EA6F2EB1ABB80AA00E74E68 /* StoryViewController.h */,
 				1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */,
 			);

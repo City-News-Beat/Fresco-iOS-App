@@ -13,6 +13,7 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "StoryViewController.h"
 
 static NSString * const kCellIdentifier = @"StoryCellMosaic";
 
@@ -101,13 +102,8 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *) sender;
     StoryThumbnailView *storyThumbnail = (StoryThumbnailView *) gesture.view;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
-                                                    message:[NSString stringWithFormat:@"Pressed id %d - image %d", (int)storyThumbnail.story_id, (int)storyThumbnail.thumbSequence]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles: nil];
-                          
-    [alert show];
+    
+    [self.tapHandler story:self.story tappedAtGalleryIndex:storyThumbnail.thumbSequence];
 }
 
 - (void)prepareForReuse

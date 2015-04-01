@@ -14,7 +14,7 @@
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"
 
-@interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -118,8 +118,9 @@
     FRSStory *story = [self.stories objectAtIndex:index];
     
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
-    
     storyCell.story = story;
+    storyCell.tapHandler = self;
+    
     [storyCell layoutIfNeeded];
     
     return storyCell;
@@ -155,12 +156,16 @@
     return storyCellHeader;
 }
 
+#pragma mark - StoryThumbnailViewTapHandler
+- (void)story:(FRSStory *)story tappedAtGalleryIndex:(NSInteger)index
+{
+    StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
+    svc.story = story;
+    [self.navigationController pushViewController:svc animated:YES];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showGallery"]) {
-        StoryCellMosaic *storyCell = (StoryCellMosaic *)sender;
-        StoryViewController *gvc = [segue destinationViewController];
-        gvc.story = storyCell.story;
-    }
+
 }
 @end

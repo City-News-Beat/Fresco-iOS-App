@@ -244,7 +244,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="constraintHeight" destination="tdN-uL-GYG" id="tp3-an-orp"/>
-                                            <segue destination="rth-VD-jLI" kind="show" identifier="showGallery" id="zJd-Aq-oRK"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -277,7 +276,7 @@
         <!--Story View Controller-->
         <scene sceneID="TC6-gH-nd3">
             <objects>
-                <viewController id="rth-VD-jLI" customClass="StoryViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="storyViewController" id="rth-VD-jLI" customClass="StoryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fux-2f-sg0"/>
                         <viewControllerLayoutGuide type="bottom" id="TLe-jA-5Rt"/>
