@@ -10,6 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
+#import <AFAmazonS3Manager.h>
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
@@ -38,6 +39,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) id runtimeErrorHandlingObserver;
 
 @end
+
+// TODO: Clean up state on app backgrounding
 
 @implementation CameraViewController
 
@@ -268,8 +271,37 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
-                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
-            }
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
+                    NSData *jpegImageData = UIImageJPEGRepresentation(image, 1.0);
+                    NSString *myFilePath = [[NSBundle mainBundle] pathForResource:@"photo"
+                                                                           ofType:@"jpeg"];
+                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+                    NSString *directory = [NSString stringWithFormat:@"%@", [paths objectAtIndex:0]];
+                    NSString *photoPath = [directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", [myFilePath lastPathComponent]]];
+
+                    NSError *writeError = nil;
+                    if (![jpegImageData writeToFile:photoPath options:NSDataWritingFileProtectionNone error:&writeError]) {
+                        [jpegImageData writeToFile:photoPath atomically:NO];
+                    }
+
+                    AFAmazonS3Manager *s3Manager = [[AFAmazonS3Manager alloc] initWithAccessKeyID:@"AKIAJNXOI5QWV3MSTZVA"
+                                                                                           secret:@"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"];
+                    s3Manager.requestSerializer.region = AFAmazonS3USStandardRegion;
+                    s3Manager.requestSerializer.bucket = @"com.fresconews";
+                    [s3Manager putObjectWithFile:photoPath
+                                  destinationPath:[NSString stringWithFormat:@"/uploads/photo%@.jpeg", @((NSInteger)[[NSDate date] timeIntervalSince1970])]
+                                       parameters:nil
+                                         progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+                                             NSLog(@"%f%% Uploaded", (totalBytesWritten / (totalBytesExpectedToWrite * 1.0f) * 100));
+                                         }
+                                          success:^(id responseObject) {
+                                              // NSLog(@"Upload Complete: %@", responseObject.URL);
+                                          }
+                                          failure:^(NSError *error) {
+                                              NSLog(@"Error: %@", error);
+                                          }];
+                }];
+             }
         }];
     });
 }
