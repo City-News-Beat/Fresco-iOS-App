@@ -3,8 +3,11 @@ platform :ios, '7.0'
 #pod 'CMPopTipView'
 #pod 'Parse'
 #pod 'PBWebViewController'
+
 pod 'AFNetworking', '~> 2.1'
 pod 'AFNetworkActivityLogger'
+pod 'AFAmazonS3Manager'
+
 pod 'Mantle', '~> 1.3'
 pod 'Functional.m', '~> 1.0'
 pod 'ASIHTTPRequest', '~> 1.8'
