@@ -10,5 +10,8 @@
 @class GalleryView, FRSStory;
 @interface ProfileViewController : UIViewController
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet UIView *profileView;
+@property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) FRSStory *story;
 @end
