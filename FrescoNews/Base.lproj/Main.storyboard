@@ -296,11 +296,11 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="602" height="299"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lrh-p2-gI1">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="602" height="299"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                                 <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                                 </variation>
@@ -732,6 +732,7 @@
                                                 <constraint firstItem="Z66-hB-0aE" firstAttribute="top" secondItem="9Gx-yU-taB" secondAttribute="bottom" constant="4" id="eSS-3f-cRu"/>
                                                 <constraint firstItem="Z66-hB-0aE" firstAttribute="top" secondItem="ie4-kp-1g7" secondAttribute="top" id="f0l-6Z-yto"/>
                                                 <constraint firstItem="Z66-hB-0aE" firstAttribute="bottom" secondItem="ie4-kp-1g7" secondAttribute="bottom" id="fBK-3j-nMm"/>
+                                                <constraint firstAttribute="trailing" secondItem="Rk9-hR-q4l" secondAttribute="trailing" constant="8" id="fzs-pN-Tj9"/>
                                                 <constraint firstItem="9Gm-Yx-ms9" firstAttribute="leading" secondItem="OCV-jN-JOq" secondAttribute="leading" constant="20" id="gYF-ZO-NFn"/>
                                                 <constraint firstItem="QCn-O9-oHf" firstAttribute="leading" secondItem="YcB-km-rNg" secondAttribute="trailing" constant="10" id="kQV-Mb-Qqt"/>
                                                 <constraint firstAttribute="trailing" secondItem="Rk9-hR-q4l" secondAttribute="trailing" constant="8" id="lG0-ui-9QC"/>
@@ -743,6 +744,9 @@
                                                 <constraint firstItem="ie4-kp-1g7" firstAttribute="leading" secondItem="Z66-hB-0aE" secondAttribute="trailing" constant="10" id="qIk-na-fH0"/>
                                                 <constraint firstItem="Z66-hB-0aE" firstAttribute="leading" secondItem="9Gx-yU-taB" secondAttribute="leading" id="u8h-eL-0ea"/>
                                                 <constraint firstItem="ta6-sF-pBv" firstAttribute="leading" secondItem="QCn-O9-oHf" secondAttribute="trailing" constant="10" id="uGv-6I-xTE"/>
+                                                <constraint firstItem="Rk9-hR-q4l" firstAttribute="leading" secondItem="6sZ-Kc-cfu" secondAttribute="trailing" constant="92" id="uKD-Q8-gY0">
+                                                    <variation key="heightClass=regular" constant="190"/>
+                                                </constraint>
                                                 <constraint firstItem="ie4-kp-1g7" firstAttribute="leading" secondItem="9Gm-Yx-ms9" secondAttribute="trailing" constant="25" id="vk2-qO-bzW"/>
                                                 <constraint firstItem="QZd-Xx-izx" firstAttribute="leading" secondItem="9Gx-yU-taB" secondAttribute="trailing" constant="10" id="xW7-FY-fph"/>
                                             </constraints>
@@ -757,7 +761,16 @@
                                                     <exclude reference="ZLK-iP-4sm"/>
                                                     <exclude reference="vk2-qO-bzW"/>
                                                     <exclude reference="QvV-vP-x0E"/>
+                                                    <exclude reference="fzs-pN-Tj9"/>
                                                     <exclude reference="lG0-ui-9QC"/>
+                                                    <exclude reference="uKD-Q8-gY0"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular">
+                                                <mask key="constraints">
+                                                    <exclude reference="Xf9-2Y-fHQ"/>
+                                                    <exclude reference="fzs-pN-Tj9"/>
+                                                    <include reference="uKD-Q8-gY0"/>
                                                 </mask>
                                             </variation>
                                         </view>
@@ -799,7 +812,7 @@
                     <connections>
                         <outlet property="profileView" destination="W79-L6-2A1" id="96W-km-E3V"/>
                         <outlet property="profileWrapperView" destination="OCV-jN-JOq" id="byL-Eq-AzQ"/>
-                        <outlet property="tableView" destination="AUk-kv-7zd" id="3j2-is-c2d"/>
+                        <outlet property="tableView" destination="AUk-kv-7zd" id="Ne8-cY-K3V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ath-Dt-VwT" userLabel="First Responder" sceneMemberID="firstResponder"/>

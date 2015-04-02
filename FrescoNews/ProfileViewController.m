@@ -14,7 +14,6 @@
 #import "UIView+Additions.h"
 
 @interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation ProfileViewController
