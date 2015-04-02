@@ -512,11 +512,11 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 3C5287NBLR;
+						DevelopmentTeam = 7Z242QD3TB;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 3C5287NBLR;
+						DevelopmentTeam = 7Z242QD3TB;
 						TestTargetID = 1EDA44AF1AA4CCC70082E08D;
 					};
 				};
@@ -687,6 +687,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (P9H23NW5JZ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -729,6 +730,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (P9H23NW5JZ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;

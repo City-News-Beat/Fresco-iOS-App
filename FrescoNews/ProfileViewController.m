@@ -9,6 +9,7 @@
 #import "ProfileViewController.h"
 #import "StoryTableViewCell.h"
 #import "GalleryView.h"
+#import "FRSDataManager.h"
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "UIView+Additions.h"
@@ -45,6 +46,24 @@
     self.tableView.dataSource = self;
     self.profileView.backgroundColor = [UIColor colorWithHex:@"FAFAFA"];
     self.profileWrapperView.backgroundColor = [UIColor colorWithHex:@"FAFAFA"];
+    
+    [self performNecessaryFetch:nil];
+}
+
+- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
+{
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            if ([responseObject count])
+            self.story = [responseObject firstObject];
+        }
+        [self reloadData];
+    }];
+}
+
+- (void)reloadData
+{
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
