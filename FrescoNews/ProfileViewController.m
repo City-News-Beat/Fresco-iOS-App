@@ -44,6 +44,8 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.profileView.backgroundColor = [UIColor colorWithHex:@"FAFAFA"];
+    self.profileWrapperView.backgroundColor = [UIColor colorWithHex:@"FAFAFA"];
 }
 
 #pragma mark - UITableViewDataSource
