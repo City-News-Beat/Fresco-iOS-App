@@ -16,13 +16,14 @@ static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate>
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
+@property (weak, nonatomic) IBOutlet UIButton *tempButton;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -274,15 +275,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
-                    NSData *jpegImageData = UIImageJPEGRepresentation(image, 1.0);
-                    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"photo" stringByAppendingPathExtension:@"jpeg"]];
-
-                    NSError *writeError = nil;
-                    if (![jpegImageData writeToFile:photoPath options:NSDataWritingFileProtectionNone error:&writeError]) {
-                        [jpegImageData writeToFile:photoPath atomically:NO];
-                    }
-                    
-                    [self uploadToCDN:photoPath photo:YES];
+                    [self uploadToCDN:[self temporaryPathForImage:image] photo:YES];
                 }];
              }
         }];
@@ -361,6 +354,40 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         button.selected = YES;
         self.photoButton.selected = NO;
     }
+}
+
+- (IBAction)tempButtonTapped:(id)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    if ([info[UIImagePickerControllerMediaType] isEqualToString:@"public.movie"]) {
+        [self uploadToCDN:[(NSURL *)info[UIImagePickerControllerMediaURL] path] photo:NO];
+    }
+    else {
+        [self uploadToCDN:[self temporaryPathForImage:info[UIImagePickerControllerOriginalImage]] photo:YES];
+    }
+
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (NSString *)temporaryPathForImage:(UIImage *)image
+{
+    NSData *jpegImageData = UIImageJPEGRepresentation(image, 1.0);
+    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"photo" stringByAppendingPathExtension:@"jpeg"]];
+
+    NSError *writeError = nil;
+    if (![jpegImageData writeToFile:photoPath options:NSDataWritingFileProtectionNone error:&writeError]) {
+        [jpegImageData writeToFile:photoPath atomically:NO];
+    }
+
+    return photoPath;
 }
 
 #pragma mark File Output Delegate
