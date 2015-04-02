@@ -295,7 +295,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    NSString *path = @"http://monorail.theburgg.com/fresco/stories.json";
+    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php";
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
     [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {

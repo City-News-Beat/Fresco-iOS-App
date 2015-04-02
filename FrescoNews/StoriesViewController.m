@@ -51,9 +51,6 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 150;
     
-    //UINib *storyCellNib = [UINib nibWithNibName:@"FRSStoryListCell" bundle:[NSBundle mainBundle]];
-    //[_collectionView registerNib:storyCellNib forCellWithReuseIdentifier:[FRSStoryListCell identifier]];
-    
     [self performNecessaryFetch:nil];
 }
 
