@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -960,7 +960,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="365" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AUk-kv-7zd">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="365" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AUk-kv-7zd">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="W79-L6-2A1" userLabel="Profile">
@@ -1169,9 +1169,6 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
-                                                            <exclude reference="GM9-en-ctz"/>
-                                                            <exclude reference="RTR-1m-s1S"/>
-                                                            <exclude reference="bhu-8T-NL0"/>
                                                             <exclude reference="HY6-Fm-dYn"/>
                                                             <exclude reference="M3v-eL-peM"/>
                                                             <exclude reference="Qss-lS-nbV"/>
@@ -1181,6 +1178,9 @@
                                                             <exclude reference="iE5-Ni-mku"/>
                                                             <exclude reference="ub1-DB-ypo"/>
                                                             <exclude reference="vc0-rw-cey"/>
+                                                            <exclude reference="GM9-en-ctz"/>
+                                                            <exclude reference="RTR-1m-s1S"/>
+                                                            <exclude reference="bhu-8T-NL0"/>
                                                         </mask>
                                                     </variation>
                                                     <connections>
@@ -1205,6 +1205,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="AUk-kv-7zd" secondAttribute="bottom" id="JEr-LA-2v5"/>
+                            <constraint firstItem="AUk-kv-7zd" firstAttribute="top" secondItem="V6R-0X-2CD" secondAttribute="top" id="Jct-91-olk"/>
+                            <constraint firstAttribute="trailing" secondItem="AUk-kv-7zd" secondAttribute="trailing" id="g9S-zf-ngr"/>
+                            <constraint firstItem="AUk-kv-7zd" firstAttribute="leading" secondItem="V6R-0X-2CD" secondAttribute="leading" id="nfW-5S-jmr"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jdL-2w-3HR"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -1223,13 +1229,13 @@
     <resources>
         <image name="Bitmap" width="192" height="192"/>
         <image name="facebook" width="40" height="40"/>
-        <image name="placeholder.png" width="238" height="750"/>
         <image name="settings" width="43" height="43"/>
         <image name="tab-assignments" width="32" height="32"/>
         <image name="tab-camera" width="32" height="32"/>
         <image name="tab-home" width="32" height="32"/>
         <image name="tab-profile" width="32" height="32"/>
         <image name="tab-stories" width="28" height="28"/>
+        <image name="towel.png" width="420" height="420"/>
         <image name="twitter" width="40" height="40"/>
     </resources>
 </document>
