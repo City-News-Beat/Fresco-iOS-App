@@ -294,13 +294,13 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 #pragma mark - Stories
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    NSString *path = @"http://monorail.theburgg.com/fresco/stories.json";
+- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    NSString *path = @"http://monorail.theburgg.com/fresco/stories.json?type=stories";
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
+    
     [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-      NSArray *stories = [responseObject map:^id(id obj) {
+        NSArray *stories = [responseObject map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
         }];
         if(responseBlock)
