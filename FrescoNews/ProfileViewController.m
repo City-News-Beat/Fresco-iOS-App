@@ -52,10 +52,10 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getGalleriesWithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count])
-            self.story = [responseObject firstObject];
+            self.galleries = responseObject;
         }
         [self reloadData];
     }];
@@ -69,7 +69,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.story.galleries count];
+    return [self.galleries count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -84,7 +84,7 @@
     // the section will tell us the "row"
     NSUInteger index = indexPath.section;
     
-    FRSGallery *gallery = [self.story.galleries objectAtIndex:index];
+    FRSGallery *gallery = [self.galleries objectAtIndex:index];
     
     StoryTableViewCell *storyTableViewCell = [tableView dequeueReusableCellWithIdentifier:[StoryTableViewCell identifier] forIndexPath:indexPath];
     

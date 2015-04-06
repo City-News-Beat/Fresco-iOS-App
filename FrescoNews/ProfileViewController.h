@@ -15,5 +15,5 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @property (weak, nonatomic) IBOutlet UIView *profileView;
 @property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) FRSStory *story;
+@property (strong, nonatomic) NSArray *galleries;
 @end

@@ -13,6 +13,7 @@
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
+#import "FRSGallery.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 
@@ -41,5 +42,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 # warning for video
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end
