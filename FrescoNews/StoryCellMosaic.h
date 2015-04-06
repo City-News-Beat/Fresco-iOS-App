@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @class FRSStory;
+
+@protocol StoryThumbnailViewTapHandler
+- (void)story:(FRSStory *)story tappedAtGalleryIndex:(NSInteger)index;
+@end
+
 @interface StoryCellMosaic : UITableViewCell
 @property (weak, nonatomic) FRSStory *story;
 @property (strong, nonatomic) NSMutableArray *imagesArray;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
+@property (strong, nonatomic) id <StoryThumbnailViewTapHandler> tapHandler;
 
 + (NSString *)identifier;
 @end
