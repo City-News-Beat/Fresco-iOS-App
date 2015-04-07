@@ -1082,9 +1082,56 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryTableViewCell" rowHeight="365" id="2O5-vR-6rE" customClass="StoryTableViewCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellHeader" rowHeight="36" id="qBw-3X-4vQ" customClass="StoryCellHeader">
+                                        <rect key="frame" x="0.0" y="282" width="600" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qBw-3X-4vQ" id="y28-Wb-oza">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view alpha="0.87000000476837158" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k1B-sf-SB8" userLabel="Opaque Background">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ODe-wN-xzC" userLabel="Time and Place">
+                                                    <rect key="frame" x="8" y="10" width="81" height="15"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXb-Jz-lec" userLabel="By Line">
+                                                    <rect key="frame" x="561" y="10" width="31" height="15"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="k1B-sf-SB8" firstAttribute="leading" secondItem="ODe-wN-xzC" secondAttribute="trailing" id="GZH-Fr-p8M"/>
+                                                <constraint firstAttribute="trailing" secondItem="k1B-sf-SB8" secondAttribute="trailing" id="OqQ-je-0BR"/>
+                                                <constraint firstItem="k1B-sf-SB8" firstAttribute="top" secondItem="y28-Wb-oza" secondAttribute="top" id="QpK-Lt-grL"/>
+                                                <constraint firstItem="aXb-Jz-lec" firstAttribute="top" secondItem="y28-Wb-oza" secondAttribute="topMargin" constant="2" id="Vif-Oi-z71"/>
+                                                <constraint firstAttribute="bottom" secondItem="k1B-sf-SB8" secondAttribute="bottom" id="Vjv-HH-IxP"/>
+                                                <constraint firstItem="k1B-sf-SB8" firstAttribute="leading" secondItem="y28-Wb-oza" secondAttribute="leading" id="b9j-dN-biL"/>
+                                                <constraint firstItem="ODe-wN-xzC" firstAttribute="top" secondItem="y28-Wb-oza" secondAttribute="topMargin" constant="2" id="hPX-EP-j7z"/>
+                                                <constraint firstItem="aXb-Jz-lec" firstAttribute="leading" secondItem="k1B-sf-SB8" secondAttribute="trailing" id="hl2-Df-GZK"/>
+                                                <constraint firstItem="aXb-Jz-lec" firstAttribute="trailing" secondItem="y28-Wb-oza" secondAttribute="trailingMargin" id="miH-fD-qdZ"/>
+                                                <constraint firstItem="ODe-wN-xzC" firstAttribute="leading" secondItem="y28-Wb-oza" secondAttribute="leadingMargin" id="rf9-AT-OLB"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="GZH-Fr-p8M"/>
+                                                    <exclude reference="hl2-Df-GZK"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="labelByLine" destination="aXb-Jz-lec" id="YpB-Vc-YA2"/>
+                                            <outlet property="labelTimeAndPlace" destination="ODe-wN-xzC" id="X9o-YI-2CJ"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryTableViewCell" id="2O5-vR-6rE" customClass="StoryTableViewCell">
+                                        <rect key="frame" x="0.0" y="118" width="600" height="365"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2O5-vR-6rE" id="Dcu-by-TWR">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>

@@ -12,7 +12,9 @@
 #import "FRSDataManager.h"
 #import "FRSStory.h"
 #import "FRSGallery.h"
+#import "FRSTag.h"
 #import "UIView+Additions.h"
+#import "StoryCellHeader.h"
 
 @interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 @end
@@ -59,6 +61,17 @@
         }
         [self reloadData];
     }];
+    
+    [[FRSDataManager sharedManager] getPostsWithTag:self.tag limit:@(self.posts.count) responseBlock:^(NSArray *responseObject, NSError *error) {
+        if (!error) {
+            [self.posts setArray:responseObject];
+            [self reloadData];
+            // [self.refreshControl endRefreshing];
+            // [[self listCollectionView] setContentOffset:CGPointZero animated:YES];
+        }
+    }];
+    
+    
 }
 
 - (void)reloadData
@@ -92,6 +105,16 @@
     //[storyCell layoutIfNeeded];
     
     return storyTableViewCell;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+    
+    // remember, one story per section
+    FRSPost *cellStory = [self.posts objectAtIndex:section];
+    [storyCellHeader setPost:cellStory];
+    
+    return storyCellHeader;
 }
 
 
