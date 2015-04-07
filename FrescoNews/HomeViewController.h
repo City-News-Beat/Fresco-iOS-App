@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @class FRSTag;
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : FRSBaseViewController
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, strong) NSMutableArray *savedPosts;
 @property (nonatomic, strong) FRSTag *tag;

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface CameraViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface CameraViewController : FRSBaseViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @end
