@@ -11,7 +11,6 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 #import <UIKit/UIKit.h>
 @class GalleryView, FRSStory, FRSTag;
 @interface ProfileViewController : UIViewController
-@property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UIView *profileView;
 @property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
