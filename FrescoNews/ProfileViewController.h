@@ -9,8 +9,11 @@
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
+
 @class GalleryView, FRSStory, FRSTag;
-@interface ProfileViewController : UIViewController
+
+@interface ProfileViewController : FRSBaseViewController
 @property (weak, nonatomic) IBOutlet UIView *profileView;
 @property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
+
 @class GalleryView, FRSStory;
-@interface StoryViewController : UIViewController
+@interface StoryViewController : FRSBaseViewController
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) FRSStory *story;
 @end

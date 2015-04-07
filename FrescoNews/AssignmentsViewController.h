@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface AssignmentsViewController : UIViewController
+@interface AssignmentsViewController : FRSBaseViewController
 
 @end
