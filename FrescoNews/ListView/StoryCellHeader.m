@@ -8,6 +8,7 @@
 
 #import "StoryCellHeader.h"
 #import "FRSPost.h"
+#import "FRSGallery.h"
 
 @interface StoryCellHeader ()
 @property (weak, nonatomic) IBOutlet UILabel *labelTimeAndPlace;
@@ -30,5 +31,11 @@ static NSString * const kCellIdentifier = @"StoryCellHeader";
 {
     self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:post.date];
     self.labelByLine.text = post.byline;
+}
+
+- (void)setGallery:(FRSGallery *)gallery
+{
+    self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
+    self.labelByLine.text = gallery.byline;
 }
 @end

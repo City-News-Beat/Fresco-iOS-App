@@ -107,17 +107,20 @@
     return storyTableViewCell;
 }
 
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 36;
+}
+
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
     
     // remember, one story per section
-    FRSPost *cellStory = [self.posts objectAtIndex:section];
-    [storyCellHeader setPost:cellStory];
+    FRSGallery *gallery = [self.galleries objectAtIndex:section];
+    [storyCellHeader setGallery:gallery];
     
     return storyCellHeader;
 }
 
-
-#pragma mark - UITableViewDelegate
-//-(CGSize)tableView:(UITableView *)tableView s
 @end

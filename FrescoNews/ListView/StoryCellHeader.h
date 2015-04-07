@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class FRSPost;
+@class FRSPost, FRSGallery;
 
 @interface StoryCellHeader : UITableViewCell
 + (NSString *)identifier;
 - (void)setPost:(FRSPost *)post;
+- (void)setGallery:(FRSGallery *)post;
 @end

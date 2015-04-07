@@ -44,6 +44,16 @@
     return [MTLModel userJSONTransformer];
 }
 
++ (NSValueTransformer *)createTimeJSONTransformer
+{
+    return [MTLModel dateJSONTransformer];
+}
+
++ (NSValueTransformer *)modifiedTimeJSONTransformer
+{
+    return [MTLModel dateJSONTransformer];
+}
+
 - (NSString *)caption
 {
     return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
