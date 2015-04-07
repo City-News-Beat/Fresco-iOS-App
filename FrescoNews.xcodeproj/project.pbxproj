@@ -17,7 +17,7 @@
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
-		1EA6F2E11AB8DE3000E74E68 /* StoryCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E01AB8DE3000E74E68 /* StoryCellHeader.m */; };
+		1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */; };
 		1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */; };
 		1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */; };
 		1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */; };
@@ -42,7 +42,7 @@
 		1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */; };
 		1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA450C1AA4E2BD0082E08D /* PostView.m */; };
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
-		1EDA45131AA4F8640082E08D /* StoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA45111AA4F8640082E08D /* StoryCell.xib */; };
+		1EDA45131AA4F8640082E08D /* GalleryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA45111AA4F8640082E08D /* GalleryCell.xib */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
@@ -87,8 +87,8 @@
 		1E408B791AA7A4580057AC16 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
-		1EA6F2DF1AB8DE3000E74E68 /* StoryCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCellHeader.h; sourceTree = "<group>"; };
-		1EA6F2E01AB8DE3000E74E68 /* StoryCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCellHeader.m; sourceTree = "<group>"; };
+		1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryHeader.h; sourceTree = "<group>"; };
+		1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryHeader.m; sourceTree = "<group>"; };
 		1EA6F2E21ABB52D000E74E68 /* CustomCellDividerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellDividerView.h; sourceTree = "<group>"; };
 		1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellDividerView.m; sourceTree = "<group>"; };
 		1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryView.h; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 		1EDA450C1AA4E2BD0082E08D /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostView.m; path = Views/PostView.m; sourceTree = "<group>"; };
 		1EDA450F1AA4F8640082E08D /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
 		1EDA45101AA4F8640082E08D /* StoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCell.m; sourceTree = "<group>"; };
-		1EDA45111AA4F8640082E08D /* StoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StoryCell.xib; sourceTree = "<group>"; };
+		1EDA45111AA4F8640082E08D /* GalleryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GalleryCell.xib; sourceTree = "<group>"; };
 		1EDA45141AA500EE0082E08D /* FRSDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDataManager.h; sourceTree = "<group>"; };
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
@@ -451,9 +451,9 @@
 				1E3592851AC30E7300F60348 /* StoryTableViewCell.m */,
 				1EDA450F1AA4F8640082E08D /* StoryCell.h */,
 				1EDA45101AA4F8640082E08D /* StoryCell.m */,
-				1EA6F2DF1AB8DE3000E74E68 /* StoryCellHeader.h */,
-				1EA6F2E01AB8DE3000E74E68 /* StoryCellHeader.m */,
-				1EDA45111AA4F8640082E08D /* StoryCell.xib */,
+				1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */,
+				1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */,
+				1EDA45111AA4F8640082E08D /* GalleryCell.xib */,
 			);
 			name = Story;
 			path = ListView;
@@ -555,7 +555,7 @@
 				42B4D4E21ABF6C6E006AD3AC /* towel.png in Resources */,
 				42BB68C41AB5349F003FC268 /* placeholder.png in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
-				1EDA45131AA4F8640082E08D /* StoryCell.xib in Resources */,
+				1EDA45131AA4F8640082E08D /* GalleryCell.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -633,7 +633,7 @@
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
-				1EA6F2E11AB8DE3000E74E68 /* StoryCellHeader.m in Sources */,
+				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,

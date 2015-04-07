@@ -11,7 +11,7 @@
 #import "FRSDataManager.h"
 #import "FRSTag.h"
 #import "StoryCell.h"
-#import "StoryCellHeader.h"
+#import "GalleryHeader.h"
 
 @interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -190,7 +190,7 @@
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+    GalleryHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
 
     // remember, one story per section
     FRSPost *cellStory = [self.posts objectAtIndex:section];

@@ -14,7 +14,7 @@
 #import "FRSGallery.h"
 #import "FRSTag.h"
 #import "UIView+Additions.h"
-#import "StoryCellHeader.h"
+#import "GalleryHeader.h"
 
 @interface ProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 @end
@@ -114,7 +114,7 @@
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    StoryCellHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellHeader identifier]];
+    GalleryHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
     
     // remember, one story per section
     FRSGallery *gallery = [self.galleries objectAtIndex:section];

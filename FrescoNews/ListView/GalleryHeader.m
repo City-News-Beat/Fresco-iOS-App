@@ -6,18 +6,18 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "StoryCellHeader.h"
+#import "GalleryHeader.h"
 #import "FRSPost.h"
 #import "FRSGallery.h"
 
-@interface StoryCellHeader ()
+@interface GalleryHeader ()
 @property (weak, nonatomic) IBOutlet UILabel *labelTimeAndPlace;
 @property (weak, nonatomic) IBOutlet UILabel *labelByLine;
 @end
 
 static NSString * const kCellIdentifier = @"StoryCellHeader";
 
-@implementation StoryCellHeader
+@implementation GalleryHeader
 + (NSString *)identifier
 {
     return kCellIdentifier;
