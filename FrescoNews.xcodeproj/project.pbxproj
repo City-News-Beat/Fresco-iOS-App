@@ -524,7 +524,7 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 7Z242QD3TB;
+						DevelopmentTeam = 7APQ65MGK2;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -770,7 +770,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joshua Lerner (FBKWT8RG95)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
@@ -785,7 +785,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Joshua Lerner (FBKWT8RG95)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;

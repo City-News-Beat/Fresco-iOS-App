@@ -245,7 +245,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [[[self movieFileOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
             // Turning OFF flash for video recording
-            [CameraViewController setFlashMode:AVCaptureFlashModeOff forDevice:[[self videoDeviceInput] device]];
+//            [CameraViewController setFlashMode:AVCaptureFlashModeOff forDevice:[[self videoDeviceInput] device]];
 
             NSError *writeError = nil;
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
@@ -267,8 +267,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
-        // Flash set to Auto for Still Capture
-        [CameraViewController setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
 
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             if (imageDataSampleBuffer) {
@@ -284,6 +282,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)uploadToCDN:(NSString *)localPath photo:(BOOL)isPhoto
 {
+    return;
     NSString *destinationPath;
     if (isPhoto) {
         destinationPath = [NSString stringWithFormat:@"/uploads/photo%@.jpeg", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
@@ -324,6 +323,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (IBAction)flashButtonTapped:(UIButton *)button
 {
     button.selected = !button.selected;
+    [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
 }
 
 - (void)finishAndUpdate
@@ -461,6 +461,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         else
         {
             NSLog(@"%@", error);
+        }
+    }
+}
+
+- (void) setTorchMode:(AVCaptureTorchMode)torchMode
+{
+    if (![[[self videoDeviceInput] device] hasTorch]) {
+        return;
+    }
+
+    AVCaptureDevice *device = [[self videoDeviceInput] device];
+    if ([device isTorchModeSupported:torchMode] && [device torchMode] != torchMode) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            [device setTorchMode:torchMode];
+            [device unlockForConfiguration];
+        }
+        else {
+            id deleg = [self delegate];
+            if ([deleg respondsToSelector:@selector(acquiringDeviceLockFailedWithError:)]) {
+                [deleg acquiringDeviceLockFailedWithError:error];
+            }
         }
     }
 }

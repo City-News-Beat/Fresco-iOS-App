@@ -297,7 +297,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="602" height="299"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lrh-p2-gI1">
@@ -640,8 +640,7 @@
                                                         <exclude reference="dqs-d3-FhZ"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="97" width="127" height="128"/>
+                                                <variation key="heightClass=compact">
                                                     <mask key="constraints">
                                                         <include reference="dqs-d3-FhZ"/>
                                                     </mask>
@@ -653,9 +652,6 @@
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" red="0.2196078598" green="0.66666668650000005" blue="0.14901961389999999" alpha="1" colorSpace="deviceRGB"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="225" width="127" height="15"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUl-iv-DcP">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -665,9 +661,6 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <state key="selected" title="On"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="242" width="127" height="30"/>
-                                                </variation>
                                                 <connections>
                                                     <action selector="flashButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="riK-K8-H6E"/>
                                                 </connections>
@@ -675,9 +668,6 @@
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1l-hi-b8h" userLabel="Spacer View 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" red="0.2196078598" green="0.66666668650000005" blue="0.14901961389999999" alpha="1" colorSpace="deviceRGB"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="274" width="127" height="15"/>
-                                                </variation>
                                             </view>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="towel.png" translatesAutoresizingMaskIntoConstraints="NO" id="rP6-eE-MdW">
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
