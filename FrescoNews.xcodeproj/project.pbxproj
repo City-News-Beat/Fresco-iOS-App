@@ -110,7 +110,7 @@
 		1ED9A3331AAE01D9009BD7A3 /* StoryCellMosaicHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCellMosaicHeader.m; sourceTree = "<group>"; };
 		1ED9A3361AAE2E4B009BD7A3 /* StoryThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryThumbnailView.h; sourceTree = "<group>"; };
 		1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryThumbnailView.m; sourceTree = "<group>"; };
-		1EDA44B01AA4CCC70082E08D /* FrescoNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrescoNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EDA44B01AA4CCC70082E08D /* Fresco2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fresco2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B41AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44B71AA4CCC70082E08D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -273,7 +273,7 @@
 		1EDA44B11AA4CCC70082E08D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44B01AA4CCC70082E08D /* FrescoNews.app */,
+				1EDA44B01AA4CCC70082E08D /* Fresco2.app */,
 				1EDA44CC1AA4CCC70082E08D /* FrescoNewsTests.xctest */,
 			);
 			name = Products;
@@ -476,9 +476,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1EDA44AF1AA4CCC70082E08D /* FrescoNews */ = {
+		1EDA44AF1AA4CCC70082E08D /* Fresco2 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoNews" */;
+			buildConfigurationList = 1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco2" */;
 			buildPhases = (
 				A712045BA4FF7C3ECD55DD1A /* Check Pods Manifest.lock */,
 				1EDA44AC1AA4CCC70082E08D /* Sources */,
@@ -490,9 +490,9 @@
 			);
 			dependencies = (
 			);
-			name = FrescoNews;
+			name = Fresco2;
 			productName = FrescoNews;
-			productReference = 1EDA44B01AA4CCC70082E08D /* FrescoNews.app */;
+			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco2.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1EDA44CB1AA4CCC70082E08D /* FrescoNewsTests */ = {
@@ -524,7 +524,7 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 7Z242QD3TB;
+						DevelopmentTeam = Z7R96S8K3N;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -546,7 +546,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1EDA44AF1AA4CCC70082E08D /* FrescoNews */,
+				1EDA44AF1AA4CCC70082E08D /* Fresco2 */,
 				1EDA44CB1AA4CCC70082E08D /* FrescoNewsTests */,
 			);
 		};
@@ -667,7 +667,7 @@
 /* Begin PBXTargetDependency section */
 		1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1EDA44AF1AA4CCC70082E08D /* FrescoNews */;
+			target = 1EDA44AF1AA4CCC70082E08D /* Fresco2 */;
 			targetProxy = 1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -701,7 +701,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (P9H23NW5JZ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (39S37GAYYM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -744,7 +744,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (P9H23NW5JZ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jason Gresh (39S37GAYYM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -771,11 +771,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -786,11 +788,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -840,7 +844,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoNews" */ = {
+		1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1EDA44D71AA4CCC70082E08D /* Debug */,

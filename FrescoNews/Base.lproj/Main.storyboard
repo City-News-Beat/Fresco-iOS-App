@@ -1552,18 +1552,18 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
-                                                            <exclude reference="hEj-Y0-JMN"/>
                                                             <exclude reference="12y-6B-gqo"/>
-                                                            <exclude reference="qDe-A2-iuR"/>
                                                             <exclude reference="9nd-S5-3TZ"/>
                                                             <exclude reference="EV8-WO-LGA"/>
+                                                            <exclude reference="NTX-Ru-0d2"/>
+                                                            <exclude reference="Wjc-3B-jXF"/>
                                                             <exclude reference="Wjl-lM-dgI"/>
                                                             <exclude reference="fsQ-PV-Q9i"/>
-                                                            <exclude reference="Wjc-3B-jXF"/>
-                                                            <exclude reference="NTX-Ru-0d2"/>
-                                                            <exclude reference="oNk-mk-c9d"/>
+                                                            <exclude reference="hEj-Y0-JMN"/>
+                                                            <exclude reference="qDe-A2-iuR"/>
                                                             <exclude reference="Czz-1U-8MS"/>
                                                             <exclude reference="bAK-Ti-xAe"/>
+                                                            <exclude reference="oNk-mk-c9d"/>
                                                         </mask>
                                                     </variation>
                                                     <connections>
