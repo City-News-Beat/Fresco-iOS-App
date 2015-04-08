@@ -10,6 +10,8 @@
 #import "StoryTableViewCell.h"
 #import "GalleryView.h"
 #import "FRSDataManager.h"
+#import "FRSStory.h"
+#import "FRSGallery.h"
 #import "UIView+Additions.h"
 
 
@@ -58,7 +60,6 @@
         }
         [self reloadData];
     }];
-    
 }
 
 - (void)reloadData

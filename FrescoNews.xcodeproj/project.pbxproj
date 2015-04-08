@@ -348,9 +348,9 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
+				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
 				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
