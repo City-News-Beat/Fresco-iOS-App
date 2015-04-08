@@ -17,6 +17,5 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, strong) NSMutableArray *savedPosts;
 @property (nonatomic, strong) FRSTag *tag;
-
 @end
 
