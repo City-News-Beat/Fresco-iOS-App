@@ -324,6 +324,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     button.selected = !button.selected;
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
+    [self setTorchMode:(button.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
 }
 
 - (void)finishAndUpdate
@@ -465,7 +466,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void) setTorchMode:(AVCaptureTorchMode)torchMode
+- (void)setTorchMode:(AVCaptureTorchMode)torchMode
 {
     if (![[[self videoDeviceInput] device] hasTorch]) {
         return;
@@ -479,10 +480,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [device unlockForConfiguration];
         }
         else {
-            id deleg = [self delegate];
-            if ([deleg respondsToSelector:@selector(acquiringDeviceLockFailedWithError:)]) {
-                [deleg acquiringDeviceLockFailedWithError:error];
-            }
+//            id deleg = [self delegate];
+//            if ([deleg respondsToSelector:@selector(acquiringDeviceLockFailedWithError:)]) {
+//                [deleg acquiringDeviceLockFailedWithError:error];
+//            }
         }
     }
 }
