@@ -7,8 +7,9 @@
 //
 
 #import "GalleriesViewController.h"
-#import "StoryTableViewCell.h"
-#import "GalleryView.h"
+#import "HomeViewController.h"
+#import "ProfileViewController.h"
+#import "GalleryTableViewCell.h"
 #import "GalleryHeader.h"
 #import "FRSDataManager.h"
 #import "FRSStory.h"
@@ -17,6 +18,7 @@
 
 
 @interface GalleriesViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 @end
 
 @implementation GalleriesViewController
@@ -73,11 +75,11 @@
     
     FRSGallery *gallery = [self.galleries objectAtIndex:index];
     
-    StoryTableViewCell *storyTableViewCell = [tableView dequeueReusableCellWithIdentifier:[StoryTableViewCell identifier] forIndexPath:indexPath];
+    GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
     
-    storyTableViewCell.gallery = gallery;
+    galleryTableViewCell.gallery = gallery;
     
-    return storyTableViewCell;
+    return galleryTableViewCell;
 }
 
 #pragma mark - UITableViewDelegate
@@ -96,4 +98,13 @@
     return galleryHeader;
 }
 
+#pragma mark - Segues
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
+        if ([self.containingViewController isKindOfClass:[HomeViewController class]])
+            [self.viewProfileHeader removeFromSuperview];
+    }
+}
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "StoryViewController.h"
-#import "StoryTableViewCell.h"
+#import "GalleryTableViewCell.h"
 #import "GalleryView.h"
 #import "FRSStory.h"
 #import "FRSGallery.h"
@@ -66,7 +66,7 @@
     
     FRSGallery *gallery = [self.story.galleries objectAtIndex:index];
     
-    StoryTableViewCell *storyTableViewCell = [tableView dequeueReusableCellWithIdentifier:[StoryTableViewCell identifier] forIndexPath:indexPath];
+    GalleryTableViewCell *storyTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
     
     storyTableViewCell.gallery = gallery;
     //[storyCell layoutIfNeeded];

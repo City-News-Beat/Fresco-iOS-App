@@ -11,7 +11,7 @@
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "GalleryHeader.h"
-#import "StoryTableViewCell.h"
+#import "GalleryTableViewCell.h"
 
 @interface HomeViewController ()
 @property (strong, nonatomic) NSArray *galleries;
@@ -73,11 +73,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Make sure your segue name in storyboard is the same as this line
-    if ([[segue identifier] isEqualToString:@"embedGalleries"])
-    {
+    if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = self.galleries;
+        self.galleriesViewController.containingViewController = self;
     }
 }
 @end
