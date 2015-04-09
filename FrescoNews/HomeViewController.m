@@ -7,13 +7,16 @@
 //
 
 #import "HomeViewController.h"
+#import "GalleriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "GalleryHeader.h"
-#import "StoryTableViewCell.h"
+#import "GalleryTableViewCell.h"
 
-@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface HomeViewController ()
+@property (strong, nonatomic) NSArray *galleries;
+@property (weak, nonatomic) IBOutlet UIView *galleriesView;
+@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end
 
 @implementation HomeViewController
@@ -36,20 +39,13 @@
 
 - (void)setup
 {
-    //_posts = [[NSMutableArray alloc] init];
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     [self setFrescoImageHeader];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 400.0;
-
     [self performNecessaryFetch:nil];
 }
 
@@ -59,8 +55,11 @@
 {
     [[FRSDataManager sharedManager] getGalleriesWithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
-            if ([responseObject count])
+            if ([responseObject count]) {
                 self.galleries = responseObject;
+                self.galleriesViewController.galleries = self.galleries;
+                [self.galleriesViewController refresh];
+            }
         }
         [self reloadData];
     }];
@@ -68,72 +67,17 @@
 
 - (void)reloadData
 {
-  //  [[self listCollectionView] reloadData];
-  //  [[self detailCollectionView] reloadData];
-    [self.tableView reloadData];
+    
 }
 
-#pragma mark - loading view
-
-- (void)setActivityIndicatorVisible:(BOOL)visible
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-/*
-    [_loadingView removeFromSuperview];
-    
-    [self setLoadingView:nil];
-    
-    if (visible) {
-        UIActivityIndicatorView *actIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        CGPoint viewCenter = [[self view] center];
-        [actIndicator setCenter:viewCenter];
-        [[self listCollectionView] addSubview:actIndicator];
-        [actIndicator startAnimating];
-        [self setLoadingView:actIndicator];
-    }*/
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
+        // Get reference to the destination view controller
+        self.galleriesViewController = [segue destinationViewController];
+        self.galleriesViewController.galleries = self.galleries;
+        self.galleriesViewController.containingViewController = self;
+    }
 }
-
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [self.galleries count];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 1;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // since there is a section for every story
-    // and just one story per section
-    // the section will tell us the "row"
-    NSUInteger index = indexPath.section;
-    
-    FRSGallery *gallery = [self.galleries objectAtIndex:index];
-    
-    StoryTableViewCell *storyTableViewCell = [tableView dequeueReusableCellWithIdentifier:[StoryTableViewCell identifier] forIndexPath:indexPath];
-    
-    storyTableViewCell.gallery = gallery;
-    //[storyCell layoutIfNeeded];
-    
-    return storyTableViewCell;
-}
-
-#pragma mark - UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 36;
-}
-
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    GalleryHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
-    
-    // remember, one story per section
-    FRSGallery *gallery = [self.galleries objectAtIndex:section];
-    [storyCellHeader setGallery:gallery];
-    
-    return storyCellHeader;
-}
-
 @end

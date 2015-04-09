@@ -11,12 +11,6 @@
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
-@class FRSTag;
-
 @interface HomeViewController : FRSBaseViewController
-@property (weak, nonatomic) IBOutlet UIView *profileView;
-@property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
-@property (strong, nonatomic) NSArray *galleries;
-
 @end
 

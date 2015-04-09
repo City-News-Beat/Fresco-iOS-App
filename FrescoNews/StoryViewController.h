@@ -11,6 +11,5 @@
 
 @class GalleryView, FRSStory;
 @interface StoryViewController : FRSBaseViewController
-@property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) FRSStory *story;
 @end

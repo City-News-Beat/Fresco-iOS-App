@@ -478,12 +478,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [device setTorchMode:torchMode];
             [device unlockForConfiguration];
         }
+        /*
         else {
             id deleg = [self delegate];
             if ([deleg respondsToSelector:@selector(acquiringDeviceLockFailedWithError:)]) {
                 [deleg acquiringDeviceLockFailedWithError:error];
             }
-        }
+        }*/
     }
 }
 

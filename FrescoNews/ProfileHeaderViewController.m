@@ -1,26 +1,22 @@
 //
-//  GalleryViewController.m
+//  ProfileHeaderViewController.m
 //  FrescoNews
 //
-//  Created by Jason Gresh on 3/25/15.
+//  Created by Jason Gresh on 4/9/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "GalleryViewController.h"
-#import "FRSStory.h"
+#import "ProfileHeaderViewController.h"
 
-@interface GalleryViewController ()
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
+@interface ProfileHeaderViewController ()
+
 @end
 
-@implementation GalleryViewController
+@implementation ProfileHeaderViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.labelCaption.text = self.story.caption;
 }
 
 - (void)didReceiveMemoryWarning {

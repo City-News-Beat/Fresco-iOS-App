@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class FRSGallery, GalleryView;
-@interface StoryTableViewCell : UITableViewCell
+@interface GalleryTableViewCell : UITableViewCell
 @property (weak, nonatomic) FRSGallery *gallery;
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 + (NSString *)identifier;
