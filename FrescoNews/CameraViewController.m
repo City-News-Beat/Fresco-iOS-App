@@ -140,6 +140,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
+
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
+    [alertView show];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -318,7 +321,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)uploadToCDN:(NSString *)localPath photo:(BOOL)isPhoto
 {
-    return;
+    if (!isPhoto) {
+        return;
+    }
+
     NSString *destinationPath;
     if (isPhoto) {
         destinationPath = [NSString stringWithFormat:@"/uploads/photo%@.jpeg", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
