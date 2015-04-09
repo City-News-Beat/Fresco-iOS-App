@@ -9,6 +9,7 @@
 #import "GalleriesViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
+#import "ProfileHeaderViewController.h"
 #import "GalleryTableViewCell.h"
 #import "GalleryHeader.h"
 #import "FRSDataManager.h"
@@ -103,8 +104,14 @@
 {
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
-        if ([self.containingViewController isKindOfClass:[HomeViewController class]])
+        if ([self.containingViewController isKindOfClass:[HomeViewController class]]) {
             [self.viewProfileHeader removeFromSuperview];
+            self.tableView.tableHeaderView = nil;
+        }
+        else {
+            ProfileHeaderViewController *phvc = [segue destinationViewController];
+            self.tableView.tableHeaderView.frame = phvc.view.bounds;
+        }
     }
 }
 @end

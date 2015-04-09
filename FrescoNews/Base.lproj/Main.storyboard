@@ -889,7 +889,7 @@
         <!--Profile Header View Controller-->
         <scene sceneID="omL-84-BkE">
             <objects>
-                <viewController id="Hcn-mn-z7c" customClass="ProfileHeaderViewController" sceneMemberID="viewController">
+                <viewController autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" id="Hcn-mn-z7c" customClass="ProfileHeaderViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q3M-fe-vHO"/>
                         <viewControllerLayoutGuide type="bottom" id="XQJ-5c-E8T"/>
@@ -1006,6 +1006,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="130"/>
@@ -1030,6 +1031,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <containerView key="tableHeaderView" opaque="NO" contentMode="scaleToFill" id="fJ2-DC-d2f" userLabel="Profile Header Container">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                     <connections>
                                         <segue destination="Hcn-mn-z7c" kind="embed" identifier="embedProfileHeader" id="S7l-jI-fi1"/>
