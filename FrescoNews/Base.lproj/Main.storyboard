@@ -676,11 +676,11 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUl-iv-DcP">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <state key="normal" title="Off">
+                                                <state key="normal" title="Flash Off">
                                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
-                                                <state key="selected" title="On"/>
+                                                <state key="selected" title="Flash On"/>
                                                 <variation key="heightClass=compact" misplaced="YES">
                                                     <rect key="frame" x="0.0" y="242" width="127" height="30"/>
                                                 </variation>
@@ -986,6 +986,7 @@
                         <outlet property="flashButton" destination="jUl-iv-DcP" id="sB5-AE-fRG"/>
                         <outlet property="photoButton" destination="PSn-d5-old" id="AI9-Hv-Rmm"/>
                         <outlet property="previewView" destination="xqM-m8-W9q" id="wIR-hN-Hkk"/>
+                        <outlet property="recentPhotoImageView" destination="rP6-eE-MdW" id="1Xk-mu-UKf"/>
                         <outlet property="shutterButton" destination="4zS-US-Aam" id="X75-10-HTj"/>
                         <outlet property="tempButton" destination="tzJ-da-4aR" id="urd-t6-2qU"/>
                         <outlet property="videoButton" destination="ez4-gP-F8Q" id="aWq-sy-q3v"/>
