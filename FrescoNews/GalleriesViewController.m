@@ -9,6 +9,7 @@
 #import "GalleriesViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
+#import "StoryViewController.h"
 #import "ProfileHeaderViewController.h"
 #import "GalleryTableViewCell.h"
 #import "GalleryHeader.h"
@@ -102,9 +103,9 @@
 #pragma mark - Segues
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
-        if ([self.containingViewController isKindOfClass:[HomeViewController class]]) {
+        if ([self.containingViewController isKindOfClass:[HomeViewController class]] ||
+            [self.containingViewController isKindOfClass:[StoryViewController class]] ) {
             [self.viewProfileHeader removeFromSuperview];
             self.tableView.tableHeaderView = nil;
         }
