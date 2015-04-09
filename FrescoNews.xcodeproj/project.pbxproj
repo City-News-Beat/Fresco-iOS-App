@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E3592831AC2FF3C00F60348 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleryViewController.m */; };
+		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* StoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* StoryTableViewCell.m */; };
 		1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592891AC3329900F60348 /* PostCollectionViewCell.m */; };
 		1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E407AD01AB090FD006F4965 /* FRSStory.m */; };
@@ -67,8 +67,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1E3592811AC2FF3C00F60348 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
-		1E3592821AC2FF3C00F60348 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
+		1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleriesViewController.m; sourceTree = "<group>"; };
 		1E3592841AC30E7300F60348 /* StoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryTableViewCell.h; sourceTree = "<group>"; };
 		1E3592851AC30E7300F60348 /* StoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryTableViewCell.m; sourceTree = "<group>"; };
 		1E3592881AC3329900F60348 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
@@ -240,8 +240,8 @@
 			children = (
 				1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */,
 				1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */,
-				1E3592811AC2FF3C00F60348 /* GalleryViewController.h */,
-				1E3592821AC2FF3C00F60348 /* GalleryViewController.m */,
+				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
 			);
 			name = Gallery;
 			sourceTree = "<group>";
@@ -630,7 +630,7 @@
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
-				1E3592831AC2FF3C00F60348 /* GalleryViewController.m in Sources */,
+				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,

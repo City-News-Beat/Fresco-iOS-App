@@ -1,5 +1,5 @@
 //
-//  FullPageGalleryViewController.h
+//  ProfileViewController.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/19/15.
@@ -12,8 +12,4 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 #import "FRSBaseViewController.h"
 
 @interface ProfileViewController : FRSBaseViewController
-@property (weak, nonatomic) IBOutlet UIView *profileView;
-@property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray *galleries;
 @end
