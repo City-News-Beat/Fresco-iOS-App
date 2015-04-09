@@ -16,6 +16,7 @@ static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
+// iOS 8 - use PHPhotoLibrary?
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
