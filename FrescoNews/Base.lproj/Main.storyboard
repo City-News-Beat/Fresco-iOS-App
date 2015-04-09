@@ -427,13 +427,13 @@
                                                     <action selector="videoButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="jCR-QK-BEq"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-US-Aam">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zS-US-Aam">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <color key="backgroundColor" red="0.90196078431372551" green="0.74509803921568629" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" red="0.98431372549019602" green="0.67450980392156867" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="4zS-US-Aam" secondAttribute="height" multiplier="1:1" id="dqs-d3-FhZ"/>
                                                 </constraints>
-                                                <state key="normal">
+                                                <state key="normal" backgroundImage="shutterButton">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -443,7 +443,7 @@
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="97" width="127" height="128"/>
+                                                    <rect key="frame" x="0.0" y="97" width="241" height="128"/>
                                                     <mask key="constraints">
                                                         <include reference="dqs-d3-FhZ"/>
                                                     </mask>
@@ -468,7 +468,7 @@
                                                 </state>
                                                 <state key="selected" title="Flash On"/>
                                                 <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="242" width="127" height="30"/>
+                                                    <rect key="frame" x="0.0" y="241" width="127" height="17"/>
                                                 </variation>
                                                 <connections>
                                                     <action selector="flashButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="riK-K8-H6E"/>
@@ -1199,6 +1199,7 @@
     </scenes>
     <resources>
         <image name="shutter" width="169" height="169"/>
+        <image name="shutterButton" width="241" height="242"/>
         <image name="tab-assignments" width="32" height="32"/>
         <image name="tab-camera" width="32" height="32"/>
         <image name="tab-home" width="32" height="32"/>
