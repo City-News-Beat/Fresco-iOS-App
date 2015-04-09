@@ -24,6 +24,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *tempButton;
+@property (weak, nonatomic) IBOutlet UIButton *shutterButton;
+@property (weak, nonatomic) IBOutlet UIView *controlsView;
+@property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -230,10 +233,39 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
+- (void)showUI
+{
+    self.controlsView.backgroundColor = [UIColor whiteColor];
+    self.shutterButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
+    for (UIView *view in [self.controlsView subviews]) {
+        view.hidden = NO;
+    }
+}
+
+- (void)hideUI
+{
+    // Hide most of the UI
+    self.controlsView.backgroundColor = [UIColor clearColor];
+    for (UIView *view in [self.controlsView subviews]) {
+        view.hidden = YES;
+    }
+
+    self.shutterButton.hidden = NO;
+    self.shutterButton.backgroundColor = [UIColor clearColor];
+}
+
 - (void)toggleMovieRecording
 {
+    if ([[self movieFileOutput] isRecording]) {
+        [self showUI];
+    }
+    else {
+        [self hideUI];
+    }
+
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording]) {
+
             [self setLockInterfaceRotation:YES];
 
             if ([[UIDevice currentDevice] isMultitaskingSupported]) {
@@ -245,7 +277,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [[[self movieFileOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
             // Turning OFF flash for video recording
-//            [CameraViewController setFlashMode:AVCaptureFlashModeOff forDevice:[[self videoDeviceInput] device]];
+            [self setTorchMode:(self.flashButton.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
 
             NSError *writeError = nil;
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
@@ -257,12 +289,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
         else {
             [[self movieFileOutput] stopRecording];
+            [self setTorchMode:AVCaptureTorchModeOff];
         }
     });
 }
 
 - (void)snapStillImage
 {
+    [self hideUI];
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
@@ -275,7 +309,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
                     [self uploadToCDN:[self temporaryPathForImage:image] photo:YES];
                 }];
-             }
+            }
+            [self showUI];
         }];
     });
 }
@@ -324,7 +359,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     button.selected = !button.selected;
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
-    [self setTorchMode:(button.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
 }
 
 - (void)finishAndUpdate
@@ -480,10 +514,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [device unlockForConfiguration];
         }
         else {
-//            id deleg = [self delegate];
-//            if ([deleg respondsToSelector:@selector(acquiringDeviceLockFailedWithError:)]) {
-//                [deleg acquiringDeviceLockFailedWithError:error];
-//            }
+            // TODO: Deal with the error
         }
     }
 }
@@ -512,6 +543,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     dispatch_async(dispatch_get_main_queue(), ^{
         [[[self previewView] layer] setOpacity:0.0];
         [UIView animateWithDuration:.25 animations:^{
+            NSLog(@"trying to animate... (broken for some reason?)");
             [[[self previewView] layer] setOpacity:1.0];
         }];
     });
