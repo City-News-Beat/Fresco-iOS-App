@@ -1011,6 +1011,7 @@
                         <outlet property="controlsView" destination="taC-R8-hTs" id="7SX-Vi-y7V"/>
                         <outlet property="doneButton" destination="oTr-jd-8qc" id="uKA-cs-ZJT"/>
                         <outlet property="flashButton" destination="jUl-iv-DcP" id="sB5-AE-fRG"/>
+                        <outlet property="flashIcon" destination="RCg-gW-Cry" id="lfs-Df-LkC"/>
                         <outlet property="photoButton" destination="PSn-d5-old" id="AI9-Hv-Rmm"/>
                         <outlet property="previewView" destination="xqM-m8-W9q" id="wIR-hN-Hkk"/>
                         <outlet property="recentPhotoImageView" destination="rP6-eE-MdW" id="1Xk-mu-UKf"/>

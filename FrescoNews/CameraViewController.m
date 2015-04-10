@@ -586,9 +586,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if ([mode isEqualToString:@"photo"]) {
         self.broadcastStatus.hidden = YES;
         self.shutterIcon.image = [UIImage imageNamed:@"shutter.png"];
+        self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
     } else {
         self.broadcastStatus.hidden = NO;
         self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
+        self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
     }
 }
 
