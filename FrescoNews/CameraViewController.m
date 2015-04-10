@@ -385,6 +385,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.videoButton.selected = NO;
+        [self updateCameraMode:@"photo"];
     }
 }
 
@@ -393,6 +394,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.photoButton.selected = NO;
+        [self updateCameraMode:@"video"];
     }
 }
 
@@ -577,6 +579,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             });
         }
     }];
+}
+
+- (void)updateCameraMode:(NSString *)mode
+{
+    if ([mode isEqualToString:@"photo"]) {
+        self.broadcastStatus.hidden = YES;
+        self.shutterIcon.image = [UIImage imageNamed:@"shutter.png"];
+    } else {
+        self.broadcastStatus.hidden = NO;
+        self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
+    }
 }
 
 @end
