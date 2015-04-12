@@ -140,6 +140,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
     });
 
+    [self updateRecentPhotoView];
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
@@ -307,7 +309,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
-                self.recentPhotoImageView.image = image;
+                [self updateRecentPhotoView:image];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
                     [self uploadToCDN:[self temporaryPathForImage:image] photo:YES];
                 }];
@@ -592,6 +594,41 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
         self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
     }
+}
+
+
+- (void)updateRecentPhotoView
+{
+    [self updateRecentPhotoView:nil];
+}
+
+- (void)updateRecentPhotoView:(UIImage *)image
+{
+    if (image) {
+        self.recentPhotoImageView.image = image;
+        return;
+    }
+    
+    // Grab the most recent image from the photo library
+    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
+                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                                     if (group) {
+                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                                             if (asset) {
+                                                 ALAssetRepresentation *repr = [asset defaultRepresentation];
+                                                 self.recentPhotoImageView.image = [UIImage imageWithCGImage:[repr fullResolutionImage]];
+                                                 *stop = YES;
+                                             }
+                                         }];
+                                     }
+                                     
+                                     *stop = NO;
+                                 }
+                               failureBlock:^(NSError *error) {
+                                   NSLog(@"error: %@", error);
+                               }];
 }
 
 @end
