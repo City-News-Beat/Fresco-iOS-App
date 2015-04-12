@@ -140,8 +140,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
     });
 
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
-    [alertView show];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
+        [alertView show];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
