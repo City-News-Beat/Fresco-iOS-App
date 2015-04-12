@@ -29,6 +29,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *recentPhotoImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *shutterIcon;
+@property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
+@property (weak, nonatomic) IBOutlet UIImageView *flashIcon;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.

@@ -481,9 +481,6 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <state key="selected" title="Flash On"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="246" width="127" height="22"/>
-                                                </variation>
                                                 <connections>
                                                     <action selector="flashButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="riK-K8-H6E"/>
                                                 </connections>
@@ -915,14 +912,14 @@
                                         <exclude reference="83o-Km-ckj"/>
                                         <exclude reference="FxL-0w-xb7"/>
                                         <exclude reference="T94-yL-Udb"/>
-                                        <exclude reference="GlC-Zh-FNH"/>
-                                        <exclude reference="fEw-M3-5g3"/>
-                                        <exclude reference="jGE-g7-hvM"/>
-                                        <exclude reference="pwi-uV-xjT"/>
                                         <exclude reference="OFz-QX-OT1"/>
                                         <exclude reference="eII-UI-0UP"/>
                                         <exclude reference="vae-3r-ZE6"/>
                                         <exclude reference="x9S-FN-t8D"/>
+                                        <exclude reference="GlC-Zh-FNH"/>
+                                        <exclude reference="fEw-M3-5g3"/>
+                                        <exclude reference="jGE-g7-hvM"/>
+                                        <exclude reference="pwi-uV-xjT"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
@@ -935,14 +932,14 @@
                                         <exclude reference="83o-Km-ckj"/>
                                         <exclude reference="FxL-0w-xb7"/>
                                         <include reference="T94-yL-Udb"/>
-                                        <exclude reference="GlC-Zh-FNH"/>
-                                        <include reference="fEw-M3-5g3"/>
-                                        <exclude reference="jGE-g7-hvM"/>
-                                        <include reference="pwi-uV-xjT"/>
                                         <include reference="OFz-QX-OT1"/>
                                         <include reference="eII-UI-0UP"/>
                                         <include reference="vae-3r-ZE6"/>
                                         <include reference="x9S-FN-t8D"/>
+                                        <exclude reference="GlC-Zh-FNH"/>
+                                        <include reference="fEw-M3-5g3"/>
+                                        <exclude reference="jGE-g7-hvM"/>
+                                        <include reference="pwi-uV-xjT"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -1282,7 +1279,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="602" height="299"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">
@@ -1407,10 +1404,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Bitmap" width="192" height="192"/>
         <image name="backCaret" width="25" height="41"/>
+        <image name="facebook" width="40" height="40"/>
         <image name="flashOff" width="25" height="43"/>
         <image name="liveOff" width="85" height="44"/>
         <image name="picker" width="178" height="178"/>
+        <image name="settings" width="43" height="43"/>
         <image name="shutter" width="169" height="169"/>
         <image name="shutterButton" width="241" height="242"/>
         <image name="tab-assignments" width="32" height="32"/>
@@ -1418,7 +1418,6 @@
         <image name="tab-home" width="32" height="32"/>
         <image name="tab-profile" width="32" height="32"/>
         <image name="tab-stories" width="28" height="28"/>
-        <image name="towel.png" width="420" height="420"/>
         <image name="twitter" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
