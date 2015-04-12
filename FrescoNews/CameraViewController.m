@@ -89,13 +89,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         AVCaptureDevice *videoDevice = [CameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
 
-        if (error)
-        {
+        if (error) {
             NSLog(@"%@", error);
         }
 
-        if ([session canAddInput:videoDeviceInput])
-        {
+        if ([session canAddInput:videoDeviceInput]) {
             [session addInput:videoDeviceInput];
             [self setVideoDeviceInput:videoDeviceInput];
 
@@ -111,19 +109,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         AVCaptureDevice *audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
         AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
 
-        if (error)
-        {
+        if (error) {
             NSLog(@"%@", error);
         }
 
-        if ([session canAddInput:audioDeviceInput])
-        {
+        if ([session canAddInput:audioDeviceInput]) {
             [session addInput:audioDeviceInput];
         }
 
         AVCaptureMovieFileOutput *movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
-        if ([session canAddOutput:movieFileOutput])
-        {
+        if ([session canAddOutput:movieFileOutput]) {
             [session addOutput:movieFileOutput];
             AVCaptureConnection *connection = [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
             if ([connection isVideoStabilizationSupported])
@@ -132,8 +127,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
 
         AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-        if ([session canAddOutput:stillImageOutput])
-        {
+        if ([session canAddOutput:stillImageOutput]) {
             [stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
             [session addOutput:stillImageOutput];
             [self setStillImageOutput:stillImageOutput];
@@ -201,25 +195,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == CapturingStillImageContext)
-    {
+    if (context == CapturingStillImageContext) {
         BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
 
-        if (isCapturingStillImage)
-        {
+        if (isCapturingStillImage) {
             [self runStillImageCaptureAnimation];
         }
     }
-    else if (context == RecordingContext)
-    {
+    else if (context == RecordingContext) {
         //
     }
-    else if (context == SessionRunningAndDeviceAuthorizedContext)
-    {
+    else if (context == SessionRunningAndDeviceAuthorizedContext) {
         //
     }
-    else
-    {
+    else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
@@ -304,7 +293,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
-
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
@@ -378,7 +366,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
 {
-    CGPoint devicePoint = CGPointMake(.5, .5);
+    CGPoint devicePoint = (CGPoint){0.5, 0.5};
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
 }
 
@@ -470,23 +458,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *device = [[self videoDeviceInput] device];
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
-            {
+        if ([device lockForConfiguration:&error]) {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode]) {
                 [device setFocusMode:focusMode];
                 [device setFocusPointOfInterest:point];
             }
-            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
-            {
+            
+            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode]) {
                 [device setExposureMode:exposureMode];
                 [device setExposurePointOfInterest:point];
             }
+            
             [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
             [device unlockForConfiguration];
         }
-        else
-        {
+        else {
             NSLog(@"%@", error);
         }
     });
@@ -494,16 +480,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 + (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
 {
-    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
-    {
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode]) {
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
+        if ([device lockForConfiguration:&error]) {
             [device setFlashMode:flashMode];
             [device unlockForConfiguration];
         }
-        else
-        {
+        else {
             NSLog(@"%@", error);
         }
     }
@@ -533,10 +516,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:mediaType];
     AVCaptureDevice *captureDevice = [devices firstObject];
     
-    for (AVCaptureDevice *device in devices)
-    {
-        if ([device position] == position)
-        {
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == position) {
             captureDevice = device;
             break;
         }
@@ -563,13 +544,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     NSString *mediaType = AVMediaTypeVideo;
     
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (granted)
-        {
+        if (granted) {
             //Granted access to mediaType
             [self setDeviceAuthorized:YES];
         }
-        else
-        {
+        else {
             //Not granted access to mediaType
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[[UIAlertView alloc] initWithTitle:@"AVCam!"
@@ -589,13 +568,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         self.broadcastStatus.hidden = YES;
         self.shutterIcon.image = [UIImage imageNamed:@"shutter.png"];
         self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
-    } else {
+    }
+    else {
         self.broadcastStatus.hidden = NO;
         self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
         self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
     }
 }
-
 
 - (void)updateRecentPhotoView
 {
