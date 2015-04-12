@@ -46,8 +46,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 @end
 
-// TODO: Clean up state on app backgrounding
-
 @implementation CameraViewController
 
 - (BOOL)isSessionRunningAndDeviceAuthorized
@@ -189,11 +187,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // Disable autorotation of the interface when recording is in progress.
     return ![self lockInterfaceRotation];
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAll;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -372,10 +365,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)finishAndUpdate
 {
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
     TabBarController *vc = ((TabBarController *)self.presentingViewController);
     vc.selectedIndex = vc.savedIndex;
     vc.tabBar.hidden = NO;
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification

@@ -8,13 +8,12 @@
 
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
+#import "CameraViewController.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <UITabBarControllerDelegate>
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
@@ -62,6 +61,7 @@
                                      @"tab-profile-highlighted"];
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    tabBarController.delegate = self;
     UITabBar *tabBar = tabBarController.tabBar;
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
@@ -69,25 +69,12 @@
         ++i;
     }
 }
-@end
 
-// Category for controlling all the view controllers
-@implementation UITabBarController (FrescoNews)
--(BOOL)shouldAutorotate
+#pragma mark - UITabBarControllerDelegate methods
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    return YES;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
- /*   if ([self.selectedViewController isKindOfClass:[CameraViewController class]])
-        return UIInterfaceOrientationMaskAllButUpsideDown;*/
-    
-    return UIInterfaceOrientationMaskPortrait;
+    return ![viewController isKindOfClass:[CameraViewController class]];
 }
 
 @end
