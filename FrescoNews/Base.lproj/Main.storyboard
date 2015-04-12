@@ -471,31 +471,7 @@
                                             </button>
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzJ-da-4aR" userLabel="Temp Button">
-                                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                        <state key="normal" title="Button">
-                                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </state>
-                                                        <variation key="heightClass=compact" fixedFrame="YES">
-                                                            <rect key="frame" x="62" y="-9" width="87" height="87"/>
-                                                        </variation>
-                                                        <connections>
-                                                            <action selector="tempButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="MxF-kv-PM0"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <variation key="default">
-                                                    <mask key="subviews">
-                                                        <exclude reference="tzJ-da-4aR"/>
-                                                    </mask>
-                                                </variation>
-                                                <variation key="heightClass=compact">
-                                                    <mask key="subviews">
-                                                        <include reference="tzJ-da-4aR"/>
-                                                    </mask>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUl-iv-DcP">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -603,6 +579,18 @@
                                                     </mask>
                                                 </variation>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzJ-da-4aR" userLabel="Temp Button">
+                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                <state key="normal" title="Button">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <variation key="heightClass=compact" fixedFrame="YES">
+                                                    <rect key="frame" x="22" y="290" width="87" height="87"/>
+                                                </variation>
+                                                <connections>
+                                                    <action selector="tempButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="MxF-kv-PM0"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -694,6 +682,7 @@
                                                 <exclude reference="RCg-gW-Cry"/>
                                                 <exclude reference="eWf-L5-maB"/>
                                                 <exclude reference="ikB-HG-2qD"/>
+                                                <exclude reference="tzJ-da-4aR"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="55w-A2-Qcb"/>
@@ -771,6 +760,7 @@
                                                 <include reference="RCg-gW-Cry"/>
                                                 <include reference="eWf-L5-maB"/>
                                                 <include reference="ikB-HG-2qD"/>
+                                                <include reference="tzJ-da-4aR"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="55w-A2-Qcb"/>
