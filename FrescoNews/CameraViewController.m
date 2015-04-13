@@ -11,13 +11,14 @@
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import <AFAmazonS3Manager.h>
+#import "CTAssetsPickerController.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
 // iOS 8 - use PHPhotoLibrary?
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIImagePickerControllerDelegate>
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
@@ -216,7 +217,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-#pragma mark Actions
+#pragma mark - Actions
 
 - (IBAction)shutterButtonTapped:(id)sender
 {
@@ -393,10 +394,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)tempButtonTapped:(id)sender
 {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+    picker.title = @"Select assets to post to Fresco";
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -425,7 +425,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return photoPath;
 }
 
-#pragma mark File Output Delegate
+#pragma mark - File Output Delegate
 
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
 {
@@ -454,7 +454,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
-#pragma mark Device Configuration
+#pragma mark - Device Configuration
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
@@ -529,7 +529,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return captureDevice;
 }
 
-#pragma mark UI
+#pragma mark - UI
 
 - (void)runStillImageCaptureAnimation
 {
@@ -611,6 +611,42 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                failureBlock:^(NSError *error) {
                                    NSLog(@"error: %@", error);
                                }];
+}
+
+#pragma mark - CTAssetsPickerControllerDelegate methods
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
+{
+    // Take the user to the "create a post" screen
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
+{
+    // Allow up to 10 assets to be picked
+    return picker.selectedAssets.count < 10;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
+{
+    // TODO: Disable video clip if too long?
+//    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+//        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+//        return lround(duration) <= 60;
+//    }
+
+    return YES;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker isDefaultAssetsGroup:(ALAssetsGroup *)group
+{
+    // Set All Photos as default album and it will be shown initially.
+    return [[group valueForProperty:ALAssetsGroupPropertyType] integerValue] == ALAssetsGroupSavedPhotos;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAssetsGroup:(ALAssetsGroup *)group
+{
+    // Do not show empty albums
+    return group.numberOfAssets > 0;
 }
 
 @end
