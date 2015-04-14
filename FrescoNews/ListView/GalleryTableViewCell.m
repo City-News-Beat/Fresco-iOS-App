@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "StoryTableViewCell.h"
+#import "GalleryTableViewCell.h"
 #import "GalleryView.h"
 #import "FRSGallery.h"
 
 static NSString * const kCellIdentifier = @"StoryTableViewCell";
 
-@implementation StoryTableViewCell
+@implementation GalleryTableViewCell
 
 + (NSString *)identifier
 {

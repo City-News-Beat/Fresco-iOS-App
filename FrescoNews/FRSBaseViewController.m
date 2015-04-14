@@ -7,6 +7,8 @@
 //
 
 #import "FRSBaseViewController.h"
+#import "FRSGallery.h"
+#import "GalleryHeader.h"
 
 @interface FRSBaseViewController ()
 
@@ -33,5 +35,15 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    GalleryHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
+    
+    // remember, one story per section
+    FRSGallery *gallery = [self.galleries objectAtIndex:section];
+    [storyCellHeader setGallery:gallery];
+    
+    return storyCellHeader;
+}
 
 @end

@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelByLine;
 @end
 
-static NSString * const kCellIdentifier = @"StoryCellHeader";
+static NSString * const kCellIdentifier = @"GalleryHeader";
 
 @implementation GalleryHeader
 + (NSString *)identifier
@@ -25,12 +25,6 @@ static NSString * const kCellIdentifier = @"StoryCellHeader";
 
 - (void)awakeFromNib {
     // Initialization code
-}
-
-- (void)setPost:(FRSPost *)post
-{
-    self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:post.date];
-    self.labelByLine.text = post.byline;
 }
 
 - (void)setGallery:(FRSGallery *)gallery
