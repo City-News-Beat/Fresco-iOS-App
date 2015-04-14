@@ -139,12 +139,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self updateRecentPhotoView];
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
-        [alertView show];
-    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -190,6 +184,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // Disable autorotation of the interface when recording is in progress.
     return ![self lockInterfaceRotation];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -313,9 +312,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)uploadToCDN:(NSString *)localPath photo:(BOOL)isPhoto
 {
-    if (!isPhoto) {
-        return;
-    }
+    return;
 
     NSString *destinationPath;
     if (isPhoto) {
