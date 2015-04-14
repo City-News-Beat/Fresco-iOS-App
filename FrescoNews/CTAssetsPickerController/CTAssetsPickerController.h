@@ -28,7 +28,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import "BaseNavigationController.h"
 
 
 @protocol CTAssetsPickerControllerDelegate;
@@ -96,7 +96,7 @@
  *
  *  This property contains the child navigation controller of the picker.
  */
-@property (nonatomic, readonly, strong) UINavigationController *childNavigationController;
+@property (nonatomic, readonly, strong) BaseNavigationController *childNavigationController;
 
 
 /**

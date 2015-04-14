@@ -75,7 +75,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 - (void)setupNavigationController
 {
     CTAssetsGroupViewController *vc = [[CTAssetsGroupViewController alloc] init];
-    UINavigationController *nav = [[self createChildNavigationController] initWithRootViewController:vc];
+    BaseNavigationController *nav = [[self createChildNavigationController] initWithRootViewController:vc];
     
     // Enable iOS 7 back gesture
     nav.interactivePopGestureRecognizer.enabled  = YES;
@@ -91,9 +91,9 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     [nav didMoveToParentViewController:self];
 }
 
-- (UINavigationController *)createChildNavigationController
+- (BaseNavigationController *)createChildNavigationController
 {
-    return [UINavigationController alloc];
+    return [BaseNavigationController alloc];
 }
 
 
@@ -210,9 +210,9 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 #pragma mark - Accessors
 
-- (UINavigationController *)childNavigationController
+- (BaseNavigationController *)childNavigationController
 {
-    return (UINavigationController *)self.childViewControllers.firstObject;
+    return (BaseNavigationController *)self.childViewControllers.firstObject;
 }
 
 
