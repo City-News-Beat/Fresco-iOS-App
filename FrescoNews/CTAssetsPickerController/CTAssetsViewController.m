@@ -154,6 +154,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)setupToolbar
 {
     self.toolbarItems = self.picker.toolbarItems;
+
+    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+    [self.navigationController setToolbarHidden:NO animated:NO];
 }
 
 - (void)setupAssets
@@ -226,16 +229,16 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                    name:ALAssetsLibraryChangedNotification
                  object:nil];
     
-    [center addObserver:self
-               selector:@selector(selectedAssetsChanged:)
-                   name:CTAssetsPickerSelectedAssetsChangedNotification
-                 object:nil];
+//    [center addObserver:self
+//               selector:@selector(selectedAssetsChanged:)
+//                   name:CTAssetsPickerSelectedAssetsChangedNotification
+//                 object:nil];
 }
 
 - (void)removeNotificationObserver
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
 }
 
 
@@ -272,17 +275,17 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 #pragma mark - Selected Assets Changed
 
-- (void)selectedAssetsChanged:(NSNotification *)notification
-{
-    NSArray *selectedAssets = (NSArray *)notification.object;
-    
-    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
-    
-    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
-    
-    // Reload assets for calling de/selectAsset method programmatically
-    [self.collectionView reloadData];
-}
+//- (void)selectedAssetsChanged:(NSNotification *)notification
+//{
+//    NSArray *selectedAssets = (NSArray *)notification.object;
+//    
+//    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+//    
+//    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
+//    
+//    // Reload assets for calling de/selectAsset method programmatically
+//    [self.collectionView reloadData];
+//}
 
 
 
@@ -405,11 +408,13 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                        withReuseIdentifier:CTAssetsSupplementaryViewIdentifier
                                               forIndexPath:indexPath];
     
-    [view bind:self.assets];
-    
-    if (self.assets.count == 0)
-        view.hidden = YES;
-    
+//    [view bind:self.assets];
+//    
+//    if (self.assets.count == 0) {
+//        view.hidden = YES;
+//    }
+
+    view.hidden = YES;
     return view;
 }
 

@@ -420,31 +420,33 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 - (NSString *)toolbarTitle
 {
-    if (self.selectedAssets.count == 0)
-        return nil;
-    
-    NSPredicate *photoPredicate = [self predicateOfAssetType:ALAssetTypePhoto];
-    NSPredicate *videoPredicate = [self predicateOfAssetType:ALAssetTypeVideo];
-    
-    BOOL photoSelected = ([self.selectedAssets filteredArrayUsingPredicate:photoPredicate].count > 0);
-    BOOL videoSelected = ([self.selectedAssets filteredArrayUsingPredicate:videoPredicate].count > 0);
-    
-    NSString *format;
-    
-    if (photoSelected && videoSelected)
-        format = CTAssetsPickerControllerLocalizedString(@"%ld Items Selected");
-    
-    else if (photoSelected)
-        format = (self.selectedAssets.count > 1) ?
-        CTAssetsPickerControllerLocalizedString(@"%ld Photos Selected") :
-        CTAssetsPickerControllerLocalizedString(@"%ld Photo Selected");
-    
-    else if (videoSelected)
-        format = (self.selectedAssets.count > 1) ?
-        CTAssetsPickerControllerLocalizedString(@"%ld Videos Selected") :
-        CTAssetsPickerControllerLocalizedString(@"%ld Video Selected");
-    
-    return [NSString stringWithFormat:format, (long)self.selectedAssets.count];
+    return @"Create a Gallery Post";
+
+//    if (self.selectedAssets.count == 0)
+//        return nil;
+//
+//    NSPredicate *photoPredicate = [self predicateOfAssetType:ALAssetTypePhoto];
+//    NSPredicate *videoPredicate = [self predicateOfAssetType:ALAssetTypeVideo];
+//    
+//    BOOL photoSelected = ([self.selectedAssets filteredArrayUsingPredicate:photoPredicate].count > 0);
+//    BOOL videoSelected = ([self.selectedAssets filteredArrayUsingPredicate:videoPredicate].count > 0);
+//    
+//    NSString *format;
+//    
+//    if (photoSelected && videoSelected)
+//        format = CTAssetsPickerControllerLocalizedString(@"%ld Items Selected");
+//    
+//    else if (photoSelected)
+//        format = (self.selectedAssets.count > 1) ?
+//        CTAssetsPickerControllerLocalizedString(@"%ld Photos Selected") :
+//        CTAssetsPickerControllerLocalizedString(@"%ld Photo Selected");
+//    
+//    else if (videoSelected)
+//        format = (self.selectedAssets.count > 1) ?
+//        CTAssetsPickerControllerLocalizedString(@"%ld Videos Selected") :
+//        CTAssetsPickerControllerLocalizedString(@"%ld Video Selected");
+//
+//    return [NSString stringWithFormat:format, (long)self.selectedAssets.count];
 }
 
 
