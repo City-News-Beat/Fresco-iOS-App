@@ -46,6 +46,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 @interface CTAssetsPickerController ()
 
 - (void)finishPickingAssets:(id)sender;
+- (void)dismiss:(id)sender;
 
 - (NSString *)toolbarTitle;
 - (UIView *)noAssetsView;
@@ -150,7 +151,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.navigationItem.leftBarButtonItem = 
     [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain
                                     target:self.picker
-                                    action:@selector(finishPickingAssets:)];
+                                    action:@selector(dismiss:)];
 
     self.navigationItem.leftBarButtonItem.enabled = YES;
 }

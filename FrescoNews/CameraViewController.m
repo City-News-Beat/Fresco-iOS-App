@@ -612,6 +612,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
 
+- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
+{
+    [self cancel];
+}
+
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
     // Take the user to the "create a post" screen

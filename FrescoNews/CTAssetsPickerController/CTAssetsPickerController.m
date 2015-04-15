@@ -486,7 +486,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     if ([self.delegate respondsToSelector:@selector(assetsPickerControllerDidCancel:)])
         [self.delegate assetsPickerControllerDidCancel:self];
     
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 
