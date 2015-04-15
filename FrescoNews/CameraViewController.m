@@ -393,7 +393,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
-    picker.title = @"Select assets to post to Fresco";
+    picker.title =  @"Choose Media";
     [self presentViewController:picker animated:YES completion:nil];
 }
 

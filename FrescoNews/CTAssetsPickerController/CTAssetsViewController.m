@@ -158,8 +158,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupAssets
 {
-    self.title = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyName];
-    
+    self.title = @"Choose Media";
+
     if (!self.assets)
         self.assets = [[NSMutableArray alloc] init];
     else
