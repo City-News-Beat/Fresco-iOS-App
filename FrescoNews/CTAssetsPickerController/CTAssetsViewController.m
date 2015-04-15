@@ -146,6 +146,13 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                   action:@selector(finishPickingAssets:)];
 
     self.navigationItem.rightBarButtonItem.enabled = YES;
+
+    self.navigationItem.leftBarButtonItem = 
+    [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain
+                                    target:self.picker
+                                    action:@selector(finishPickingAssets:)];
+
+    self.navigationItem.leftBarButtonItem.enabled = YES;
 }
 
 - (void)setupToolbar
