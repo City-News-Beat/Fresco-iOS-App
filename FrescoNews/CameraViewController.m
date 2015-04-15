@@ -346,9 +346,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
 }
 
-- (IBAction)doneButtonTapped:(id)sender
+- (IBAction)cancelButtonTapped:(id)sender
 {
-    [self finishAndUpdate];
+    [self cancel];
 }
 
 - (IBAction)flashButtonTapped:(UIButton *)button
@@ -357,7 +357,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
 }
 
-- (void)finishAndUpdate
+- (void)cancel
 {
     TabBarController *vc = ((TabBarController *)self.presentingViewController);
     vc.selectedIndex = vc.savedIndex;
