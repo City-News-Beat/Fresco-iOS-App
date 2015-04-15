@@ -89,8 +89,8 @@
 /* Begin PBXFileReference section */
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
 		1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleriesViewController.m; sourceTree = "<group>"; };
-		1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryTableViewCell.h; sourceTree = "<group>"; };
-		1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryTableViewCell.m; sourceTree = "<group>"; };
+		1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GalleryTableViewCell.h; path = ListView/GalleryTableViewCell.h; sourceTree = "<group>"; };
+		1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GalleryTableViewCell.m; path = ListView/GalleryTableViewCell.m; sourceTree = "<group>"; };
 		1E3592881AC3329900F60348 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		1E3592891AC3329900F60348 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		1E407ACF1AB090EE006F4965 /* FRSStory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSStory.h; path = "News Story/FRSStory.h"; sourceTree = "<group>"; };
@@ -317,10 +317,10 @@
 		1EA6F2E51ABB6C5000E74E68 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */,
+				1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */,
 				1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */,
 				1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */,
-				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
-				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
 			);
 			name = Gallery;
 			sourceTree = "<group>";
@@ -431,6 +431,8 @@
 			children = (
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
+				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
 				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
@@ -535,8 +537,6 @@
 		1EDA450E1AA4F8640082E08D /* Story */ = {
 			isa = PBXGroup;
 			children = (
-				1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */,
-				1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */,
 				1EDA450F1AA4F8640082E08D /* StoryCell.h */,
 				1EDA45101AA4F8640082E08D /* StoryCell.m */,
 				1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */,

@@ -1,5 +1,5 @@
 //
-//  StoryTableViewCell.h
+//  GalleryTableViewCell.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/25/15.
