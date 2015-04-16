@@ -41,50 +41,27 @@ static CGFloat const kInterImageGap = 1.0f;
     if (_imageArray)
         return _imageArray;
     
-    CGFloat totalWidth = 0.0;
     NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:10];
     
-    // keep track of the position we're in in each gallery so we can
-    // insert into the irregular output array at the correct position
-    int galleryPositionIndices[[self.story.galleries count]];
-    memset(galleryPositionIndices, 0, sizeof(galleryPositionIndices));
-    
-    // loop through galleries and posts first taking the first post
-    // from each gallery and then filling back
-    //int index = 0;
-    for (int i = 0; i < 10; ++i) {
-        if (totalWidth > self.frame.size.width * 2)
-            break;
-        
-        for (int j = 0; j < [self.story.galleries count]; ++j) {
-            FRSGallery *gallery = [self.story.galleries objectAtIndex:j];
-            
-            // the initial placement for each gallery is in the first j positions of the array
-            if (galleryPositionIndices[j] == 0)
-                galleryPositionIndices[j] = j;
-
-            if (i < [gallery.posts count]) {
-                FRSPost *post = [gallery.posts objectAtIndex:i];
-                
-                CGFloat scale = kImageHeight / [post.largeImage.height floatValue];
-                CGFloat imageWidth = [post.largeImage.width floatValue] * scale;
-                
-                totalWidth += imageWidth;
-                
-                //index = j;
-                [tempArray insertObject:post.largeImage atIndex:galleryPositionIndices[j]];
-                //++index;
-                galleryPositionIndices[j] = galleryPositionIndices[j] + 1;
-                
-                for (int k = 0; k < [self.story.galleries count]; k++) {
-                    NSLog(@"Gallery %d index: %d", k, galleryPositionIndices[k]);
-                }
-            }
-            ++i;
+    for (FRSGallery *gallery in self.story.galleries) {
+        for (FRSPost *post in gallery.posts) {
+            [tempArray addObject:post.largeImage];
         }
     }
+    [self shuffle:tempArray];
+    
     _imageArray = [[NSArray alloc]initWithArray:tempArray];
     return _imageArray;
+}
+
+- (void)shuffle:(NSMutableArray *)array
+{
+    NSUInteger count = [array count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        NSInteger remainingCount = count - i;
+        NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+    }
 }
 
 - (void)layoutSubviews
