@@ -32,6 +32,7 @@
 #import "CTAssetsViewControllerTransition.h"
 #import "NSBundle+CTAssetsPickerController.h"
 #import "UIImage+CTAssetsPickerController.h"
+#import "GalleryPostViewController.h"
 
 
 
@@ -453,14 +454,12 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 - (UIBarButtonItem *)titleButtonItem
 {
-    UIBarButtonItem *title =
-    [[UIBarButtonItem alloc] initWithTitle:self.toolbarTitle
-                                     style:UIBarButtonItemStylePlain
-                                    target:nil
-                                    action:nil];
-
-    [title setEnabled:NO];
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:self.toolbarTitle
+                                                              style:UIBarButtonItemStylePlain
+                                                             target:self
+                                                             action:@selector(createGalleryPost:)];
     
+    title.enabled = YES;
     return title;
 }
 
@@ -473,10 +472,8 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 {
     UIBarButtonItem *title = [self titleButtonItem];
     UIBarButtonItem *space = [self spaceButtonItem];
-    
     return @[space, title, space];
 }
-
 
 #pragma mark - Actions
 
@@ -496,9 +493,15 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 - (void)finishPickingAssets:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
+    if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)]) {
         [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+    }
 }
 
+- (void)createGalleryPost:(id)sender
+{
+    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
+    [[self childNavigationController] pushViewController:vc animated:YES];
+}
 
 @end
