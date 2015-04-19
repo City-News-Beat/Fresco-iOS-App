@@ -66,6 +66,7 @@
 		420DC73D1ADB875000157762 /* UIImage+CTAssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7141ADB875000157762 /* UIImage+CTAssetsPickerController.m */; };
 		420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420DC7161ADB875000157762 /* CTAssetsPickerController.strings */; };
 		420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */; };
+		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
 		42B4D4E21ABF6C6E006AD3AC /* towel.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B4D4E11ABF6C6E006AD3AC /* towel.png */; };
@@ -205,6 +206,8 @@
 		420DC7141ADB875000157762 /* UIImage+CTAssetsPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CTAssetsPickerController.m"; sourceTree = "<group>"; };
 		420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CTAssetsPicker.xcassets; sourceTree = "<group>"; };
 		420DC71B1ADB875000157762 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CTAssetsPickerController.strings; sourceTree = "<group>"; };
+		4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryPostViewController.h; sourceTree = "<group>"; };
+		4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryPostViewController.m; sourceTree = "<group>"; };
 		423A14531AB327CA0030DAF4 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
@@ -427,6 +430,8 @@
 				1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */,
 				1EBC7FCF1AD6DED000DE5301 /* ProfileHeaderViewController.h */,
 				1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */,
+				4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */,
+				4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -771,6 +776,7 @@
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
+				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,

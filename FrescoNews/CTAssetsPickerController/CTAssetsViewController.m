@@ -33,6 +33,7 @@
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
 #import "NSBundle+CTAssetsPickerController.h"
+#import "GalleryPostViewController.h"
 
 
 
@@ -153,9 +154,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupToolbar
 {
-    self.toolbarItems = self.picker.toolbarItems;
-
-    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+    self.toolbarItems = [self toolbarItems];
     [self.navigationController setToolbarHidden:NO animated:NO];
 }
 
@@ -191,6 +190,30 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self.assetsGroup enumerateAssetsUsingBlock:resultsBlock];
 }
 
+#pragma mark - Toolbar Items
+
+- (UIBarButtonItem *)titleButtonItem
+{
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery Post"
+                                                              style:UIBarButtonItemStylePlain
+                                                             target:self
+                                                             action:@selector(createGalleryPost:)];
+    
+    title.enabled = YES;
+    return title;
+}
+
+- (UIBarButtonItem *)spaceButtonItem
+{
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+}
+
+- (NSArray *)toolbarItems
+{
+    UIBarButtonItem *title = [self titleButtonItem];
+    UIBarButtonItem *space = [self spaceButtonItem];
+    return @[space, title, space];
+}
 
 #pragma mark - Collection View Layout
 
@@ -491,5 +514,16 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self.picker.delegate assetsPickerController:self.picker didUnhighlightAsset:asset];
 }
 
+#pragma mark - Action methods
+
+- (void)createGalleryPost:(id)sender
+{
+    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 @end
