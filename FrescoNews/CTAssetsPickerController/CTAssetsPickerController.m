@@ -55,7 +55,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         self.preferredContentSize = CTAssetPickerPopoverContentSize;
         
         [self setupNavigationController];
-        [self setupToolbarApperance];
+        [self setupToolbarAppearance];
         [self addKeyValueObserver];
     }
     
@@ -122,7 +122,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 #pragma mark - Toolbar Appearance
 
-- (void)setupToolbarApperance
+- (void)setupToolbarAppearance
 {
     NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
     UIBarButtonItem *barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], [CTAssetsPickerController class], nil];
