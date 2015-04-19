@@ -47,6 +47,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)finishPickingAssets:(id)sender;
 - (void)dismiss:(id)sender;
+- (void)returnToCamera:(id)sender;
 
 - (NSString *)toolbarTitle;
 - (UIView *)noAssetsView;
@@ -144,7 +145,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.navigationItem.rightBarButtonItem =
     [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
                                                   target:self.picker
-                                                  action:@selector(finishPickingAssets:)];
+                                                  action:@selector(returnToCamera:)];
 
     self.navigationItem.rightBarButtonItem.enabled = YES;
 
