@@ -340,6 +340,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                          }];
 }
 
+// TODO: Ask if we want to keep this or not
 - (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
 {
     CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
