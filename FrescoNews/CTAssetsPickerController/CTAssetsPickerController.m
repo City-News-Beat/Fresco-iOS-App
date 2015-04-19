@@ -49,7 +49,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         _assetsLibrary          = [self.class defaultAssetsLibrary];
         _assetsFilter           = [ALAssetsFilter allAssets];
         _selectedAssets         = [[NSMutableArray alloc] init];
-        _showsCancelButton      = YES;
         _showsNumberOfAssets    = YES;
         _alwaysEnableDoneButton = NO;
         

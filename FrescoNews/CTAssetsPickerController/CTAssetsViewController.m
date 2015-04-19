@@ -141,20 +141,14 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupButtons
 {
-    // TODO: Clean up all references to "Done" button
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                  target:self.picker
-                                                  action:@selector(returnToCamera:)];
-
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-
-    self.navigationItem.leftBarButtonItem = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain
-                                    target:self.picker
-                                    action:@selector(dismiss:)];
-
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self.picker
+                                                                            action:@selector(dismiss:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                           target:self.picker
+                                                                                           action:@selector(returnToCamera:)];
 }
 
 - (void)setupToolbar
