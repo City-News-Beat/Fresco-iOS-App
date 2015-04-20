@@ -658,11 +658,9 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = Z7R96S8K3N;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = Z7R96S8K3N;
 						TestTargetID = 1EDA44AF1AA4CCC70082E08D;
 					};
 				};

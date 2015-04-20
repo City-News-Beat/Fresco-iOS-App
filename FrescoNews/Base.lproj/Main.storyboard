@@ -128,7 +128,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="F2K-WN-uKr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaicHeader" rowHeight="45" id="Q63-7s-eVb" customClass="StoryCellMosaicHeader">
@@ -161,34 +161,26 @@
                                             <outlet property="labelTitle" destination="ult-p4-y5e" id="X1E-W8-wQV"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaic" id="BP4-ad-CmZ" customClass="StoryCellMosaic">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaic" rowHeight="70" id="BP4-ad-CmZ" customClass="StoryCellMosaic">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BP4-ad-CmZ" id="SA0-Ix-fnD">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lF-OT-bel" userLabel="Image container">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="tdN-uL-GYG"/>
+                                                        <constraint firstAttribute="height" constant="70" id="tdN-uL-GYG"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" id="2Mu-kM-T5c"/>
-                                                <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" priority="750" id="G2D-s2-TfB"/>
+                                                <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" id="G2D-s2-TfB"/>
                                                 <constraint firstItem="5lF-OT-bel" firstAttribute="top" secondItem="SA0-Ix-fnD" secondAttribute="top" id="QQl-xq-tUl"/>
-                                                <constraint firstItem="5lF-OT-bel" firstAttribute="top" secondItem="SA0-Ix-fnD" secondAttribute="top" id="bTt-Qo-E9K"/>
                                                 <constraint firstAttribute="trailing" secondItem="5lF-OT-bel" secondAttribute="trailing" id="xHG-Ex-YNh"/>
                                                 <constraint firstItem="5lF-OT-bel" firstAttribute="leading" secondItem="SA0-Ix-fnD" secondAttribute="leading" id="xLn-za-jYl"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="2Mu-kM-T5c"/>
-                                                    <exclude reference="bTt-Qo-E9K"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="constraintHeight" destination="tdN-uL-GYG" id="tp3-an-orp"/>
@@ -199,15 +191,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="zBm-AS-RwQ" firstAttribute="top" secondItem="F2K-WN-uKr" secondAttribute="bottom" constant="-49" id="BoX-oh-vGL"/>
+                            <constraint firstItem="zBm-AS-RwQ" firstAttribute="top" secondItem="F2K-WN-uKr" secondAttribute="bottom" id="BoX-oh-vGL"/>
                             <constraint firstAttribute="bottom" secondItem="F2K-WN-uKr" secondAttribute="bottom" id="CsY-hC-ZVJ"/>
                             <constraint firstAttribute="trailing" secondItem="F2K-WN-uKr" secondAttribute="trailing" id="D6F-xE-Zzb"/>
                             <constraint firstItem="F2K-WN-uKr" firstAttribute="leading" secondItem="rhQ-YS-CX9" secondAttribute="leading" id="Yw1-Eh-hfL"/>
-                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" constant="-64" id="eoP-VO-xT4"/>
+                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="top" id="eoP-VO-xT4"/>
+                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" constant="-64" id="u9k-oA-mHK"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="CsY-hC-ZVJ"/>
+                                <exclude reference="eoP-VO-xT4"/>
                             </mask>
                         </variation>
                     </view>
@@ -219,7 +213,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="twO-ek-izW" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1545" y="-946.5"/>
+            <point key="canvasLocation" x="1545" y="-947"/>
         </scene>
         <!--Story View Controller-->
         <scene sceneID="TC6-gH-nd3">
@@ -1395,6 +1389,6 @@
         <image name="twitter" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SWl-Ux-T2G"/>
+        <segue reference="QsB-rB-XyN"/>
     </inferredMetricsTieBreakers>
 </document>
