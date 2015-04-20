@@ -418,63 +418,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     }];
 }
 
-- (NSString *)toolbarTitle
-{
-    return @"Create a Gallery Post";
-
-//    if (self.selectedAssets.count == 0)
-//        return nil;
-//
-//    NSPredicate *photoPredicate = [self predicateOfAssetType:ALAssetTypePhoto];
-//    NSPredicate *videoPredicate = [self predicateOfAssetType:ALAssetTypeVideo];
-//    
-//    BOOL photoSelected = ([self.selectedAssets filteredArrayUsingPredicate:photoPredicate].count > 0);
-//    BOOL videoSelected = ([self.selectedAssets filteredArrayUsingPredicate:videoPredicate].count > 0);
-//    
-//    NSString *format;
-//    
-//    if (photoSelected && videoSelected)
-//        format = CTAssetsPickerControllerLocalizedString(@"%ld Items Selected");
-//    
-//    else if (photoSelected)
-//        format = (self.selectedAssets.count > 1) ?
-//        CTAssetsPickerControllerLocalizedString(@"%ld Photos Selected") :
-//        CTAssetsPickerControllerLocalizedString(@"%ld Photo Selected");
-//    
-//    else if (videoSelected)
-//        format = (self.selectedAssets.count > 1) ?
-//        CTAssetsPickerControllerLocalizedString(@"%ld Videos Selected") :
-//        CTAssetsPickerControllerLocalizedString(@"%ld Video Selected");
-//
-//    return [NSString stringWithFormat:format, (long)self.selectedAssets.count];
-}
-
-
-#pragma mark - Toolbar Items
-
-- (UIBarButtonItem *)titleButtonItem
-{
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:self.toolbarTitle
-                                                              style:UIBarButtonItemStylePlain
-                                                             target:self
-                                                             action:@selector(createGalleryPost:)];
-    
-    title.enabled = YES;
-    return title;
-}
-
-- (UIBarButtonItem *)spaceButtonItem
-{
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-}
-
-- (NSArray *)toolbarItems
-{
-    UIBarButtonItem *title = [self titleButtonItem];
-    UIBarButtonItem *space = [self spaceButtonItem];
-    return @[space, title, space];
-}
-
 #pragma mark - Actions
 
 - (void)dismiss:(id)sender
@@ -496,12 +439,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)]) {
         [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
     }
-}
-
-- (void)createGalleryPost:(id)sender
-{
-    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
-    [[self childNavigationController] pushViewController:vc animated:YES];
 }
 
 @end
