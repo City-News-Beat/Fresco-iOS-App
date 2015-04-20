@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSBaseViewController.h"
 
 @interface CameraViewController : UIViewController <UINavigationControllerDelegate>
 
