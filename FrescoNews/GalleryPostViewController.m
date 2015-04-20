@@ -13,7 +13,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupButtons];
     self.title = @"Create a Gallery Post";
+}
+
+- (void)setupButtons
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                           target:self
+                                                                                           action:@selector(returnToCamera:)];
+}
+
+- (void)returnToCamera:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 @end
