@@ -10,4 +10,10 @@
 
 @implementation GalleryPostViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"Create a Gallery Post";
+}
+
 @end
