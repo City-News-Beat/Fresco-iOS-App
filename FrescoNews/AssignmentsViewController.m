@@ -9,6 +9,16 @@
 #import "AssignmentsViewController.h"
 #import "UIViewController+Additions.h"
 
+@interface AssignmentsViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
+@property (weak, nonatomic) IBOutlet MKMapView *assignmentMapView;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
+
+@end
+
 @implementation AssignmentsViewController
 
 - (void)viewDidLoad {

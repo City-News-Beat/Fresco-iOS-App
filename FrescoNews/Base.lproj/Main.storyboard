@@ -71,9 +71,110 @@
                     <view key="view" contentMode="scaleToFill" id="vDU-Ms-fEa">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
+                                <rect key="frame" x="0.0" y="64" width="600" height="32"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click here to be notified when a story breaks in your area" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlo-pW-knl">
+                                        <rect key="frame" x="8" y="5" width="584" height="12"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="10"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="zlo-pW-knl" firstAttribute="top" secondItem="an2-MI-GTV" secondAttribute="top" constant="5" id="1qv-7W-EBS"/>
+                                    <constraint firstAttribute="trailing" secondItem="zlo-pW-knl" secondAttribute="trailing" constant="8" id="3kH-eg-kQz"/>
+                                    <constraint firstItem="zlo-pW-knl" firstAttribute="leading" secondItem="an2-MI-GTV" secondAttribute="leading" constant="8" id="dHb-hf-NE2"/>
+                                    <constraint firstAttribute="height" constant="32" id="vPq-KB-Zew"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
+                                <rect key="frame" x="0.0" y="381" width="600" height="170"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pileup by Dame Tipping School" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
+                                        <rect key="frame" x="8" y="8" width="584" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3m" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cng-bK-tuo">
+                                        <rect key="frame" x="567" y="9" width="25" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="05T-eO-1PG"/>
+                                            <constraint firstAttribute="width" constant="25" id="W0X-yK-AiE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
+                                        <rect key="frame" x="8" y="37" width="584" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="29" id="I8d-cF-gis"/>
+                                        </constraints>
+                                        <string key="text">Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. </string>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="trailing" secondItem="KZO-a3-yF6" secondAttribute="trailing" id="1Jh-KW-Fcf"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="cng-bK-tuo" secondAttribute="bottom" constant="7" id="4Mg-Jx-1WK"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="4qB-6Z-Att"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="8" symbolic="YES" id="6Ug-o3-gD5"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="BrE-gC-Sya"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="trailing" secondItem="ure-nI-UMR" secondAttribute="trailingMargin" id="HBj-eu-pSY"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="IXb-L4-0NL"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="7y8-HL-DmS" secondAttribute="leading" id="P7o-UL-ffs"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="cng-bK-tuo" secondAttribute="bottom" constant="7" id="aYL-eJ-wo0"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="dvb-7t-9QE"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="gdO-2X-gd5"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="topMargin" id="irW-q3-MMb"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="lNk-NU-zQB"/>
+                                    <constraint firstAttribute="trailing" secondItem="7y8-HL-DmS" secondAttribute="trailing" constant="8" id="q8q-aZ-RRm"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="8" id="tzv-Wd-O5Q"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="8" id="wYM-ue-RM9"/>
+                                </constraints>
+                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4Ij-9p-8ce">
+                                <rect key="frame" x="0.0" y="64" width="600" height="318"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="an2-MI-GTV" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="HZE-3M-zIW"/>
+                            <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" constant="169" id="Ux2-95-7Ty"/>
+                            <constraint firstItem="ure-nI-UMR" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="Vdg-4V-Q2P"/>
+                            <constraint firstItem="4Ij-9p-8ce" firstAttribute="top" secondItem="zhG-wu-pDc" secondAttribute="bottom" id="Wbr-5o-jFm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="an2-MI-GTV" secondAttribute="trailing" constant="-16" id="XSx-Q8-jLO"/>
+                            <constraint firstItem="an2-MI-GTV" firstAttribute="top" secondItem="zhG-wu-pDc" secondAttribute="bottom" id="Xym-Pu-RZe"/>
+                            <constraint firstItem="4Ij-9p-8ce" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="b70-xn-yz6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4Ij-9p-8ce" secondAttribute="trailing" constant="-16" id="g2f-dm-Ig1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ure-nI-UMR" secondAttribute="trailing" constant="-16" id="hJI-W0-QDD"/>
+                            <constraint firstItem="ure-nI-UMR" firstAttribute="top" secondItem="vDU-Ms-fEa" secondAttribute="top" constant="381" id="od5-Zd-hDZ"/>
+                            <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" id="wI8-nX-mVS"/>
+                            <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="bottom" id="xze-WD-s95"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="wI8-nX-mVS"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="cb8-3H-bUF"/>
+                    <connections>
+                        <outlet property="assignmentDescription" destination="KZO-a3-yF6" id="uUu-VJ-O7n"/>
+                        <outlet property="assignmentDescriptions" destination="7y8-HL-DmS" id="kMq-Gg-gBA"/>
+                        <outlet property="assignmentMap" destination="4Ij-9p-8ce" id="dQG-oL-CdE"/>
+                        <outlet property="assignmentMapView" destination="4Ij-9p-8ce" id="TSq-1m-GzG"/>
+                        <outlet property="assignmentTimeElapsed" destination="cng-bK-tuo" id="vwD-Qp-rWJ"/>
+                        <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
+                        <outlet property="storyBreaksNotification" destination="zlo-pW-knl" id="gYv-WI-I7b"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="36b-EW-bWH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -141,8 +242,8 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
-                                                    <rect key="frame" x="8" y="10" width="40" height="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
+                                                    <rect key="frame" x="8" y="11" width="40" height="19"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
