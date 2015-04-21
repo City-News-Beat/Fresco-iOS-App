@@ -49,14 +49,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 150;
+    self.tableView.estimatedRowHeight = 96;
     
     [self performNecessaryFetch:nil];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Data Loading
@@ -92,8 +87,8 @@
      [self setLoadingView:actIndicator];
      }*/
 }
-#pragma mark - UITableViewDataSource
 
+#pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.stories count];
@@ -123,20 +118,11 @@
     return storyCell;
 }
 
-
 #pragma mark - UITableViewDelegate
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 200;
-}
-*/
-
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
