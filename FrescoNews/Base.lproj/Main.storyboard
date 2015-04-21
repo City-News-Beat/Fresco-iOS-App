@@ -92,7 +92,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mxj-w7-ehO" userLabel="Galleries Container View">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="601"/>
                                 <connections>
                                     <segue destination="XbF-CP-fc2" kind="embed" identifier="embedGalleries" id="QsB-rB-XyN"/>
                                 </connections>
@@ -101,7 +101,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Mxj-w7-ehO" secondAttribute="trailing" id="LN1-vQ-vVO"/>
-                            <constraint firstItem="imw-0w-dSE" firstAttribute="top" secondItem="Mxj-w7-ehO" secondAttribute="bottom" id="ego-85-jQQ"/>
+                            <constraint firstItem="imw-0w-dSE" firstAttribute="top" secondItem="Mxj-w7-ehO" secondAttribute="bottom" constant="-50" id="ego-85-jQQ"/>
                             <constraint firstItem="Mxj-w7-ehO" firstAttribute="leading" secondItem="ugC-v5-eYQ" secondAttribute="leading" id="qQt-QZ-MBI"/>
                             <constraint firstItem="Mxj-w7-ehO" firstAttribute="top" secondItem="ugC-v5-eYQ" secondAttribute="top" id="xvN-XL-fn3"/>
                         </constraints>
@@ -118,7 +118,7 @@
         <!--Stories View Controller-->
         <scene sceneID="DFa-lo-ERH">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="ZA6-zD-xIQ" userLabel="Stories View Controller" customClass="StoriesViewController" sceneMemberID="viewController">
+                <viewController id="ZA6-zD-xIQ" userLabel="Stories View Controller" customClass="StoriesViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ivd-y7-luw"/>
                         <viewControllerLayoutGuide type="bottom" id="zBm-AS-RwQ"/>
@@ -128,7 +128,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="F2K-WN-uKr">
-                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="601"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaicHeader" rowHeight="39" id="Q63-7s-eVb" customClass="StoryCellMosaicHeader">
@@ -190,9 +190,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="zBm-AS-RwQ" firstAttribute="top" secondItem="F2K-WN-uKr" secondAttribute="bottom" id="BoX-oh-vGL"/>
+                            <constraint firstItem="zBm-AS-RwQ" firstAttribute="top" secondItem="F2K-WN-uKr" secondAttribute="bottom" constant="-50" id="BoX-oh-vGL"/>
                             <constraint firstAttribute="trailing" secondItem="F2K-WN-uKr" secondAttribute="trailing" id="D6F-xE-Zzb"/>
-                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" id="Ra3-h5-CLi"/>
+                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" constant="-64" id="Ra3-h5-CLi"/>
                             <constraint firstItem="F2K-WN-uKr" firstAttribute="leading" secondItem="rhQ-YS-CX9" secondAttribute="leading" id="Yw1-Eh-hfL"/>
                         </constraints>
                     </view>
@@ -1015,7 +1015,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4y-sw-IvG" userLabel="Galleries Container View">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="601"/>
                                 <connections>
                                     <segue destination="XbF-CP-fc2" kind="embed" identifier="embedGalleries" id="SWl-Ux-T2G"/>
                                 </connections>
@@ -1023,7 +1023,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="07z-Sh-fO4" firstAttribute="top" secondItem="v4y-sw-IvG" secondAttribute="bottom" id="0qD-yL-XbV"/>
+                            <constraint firstItem="07z-Sh-fO4" firstAttribute="top" secondItem="v4y-sw-IvG" secondAttribute="bottom" constant="-50" id="0qD-yL-XbV"/>
                             <constraint firstItem="v4y-sw-IvG" firstAttribute="leading" secondItem="V6R-0X-2CD" secondAttribute="leading" id="QrL-JU-0x0"/>
                             <constraint firstAttribute="trailing" secondItem="v4y-sw-IvG" secondAttribute="trailing" id="hGh-H7-4Yp"/>
                             <constraint firstItem="v4y-sw-IvG" firstAttribute="top" secondItem="V6R-0X-2CD" secondAttribute="top" id="pdz-1L-auO"/>
@@ -1380,6 +1380,6 @@
         <image name="twitter" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QsB-rB-XyN"/>
+        <segue reference="SWl-Ux-T2G"/>
     </inferredMetricsTieBreakers>
 </document>
