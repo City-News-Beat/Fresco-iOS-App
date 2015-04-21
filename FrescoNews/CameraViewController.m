@@ -11,7 +11,7 @@
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import <AFAmazonS3Manager.h>
-#import <CTAssetsPickerController.h>
+#import "CTAssetsPickerController.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
@@ -346,9 +346,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
 }
 
-- (IBAction)doneButtonTapped:(id)sender
+- (IBAction)cancelButtonTapped:(id)sender
 {
-    [self finishAndUpdate];
+    [self cancel];
 }
 
 - (IBAction)flashButtonTapped:(UIButton *)button
@@ -357,7 +357,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
 }
 
-- (void)finishAndUpdate
+- (void)cancel
 {
     TabBarController *vc = ((TabBarController *)self.presentingViewController);
     vc.selectedIndex = vc.savedIndex;
@@ -393,7 +393,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
-    picker.title = @"Select assets to post to Fresco";
+    picker.title =  @"Choose Media";
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -611,6 +611,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
+
+- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
+{
+    [self cancel];
+}
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
