@@ -49,7 +49,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 150;
+    self.tableView.estimatedRowHeight = 96;
     
     [self performNecessaryFetch:nil];
 }

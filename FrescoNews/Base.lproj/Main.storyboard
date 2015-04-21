@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -118,7 +118,7 @@
         <!--Stories View Controller-->
         <scene sceneID="DFa-lo-ERH">
             <objects>
-                <viewController id="ZA6-zD-xIQ" userLabel="Stories View Controller" customClass="StoriesViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="ZA6-zD-xIQ" userLabel="Stories View Controller" customClass="StoriesViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ivd-y7-luw"/>
                         <viewControllerLayoutGuide type="bottom" id="zBm-AS-RwQ"/>
@@ -127,32 +127,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="F2K-WN-uKr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                            <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="F2K-WN-uKr">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaicHeader" rowHeight="45" id="Q63-7s-eVb" customClass="StoryCellMosaicHeader">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellMosaicHeader" rowHeight="39" id="Q63-7s-eVb" customClass="StoryCellMosaicHeader">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q63-7s-eVb" id="KVY-9S-kjr">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e">
-                                                    <rect key="frame" x="8" y="8" width="37" height="18"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
+                                                    <rect key="frame" x="8" y="11" width="33" height="17"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                                    <color key="textColor" white="0.54000000000000004" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="mIQ-F1-s1d" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leading" id="3Bd-cQ-xBt"/>
                                                 <constraint firstAttribute="trailing" secondItem="mIQ-F1-s1d" secondAttribute="trailing" id="J3M-m0-YNM"/>
-                                                <constraint firstItem="ult-p4-y5e" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leadingMargin" id="MxJ-sG-vQC"/>
-                                                <constraint firstItem="ult-p4-y5e" firstAttribute="top" secondItem="KVY-9S-kjr" secondAttribute="topMargin" id="iv6-60-A9X"/>
+                                                <constraint firstItem="ult-p4-y5e" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leadingMargin" id="dOG-4q-GfN"/>
+                                                <constraint firstAttribute="centerY" secondItem="ult-p4-y5e" secondAttribute="centerY" id="gCM-Ue-4IS"/>
                                                 <constraint firstAttribute="bottom" secondItem="mIQ-F1-s1d" secondAttribute="bottom" id="o4j-GY-GNK"/>
                                                 <constraint firstItem="mIQ-F1-s1d" firstAttribute="top" secondItem="KVY-9S-kjr" secondAttribute="top" id="r87-bt-77V"/>
                                             </constraints>
@@ -171,7 +171,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="70" id="tdN-uL-GYG"/>
+                                                        <constraint firstAttribute="height" priority="750" constant="70" id="tdN-uL-GYG"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -192,18 +192,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="zBm-AS-RwQ" firstAttribute="top" secondItem="F2K-WN-uKr" secondAttribute="bottom" id="BoX-oh-vGL"/>
-                            <constraint firstAttribute="bottom" secondItem="F2K-WN-uKr" secondAttribute="bottom" id="CsY-hC-ZVJ"/>
                             <constraint firstAttribute="trailing" secondItem="F2K-WN-uKr" secondAttribute="trailing" id="D6F-xE-Zzb"/>
+                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" id="Ra3-h5-CLi"/>
                             <constraint firstItem="F2K-WN-uKr" firstAttribute="leading" secondItem="rhQ-YS-CX9" secondAttribute="leading" id="Yw1-Eh-hfL"/>
-                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="top" id="eoP-VO-xT4"/>
-                            <constraint firstItem="F2K-WN-uKr" firstAttribute="top" secondItem="Ivd-y7-luw" secondAttribute="bottom" constant="-64" id="u9k-oA-mHK"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="CsY-hC-ZVJ"/>
-                                <exclude reference="eoP-VO-xT4"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="0iR-yg-grc"/>
                     <connections>
