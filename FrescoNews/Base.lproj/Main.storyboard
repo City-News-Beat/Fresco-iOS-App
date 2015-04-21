@@ -75,7 +75,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
                                 <rect key="frame" x="0.0" y="64" width="600" height="32"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click here to be notified when a story breaks in your area" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlo-pW-knl">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Breaks Notification" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlo-pW-knl">
                                         <rect key="frame" x="8" y="5" width="584" height="12"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="10"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -93,14 +93,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
                                 <rect key="frame" x="0.0" y="381" width="600" height="170"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pileup by Dame Tipping School" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
                                         <rect key="frame" x="8" y="8" width="584" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3m" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cng-bK-tuo">
-                                        <rect key="frame" x="567" y="9" width="25" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cng-bK-tuo">
+                                        <rect key="frame" x="561" y="9" width="31" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="05T-eO-1PG"/>
                                             <constraint firstAttribute="width" constant="25" id="W0X-yK-AiE"/>
@@ -109,12 +109,11 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
                                         <rect key="frame" x="8" y="37" width="584" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="29" id="I8d-cF-gis"/>
                                         </constraints>
-                                        <string key="text">Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. </string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -167,12 +166,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="cb8-3H-bUF"/>
                     <connections>
-                        <outlet property="assignmentDescription" destination="KZO-a3-yF6" id="uUu-VJ-O7n"/>
-                        <outlet property="assignmentDescriptions" destination="7y8-HL-DmS" id="kMq-Gg-gBA"/>
-                        <outlet property="assignmentMap" destination="4Ij-9p-8ce" id="dQG-oL-CdE"/>
-                        <outlet property="assignmentMapView" destination="4Ij-9p-8ce" id="TSq-1m-GzG"/>
+                        <outlet property="assignmentDescription" destination="7y8-HL-DmS" id="h4o-xm-6L2"/>
                         <outlet property="assignmentTimeElapsed" destination="cng-bK-tuo" id="vwD-Qp-rWJ"/>
                         <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
+                        <outlet property="assignmentsMap" destination="4Ij-9p-8ce" id="WXX-E7-WVF"/>
                         <outlet property="storyBreaksNotification" destination="zlo-pW-knl" id="gYv-WI-I7b"/>
                     </connections>
                 </viewController>
