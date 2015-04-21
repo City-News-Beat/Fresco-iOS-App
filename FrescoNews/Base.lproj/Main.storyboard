@@ -11,7 +11,7 @@
         <scene sceneID="WFY-08-iPs">
             <objects>
                 <navigationController title="Home Navigation" id="G0t-Ny-nTp" customClass="BaseNavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="tab-home" id="2v8-GA-Shr"/>
+                    <tabBarItem key="tabBarItem" title="Highlights" image="tab-home" id="2v8-GA-Shr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="CeV-bX-2LY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -137,16 +137,15 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q63-7s-eVb" id="KVY-9S-kjr">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
-                                                    <rect key="frame" x="8" y="11" width="33" height="17"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                                    <color key="textColor" white="0.54000000000000004" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
+                                                    <rect key="frame" x="8" y="10" width="40" height="19"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="mIQ-F1-s1d" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leading" id="3Bd-cQ-xBt"/>
