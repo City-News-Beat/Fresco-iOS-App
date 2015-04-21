@@ -72,6 +72,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4Ij-9p-8ce">
+                                <rect key="frame" x="0.0" y="64" width="600" height="318"/>
+                            </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
                                 <rect key="frame" x="0.0" y="64" width="600" height="32"/>
                                 <subviews>
@@ -139,9 +142,6 @@
                                     <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="8" id="wYM-ue-RM9"/>
                                 </constraints>
                             </view>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4Ij-9p-8ce">
-                                <rect key="frame" x="0.0" y="64" width="600" height="318"/>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -171,6 +171,7 @@
                         <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
                         <outlet property="assignmentsMap" destination="4Ij-9p-8ce" id="WXX-E7-WVF"/>
                         <outlet property="storyBreaksNotification" destination="zlo-pW-knl" id="gYv-WI-I7b"/>
+                        <outlet property="storyBreaksView" destination="an2-MI-GTV" id="4sa-nA-lex"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="36b-EW-bWH" userLabel="First Responder" sceneMemberID="firstResponder"/>

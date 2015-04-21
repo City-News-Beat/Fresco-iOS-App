@@ -12,11 +12,13 @@
 @interface AssignmentsViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
+@property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
 
 @property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
 @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
+
 
 @end
 
@@ -26,6 +28,8 @@
     [super viewDidLoad];
     
     [self setFrescoImageHeader];
+    
+    self.storyBreaksView.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorStoryBreaksBackground];
 }
 
 @end

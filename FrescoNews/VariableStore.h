@@ -21,6 +21,8 @@
 @property NSString *colorPhotoUse;
 @property NSString *colorBackground;
 
+@property NSString *colorStoryBreaksBackground;
+
 @property CGFloat opacityDarkText;
 @property CGFloat opacityLightText;
 @property CGFloat opacityOuterListDividers;
