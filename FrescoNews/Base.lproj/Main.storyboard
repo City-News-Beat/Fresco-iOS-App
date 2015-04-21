@@ -73,37 +73,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4Ij-9p-8ce">
-                                <rect key="frame" x="0.0" y="64" width="600" height="318"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="417"/>
                             </mapView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
-                                <rect key="frame" x="0.0" y="64" width="600" height="32"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Breaks Notification" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlo-pW-knl">
-                                        <rect key="frame" x="8" y="5" width="584" height="12"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="10"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="zlo-pW-knl" firstAttribute="top" secondItem="an2-MI-GTV" secondAttribute="top" constant="5" id="1qv-7W-EBS"/>
-                                    <constraint firstAttribute="trailing" secondItem="zlo-pW-knl" secondAttribute="trailing" constant="8" id="3kH-eg-kQz"/>
-                                    <constraint firstItem="zlo-pW-knl" firstAttribute="leading" secondItem="an2-MI-GTV" secondAttribute="leading" constant="8" id="dHb-hf-NE2"/>
-                                    <constraint firstAttribute="height" constant="32" id="vPq-KB-Zew"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
-                                <rect key="frame" x="0.0" y="381" width="600" height="170"/>
+                                <rect key="frame" x="0.0" y="449" width="600" height="102"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
-                                        <rect key="frame" x="8" y="8" width="584" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Assignment Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
+                                        <rect key="frame" x="16" y="8" width="543" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
+                                        <rect key="frame" x="16" y="33" width="568" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="29" id="I8d-cF-gis"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="I8d-cF-gis"/>
+                                            </mask>
+                                        </variation>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cng-bK-tuo">
-                                        <rect key="frame" x="561" y="9" width="31" height="21"/>
+                                        <rect key="frame" x="559" y="8" width="25" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="05T-eO-1PG"/>
                                             <constraint firstAttribute="width" constant="25" id="W0X-yK-AiE"/>
@@ -111,42 +107,87 @@
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
-                                        <rect key="frame" x="8" y="37" width="584" height="29"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="29" id="I8d-cF-gis"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="05T-eO-1PG"/>
+                                                <exclude reference="W0X-yK-AiE"/>
+                                            </mask>
+                                        </variation>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="top" constant="29" id="0yd-n1-L5a"/>
                                     <constraint firstItem="cng-bK-tuo" firstAttribute="trailing" secondItem="KZO-a3-yF6" secondAttribute="trailing" id="1Jh-KW-Fcf"/>
                                     <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="cng-bK-tuo" secondAttribute="bottom" constant="7" id="4Mg-Jx-1WK"/>
                                     <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="4qB-6Z-Att"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="5Yl-oE-edX"/>
                                     <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="8" symbolic="YES" id="6Ug-o3-gD5"/>
                                     <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="BrE-gC-Sya"/>
                                     <constraint firstItem="cng-bK-tuo" firstAttribute="trailing" secondItem="ure-nI-UMR" secondAttribute="trailingMargin" id="HBj-eu-pSY"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="top" constant="25" id="HWE-OD-hOR"/>
+                                    <constraint firstAttribute="trailing" secondItem="cng-bK-tuo" secondAttribute="trailing" constant="16" id="IC4-ET-kp9"/>
                                     <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="IXb-L4-0NL"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="leading" secondItem="KZO-a3-yF6" secondAttribute="trailing" constant="8" id="JAT-Uu-lgV"/>
                                     <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="7y8-HL-DmS" secondAttribute="leading" id="P7o-UL-ffs"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="bottom" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="27" id="Qiz-Dp-iQl"/>
+                                    <constraint firstItem="cng-bK-tuo" firstAttribute="baseline" secondItem="KZO-a3-yF6" secondAttribute="baseline" id="TbK-rI-fLN"/>
                                     <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="cng-bK-tuo" secondAttribute="bottom" constant="7" id="aYL-eJ-wo0"/>
+                                    <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="16" id="cTU-js-Cxq"/>
                                     <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="dvb-7t-9QE"/>
                                     <constraint firstItem="cng-bK-tuo" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="9" id="gdO-2X-gd5"/>
                                     <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="topMargin" id="irW-q3-MMb"/>
                                     <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="lNk-NU-zQB"/>
-                                    <constraint firstAttribute="trailing" secondItem="7y8-HL-DmS" secondAttribute="trailing" constant="8" id="q8q-aZ-RRm"/>
-                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="8" id="tzv-Wd-O5Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="7y8-HL-DmS" secondAttribute="trailing" constant="16" id="q8q-aZ-RRm"/>
+                                    <constraint firstItem="7y8-HL-DmS" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="16" id="tzv-Wd-O5Q"/>
                                     <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="8" id="wYM-ue-RM9"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="BrE-gC-Sya"/>
+                                        <exclude reference="P7o-UL-ffs"/>
+                                        <exclude reference="dvb-7t-9QE"/>
+                                        <exclude reference="irW-q3-MMb"/>
+                                        <exclude reference="lNk-NU-zQB"/>
+                                        <exclude reference="0yd-n1-L5a"/>
+                                        <exclude reference="4Mg-Jx-1WK"/>
+                                        <exclude reference="6Ug-o3-gD5"/>
+                                        <exclude reference="Qiz-Dp-iQl"/>
+                                        <exclude reference="aYL-eJ-wo0"/>
+                                        <exclude reference="wYM-ue-RM9"/>
+                                        <exclude reference="1Jh-KW-Fcf"/>
+                                        <exclude reference="4qB-6Z-Att"/>
+                                        <exclude reference="HBj-eu-pSY"/>
+                                        <exclude reference="IXb-L4-0NL"/>
+                                        <exclude reference="JAT-Uu-lgV"/>
+                                        <exclude reference="gdO-2X-gd5"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
+                                <rect key="frame" x="0.0" y="64" width="600" height="32"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Story Breaks Notification" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zlo-pW-knl">
+                                        <rect key="frame" x="8" y="10" width="584" height="12"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="10"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="zlo-pW-knl" firstAttribute="top" secondItem="an2-MI-GTV" secondAttribute="top" constant="9" id="1qv-7W-EBS"/>
+                                    <constraint firstAttribute="trailing" secondItem="zlo-pW-knl" secondAttribute="trailing" constant="8" id="3kH-eg-kQz"/>
+                                    <constraint firstItem="zlo-pW-knl" firstAttribute="leading" secondItem="an2-MI-GTV" secondAttribute="leading" constant="8" id="dHb-hf-NE2"/>
+                                    <constraint firstAttribute="height" constant="32" id="vPq-KB-Zew"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="an2-MI-GTV" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="HZE-3M-zIW"/>
-                            <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" constant="169" id="Ux2-95-7Ty"/>
+                            <constraint firstItem="4Ij-9p-8ce" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="-395" id="Iq5-pg-mgY"/>
+                            <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" constant="70" id="Ux2-95-7Ty"/>
                             <constraint firstItem="ure-nI-UMR" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="Vdg-4V-Q2P"/>
                             <constraint firstItem="4Ij-9p-8ce" firstAttribute="top" secondItem="zhG-wu-pDc" secondAttribute="bottom" id="Wbr-5o-jFm"/>
                             <constraint firstAttribute="trailingMargin" secondItem="an2-MI-GTV" secondAttribute="trailing" constant="-16" id="XSx-Q8-jLO"/>
@@ -154,12 +195,17 @@
                             <constraint firstItem="4Ij-9p-8ce" firstAttribute="leading" secondItem="vDU-Ms-fEa" secondAttribute="leadingMargin" constant="-16" id="b70-xn-yz6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4Ij-9p-8ce" secondAttribute="trailing" constant="-16" id="g2f-dm-Ig1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ure-nI-UMR" secondAttribute="trailing" constant="-16" id="hJI-W0-QDD"/>
+                            <constraint firstItem="4Ij-9p-8ce" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" id="llZ-Ez-ers"/>
                             <constraint firstItem="ure-nI-UMR" firstAttribute="top" secondItem="vDU-Ms-fEa" secondAttribute="top" constant="381" id="od5-Zd-hDZ"/>
                             <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" id="wI8-nX-mVS"/>
+                            <constraint firstItem="ure-nI-UMR" firstAttribute="top" secondItem="4Ij-9p-8ce" secondAttribute="bottom" constant="-32" id="xGR-sf-vz9"/>
                             <constraint firstItem="hNF-V8-PjN" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="bottom" id="xze-WD-s95"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Iq5-pg-mgY"/>
+                                <exclude reference="llZ-Ez-ers"/>
+                                <exclude reference="od5-Zd-hDZ"/>
                                 <exclude reference="wI8-nX-mVS"/>
                             </mask>
                         </variation>
@@ -170,6 +216,7 @@
                         <outlet property="assignmentTimeElapsed" destination="cng-bK-tuo" id="vwD-Qp-rWJ"/>
                         <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
                         <outlet property="assignmentsMap" destination="4Ij-9p-8ce" id="WXX-E7-WVF"/>
+                        <outlet property="detailViewWrapper" destination="ure-nI-UMR" id="Skc-cL-tBA"/>
                         <outlet property="storyBreaksNotification" destination="zlo-pW-knl" id="gYv-WI-I7b"/>
                         <outlet property="storyBreaksView" destination="an2-MI-GTV" id="4sa-nA-lex"/>
                     </connections>
