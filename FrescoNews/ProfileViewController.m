@@ -14,7 +14,7 @@
 @interface ProfileViewController ()
 //@property (weak, nonatomic) IBOutlet UIView *profileView;
 //@property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
-@property (strong, nonatomic) NSArray *galleries;
+//@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end

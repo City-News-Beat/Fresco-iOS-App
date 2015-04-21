@@ -1,5 +1,5 @@
 //
-//  StoryTableViewCell.m
+//  GalleryTableViewCell.m
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/25/15.
@@ -10,7 +10,7 @@
 #import "GalleryView.h"
 #import "FRSGallery.h"
 
-static NSString * const kCellIdentifier = @"StoryTableViewCell";
+static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 
 @implementation GalleryTableViewCell
 
