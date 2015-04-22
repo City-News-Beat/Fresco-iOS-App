@@ -32,9 +32,7 @@
 #import "CTAssetsSupplementaryView.h"
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
-#import "NSBundle+CTAssetsPickerController.h"
 #import "GalleryPostViewController.h"
-
 
 
 
@@ -108,6 +106,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self setupButtons];
     [self setupToolbar];
     [self setupAssets];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 - (void)dealloc
@@ -178,8 +177,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
             else
                 shouldShowAsset = YES;
             
-            if (shouldShowAsset)
-                [self.assets addObject:asset];
+            if (shouldShowAsset) {
+                [self.assets insertObject:asset atIndex:0];
+            }
         }
         else
         {
@@ -252,16 +252,16 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                    name:ALAssetsLibraryChangedNotification
                  object:nil];
     
-//    [center addObserver:self
-//               selector:@selector(selectedAssetsChanged:)
-//                   name:CTAssetsPickerSelectedAssetsChangedNotification
-//                 object:nil];
+    [center addObserver:self
+               selector:@selector(selectedAssetsChanged:)
+                   name:CTAssetsPickerSelectedAssetsChangedNotification
+                 object:nil];
 }
 
 - (void)removeNotificationObserver
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
 }
 
 
@@ -278,7 +278,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self reloadAssetsGroupForUserInfo:notification.userInfo];
 }
 
-
 #pragma mark - Reload Assets Group
 
 - (void)reloadAssetsGroupForUserInfo:(NSDictionary *)userInfo
@@ -294,12 +293,10 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
 }
 
-
-
 #pragma mark - Selected Assets Changed
 
-//- (void)selectedAssetsChanged:(NSNotification *)notification
-//{
+- (void)selectedAssetsChanged:(NSNotification *)notification
+{
 //    NSArray *selectedAssets = (NSArray *)notification.object;
 //    
 //    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
@@ -308,9 +305,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 //    
 //    // Reload assets for calling de/selectAsset method programmatically
 //    [self.collectionView reloadData];
-//}
-
-
+}
 
 #pragma mark - Gesture Recognizer
 
@@ -321,7 +316,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     
     [self.collectionView addGestureRecognizer:longPress];
 }
-
 
 #pragma mark - Push Assets Page View Controller
 

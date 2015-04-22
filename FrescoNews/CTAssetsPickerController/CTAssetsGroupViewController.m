@@ -30,8 +30,6 @@
 #import "CTAssetsGroupViewController.h"
 #import "CTAssetsGroupViewCell.h"
 #import "CTAssetsViewController.h"
-#import "NSBundle+CTAssetsPickerController.h"
-
 
 
 @interface CTAssetsPickerController ()
@@ -138,7 +136,7 @@
 - (void)localize
 {
     if (!self.picker.title)
-        self.title = CTAssetsPickerControllerLocalizedString(@"Photos");
+        self.title = @"Photos";
     else
         self.title = self.picker.title;
 }
@@ -331,11 +329,11 @@
 
 - (void)selectedAssetsChanged:(NSNotification *)notification
 {
-    NSArray *selectedAssets = (NSArray *)notification.object;
-    
-    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
-    
-    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
+//    NSArray *selectedAssets = (NSArray *)notification.object;
+//
+//    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+//    
+//    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
 }
 
 

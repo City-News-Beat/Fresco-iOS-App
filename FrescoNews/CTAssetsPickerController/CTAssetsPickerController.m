@@ -30,9 +30,6 @@
 #import "CTAssetsGroupViewController.h"
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
-#import "NSBundle+CTAssetsPickerController.h"
-#import "UIImage+CTAssetsPickerController.h"
-#import "GalleryPostViewController.h"
 
 
 
@@ -271,7 +268,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 - (UIImageView *)padlockImageView
 {
-    UIImage *file        = [UIImage ctassetsPickerControllerImageNamed:@"CTAssetsPickerLocked"];
+    UIImage *file        = [UIImage imageNamed:@"CTAssetsPickerLocked"];
     UIImage *image       = [file imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     UIImageView *padlock = [[UIImageView alloc] initWithImage:image];
@@ -287,9 +284,9 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     NSString *format;
     
     if ([self isCameraDeviceAvailable])
-        format = CTAssetsPickerControllerLocalizedString(@"You can take photos and videos using the camera, or sync photos and videos onto your %@\nusing iTunes.");
+        format = @"You can take photos and videos using the camera, or sync photos and videos onto your %@\nusing iTunes.";
     else
-        format = CTAssetsPickerControllerLocalizedString(@"You can sync photos and videos onto your %@ using iTunes.");
+        format = @"You can sync photos and videos onto your %@ using iTunes.";
     
     return [NSString stringWithFormat:format, self.deviceModel];
 }
@@ -374,11 +371,11 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *title =
     [self auxiliaryLabelWithFont:[UIFont boldSystemFontOfSize:17.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"This app does not have access to your photos or videos.")];
+                            text:@"This app does not have access to your photos or videos."];
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:14.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"You can enable access in Privacy Settings.")];
+                            text:@"You can enable access in Privacy Settings."];
     
     UIView *centerView = [self centerViewWithViews:@[padlock, title, message]];
     
@@ -393,7 +390,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *title =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:26.0]
                            color:[UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"No Photos or Videos")];
+                            text:@"No Photos or Videos"];
     
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:18.0]
