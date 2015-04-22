@@ -331,11 +331,11 @@
 
 - (void)selectedAssetsChanged:(NSNotification *)notification
 {
-    NSArray *selectedAssets = (NSArray *)notification.object;
-    
-    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
-    
-    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
+//    NSArray *selectedAssets = (NSArray *)notification.object;
+//
+//    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+//    
+//    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
 }
 
 
