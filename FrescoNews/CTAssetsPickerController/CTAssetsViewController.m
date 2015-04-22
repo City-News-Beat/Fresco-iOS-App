@@ -107,6 +107,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self setupButtons];
     [self setupToolbar];
     [self setupAssets];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 - (void)dealloc
@@ -177,8 +178,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
             else
                 shouldShowAsset = YES;
             
-            if (shouldShowAsset)
-                [self.assets addObject:asset];
+            if (shouldShowAsset) {
+                [self.assets insertObject:asset atIndex:0];
+            }
         }
         else
         {
