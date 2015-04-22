@@ -33,10 +33,7 @@
     
     [self tweakUI];
     [self insertFakeData]; // Will likely delete
-    [self zoomDelayDemo]; // Will likely delete
-    
-    self.detailViewWrapper.
-    
+    [self zoomDelayDemo]; // Will likely delete    
 
 }
 
