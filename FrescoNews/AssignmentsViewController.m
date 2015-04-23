@@ -33,7 +33,25 @@
     
     [self tweakUI];
     [self insertFakeData]; // Will likely delete
-    [self zoomDelayDemo]; // Will likely delete    
+    [self zoomDelayDemo]; // Will likely delete    \
+    
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
+                                                                      attribute:NSLayoutAttributeLeading
+                                                                      relatedBy:0
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeLeft
+                                                                     multiplier:1.0
+                                                                       constant:0];
+    [self.view addConstraint:leftConstraint];
+    
+    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
+                                                                       attribute:NSLayoutAttributeTrailing
+                                                                       relatedBy:0
+                                                                          toItem:self.view
+                                                                       attribute:NSLayoutAttributeRight
+                                                                      multiplier:1.0
+                                                                        constant:0];
+    [self.view addConstraint:rightConstraint];
 
 }
 
@@ -65,7 +83,7 @@
     // "Real Fake Data"
     self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
     self.assignmentTitle.text= @"Pileup by Dame Tipping Primary School";
-    self.assignmentDescription.text = @"Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed.";
+    self.assignmentDescription.text = @"Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed.";
     self.assignmentTimeElapsed.text = @"3m";
 }
 
