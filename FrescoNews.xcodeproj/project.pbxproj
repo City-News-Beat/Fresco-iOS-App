@@ -73,6 +73,8 @@
 		42BB68C41AB5349F003FC268 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 42BB68C31AB5349F003FC268 /* placeholder.png */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
+		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
+		E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
 /* End PBXBuildFile section */
@@ -237,6 +239,10 @@
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
+		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
+		E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSkipViewController.h; sourceTree = "<group>"; };
+		E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSkipViewController.m; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
@@ -446,6 +452,10 @@
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
+				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
+				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
@@ -793,6 +803,7 @@
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
+				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
@@ -827,6 +838,7 @@
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
+				E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
