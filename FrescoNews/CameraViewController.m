@@ -10,7 +10,6 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
-#import <AFAmazonS3Manager.h>
 #import "CTAssetsPickerController.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
@@ -301,43 +300,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [self updateRecentPhotoView:image];
-                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
-                    [self uploadToCDN:[self temporaryPathForImage:image] photo:YES];
-                }];
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
             }
             [self showUI];
         }];
     });
-}
-
-- (void)uploadToCDN:(NSString *)localPath photo:(BOOL)isPhoto
-{
-    return;
-
-    NSString *destinationPath;
-    if (isPhoto) {
-        destinationPath = [NSString stringWithFormat:@"/uploads/photo%@.jpeg", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
-    }
-    else {
-        destinationPath = [NSString stringWithFormat:@"/uploads/movie%@.mov", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
-    }
-
-    AFAmazonS3Manager *s3Manager = [[AFAmazonS3Manager alloc] initWithAccessKeyID:@"AKIAJNXOI5QWV3MSTZVA"
-                                                                           secret:@"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"];
-    s3Manager.requestSerializer.region = AFAmazonS3USStandardRegion;
-    s3Manager.requestSerializer.bucket = @"com.fresconews";
-    [s3Manager putObjectWithFile:localPath
-                 destinationPath:destinationPath
-                      parameters:nil
-                        progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-                            NSLog(@"%f%% Uploaded", (totalBytesWritten / (totalBytesExpectedToWrite * 1.0f) * 100));
-                        }
-                         success:^(id responseObject) {
-                             // NSLog(@"Upload Complete: %@", responseObject.URL);
-                         }
-                         failure:^(NSError *error) {
-                             NSLog(@"Error: %@", error);
-                         }];
 }
 
 // TODO: Ask if we want to keep this or not
@@ -400,13 +367,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    if ([info[UIImagePickerControllerMediaType] isEqualToString:@"public.movie"]) {
-        [self uploadToCDN:[(NSURL *)info[UIImagePickerControllerMediaURL] path] photo:NO];
-    }
-    else {
-        [self uploadToCDN:[self temporaryPathForImage:info[UIImagePickerControllerOriginalImage]] photo:YES];
-    }
-
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -433,8 +393,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [self setLockInterfaceRotation:NO];
     
-    [self uploadToCDN:[NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]] photo:NO];
-
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
