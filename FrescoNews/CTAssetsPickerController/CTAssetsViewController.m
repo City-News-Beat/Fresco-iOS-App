@@ -33,14 +33,10 @@
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
 #import "GalleryPostViewController.h"
-
-
-
+#import "FRSGallery.h"
 
 NSString * const CTAssetsViewCellIdentifier = @"CTAssetsViewCellIdentifier";
 NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryViewIdentifier";
-
-
 
 @interface CTAssetsPickerController ()
 
@@ -53,8 +49,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 @end
 
-
-
 @interface CTAssetsViewController ()
 
 @property (nonatomic, weak) CTAssetsPickerController *picker;
@@ -62,12 +56,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 @end
 
-
-
-
-
 @implementation CTAssetsViewController
-
 
 - (id)init
 {
@@ -114,14 +103,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self removeNotificationObserver];
 }
 
-
 #pragma mark - Accessors
 
 - (CTAssetsPickerController *)picker
 {
     return (CTAssetsPickerController *)self.navigationController.parentViewController;
 }
-
 
 #pragma mark - Rotation
 
@@ -130,7 +117,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     UICollectionViewFlowLayout *layout = [self collectionViewFlowLayoutOfOrientation:toInterfaceOrientation];
     [self.collectionView setCollectionViewLayout:layout animated:YES];
 }
-
 
 #pragma mark - Setup
 
@@ -264,7 +250,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
 }
 
-
 #pragma mark - Assets Library Changed
 
 - (void)assetsLibraryChanged:(NSNotification *)notification
@@ -333,8 +318,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 }
 
-
-
 #pragma mark - Reload Assets
 
 - (void)reloadAssets
@@ -342,8 +325,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.assets = nil;
     [self setupAssets];
 }
-
-
 
 #pragma mark - Reload Data
 
@@ -362,7 +343,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 }
 
-
 #pragma mark - No assets
 
 - (void)showNoAssets
@@ -377,7 +357,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.collectionView.accessibilityLabel      = self.collectionView.backgroundView.accessibilityLabel;
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.collectionView);
 }
-
 
 #pragma mark - Collection View Data Source
 
@@ -521,6 +500,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:nil
                                                                             action:nil];
+
+    vc.gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

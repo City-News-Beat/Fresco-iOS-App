@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class FRSGallery;
+
 @interface GalleryPostViewController : UIViewController
+
+@property (strong, nonatomic) FRSGallery *gallery;
 
 @end

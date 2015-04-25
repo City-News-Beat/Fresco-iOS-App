@@ -7,6 +7,11 @@
 //
 
 #import "GalleryPostViewController.h"
+#import "GalleryView.h"
+
+@interface GalleryPostViewController ()
+@property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@end
 
 @implementation GalleryPostViewController
 
@@ -16,6 +21,7 @@
     [self setupButtons];
     [self setupToolbar];
     self.title = @"Create a Gallery Post";
+    self.galleryView.gallery = self.gallery;
 }
 
 - (void)setupButtons
