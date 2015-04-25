@@ -578,6 +578,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
+    // TODO: Use or remove
     // Take the user to the "create a post" screen
 }
 
