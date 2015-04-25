@@ -15,6 +15,8 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "UIImage+ALAsset.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface FRSGallery ()
 @end
@@ -72,7 +74,17 @@
         image.height = @1; // ?
         image.width = @1; // ?
         post.largeImage = image;
-        [posts addObject:post];
+        
+        if ([asset valueForProperty:ALAssetPropertyLocation]) {
+            [posts addObject:post];
+        }
+        else {
+            NSLog(@"Skipping - no location information available");
+        }
+    }
+    
+    if (posts.count == 0) {
+        return nil;
     }
     
     _posts = posts;
