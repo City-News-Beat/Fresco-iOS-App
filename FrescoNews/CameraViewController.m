@@ -11,6 +11,8 @@
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
+#import "AppDelegate.h"
+#import "CLLocation+EXIFGPS.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
@@ -300,7 +302,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [self updateRecentPhotoView:image];
-                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
+                                                                    metadata:[((AppDelegate *)[UIApplication sharedApplication].delegate).location EXIFMetadata]
+                                                             completionBlock:nil];
             }
             [self showUI];
         }];
@@ -591,12 +595,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
 {
     // TODO: Disable video clip if too long?
-//    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
 //        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
 //        return lround(duration) <= 60;
-//    }
-
-    return YES;
+        return YES;
+    }
+    else if ([asset valueForProperty:ALAssetPropertyLocation]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker isDefaultAssetsGroup:(ALAssetsGroup *)group

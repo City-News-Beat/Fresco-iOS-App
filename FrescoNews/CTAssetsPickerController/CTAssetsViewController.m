@@ -145,30 +145,21 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupAssets
 {
+    // TODO: Explain in the UI why some photos cannot be selected (no location information)?
     self.title = @"Choose Media";
-
-    if (!self.assets)
-        self.assets = [[NSMutableArray alloc] init];
-    else
-        return;
     
-    ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop)
-    {
-        if (asset)
-        {
-            BOOL shouldShowAsset;
-            
-            if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldShowAsset:)])
-                shouldShowAsset = [self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset];
-            else
-                shouldShowAsset = YES;
-            
-            if (shouldShowAsset) {
-                [self.assets insertObject:asset atIndex:0];
-            }
+    if (!self.assets) {
+        self.assets = [[NSMutableArray alloc] init];
+    }
+    else {
+        return;
+    }
+    
+    ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+        if (asset) {
+            [self.assets insertObject:asset atIndex:0];
         }
-        else
-        {
+        else {
             [self reloadData];
         }
     };
@@ -494,6 +485,11 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     if (!self.picker.selectedAssets.count) {
         return;
     }
+    
+    FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    if (!gallery) {
+        return;
+    }
 
     GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
@@ -502,7 +498,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                                             action:nil];
 
     vc.gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
-    // TODO: check for non-nil vc.gallery
     [self.navigationController pushViewController:vc animated:YES];
 }
 
