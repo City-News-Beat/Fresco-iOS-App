@@ -9,14 +9,17 @@
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface AppDelegate () <UITabBarControllerDelegate>
+@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
+    [self setupLocationManager];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     return YES;
@@ -67,6 +70,37 @@
     for (UITabBarItem *item in tabBar.items) {
         item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
         ++i;
+    }
+}
+
+- (void)setupLocationManager
+{
+    if (![CLLocationManager locationServicesEnabled]) {
+        // User has disabled location services on this device
+        return;
+    }
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
     }
 }
 
