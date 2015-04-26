@@ -72,6 +72,8 @@
 		42BB68C41AB5349F003FC268 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 42BB68C31AB5349F003FC268 /* placeholder.png */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
+		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
+		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
 /* End PBXBuildFile section */
@@ -214,6 +216,10 @@
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ALAsset.h"; sourceTree = "<group>"; };
 		42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ALAsset.m"; sourceTree = "<group>"; };
+		42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocation+EXIFGPS.h"; sourceTree = "<group>"; };
+		42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+EXIFGPS.m"; sourceTree = "<group>"; };
+		42D998051AEC46D900636F33 /* NSDate+ISO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ISO.h"; sourceTree = "<group>"; };
+		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ISO.m"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
@@ -514,6 +520,10 @@
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
 				1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */,
 				1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */,
+				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
+				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
+				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
+				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -764,6 +774,7 @@
 				423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */,
 				420DC7341ADB875000157762 /* CTAssetsGroupViewController.m in Sources */,
 				1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */,
+				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
@@ -791,6 +802,7 @@
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
+				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
