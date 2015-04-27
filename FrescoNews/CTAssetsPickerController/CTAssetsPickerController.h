@@ -68,14 +68,6 @@
 @property (nonatomic, strong) NSMutableArray *selectedAssets;
 
 /**
- *  Determines whether or not the cancel button is visible in the picker.
- *
- *  The cancel button is visible by default. To hide the cancel button, (e.g. presenting the picker in `UIPopoverController`)
- *  set this property’s value to `NO`.
- */
-@property (nonatomic, assign) BOOL showsCancelButton;
-
-/**
  *  Determines whether or not the number of assets is shown in the album list.
  *
  *  The number of assets is visible by default. To hide the number of assets, (e.g. implementing `shouldShowAsset` delegate method)

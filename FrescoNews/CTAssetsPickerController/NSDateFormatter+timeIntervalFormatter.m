@@ -26,7 +26,6 @@
  */
 
 #import "NSDateFormatter+timeIntervalFormatter.h"
-#import "NSBundle+CTAssetsPickerController.h"
 
 
 
@@ -54,22 +53,22 @@
         string = [string stringByAppendingFormat:@"%ld %@",
                   (long)components.hour,
                   (components.hour > 1) ?
-                  CTAssetsPickerControllerLocalizedString(@"hours") :
-                  CTAssetsPickerControllerLocalizedString(@"hour")];
+                  @"hours" :
+                  @"hour"];
     
     if (components.minute > 0)
         string = [string stringByAppendingFormat:@"%ld %@",
                   (long)components.minute,
                   (components.minute > 1) ?
-                  CTAssetsPickerControllerLocalizedString(@"minutes") :
-                  CTAssetsPickerControllerLocalizedString(@"minute")];
+                  @"minutes" :
+                  @"minute"];
     
     if (components.second > 0)
         string = [string stringByAppendingFormat:@"%ld %@",
                   (long)components.second,
                   (components.second > 1) ?
-                  CTAssetsPickerControllerLocalizedString(@"seconds") :
-                  CTAssetsPickerControllerLocalizedString(@"second")];
+                  @"seconds" :
+                  @"second"];
     
     return string;
 }
