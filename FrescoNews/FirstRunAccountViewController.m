@@ -9,6 +9,8 @@
 #import "FirstRunAccountViewController.h"
 
 @interface FirstRunAccountViewController ()
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 
 @end
 
@@ -17,11 +19,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self styleButtons];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)styleButtons {
+    self.twitterButton.layer.cornerRadius = 8;
+    self.twitterButton.clipsToBounds = YES;
+    
+    self.facebookButton.layer.cornerRadius = 8;
+    self.facebookButton.clipsToBounds = YES;
 }
 
 /*
