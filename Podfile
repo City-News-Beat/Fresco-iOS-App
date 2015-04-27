@@ -6,7 +6,7 @@ platform :ios, '7.0'
 
 pod 'AFNetworking', '~> 2.1'
 pod 'AFNetworkActivityLogger'
-pod 'AFAmazonS3Manager'
+# pod 'AFAmazonS3Manager'
 
 pod 'Mantle', '~> 1.3'
 pod 'Functional.m', '~> 1.0'

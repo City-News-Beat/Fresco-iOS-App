@@ -30,8 +30,6 @@
 #import "CTAssetsGroupViewController.h"
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
-#import "NSBundle+CTAssetsPickerController.h"
-#import "UIImage+CTAssetsPickerController.h"
 
 
 
@@ -49,14 +47,13 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         _assetsLibrary          = [self.class defaultAssetsLibrary];
         _assetsFilter           = [ALAssetsFilter allAssets];
         _selectedAssets         = [[NSMutableArray alloc] init];
-        _showsCancelButton      = YES;
         _showsNumberOfAssets    = YES;
         _alwaysEnableDoneButton = NO;
         
         self.preferredContentSize = CTAssetPickerPopoverContentSize;
         
         [self setupNavigationController];
-        [self setupToolbarApperance];
+        [self setupToolbarAppearance];
         [self addKeyValueObserver];
     }
     
@@ -123,7 +120,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 #pragma mark - Toolbar Appearance
 
-- (void)setupToolbarApperance
+- (void)setupToolbarAppearance
 {
     NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
     UIBarButtonItem *barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], [CTAssetsPickerController class], nil];
@@ -271,7 +268,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
 
 - (UIImageView *)padlockImageView
 {
-    UIImage *file        = [UIImage ctassetsPickerControllerImageNamed:@"CTAssetsPickerLocked"];
+    UIImage *file        = [UIImage imageNamed:@"CTAssetsPickerLocked"];
     UIImage *image       = [file imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     UIImageView *padlock = [[UIImageView alloc] initWithImage:image];
@@ -287,9 +284,9 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     NSString *format;
     
     if ([self isCameraDeviceAvailable])
-        format = CTAssetsPickerControllerLocalizedString(@"You can take photos and videos using the camera, or sync photos and videos onto your %@\nusing iTunes.");
+        format = @"You can take photos and videos using the camera, or sync photos and videos onto your %@\nusing iTunes.";
     else
-        format = CTAssetsPickerControllerLocalizedString(@"You can sync photos and videos onto your %@ using iTunes.");
+        format = @"You can sync photos and videos onto your %@ using iTunes.";
     
     return [NSString stringWithFormat:format, self.deviceModel];
 }
@@ -374,11 +371,11 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *title =
     [self auxiliaryLabelWithFont:[UIFont boldSystemFontOfSize:17.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"This app does not have access to your photos or videos.")];
+                            text:@"This app does not have access to your photos or videos."];
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:14.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"You can enable access in Privacy Settings.")];
+                            text:@"You can enable access in Privacy Settings."];
     
     UIView *centerView = [self centerViewWithViews:@[padlock, title, message]];
     
@@ -393,7 +390,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *title =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:26.0]
                            color:[UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1]
-                            text:CTAssetsPickerControllerLocalizedString(@"No Photos or Videos")];
+                            text:@"No Photos or Videos"];
     
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:18.0]
@@ -418,83 +415,27 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     }];
 }
 
-- (NSString *)toolbarTitle
-{
-    return @"Create a Gallery Post";
-
-//    if (self.selectedAssets.count == 0)
-//        return nil;
-//
-//    NSPredicate *photoPredicate = [self predicateOfAssetType:ALAssetTypePhoto];
-//    NSPredicate *videoPredicate = [self predicateOfAssetType:ALAssetTypeVideo];
-//    
-//    BOOL photoSelected = ([self.selectedAssets filteredArrayUsingPredicate:photoPredicate].count > 0);
-//    BOOL videoSelected = ([self.selectedAssets filteredArrayUsingPredicate:videoPredicate].count > 0);
-//    
-//    NSString *format;
-//    
-//    if (photoSelected && videoSelected)
-//        format = CTAssetsPickerControllerLocalizedString(@"%ld Items Selected");
-//    
-//    else if (photoSelected)
-//        format = (self.selectedAssets.count > 1) ?
-//        CTAssetsPickerControllerLocalizedString(@"%ld Photos Selected") :
-//        CTAssetsPickerControllerLocalizedString(@"%ld Photo Selected");
-//    
-//    else if (videoSelected)
-//        format = (self.selectedAssets.count > 1) ?
-//        CTAssetsPickerControllerLocalizedString(@"%ld Videos Selected") :
-//        CTAssetsPickerControllerLocalizedString(@"%ld Video Selected");
-//
-//    return [NSString stringWithFormat:format, (long)self.selectedAssets.count];
-}
-
-
-#pragma mark - Toolbar Items
-
-- (UIBarButtonItem *)titleButtonItem
-{
-    UIBarButtonItem *title =
-    [[UIBarButtonItem alloc] initWithTitle:self.toolbarTitle
-                                     style:UIBarButtonItemStylePlain
-                                    target:nil
-                                    action:nil];
-
-    [title setEnabled:NO];
-    
-    return title;
-}
-
-- (UIBarButtonItem *)spaceButtonItem
-{
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-}
-
-- (NSArray *)toolbarItems
-{
-    UIBarButtonItem *title = [self titleButtonItem];
-    UIBarButtonItem *space = [self spaceButtonItem];
-    
-    return @[space, title, space];
-}
-
-
 #pragma mark - Actions
 
 - (void)dismiss:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(assetsPickerControllerDidCancel:)])
+    if ([self.delegate respondsToSelector:@selector(assetsPickerControllerDidCancel:)]) {
         [self.delegate assetsPickerControllerDidCancel:self];
+    }
     
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (void)returnToCamera:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+}
 
 - (void)finishPickingAssets:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
+    if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)]) {
         [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+    }
 }
-
 
 @end

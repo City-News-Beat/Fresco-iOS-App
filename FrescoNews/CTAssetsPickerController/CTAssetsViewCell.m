@@ -29,8 +29,6 @@
 #import "ALAsset+assetType.h"
 #import "ALAsset+accessibilityLabel.h"
 #import "NSDateFormatter+timeIntervalFormatter.h"
-#import "UIImage+CTAssetsPickerController.h"
-
 
 
 
@@ -61,9 +59,9 @@ static UIColor *disabledColor;
 {
     titleFont       = [UIFont systemFontOfSize:12];
     titleHeight     = 20.0f;
-    videoIcon       = [UIImage ctassetsPickerControllerImageNamed:@"CTAssetsPickerVideo"];
+    videoIcon       = [UIImage imageNamed:@"CTAssetsPickerVideo"];
     titleColor      = [UIColor whiteColor];
-    checkedIcon     = [UIImage ctassetsPickerControllerImageNamed:@"CTAssetsPickerChecked"];
+    checkedIcon     = [UIImage imageNamed:@"CTAssetsPickerChecked"];
     selectedColor   = [UIColor colorWithWhite:1 alpha:0.3];
     disabledColor   = [UIColor colorWithWhite:1 alpha:0.9];
 }
@@ -84,7 +82,7 @@ static UIColor *disabledColor;
 - (void)bind:(ALAsset *)asset
 {
     self.asset  = asset;
-    self.image  = (asset.thumbnail == NULL) ? [UIImage ctassetsPickerControllerImageNamed:@"CTAssetsPickerEmptyCell"] : [UIImage imageWithCGImage:asset.thumbnail];
+    self.image  = (asset.thumbnail == NULL) ? [UIImage imageNamed:@"CTAssetsPickerEmptyCell"] : [UIImage imageWithCGImage:asset.thumbnail];
     
     if ([self.asset isVideo])
     {

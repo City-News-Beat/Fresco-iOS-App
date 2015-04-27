@@ -27,7 +27,6 @@
 
 #import "CTAssetsPickerCommon.h"
 #import "CTAssetsGroupViewCell.h"
-#import "NSBundle+CTAssetsPickerController.h"
 
 
 
@@ -79,7 +78,7 @@
 {
     NSString *label = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyName];
     
-    return [label stringByAppendingFormat:CTAssetsPickerControllerLocalizedString(@"%ld Photos"), (long)self.assetsGroup.numberOfAssets];
+    return [label stringByAppendingFormat:@"%ld Photos", (long)self.assetsGroup.numberOfAssets];
 }
 
 @end
