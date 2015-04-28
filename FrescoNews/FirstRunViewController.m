@@ -32,11 +32,11 @@
 }
 
 - (void)styleButtons {
-    self.twitterButton.layer.cornerRadius = 8;
+    /*self.twitterButton.layer.cornerRadius = 8;
     self.twitterButton.clipsToBounds = YES;
     
     self.facebookButton.layer.cornerRadius = 8;
-    self.facebookButton.clipsToBounds = YES;
+    self.facebookButton.clipsToBounds = YES;*/
     
     self.loginButton.layer.cornerRadius = 8;
     self.loginButton.clipsToBounds = YES;
