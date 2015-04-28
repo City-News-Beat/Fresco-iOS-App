@@ -10,14 +10,16 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
-#import <AFAmazonS3Manager.h>
+#import "CTAssetsPickerController.h"
+#import "AppDelegate.h"
+#import "CLLocation+EXIFGPS.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
 // iOS 8 - use PHPhotoLibrary?
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIImagePickerControllerDelegate>
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
@@ -29,6 +31,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *recentPhotoImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *shutterIcon;
+@property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
+@property (weak, nonatomic) IBOutlet UIImageView *flashIcon;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -45,8 +50,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) id runtimeErrorHandlingObserver;
 
 @end
-
-// TODO: Clean up state on app backgrounding
 
 @implementation CameraViewController
 
@@ -91,13 +94,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         AVCaptureDevice *videoDevice = [CameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
 
-        if (error)
-        {
+        if (error) {
             NSLog(@"%@", error);
         }
 
-        if ([session canAddInput:videoDeviceInput])
-        {
+        if ([session canAddInput:videoDeviceInput]) {
             [session addInput:videoDeviceInput];
             [self setVideoDeviceInput:videoDeviceInput];
 
@@ -113,19 +114,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         AVCaptureDevice *audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
         AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
 
-        if (error)
-        {
+        if (error) {
             NSLog(@"%@", error);
         }
 
-        if ([session canAddInput:audioDeviceInput])
-        {
+        if ([session canAddInput:audioDeviceInput]) {
             [session addInput:audioDeviceInput];
         }
 
         AVCaptureMovieFileOutput *movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
-        if ([session canAddOutput:movieFileOutput])
-        {
+        if ([session canAddOutput:movieFileOutput]) {
             [session addOutput:movieFileOutput];
             AVCaptureConnection *connection = [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
             if ([connection isVideoStabilizationSupported])
@@ -134,16 +132,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
 
         AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-        if ([session canAddOutput:stillImageOutput])
-        {
+        if ([session canAddOutput:stillImageOutput]) {
             [stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
             [session addOutput:stillImageOutput];
             [self setStillImageOutput:stillImageOutput];
         }
     });
 
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"WARNING" message:@"Still photos are uploaded to a public Fresco S3 bucket" delegate:nil cancelButtonTitle:@"I understand" otherButtonTitles:nil];
-    [alertView show];
+    [self updateRecentPhotoView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -193,7 +189,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAll;
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -203,30 +199,25 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == CapturingStillImageContext)
-    {
+    if (context == CapturingStillImageContext) {
         BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
 
-        if (isCapturingStillImage)
-        {
+        if (isCapturingStillImage) {
             [self runStillImageCaptureAnimation];
         }
     }
-    else if (context == RecordingContext)
-    {
+    else if (context == RecordingContext) {
         //
     }
-    else if (context == SessionRunningAndDeviceAuthorizedContext)
-    {
+    else if (context == SessionRunningAndDeviceAuthorizedContext) {
         //
     }
-    else
-    {
+    else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
-#pragma mark Actions
+#pragma mark - Actions
 
 - (IBAction)shutterButtonTapped:(id)sender
 {
@@ -306,62 +297,30 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
-
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
-                self.recentPhotoImageView.image = image;
-                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error) {
-                    [self uploadToCDN:[self temporaryPathForImage:image] photo:YES];
-                }];
+                [self updateRecentPhotoView:image];
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
+                                                                    metadata:[((AppDelegate *)[UIApplication sharedApplication].delegate).location EXIFMetadata]
+                                                             completionBlock:nil];
             }
             [self showUI];
         }];
     });
 }
 
-- (void)uploadToCDN:(NSString *)localPath photo:(BOOL)isPhoto
-{
-    if (!isPhoto) {
-        return;
-    }
-
-    NSString *destinationPath;
-    if (isPhoto) {
-        destinationPath = [NSString stringWithFormat:@"/uploads/photo%@.jpeg", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
-    }
-    else {
-        destinationPath = [NSString stringWithFormat:@"/uploads/movie%@.mov", @((NSInteger)[[NSDate date] timeIntervalSince1970])];
-    }
-
-    AFAmazonS3Manager *s3Manager = [[AFAmazonS3Manager alloc] initWithAccessKeyID:@"AKIAJNXOI5QWV3MSTZVA"
-                                                                           secret:@"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"];
-    s3Manager.requestSerializer.region = AFAmazonS3USStandardRegion;
-    s3Manager.requestSerializer.bucket = @"com.fresconews";
-    [s3Manager putObjectWithFile:localPath
-                 destinationPath:destinationPath
-                      parameters:nil
-                        progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-                            NSLog(@"%f%% Uploaded", (totalBytesWritten / (totalBytesExpectedToWrite * 1.0f) * 100));
-                        }
-                         success:^(id responseObject) {
-                             // NSLog(@"Upload Complete: %@", responseObject.URL);
-                         }
-                         failure:^(NSError *error) {
-                             NSLog(@"Error: %@", error);
-                         }];
-}
-
+// TODO: Ask if we want to keep this or not
 - (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
 {
     CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
 }
 
-- (IBAction)doneButtonTapped:(id)sender
+- (IBAction)cancelButtonTapped:(id)sender
 {
-    [self finishAndUpdate];
+    [self cancel];
 }
 
 - (IBAction)flashButtonTapped:(UIButton *)button
@@ -370,17 +329,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
 }
 
-- (void)finishAndUpdate
+- (void)cancel
 {
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
     TabBarController *vc = ((TabBarController *)self.presentingViewController);
     vc.selectedIndex = vc.savedIndex;
     vc.tabBar.hidden = NO;
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
 {
-    CGPoint devicePoint = CGPointMake(.5, .5);
+    CGPoint devicePoint = (CGPoint){0.5, 0.5};
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
 }
 
@@ -389,6 +348,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.videoButton.selected = NO;
+        [self updateCameraMode:@"photo"];
     }
 }
 
@@ -397,27 +357,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.photoButton.selected = NO;
+        [self updateCameraMode:@"video"];
     }
 }
 
 - (IBAction)tempButtonTapped:(id)sender
 {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+    picker.title =  @"Choose Media";
     [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    if ([info[UIImagePickerControllerMediaType] isEqualToString:@"public.movie"]) {
-        [self uploadToCDN:[(NSURL *)info[UIImagePickerControllerMediaURL] path] photo:NO];
-    }
-    else {
-        [self uploadToCDN:[self temporaryPathForImage:info[UIImagePickerControllerOriginalImage]] photo:YES];
-    }
-
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -434,7 +387,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return photoPath;
 }
 
-#pragma mark File Output Delegate
+#pragma mark - File Output Delegate
 
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
 {
@@ -444,8 +397,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [self setLockInterfaceRotation:NO];
     
-    [self uploadToCDN:[NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]] photo:NO];
-
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
@@ -463,30 +414,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
-#pragma mark Device Configuration
+#pragma mark - Device Configuration
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *device = [[self videoDeviceInput] device];
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
-            {
+        if ([device lockForConfiguration:&error]) {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode]) {
                 [device setFocusMode:focusMode];
                 [device setFocusPointOfInterest:point];
             }
-            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
-            {
+            
+            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode]) {
                 [device setExposureMode:exposureMode];
                 [device setExposurePointOfInterest:point];
             }
+            
             [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
             [device unlockForConfiguration];
         }
-        else
-        {
+        else {
             NSLog(@"%@", error);
         }
     });
@@ -494,16 +443,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 + (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
 {
-    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
-    {
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode]) {
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
+        if ([device lockForConfiguration:&error]) {
             [device setFlashMode:flashMode];
             [device unlockForConfiguration];
         }
-        else
-        {
+        else {
             NSLog(@"%@", error);
         }
     }
@@ -533,10 +479,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:mediaType];
     AVCaptureDevice *captureDevice = [devices firstObject];
     
-    for (AVCaptureDevice *device in devices)
-    {
-        if ([device position] == position)
-        {
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == position) {
             captureDevice = device;
             break;
         }
@@ -545,7 +489,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return captureDevice;
 }
 
-#pragma mark UI
+#pragma mark - UI
 
 - (void)runStillImageCaptureAnimation
 {
@@ -563,13 +507,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     NSString *mediaType = AVMediaTypeVideo;
     
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (granted)
-        {
+        if (granted) {
             //Granted access to mediaType
             [self setDeviceAuthorized:YES];
         }
-        else
-        {
+        else {
             //Not granted access to mediaType
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[[UIAlertView alloc] initWithTitle:@"AVCam!"
@@ -581,6 +523,100 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             });
         }
     }];
+}
+
+- (void)updateCameraMode:(NSString *)mode
+{
+    if ([mode isEqualToString:@"photo"]) {
+        self.broadcastStatus.hidden = YES;
+        self.shutterIcon.image = [UIImage imageNamed:@"shutter.png"];
+        self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
+    }
+    else {
+        self.broadcastStatus.hidden = NO;
+        self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
+        self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
+    }
+}
+
+- (void)updateRecentPhotoView
+{
+    [self updateRecentPhotoView:nil];
+}
+
+- (void)updateRecentPhotoView:(UIImage *)image
+{
+    if (image) {
+        self.recentPhotoImageView.image = image;
+        return;
+    }
+    
+    // Grab the most recent image from the photo library
+    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
+                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                                     if (group) {
+                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                                             if (asset) {
+                                                 ALAssetRepresentation *repr = [asset defaultRepresentation];
+                                                 self.recentPhotoImageView.image = [UIImage imageWithCGImage:[repr fullResolutionImage]];
+                                                 *stop = YES;
+                                             }
+                                         }];
+                                     }
+                                     
+                                     *stop = NO;
+                                 }
+                               failureBlock:^(NSError *error) {
+                                   NSLog(@"error: %@", error);
+                               }];
+}
+
+#pragma mark - CTAssetsPickerControllerDelegate methods
+
+- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
+{
+    [self cancel];
+}
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
+{
+    // TODO: Use or remove
+    // Take the user to the "create a post" screen
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
+{
+    // Allow up to 10 assets to be picked
+    return picker.selectedAssets.count < 10;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
+{
+    // TODO: Disable video clip if too long?
+    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+//        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+//        return lround(duration) <= 60;
+        return YES;
+    }
+    else if ([asset valueForProperty:ALAssetPropertyLocation]) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker isDefaultAssetsGroup:(ALAssetsGroup *)group
+{
+    // Set All Photos as default album and it will be shown initially.
+    return [[group valueForProperty:ALAssetsGroupPropertyType] integerValue] == ALAssetsGroupSavedPhotos;
+}
+
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAssetsGroup:(ALAssetsGroup *)group
+{
+    // Do not show empty albums
+    return group.numberOfAssets > 0;
 }
 
 @end

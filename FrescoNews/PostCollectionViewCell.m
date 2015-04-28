@@ -10,6 +10,7 @@
 
 #import "PostCollectionViewCell.h"
 #import "FRSPost.h"
+#import "FRSImage.h"
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
@@ -28,12 +29,18 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     _post = post;
     
     __weak PostCollectionViewCell *weakSelf = self;
-    
-    [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        weakSelf.imageView.image = image;
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
 
-    }];
+    if (_post.postID) {
+        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            weakSelf.imageView.image = image;
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+
+        }];
+    }
+    else {
+        // local
+        self.imageView.image = post.largeImage.image;
+    }
 }
 
 @end

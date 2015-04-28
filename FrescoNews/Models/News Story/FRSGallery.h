@@ -24,4 +24,6 @@
 @property (nonatomic, strong) NSArray *articles;
 @property (nonatomic, strong) NSArray *posts;
 
+- (instancetype)initWithAssets:(NSArray *)assets;
+
 @end

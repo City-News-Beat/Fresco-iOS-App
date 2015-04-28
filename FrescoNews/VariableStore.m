@@ -30,6 +30,8 @@
         sharedInstance.colorPhotoUse = @"5C85F5";
         sharedInstance.colorBackground = @"FAFAFA";
         
+        sharedInstance.colorStoryBreaksBackground = @"5C85F5";
+        
         sharedInstance.opacityDarkText = 0.87f;
         sharedInstance.opacityLightText = 0.54f;
         sharedInstance.opacityOuterListDividers = 0.26f;

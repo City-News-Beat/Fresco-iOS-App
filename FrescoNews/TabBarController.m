@@ -15,10 +15,29 @@
 {
     if ([item.title isEqualToString:@"Camera"]) {
         self.savedIndex = self.selectedIndex;
-        CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
         self.tabBar.hidden = YES;
+        CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
         [self presentViewController:vc animated:NO completion:nil];
     }
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if ([self.selectedViewController isKindOfClass:[CameraViewController class]]) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end

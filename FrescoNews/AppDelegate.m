@@ -8,16 +8,18 @@
 
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
+#import "CameraViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
+    [self setupLocationManager];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     return YES;
@@ -62,6 +64,7 @@
                                      @"tab-profile-highlighted"];
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    tabBarController.delegate = self;
     UITabBar *tabBar = tabBarController.tabBar;
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
@@ -69,25 +72,43 @@
         ++i;
     }
 }
-@end
 
-// Category for controlling all the view controllers
-@implementation UITabBarController (FrescoNews)
--(BOOL)shouldAutorotate
+- (void)setupLocationManager
 {
-    return YES;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
- /*   if ([self.selectedViewController isKindOfClass:[CameraViewController class]])
-        return UIInterfaceOrientationMaskAllButUpsideDown;*/
+    if (![CLLocationManager locationServicesEnabled]) {
+        // User has disabled location services on this device
+        return;
+    }
     
-    return UIInterfaceOrientationMaskPortrait;
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+
+#pragma mark - UITabBarControllerDelegate methods
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    return ![viewController isKindOfClass:[CameraViewController class]];
 }
 
 @end

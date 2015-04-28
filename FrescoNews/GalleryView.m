@@ -8,6 +8,8 @@
 
 #import "GalleryView.h"
 #import "FRSGallery.h"
+#import "FRSPost.h"
+#import "FRSImage.h"
 #import "PostCollectionViewCell.h"
 
 @interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
@@ -23,7 +25,6 @@
     self.collectionPosts.dataSource = self;
     self.collectionPosts.delegate = self;
     self.pageControl.numberOfPages = 0;
-
 }
 
 - (void)setGallery:(FRSGallery *)gallery
@@ -31,6 +32,31 @@
     _gallery = gallery;
     self.labelCaption.text = self.gallery.caption;
     self.pageControl.numberOfPages = [self.gallery.posts count];
+
+    [self setAspectRatio];
+}
+
+- (void)setAspectRatio
+{
+    if ([self.gallery.posts count]) {
+        FRSPost *post = [self.gallery.posts firstObject];
+        CGFloat aspectRatio = [post.largeImage.width floatValue] / [post.largeImage.height floatValue];
+        if (aspectRatio < 1.0f)
+            aspectRatio = 1.0f;
+        
+        if (self.collectionPosts.constraints)
+            [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
+        
+        // make the aspect ratio 4:3
+        [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
+                                                                         attribute:NSLayoutAttributeWidth
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self.collectionPosts
+                                                                         attribute:NSLayoutAttributeHeight
+                                                                        multiplier:aspectRatio
+                                                                          constant:0]];
+        [self updateConstraints];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
