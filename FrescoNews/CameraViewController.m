@@ -558,7 +558,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                      if (group) {
                                          [group setAssetsFilter:[ALAssetsFilter allPhotos]];
                                          [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
-                                             if (asset) {
+                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
                                                  ALAssetRepresentation *repr = [asset defaultRepresentation];
                                                  self.recentPhotoImageView.image = [UIImage imageWithCGImage:[repr fullResolutionImage]];
                                                  *stop = YES;
