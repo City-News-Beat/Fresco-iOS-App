@@ -32,28 +32,22 @@
 #import "CTAssetsSupplementaryView.h"
 #import "CTAssetsPageViewController.h"
 #import "CTAssetsViewControllerTransition.h"
-#import "NSBundle+CTAssetsPickerController.h"
-
-
-
-
+#import "GalleryPostViewController.h"
+#import "FRSGallery.h"
 
 NSString * const CTAssetsViewCellIdentifier = @"CTAssetsViewCellIdentifier";
 NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryViewIdentifier";
-
-
 
 @interface CTAssetsPickerController ()
 
 - (void)finishPickingAssets:(id)sender;
 - (void)dismiss:(id)sender;
+- (void)returnToCamera:(id)sender;
 
 - (NSString *)toolbarTitle;
 - (UIView *)noAssetsView;
 
 @end
-
-
 
 @interface CTAssetsViewController ()
 
@@ -62,12 +56,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 @end
 
-
-
-
-
 @implementation CTAssetsViewController
-
 
 - (id)init
 {
@@ -106,13 +95,13 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self setupButtons];
     [self setupToolbar];
     [self setupAssets];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 - (void)dealloc
 {
     [self removeNotificationObserver];
 }
-
 
 #pragma mark - Accessors
 
@@ -121,7 +110,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     return (CTAssetsPickerController *)self.navigationController.parentViewController;
 }
 
-
 #pragma mark - Rotation
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -129,7 +117,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     UICollectionViewFlowLayout *layout = [self collectionViewFlowLayoutOfOrientation:toInterfaceOrientation];
     [self.collectionView setCollectionViewLayout:layout animated:YES];
 }
-
 
 #pragma mark - Setup
 
@@ -140,55 +127,39 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupButtons
 {
-    // TODO: Clean up all references to "Done" button
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                  target:self.picker
-                                                  action:@selector(finishPickingAssets:)];
-
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-
-    self.navigationItem.leftBarButtonItem = 
-    [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain
-                                    target:self.picker
-                                    action:@selector(dismiss:)];
-
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self.picker
+                                                                            action:@selector(dismiss:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                           target:self.picker
+                                                                                           action:@selector(returnToCamera:)];
 }
 
 - (void)setupToolbar
 {
-    self.toolbarItems = self.picker.toolbarItems;
-
-    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
+    self.toolbarItems = [self toolbarItems];
     [self.navigationController setToolbarHidden:NO animated:NO];
 }
 
 - (void)setupAssets
 {
+    // TODO: Explain in the UI why some photos cannot be selected (no location information)?
     self.title = @"Choose Media";
-
-    if (!self.assets)
-        self.assets = [[NSMutableArray alloc] init];
-    else
-        return;
     
-    ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop)
-    {
-        if (asset)
-        {
-            BOOL shouldShowAsset;
-            
-            if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldShowAsset:)])
-                shouldShowAsset = [self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset];
-            else
-                shouldShowAsset = YES;
-            
-            if (shouldShowAsset)
-                [self.assets addObject:asset];
+    if (!self.assets) {
+        self.assets = [[NSMutableArray alloc] init];
+    }
+    else {
+        return;
+    }
+    
+    ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+        if (asset) {
+            [self.assets insertObject:asset atIndex:0];
         }
-        else
-        {
+        else {
             [self reloadData];
         }
     };
@@ -196,6 +167,30 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self.assetsGroup enumerateAssetsUsingBlock:resultsBlock];
 }
 
+#pragma mark - Toolbar Items
+
+- (UIBarButtonItem *)titleButtonItem
+{
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery Post"
+                                                              style:UIBarButtonItemStylePlain
+                                                             target:self
+                                                             action:@selector(createGalleryPost:)];
+    
+    title.enabled = YES;
+    return title;
+}
+
+- (UIBarButtonItem *)spaceButtonItem
+{
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+}
+
+- (NSArray *)toolbarItems
+{
+    UIBarButtonItem *title = [self titleButtonItem];
+    UIBarButtonItem *space = [self spaceButtonItem];
+    return @[space, title, space];
+}
 
 #pragma mark - Collection View Layout
 
@@ -234,18 +229,17 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                    name:ALAssetsLibraryChangedNotification
                  object:nil];
     
-//    [center addObserver:self
-//               selector:@selector(selectedAssetsChanged:)
-//                   name:CTAssetsPickerSelectedAssetsChangedNotification
-//                 object:nil];
+    [center addObserver:self
+               selector:@selector(selectedAssetsChanged:)
+                   name:CTAssetsPickerSelectedAssetsChangedNotification
+                 object:nil];
 }
 
 - (void)removeNotificationObserver
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
 }
-
 
 #pragma mark - Assets Library Changed
 
@@ -259,7 +253,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     if (notification.userInfo.count > 0)
         [self reloadAssetsGroupForUserInfo:notification.userInfo];
 }
-
 
 #pragma mark - Reload Assets Group
 
@@ -276,12 +269,10 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
 }
 
-
-
 #pragma mark - Selected Assets Changed
 
-//- (void)selectedAssetsChanged:(NSNotification *)notification
-//{
+- (void)selectedAssetsChanged:(NSNotification *)notification
+{
 //    NSArray *selectedAssets = (NSArray *)notification.object;
 //    
 //    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
@@ -290,9 +281,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 //    
 //    // Reload assets for calling de/selectAsset method programmatically
 //    [self.collectionView reloadData];
-//}
-
-
+}
 
 #pragma mark - Gesture Recognizer
 
@@ -303,7 +292,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     
     [self.collectionView addGestureRecognizer:longPress];
 }
-
 
 #pragma mark - Push Assets Page View Controller
 
@@ -321,8 +309,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 }
 
-
-
 #pragma mark - Reload Assets
 
 - (void)reloadAssets
@@ -330,8 +316,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.assets = nil;
     [self setupAssets];
 }
-
-
 
 #pragma mark - Reload Data
 
@@ -350,7 +334,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 }
 
-
 #pragma mark - No assets
 
 - (void)showNoAssets
@@ -365,7 +348,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     self.collectionView.accessibilityLabel      = self.collectionView.backgroundView.accessibilityLabel;
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.collectionView);
 }
-
 
 #pragma mark - Collection View Data Source
 
@@ -496,5 +478,27 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self.picker.delegate assetsPickerController:self.picker didUnhighlightAsset:asset];
 }
 
+#pragma mark - Action methods
+
+- (void)createGalleryPost:(id)sender
+{
+    if (!self.picker.selectedAssets.count) {
+        return;
+    }
+    
+    FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    if (!gallery) {
+        return;
+    }
+
+    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:nil
+                                                                            action:nil];
+
+    vc.gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 @end

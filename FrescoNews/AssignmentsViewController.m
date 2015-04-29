@@ -22,9 +22,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
 @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (assign, nonatomic) BOOL centeredUserLocation;
 @end
 
 @implementation AssignmentsViewController
@@ -37,8 +37,10 @@
     self.scrollView.delegate = self;
     self.assignmentsMap.delegate = self;
     
+    self.centeredUserLocation = NO;
+    
     [self tweakUI];
-    [self insertFakeData]; // Will likely delete
+    [self insertFakeData];
     
     NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
                                                                       attribute:NSLayoutAttributeLeading
@@ -68,21 +70,15 @@
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
 }
 
-- (void)zoomDelayDemo {
-
+- (void)zoomToCurrentLocation {
     // Zooming map after delay for effect
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.0001f, 0.0001f);
-    CLLocationCoordinate2D coordinate = {38.343128671, -90.980396261};
-    MKCoordinateRegion region = {coordinate, span};
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
     
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
     NSLog(@"Fit Region %f %f", regionThatFits.center.latitude, regionThatFits.center.longitude);
-    
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        //[self.assignmentsMap setRegion:regionThatFits animated:YES];
-    });
+
+    [self.assignmentsMap setRegion:regionThatFits animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -127,6 +123,11 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     // center on the current location
-    [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+    if (!self.centeredUserLocation)
+        [self zoomToCurrentLocation];
+    
+    self.centeredUserLocation = YES;
+    
+    //[self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
 }
 @end
