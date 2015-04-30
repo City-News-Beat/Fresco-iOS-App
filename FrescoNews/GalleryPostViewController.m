@@ -8,6 +8,10 @@
 
 #import "GalleryPostViewController.h"
 #import "GalleryView.h"
+#import <AFNetworking.h>
+#import "FRSGallery.h"
+#import "FRSPost.h"
+#import "FRSImage.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -100,7 +104,49 @@
 
 - (void)submitGalleryPost:(id)sender
 {
-    
+    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/gallery/assemble";
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+
+    NSMutableDictionary *postMetadata = [NSMutableDictionary new];
+    for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
+        NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
+        NSLog(@"filename: %@" , filename);
+
+        postMetadata[filename] = @{ @"byline" : @"Test via Test", // TODO: Make optional
+                                    @"source" : @"",
+                                    @"type" : @"image",
+                                    @"license" : @"Fresco",
+                                    @"lat" : @10,
+                                    @"lon" : @10 };
+    }
+
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
+                                                       options:(NSJSONWritingOptions)0
+                                                         error:&error];
+
+    NSDictionary *parameters = @{ @"owner" : @"id_bullshitID",
+                                  @"caption" : self.captionTextView.text,
+                                  @"tags" : @"[]",  // TODO: Make optional; generate on server
+                                  @"articles" : @"[]", // TODO: Make optional
+                                  @"posts" : jsonData };
+
+    [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSInteger count = 0;
+        for (FRSPost *post in self.gallery.posts) {
+            NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
+            NSLog(@"filename: %@" , filename);
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.largeImage.image, 1.0)
+                                        name:filename
+                                    fileName:filename
+                                    mimeType:@"image/jpeg"];
+            count++;
+        }
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Success: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 // temporary ("return" to dismiss keyboard)
