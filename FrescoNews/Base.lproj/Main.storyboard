@@ -1742,7 +1742,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <segue destination="3S1-xO-1aC" kind="show" id="tML-91-Dlo"/>
+                                            <segue destination="APe-K0-XGS" kind="show" id="Vb7-CS-cSI"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -2238,17 +2238,18 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0UT-Oh-D80">
-                                <rect key="frame" x="16" y="267" width="158" height="30"/>
-                                <color key="backgroundColor" red="0.29411764709999999" green="0.60392156860000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Twitter">
+                                <rect key="frame" x="16" y="267" width="158" height="46"/>
+                                <state key="normal" backgroundImage="twitterButtonSmall">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5LN-oI-tKY">
-                                <rect key="frame" x="201" y="267" width="158" height="30"/>
-                                <color key="backgroundColor" red="0.1843137255" green="0.27058823529999998" blue="0.53725490200000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Facebook">
+                                <rect key="frame" x="201" y="267" width="158" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5LN-oI-tKY" secondAttribute="height" multiplier="79:23" id="THC-cQ-nu2"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="facebookButtonSmall">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -2268,11 +2269,11 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="progressSignUp" translatesAutoresizingMaskIntoConstraints="NO" id="odg-nT-te1">
                                 <rect key="frame" x="1" y="610" width="375" height="20"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4sr-us-fVk" userLabel="Fields Border">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4sr-us-fVk" userLabel="Fields Border">
                                 <rect key="frame" x="0.0" y="350" width="375" height="124"/>
                                 <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0qC-R2-kGU" userLabel="Fields">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0qC-R2-kGU" userLabel="Fields">
                                 <rect key="frame" x="0.0" y="351" width="375" height="122"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vBt-ig-Pax">
@@ -2425,6 +2426,7 @@
                             <constraint firstAttribute="trailing" secondItem="0qC-R2-kGU" secondAttribute="trailing" id="mte-fF-ogD"/>
                             <constraint firstItem="5LN-oI-tKY" firstAttribute="top" secondItem="Bdn-5L-uvv" secondAttribute="bottom" constant="32" id="nKD-Q9-xpf"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="top" secondItem="odg-nT-te1" secondAttribute="bottom" constant="-8" id="no3-j8-rB5"/>
+                            <constraint firstItem="0UT-Oh-D80" firstAttribute="height" secondItem="5LN-oI-tKY" secondAttribute="height" id="pVm-02-XxH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="TEQ-7h-Zc1" secondAttribute="trailing" constant="141" id="pty-Vl-UTu"/>
                             <constraint firstAttribute="centerX" secondItem="TEQ-7h-Zc1" secondAttribute="centerX" id="q7e-cE-WQb"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="leading" secondItem="WT6-JR-z0E" secondAttribute="trailing" constant="-375" id="qrZ-ew-PLh"/>
@@ -2433,6 +2435,7 @@
                             <constraint firstItem="TEQ-7h-Zc1" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leadingMargin" constant="50" id="tn4-Ne-fC8"/>
                             <constraint firstItem="5LN-oI-tKY" firstAttribute="trailing" secondItem="KeG-2G-fq1" secondAttribute="trailingMargin" id="uB3-eq-pud"/>
                             <constraint firstItem="0UT-Oh-D80" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leadingMargin" id="uK5-G9-3hU"/>
+                            <constraint firstItem="0UT-Oh-D80" firstAttribute="width" secondItem="5LN-oI-tKY" secondAttribute="width" id="wxE-pc-TnZ"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leading" id="xnp-8U-raS"/>
                             <constraint firstAttribute="centerX" secondItem="Bdn-5L-uvv" secondAttribute="centerX" constant="-9.5" id="yko-66-EUf"/>
                         </constraints>
@@ -2442,6 +2445,7 @@
                                 <exclude reference="q7e-cE-WQb"/>
                                 <exclude reference="yko-66-EUf"/>
                                 <exclude reference="IwP-bf-z9s"/>
+                                <exclude reference="h9z-hs-acX"/>
                                 <exclude reference="jkR-sz-bCw"/>
                                 <exclude reference="uK5-G9-3hU"/>
                                 <exclude reference="nKD-Q9-xpf"/>
