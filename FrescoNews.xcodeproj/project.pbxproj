@@ -17,6 +17,8 @@
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
+		1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */; };
+		1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA27AA71AF147C4003137CE /* MKMapView+LegalLabel.m */; };
 		1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */; };
 		1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */; };
 		1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */; };
@@ -75,7 +77,12 @@
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
+		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
+		E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
+		E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */; };
+		E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */; };
+		E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +118,10 @@
 		1E408B791AA7A4580057AC16 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
+		1EA27AA31AF142AA003137CE /* ScrollViewWithPassthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewWithPassthrough.h; sourceTree = "<group>"; };
+		1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewWithPassthrough.m; sourceTree = "<group>"; };
+		1EA27AA61AF147C4003137CE /* MKMapView+LegalLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+LegalLabel.h"; sourceTree = "<group>"; };
+		1EA27AA71AF147C4003137CE /* MKMapView+LegalLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+LegalLabel.m"; sourceTree = "<group>"; };
 		1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryHeader.h; sourceTree = "<group>"; };
 		1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryHeader.m; sourceTree = "<group>"; };
 		1EA6F2E21ABB52D000E74E68 /* CustomCellDividerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellDividerView.h; sourceTree = "<group>"; };
@@ -223,7 +234,17 @@
 		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ISO.m"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
+		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
+		E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSkipViewController.h; sourceTree = "<group>"; };
+		E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSkipViewController.m; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSignUpViewController.h; sourceTree = "<group>"; };
+		E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSignUpViewController.m; sourceTree = "<group>"; };
+		E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunAccountViewController.h; sourceTree = "<group>"; };
+		E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunAccountViewController.m; sourceTree = "<group>"; };
+		E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunRadiusViewController.h; sourceTree = "<group>"; };
+		E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunRadiusViewController.m; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -302,6 +323,15 @@
 				1E408B791AA7A4580057AC16 /* BaseNavigationController.m */,
 			);
 			name = "Base Classes";
+			sourceTree = "<group>";
+		};
+		1EA27AA21AF14256003137CE /* Assignments */ = {
+			isa = PBXGroup;
+			children = (
+				1EA27AA31AF142AA003137CE /* ScrollViewWithPassthrough.h */,
+				1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */,
+			);
+			name = Assignments;
 			sourceTree = "<group>";
 		};
 		1EA6F2E51ABB6C5000E74E68 /* Gallery */ = {
@@ -402,6 +432,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1EA27AA21AF14256003137CE /* Assignments */,
 				1E3592871AC3327000F60348 /* Post */,
 				1EA6F2E51ABB6C5000E74E68 /* Gallery */,
 				1ED9A3351AAE01E0009BD7A3 /* Stories */,
@@ -432,6 +463,16 @@
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
+				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
+				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */,
+				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
+				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
+				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
+				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
+				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
+				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
@@ -524,6 +565,8 @@
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
 				1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */,
 				1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */,
+				1EA27AA61AF147C4003137CE /* MKMapView+LegalLabel.h */,
+				1EA27AA71AF147C4003137CE /* MKMapView+LegalLabel.m */,
 				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
 				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
 				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
@@ -771,6 +814,8 @@
 				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
+				420DC73D1ADB875000157762 /* UIImage+CTAssetsPickerController.m in Sources */,
+				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
 				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
@@ -782,6 +827,8 @@
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
+				1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */,
+				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
@@ -790,8 +837,10 @@
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
+				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
+				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
@@ -816,9 +865,11 @@
 				420DC7391ADB875000157762 /* CTAssetsViewController.m in Sources */,
 				420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
+				E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */,
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
+				E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
