@@ -73,7 +73,7 @@
             
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
-            //item.imageInsets = UIEdgeInsetsMake(5,0,0,0);
+            item.imageInsets = UIEdgeInsetsMake(6,0,-6,0);
         } else {
             item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
         }
