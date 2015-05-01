@@ -558,7 +558,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                      if (group) {
                                          [group setAssetsFilter:[ALAssetsFilter allPhotos]];
                                          [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
-                                             if (asset) {
+                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
                                                  ALAssetRepresentation *repr = [asset defaultRepresentation];
                                                  self.recentPhotoImageView.image = [UIImage imageWithCGImage:[repr fullResolutionImage]];
                                                  *stop = YES;
@@ -592,6 +592,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return picker.selectedAssets.count < 10;
 }
 
+- (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
+{
+    if (![asset valueForProperty:ALAssetPropertyLocation]) {
+        return NO;
+    }
+
+    return YES;
+}
+
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
 {
     // TODO: Disable video clip if too long?
@@ -600,11 +609,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 //        return lround(duration) <= 60;
         return YES;
     }
-    else if ([asset valueForProperty:ALAssetPropertyLocation]) {
-        return YES;
-    }
-    
-    return NO;
+
+    return YES;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker isDefaultAssetsGroup:(ALAssetsGroup *)group
