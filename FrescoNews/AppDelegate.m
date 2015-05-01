@@ -69,11 +69,11 @@
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
         if (i == 2) {
-            UIImage *image = [UIImage imageWithCGImage:item.image.CGImage];
-            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.image = image;
-            item.title = @"";
-            item.imageInsets = UIEdgeInsetsMake(18, 14, 6, 14);
+            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            
+            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
+            //item.imageInsets = UIEdgeInsetsMake(5,0,0,0);
         } else {
             item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
         }

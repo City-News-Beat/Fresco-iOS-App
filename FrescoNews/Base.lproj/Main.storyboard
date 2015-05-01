@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1087,7 +1087,9 @@
                         </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="are-vO-thx"/>
+                    <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="are-vO-thx">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="30"/>
+                    </tabBarItem>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -2684,7 +2686,7 @@
         <image name="shutter" width="169" height="169"/>
         <image name="shutterButton" width="241" height="242"/>
         <image name="tab-assignments" width="32" height="32"/>
-        <image name="tab-camera" width="32" height="32"/>
+        <image name="tab-camera" width="60" height="49"/>
         <image name="tab-home" width="32" height="32"/>
         <image name="tab-profile" width="32" height="32"/>
         <image name="tab-stories" width="28" height="28"/>
