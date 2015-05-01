@@ -157,7 +157,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     
     ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
         if (asset) {
-            [self.assets insertObject:asset atIndex:0];
+            if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
+                [self.assets insertObject:asset atIndex:0];
+            }
         }
         else {
             [self reloadData];
