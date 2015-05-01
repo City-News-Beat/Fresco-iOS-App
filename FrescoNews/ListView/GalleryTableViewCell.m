@@ -29,4 +29,8 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
     self.galleryView.gallery = gallery;
 }
 
+- (void)prepareForReuse
+{
+    self.gallery = nil;
+}
 @end
