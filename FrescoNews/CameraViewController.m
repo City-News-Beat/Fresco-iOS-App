@@ -187,6 +187,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return ![self lockInterfaceRotation];
 }
 
+// Comment this out to show "Rotate Device" instructional screen
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
