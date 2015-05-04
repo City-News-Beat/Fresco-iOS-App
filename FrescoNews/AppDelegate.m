@@ -68,7 +68,15 @@
     UITabBar *tabBar = tabBarController.tabBar;
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
-        item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
+        if (i == 2) {
+            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            
+            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
+            item.imageInsets = UIEdgeInsetsMake(5.5,0,-6,0);
+        } else {
+            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
+        }
         ++i;
     }
 }
