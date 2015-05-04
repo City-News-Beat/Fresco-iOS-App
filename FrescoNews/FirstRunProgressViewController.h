@@ -8,6 +8,6 @@
 
 #import "FRSBaseViewController.h"
 
-@interface FirstRunSkipViewController : FRSBaseViewController
-
+@interface FirstRunProgressViewController : FRSBaseViewController
+@property (assign) BOOL isSkipState;
 @end

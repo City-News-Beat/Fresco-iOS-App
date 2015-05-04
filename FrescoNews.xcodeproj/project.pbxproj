@@ -77,7 +77,7 @@
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
-		E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */; };
+		E60266CE1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */; };
 		E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */; };
@@ -234,8 +234,8 @@
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
 		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
-		E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSkipViewController.h; sourceTree = "<group>"; };
-		E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSkipViewController.m; sourceTree = "<group>"; };
+		E60266CC1AEA1BEE0055A5C6 /* FirstRunProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunProgressViewController.h; sourceTree = "<group>"; };
+		E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunProgressViewController.m; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSignUpViewController.h; sourceTree = "<group>"; };
 		E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSignUpViewController.m; sourceTree = "<group>"; };
@@ -463,8 +463,8 @@
 				424323D91AB3D64900646278 /* TabBarController.h */,
 				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
 				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunProgressViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */,
 				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
 				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
 				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
@@ -692,6 +692,7 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 3C5287NBLR;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -864,7 +865,7 @@
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
-				E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */,
+				E60266CE1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
