@@ -12,7 +12,6 @@
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
-
 @end
 
 @implementation FirstRunSignUpViewController
