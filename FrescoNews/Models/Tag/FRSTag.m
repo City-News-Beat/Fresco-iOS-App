@@ -7,6 +7,7 @@
 //
 
 #import "FRSTag.h"
+#import "MTLModel+Additions.h"
 
 @implementation FRSTag
 

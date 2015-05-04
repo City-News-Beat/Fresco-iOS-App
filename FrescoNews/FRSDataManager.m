@@ -143,7 +143,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 }
 
-- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber*)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
 {
     NSString *path = @"frs-query.php";
     
@@ -182,6 +182,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
         
         if (responseBlock) responseBlock(nil, error);
     }];
+}
+
+- (void)getPostsWithTag:(FRSTag *)tag limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+{
+    NSArray *tags = tag ? @[tag] : nil;
+    [self getPostsWithTags:tags limit:limit responseBlock:responseBlock];
 }
 
 - (void)getPostsAfterId:(NSNumber*)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock{
@@ -264,6 +270,54 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     [self setSearchTask:nil];
 }
 
+#pragma mark - Stories
 
+- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        NSArray *stories = [responseObject map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
+        }];
+        if(responseBlock)
+            responseBlock(stories, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock)
+            responseBlock(nil, error);
+    }];
+    
+}
+
+#pragma mark - Galleries
+- (void)getGalleriesAtURLString:(NSString *)urlString WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        NSArray *galleries = [responseObject map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        if(responseBlock)
+            responseBlock(galleries, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock)
+            responseBlock(nil, error);
+    }];
+}
+
+- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    [self getGalleriesAtURLString: @"http://monorail.theburgg.com/fresco/stories.php?type=video_home" WithResponseBlock:responseBlock];
+}
+
+
+- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    [self getGalleriesAtURLString: @"http://monorail.theburgg.com/fresco/stories.php?type=profile" WithResponseBlock:responseBlock];
+}
 
 @end

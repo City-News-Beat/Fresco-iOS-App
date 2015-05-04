@@ -7,16 +7,21 @@
 //
 
 #import "AppDelegate.h"
+#import "AFNetworkActivityLogger.h"
+#import "CameraViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
+    [self setupLocationManager];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    
     return YES;
 }
 
@@ -45,7 +50,73 @@
 #pragma mark - Utility methods
 - (void)setupAppearances
 {
-    [[UITabBar appearance] setTintColor:[UIColor yellowColor]];
+    [self setupTabBarAppearances];
+}
+
+- (void)setupTabBarAppearances
+{
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
+    
+    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
+                                     @"tab-stories-highlighted",
+                                     @"tab-camera-highlighted",
+                                     @"tab-assignments-highlighted",
+                                     @"tab-profile-highlighted"];
+    
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    tabBarController.delegate = self;
+    UITabBar *tabBar = tabBarController.tabBar;
+    int i = 0;
+    for (UITabBarItem *item in tabBar.items) {
+        if (i == 2) {
+            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            
+            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
+            item.imageInsets = UIEdgeInsetsMake(5.5,0,-6,0);
+        } else {
+            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
+        }
+        ++i;
+    }
+}
+
+- (void)setupLocationManager
+{
+    if (![CLLocationManager locationServicesEnabled]) {
+        // User has disabled location services on this device
+        return;
+    }
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+
+#pragma mark - UITabBarControllerDelegate methods
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    return ![viewController isKindOfClass:[CameraViewController class]];
 }
 
 @end
