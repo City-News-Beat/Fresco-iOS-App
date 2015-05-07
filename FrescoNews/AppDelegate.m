@@ -6,10 +6,13 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <CoreLocation/CoreLocation.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
-#import <CoreLocation/CoreLocation.h>
 
 @interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -20,9 +23,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
     [self setupLocationManager];
+    [self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -79,6 +93,11 @@
         }
         ++i;
     }
+}
+
+- (void)setupFacebookAndParse
+{
+    
 }
 
 - (void)setupLocationManager

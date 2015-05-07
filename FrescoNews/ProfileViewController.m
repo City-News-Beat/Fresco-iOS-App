@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 #import "ProfileViewController.h"
 #import "GalleriesViewController.h"
 #import "FirstRunViewController.h"
@@ -49,6 +52,10 @@
     [super viewDidLoad];
     [self setFrescoImageHeader];
     [self performNecessaryFetch:nil];
+    
+    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    loginButton.center = self.view.center;
+    [self.view addSubview:loginButton];
 }
 
 #pragma mark - Data Loading
