@@ -14,7 +14,6 @@
 #import "GalleryTableViewCell.h"
 
 @interface HomeViewController ()
-@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end

@@ -110,8 +110,6 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        NSLog(@"filename: %@" , filename);
-
         postMetadata[filename] = @{ @"byline" : @"Test via Test", // TODO: Make optional
                                     @"source" : @"",
                                     @"type" : @"image",
@@ -135,7 +133,6 @@
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSLog(@"filename: %@" , filename);
             [formData appendPartWithFileData:UIImageJPEGRepresentation(post.largeImage.image, 1.0)
                                         name:filename
                                     fileName:filename
