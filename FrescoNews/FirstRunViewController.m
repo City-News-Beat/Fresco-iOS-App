@@ -12,12 +12,17 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
-@property (weak, nonatomic) IBOutlet UIButton *signUpButton;
+
+
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+
+@property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 @end
 
 @implementation FirstRunViewController
@@ -93,5 +98,20 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (IBAction)loginButtonAction:(id)sender {
+    PFUser *user = [PFUser user];
+    user.password = self.passwordField.text;
+    user.email = self.emailField.text;
+    
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            // Hooray! Let them use the app now.
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            // Show the errorString somewhere and let the user try again.
+        }
+    }];
+}
 
 @end

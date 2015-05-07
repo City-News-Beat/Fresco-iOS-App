@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1389,6 +1389,9 @@
                                         <exclude reference="cjs-CQ-qs6"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="loginButtonAction:" destination="3S1-xO-1aC" eventType="touchUpInside" id="mCL-4A-nJP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ScJ-Uh-16B">
                                 <rect key="frame" x="201" y="559" width="158" height="46"/>
@@ -1409,12 +1412,12 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NxF-P7-Ydg" userLabel="Fields">
                                 <rect key="frame" x="0.0" y="450" width="375" height="84"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DrP-vM-boS">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DrP-vM-boS" userLabel="Email Field">
                                         <rect key="frame" x="67" y="8" width="300" height="30"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="yes" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="55A-uc-pGT">
                                         <rect key="frame" x="17" y="12" width="42" height="21"/>
@@ -1441,12 +1444,12 @@
                                             <constraint firstAttribute="height" constant="1" id="OeM-TU-3VC"/>
                                         </constraints>
                                     </view>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dsc-vC-HQF">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dsc-vC-HQF" userLabel="Password Field">
                                         <rect key="frame" x="105" y="46" width="262" height="30"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1640,9 +1643,11 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="bottomVerticalSpaceConstraint" destination="yv7-PI-9Z8" id="v6A-kO-Ioj"/>
+                        <outlet property="emailField" destination="DrP-vM-boS" id="1UR-nv-YVJ"/>
                         <outlet property="facebookButton" destination="5ho-7Z-PBc" id="bgg-Ei-85s"/>
                         <outlet property="fieldsWrapper" destination="NxF-P7-Ydg" id="5qo-1G-H4n"/>
                         <outlet property="loginButton" destination="40z-9f-bIc" id="bU7-YR-K0k"/>
+                        <outlet property="passwordField" destination="Dsc-vC-HQF" id="drA-9A-0H0"/>
                         <outlet property="signUpButton" destination="ScJ-Uh-16B" id="oPV-cA-zKl"/>
                         <outlet property="topVerticalSpaceConstraint" destination="JFt-9q-Qe9" id="F9j-cf-uwW"/>
                         <outlet property="twitterButton" destination="s5E-sx-gRe" id="1of-ca-aqu"/>

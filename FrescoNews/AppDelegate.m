@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <Parse/Parse.h>
 
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
@@ -26,6 +27,11 @@
     [self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
+    // Parse Initialization
+    [Parse setApplicationId:@"8ngjMD9r7WB8wxUxtaOlaQdzyF8YVqgp0HRtohUd"
+                  clientKey:@"ov0p1rmGlUrUs384U0dxPXADNqsRveCzZeZcnEnh"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+        
     return YES;
 }
 

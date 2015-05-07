@@ -7,6 +7,7 @@
 //
 
 #import "FRSBaseViewController.h"
+#import <Parse/Parse.h>
 
 @interface FirstRunViewController : FRSBaseViewController
 
