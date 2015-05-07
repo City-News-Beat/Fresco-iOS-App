@@ -100,6 +100,21 @@
 */
 
 - (IBAction)loginButtonAction:(id)sender {
+    
+    [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text
+                                    block:^(PFUser *user, NSError *error) {
+                                        if (user) {
+                                            // Do stuff after successful login.
+                                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're logged in now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
+                                            [alert addButtonWithTitle:@"GOO"];
+                                            [alert show];
+                                        } else {
+                                            // The login failed. Check error to see why.
+                                        }
+                                    }];
+}
+
+- (IBAction) signUpButtonAction:(id)sender {
     PFUser *user = [PFUser user];
     user.password = self.passwordField.text;
     user.username = self.emailField.text;
@@ -108,9 +123,12 @@
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             // Hooray! Let them use the app now.
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're signed up now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
+            [alert addButtonWithTitle:@"GOO"];
+            [alert show];
         } else {
             NSString *errorString = [error userInfo][@"error"];
-            NSLog(errorString);
+                NSLog(errorString);
             // Show the errorString somewhere and let the user try again.
         }
     }];
