@@ -102,6 +102,7 @@
 - (IBAction)loginButtonAction:(id)sender {
     PFUser *user = [PFUser user];
     user.password = self.passwordField.text;
+    user.username = self.emailField.text;
     user.email = self.emailField.text;
     
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -109,6 +110,7 @@
             // Hooray! Let them use the app now.
         } else {
             NSString *errorString = [error userInfo][@"error"];
+            NSLog(errorString);
             // Show the errorString somewhere and let the user try again.
         }
     }];
