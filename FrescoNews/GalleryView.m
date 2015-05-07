@@ -41,6 +41,9 @@
 {
     if ([self.gallery.posts count]) {
         FRSPost *post = [self.gallery.posts firstObject];
+        
+        post.largeImage.width = [NSNumber numberWithFloat:800.0f];
+        post.largeImage.height = [NSNumber numberWithFloat:600.0f];
         CGFloat aspectRatio = [post.largeImage.width floatValue] / [post.largeImage.height floatValue];
         if (aspectRatio < 1.0f)
             aspectRatio = 1.0f;

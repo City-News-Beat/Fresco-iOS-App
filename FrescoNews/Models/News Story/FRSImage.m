@@ -18,8 +18,8 @@
 {
     return @{
              @"URL": @"path",
-             @"width" : @"width",
-             @"height" : @"height"
+            // @"width" : @"width",
+            // @"height" : @"height"
              };
 }
 
