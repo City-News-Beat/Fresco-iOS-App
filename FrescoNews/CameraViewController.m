@@ -187,10 +187,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return ![self lockInterfaceRotation];
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+/*- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
-}
+}*/
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
