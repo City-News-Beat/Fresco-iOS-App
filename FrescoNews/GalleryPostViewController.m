@@ -104,7 +104,7 @@
 
 - (void)submitGalleryPost:(id)sender
 {
-    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/gallery/assemble";
+    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/mobile/gallery/assemble";
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
@@ -123,7 +123,7 @@
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
 
-    NSDictionary *parameters = @{ @"owner" : @"id_bullshitID",
+    NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
                                   @"caption" : self.captionTextView.text,
                                   @"tags" : @"[]",  // TODO: Make optional; generate on server
                                   @"articles" : @"[]", // TODO: Make optional
