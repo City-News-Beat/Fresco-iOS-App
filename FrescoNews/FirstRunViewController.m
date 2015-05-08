@@ -8,6 +8,7 @@
 
 #import "FirstRunViewController.h"
 
+
 @interface FirstRunViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
@@ -101,17 +102,33 @@
 
 - (IBAction)loginButtonAction:(id)sender {
     
-    [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:self.emailField.text options:0 range:NSMakeRange(0, [self.emailField.text length])];
+    
+    if ([self.emailField.text length]!=0 && regExMatches!=0) { // Run Log In Method
+    
+        [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
                                             // Do stuff after successful login.
                                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're logged in now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
                                             [alert addButtonWithTitle:@"GOO"];
                                             [alert show];
+                                            
+                                            [self performSegueWithIdentifier:@"PushHomeViewController" sender:sender];
                                         } else {
                                             // The login failed. Check error to see why.
                                         }
                                     }];
+    } else { // Show error state
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You've screwed up and mistyped your email" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
+        [alert addButtonWithTitle:@"Try Again"];
+        [alert show];
+        
+        self.emailField.textColor = [UIColor redColor];
+    }
 }
 
 - (IBAction) signUpButtonAction:(id)sender {
@@ -120,18 +137,31 @@
     user.username = self.emailField.text;
     user.email = self.emailField.text;
     
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            // Hooray! Let them use the app now.
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're signed up now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
-            [alert addButtonWithTitle:@"GOO"];
-            [alert show];
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-                NSLog(errorString);
-            // Show the errorString somewhere and let the user try again.
-        }
-    }];
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:user.email options:0 range:NSMakeRange(0, [user.email length])];
+    
+    if ([user.email length]!=0 && regExMatches!=0) { // Run Sign Up Method
+    
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                // Hooray! Let them use the app now.
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're signed up now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
+                [alert addButtonWithTitle:@"GOO"];
+                [alert show];
+                
+                [self performSegueWithIdentifier:@"PushFirstRunSignUpViewController" sender:sender];
+            }
+        }];
+        
+    } else { // Show error state
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You've screwed up and mistyped your email" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
+        [alert addButtonWithTitle:@"Try Again"];
+        [alert show];
+        
+        self.emailField.textColor = [UIColor redColor];
+    }
 }
 
 @end
