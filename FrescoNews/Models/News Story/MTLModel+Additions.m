@@ -17,26 +17,8 @@
 
 @implementation MTLModel (Additions)
 
-+ (NSDateFormatter *)sharedFormatter
-{
-    static NSDateFormatter *sharedFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedFormatter = [[NSDateFormatter alloc] init];
-        [sharedFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [sharedFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-
-    });
-    
-    return sharedFormatter;
-}
-
 // some default transformers
 // if we stick to these naming conventions for fields they will be picked up
-+ (NSValueTransformer *)tagsJSONTransformer
-{
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSTag class]];
-}
 
 + (NSValueTransformer *)sourcesJSONTransformer
 {
@@ -70,12 +52,11 @@
 
 + (NSValueTransformer *)dateJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSString *dateString) {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSNumber *UNIXTimestamp) {
+       return [NSDate dateWithTimeIntervalSince1970:[UNIXTimestamp integerValue]];
 
-       return[[self sharedFormatter] dateFromString:dateString];
-
-    } reverseBlock:^NSString *(NSDate *date) {
-        return [[self sharedFormatter] stringFromDate:date];
+    } reverseBlock:^NSNumber *(NSDate *date) {
+        return [NSNumber numberWithInteger:[date timeIntervalSince1970]];
     }];
 }
 
