@@ -38,7 +38,7 @@ static NSString * const kCellIdentifier = @"StoryCell";
     _post = post;
     
     // set the caption
-    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:[MTLModel relativeDateStringFromDate:self.post.date]]];
+    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:@"used to be post caption" date:[MTLModel relativeDateStringFromDate:self.post.date]]];
     
     // set the image
     __weak StoryCell *weakSelf = self;

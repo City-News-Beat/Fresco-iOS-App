@@ -42,9 +42,16 @@
     if ([self.gallery.posts count]) {
         FRSPost *post = [self.gallery.posts firstObject];
         
-        CGFloat aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
-        if (aspectRatio < 1.0f)
-            aspectRatio = 1.0f;
+        
+        CGFloat aspectRatio;
+        if (post.image) {
+            aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
+            if (aspectRatio < 1.0f)
+                aspectRatio = 1.0f;
+        }
+        else {
+            aspectRatio = 600/800;
+        }
         
         if (self.collectionPosts.constraints)
             [self.collectionPosts removeConstraints:self.collectionPosts.constraints];

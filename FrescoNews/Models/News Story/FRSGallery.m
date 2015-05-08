@@ -72,8 +72,7 @@
         image.image = [UIImage imageFromAsset:asset];
         image.height = @1; // ?
         image.width = @1; // ?
-#warning This is broken
-        //post.mediaURL = image;
+        post.image = image;
         
         if ([asset valueForProperty:ALAssetPropertyLocation]) {
             [posts addObject:post];
