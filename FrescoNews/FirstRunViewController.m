@@ -151,7 +151,7 @@
                 [alert addButtonWithTitle:@"GOO"];
                 [alert show];
                 
-                [self.navigationController popViewControllerAnimated:YES];
+                //[self.navigationController pushViewController: animated:YES]
             }
         }];
         
