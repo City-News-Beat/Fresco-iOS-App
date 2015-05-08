@@ -131,14 +131,12 @@
                                   @"articles" : @"[]", // TODO: Make optional
                                   @"posts" : jsonData };
 
-#warning fix posting with new model
-    /*
     [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.largeImage.image, 1.0)
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
                                         name:filename
                                     fileName:filename
                                     mimeType:@"image/jpeg"];
@@ -149,7 +147,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-     */
 }
 
 // temporary ("return" to dismiss keyboard)
