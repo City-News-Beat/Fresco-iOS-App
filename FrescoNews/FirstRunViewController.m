@@ -109,7 +109,7 @@
     
     if ([self.emailField.text length]!=0 && regExMatches!=0) { // Run Log In Method
     
-        [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text
+        [PFUser logInWithUsernameInBackground:[self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] password:self.passwordField.text
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
                                             // Do stuff after successful login.
@@ -134,8 +134,8 @@
 - (IBAction) signUpButtonAction:(id)sender {
     PFUser *user = [PFUser user];
     user.password = self.passwordField.text;
-    user.username = self.emailField.text;
-    user.email = self.emailField.text;
+    user.username = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    user.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     
