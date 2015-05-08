@@ -117,7 +117,7 @@
                                             [alert addButtonWithTitle:@"GOO"];
                                             [alert show];
                                             
-                                            [self performSegueWithIdentifier:@"PushHomeViewController" sender:sender];
+                                            [self.navigationController popViewControllerAnimated:YES];
                                         } else {
                                             // The login failed. Check error to see why.
                                         }
@@ -151,7 +151,7 @@
                 [alert addButtonWithTitle:@"GOO"];
                 [alert show];
                 
-                [self performSegueWithIdentifier:@"PushFirstRunSignUpViewController" sender:sender];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         }];
         
