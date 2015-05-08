@@ -312,12 +312,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString: @"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
 }
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString: @"http://monorail.theburgg.com/fresco/stories.php?type=profile" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
 }
 
 @end

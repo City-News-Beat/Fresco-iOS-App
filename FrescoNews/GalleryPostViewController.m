@@ -131,6 +131,8 @@
                                   @"articles" : @"[]", // TODO: Make optional
                                   @"posts" : jsonData };
 
+#warning fix posting with new model
+    /*
     [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
@@ -147,6 +149,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+     */
 }
 
 // temporary ("return" to dismiss keyboard)

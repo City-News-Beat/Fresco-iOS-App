@@ -19,10 +19,12 @@
 @property (nonatomic, strong, readonly) FRSUser *user;
 @property (nonatomic, copy, readonly) NSString *source;
 @property (nonatomic, copy, readonly) NSString *type;
-@property (nonatomic, copy, readonly) NSURL *mediaURL;
-@property (nonatomic, assign) CGSize mediaSize;
+@property (nonatomic, copy, readonly) FRSImage *image;
+@property (nonatomic, copy, readonly) NSString *mediaURLString;
+//@property (nonatomic, assign) CGSize mediaSize;
 @property (nonatomic, copy, readonly) NSDate *date;
 @property (nonatomic, copy, readonly) NSString *byline;
+@property (nonatomic, copy, readonly) NSString *caption;
 @property (nonatomic, copy, readonly) NSNumber *visibility;
 
 - (NSURL *)largeImageURL;

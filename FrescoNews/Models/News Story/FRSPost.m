@@ -54,17 +54,30 @@
              @"user" : @"owner",
              @"source" : @"source",
              @"type" : @"type",
-             @"mediaSize" : @"meta",
-             @"mediaURL" : @"file",
+             //@"mediaSize" : @"meta",
+             @"mediaURLString" : @"file",
+             @"image" : @"file",
              @"date" : @"time_created",
              @"byline" : @"byline",
+             @"caption" : @"caption",
              @"visibility" : @"visibility",
              };
 }
 
-+ (NSValueTransformer *)mediaURLJSONTransformer
++ (NSValueTransformer *)mediaURLStringJSONTransformer
 {
     return [MTLModel URLJSONTransformer];
+}
+
++ (NSValueTransformer *)imageJSONTransformer
+{
+    return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
+        FRSImage *image = [[FRSImage alloc] init];
+        image.URL = [NSURL URLWithString:imageURL];
+        image.width = [NSNumber numberWithFloat:800.0f];
+        image.height =  [NSNumber numberWithFloat:600.0f];
+        return image;
+    }];
 }
 
 //#warning part of reverse compatability hack
@@ -82,7 +95,7 @@
 
 - (NSURL *)largeImageURL
 {
-    return self.mediaURL;
+    return [self.image cdnImageInListURL];
     //return [self.largeImage cdnImageInListURL];
 }
 
