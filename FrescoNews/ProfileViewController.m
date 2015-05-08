@@ -51,6 +51,11 @@
     [self performNecessaryFetch:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self performNecessaryFetch:nil];
+}
+
 #pragma mark - Data Loading
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
