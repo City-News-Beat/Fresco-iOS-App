@@ -104,14 +104,12 @@
 
 - (void)submitGalleryPost:(id)sender
 {
-    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/gallery/assemble";
+    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/mobile/gallery/assemble";
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
 
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        NSLog(@"filename: %@" , filename);
-
         postMetadata[filename] = @{ @"byline" : @"Test via Test", // TODO: Make optional
                                     @"source" : @"",
                                     @"type" : @"image",
@@ -125,7 +123,7 @@
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
 
-    NSDictionary *parameters = @{ @"owner" : @"id_bullshitID",
+    NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
                                   @"caption" : self.captionTextView.text,
                                   @"tags" : @"[]",  // TODO: Make optional; generate on server
                                   @"articles" : @"[]", // TODO: Make optional
@@ -136,7 +134,7 @@
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.largeImage.image, 1.0)
+            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
                                         name:filename
                                     fileName:filename
                                     mimeType:@"image/jpeg"];

@@ -30,6 +30,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 - (void)setGallery:(FRSGallery *)gallery
 {
     self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
-    self.labelByLine.text = gallery.byline;
+    self.labelByLine.text = ((FRSPost *)[gallery.posts firstObject]).byline;
 }
 @end

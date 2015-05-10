@@ -14,21 +14,7 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"identifier": @"identifier",
-             @"smallImagePath" : @"small_path",
-             @"largeImagePath" : @"large_path"
+             @"identifier": @"identifier"
              };
 }
-
-+ (NSValueTransformer *)smallImagePathJSONTransformer
-{
-    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
-}
-
-+ (NSValueTransformer *)largeImagePathJSONTransformer
-{
-    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
-}
-
-
 @end
