@@ -29,7 +29,6 @@
 {
     [super viewDidLoad];
     [self setupButtons];
-    [self setupToolbar];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
@@ -66,11 +65,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
                                                                                            target:self
                                                                                            action:@selector(returnToCamera:)];
-}
-
-- (void)setupToolbar
-{
-    self.toolbarItems = [self toolbarItems];
 }
 
 - (void)returnToCamera:(id)sender
