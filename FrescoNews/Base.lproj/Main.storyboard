@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -586,9 +586,6 @@
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1l-hi-b8h" userLabel="Spacer View 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="306" width="127" height="15"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzJ-da-4aR" userLabel="Done Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -632,8 +629,7 @@
                                                         <exclude reference="wzP-Z7-DIA"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="22" y="355" width="85" height="21"/>
+                                                <variation key="heightClass=compact">
                                                     <mask key="constraints">
                                                         <exclude reference="GmZ-e4-b5S"/>
                                                         <exclude reference="wOb-gZ-xL5"/>
@@ -643,9 +639,6 @@
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KC3-vo-SMa" userLabel="Spacer View 3">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <variation key="heightClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="375" width="127" height="16"/>
-                                                </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
