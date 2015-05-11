@@ -1370,6 +1370,9 @@
                                         <exclude reference="eg4-dn-Y00"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="facebookLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="pWf-Oh-k4K"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="40z-9f-bIc">
                                 <rect key="frame" x="16" y="559" width="158" height="46"/>

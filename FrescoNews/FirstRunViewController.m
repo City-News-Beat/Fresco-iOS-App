@@ -36,6 +36,8 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -177,6 +179,16 @@
         [self.loginButton resignFirstResponder];
     }
     return YES;
+}
+
+- (IBAction)facebookLogin:(id)sender {
+    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ] block:^(PFUser *user, NSError *error) {
+        if (!user) {
+            NSLog(@"Uh oh. The user cancelled the Facebook login.");
+        } else {
+            NSLog(@"User now has publish permissions!");
+        }
+    }];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
@@ -31,6 +32,8 @@
     [Parse setApplicationId:@"8ngjMD9r7WB8wxUxtaOlaQdzyF8YVqgp0HRtohUd"
                   clientKey:@"ov0p1rmGlUrUs384U0dxPXADNqsRveCzZeZcnEnh"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
         
     return YES;
 }
@@ -43,6 +46,8 @@
                                                           openURL:url
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
+    
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -61,6 +66,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -99,11 +106,6 @@
         }
         ++i;
     }
-}
-
-- (void)setupFacebookAndParse
-{
-    
 }
 
 - (void)setupLocationManager

@@ -52,10 +52,6 @@
     [super viewDidLoad];
     [self setFrescoImageHeader];
     [self performNecessaryFetch:nil];
-    
-    //FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    //loginButton.center = self.view.center;
-    //[self.view addSubview:loginButton];
 }
 
 #pragma mark - Data Loading
