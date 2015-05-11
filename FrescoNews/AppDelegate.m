@@ -52,9 +52,13 @@
 }
 
 #pragma mark - Utility methods
+
 - (void)setupAppearances
 {
     [self setupTabBarAppearances];
+    [self setupNavigationBarAppearance];
+    [self setupToolbarAppearance];
+    [self setupBarButtonItemAppearance];
 }
 
 - (void)setupTabBarAppearances
@@ -82,6 +86,24 @@
         }
         ++i;
     }
+}
+
+- (void)setupNavigationBarAppearance
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [UINavigationBar appearance].titleTextAttributes = attributes;
+}
+
+- (void)setupToolbarAppearance
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
+}
+
+- (void)setupBarButtonItemAppearance
+{
+    [UIBarButtonItem appearance].tintColor = [UIColor colorWithHex:@"76541E"];
 }
 
 - (void)setupLocationManager
