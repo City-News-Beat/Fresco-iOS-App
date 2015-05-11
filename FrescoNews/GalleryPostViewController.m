@@ -29,7 +29,6 @@
 {
     [super viewDidLoad];
     [self setupButtons];
-    [self setupToolbar];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
@@ -66,11 +65,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
                                                                                            target:self
                                                                                            action:@selector(returnToCamera:)];
-}
-
-- (void)setupToolbar
-{
-    self.toolbarItems = [self toolbarItems];
 }
 
 - (void)returnToCamera:(id)sender
@@ -163,13 +157,24 @@
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height = 0;
+                            CGFloat height;
+                            CGRect frame = self.navigationController.toolbar.frame;
+
+                            height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -1 * [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                height *= -1;
+                                frame.origin.y += height;
+                                self.navigationController.toolbar.frame = frame;
+                            }
+                            else {
+                                frame.origin.y += height;
+                                self.navigationController.toolbar.frame = frame;
+                                height = 0;
                             }
 
                             self.topVerticalSpaceConstraint.constant = height;
                             self.bottomVerticalSpaceConstraint.constant = height;
+
                             [self.view layoutIfNeeded];
     } completion:nil];
 }
