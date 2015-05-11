@@ -99,7 +99,9 @@
 - (void)submitGalleryPost:(id)sender
 {
     NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/mobile/gallery/assemble";
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSProgress *progress = nil;
+    NSError *error;
 
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
@@ -112,7 +114,6 @@
                                     @"lon" : @10 };
     }
 
-    NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
@@ -123,7 +124,10 @@
                                   @"articles" : @"[]", // TODO: Make optional
                                   @"posts" : jsonData };
 
-    [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
+                                                                                              URLString:urlString
+                                                                                             parameters:parameters
+                                                                              constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
@@ -134,12 +138,40 @@
                                     mimeType:@"image/jpeg"];
             count++;
         }
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Success: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+    } error:nil];
+
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request
+                                                                       progress:&progress
+                                                              completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
+        if (uploadError) {
+            NSLog(@"Error: %@", uploadError);
+        }
+        else {
+            NSLog(@"Success: %@ %@", response, responseObject);
+        }
     }];
+    
+    [uploadTask resume];
+    [progress addObserver:self
+               forKeyPath:@"fractionCompleted"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
 }
+
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"fractionCompleted"]) {
+        NSProgress *progress = (NSProgress *)object;
+        NSLog(@"Progress... %f", progress.fractionCompleted);
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+#pragma mark - UITextViewDelegate methods
 
 // temporary ("return" to dismiss keyboard)
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -151,6 +183,8 @@
     [textView resignFirstResponder];
     return NO;
 }
+
+#pragma mark - Notification methods
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
