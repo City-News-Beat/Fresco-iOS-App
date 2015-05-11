@@ -26,10 +26,9 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"galleryID": @"gallery_id",
+             @"galleryID": @"_id",
              @"visibility" : @"visibility",
-             @"createTime" : @"times.created",
-             @"modifiedTime" : @"times.edited",
+             @"createTime" : @"time_created",
              @"owner" : @"owner",
              @"caption" : @"caption",
              @"byline" : @"byline",
@@ -73,7 +72,7 @@
         image.image = [UIImage imageFromAsset:asset];
         image.height = @1; // ?
         image.width = @1; // ?
-        post.largeImage = image;
+        post.image = image;
         
         if ([asset valueForProperty:ALAssetPropertyLocation]) {
             [posts addObject:post];

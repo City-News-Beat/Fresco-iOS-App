@@ -32,6 +32,7 @@
     _gallery = gallery;
     self.labelCaption.text = self.gallery.caption;
     self.pageControl.numberOfPages = [self.gallery.posts count];
+    [self.collectionPosts reloadData];
 
     [self setAspectRatio];
 }
@@ -40,9 +41,17 @@
 {
     if ([self.gallery.posts count]) {
         FRSPost *post = [self.gallery.posts firstObject];
-        CGFloat aspectRatio = [post.largeImage.width floatValue] / [post.largeImage.height floatValue];
-        if (aspectRatio < 1.0f)
-            aspectRatio = 1.0f;
+        
+        
+        CGFloat aspectRatio;
+        if (post.image) {
+            aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
+            if (aspectRatio < 1.0f)
+                aspectRatio = 1.0f;
+        }
+        else {
+            aspectRatio = 600/800;
+        }
         
         if (self.collectionPosts.constraints)
             [self.collectionPosts removeConstraints:self.collectionPosts.constraints];

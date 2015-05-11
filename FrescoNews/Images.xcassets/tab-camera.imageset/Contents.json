@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "camera-tabbar-stroke.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "camera-tabbar-stroke@2x.png"
+      "filename" : "shutter-bg-wide@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "camera-tabbar-stroke@3x.png"
+      "filename" : "shutter-bg-wide@3x.png"
     }
   ],
   "info" : {

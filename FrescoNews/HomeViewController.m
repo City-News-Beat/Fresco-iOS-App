@@ -14,7 +14,7 @@
 #import "GalleryTableViewCell.h"
 
 @interface HomeViewController ()
-@property (strong, nonatomic) NSArray *galleries;
+//@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end
@@ -53,7 +53,7 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getGalleriesWithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count]) {
                 self.galleries = responseObject;
@@ -67,7 +67,7 @@
 
 - (void)reloadData
 {
-    
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
