@@ -12,8 +12,15 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 #import "FRSBaseViewController.h"
 
 @interface GalleriesViewController : UIViewController
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (strong, nonatomic) NSArray *galleries;
+
 @property (weak, nonatomic) UIViewController *containingViewController;
+
 - (void)refresh;
+
+@property (nonatomic) NSIndexPath *playingIndex;
+
 @end

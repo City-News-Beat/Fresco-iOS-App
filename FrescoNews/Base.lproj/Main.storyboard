@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -225,7 +225,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kEC-6m-A2Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2421" y="-1872"/>
+            <point key="canvasLocation" x="2603" y="-1864"/>
         </scene>
         <!--Stories View Controller-->
         <scene sceneID="DFa-lo-ERH">
@@ -470,15 +470,15 @@
                                         <exclude reference="g8T-vW-fTR"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="FGc-6A-eaK"/>
-                                        <exclude reference="MXs-k7-2nz"/>
-                                        <exclude reference="oA2-hQ-bqj"/>
-                                        <exclude reference="rBo-Cn-zN7"/>
                                         <exclude reference="8te-JV-5Bp"/>
                                         <exclude reference="9pZ-jN-kDi"/>
                                         <exclude reference="co0-oQ-Wml"/>
                                         <exclude reference="ikM-mS-D0x"/>
                                         <exclude reference="z8j-mo-OOx"/>
+                                        <exclude reference="FGc-6A-eaK"/>
+                                        <exclude reference="MXs-k7-2nz"/>
+                                        <exclude reference="oA2-hQ-bqj"/>
+                                        <exclude reference="rBo-Cn-zN7"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -487,15 +487,15 @@
                                         <include reference="g8T-vW-fTR"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="FGc-6A-eaK"/>
-                                        <include reference="MXs-k7-2nz"/>
-                                        <exclude reference="oA2-hQ-bqj"/>
-                                        <include reference="rBo-Cn-zN7"/>
                                         <exclude reference="8te-JV-5Bp"/>
                                         <exclude reference="9pZ-jN-kDi"/>
                                         <include reference="co0-oQ-Wml"/>
                                         <include reference="ikM-mS-D0x"/>
                                         <include reference="z8j-mo-OOx"/>
+                                        <include reference="FGc-6A-eaK"/>
+                                        <include reference="MXs-k7-2nz"/>
+                                        <exclude reference="oA2-hQ-bqj"/>
+                                        <include reference="rBo-Cn-zN7"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -1819,7 +1819,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVc-qX-Ra0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3225" y="2469"/>
+            <point key="canvasLocation" x="3287" y="2469"/>
         </scene>
         <!--Galleries View Controller-->
         <scene sceneID="7K6-Bc-mqa">
@@ -2918,6 +2918,7 @@
                         <viewControllerLayoutGuide type="bottom" id="P1d-69-Lau"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="auf-jc-pBv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -2954,6 +2955,6 @@
         <image name="twitterButtonSmall" width="167" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SWl-Ux-T2G"/>
+        <segue reference="QsB-rB-XyN"/>
     </inferredMetricsTieBreakers>
 </document>
