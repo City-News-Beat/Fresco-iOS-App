@@ -36,8 +36,6 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,12 +65,6 @@
 }
 
 - (void)styleButtons {
-    /*self.twitterButton.layer.cornerRadius = 8;
-    self.twitterButton.clipsToBounds = YES;
-    
-    self.facebookButton.layer.cornerRadius = 8;
-    self.facebookButton.clipsToBounds = YES;*/
-    
     self.loginButton.layer.cornerRadius = 8;
     self.loginButton.clipsToBounds = YES;
     
@@ -187,6 +179,19 @@
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
         } else {
             NSLog(@"User now has publish permissions!");
+        }
+    }];
+}
+
+- (IBAction)twitterLogin:(id)sender {
+    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        if (!user) {
+            NSLog(@"Uh oh. The user cancelled the Twitter login.");
+            return;
+        } else if (user.isNew) {
+            NSLog(@"User signed up and logged in with Twitter!");
+        } else {
+            NSLog(@"User logged in with Twitter!");
         }
     }];
 }

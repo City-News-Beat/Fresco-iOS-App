@@ -25,7 +25,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupAppearances];
     [self setupLocationManager];
-    [self setupFacebookAndParse];
+    //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     // Parse Initialization
@@ -33,7 +33,12 @@
                   clientKey:@"ov0p1rmGlUrUs384U0dxPXADNqsRveCzZeZcnEnh"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    // Facebook
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    
+    // Twitter
+    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
+                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
         
     return YES;
 }
