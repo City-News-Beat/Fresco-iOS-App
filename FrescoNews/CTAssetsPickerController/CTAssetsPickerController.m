@@ -92,7 +92,10 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     return [BaseNavigationController alloc];
 }
 
-
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
 
 #pragma mark - UINavigationControllerDelegate
 

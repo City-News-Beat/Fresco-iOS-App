@@ -521,11 +521,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateCameraMode:(NSString *)mode
 {
     if ([mode isEqualToString:@"photo"]) {
-        self.broadcastStatus.hidden = YES;
+        // self.broadcastStatus.hidden = YES;
         self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
     }
     else {
-        self.broadcastStatus.hidden = NO;
+        // self.broadcastStatus.hidden = NO;
         self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
     }
 }
