@@ -33,16 +33,25 @@
 }
 
 - (void)updateLinkingStatus {
-    if ([PFTwitterUtils isLinkedWithUser:self.currentUser]) {
-        [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-    } else {
-        [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
-    }
     
-    if ([PFFacebookUtils isLinkedWithUser:self.currentUser]) {
-        [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+    if (!self.currentUser) {
+        [self.connectTwitterButton setHidden:YES];
+        [self.connectFacebookButton setHidden:YES];
     } else {
-        [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+        [self.connectTwitterButton setHidden:NO];
+        [self.connectFacebookButton setHidden:NO];
+    
+        if ([PFTwitterUtils isLinkedWithUser:self.currentUser]) {
+            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+        } else {
+            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+        }
+    
+        if ([PFFacebookUtils isLinkedWithUser:self.currentUser]) {
+            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+        } else {
+            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+        }
     }
 }
 
@@ -80,6 +89,11 @@
             }
         }];
     }
+}
+
+- (IBAction)logOut:(id)sender {
+    [PFUser logOut];
+    [self updateLinkingStatus];
 }
 
 /*
