@@ -114,7 +114,7 @@
 {
     [self configureControlsForUpload:YES];
 
-    NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/mobile/gallery/assemble";
+    NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     NSProgress *progress = nil;
     NSError *error;
