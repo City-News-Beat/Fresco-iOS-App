@@ -12,11 +12,13 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "CameraViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
+@property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @end
@@ -67,6 +69,18 @@
                                                                                            action:@selector(returnToCamera:)];
 }
 
+- (void)configureControlsForUpload:(BOOL)upload
+{
+    self.uploadProgressView.hidden = !upload;
+    self.view.userInteractionEnabled = !upload;
+    self.navigationController.navigationBar.userInteractionEnabled = !upload;
+}
+
+- (void)returnToTabBar
+{
+    [((CameraViewController *)self.presentingViewController) cancel];
+}
+
 - (void)returnToCamera:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
@@ -98,6 +112,8 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    [self configureControlsForUpload:YES];
+
     NSString *urlString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/api/mobile/gallery/assemble";
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     NSProgress *progress = nil;
@@ -145,9 +161,29 @@
                                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
         if (uploadError) {
             NSLog(@"Error: %@", uploadError);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self configureControlsForUpload:NO];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed"
+                                                                             message:@"Please try again later"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil]];
+                [self presentViewController:alert animated:YES completion:nil];
+            });
         }
         else {
             NSLog(@"Success: %@ %@", response, responseObject);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
+                                                                           message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+                                                        [self returnToTabBar];
+                                                    }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
     
@@ -158,6 +194,11 @@
                   context:NULL];
 }
 
+- (void)showUploadProgress:(CGFloat)fractionCompleted
+{
+    [self.uploadProgressView setProgress:fractionCompleted animated:YES];
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -165,6 +206,9 @@
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
         NSProgress *progress = (NSProgress *)object;
         NSLog(@"Progress... %f", progress.fractionCompleted);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showUploadProgress:progress.fractionCompleted];
+        });
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
