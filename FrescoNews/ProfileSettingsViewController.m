@@ -24,6 +24,8 @@
     
     // NSLog(@"%@",self.currentUser); // Undo to print user in log
     
+    [self updateLinkingStatus];
+    
     
 }
 
@@ -56,39 +58,70 @@
 }
 
 - (IBAction)connectFacebook:(id)sender {
+    [self.connectFacebookButton setTitle:@"" forState:UIControlStateNormal];
+    
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
+    spinner.color = [UIColor whiteColor];
+    [spinner startAnimating];
+    [self.connectFacebookButton addSubview:spinner];
+        
     if (![PFFacebookUtils isLinkedWithUser:self.currentUser]) {
         [PFFacebookUtils linkUserInBackground:self.currentUser withReadPermissions:nil block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"Woohoo, user is linked with Facebook!");
-                [self updateLinkingStatus];
+            } else {
+                NSLog(@"%@", error);
             }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
         }];
     } else {
         [PFFacebookUtils unlinkUserInBackground:self.currentUser block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"The user is no longer associated with their Facebook account.");
-                [self updateLinkingStatus];
+                
+            } else {
+                NSLog(@"%@", error);
             }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
         }];
     }
+
 }
 
 - (IBAction)connectTwitter:(id)sender {
+    [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
+    
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
+    spinner.color = [UIColor whiteColor];
+    [spinner startAnimating];
+    [self.connectTwitterButton addSubview:spinner];
+
     if (![PFTwitterUtils isLinkedWithUser:self.currentUser]) {
         [PFTwitterUtils linkUser:self.currentUser block:^(BOOL succeeded, NSError *error) {
             if ([PFTwitterUtils isLinkedWithUser:self.currentUser]) {
                 NSLog(@"Woohoo, user logged in with Twitter!");
-                [self updateLinkingStatus];
+            } else {
+                NSLog(@"%@", error);
             }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
         }];
     } else {
         [PFTwitterUtils unlinkUserInBackground:self.currentUser block:^(BOOL succeeded, NSError *error) {
             if (!error && succeeded) {
                 NSLog(@"The user is no longer associated with their Twitter account.");
-                [self updateLinkingStatus];
+            } else {
+                NSLog(@"%@", error);
             }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
         }];
     }
+
 }
 
 - (IBAction)logOut:(id)sender {
