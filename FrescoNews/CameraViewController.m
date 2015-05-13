@@ -354,7 +354,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (IBAction)tempButtonTapped:(id)sender
+- (IBAction)doneButtonTapped:(id)sender
 {
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
