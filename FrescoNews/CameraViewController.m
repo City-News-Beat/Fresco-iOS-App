@@ -521,12 +521,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateCameraMode:(NSString *)mode
 {
     if ([mode isEqualToString:@"photo"]) {
-        // self.broadcastStatus.hidden = YES;
+        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"camera-shutter-icon"] forState:UIControlStateNormal];
         self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
+        // self.broadcastStatus.hidden = YES;
     }
     else {
-        // self.broadcastStatus.hidden = NO;
+        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
         self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
+        // self.broadcastStatus.hidden = NO;
     }
 }
 
