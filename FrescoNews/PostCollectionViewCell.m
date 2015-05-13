@@ -39,7 +39,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     }
     else {
         // local
-        self.imageView.image = post.largeImage.image;
+        self.imageView.image = post.image.image;
     }
 }
 

@@ -53,7 +53,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         self.preferredContentSize = CTAssetPickerPopoverContentSize;
         
         [self setupNavigationController];
-        [self setupToolbarAppearance];
         [self addKeyValueObserver];
     }
     
@@ -93,7 +92,10 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     return [BaseNavigationController alloc];
 }
 
-
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
 
 #pragma mark - UINavigationControllerDelegate
 
@@ -115,19 +117,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         return nil;
     }
 }
-
-
-
-#pragma mark - Toolbar Appearance
-
-- (void)setupToolbarAppearance
-{
-    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor blackColor]};
-    UIBarButtonItem *barButtonItem = [UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], [CTAssetsPickerController class], nil];
-    [barButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
-}
-
-
 
 #pragma mark - ALAssetsLibrary
 

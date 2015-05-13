@@ -10,6 +10,7 @@
 
 @interface VariableStore : NSObject
 + (VariableStore *)sharedInstance;
++ (NSString *)endpointForPath:(NSString *)endpoint;
 
 // colors
 @property NSString *colorBrandDark;
@@ -29,6 +30,8 @@
 @property CGFloat opacityInnerListDividers;
 @property CGFloat opacityUnreadNotificationHighlights;
 
+@property NSString *baseURL;
+@property NSString *basePath;
 @property NSString *cdnBaseURL;
 
 @end
