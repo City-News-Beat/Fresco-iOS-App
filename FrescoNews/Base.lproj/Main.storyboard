@@ -222,12 +222,14 @@
                         <barButtonItem key="rightBarButtonItem" title="First Run" id="vYx-HH-oEE">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="3S1-xO-1aC" kind="show" id="C3H-jq-wXB"/>
+                                <action selector="primaryAction:" destination="e7j-a0-dqz" id="GQc-f3-0AL"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="galleriesView" destination="Mxj-w7-ehO" id="tKK-0N-RFG"/>
+                        <outlet property="primaryAction" destination="vYx-HH-oEE" id="0Hr-Te-m6J"/>
+                        <segue destination="3S1-xO-1aC" kind="show" identifier="firstRunPush" id="Yet-yq-6JA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kEC-6m-A2Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3015,23 +3017,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jma-gk-3Ha" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1474.5" y="4489.5"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Fik-CQ-90x">
-            <objects>
-                <viewController id="Fbg-kb-vk6" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="3DS-Zj-BZ9"/>
-                        <viewControllerLayoutGuide type="bottom" id="zdH-mG-YQf"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="85X-A6-HGm">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vso-iV-ifn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>

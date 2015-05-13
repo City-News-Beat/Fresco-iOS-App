@@ -16,7 +16,9 @@
 @interface HomeViewController ()
 @property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *primaryAction;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+@property (weak, nonatomic) PFUser *currentUser;
 @end
 
 @implementation HomeViewController
@@ -47,6 +49,15 @@
     [super viewDidLoad];
     [self setFrescoImageHeader];
     [self performNecessaryFetch:nil];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    self.currentUser = [PFUser currentUser];
+    
+    if (self.currentUser) {
+        self.primaryAction.title = @"Log Out";
+    }
 }
 
 #pragma mark - Data Loading
@@ -78,6 +89,15 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = self.galleries;
         self.galleriesViewController.containingViewController = self;
+    }
+}
+
+- (IBAction)primaryAction:(id)sender {
+    if (self.currentUser) {
+        [PFUser logOut];
+        self.primaryAction.title = @"First Run";
+    } else {
+        [self performSegueWithIdentifier:@"firstRunPush" sender:sender];
     }
 }
 @end

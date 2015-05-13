@@ -23,7 +23,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-        [self setupLocationManager];
+    [self setupLocationManager];
     //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
