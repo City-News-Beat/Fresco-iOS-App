@@ -23,8 +23,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self setupAppearances];
-    [self setupLocationManager];
+        [self setupLocationManager];
     //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
@@ -39,6 +38,8 @@
     // Twitter
     [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
                                consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
+    
+    [self setupAppearances];
         
     return YES;
 }
@@ -87,20 +88,33 @@
 
 - (void)setupTabBarAppearances
 {
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
     
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
                                      @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
+                                     @"tab-following-highlighted"];
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     tabBarController.delegate = self;
     UITabBar *tabBar = tabBarController.tabBar;
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
-        if (i == 2) {
+        if (i == 4) {
+            if (!currentUser) {
+                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
+                item.title = @"Following";
+            } else {
+                item.image = [[UIImage imageNamed:@"tab-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                item.selectedImage = [UIImage imageNamed:@"tab-profile-highlighted"];
+                item.title = @"Profile";
+            }
+        } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

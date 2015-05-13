@@ -387,7 +387,7 @@
         <scene sceneID="LQ8-Hc-e4a">
             <objects>
                 <navigationController id="zRu-VI-cNm" userLabel="Profile Navigation" customClass="BaseNavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="tab-profile" id="dX3-lU-RwU"/>
+                    <tabBarItem key="tabBarItem" title="Following" image="tab-following" id="dX3-lU-RwU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hsh-rZ-HIN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -3056,8 +3056,8 @@
         <image name="shutterButton" width="241" height="242"/>
         <image name="tab-assignments" width="32" height="32"/>
         <image name="tab-camera" width="60" height="49"/>
+        <image name="tab-following" width="36" height="23"/>
         <image name="tab-home" width="32" height="32"/>
-        <image name="tab-profile" width="32" height="32"/>
         <image name="tab-stories" width="28" height="28"/>
         <image name="twitter" width="40" height="40"/>
         <image name="twitterButtonSmall" width="167" height="46"/>
