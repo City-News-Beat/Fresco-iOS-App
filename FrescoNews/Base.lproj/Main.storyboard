@@ -614,7 +614,7 @@
                                                     <action selector="shutterButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="z9S-2m-yzv"/>
                                                 </connections>
                                             </button>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSb-Wi-oRW" userLabel="Spacer View 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
@@ -630,7 +630,7 @@
                                                     <action selector="flashButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="riK-K8-H6E"/>
                                                 </connections>
                                             </button>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1l-hi-b8h" userLabel="Spacer View 2">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1l-hi-b8h" userLabel="Spacer View 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
@@ -683,7 +683,7 @@
                                                     </mask>
                                                 </variation>
                                             </label>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KC3-vo-SMa" userLabel="Spacer View 3">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KC3-vo-SMa" userLabel="Spacer View 3">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
