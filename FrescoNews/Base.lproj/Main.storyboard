@@ -529,7 +529,7 @@
                                             <action selector="cancelButtonTapped:" destination="ZRN-7D-fGO" eventType="touchUpInside" id="tz3-cF-16J"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="taC-R8-hTs" userLabel="Controls View">
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="taC-R8-hTs" userLabel="Controls View">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSn-d5-old" userLabel="Photo Button">
