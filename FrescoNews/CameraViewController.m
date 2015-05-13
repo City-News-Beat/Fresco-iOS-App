@@ -226,6 +226,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     self.controlsView.backgroundColor = [UIColor whiteColor];
     self.shutterButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
+    [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
     for (UIView *view in [self.controlsView subviews]) {
         view.hidden = NO;
     }
@@ -240,6 +241,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     self.shutterButton.hidden = NO;
+    [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
     self.shutterButton.backgroundColor = [UIColor clearColor];
 }
 
