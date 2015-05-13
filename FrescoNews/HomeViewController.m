@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *primaryAction;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
-@property (weak, nonatomic) PFUser *currentUser;
 @end
 
 @implementation HomeViewController
@@ -53,9 +52,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.currentUser = [PFUser currentUser];
-    
-    if (self.currentUser) {
+    if ([PFUser currentUser]) {
         self.primaryAction.title = @"Log Out";
     }
 }
@@ -93,7 +90,7 @@
 }
 
 - (IBAction)primaryAction:(id)sender {
-    if (self.currentUser) {
+    if ([PFUser currentUser]) {
         [PFUser logOut];
         self.primaryAction.title = @"First Run";
     } else {

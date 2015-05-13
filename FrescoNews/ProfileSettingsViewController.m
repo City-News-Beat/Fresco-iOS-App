@@ -11,7 +11,6 @@
 @interface ProfileSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
-@property (weak, nonatomic) PFUser *currentUser;
 @end
 
 @implementation ProfileSettingsViewController
@@ -20,9 +19,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.currentUser = [PFUser currentUser];
-    
-    // NSLog(@"%@",self.currentUser); // Undo to print user in log
+    // NSLog(@"%@",[PFUser currentUser]); // Undo to print user in log
     
     [self updateLinkingStatus];
     
@@ -36,20 +33,20 @@
 
 - (void)updateLinkingStatus {
     
-    if (!self.currentUser) {
+    if (![PFUser currentUser]) {
         [self.connectTwitterButton setHidden:YES];
         [self.connectFacebookButton setHidden:YES];
     } else {
         [self.connectTwitterButton setHidden:NO];
         [self.connectFacebookButton setHidden:NO];
     
-        if ([PFTwitterUtils isLinkedWithUser:self.currentUser]) {
+        if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
         } else {
             [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
         }
     
-        if ([PFFacebookUtils isLinkedWithUser:self.currentUser]) {
+        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
         } else {
             [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
@@ -66,8 +63,8 @@
     [spinner startAnimating];
     [self.connectFacebookButton addSubview:spinner];
         
-    if (![PFFacebookUtils isLinkedWithUser:self.currentUser]) {
-        [PFFacebookUtils linkUserInBackground:self.currentUser withReadPermissions:nil block:^(BOOL succeeded, NSError *error) {
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withReadPermissions:nil block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"Woohoo, user is linked with Facebook!");
             } else {
@@ -77,7 +74,7 @@
             [self updateLinkingStatus];
         }];
     } else {
-        [PFFacebookUtils unlinkUserInBackground:self.currentUser block:^(BOOL succeeded, NSError *error) {
+        [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"The user is no longer associated with their Facebook account.");
                 
@@ -100,9 +97,9 @@
     [spinner startAnimating];
     [self.connectTwitterButton addSubview:spinner];
 
-    if (![PFTwitterUtils isLinkedWithUser:self.currentUser]) {
-        [PFTwitterUtils linkUser:self.currentUser block:^(BOOL succeeded, NSError *error) {
-            if ([PFTwitterUtils isLinkedWithUser:self.currentUser]) {
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
                 NSLog(@"Woohoo, user logged in with Twitter!");
             } else {
                 NSLog(@"%@", error);
@@ -111,7 +108,7 @@
             [self updateLinkingStatus];
         }];
     } else {
-        [PFTwitterUtils unlinkUserInBackground:self.currentUser block:^(BOOL succeeded, NSError *error) {
+        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if (!error && succeeded) {
                 NSLog(@"The user is no longer associated with their Twitter account.");
             } else {
