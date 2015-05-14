@@ -36,7 +36,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
-@property (weak, nonatomic) IBOutlet UIImageView *flashIcon;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -250,6 +249,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     self.shutterButton.hidden = NO;
+    self.flashButton.hidden = NO;
     if (cameraMode == CameraModeVideo) {
         [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
     }
@@ -336,6 +336,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     button.selected = !button.selected;
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
+
+    dispatch_async([self sessionQueue], ^{
+        if ([[self movieFileOutput] isRecording]) {
+            [self setTorchMode:(button.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
+        }
+    });
 }
 
 - (void)cancel
@@ -536,12 +542,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if (cameraMode == CameraModePhoto) {
         [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"camera-shutter-icon"] forState:UIControlStateNormal];
-        self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
+        [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
+        [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
         // self.broadcastStatus.hidden = YES;
     }
     else {
         [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
-        self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
+        [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
+        [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
         // self.broadcastStatus.hidden = NO;
     }
 }
