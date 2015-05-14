@@ -14,6 +14,11 @@
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
 
+typedef enum : NSUInteger {
+    CameraModePhoto,
+    CameraModeVideo
+} CameraMode;
+
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
@@ -222,17 +227,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)showUI
+- (void)showUIForCameraMode:(CameraMode)cameraMode
 {
     self.controlsView.backgroundColor = [UIColor whiteColor];
     self.shutterButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
-    [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+
+    if (cameraMode == CameraModeVideo) {
+        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+    }
+
     for (UIView *view in [self.controlsView subviews]) {
         view.hidden = NO;
     }
 }
 
-- (void)hideUI
+- (void)hideUIForCameraMode:(CameraMode)cameraMode
 {
     // Hide most of the UI
     self.controlsView.backgroundColor = [UIColor clearColor];
@@ -241,17 +250,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     self.shutterButton.hidden = NO;
-    [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
+    if (cameraMode == CameraModeVideo) {
+        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
+    }
+
     self.shutterButton.backgroundColor = [UIColor clearColor];
 }
 
 - (void)toggleMovieRecording
 {
     if ([[self movieFileOutput] isRecording]) {
-        [self showUI];
+        [self showUIForCameraMode:CameraModeVideo];
     }
     else {
-        [self hideUI];
+        [self hideUIForCameraMode:CameraModeVideo];
     }
 
     dispatch_async([self sessionQueue], ^{
@@ -287,7 +299,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)snapStillImage
 {
-    [self hideUI];
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
@@ -296,12 +307,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
-                [self updateRecentPhotoView:image];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
                                                                     metadata:[((AppDelegate *)[UIApplication sharedApplication].delegate).location EXIFMetadata]
                                                              completionBlock:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self hideUIForCameraMode:CameraModePhoto];
+                    [self showUIForCameraMode:CameraModePhoto];
+                    [self updateRecentPhotoView:image];
+                });
             }
-            [self showUI];
         }];
     });
 }
@@ -343,7 +357,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.videoButton.selected = NO;
-        [self updateCameraMode:@"photo"];
+        [self updateCameraMode:CameraModePhoto];
     }
 }
 
@@ -352,7 +366,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (!button.selected) {
         button.selected = YES;
         self.photoButton.selected = NO;
-        [self updateCameraMode:@"video"];
+        [self updateCameraMode:CameraModeVideo];
     }
 }
 
@@ -520,9 +534,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
-- (void)updateCameraMode:(NSString *)mode
+- (void)updateCameraMode:(CameraMode)cameraMode
 {
-    if ([mode isEqualToString:@"photo"]) {
+    if (cameraMode == CameraModePhoto) {
         [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"camera-shutter-icon"] forState:UIControlStateNormal];
         self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
         // self.broadcastStatus.hidden = YES;
