@@ -352,21 +352,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
 }
 
-- (IBAction)photoButtonTapped:(UIButton *)button
+- (IBAction)modeButtonTapped:(UIButton *)button
 {
     if (!button.selected) {
         button.selected = YES;
-        self.videoButton.selected = NO;
-        [self updateCameraMode:CameraModePhoto];
-    }
-}
 
-- (IBAction)videoButtonTapped:(UIButton *)button
-{
-    if (!button.selected) {
-        button.selected = YES;
-        self.photoButton.selected = NO;
-        [self updateCameraMode:CameraModeVideo];
+        if (button.tag) {
+            self.photoButton.selected = NO;
+            [self updateCameraMode:CameraModeVideo];
+        }
+        else {
+            self.videoButton.selected = NO;
+            [self updateCameraMode:CameraModePhoto];
+        }
     }
 }
 
