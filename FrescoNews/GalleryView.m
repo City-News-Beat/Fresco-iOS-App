@@ -81,6 +81,7 @@
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
     cell.post = [self.gallery.posts objectAtIndex:indexPath.item];
+    cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
 
     return cell;
 }

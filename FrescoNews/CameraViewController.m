@@ -24,14 +24,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
-@property (weak, nonatomic) IBOutlet UIButton *tempButton;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *shutterButton;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *recentPhotoImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *shutterIcon;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIImageView *flashIcon;
 
@@ -523,13 +521,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateCameraMode:(NSString *)mode
 {
     if ([mode isEqualToString:@"photo"]) {
-        self.broadcastStatus.hidden = YES;
-        self.shutterIcon.image = [UIImage imageNamed:@"shutter.png"];
+        // self.broadcastStatus.hidden = YES;
         self.flashIcon.image = [UIImage imageNamed:@"flashOff.png"];
     }
     else {
-        self.broadcastStatus.hidden = NO;
-        self.shutterIcon.image = [UIImage imageNamed:@"record.png"];
+        // self.broadcastStatus.hidden = NO;
         self.flashIcon.image = [UIImage imageNamed:@"flashlightOff.png"];
     }
 }
@@ -542,7 +538,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateRecentPhotoView:(UIImage *)image
 {
     if (image) {
-        self.recentPhotoImageView.image = image;
+        [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
     
@@ -555,7 +551,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                          [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
                                              if ([asset valueForProperty:ALAssetPropertyLocation]) {
                                                  ALAssetRepresentation *repr = [asset defaultRepresentation];
-                                                 self.recentPhotoImageView.image = [UIImage imageWithCGImage:[repr fullResolutionImage]];
+                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[repr fullResolutionImage]] forState:UIControlStateNormal];
                                                  *stop = YES;
                                              }
                                          }];
