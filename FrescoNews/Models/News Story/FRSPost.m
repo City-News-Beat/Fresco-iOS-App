@@ -17,42 +17,39 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"postID": @"post_id",
-             @"caption" : @"caption",
-             @"smallImage" : @"image.small",
-             @"largeImage" : @"image.large",
-             @"user" : @"user",
-             @"date" : @"timestamp",
-             @"sources" : @"sources",
-             @"tags" : @"tags",
+             @"postID" : @"_id",
+             @"user" : @"owner",
+             @"source" : @"source",
+             @"type" : @"type",
+             //@"mediaSize" : @"meta",
+             @"mediaURLString" : @"file",
+             @"image" : @"file",
+             @"date" : @"time_created",
              @"byline" : @"byline",
+             @"visibility" : @"visibility",
              };
 }
 
-+ (NSValueTransformer *)smallImageJSONTransformer
++ (NSValueTransformer *)mediaURLStringJSONTransformer
 {
-    return [MTLModel imageJSONTransformer];
+    return [MTLModel URLJSONTransformer];
 }
 
-+ (NSValueTransformer *)largeImageJSONTransformer
++ (NSValueTransformer *)imageJSONTransformer
 {
-    return [MTLModel imageJSONTransformer];
-}
-
-//#warning part of reverse compatability hack
-//+ (NSValueTransformer *)large_pathJSONTransformer
-//{
-//    return [MTLModel ];
-//}
-
-- (NSString *)caption
-{
-    return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
+    return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
+        FRSImage *image = [[FRSImage alloc] init];
+        image.URL = [NSURL URLWithString:imageURL];
+        image.width = [NSNumber numberWithFloat:800.0f];
+        image.height =  [NSNumber numberWithFloat:600.0f];
+        return image;
+    }];
 }
 
 - (NSURL *)largeImageURL
 {
-    return [self.largeImage cdnImageInListURL];
+    return [self.image cdnImageInListURL];
+    //return [self.largeImage cdnImageInListURL];
 }
 
 @end

@@ -81,9 +81,13 @@
 }
 
 #pragma mark - Utility methods
+
 - (void)setupAppearances
 {
     [self setupTabBarAppearances];
+    [self setupNavigationBarAppearance];
+    [self setupToolbarAppearance];
+    [self setupBarButtonItemAppearance];
 }
 
 - (void)setupTabBarAppearances
@@ -116,15 +120,32 @@
             }
         } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-
-            item.imageInsets = UIEdgeInsetsMake(5.5,0,-6,0);
-        } else {
+            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -6, 0);
+        }
+        else {
             item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
         }
         ++i;
     }
+}
+
+- (void)setupNavigationBarAppearance
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [UINavigationBar appearance].titleTextAttributes = attributes;
+}
+
+- (void)setupToolbarAppearance
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
+}
+
+- (void)setupBarButtonItemAppearance
+{
+    [UIBarButtonItem appearance].tintColor = [UIColor colorWithHex:@"76541E"];
 }
 
 - (void)setupLocationManager
@@ -136,25 +157,38 @@
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager requestAlwaysAuthorization];
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     self.location = [locations lastObject];
+    // TODO: Report location to the server
+    
+    // Set to YES to test monitoring of significant location changes even when the app is not running; also see didFinishLaunchingWithOptions above
+    if (/* DISABLES CODE */ (NO)) {
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.alertBody = [self.location description];
+        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+        notification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        // TODO: Only if the app is running in the foreground
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
                                                         message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
-        [self.locationManager stopUpdatingLocation];
+        [self.locationManager stopMonitoringSignificantLocationChanges];
     }
 }
 

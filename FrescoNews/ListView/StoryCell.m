@@ -38,7 +38,7 @@ static NSString * const kCellIdentifier = @"StoryCell";
     _post = post;
     
     // set the caption
-    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:self.post.caption date:[MTLModel relativeDateStringFromDate:self.post.date]]];
+    [[self captionLabel] setAttributedText:[[self class] attributedStringForCaption:@"used to be post caption" date:[MTLModel relativeDateStringFromDate:self.post.date]]];
     
     // set the image
     __weak StoryCell *weakSelf = self;
@@ -94,7 +94,7 @@ static NSString * const kCellIdentifier = @"StoryCell";
 
 - (CGSize)imageSizeInPoints
 {
-    CGFloat inverseAspectRatio = [self.post.largeImage.height floatValue] / [self.post.largeImage.width floatValue];
+    CGFloat inverseAspectRatio = [self.post.image.height floatValue] / [self.post.image.width floatValue];
     CGFloat height = self.frame.size.width * inverseAspectRatio;
     
     if (height > self.frame.size.width)

@@ -7,6 +7,7 @@
 //
 
 #import "ProfileSettingsViewController.h"
+#import "FRSUser.h"
 
 @interface ProfileSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
@@ -17,13 +18,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    // NSLog(@"%@",[PFUser currentUser]); // Undo to print user in log
+    FRSUser *user = [[FRSUser alloc] init];
+    NSLog(@"USER ID: %@", user.userID);
     
     [self updateLinkingStatus];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -125,15 +124,5 @@
     [PFUser logOut];
     [self updateLinkingStatus];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

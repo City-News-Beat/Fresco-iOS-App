@@ -12,7 +12,6 @@
 #import "ASIFormDataRequest+Array.h"
 #import <NSArray+F.h>
 
-static NSString * const kAPIBaseURLString = @"http://fresconews.com/api/";
 static NSString * const kPersistedStoriesFilename = @"stories.frs";
 static NSString * const kPersistedUserFilename = @"user.usr";
 
@@ -52,7 +51,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 - (id)init
 {
-    NSURL *baseURL = [NSURL URLWithString:kAPIBaseURLString];
+    NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseURL];
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         [[self responseSerializer] setAcceptableContentTypes:nil];
     }
@@ -298,7 +297,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     
     [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSArray *galleries = [responseObject map:^id(id obj) {
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
         }];
         if(responseBlock)
@@ -312,12 +311,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString: @"http://monorail.theburgg.com/fresco/stories.php?type=video_home" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
 }
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString: @"http://monorail.theburgg.com/fresco/stories.php?type=profile" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/api/mobile/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
 }
 
 @end
