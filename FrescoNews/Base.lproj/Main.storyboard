@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1114,8 +1114,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FE4-RF-zhQ" customClass="GalleryView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="450"/>
                                         <subviews>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="MVt-gT-erO" userLabel="Posts">
-                                                <rect key="frame" x="0.0" y="0.0" width="600" height="422"/>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="MVt-gT-erO" userLabel="Posts">
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="450"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="R7d-Xy-qmA">
                                                     <size key="itemSize" width="600" height="421"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -1130,8 +1130,8 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H6Z-N4-zNg">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="422"/>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H6Z-N4-zNg">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
                                                                     <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     </variation>
@@ -1176,7 +1176,7 @@
                                         <rect key="frame" x="0.0" y="450" width="600" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Taken for Painting at Heart Castle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfG-Ph-Nex" userLabel="Assignment View">
-                                                <rect key="frame" x="22" y="9" width="257" height="21"/>
+                                                <rect key="frame" x="0.0" y="-514" width="217" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1196,8 +1196,8 @@
                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="TcS-bd-gWs" userLabel="Progress View">
-                                        <rect key="frame" x="16" y="445" width="568" height="3"/>
+                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="TcS-bd-gWs" userLabel="Progress View">
+                                        <rect key="frame" x="0.0" y="890" width="600" height="3"/>
                                     </progressView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1621,10 +1621,10 @@
                                 <exclude reference="yeE-qk-8tO"/>
                                 <exclude reference="15j-H1-shU"/>
                                 <exclude reference="DYj-r3-gq4"/>
+                                <exclude reference="CMT-uo-eIO"/>
                                 <exclude reference="Kap-LA-7kY"/>
                                 <exclude reference="bY5-AS-4ew"/>
                                 <exclude reference="Ki3-v2-zz9"/>
-                                <exclude reference="CMT-uo-eIO"/>
                                 <exclude reference="3E3-PS-qoV"/>
                                 <exclude reference="AzU-aU-nSh"/>
                                 <exclude reference="UUR-rK-OKZ"/>
@@ -1679,7 +1679,7 @@
                                             <constraint firstAttribute="height" constant="104" id="UfO-Lg-1pP"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Lewis Carroll" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqC-2K-fJV">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lewis Carroll" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TqC-2K-fJV">
                                         <rect key="frame" x="134" y="15" width="102" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1691,7 +1691,7 @@
                                             <rect key="frame" x="134" y="15" width="102" height="62"/>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="# photos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Otx-OC-9lU">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="# photos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Otx-OC-9lU">
                                         <rect key="frame" x="134" y="38" width="39" height="12"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
@@ -1703,7 +1703,7 @@
                                             <rect key="frame" x="134" y="79" width="39" height="12"/>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="# assignments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ltV-M2-0Cr">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="# assignments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ltV-M2-0Cr">
                                         <rect key="frame" x="230" y="38" width="63" height="12"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
@@ -1715,7 +1715,7 @@
                                             <rect key="frame" x="230" y="79" width="63" height="12"/>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="# videos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oft-It-HI7">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="# videos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oft-It-HI7">
                                         <rect key="frame" x="183" y="38" width="37" height="12"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="10"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
@@ -2017,16 +2017,16 @@
                                         <exclude reference="4Yb-Lm-Lwo"/>
                                         <exclude reference="eDv-dh-iyj"/>
                                         <exclude reference="nSb-gc-HA3"/>
-                                        <exclude reference="nZl-GI-TA9"/>
                                         <exclude reference="H5B-Fs-T8o"/>
-                                        <exclude reference="VUD-MR-Uky"/>
                                         <exclude reference="J4b-k9-1Cb"/>
                                         <exclude reference="QhC-Wv-kc1"/>
-                                        <exclude reference="ahK-Sm-2Lr"/>
                                         <exclude reference="ROj-a8-uay"/>
-                                        <exclude reference="waN-af-USQ"/>
+                                        <exclude reference="VUD-MR-Uky"/>
+                                        <exclude reference="ahK-Sm-2Lr"/>
+                                        <exclude reference="nZl-GI-TA9"/>
                                         <exclude reference="rPl-jo-npC"/>
                                         <exclude reference="v85-9Y-44Q"/>
+                                        <exclude reference="waN-af-USQ"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -2191,16 +2191,16 @@
                                         <exclude reference="Har-U6-nfB"/>
                                         <exclude reference="Kd7-M4-xIs"/>
                                         <exclude reference="RQ7-3Q-Zcr"/>
-                                        <exclude reference="k4Z-wg-cvx"/>
-                                        <exclude reference="fWh-5u-IY0"/>
-                                        <exclude reference="nnB-xE-19O"/>
-                                        <exclude reference="1sU-7B-EM9"/>
-                                        <exclude reference="Vmq-FP-Dcg"/>
-                                        <exclude reference="mgv-AW-xea"/>
-                                        <exclude reference="z08-3Y-uHk"/>
                                         <exclude reference="JYq-Kf-tJ4"/>
                                         <exclude reference="eAM-2X-Q4O"/>
                                         <exclude reference="vrv-Kz-a0U"/>
+                                        <exclude reference="1sU-7B-EM9"/>
+                                        <exclude reference="Vmq-FP-Dcg"/>
+                                        <exclude reference="fWh-5u-IY0"/>
+                                        <exclude reference="k4Z-wg-cvx"/>
+                                        <exclude reference="mgv-AW-xea"/>
+                                        <exclude reference="nnB-xE-19O"/>
+                                        <exclude reference="z08-3Y-uHk"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -2369,11 +2369,11 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
-                                                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" secondItem="hMC-XK-Pgg" secondAttribute="height" multiplier="602:299" id="Oou-i3-5Bf"/>
                                                                                     <constraint firstAttribute="width" secondItem="hMC-XK-Pgg" secondAttribute="height" multiplier="4:3" id="ayx-0E-9rp"/>
@@ -2685,20 +2685,20 @@
                                 <exclude reference="e91-K2-UbN"/>
                                 <exclude reference="vfi-ZY-rrp"/>
                                 <exclude reference="COf-j9-WVT"/>
+                                <exclude reference="OhT-aE-vWQ"/>
                                 <exclude reference="ZAZ-2A-p9h"/>
                                 <exclude reference="gL2-T9-SyM"/>
                                 <exclude reference="gNY-k3-SIo"/>
                                 <exclude reference="L8g-81-kg6"/>
-                                <exclude reference="OhT-aE-vWQ"/>
-                                <exclude reference="FsU-YL-8l8"/>
-                                <exclude reference="Iim-tM-SK7"/>
-                                <exclude reference="qgL-EG-IuN"/>
                                 <exclude reference="7L5-J2-QU1"/>
                                 <exclude reference="AgK-hO-7Qg"/>
                                 <exclude reference="UIb-8J-kZU"/>
                                 <exclude reference="a5H-8q-QRZ"/>
                                 <exclude reference="g83-L3-d3a"/>
                                 <exclude reference="gbK-Wg-WVH"/>
+                                <exclude reference="FsU-YL-8l8"/>
+                                <exclude reference="Iim-tM-SK7"/>
+                                <exclude reference="qgL-EG-IuN"/>
                             </mask>
                         </variation>
                     </view>
@@ -3351,10 +3351,10 @@
                             <mask key="constraints">
                                 <exclude reference="5DS-3w-AUh"/>
                                 <exclude reference="aVw-8Q-oqY"/>
+                                <exclude reference="jnM-wk-kf5"/>
                                 <exclude reference="L0f-vP-4oF"/>
                                 <exclude reference="bhb-0Q-4MT"/>
                                 <exclude reference="c6u-F5-FOU"/>
-                                <exclude reference="jnM-wk-kf5"/>
                                 <exclude reference="9Mj-UG-PCR"/>
                                 <exclude reference="1F8-4A-pFE"/>
                                 <exclude reference="9xN-pi-UpR"/>
