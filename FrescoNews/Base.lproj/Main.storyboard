@@ -1778,11 +1778,12 @@
                                         </variation>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HYI-oB-zrP">
-                                        <rect key="frame" x="564" y="16" width="20" height="20"/>
+                                        <rect key="frame" x="521" y="0.0" width="79" height="51"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="Q1y-Oo-2ex"/>
-                                            <constraint firstAttribute="width" secondItem="HYI-oB-zrP" secondAttribute="height" multiplier="1:1" id="tvy-yy-EB0"/>
+                                            <constraint firstAttribute="height" constant="51" id="Q1y-Oo-2ex"/>
+                                            <constraint firstAttribute="width" secondItem="HYI-oB-zrP" secondAttribute="height" multiplier="1:1" constant="28" id="tvy-yy-EB0"/>
                                         </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="2" maxX="-16" maxY="0.0"/>
                                         <state key="normal" image="settings">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -1794,7 +1795,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="leading" id="04j-U0-h8E"/>
-                                    <constraint firstAttribute="trailing" secondItem="HYI-oB-zrP" secondAttribute="trailing" constant="16" id="0YP-4f-jAF"/>
+                                    <constraint firstAttribute="trailing" secondItem="HYI-oB-zrP" secondAttribute="trailing" id="0YP-4f-jAF"/>
                                     <constraint firstAttribute="height" constant="130" id="15x-OD-hLF"/>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="leading" secondItem="Otx-OC-9lU" secondAttribute="leading" id="5UF-4b-etu"/>
                                     <constraint firstItem="Otx-OC-9lU" firstAttribute="top" secondItem="TqC-2K-fJV" secondAttribute="bottom" constant="2" id="7YR-N3-xCQ"/>
@@ -1806,7 +1807,7 @@
                                     <constraint firstItem="oft-It-HI7" firstAttribute="baseline" secondItem="Otx-OC-9lU" secondAttribute="baseline" id="OaU-T6-zKB"/>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="trailing" secondItem="Xh1-Dl-chr" secondAttribute="trailing" id="OlP-XG-ybQ"/>
                                     <constraint firstItem="Xh1-Dl-chr" firstAttribute="centerY" secondItem="VNa-TL-dW3" secondAttribute="centerY" id="VYW-oq-ugc"/>
-                                    <constraint firstItem="HYI-oB-zrP" firstAttribute="centerY" secondItem="TqC-2K-fJV" secondAttribute="centerY" constant="0.5" id="YXn-02-H8O"/>
+                                    <constraint firstItem="HYI-oB-zrP" firstAttribute="centerY" secondItem="TqC-2K-fJV" secondAttribute="centerY" id="YXn-02-H8O"/>
                                     <constraint firstItem="ltV-M2-0Cr" firstAttribute="leading" secondItem="oft-It-HI7" secondAttribute="trailing" constant="10" id="bSz-jY-2Pa"/>
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="top" secondItem="TqC-2K-fJV" secondAttribute="top" id="cJH-7f-T7N"/>
                                     <constraint firstItem="VNa-TL-dW3" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="trailing" constant="10" id="dD0-sd-b8t"/>
@@ -1852,7 +1853,7 @@
                         <rect key="frame" x="0.0" y="44" width="375" height="1156"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="1156" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHX-Av-OJh">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="1156" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHX-Av-OJh">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="1156"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqH-iM-sZZ">
@@ -1927,7 +1928,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VCr-A0-tTq">
                                                         <rect key="frame" x="17" y="10" width="31" height="21"/>
@@ -1946,14 +1947,14 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L36-Rz-Ank">
                                                         <rect key="frame" x="57" y="92" width="310" height="18"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmq-Zx-hDr">
                                                         <rect key="frame" x="17" y="80" width="358" height="1"/>
@@ -2045,7 +2046,7 @@
                                                 <color key="textColor" red="0.3843137254901961" green="0.3843137254901961" blue="0.3843137254901961" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mpg-Nr-jZG">
+                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mpg-Nr-jZG">
                                                 <rect key="frame" x="-2" y="358" width="375" height="215"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="215" id="X2Y-7E-qhF"/>
@@ -2102,7 +2103,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6pg-nJ-2iC">
                                                         <rect key="frame" x="17" y="10" width="132" height="21"/>
@@ -2128,7 +2129,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PLX-ch-uGe">
                                                         <rect key="frame" x="17" y="80" width="358" height="1"/>
@@ -3416,7 +3417,7 @@
         <image name="progressPermissions" width="375" height="20"/>
         <image name="progressPersonal" width="375" height="20"/>
         <image name="progressSignUp" width="375" height="20"/>
-        <image name="settings" width="43" height="43"/>
+        <image name="settings" width="18" height="19"/>
         <image name="tab-assignments" width="32" height="32"/>
         <image name="tab-camera" width="60" height="49"/>
         <image name="tab-following" width="36" height="23"/>
