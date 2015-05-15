@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
+@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
@@ -34,6 +37,7 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
+    self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 }
 
 - (void)viewWillAppear:(BOOL)animated
