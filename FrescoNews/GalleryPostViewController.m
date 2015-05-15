@@ -122,10 +122,7 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"byline" : @"Test via Test", // TODO: Make optional
-                                    @"source" : @"",
-                                    @"type" : @"image",
-                                    @"license" : @"Fresco",
+        postMetadata[filename] = @{ @"type" : @"image",
                                     @"lat" : @10,
                                     @"lon" : @10 };
     }
@@ -136,8 +133,6 @@
 
     NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
                                   @"caption" : self.captionTextView.text,
-                                  @"tags" : @"[]",  // TODO: Make optional; generate on server
-                                  @"articles" : @"[]", // TODO: Make optional
                                   @"posts" : jsonData };
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"

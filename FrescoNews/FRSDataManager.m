@@ -311,12 +311,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
 }
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:@"/api/mobile/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
 }
 
 @end
