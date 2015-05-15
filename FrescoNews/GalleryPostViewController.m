@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
+@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
@@ -34,6 +37,7 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
+    self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -122,10 +126,7 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"byline" : @"Test via Test", // TODO: Make optional
-                                    @"source" : @"",
-                                    @"type" : @"image",
-                                    @"license" : @"Fresco",
+        postMetadata[filename] = @{ @"type" : @"image",
                                     @"lat" : @10,
                                     @"lon" : @10 };
     }
@@ -136,8 +137,6 @@
 
     NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
                                   @"caption" : self.captionTextView.text,
-                                  @"tags" : @"[]",  // TODO: Make optional; generate on server
-                                  @"articles" : @"[]", // TODO: Make optional
                                   @"posts" : jsonData };
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"

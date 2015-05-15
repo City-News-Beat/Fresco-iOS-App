@@ -498,7 +498,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                                             target:nil
                                                                             action:nil];
 
-    vc.gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    vc.gallery = gallery;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
