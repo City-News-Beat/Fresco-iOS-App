@@ -28,8 +28,8 @@
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     // Parse Initialization
-    [Parse setApplicationId:@"8ngjMD9r7WB8wxUxtaOlaQdzyF8YVqgp0HRtohUd"
-                  clientKey:@"ov0p1rmGlUrUs384U0dxPXADNqsRveCzZeZcnEnh"];
+    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
+                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     // Facebook
