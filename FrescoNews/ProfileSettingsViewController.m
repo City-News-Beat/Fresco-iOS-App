@@ -14,6 +14,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
+@property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
+@property (nonatomic) int stepValue;
 @end
 
 @implementation ProfileSettingsViewController
@@ -26,7 +30,21 @@
     
     [self updateLinkingStatus];
     
+    // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
+    self.stepValue = 5.0f;
+
+}
+
+- (IBAction)valueChanged:(id)sender {
+    float newStep = roundf((self.radiusStepper.value) / self.stepValue);
+    self.radiusStepper.value = newStep * self.stepValue;
+    
+    if (self.radiusStepper.value < 2) {
+        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i mile", (int) self.radiusStepper.value];
+    } else {
+        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i miles", (int) self.radiusStepper.value];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,6 +146,7 @@
     [PFUser logOut];
     [self updateLinkingStatus];
 }
+
 
 
 @end
