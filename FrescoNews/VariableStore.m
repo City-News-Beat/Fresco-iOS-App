@@ -40,8 +40,8 @@
         sharedInstance.opacityInnerListDividers = 0.08f;
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
         
-        sharedInstance.baseURL = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/";
-        sharedInstance.basePath = @"api/mobile/";
+        sharedInstance.baseURL = @"http://52.6.231.245/";
+        sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/dnd5ngsax/image/fetch/";
     });
     
