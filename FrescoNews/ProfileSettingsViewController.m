@@ -12,6 +12,8 @@
 @interface ProfileSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation ProfileSettingsViewController
@@ -23,6 +25,8 @@
     NSLog(@"USER ID: %@", user.userID);
     
     [self updateLinkingStatus];
+    
+    self.scrollView.alwaysBounceHorizontal = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -124,5 +128,6 @@
     [PFUser logOut];
     [self updateLinkingStatus];
 }
+
 
 @end
