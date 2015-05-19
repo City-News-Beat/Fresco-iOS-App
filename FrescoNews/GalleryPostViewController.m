@@ -90,6 +90,16 @@
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (IBAction)twitterButtonTapped:(UIButton *)button
+{
+    button.selected = !button.selected;
+}
+
+- (IBAction)facebookButtonTapped:(UIButton *)button
+{
+    button.selected = !button.selected;
+}
+
 #pragma mark - Toolbar Items
 
 - (UIBarButtonItem *)titleButtonItem
