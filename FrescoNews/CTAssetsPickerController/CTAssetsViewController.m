@@ -145,16 +145,15 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupAssets
 {
-    // TODO: Explain in the UI why some photos cannot be selected (no location information)?
     self.title = @"Choose Media";
-    
-    if (!self.assets) {
-        self.assets = [[NSMutableArray alloc] init];
-    }
-    else {
+
+    if (self.assets) {
         return;
     }
-    
+
+    self.assets = [[NSMutableArray alloc] init];
+
+    // TODO: Explain in the UI why some photos cannot be selected (no location information)?
     ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
         if (asset) {
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
@@ -499,7 +498,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                                             target:nil
                                                                             action:nil];
 
-    vc.gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    vc.gallery = gallery;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

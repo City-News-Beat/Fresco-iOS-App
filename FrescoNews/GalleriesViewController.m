@@ -16,14 +16,19 @@
 #import "FRSDataManager.h"
 #import "FRSStory.h"
 #import "FRSGallery.h"
+#import "GalleryView.h"
+#import "FRSPost.h"
 #import "UIView+Additions.h"
 
-
 @interface GalleriesViewController () <UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
+
 @end
 
 @implementation GalleriesViewController
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -87,6 +92,7 @@
 }
 
 #pragma mark - UITableViewDelegate
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 36;
@@ -102,7 +108,119 @@
     return galleryHeader;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGRect visibleRect = (CGRect){.origin = self.tableView.contentOffset, .size = self.tableView.bounds.size};
+    
+    CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
+    
+    NSIndexPath *visibleIndexPath = [self.tableView indexPathForRowAtPoint:visiblePoint];
+    
+    GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:visibleIndexPath];
+    
+    FRSPost *firstPost = cell.gallery.posts[0];
+    
+    //Check if the cell is a video first!
+    if([firstPost isVideo]){
+        
+        // Video indicator, uncomment when added to cell
+        //[cell.videoImage setAlpha:1];
+        
+        //If the video current playing isn't this one, or no video has palyed yet
+        if((_playingIndex.row != visibleIndexPath.row || _playingIndex == nil)){
+            
+            cell.galleryView.sharedPlayer = nil;
+            
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
+            
+            //Dispatch event to make sure the condition is true for more than one second
+            double delayInSeconds = 1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                
+                //Code to be executed on the main queue after delay
+                if((_playingIndex.row != visibleIndexPath.row || _playingIndex == nil) && cell != nil){
+                    
+                    self.playingIndex = visibleIndexPath;
+                    
+                    [cell.galleryView.sharedLayer removeFromSuperlayer];
+                    
+                    cell.galleryView.sharedPlayer = nil;
+                    
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:firstPost.mediaURLString]];
+                    
+                    [cell.galleryView.sharedPlayer setMuted:YES];
+                    
+                    cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
+                    
+                    cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                    
+                    cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
+                    
+                    [cell.galleryView.sharedPlayer play];
+                    
+                    [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                    
+                    //Pulsing Animation for video image, uncomment if wished to be implemented
+                    
+//                    CABasicAnimation *pulseAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+//                    
+//                    pulseAnimation.duration = .4;
+//                    
+//                    pulseAnimation.toValue = [NSNumber numberWithFloat:1.2];
+//                    
+//                    pulseAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//                    
+//                    pulseAnimation.autoreverses = YES;
+//                    
+//                    pulseAnimation.repeatCount = FLT_MAX;
+//                    
+//                    [cell.videoImage.layer addAnimation:pulseAnimation forKey:nil];
+//                    
+//                    [UIView animateWithDuration:0.5
+//                                          delay:1
+//                                        options:UIViewAnimationOptionCurveEaseInOut
+//                                     animations:^{
+//                                         [cell.videoImage setAlpha:0];
+//                                     } completion:^(BOOL finished) {
+//                                         [cell.videoImage.layer removeAllAnimations];
+//                                     }];
+                    
+                }
+                
+            });
+            
+        }
+        
+    }
+    
+    //If the cell doesn't have a video
+    else{
+        
+        //If the player is actually playing
+        if(cell.galleryView.sharedPlayer != nil){
+            
+            //Stop the player from playing
+            
+            _playingIndex = nil;
+            
+            [cell.galleryView.sharedPlayer pause];
+            
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
+            
+        }
+        
+    }
+    
+}
+
+
+
+
 #pragma mark - Segues
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {

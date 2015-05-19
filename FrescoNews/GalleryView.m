@@ -13,12 +13,30 @@
 #import "PostCollectionViewCell.h"
 
 @interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
+
 @end
 
 @implementation GalleryView
+
++ (AVPlayer *)sharedPlayer
+{
+    static AVPlayer *player = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        player = [[AVPlayer alloc] init];
+    });
+    return player;
+}
+
++ (AVPlayerLayer *)sharedLayer
+{
+    static AVPlayerLayer *layer = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        layer = [[AVPlayerLayer alloc] init];
+    });
+    return layer;
+}
 
 - (void)awakeFromNib
 {
@@ -81,6 +99,7 @@
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
     cell.post = [self.gallery.posts objectAtIndex:indexPath.item];
+    cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
 
     return cell;
 }
@@ -107,10 +126,62 @@
 }
 
 #pragma mark - ScrollViewDelegate
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSIndexPath *index = [[self.collectionPosts indexPathsForVisibleItems] lastObject];
+    
     self.pageControl.currentPage = index.item;
+    
+    CGRect visibleRect = (CGRect){.origin = self.collectionPosts.contentOffset, .size = self.collectionPosts.bounds.size};
+    
+    CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
+    
+    NSIndexPath *visibleIndexPath = [self.collectionPosts indexPathForItemAtPoint:visiblePoint];
+    
+    PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
+    
+    //If the cell has a video
+    if([postCell.post isVideo]){
+    
+        [[self sharedPlayer] pause];
+        
+        [[self sharedLayer] removeFromSuperlayer];
+        
+        _sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:postCell.post.mediaURLString]];
+        
+        self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+        
+        self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
+        
+        self.sharedLayer.frame = postCell.imageView.bounds;
+        
+        self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
+        
+        [_sharedPlayer play];
+        
+        [_sharedPlayer setMuted:NO];
+        
+        [postCell.imageView.layer addSublayer:self.sharedLayer];
+        
+    }
+    
+    //If the cell doesn't have a video
+    else{
+        
+        //If the Player is actually playing
+        if([self sharedPlayer] != nil){
+            
+            //Stop the player
+            
+            [[self sharedPlayer] pause];
+            
+            [[self sharedLayer] removeFromSuperlayer];
+            
+        }
+        
+    }
+
 }
 
 @end

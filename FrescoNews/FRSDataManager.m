@@ -12,7 +12,6 @@
 #import "ASIFormDataRequest+Array.h"
 #import <NSArray+F.h>
 
-static NSString * const kAPIBaseURLString = @"http://ec2-52-1-216-0.compute-1.amazonaws.com/";
 static NSString * const kPersistedStoriesFilename = @"stories.frs";
 static NSString * const kPersistedUserFilename = @"user.usr";
 
@@ -52,7 +51,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 - (id)init
 {
-    NSURL *baseURL = [NSURL URLWithString:kAPIBaseURLString];
+    NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseURL];
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         [[self responseSerializer] setAcceptableContentTypes:nil];
     }
@@ -312,12 +311,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
 }
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:@"/api/mobile/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
 }
 
 @end

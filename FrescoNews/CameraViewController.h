@@ -10,4 +10,6 @@
 
 @interface CameraViewController : UIViewController <UINavigationControllerDelegate>
 
+- (void)cancel;
+
 @end
