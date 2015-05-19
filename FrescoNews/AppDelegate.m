@@ -138,7 +138,7 @@
 
 - (void)setupToolbarAppearance
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
 }
