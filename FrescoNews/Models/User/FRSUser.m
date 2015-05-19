@@ -21,18 +21,18 @@
              };
 }
 
-- (NSNumber *)userID
++ (NSString *)loggedInUserId;
 {
-    _userID = [[PFUser currentUser] objectForKey:@"frescoUserId"];
-
-    if (_userID)
-        return _userID;
-
-    // this call is synchronous but it's rare and it's what we want here
-    [[PFUser currentUser] fetch];
-    _userID = [[PFUser currentUser] objectForKey:@"frescoUserId"];
+    static NSString *loggedInUserId = nil;
     
-    return _userID;
+    static dispatch_once_t oncePredicate;
+    
+    dispatch_once(&oncePredicate, ^{
+        [[PFUser currentUser] fetch];
+        loggedInUserId = [[PFUser currentUser] objectForKey:@"frescoUserId"];
+    });
+    
+    return loggedInUserId;
 }
 
 

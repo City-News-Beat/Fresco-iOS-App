@@ -12,6 +12,7 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "FRSUser.h"
 #import "CameraViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
@@ -145,7 +146,7 @@
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
 
-    NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
+    NSDictionary *parameters = @{ @"owner" : [FRSUser loggedInUserId],
                                   @"caption" : self.captionTextView.text,
                                   @"posts" : jsonData };
 

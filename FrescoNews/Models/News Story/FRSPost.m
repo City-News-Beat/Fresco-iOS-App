@@ -46,6 +46,13 @@
     }];
 }
 
+- (BOOL)isVideo
+{
+    return [_type isEqualToString:@"video"] ? YES : NO;
+}
+
+
+
 - (NSURL *)largeImageURL
 {
     return [self.image cdnImageInListURL];

@@ -103,6 +103,8 @@
     return self;
 }
 
+
+
 - (NSString *)caption
 {
     return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
