@@ -8,14 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
-
 @interface FRSUser : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, copy) NSNumber *userID;
-@property (nonatomic, copy) NSString *firstName;
-@property (nonatomic, copy) NSString *surname;
-@property (nonatomic, copy) NSString *username;
-@property (nonatomic, copy) NSString *token;
+@property (nonatomic, copy) NSString *first;
+@property (nonatomic, copy) NSString *last;
+@property (nonatomic, copy) NSString *email;
 
 - (NSString *)displayName;
 
