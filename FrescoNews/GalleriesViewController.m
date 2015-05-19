@@ -112,6 +112,42 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    float scrollViewHeight = scrollView.frame.size.height;
+    float scrollOffset = scrollView.contentOffset.y;
+    
+    /*
+    ** Endless Scroll
+    */
+  
+    //Check if at the end of the scroll view
+    if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height && !_isRunning && [[self galleries] count] > 0){
+        
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        _isRunning = true;
+
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    
+                    [self.galleries addObjectsFromArray:responseObject];
+                    
+                    [self refresh];
+                    
+                    _isRunning = false;
+                    
+                }
+            }
+            [[self tableView] reloadData];
+        }];
+        
+    }
+    
+    /*
+    ** Video Conditioning
+    */
+    
     CGRect visibleRect = (CGRect){.origin = self.tableView.contentOffset, .size = self.tableView.bounds.size};
     
     CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
@@ -216,6 +252,33 @@
     
 }
 
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+    /*
+    ** Endless Scroll
+    */
+
+    CGFloat pageWidth = self.tableView.frame.size.width;
+    
+    NSInteger currentPage = self.tableView.contentOffset.x / pageWidth;
+    
+    if([[self galleries] count] - currentPage < 2  && [[self galleries] count] > 0){
+        
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    [self.galleries addObjectsFromArray:responseObject];
+                    [self refresh];
+                }
+            }
+            [[self tableView] reloadData];
+        }];
+    }
+
+
+}
 
 
 
@@ -235,4 +298,5 @@
         }
     }
 }
+
 @end

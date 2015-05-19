@@ -61,14 +61,14 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:nil responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count]) {
-                self.galleries = responseObject;
-//                self.galleriesViewController.galleries = self.galleries;
-//                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
-//                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
+                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 [self.galleriesViewController refresh];
+                //                self.galleriesViewController.galleries = self.galleries;
+                //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
+                //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
             }
         }
         [self reloadData];
@@ -86,7 +86,7 @@
     if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = self.galleries;
+        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 }

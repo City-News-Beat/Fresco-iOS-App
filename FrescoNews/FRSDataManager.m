@@ -223,6 +223,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 
 #pragma mark - get tags
+
 - (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
     NSString *path = @"frs-query.php";
     
@@ -272,7 +273,9 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
     NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -292,6 +295,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 #pragma mark - Galleries
+
 - (void)getGalleriesAtURLString:(NSString *)urlString WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -310,8 +314,14 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     }];
 }
 
-- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
+    if (offset != nil) {
+        
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
+    }
+    else{
+        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+    }
 }
 
 

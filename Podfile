@@ -1,5 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
+link_with 'Fresco2 WatchKit Extension', 'Fresco2'
 #pod 'CMPopTipView'
 #pod 'Parse'
 #pod 'PBWebViewController'

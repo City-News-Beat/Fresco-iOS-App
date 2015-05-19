@@ -13,5 +13,6 @@
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @interface HomeViewController : FRSBaseViewController
+
 @end
 
