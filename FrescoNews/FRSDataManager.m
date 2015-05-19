@@ -316,7 +316,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:@"/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSUser loggedInUserId]] WithResponseBlock:responseBlock];
 }
 
 @end

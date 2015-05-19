@@ -21,8 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    FRSUser *user = [[FRSUser alloc] init];
-    NSLog(@"USER ID: %@", user.userID);
+    NSString *frescoUserId = [FRSUser loggedInUserId];
     
     [self updateLinkingStatus];
     
