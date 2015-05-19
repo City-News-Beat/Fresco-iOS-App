@@ -146,6 +146,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.view.hidden = NO;
+
     dispatch_async([self sessionQueue], ^{
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
@@ -379,6 +381,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
     picker.title =  @"Choose Media";
+    self.view.hidden = YES;
     [self presentViewController:picker animated:YES completion:nil];
 }
 

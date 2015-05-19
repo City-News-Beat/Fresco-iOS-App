@@ -18,7 +18,7 @@
 @property (nonatomic, copy, readonly) NSNumber *postID;
 @property (nonatomic, strong) FRSUser *user;
 @property (nonatomic, copy, readonly) NSString *source;
-@property (nonatomic, copy, readonly) NSString *type;
+@property (nonatomic, copy) NSString *type;
 @property (nonatomic, strong) FRSImage *image;
 @property (nonatomic, copy, readonly) NSString *mediaURLString;
 //@property (nonatomic, assign) CGSize mediaSize;
