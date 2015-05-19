@@ -297,11 +297,14 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     
     [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
-        }];
-        if(responseBlock)
-            responseBlock(galleries, nil);
+        
+        if ([responseObject objectForKey:@"data"] != [NSNull null]) {
+            NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+            }];
+            if(responseBlock)
+                responseBlock(galleries, nil);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
