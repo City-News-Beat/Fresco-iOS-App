@@ -2129,17 +2129,26 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CxU-na-Xtd">
                                                 <rect key="frame" x="0.0" y="573" width="375" height="58"/>
                                                 <subviews>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="U9s-rE-jxC">
-                                                        <rect key="frame" x="15" y="14" width="249" height="31"/>
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="U9s-rE-jxC">
+                                                        <rect key="frame" x="15" y="14" width="274" height="31"/>
+                                                        <connections>
+                                                            <action selector="valueChanged:" destination="fkO-PC-iRn" eventType="valueChanged" id="FaB-NG-RhI"/>
+                                                        </connections>
                                                     </slider>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 miles" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bcm-cw-UW6">
-                                                        <rect key="frame" x="312" y="18" width="55" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 miles" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bcm-cw-UW6">
+                                                        <rect key="frame" x="295" y="18" width="72" height="21"/>
                                                         <constraints>
+                                                            <constraint firstAttribute="width" secondItem="Bcm-cw-UW6" secondAttribute="height" multiplier="86:21" constant="-14" id="kJy-UY-N8X"/>
                                                             <constraint firstAttribute="width" constant="55" id="ugM-8v-1Bq"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="ugM-8v-1Bq"/>
+                                                            </mask>
+                                                        </variation>
                                                     </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2150,7 +2159,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="Bcm-cw-UW6" secondAttribute="trailing" constant="8" id="OK4-9R-dxp"/>
                                                     <constraint firstItem="U9s-rE-jxC" firstAttribute="centerY" secondItem="CxU-na-Xtd" secondAttribute="centerY" id="f4I-Ju-pJe"/>
                                                     <constraint firstItem="U9s-rE-jxC" firstAttribute="leading" secondItem="CxU-na-Xtd" secondAttribute="leading" constant="17" id="n1X-15-Ogl"/>
-                                                    <constraint firstItem="Bcm-cw-UW6" firstAttribute="leading" secondItem="U9s-rE-jxC" secondAttribute="trailing" constant="50" id="tXd-a2-O05"/>
+                                                    <constraint firstItem="Bcm-cw-UW6" firstAttribute="leading" secondItem="U9s-rE-jxC" secondAttribute="trailing" constant="8" id="tXd-a2-O05"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ASSIGNMENT NOTIFICATIONS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uA6-wt-D8J">
@@ -2338,6 +2347,8 @@
                     <connections>
                         <outlet property="connectFacebookButton" destination="bbh-OR-5Lb" id="BNX-La-u9e"/>
                         <outlet property="connectTwitterButton" destination="UCq-t6-lmB" id="eF5-W9-fTU"/>
+                        <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
+                        <outlet property="radiusStepperLabel" destination="Bcm-cw-UW6" id="ncR-tA-4na"/>
                         <outlet property="scrollView" destination="xHX-Av-OJh" id="ieX-b7-EzZ"/>
                     </connections>
                 </viewController>
