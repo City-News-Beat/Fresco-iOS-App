@@ -7,32 +7,44 @@
 //
 
 #import "FRSUser.h"
+#import <Parse/Parse.h>
 
 @implementation FRSUser
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"userID" : @"user_id",
-             @"firstName" : @"firstname",
-             @"surname" : @"surname",
-             @"username" : @"username",
-             @"token" : @"access_token"
+             @"first" : @"first",
+             @"last" : @"last",
+             @"email" : @"email",
+             @"userID" : @"userid"
              };
 }
 
-- (NSString *)username
++ (NSString *)loggedInUserId;
 {
-    return [_username length] ? _username : NSLocalizedString(@"Anonymous User", nil);
+#warning Need to add logout support
+    static NSString *loggedInUserId = nil;
+    
+    static dispatch_once_t oncePredicate;
+    
+    dispatch_once(&oncePredicate, ^{
+        [[PFUser currentUser] fetch];
+        loggedInUserId = [[PFUser currentUser] objectForKey:@"frescoUserId"];
+    });
+    
+    return loggedInUserId;
 }
+
 
 - (NSString *)displayName
 {
-    if ([[self firstName] length] && [[self surname] length]) {
-        return [NSString stringWithFormat:@"%@ %@", [self firstName], [self surname]];
+    if ([[self first] length] && [[self last] length]) {
+        return [NSString stringWithFormat:@"%@ %@", [self first], [self last]];
     }
+    // this shouldn't happen
     else {
-        return [self username];
+        return @"No display name";
     }
 }
 

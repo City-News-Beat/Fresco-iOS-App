@@ -73,12 +73,25 @@
         image.height = @1; // ?
         image.width = @1; // ?
         post.image = image;
-        
+
+        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
+        if ([assetType isEqualToString:ALAssetTypePhoto]) {
+            post.type = @"photo";
+        }
+        else if ([assetType isEqualToString:ALAssetTypeVideo]) {
+            post.type = @"video";
+        }
+        else {
+            NSLog(@"Skipping - cannot determine asset type");
+            continue;
+        }
+
         if ([asset valueForProperty:ALAssetPropertyLocation]) {
             [posts addObject:post];
         }
         else {
             NSLog(@"Skipping - no location information available");
+            continue;
         }
     }
     
@@ -89,6 +102,8 @@
     _posts = posts;
     return self;
 }
+
+
 
 - (NSString *)caption
 {

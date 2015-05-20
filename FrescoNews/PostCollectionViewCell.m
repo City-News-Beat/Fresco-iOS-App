@@ -14,9 +14,6 @@
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
-@interface PostCollectionViewCell ()
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@end
 
 @implementation PostCollectionViewCell
 + (NSString *)identifier

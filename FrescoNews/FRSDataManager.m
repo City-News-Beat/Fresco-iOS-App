@@ -297,11 +297,14 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     
     [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
-        }];
-        if(responseBlock)
-            responseBlock(galleries, nil);
+        
+        if ([responseObject objectForKey:@"data"] != [NSNull null]) {
+            NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+            }];
+            if(responseBlock)
+                responseBlock(galleries, nil);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -311,12 +314,12 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString:@"/api/mobile/highlights/latest" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
 }
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:@"/api/mobile/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSUser loggedInUserId]] WithResponseBlock:responseBlock];
 }
 
 @end
