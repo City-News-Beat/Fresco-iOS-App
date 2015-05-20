@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -106,6 +107,8 @@
 {
     button.selected = !button.selected;
 }
+
+- (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
 
 #pragma mark - Toolbar Items
 

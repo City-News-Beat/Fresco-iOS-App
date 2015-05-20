@@ -1209,17 +1209,29 @@
                                         <rect key="frame" x="0.0" y="450" width="600" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Taken for Painting at Heart Castle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfG-Ph-Nex" userLabel="Assignment Label">
-                                                <rect key="frame" x="13" y="12" width="202" height="16"/>
+                                                <rect key="frame" x="13" y="12" width="553" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pLQ-De-2bK">
+                                                <rect key="frame" x="576" y="9" width="14" height="22"/>
+                                                <state key="normal" image="delete-small-white">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="unlinkAssignmentButtonTapped:" destination="mwE-c4-cjL" eventType="touchUpInside" id="8Ag-QU-p1s"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.35686274509803922" green="0.53333333333333333" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="IfG-Ph-Nex" firstAttribute="leading" secondItem="z9B-52-gor" secondAttribute="leading" constant="13" id="46Z-83-o2V">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="14"/>
                                             </constraint>
+                                            <constraint firstAttribute="trailing" secondItem="pLQ-De-2bK" secondAttribute="trailing" constant="10" id="5So-AJ-fxr"/>
+                                            <constraint firstItem="pLQ-De-2bK" firstAttribute="leading" secondItem="IfG-Ph-Nex" secondAttribute="trailing" constant="10" id="WN1-hK-2lm"/>
+                                            <constraint firstAttribute="centerY" secondItem="pLQ-De-2bK" secondAttribute="centerY" id="cDn-XH-EFy"/>
                                             <constraint firstAttribute="centerY" secondItem="IfG-Ph-Nex" secondAttribute="centerY" id="jIx-FI-rA9"/>
                                             <constraint firstAttribute="height" constant="40" id="z4t-Mr-9U9"/>
                                         </constraints>
@@ -1316,6 +1328,7 @@
                         <outlet property="twitterButton" destination="OjM-5h-pYD" id="yfS-nW-mcy"/>
                         <outlet property="twitterHeightConstraint" destination="Wn7-tw-5FY" id="AdR-pO-gIr"/>
                         <outlet property="twitterVerticalConstraint" destination="Fvh-v5-prC" id="aCe-lG-4ia"/>
+                        <outlet property="unlinkAssignmentButton" destination="pLQ-De-2bK" id="4fJ-Yy-bsE"/>
                         <outlet property="uploadProgressView" destination="TcS-bd-gWs" id="BCu-PY-yYI"/>
                     </connections>
                 </viewController>
@@ -3473,6 +3486,7 @@
         <image name="backCaret" width="25" height="41"/>
         <image name="camera-shutter-icon" width="121" height="121"/>
         <image name="cameraOnIcon" width="96" height="96"/>
+        <image name="delete-small-white" width="14" height="14"/>
         <image name="facebook" width="40" height="40"/>
         <image name="facebookButtonSmall" width="167" height="46"/>
         <image name="flash-off" width="10" height="20"/>
