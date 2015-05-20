@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import "FRSDataManager.h"
+#import <NSArray+F.h>
+#import <Parse/Parse.h>
 #import <ASIHTTPRequest/ASIFormDataRequest.h>
+#import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
 #import "ASIFormDataRequest+Array.h"
-#import <NSArray+F.h>
 
-static NSString * const kPersistedStoriesFilename = @"stories.frs";
-static NSString * const kPersistedUserFilename = @"user.usr";
+#define kFrescoUserIdKey @"frescoUserId"
 
 @interface FRSDataManager () {
     @protected
@@ -23,7 +23,6 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
 
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
-+ (NSString *)userPath;
 
 @end
 
@@ -59,53 +58,80 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 
-#pragma - login
+#pragma - User State
 
-+ (NSString *)userPath
+- (void)currentUserFromParseUser
 {
-    return [[NSFileManager libraryDirectoryPath] stringByAppendingPathComponent:kPersistedUserFilename];
-}
-
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock
-{
-    NSString *path = @"frs-login.php";
-    NSDictionary *params = @{@"username": username, @"password" : password};
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject error:NULL];
-        [self setCurrentUser:user];
-        if (responseBlock) responseBlock(user, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (responseBlock) responseBlock(nil, error);
-    }];
+    // make a blank user
+    self.currentUser = [[FRSUser alloc] init];
+    
+    // user is logged into parse
+    if ([PFUser currentUser]) {
+        NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+        
+        // but user isn't sync'd
+        if (!userId || [userId length] == 0) {
+            [[PFUser currentUser] fetch];
+            userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+            
+            // or doesn't exist at all make one asynchronously
+            if (!userId || [userId length] == 0) {
+                [self createFrescoUser:^(id responseObject, NSError *error) {
+                    FRSUser *frsUser = responseObject;
+                    _currentUser = frsUser;
+                    
+                    // send data back to Parse
+                    [[PFUser currentUser] setObject:_currentUser.userID forKey:kFrescoUserIdKey];
+                    [[PFUser currentUser] save];
+                }];
+            }
+            // this is synchronous
+            else
+                self.currentUser.userID = userId;
+        }
+        else
+            self.currentUser.userID = userId;
+    }
 }
 
 - (void)setCurrentUser:(FRSUser *)currentUser
 {
-    if (_currentUser != currentUser) {
-        NSString *userPath = [[self class] userPath];
-        if (currentUser) {
-            _currentUser = currentUser;
-            [NSKeyedArchiver archiveRootObject:_currentUser toFile:userPath];
-        }
-        else {
-            _currentUser = nil;
-            [[NSFileManager defaultManager] removeItemAtPath:userPath error:NULL];
-        }
+    if (currentUser)
+        _currentUser = currentUser;
+    // log out
+    else {
+        _currentUser = nil;
+        [PFUser logOutInBackground];
     }
 }
 
 - (FRSUser *)currentUser
 {
-    if (!_currentUser) {
-        NSString *userPath = [[self class] userPath];
-        _currentUser = [NSKeyedUnarchiver unarchiveObjectWithFile:userPath];
-    }
+    // see if we can bootstrap the user from Parse
+    if (!_currentUser)
+       [self currentUserFromParseUser];
+
     return _currentUser;
 }
 
 - (void)logout
 {
     [self setCurrentUser:nil];
+}
+
+- (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock{
+    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
+    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+    
+    [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           if (responseBlock) responseBlock(user, nil);
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
 }
 
 #pragma mark - posts
@@ -319,7 +345,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSUser loggedInUserId]] WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
 
 @end

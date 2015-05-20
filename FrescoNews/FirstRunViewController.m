@@ -7,6 +7,7 @@
 //
 
 #import "FirstRunViewController.h"
+#import "FRSDataManager.h"
 
 
 @interface FirstRunViewController ()
@@ -106,18 +107,18 @@
     NSUInteger regExMatches = [regEx numberOfMatchesInString:self.emailField.text options:0 range:NSMakeRange(0, [self.emailField.text length])];
     
     if ([self.emailField.text length]!=0 && regExMatches!=0) { // Run Log In Method
-    
         [PFUser logInWithUsernameInBackground:[self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] password:self.passwordField.text
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
-                                            // Do stuff after successful login.
-                                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're logged in now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
-                                            [alert addButtonWithTitle:@"GOO"];
-                                            [alert show];
                                             
-                                            [self.navigationController popViewControllerAnimated:YES];
+                                            //TODO: set the current user and pfuser in datamanager
+                                            // very first time the user needs to get a Fresco Id
+                                            NSLog(@"user : %@", user);
+                                            NSLog(@"cache: %@", [PFUser currentUser]);
+                                            
+                                           [self.navigationController popViewControllerAnimated:YES];
                                         } else {
-                                            // The login failed. Check error to see why.
+                                            NSLog(@"Login failed : %@", error);
                                         }
                                     }];
     } else { // Show error state
@@ -176,8 +177,10 @@
 - (IBAction)facebookLogin:(id)sender {
     [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ] block:^(PFUser *user, NSError *error) {
         if (!user) {
+
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
         } else {
+            [[FRSDataManager sharedManager] currentUserFromParseUser];
             NSLog(@"User now has publish permissions!");
         }
     }];

@@ -25,8 +25,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *frescoUserId = [FRSUser loggedInUserId];
-    
     [self updateLinkingStatus];
     
     // Radius slider values

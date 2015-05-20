@@ -15,7 +15,7 @@
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
 
-+ (NSString *)loggedInUserId;
+//+ (NSString *)loggedInUserId;
 
 - (NSString *)displayName;
 

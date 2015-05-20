@@ -25,7 +25,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)currentUserFromParseUser;
 
 - (void)logout;
 
@@ -39,9 +39,10 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-# warning for video
 - (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end
