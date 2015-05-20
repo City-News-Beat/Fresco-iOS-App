@@ -37,6 +37,12 @@
     [self setupButtons];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:@"Taken for Painting at Heart Castle"];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                    range:NSMakeRange(10, [string length] - 10)];
+    self.assignmentLabel.attributedText = string;
+
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 }
