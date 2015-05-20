@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "stories-toolbar-stroke.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "stories-toolbar-stroke@2x.png"
+      "filename" : "tab-stories@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "stories-toolbar-stroke@3x.png"
+      "filename" : "tab-stories@3x.png"
     }
   ],
   "info" : {

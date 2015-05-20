@@ -112,7 +112,7 @@
     for (UITabBarItem *item in tabBar.items) {
         if (i == 4) {
             if (!currentUser) {
-                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
                 item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
                 item.title = @"Following";
             } else {
