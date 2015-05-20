@@ -606,8 +606,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
-    // Allow up to 10 assets to be picked
-    return picker.selectedAssets.count < 10;
+    return picker.selectedAssets.count < 5;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset

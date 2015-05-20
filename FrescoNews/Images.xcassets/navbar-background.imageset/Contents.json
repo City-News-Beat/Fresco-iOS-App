@@ -7,12 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "gradient-menubar@2x.png"
+      "filename" : "menubar@iphone6.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "gradient-menubar@3x.png"
+      "filename" : "menubar@iphone6plus.png"
     }
   ],
   "info" : {
