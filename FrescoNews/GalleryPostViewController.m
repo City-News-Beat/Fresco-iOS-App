@@ -236,6 +236,13 @@
 
 #pragma mark - UITextViewDelegate methods
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"What's happening?"]) {
+        textView.text = @"";
+    }
+}
+
 // temporary ("return" to dismiss keyboard)
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
