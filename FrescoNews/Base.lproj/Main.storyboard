@@ -3470,9 +3470,9 @@
         <image name="cameraOnIcon" width="96" height="96"/>
         <image name="facebook" width="40" height="40"/>
         <image name="facebookButtonSmall" width="167" height="46"/>
-        <image name="flash-off" width="12" height="21"/>
-        <image name="flash-on" width="12" height="21"/>
-        <image name="largeLogo" width="408" height="146"/>
+        <image name="flash-off" width="10" height="20"/>
+        <image name="flash-on" width="10" height="20"/>
+        <image name="largeLogo" width="204" height="71"/>
         <image name="lewisCarolPlaceholder" width="192" height="192"/>
         <image name="liveOff" width="85" height="44"/>
         <image name="locationOffIcon" width="96" height="96"/>
