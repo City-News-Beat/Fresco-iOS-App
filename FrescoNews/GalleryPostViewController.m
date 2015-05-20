@@ -28,8 +28,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @end
 
-// TODO: On success, redirect user back to original tab
-
 @implementation GalleryPostViewController
 
 - (void)viewDidLoad
