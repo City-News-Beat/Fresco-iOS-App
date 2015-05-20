@@ -1208,7 +1208,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z9B-52-gor" userLabel="Assignment View">
                                         <rect key="frame" x="0.0" y="450" width="600" height="40"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Taken for Painting at Heart Castle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfG-Ph-Nex" userLabel="Assignment Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Taken for Painting at Heart Castle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfG-Ph-Nex" userLabel="Assignment Label">
                                                 <rect key="frame" x="0.0" y="-514" width="217" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1217,8 +1217,24 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.35686274509803922" green="0.53333333333333333" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstItem="IfG-Ph-Nex" firstAttribute="leading" secondItem="z9B-52-gor" secondAttribute="leading" constant="192" id="46Z-83-o2V">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="14"/>
+                                            </constraint>
+                                            <constraint firstAttribute="centerY" secondItem="IfG-Ph-Nex" secondAttribute="centerY" id="jIx-FI-rA9"/>
                                             <constraint firstAttribute="height" constant="40" id="z4t-Mr-9U9"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="46Z-83-o2V"/>
+                                                <exclude reference="jIx-FI-rA9"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="46Z-83-o2V"/>
+                                                <include reference="jIx-FI-rA9"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="Y8g-aN-JKf" userLabel="Caption Text View">
                                         <rect key="frame" x="0.0" y="491" width="600" height="139"/>
@@ -1227,10 +1243,10 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="TcS-bd-gWs" userLabel="Progress View">
+                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="TcS-bd-gWs" userLabel="Progress View">
                                         <rect key="frame" x="0.0" y="860" width="600" height="3"/>
                                     </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OjM-5h-pYD" userLabel="Twitter Button">
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OjM-5h-pYD" userLabel="Twitter Button">
                                         <rect key="frame" x="0.0" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.32549019607843138" green="0.68235294117647061" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -1245,7 +1261,7 @@
                                             <action selector="twitterButtonTapped:" destination="mwE-c4-cjL" eventType="touchUpInside" id="CD6-AH-R7z"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9k-qQ-QHN" userLabel="Facebook Button">
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9k-qQ-QHN" userLabel="Facebook Button">
                                         <rect key="frame" x="300" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.5725490196078431" green="0.63921568627450975" blue="0.75686274509803919" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
@@ -1317,6 +1333,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="1000"/>
                     <connections>
+                        <outlet property="assignmentLabel" destination="IfG-Ph-Nex" id="5xQ-DF-IaI"/>
                         <outlet property="bottomVerticalSpaceConstraint" destination="g1f-oF-uoo" id="jpU-dR-Ca5"/>
                         <outlet property="captionTextView" destination="Y8g-aN-JKf" id="pz6-bp-bMA"/>
                         <outlet property="facebookButton" destination="g9k-qQ-QHN" id="SsH-fg-LyK"/>
