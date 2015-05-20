@@ -169,6 +169,7 @@
     self.location = [locations lastObject];
 
     if (![FRSUser loggedInUserId]) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
         return;
     }
 
