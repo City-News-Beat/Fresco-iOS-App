@@ -1230,7 +1230,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="TcS-bd-gWs" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="890" width="600" height="3"/>
+                                        <rect key="frame" x="0.0" y="860" width="600" height="3"/>
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OjM-5h-pYD" userLabel="Twitter Button">
                                         <rect key="frame" x="0.0" y="862" width="300" height="30"/>
@@ -1238,22 +1238,31 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="Wn7-tw-5FY"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                         <state key="normal" title="Twitter">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="twitterButtonTapped:" destination="mwE-c4-cjL" eventType="touchUpInside" id="CD6-AH-R7z"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9k-qQ-QHN" userLabel="Facebook Button">
                                         <rect key="frame" x="300" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.5725490196078431" green="0.63921568627450975" blue="0.75686274509803919" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                         <state key="normal" title="Facebook">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="facebookButtonTapped:" destination="mwE-c4-cjL" eventType="touchUpInside" id="ru0-2l-yY4"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="TcS-bd-gWs" firstAttribute="top" secondItem="OjM-5h-pYD" secondAttribute="top" constant="-2" id="2XG-rE-4U5"/>
                                     <constraint firstAttribute="trailing" secondItem="z9B-52-gor" secondAttribute="trailing" id="KGT-xk-a6f"/>
                                     <constraint firstItem="FE4-RF-zhQ" firstAttribute="top" secondItem="Tmj-hB-Hh9" secondAttribute="top" id="Mh4-TR-7Xg"/>
                                     <constraint firstAttribute="trailing" secondItem="g9k-qQ-QHN" secondAttribute="trailing" id="Rx0-iZ-pfA"/>
@@ -1285,21 +1294,9 @@
                             <constraint firstItem="Tmj-hB-Hh9" firstAttribute="top" secondItem="0Gu-MF-Y2s" secondAttribute="bottom" id="aaM-MG-fIQ"/>
                             <constraint firstItem="O6G-p2-711" firstAttribute="top" secondItem="Tmj-hB-Hh9" secondAttribute="bottom" id="g1f-oF-uoo"/>
                             <constraint firstItem="Tmj-hB-Hh9" firstAttribute="leading" secondItem="NXN-BT-ZYH" secondAttribute="leading" id="gAg-td-ow9"/>
-                            <constraint firstItem="O6G-p2-711" firstAttribute="top" secondItem="TcS-bd-gWs" secondAttribute="bottom" id="lEA-bS-YFy"/>
-                            <constraint firstItem="Tmj-hB-Hh9" firstAttribute="top" secondItem="NXN-BT-ZYH" secondAttribute="top" id="trW-Jb-RnG"/>
                             <constraint firstItem="O6G-p2-711" firstAttribute="top" secondItem="g9k-qQ-QHN" secondAttribute="bottom" id="v9T-7g-gtg"/>
                             <constraint firstAttribute="trailing" secondItem="Tmj-hB-Hh9" secondAttribute="trailing" id="xWK-Aj-OP6"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="trW-Jb-RnG"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=compact">
-                            <mask key="constraints">
-                                <exclude reference="trW-Jb-RnG"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
