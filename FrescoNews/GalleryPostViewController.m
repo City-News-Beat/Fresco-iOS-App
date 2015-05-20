@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @end
 
 // TODO: On success, redirect user back to original tab
@@ -245,10 +246,9 @@
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height;
+                            CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             CGRect frame = self.navigationController.toolbar.frame;
 
-                            height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 height *= -1;
                                 frame.origin.y += height;
@@ -262,7 +262,7 @@
 
                             self.topVerticalSpaceConstraint.constant = height;
                             self.bottomVerticalSpaceConstraint.constant = height;
-
+                            self.twitterVerticalConstraint.constant = -2 * height;
                             [self.view layoutIfNeeded];
     } completion:nil];
 }
