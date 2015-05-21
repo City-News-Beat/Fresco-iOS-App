@@ -14,6 +14,8 @@
 #import "FRSImage.h"
 #import "FRSUser.h"
 #import "CameraViewController.h"
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -101,12 +103,32 @@
 
 - (IBAction)twitterButtonTapped:(UIButton *)button
 {
-    button.selected = !button.selected;
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
+                                                        message:@"Go to Profile to link your Fresco account to Twitter"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else {
+        button.selected = !button.selected;
+    }
 }
 
 - (IBAction)facebookButtonTapped:(UIButton *)button
 {
-    button.selected = !button.selected;
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
+                                                        message:@"Go to Profile to link your Fresco account to Facebook"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else {
+        button.selected = !button.selected;
+    }
 }
 
 - (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
