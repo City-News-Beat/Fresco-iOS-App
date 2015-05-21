@@ -485,9 +485,6 @@
                                         <exclude reference="usM-jV-I2g"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="FGc-6A-eaK"/>
-                                        <exclude reference="MXs-k7-2nz"/>
-                                        <exclude reference="rBo-Cn-zN7"/>
                                         <exclude reference="co0-oQ-Wml"/>
                                         <exclude reference="ikM-mS-D0x"/>
                                         <exclude reference="z8j-mo-OOx"/>
@@ -495,6 +492,9 @@
                                         <exclude reference="TYR-40-dND"/>
                                         <exclude reference="gZA-NY-4Ic"/>
                                         <exclude reference="pCn-Jr-8Hf"/>
+                                        <exclude reference="FGc-6A-eaK"/>
+                                        <exclude reference="MXs-k7-2nz"/>
+                                        <exclude reference="rBo-Cn-zN7"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -504,9 +504,6 @@
                                         <include reference="usM-jV-I2g"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="FGc-6A-eaK"/>
-                                        <include reference="MXs-k7-2nz"/>
-                                        <include reference="rBo-Cn-zN7"/>
                                         <include reference="co0-oQ-Wml"/>
                                         <include reference="ikM-mS-D0x"/>
                                         <include reference="z8j-mo-OOx"/>
@@ -514,6 +511,9 @@
                                         <include reference="TYR-40-dND"/>
                                         <include reference="gZA-NY-4Ic"/>
                                         <include reference="pCn-Jr-8Hf"/>
+                                        <include reference="FGc-6A-eaK"/>
+                                        <include reference="MXs-k7-2nz"/>
+                                        <include reference="rBo-Cn-zN7"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -3495,23 +3495,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jma-gk-3Ha" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1474.5" y="4489.5"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="hNj-nL-JGx">
-            <objects>
-                <viewController id="ydK-K2-E2f" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="KAM-IE-2Ku"/>
-                        <viewControllerLayoutGuide type="bottom" id="P1d-69-Lau"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="auf-jc-pBv">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HyF-uX-1Gr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
