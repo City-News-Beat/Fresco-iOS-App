@@ -21,6 +21,21 @@
              };
 }
 
++ (NSString *)loggedInUserId;
+{
+#warning Need to add logout support
+    static NSString *loggedInUserId = nil;
+    
+    static dispatch_once_t oncePredicate;
+    
+    dispatch_once(&oncePredicate, ^{
+        [[PFUser currentUser] fetch];
+        loggedInUserId = [[PFUser currentUser] objectForKey:@"frescoUserId"];
+    });
+    
+    return loggedInUserId;
+}
+
 - (NSString *)displayName
 {
     if ([[self first] length] && [[self last] length]) {
