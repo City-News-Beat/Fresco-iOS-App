@@ -21,7 +21,7 @@
              };
 }
 
-+ (NSString *)loggedInUserId;
++ (NSString *)loggedInUserId
 {
 #warning Need to add logout support
     static NSString *loggedInUserId = nil;
