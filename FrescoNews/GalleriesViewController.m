@@ -19,16 +19,11 @@
 #import "GalleryView.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
+#import <UIScrollView+SVPullToRefresh.h>
+#import <UIScrollView+SVInfiniteScrolling.h>
 
-@interface GalleriesViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
-
-@end
 
 @implementation GalleriesViewController
-
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -51,12 +46,49 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
+    
+    //Pull to refresh handler
+    [self.tableView addPullToRefreshWithActionHandler:^{
+        // prepend data to dataSource, insert cells at top of table view
+        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+        
+        [self.tableView.pullToRefreshView stopAnimating];
+    }];
+    
+    //Endless scroll handler
+    [self.tableView addInfiniteScrollingWithActionHandler:^{
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        _isRunning = true;
+        
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    
+                    [self.galleries addObjectsFromArray:responseObject];
+                    
+                    [self refresh];
+                    
+                    _isRunning = false;
+                    
+                }
+            }
+            [[self tableView] reloadData];
+        }];
+
+        [self.tableView.infiniteScrollingView stopAnimating];
+        
+    }];
+    
 }
 
 - (void)refresh
@@ -65,6 +97,8 @@
 }
 
 #pragma mark - UITableViewDataSource
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.galleries count];
@@ -115,34 +149,7 @@
     float scrollViewHeight = scrollView.frame.size.height;
     float scrollOffset = scrollView.contentOffset.y;
     
-    /*
-    ** Endless Scroll
-    */
-  
-    //Check if at the end of the scroll view
-    if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height && !_isRunning && [[self galleries] count] > 0){
-        
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
-        
-        _isRunning = true;
 
-        //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    
-                    [self.galleries addObjectsFromArray:responseObject];
-                    
-                    [self refresh];
-                    
-                    _isRunning = false;
-                    
-                }
-            }
-            [[self tableView] reloadData];
-        }];
-        
-    }
     
     /*
     ** Video Conditioning
@@ -164,7 +171,7 @@
         // Video indicator, uncomment when added to cell
         //[cell.videoImage setAlpha:1];
         
-        //If the video current playing isn't this one, or no video has palyed yet
+        //If the video current playing isn't this one, or no video has played yet
         if((_playingIndex.row != visibleIndexPath.row || _playingIndex == nil)){
             
             cell.galleryView.sharedPlayer = nil;
@@ -251,35 +258,6 @@
     }
     
 }
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
-    /*
-    ** Endless Scroll
-    */
-
-    CGFloat pageWidth = self.tableView.frame.size.width;
-    
-    NSInteger currentPage = self.tableView.contentOffset.x / pageWidth;
-    
-    if([[self galleries] count] - currentPage < 2  && [[self galleries] count] > 0){
-        
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
-        
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    [self.galleries addObjectsFromArray:responseObject];
-                    [self refresh];
-                }
-            }
-            [[self tableView] reloadData];
-        }];
-    }
-
-
-}
-
 
 
 #pragma mark - Segues
