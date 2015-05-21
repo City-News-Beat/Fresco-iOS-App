@@ -866,6 +866,7 @@
 				1EDA44AE1AA4CCC70082E08D /* Resources */,
 				BCA811ECB60B44FE48F07483 /* Copy Pods Resources */,
 				E71F0E561B0B936200186BAD /* Embed App Extensions */,
+				1EDF047A1B0E7E5800B35858 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1035,6 +1036,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1EDF047A1B0E7E5800B35858 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf ~/Library/Developer/Xcode/DerivedData/FrescoNews-*/Build/Products/Debug-iphoneos/*.appex/\n";
+		};
 		63CF859EF88AE3997746D05F /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
