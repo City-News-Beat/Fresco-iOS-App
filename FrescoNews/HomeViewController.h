@@ -13,5 +13,8 @@
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @interface HomeViewController : FRSBaseViewController
+
+- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
+
 @end
 

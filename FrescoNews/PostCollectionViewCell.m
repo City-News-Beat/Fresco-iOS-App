@@ -21,6 +21,11 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     return kCellIdentifier;
 }
 
+-(void)prepareForReuse{
+    [[self imageView] setImage:nil];
+    [[self imageView] cancelImageRequestOperation];
+}
+
 - (void)setPost:(FRSPost *)post
 {
     _post = post;

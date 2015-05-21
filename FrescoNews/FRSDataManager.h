@@ -39,7 +39,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
