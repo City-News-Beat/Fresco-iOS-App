@@ -10,6 +10,9 @@
 #import "FRSBaseViewController.h"
 
 @class GalleryView, FRSStory;
+
 @interface StoryViewController : FRSBaseViewController
+
 @property (weak, nonatomic) FRSStory *story;
+
 @end

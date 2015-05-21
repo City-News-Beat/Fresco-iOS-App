@@ -14,7 +14,9 @@
 
 @interface StoryViewController ()
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
+
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+
 @end
 
 @implementation StoryViewController
@@ -52,7 +54,7 @@
     if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = self.story.galleries;
+        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 }
