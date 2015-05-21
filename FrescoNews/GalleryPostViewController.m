@@ -66,6 +66,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
