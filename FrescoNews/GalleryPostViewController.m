@@ -19,6 +19,8 @@
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
+@property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -26,9 +28,8 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @end
-
-// TODO: On success, redirect user back to original tab
 
 @implementation GalleryPostViewController
 
@@ -38,6 +39,12 @@
     [self setupButtons];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:@"Taken for Painting at Heart Castle"];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                    range:NSMakeRange(10, [string length] - 10)];
+    self.assignmentLabel.attributedText = string;
+
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 }
@@ -101,6 +108,8 @@
 {
     button.selected = !button.selected;
 }
+
+- (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
 
 #pragma mark - Toolbar Items
 
@@ -228,7 +237,13 @@
 
 #pragma mark - UITextViewDelegate methods
 
-// temporary ("return" to dismiss keyboard)
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"What's happening?"]) {
+        textView.text = @"";
+    }
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
@@ -246,10 +261,9 @@
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height;
+                            CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             CGRect frame = self.navigationController.toolbar.frame;
 
-                            height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 height *= -1;
                                 frame.origin.y += height;
@@ -263,7 +277,7 @@
 
                             self.topVerticalSpaceConstraint.constant = height;
                             self.bottomVerticalSpaceConstraint.constant = height;
-
+                            self.twitterVerticalConstraint.constant = -2 * height;
                             [self.view layoutIfNeeded];
     } completion:nil];
 }

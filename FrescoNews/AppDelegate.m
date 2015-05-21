@@ -190,6 +190,7 @@
     self.location = [locations lastObject];
 
     if (![FRSDataManager sharedManager].currentUser.userID) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
         return;
     }
 
