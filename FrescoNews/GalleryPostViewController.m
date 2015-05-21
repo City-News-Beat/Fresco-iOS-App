@@ -110,10 +110,28 @@
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
+        return;
     }
-    else {
-        button.selected = !button.selected;
-    }
+
+    button.selected = !button.selected;
+
+    NSString *bodyString = @"status=this is a test with spaces";
+    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    [[PFTwitterUtils twitter] signRequest:tweetRequest];
+
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"Error: %@", connectionError);
+        }
+        else {
+            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+    }];
 }
 
 - (IBAction)facebookButtonTapped:(UIButton *)button
