@@ -43,8 +43,28 @@
                                consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
     
     [self setupAppearances];
-        
+    
+    // this is where we determine whether to run the firstRun sequence
+    [self loadInitialViewController];
+    
     return YES;
+}
+
+- (void)loadInitialViewController
+{
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+    
+    if ([FRSDataManager sharedManager].currentUser.userID)
+        viewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"];
+
+    self.window.rootViewController = viewController;
+    [self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
