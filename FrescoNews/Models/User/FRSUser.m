@@ -23,6 +23,7 @@
 
 + (NSString *)loggedInUserId;
 {
+#warning Need to add logout support
     static NSString *loggedInUserId = nil;
     
     static dispatch_once_t oncePredicate;
