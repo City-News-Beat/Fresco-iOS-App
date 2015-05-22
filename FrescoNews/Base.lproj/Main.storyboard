@@ -254,8 +254,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="164" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="0Xi-lz-kA9">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="164" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="0Xi-lz-kA9">
+                                <rect key="frame" x="0.0" y="-40" width="600" height="640"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="assignmentCell" textLabel="Bmp-Yo-aFJ" rowHeight="141" style="IBUITableViewCellStyleDefault" id="090-ao-CzZ" customClass="AssignmentNotificationCell">
@@ -305,10 +305,13 @@
                                                                 </mask>
                                                             </variation>
                                                         </label>
-                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Assignment body content" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzj-wV-KbU">
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Assignment body content" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzj-wV-KbU">
                                                             <rect key="frame" x="55" y="49" width="537" height="18"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="18O-BR-spY"/>
+                                                                <constraint firstAttribute="width" secondItem="Xzj-wV-KbU" secondAttribute="height" multiplier="179:6" id="aA3-hN-jem"/>
+                                                                <constraint firstAttribute="width" constant="537" id="aU2-Nd-ZaW"/>
+                                                                <constraint firstAttribute="width" constant="537" id="kgM-88-ouS"/>
                                                                 <constraint firstAttribute="height" constant="36" id="rtb-Ml-oA4"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -317,6 +320,8 @@
                                                             <variation key="default">
                                                                 <mask key="constraints">
                                                                     <exclude reference="18O-BR-spY"/>
+                                                                    <exclude reference="aA3-hN-jem"/>
+                                                                    <exclude reference="aU2-Nd-ZaW"/>
                                                                     <exclude reference="rtb-Ml-oA4"/>
                                                                 </mask>
                                                             </variation>
@@ -451,6 +456,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0Xi-lz-kA9" firstAttribute="leading" secondItem="ZPq-RN-D5o" secondAttribute="leading" id="2Bw-3A-P4a"/>
+                            <constraint firstAttribute="trailing" secondItem="0Xi-lz-kA9" secondAttribute="trailing" id="fXW-np-Jzr"/>
+                            <constraint firstItem="0Xi-lz-kA9" firstAttribute="top" secondItem="ggo-PN-f9N" secondAttribute="bottom" constant="-40" id="g0V-zr-IxY"/>
+                            <constraint firstItem="9cW-Gt-aoZ" firstAttribute="top" secondItem="0Xi-lz-kA9" secondAttribute="bottom" constant="-113" id="x9y-K5-qw3"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="tableView" destination="0Xi-lz-kA9" id="YgK-GQ-R1c"/>
