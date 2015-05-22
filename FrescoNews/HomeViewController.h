@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 #import "FRSBaseViewController.h"
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @interface HomeViewController : FRSBaseViewController
+
+- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
+
 @end
 

@@ -11,11 +11,9 @@
 #import <Mantle/Mantle.h>
 
 @interface MTLModel (Additions)
-+ (NSDateFormatter *)sharedFormatter;
 
 // transformers to be used directly or by reference
 // in same-typed fields
-+ (NSValueTransformer *)tagsJSONTransformer;
 + (NSValueTransformer *)postsJSONTransformer;
 + (NSValueTransformer *)sourcesJSONTransformer;
 + (NSValueTransformer *)imageJSONTransformer;

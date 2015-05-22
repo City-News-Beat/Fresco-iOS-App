@@ -7,7 +7,6 @@
 //
 
 #import "MTLModel+Additions.h"
-#import "NSDate+RelativeDate.h"
 #import "FRSTag.h"
 #import "FRSTradionalSource.h"
 #import "FRSUser.h"
@@ -17,26 +16,8 @@
 
 @implementation MTLModel (Additions)
 
-+ (NSDateFormatter *)sharedFormatter
-{
-    static NSDateFormatter *sharedFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedFormatter = [[NSDateFormatter alloc] init];
-        [sharedFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [sharedFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-
-    });
-    
-    return sharedFormatter;
-}
-
 // some default transformers
 // if we stick to these naming conventions for fields they will be picked up
-+ (NSValueTransformer *)tagsJSONTransformer
-{
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSTag class]];
-}
 
 + (NSValueTransformer *)sourcesJSONTransformer
 {
@@ -70,12 +51,11 @@
 
 + (NSValueTransformer *)dateJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSString *dateString) {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSNumber *UNIXTimestamp) {
+       return [NSDate dateWithTimeIntervalSince1970:[UNIXTimestamp integerValue]];
 
-       return[[self sharedFormatter] dateFromString:dateString];
-
-    } reverseBlock:^NSString *(NSDate *date) {
-        return [[self sharedFormatter] stringFromDate:date];
+    } reverseBlock:^NSNumber *(NSDate *date) {
+        return [NSNumber numberWithInteger:[date timeIntervalSince1970]];
     }];
 }
 
@@ -84,44 +64,57 @@
     double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
 
     if(ti < 60){
-        return @"less than a minute ago";
+        return @"just now";
     }
     else if(ti < 3600){
+        
         int diff = round(ti / 60);
-        if(diff == 1)
-            return[NSString stringWithFormat:@"%d minute ago", diff];
-        else
-            return[NSString stringWithFormat:@"%d minutes ago", diff];
-
+        
+        return diff == 1 ? [NSString stringWithFormat:@"%d minute ago", diff] : [NSString stringWithFormat:@"%d minutes ago", diff];
+        
     }
     else if(ti<86400){
+        
         int diff = round(ti / 60 / 60);
-        if(diff == 1)
-            return[NSString stringWithFormat:@"%d hour ago", diff];
-        else
-            return[NSString stringWithFormat:@"%d hours ago", diff];
+        
+        return diff == 1 ?[NSString stringWithFormat:@"%d hour ago", diff] : [NSString stringWithFormat:@"%d hours ago", diff];
+        
     }
-    else if(ti < 172800){
+    else if(ti < 604800){
         
         int diff = round(ti / 60 / 60 / 24);
         
-        if(diff == 1)
-            return[NSString stringWithFormat:@"%d day ago", diff];
-        else
-            return[NSString stringWithFormat:@"%d days ago", diff];
-            
+        return diff == 1 ? [NSString stringWithFormat:@"%d day ago", diff] : [NSString stringWithFormat:@"%d days ago", diff];
+        
     }
-    else if(ti >= 172800){
+    else if(ti < 2629740){
         
-        NSDateFormatter *format = [[NSDateFormatter alloc] init];
-        [format setDateStyle:NSDateFormatterLongStyle];
+        int diff = round(ti / 60 / 60 / 24 / 4);
         
-        return [format stringFromDate:date];
+        return diff == 1 ? [NSString stringWithFormat:@"%d weeks ago", diff] : [NSString stringWithFormat:@"%d weeks ago", diff];
+        
+        
+    }
+    else if(ti < 31556900){
+        
+        int diff = round(ti / 60 / 60 / 24 / 4 / 12);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"%d month ago", diff] : [NSString stringWithFormat:@"%d months ago", diff];
+        
+        
+    }
+    else if(ti < 3155690000){
+        
+        int diff = round(ti / 60 / 60 / 24 / 30 / 52);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"%d year ago", diff] : [NSString stringWithFormat:@"%d years ago", diff];
+        
     }
     else
         return @"Never";
     
     return 0;
+    
 }
 
 #pragma mark - Image CDN

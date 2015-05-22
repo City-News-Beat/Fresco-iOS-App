@@ -6,6 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 #import "ProfileViewController.h"
 #import "GalleriesViewController.h"
 #import "FirstRunViewController.h"
@@ -51,6 +54,11 @@
     [self performNecessaryFetch:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self performNecessaryFetch:nil];
+}
+
 #pragma mark - Data Loading
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
@@ -59,7 +67,7 @@
         if (!error) {
             if ([responseObject count]) {
                 self.galleries = responseObject;
-                self.galleriesViewController.galleries = self.galleries;
+                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController refresh];
             }
         }
@@ -80,7 +88,7 @@
     {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = self.galleries;
+        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 

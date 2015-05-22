@@ -15,15 +15,19 @@
 
 @interface FRSPost : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSArray *tags;
+@property (nonatomic, copy, readonly) NSNumber *postID;
 @property (nonatomic, strong) FRSUser *user;
-@property (nonatomic, copy) NSNumber *postID;
-@property (nonatomic, copy) NSString *caption;
-@property (nonatomic, copy) FRSImage *largeImage;
-@property (nonatomic, copy) FRSImage *smallImage;
-@property (nonatomic, copy) NSDate *date;
-@property (nonatomic, strong) NSArray *sources;
-@property (nonatomic, copy) NSString *byline;
+@property (nonatomic, copy, readonly) NSString *source;
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, strong) FRSImage *image;
+@property (nonatomic, copy) NSString *mediaURLString;
+//@property (nonatomic, assign) CGSize mediaSize;
+@property (nonatomic, copy, readonly) NSDate *date;
+@property (nonatomic, copy, readonly) NSString *byline;
+@property (nonatomic, copy, readonly) NSNumber *visibility;
+
 - (NSURL *)largeImageURL;
+
+- (BOOL)isVideo;
 
 @end

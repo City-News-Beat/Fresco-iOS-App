@@ -17,6 +17,24 @@
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
+		1E4983B11AFBBD8800924F59 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */; };
+		1E4983B21AFBBD8800924F59 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */; };
+		1E4983B31AFBBD8800924F59 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */; };
+		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
+		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
+		1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B81AFBCDEA00924F59 /* StoreKit.framework */; };
+		1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BA1AFBCE7500924F59 /* AudioToolbox.framework */; };
+		1E4983BD1AFBCE8000924F59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BC1AFBCE8000924F59 /* CFNetwork.framework */; };
+		1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BE1AFBCE8F00924F59 /* CoreGraphics.framework */; };
+		1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C01AFBCE9500924F59 /* CoreLocation.framework */; };
+		1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C21AFBCEA200924F59 /* MobileCoreServices.framework */; };
+		1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C41AFBCEAF00924F59 /* Security.framework */; };
+		1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C61AFBCEBE00924F59 /* SystemConfiguration.framework */; };
+		1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C81AFBCECA00924F59 /* libz.dylib */; };
+		1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CA1AFBCED000924F59 /* libsqlite3.dylib */; };
+		1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CC1AFBCEF400924F59 /* Social.framework */; };
+		1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CE1AFBCF0800924F59 /* Accounts.framework */; };
+		1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983D01AFBCF5100924F59 /* Bolts.framework */; };
 		1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */; };
 		1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA27AA71AF147C4003137CE /* MKMapView+LegalLabel.m */; };
 		1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */; };
@@ -42,13 +60,13 @@
 		1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F91AA4D0730082E08D /* FRSTag.m */; };
 		1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */; };
 		1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FF1AA4D0730082E08D /* FRSUser.m */; };
-		1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */; };
 		1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA450C1AA4E2BD0082E08D /* PostView.m */; };
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
-		1EDA45131AA4F8640082E08D /* GalleryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA45111AA4F8640082E08D /* GalleryCell.xib */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
+		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
+		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */; };
 		420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F51ADB875000157762 /* ALAsset+assetType.m */; };
 		420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F71ADB875000157762 /* ALAsset+isEqual.m */; };
@@ -69,21 +87,32 @@
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
-		42B4D4E21ABF6C6E006AD3AC /* towel.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B4D4E11ABF6C6E006AD3AC /* towel.png */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
-		42BB68C41AB5349F003FC268 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 42BB68C31AB5349F003FC268 /* placeholder.png */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
-		E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */; };
+		E60266CE1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */; };
 		E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */; };
 		E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
+		E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E3D1B0B936200186BAD /* Images.xcassets */; };
+		E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */; };
+		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
+		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
+		E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
+		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
+		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
+		E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */; };
+		E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */; };
+		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
+		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
+		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,7 +123,35 @@
 			remoteGlobalIDString = 1EDA44AF1AA4CCC70082E08D;
 			remoteInfo = FrescoNews;
 		};
+		E71F0E431B0B936200186BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E71F0E401B0B936200186BAD;
+			remoteInfo = "Fresco2 WatchKit App";
+		};
+		E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E71F0E2E1B0B936200186BAD;
+			remoteInfo = "Fresco2 WatchKit Extension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E71F0E561B0B936200186BAD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
@@ -118,6 +175,24 @@
 		1E408B791AA7A4580057AC16 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
+		1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		1E4983B41AFBCD9900924F59 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		1E4983B81AFBCDEA00924F59 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1E4983BA1AFBCE7500924F59 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		1E4983BC1AFBCE8000924F59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		1E4983BE1AFBCE8F00924F59 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1E4983C01AFBCE9500924F59 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1E4983C21AFBCEA200924F59 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		1E4983C41AFBCEAF00924F59 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1E4983C61AFBCEBE00924F59 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1E4983C81AFBCECA00924F59 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		1E4983CA1AFBCED000924F59 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		1E4983CC1AFBCEF400924F59 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		1E4983CE1AFBCF0800924F59 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		1E4983D01AFBCF5100924F59 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		1EA27AA31AF142AA003137CE /* ScrollViewWithPassthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewWithPassthrough.h; sourceTree = "<group>"; };
 		1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewWithPassthrough.m; sourceTree = "<group>"; };
 		1EA27AA61AF147C4003137CE /* MKMapView+LegalLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+LegalLabel.h"; sourceTree = "<group>"; };
@@ -168,19 +243,18 @@
 		1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTradionalSource.m; sourceTree = "<group>"; };
 		1EDA44FE1AA4D0730082E08D /* FRSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUser.h; sourceTree = "<group>"; };
 		1EDA44FF1AA4D0730082E08D /* FRSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUser.m; sourceTree = "<group>"; };
-		1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RelativeDate.h"; sourceTree = "<group>"; };
-		1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RelativeDate.m"; sourceTree = "<group>"; };
 		1EDA450B1AA4E2BD0082E08D /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostView.h; path = Views/PostView.h; sourceTree = "<group>"; };
 		1EDA450C1AA4E2BD0082E08D /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostView.m; path = Views/PostView.m; sourceTree = "<group>"; };
 		1EDA450F1AA4F8640082E08D /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
 		1EDA45101AA4F8640082E08D /* StoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCell.m; sourceTree = "<group>"; };
-		1EDA45111AA4F8640082E08D /* GalleryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GalleryCell.xib; sourceTree = "<group>"; };
 		1EDA45141AA500EE0082E08D /* FRSDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDataManager.h; sourceTree = "<group>"; };
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
 		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
 		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
 		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
+		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
+		32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileSettingsViewController.m; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		420DC6F21ADB875000157762 /* ALAsset+accessibilityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+accessibilityLabel.h"; sourceTree = "<group>"; };
 		420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALAsset+accessibilityLabel.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -221,9 +295,7 @@
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
-		42B4D4E11ABF6C6E006AD3AC /* towel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = towel.png; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		42BB68C31AB5349F003FC268 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraPreviewView.h; path = Views/CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ALAsset.h"; sourceTree = "<group>"; };
@@ -236,8 +308,8 @@
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
 		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
-		E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSkipViewController.h; sourceTree = "<group>"; };
-		E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSkipViewController.m; sourceTree = "<group>"; };
+		E60266CC1AEA1BEE0055A5C6 /* FirstRunProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunProgressViewController.h; sourceTree = "<group>"; };
+		E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunProgressViewController.m; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSignUpViewController.h; sourceTree = "<group>"; };
 		E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSignUpViewController.m; sourceTree = "<group>"; };
@@ -247,6 +319,30 @@
 		E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunRadiusViewController.m; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
+		E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco2 WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E321B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		E71F0E3D1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fresco2 WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlanceInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlanceInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E591B0B948200186BAD /* FRSInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
+		E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationController.m; sourceTree = "<group>"; };
+		E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryRowController.h; sourceTree = "<group>"; };
+		E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryRowController.m; sourceTree = "<group>"; };
+		E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E631B0B948200186BAD /* FRSStoryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryRowController.h; sourceTree = "<group>"; };
+		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
+		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
+		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,7 +350,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
+				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
+				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
+				1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */,
+				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
+				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
+				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
+				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
+				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
+				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
+				1E4983BD1AFBCE8000924F59 /* CFNetwork.framework in Frameworks */,
+				1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */,
+				1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */,
 				E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */,
+				1E4983B11AFBBD8800924F59 /* FBSDKCoreKit.framework in Frameworks */,
+				1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */,
+				1E4983B31AFBBD8800924F59 /* FBSDKShareKit.framework in Frameworks */,
+				1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */,
+				1E4983B21AFBBD8800924F59 /* FBSDKLoginKit.framework in Frameworks */,
 				42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */,
 				80AA49FED257B703E367D68E /* libPods.a in Frameworks */,
 			);
@@ -267,12 +381,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E71F0E2C1B0B936200186BAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E4983D01AFBCF5100924F59 /* Bolts.framework */,
+				1E4983CE1AFBCF0800924F59 /* Accounts.framework */,
+				1E4983CC1AFBCEF400924F59 /* Social.framework */,
+				1E4983CA1AFBCED000924F59 /* libsqlite3.dylib */,
+				1E4983C81AFBCECA00924F59 /* libz.dylib */,
+				1E4983C61AFBCEBE00924F59 /* SystemConfiguration.framework */,
+				1E4983C41AFBCEAF00924F59 /* Security.framework */,
+				1E4983C21AFBCEA200924F59 /* MobileCoreServices.framework */,
+				1E4983C01AFBCE9500924F59 /* CoreLocation.framework */,
+				1E4983BE1AFBCE8F00924F59 /* CoreGraphics.framework */,
+				1E4983BC1AFBCE8000924F59 /* CFNetwork.framework */,
+				1E4983BA1AFBCE7500924F59 /* AudioToolbox.framework */,
+				1E4983B81AFBCDEA00924F59 /* StoreKit.framework */,
+				1E4983B41AFBCD9900924F59 /* Parse.framework */,
+				1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */,
+				1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */,
+				1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */,
+				1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */,
 				E65C24581AE6E328001A5208 /* MapKit.framework */,
 				42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */,
 				96C32138EB19F136689A3D6B /* libPods.a */,
@@ -363,6 +503,8 @@
 			children = (
 				1EDA44B21AA4CCC70082E08D /* FrescoNews */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
+				E71F0E301B0B936200186BAD /* Fresco2 WatchKit Extension */,
+				E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */,
 				1EDA44B11AA4CCC70082E08D /* Products */,
 				BE77E1E79885C4C61AC87E44 /* Pods */,
 				1B35C7E2C0D16DEBE7A411F8 /* Frameworks */,
@@ -374,6 +516,8 @@
 			children = (
 				1EDA44B01AA4CCC70082E08D /* Fresco2.app */,
 				1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */,
+				E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */,
+				E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -393,8 +537,6 @@
 				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
-				42BB68C31AB5349F003FC268 /* placeholder.png */,
-				42B4D4E11ABF6C6E006AD3AC /* towel.png */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
 				1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */,
@@ -465,8 +607,8 @@
 				424323D91AB3D64900646278 /* TabBarController.h */,
 				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
 				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunSkipViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunProgressViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m */,
 				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
 				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
 				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
@@ -482,6 +624,8 @@
 				1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */,
 				4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */,
 				4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */,
+				32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */,
+				32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -559,8 +703,6 @@
 				1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */,
 				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
 				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
-				1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */,
-				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
 				1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */,
@@ -582,7 +724,6 @@
 				1EDA45101AA4F8640082E08D /* StoryCell.m */,
 				1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */,
 				1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */,
-				1EDA45111AA4F8640082E08D /* GalleryCell.xib */,
 			);
 			name = Story;
 			path = ListView;
@@ -644,6 +785,74 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E71F0E301B0B936200186BAD /* Fresco2 WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
+				E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */,
+				E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */,
+				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
+				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
+				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
+				E71F0E701B0B99F100186BAD /* Stories */,
+				E71F0E6F1B0B99DD00186BAD /* Galleries */,
+				E71F0E3D1B0B936200186BAD /* Images.xcassets */,
+				E71F0E311B0B936200186BAD /* Supporting Files */,
+			);
+			path = "Fresco2 WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		E71F0E311B0B936200186BAD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E321B0B936200186BAD /* Info.plist */,
+				E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E481B0B936200186BAD /* Interface.storyboard */,
+				E71F0E4B1B0B936200186BAD /* Images.xcassets */,
+				E71F0E461B0B936200186BAD /* Supporting Files */,
+			);
+			path = "Fresco2 WatchKit App";
+			sourceTree = "<group>";
+		};
+		E71F0E461B0B936200186BAD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E471B0B936200186BAD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E71F0E6F1B0B99DD00186BAD /* Galleries */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */,
+				E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */,
+				E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */,
+				E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */,
+				E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */,
+				E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */,
+			);
+			name = Galleries;
+			sourceTree = "<group>";
+		};
+		E71F0E701B0B99F100186BAD /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */,
+				E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */,
+				E71F0E631B0B948200186BAD /* FRSStoryRowController.h */,
+				E71F0E641B0B948200186BAD /* FRSStoryRowController.m */,
+			);
+			name = Stories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -656,10 +865,13 @@
 				1EDA44AD1AA4CCC70082E08D /* Frameworks */,
 				1EDA44AE1AA4CCC70082E08D /* Resources */,
 				BCA811ECB60B44FE48F07483 /* Copy Pods Resources */,
+				E71F0E561B0B936200186BAD /* Embed App Extensions */,
+				1EDF047A1B0E7E5800B35858 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E71F0E4E1B0B936200186BAD /* PBXTargetDependency */,
 			);
 			name = Fresco2;
 			productName = Fresco2;
@@ -684,6 +896,41 @@
 			productReference = 1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */;
+			buildPhases = (
+				D1CB606E0993A608E8927788 /* Check Pods Manifest.lock */,
+				E71F0E2B1B0B936200186BAD /* Sources */,
+				E71F0E2C1B0B936200186BAD /* Frameworks */,
+				E71F0E2D1B0B936200186BAD /* Resources */,
+				63CF859EF88AE3997746D05F /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E71F0E441B0B936200186BAD /* PBXTargetDependency */,
+			);
+			name = "Fresco2 WatchKit Extension";
+			productName = "Fresco2 WatchKit Extension";
+			productReference = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */;
+			buildPhases = (
+				E71F0E3F1B0B936200186BAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Fresco2 WatchKit App";
+			productName = "Fresco2 WatchKit App";
+			productReference = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -699,6 +946,12 @@
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 1EDA44AF1AA4CCC70082E08D;
+					};
+					E71F0E2E1B0B936200186BAD = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					E71F0E401B0B936200186BAD = {
+						CreatedOnToolsVersion = 6.3.1;
 					};
 				};
 			};
@@ -737,6 +990,8 @@
 			targets = (
 				1EDA44AF1AA4CCC70082E08D /* Fresco2 */,
 				1EDA44CB1AA4CCC70082E08D /* Fresco2Tests */,
+				E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */,
+				E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -747,11 +1002,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
-				42B4D4E21ABF6C6E006AD3AC /* towel.png in Resources */,
-				42BB68C41AB5349F003FC268 /* placeholder.png in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
-				1EDA45131AA4F8640082E08D /* GalleryCell.xib in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -763,9 +1015,55 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E71F0E2D1B0B936200186BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */,
+				E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E71F0E3F1B0B936200186BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */,
+				E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1EDF047A1B0E7E5800B35858 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf ~/Library/Developer/Xcode/DerivedData/FrescoNews-*/Build/Products/Debug-iphoneos/*.appex/\n";
+		};
+		63CF859EF88AE3997746D05F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A712045BA4FF7C3ECD55DD1A /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -796,6 +1094,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D1CB606E0993A608E8927788 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -814,7 +1127,6 @@
 				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
-				420DC73D1ADB875000157762 /* UIImage+CTAssetsPickerController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
 				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,
@@ -835,13 +1147,13 @@
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
-				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
+				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
@@ -869,7 +1181,7 @@
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
-				E60266CE1AEA1BEE0055A5C6 /* FirstRunSkipViewController.m in Sources */,
+				E60266CE1AEA1BEE0055A5C6 /* FirstRunProgressViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,6 +1193,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E71F0E2B1B0B936200186BAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */,
+				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
+				E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */,
+				E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */,
+				E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */,
+				E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */,
+				E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */,
+				E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -888,6 +1215,16 @@
 			isa = PBXTargetDependency;
 			target = 1EDA44AF1AA4CCC70082E08D /* Fresco2 */;
 			targetProxy = 1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */;
+		};
+		E71F0E441B0B936200186BAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */;
+			targetProxy = E71F0E431B0B936200186BAD /* PBXContainerItemProxy */;
+		};
+		E71F0E4E1B0B936200186BAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */;
+			targetProxy = E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -906,6 +1243,14 @@
 				420DC71B1ADB875000157762 /* en */,
 			);
 			name = CTAssetsPickerController.strings;
+			sourceTree = "<group>";
+		};
+		E71F0E481B0B936200186BAD /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E71F0E491B0B936200186BAD /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -947,7 +1292,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -984,7 +1329,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -999,9 +1344,14 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1016,9 +1366,14 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1065,6 +1420,80 @@
 			};
 			name = Release;
 		};
+		E71F0E501B0B936200186BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E71F0E511B0B936200186BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E71F0E521B0B936200186BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = Fresco2_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		E71F0E531B0B936200186BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				IBSC_MODULE = Fresco2_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1091,6 +1520,24 @@
 			buildConfigurations = (
 				1EDA44DA1AA4CCC70082E08D /* Debug */,
 				1EDA44DB1AA4CCC70082E08D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E71F0E521B0B936200186BAD /* Debug */,
+				E71F0E531B0B936200186BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E71F0E501B0B936200186BAD /* Debug */,
+				E71F0E511B0B936200186BAD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

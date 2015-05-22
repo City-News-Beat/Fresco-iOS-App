@@ -30,6 +30,7 @@
 #define CTIPhone6 (CTScreenHeight == 667)
 #define CTIPhone6Plus (CTScreenHeight == 736)
 
-#define CTAssetThumbnailLength (CTIPhone6Plus) ? 103.0f : ( (CTIPhone6) ? 93.0f : 78.0f )
+// #define CTAssetThumbnailLength (CTIPhone6Plus) ? 103.0f : ( (CTIPhone6) ? 93.0f : 78.0f ) // 4 per row in portrait
+#define CTAssetThumbnailLength (CTIPhone6Plus) ? 137.0f : ( (CTIPhone6) ? 124.0 : 104.0f ) // 3 per row in portrait
 #define CTAssetThumbnailSize CGSizeMake(CTAssetThumbnailLength, CTAssetThumbnailLength)
 #define CTAssetPickerPopoverContentSize CGSizeMake(320, 480)

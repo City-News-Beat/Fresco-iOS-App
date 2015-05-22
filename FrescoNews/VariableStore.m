@@ -9,7 +9,9 @@
 #import "VariableStore.h"
 
 @implementation VariableStore
-+ (VariableStore *)sharedInstance {
+
++ (VariableStore *)sharedInstance
+{
     static VariableStore *sharedInstance = nil;
     
     if (nil != sharedInstance) {
@@ -38,9 +40,20 @@
         sharedInstance.opacityInnerListDividers = 0.08f;
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
         
+        sharedInstance.baseURL = @"http://52.6.231.245/";
+        sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/dnd5ngsax/image/fetch/";
     });
     
     return sharedInstance;
 }
+
++ (NSString *)endpointForPath:(NSString *)endpoint
+{
+    return [NSString stringWithFormat:@"%@%@%@",
+            [NSURL URLWithString:[VariableStore sharedInstance].baseURL],
+            [NSURL URLWithString:[VariableStore sharedInstance].basePath],
+            endpoint];
+}
+
 @end

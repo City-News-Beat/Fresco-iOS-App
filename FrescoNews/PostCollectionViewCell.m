@@ -14,14 +14,16 @@
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
-@interface PostCollectionViewCell ()
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@end
 
 @implementation PostCollectionViewCell
 + (NSString *)identifier
 {
     return kCellIdentifier;
+}
+
+-(void)prepareForReuse{
+    [[self imageView] setImage:nil];
+    [[self imageView] cancelImageRequestOperation];
 }
 
 - (void)setPost:(FRSPost *)post
@@ -39,7 +41,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     }
     else {
         // local
-        self.imageView.image = post.largeImage.image;
+        self.imageView.image = post.image.image;
     }
 }
 
