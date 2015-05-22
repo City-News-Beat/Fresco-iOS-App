@@ -9,8 +9,11 @@
 #import "AssignmentsViewController.h"
 #import "UIViewController+Additions.h"
 #import "MKMapView+LegalLabel.h"
+#import "MTLModel+Additions.h"
 
 #define kSCROLL_VIEW_INSET 100
+
+@class FRSAssignment;
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate>
 
@@ -30,17 +33,51 @@
 @implementation AssignmentsViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self setFrescoImageHeader];
     
     self.scrollView.delegate = self;
+    
     self.assignmentsMap.delegate = self;
     
     self.centeredUserLocation = NO;
     
+    if(self.currentAssignment != nil){
+    
+        [self zoomToCoordinates:_currentAssignment.lat lng:_currentAssignment.lon];
+    
+    }
+    
     [self tweakUI];
-    [self insertFakeData];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    static BOOL firstTime = YES;
+    if (firstTime) {
+        // move the legal link in order to tuck the map behind nicely
+        [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
+    }
+    firstTime = NO;
+}
+
+- (void)viewDidLayoutSubviews{
+    self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
+}
+
+
+- (void)tweakUI {
+    
+    self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
+    
+    
+    // UI Values
+    self.storyBreaksView.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorStoryBreaksBackground];
+    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.detailViewWrapper.layer.shadowOpacity = 0.26;
+    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
     
     NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
                                                                       attribute:NSLayoutAttributeLeading
@@ -59,65 +96,76 @@
                                                                       multiplier:1.0
                                                                         constant:0];
     [self.view addConstraint:rightConstraint];
+
 }
 
 
-- (void)tweakUI {
-    // UI Values
-    self.storyBreaksView.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorStoryBreaksBackground];
-    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.detailViewWrapper.layer.shadowOpacity = 0.26;
-    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
+/*
+** Set the current assignment
+*/
+
+- (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate{
+    
+    [self setCurrentAssignment:assignment];
+    
+    self.assignmentTitle.text= self.currentAssignment.title;
+    
+    self.assignmentDescription.text = self.currentAssignment.caption;
+    
+    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
+    
+    [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon];
+    
+    //Navgiate to the location if true
+    if(navigate){
+    
+        
+        
+    }
+
+}
+
+- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lng{
+
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+    
+    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lng floatValue]), span};
+    
+    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+    
+    NSLog(@"Fit Region %f %f", regionThatFits.center.latitude, regionThatFits.center.longitude);
+    
+    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+
 }
 
 - (void)zoomToCurrentLocation {
     // Zooming map after delay for effect
+    
     MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
     MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
     
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+    
     NSLog(@"Fit Region %f %f", regionThatFits.center.latitude, regionThatFits.center.longitude);
 
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    static BOOL firstTime = YES;
-    if (firstTime) {
-        // move the legal link in order to tuck the map behind nicely
-        [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
-    }
-    firstTime = NO;
-}
 
-- (void)viewDidLayoutSubviews
-{
-    self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
-}
-
-- (void)insertFakeData {
-    // "Real Fake Data"
-    self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
-    self.assignmentTitle.text= @"Pileup by Dame Tipping Primary School";
-    
-    // testing long string
-    self.assignmentDescription.text = @"Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed.";
-    
-    // testing short string
-    self.assignmentDescription.text = @"Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three casualities; police and EMS have not confirmed. Six cars and one truck were involved in a major car accident on North Rd/B175. Eyewitness reports suggest at least three ca";
-    
-    self.assignmentTimeElapsed.text = @"3m";
-}
 
 #pragma mark - ScrollViewDelegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
     if (scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.size.height) {
         [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, scrollView.contentSize.height - scrollView.frame.size.height)];
     }
+
 }
 
 #pragma mark - MKMapViewDelegate
+
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
     NSLog(@"Failed to locate user: %@", error);
@@ -126,10 +174,13 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     // center on the current location
-    if (!self.centeredUserLocation)
-        [self zoomToCurrentLocation];
-    
-    self.centeredUserLocation = YES;
+    if(self.currentAssignment == nil){
+        
+        if (!self.centeredUserLocation) [self zoomToCurrentLocation];
+        
+        self.centeredUserLocation = YES;
+            
+    }
     
     //[self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
 }

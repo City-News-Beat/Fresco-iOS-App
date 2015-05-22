@@ -17,9 +17,6 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface FRSGallery ()
-@end
-
 @implementation FRSGallery
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
