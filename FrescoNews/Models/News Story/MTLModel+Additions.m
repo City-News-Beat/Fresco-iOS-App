@@ -13,6 +13,7 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "FRSAssignment.h"
 
 @implementation MTLModel (Additions)
 
@@ -33,6 +34,7 @@
 {
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSGallery class]];
 }
+
 
 + (NSValueTransformer *)imageJSONTransformer
 {

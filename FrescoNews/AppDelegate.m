@@ -11,21 +11,73 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
 #import "FRSUser.h"
 #import <AFNetworking.h>
+#import "FRSDataManager.h"
+#import "AssignmentsViewController.h"
+
+//Notification Categories
+
+static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY";
+
+//Notification Actions
+
+static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 @interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     [self setupLocationManager];
+
+    
+    // Register for Push Notitications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    
+    
+    //Set up action for navigate
+    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init];
+    
+    // Define an ID string to be passed back to your app when you handle the action
+    navigateAction.identifier = navigateIdentifier;
+    // Localized string displayed in the action button
+    navigateAction.title = @"Navigate";
+    // If you need to show UI, choose foreground
+    navigateAction.activationMode = UIUserNotificationActivationModeBackground;
+    // Destructive actions display in red
+    navigateAction.destructive = NO;
+    // Set whether the action requires the user to authenticate
+    navigateAction.authenticationRequired = NO;
+    
+    
+    // First create the category
+    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
+    // Identifier to include in your push payload and local notification
+    assignmentCategory.identifier = assignmentIdentifier;
+    // Add the actions to the category and set the action context
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
+    // Set the actions to present in a minimal context
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    
     //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
@@ -42,7 +94,8 @@
                                consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
     
     [self setupAppearances];
-        
+    
+    
     return YES;
 }
 
@@ -82,7 +135,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-#pragma mark - Utility methods
+#pragma mark - Apperance Delegate Methods
 
 - (void)setupAppearances
 {
@@ -105,10 +158,15 @@
                                      @"tab-assignments-highlighted",
                                      @"tab-following-highlighted"];
     
+    
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    
     tabBarController.delegate = self;
+    
     UITabBar *tabBar = tabBarController.tabBar;
+    
     int i = 0;
+    
     for (UITabBarItem *item in tabBar.items) {
         if (i == 4) {
             if (!currentUser) {
@@ -164,6 +222,8 @@
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
+#pragma mark - Location Delegate Methods
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     self.location = [locations lastObject];
@@ -216,5 +276,114 @@
 {
     return ![viewController isKindOfClass:[CameraViewController class]];
 }
+
+
+#pragma mark - Notification Delegate Methods
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
+    
+    [PFPush handlePush:userInfo];
+    
+    
+    //Breaking News
+    if([userInfo[@"type"] isEqualToString:@"breaking"]){
+        
+        //Check to make sure the payload has an id
+        if(userInfo[@"gallery_id"] != nil){
+            
+            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    #warning Nothing will happen yet, need to figure out how to handle gallery viewss
+                    
+                }
+                
+            }];
+            
+        }
+
+        
+    
+    }
+    
+    //Assignments
+    if([userInfo[@"type"] isEqualToString:@"assignment"]){
+        
+        //Check to make sure the payload has an id
+        if(userInfo[@"assignment_id"] != nil){
+            
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+                    
+                    [tabBarController setSelectedIndex:3];
+                    
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    
+                    [assignmentVC setCurrentAssignment:responseObject];
+                    
+                }
+                
+            }];
+            
+        }
+
+    }
+    
+    //Use
+    
+    //Social
+    
+
+    
+    
+}
+
+- (void)application:(UIApplication *) application handleActionWithIdentifier: (NSString *) identifier forRemoteNotification: (NSDictionary *) notification
+  completionHandler: (void (^)()) completionHandler {
+    
+    /*
+    ** Check the identifier for the type of notifcaiton
+    */
+    
+
+    //Assignment Action
+    if ([identifier isEqualToString: navigateIdentifier]) {
+        
+        //Check to make sure the payload has an id
+        if(notification[@"assignment_id"] != nil){
+            
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+                    
+                    [tabBarController setSelectedIndex:3];
+                    
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    
+                    [assignmentVC setCurrentAssignment:responseObject];
+                    
+                }
+                
+            }];
+        
+        }
+        
+    }
+    
+    // Must be called when finished
+    completionHandler(UIBackgroundFetchResultNewData);
+    
+}
+
 
 @end

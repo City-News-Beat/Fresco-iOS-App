@@ -12,6 +12,7 @@
 #import "FRSDataManager.h"
 #import "GalleryHeader.h"
 #import "GalleryTableViewCell.h"
+#import "AssignmentsViewController.h"
 
 @interface HomeViewController ()
 //@property (strong, nonatomic) NSArray *galleries;
@@ -48,6 +49,7 @@
     [super viewDidLoad];
     [self setFrescoImageHeader];
     [self performNecessaryFetch:nil];
+
     
 }
 
