@@ -10,6 +10,8 @@
 #import "UIViewController+Additions.h"
 #import "MKMapView+LegalLabel.h"
 #import "MTLModel+Additions.h"
+#import "FRSDataManager.h"
+#import "AssignmentLocation.h"
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -17,17 +19,20 @@
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
-@property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
-@property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
+    @property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
+    @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
+    @property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
 
-@property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
-@property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
-@property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
-@property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+    @property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
+    @property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
+    @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
+    @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
+    @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-@property (assign, nonatomic) BOOL centeredUserLocation;
+    @property (assign, nonatomic) BOOL centeredUserLocation;
+
+    @property (assign, nonatomic) NSNumber *operatingRadius;
+
 @end
 
 @implementation AssignmentsViewController
@@ -42,15 +47,13 @@
     
     self.assignmentsMap.delegate = self;
     
-    self.centeredUserLocation = NO;
-    
-    if(self.currentAssignment != nil){
-    
-        [self zoomToCoordinates:_currentAssignment.lat lng:_currentAssignment.lon];
-    
-    }
-    
     [self tweakUI];
+    
+    //Go to user location
+    
+    [self zoomToCurrentLocation];
+    
+//    [self updateAssignments];
     
 }
 
@@ -67,11 +70,9 @@
     self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
 }
 
-
 - (void)tweakUI {
     
     self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
-    
     
     // UI Values
     self.storyBreaksView.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorStoryBreaksBackground];
@@ -101,6 +102,45 @@
 
 
 /*
+** Update Assignments
+*/
+
+-(void)updateAssignments{
+    
+    //Grab the assignments in that region
+    //One degree of latitude = 69 miles
+    NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
+
+    [[FRSDataManager sharedManager] getAssignmentsWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            
+            [self setAssignments:responseObject];
+            
+            [self populateMapWithAnnotations];
+            
+            [self setOperatingRadius:radius];
+            
+        }
+        
+    }];
+}
+
+/*
+** Runs through controller's assignments, and adds them to the map
+*/
+
+- (void)populateMapWithAnnotations{
+    
+    for(FRSAssignment *assignment in self.assignments){
+        
+        [self addAssignmentAnnotation:assignment];
+        
+    }
+    
+}
+
+
+/*
 ** Set the current assignment
 */
 
@@ -120,38 +160,60 @@
     if(navigate){
     
         
-        
     }
 
 }
 
-- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lng{
+/*
+** Zoom to specified coordinates
+*/
+
+- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lon{
 
     MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
     
-    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lng floatValue]), span};
+    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    NSLog(@"Fit Region %f %f", regionThatFits.center.latitude, regionThatFits.center.longitude);
     
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
 
 }
 
-- (void)zoomToCurrentLocation {
-    // Zooming map after delay for effect
+/*
+** Adds assignment to map through annotation
+*/
+
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment{
     
+    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:self.currentAssignment.title address:self.currentAssignment.location[@"googlemaps"] coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:[self.currentAssignment.radius floatValue]];
+    
+    [self.assignmentsMap addOverlay:circle];
+    
+    [self.assignmentsMap addAnnotation:annotation];
+    
+}
+
+
+/*
+** Zooms to user locationter
+*/
+
+- (void)zoomToCurrentLocation {
+    
+    // Zooming map after delay for effect
     MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
     MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
     
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    NSLog(@"Fit Region %f %f", regionThatFits.center.latitude, regionThatFits.center.longitude);
 
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    
+    self.centeredUserLocation = YES;
+    
 }
-
 
 
 #pragma mark - ScrollViewDelegate
@@ -166,6 +228,64 @@
 
 #pragma mark - MKMapViewDelegate
 
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+    
+    static NSString *identifier = @"AssignmentAnnotation";
+    
+    if ([annotation isKindOfClass:[AssignmentLocation class]]){
+  
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+    
+        if (annotationView == nil) {
+          
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = YES;
+            annotationView.image = [UIImage imageNamed:@"assignment-dot"];//here we use a nice image instead of the default pins
+       
+        }
+        else {
+            annotationView.annotation = annotation;
+        }
+        
+        return annotationView;
+    
+    }
+
+    return nil;
+
+}
+
+-(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
+
+    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
+    
+    [circleView setFillColor:[UIColor colorWithHex:@"ffc600" alpha:.26]];
+    [circleView setStrokeColor:[UIColor clearColor]];
+    
+    return circleView;
+
+}
+
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+
+    //One degree of latitude = 69 miles
+    NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
+    
+    if(self.operatingRadius == nil){
+    
+        [self updateAssignments];
+        
+    }
+    else if (fabsf([_operatingRadius floatValue] - [radius floatValue]) > 1) {
+        
+        [self updateAssignments];
+        
+    }
+ 
+}
+
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
     NSLog(@"Failed to locate user: %@", error);
@@ -174,14 +294,11 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     // center on the current location
-    if(self.currentAssignment == nil){
-        
-        if (!self.centeredUserLocation) [self zoomToCurrentLocation];
-        
-        self.centeredUserLocation = YES;
-            
-    }
+    if (!self.centeredUserLocation) [self zoomToCurrentLocation];
     
-    //[self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+    self.centeredUserLocation = YES;
+    
+    [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+    
 }
 @end

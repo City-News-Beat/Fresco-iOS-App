@@ -22,7 +22,7 @@
              @"location": @"location",
              @"lat" : @"location.geo.coordinates",
              @"lon" : @"location.geo.coordinates",
-             @"radius" : @"radius",
+             @"radius" : @"location.radius",
              @"timeCreated" : @"time_created",
              @"timeEdited" : @"time_edited",
              @"expirationTime": @"expiration_time"

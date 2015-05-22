@@ -113,6 +113,7 @@
 		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
 		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
 		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
+		E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentLocation.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 /* End PBXBuildFile section */
 
@@ -344,6 +345,8 @@
 		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
 		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
 		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
+		E73E100B1B0F963800763240 /* AssignmentLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentLocation.h; sourceTree = "<group>"; };
+		E73E100C1B0F963800763240 /* AssignmentLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentLocation.m; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
@@ -599,14 +602,10 @@
 			children = (
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
-				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
-				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
-				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
-				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				E73E10091B0F957B00763240 /* Assignments */,
+				E73E100A1B0F958D00763240 /* Home */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
 				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
-				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
-				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
@@ -857,6 +856,28 @@
 				E71F0E641B0B948200186BAD /* FRSStoryRowController.m */,
 			);
 			name = Stories;
+			sourceTree = "<group>";
+		};
+		E73E10091B0F957B00763240 /* Assignments */ = {
+			isa = PBXGroup;
+			children = (
+				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
+				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
+				E73E100B1B0F963800763240 /* AssignmentLocation.h */,
+				E73E100C1B0F963800763240 /* AssignmentLocation.m */,
+			);
+			name = Assignments;
+			sourceTree = "<group>";
+		};
+		E73E100A1B0F958D00763240 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
+				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
+			);
+			name = Home;
 			sourceTree = "<group>";
 		};
 		E796FA151B0E5244002B30C4 /* Assignment */ = {
@@ -1158,6 +1179,7 @@
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
+				E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,
