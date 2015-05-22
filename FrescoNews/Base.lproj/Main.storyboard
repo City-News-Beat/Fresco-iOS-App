@@ -441,10 +441,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="description" destination="Xzj-wV-KbU" id="EPU-I0-3Ok"/>
+                                            <outlet property="assignDescription" destination="Xzj-wV-KbU" id="R7u-m6-qzM"/>
                                             <outlet property="eventName" destination="mxa-uO-2L4" id="0py-hD-XTC"/>
                                             <outlet property="timeElapsed" destination="XH7-Om-VZ8" id="jpq-l9-iGw"/>
-                                            <outlet property="timeSince" destination="XH7-Om-VZ8" id="sQ0-DR-4Uk"/>
                                             <outlet property="title" destination="GM2-t7-q02" id="H5J-K9-x4M"/>
                                         </connections>
                                     </tableViewCell>
