@@ -111,15 +111,9 @@
     int i = 0;
     for (UITabBarItem *item in tabBar.items) {
         if (i == 4) {
-            if (!currentUser) {
-                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-                item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
-                item.title = @"Following";
-            } else {
-                item.image = [[UIImage imageNamed:@"tab-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-                item.selectedImage = [UIImage imageNamed:@"tab-profile-highlighted"];
-                item.title = @"Profile";
-            }
+            item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+            item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
+            item.title = @"Following";
         } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -169,6 +163,7 @@
     self.location = [locations lastObject];
 
     if (![FRSUser loggedInUserId]) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
         return;
     }
 
