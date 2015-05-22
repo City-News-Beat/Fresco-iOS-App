@@ -14,6 +14,9 @@
 #import "FRSImage.h"
 #import "FRSUser.h"
 #import "CameraViewController.h"
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -66,6 +69,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -100,12 +104,60 @@
 
 - (IBAction)twitterButtonTapped:(UIButton *)button
 {
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
+                                                        message:@"Go to Profile to link your Fresco account to Twitter"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     button.selected = !button.selected;
+
+    NSString *bodyString = @"status=this is a test with spaces";
+    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    [[PFTwitterUtils twitter] signRequest:tweetRequest];
+
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"Error: %@", connectionError);
+        }
+        else {
+            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+    }];
 }
 
 - (IBAction)facebookButtonTapped:(UIButton *)button
 {
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
+                                                        message:@"Go to Profile to link your Fresco account to Facebook"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     button.selected = !button.selected;
+
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
+                                           parameters: @{ @"message" : @"hello world"}
+                                           HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"Post id:%@", result[@"id"]);
+             }
+         }];
+    }
 }
 
 - (IBAction)unlinkAssignmentButtonTapped:(id)sender {}

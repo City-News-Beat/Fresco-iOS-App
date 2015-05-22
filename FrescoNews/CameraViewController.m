@@ -611,11 +611,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+#if TARGET_IPHONE_SIMULATOR
+    return YES;
+#else
     if (![asset valueForProperty:ALAssetPropertyLocation]) {
         return NO;
     }
 
     return YES;
+#endif
+
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
