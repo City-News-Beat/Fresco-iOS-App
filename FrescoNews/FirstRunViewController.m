@@ -8,7 +8,7 @@
 
 #import "FirstRunViewController.h"
 #import "FRSDataManager.h"
-
+#import "AppDelegate.h"
 
 @interface FirstRunViewController ()
 
@@ -116,7 +116,7 @@
                                             NSLog(@"user : %@", user);
                                             NSLog(@"cache: %@", [PFUser currentUser]);
                                             
-                                           [self.navigationController popViewControllerAnimated:YES];
+                                            [((AppDelegate *)[[UIApplication sharedApplication] delegate]) setRootViewControllerToTabBar];
                                         } else {
                                             NSLog(@"Login failed : %@", error);
                                         }

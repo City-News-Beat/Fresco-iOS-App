@@ -52,16 +52,39 @@
 
 - (void)loadInitialViewController
 {
+    if ([FRSDataManager sharedManager].currentUser.userID)
+        [self setRootViewControllerToTabBar];
+    else {
+        [self setRootViewControllerToFirstRun];
+    }
+}
+
+- (void)setRootViewControllerToTabBar
+{
+    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    [self setupTabBarAppearances];
+}
+
+- (void)setRootViewControllerToFirstRun
+{
+    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+}
+
+- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
     
     UIViewController *viewController;
-    
-    if ([FRSDataManager sharedManager].currentUser.userID)
-        viewController = [storyboard instantiateViewControllerWithIdentifier:@"tabBarController"];
+
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
     else
-        viewController = [storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"];
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
 
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
