@@ -8,6 +8,20 @@
 
 #import "AssignmentNotificationCell.h"
 
+@interface AssignmentNotificationCell()
+
+
+@end
+
 @implementation AssignmentNotificationCell
+
+- (void)viewDidLoad {
+}
+
+- (IBAction)viewAssignment:(id)sender {
+}
+
+- (IBAction)openInMaps:(id)sender {
+}
 
 @end

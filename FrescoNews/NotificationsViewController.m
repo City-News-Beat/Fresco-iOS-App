@@ -7,6 +7,7 @@
 //
 
 #import "NotificationsViewController.h"
+#import "AssignmentNotificationCell.h"
 
 @interface NotificationsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -48,7 +49,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 5;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -56,9 +57,14 @@
     // since there is a section for every story
     // and just one story per section
     // the section will tell us the "row"
-    NSUInteger index = indexPath.section;
+    // NSUInteger index = indexPath.section;
     
-    UITableViewCell *tableViewCell = [[UITableViewCell alloc] init];
+    AssignmentNotificationCell *tableViewCell = [[AssignmentNotificationCell alloc] init];
+    
+    tableViewCell.title.text = @"New Assignment";
+    tableViewCell.eventName.text = @"St. Patrick's Day Parade";
+    //tableViewCell.description.text = @"The parade has started heading north from 5th Avenue and 44th Street.";
+    tableViewCell.timeElapsed.text = @"2h";
     
     return tableViewCell;
 }
