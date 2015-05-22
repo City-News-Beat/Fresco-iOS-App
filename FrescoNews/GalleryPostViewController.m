@@ -16,6 +16,7 @@
 #import "CameraViewController.h"
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -143,9 +144,19 @@
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
+        return;
     }
-    else {
-        button.selected = !button.selected;
+
+    button.selected = !button.selected;
+
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
+                                           parameters: @{ @"message" : @"hello world"}
+                                           HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"Post id:%@", result[@"id"]);
+             }
+         }];
     }
 }
 
