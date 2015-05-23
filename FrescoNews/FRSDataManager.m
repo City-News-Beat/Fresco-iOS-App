@@ -219,7 +219,6 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
     
     [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(![responseObject[@"data"] isEqual:[NSNull null]]){
@@ -231,7 +230,6 @@ static NSString * const kPersistedUserFilename = @"user.usr";
             if(responseBlock) responseBlock(assignments, nil);
             
         }
-    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -239,7 +237,5 @@ static NSString * const kPersistedUserFilename = @"user.usr";
         
     }];
 }
-
-
 
 @end

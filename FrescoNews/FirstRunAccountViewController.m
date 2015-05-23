@@ -23,6 +23,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self styleButtons];
+
+#warning Causes crash when tapping "No thanks, I'll sign up later": '-[UIView setContentSize:]: unrecognized selector sent to instance'
+    [(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

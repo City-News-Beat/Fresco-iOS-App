@@ -12,11 +12,17 @@
 #import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "FRSUser.h"
 #import "CameraViewController.h"
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 // TODO: Add assignment view, which is set automatically based on radius
+@property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -24,9 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @end
-
-// TODO: On success, redirect user back to original tab
 
 @implementation GalleryPostViewController
 
@@ -36,6 +41,12 @@
     [self setupButtons];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:@"Taken for Painting at Heart Castle"];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                    range:NSMakeRange(10, [string length] - 10)];
+    self.assignmentLabel.attributedText = string;
+
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 }
@@ -58,6 +69,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -89,6 +101,66 @@
 {
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
+
+- (IBAction)twitterButtonTapped:(UIButton *)button
+{
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
+                                                        message:@"Go to Profile to link your Fresco account to Twitter"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
+    button.selected = !button.selected;
+
+    NSString *bodyString = @"status=this is a test with spaces";
+    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    [[PFTwitterUtils twitter] signRequest:tweetRequest];
+
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"Error: %@", connectionError);
+        }
+        else {
+            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+    }];
+}
+
+- (IBAction)facebookButtonTapped:(UIButton *)button
+{
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
+                                                        message:@"Go to Profile to link your Fresco account to Facebook"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
+    button.selected = !button.selected;
+
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
+                                           parameters: @{ @"message" : @"hello world"}
+                                           HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"Post id:%@", result[@"id"]);
+             }
+         }];
+    }
+}
+
+- (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
 
 #pragma mark - Toolbar Items
 
@@ -135,7 +207,7 @@
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
 
-    NSDictionary *parameters = @{ @"owner" : @"55284ea411fe08b11f004297",  // test Owner ID
+    NSDictionary *parameters = @{ @"owner" : [FRSUser loggedInUserId],
                                   @"caption" : self.captionTextView.text,
                                   @"posts" : jsonData };
 
@@ -216,7 +288,13 @@
 
 #pragma mark - UITextViewDelegate methods
 
-// temporary ("return" to dismiss keyboard)
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"What's happening?"]) {
+        textView.text = @"";
+    }
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
@@ -234,10 +312,9 @@
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height;
+                            CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             CGRect frame = self.navigationController.toolbar.frame;
 
-                            height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 height *= -1;
                                 frame.origin.y += height;
@@ -251,7 +328,7 @@
 
                             self.topVerticalSpaceConstraint.constant = height;
                             self.bottomVerticalSpaceConstraint.constant = height;
-
+                            self.twitterVerticalConstraint.constant = -2 * height;
                             [self.view layoutIfNeeded];
     } completion:nil];
 }

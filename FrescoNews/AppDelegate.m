@@ -14,6 +14,8 @@
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
+#import "FRSUser.h"
+#import <AFNetworking.h>
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
 
@@ -167,15 +169,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     
     for (UITabBarItem *item in tabBar.items) {
         if (i == 4) {
-            if (!currentUser) {
-                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-                item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
-                item.title = @"Following";
-            } else {
-                item.image = [[UIImage imageNamed:@"tab-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-                item.selectedImage = [UIImage imageNamed:@"tab-profile-highlighted"];
-                item.title = @"Profile";
-            }
+            item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+            item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
+            item.title = @"Following";
         } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -196,7 +192,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 - (void)setupToolbarAppearance
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
 }
@@ -225,8 +221,24 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     self.location = [locations lastObject];
-    // TODO: Report location to the server
-    
+
+    if (![FRSUser loggedInUserId]) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
+        return;
+    }
+
+    AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"id" : [FRSUser loggedInUserId],
+                                 @"lat" : @(self.location.coordinate.latitude),
+                                 @"lon" : @(self.location.coordinate.longitude)};
+    [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
+                parameters:parameters
+                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
     // Set to YES to test monitoring of significant location changes even when the app is not running; also see didFinishLaunchingWithOptions above
     if (/* DISABLES CODE */ (NO)) {
         UILocalNotification *notification = [[UILocalNotification alloc] init];
