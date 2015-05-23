@@ -56,8 +56,10 @@
     [self zoomToCurrentLocation];
     
     [self updateAssignments];
-
     
+    self.scrollView.alpha = 0;
+
+
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -134,10 +136,11 @@
 
 - (void)populateMapWithAnnotations{
     
+    NSUInteger count = 0;
     for(FRSAssignment *assignment in self.assignments){
         
-        [self addAssignmentAnnotation:assignment];
-        
+        [self addAssignmentAnnotation:assignment index:count];
+        count++;
     }
     
 }
@@ -158,6 +161,10 @@
     self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
     
     [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon];
+    
+    [UIView animateWithDuration:1 animations:^(void) {
+        [self.scrollView setAlpha:1];
+    }];
     
     //Navgiate to the location if true
     if(navigate){
@@ -187,11 +194,11 @@
 ** Adds assignment to map through annotation
 */
 
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment{
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
-    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:self.currentAssignment.location[@"googlemaps"] coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:assignment.location[@"address"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
     
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:[assignment.radius floatValue]];
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
     
     [self.assignmentsMap addOverlay:circle];
     
@@ -259,8 +266,15 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
+    
     [mapView deselectAnnotation:view.annotation animated:YES];
     
+    if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
+        
+        
+        [self setAssignment:[self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex] navigateToAssignment:NO];
+
+    }
     
 }
 
@@ -269,6 +283,8 @@
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
     [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
+    
+    circleView.alpha = .1;
     
     return circleView;
 

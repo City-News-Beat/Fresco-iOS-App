@@ -310,7 +310,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                     
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    [assignmentVC setCurrentAssignment:responseObject];
+                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
                     
                 }
                 
@@ -351,7 +351,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                     
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    [assignmentVC setCurrentAssignment:responseObject];
+                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
                     
                 }
                 
