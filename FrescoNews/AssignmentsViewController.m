@@ -46,14 +46,17 @@
     self.scrollView.delegate = self;
     
     self.assignmentsMap.delegate = self;
-    
+
+    self.operatingRadius = 0;
+
     [self tweakUI];
     
     //Go to user location
     
     [self zoomToCurrentLocation];
     
-//    [self updateAssignments];
+    [self updateAssignments];
+
     
 }
 
@@ -186,9 +189,9 @@
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment{
     
-    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:self.currentAssignment.title address:self.currentAssignment.location[@"googlemaps"] coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:self.currentAssignment.location[@"googlemaps"] coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
     
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:[self.currentAssignment.radius floatValue]];
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:[assignment.radius floatValue]];
     
     [self.assignmentsMap addOverlay:circle];
     
@@ -210,9 +213,7 @@
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
 
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
-    
-    self.centeredUserLocation = YES;
-    
+
 }
 
 
@@ -256,12 +257,18 @@
 
 }
 
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
+{
+    [mapView deselectAnnotation:view.annotation animated:YES];
+    
+    
+}
+
 -(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
 
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
-    [circleView setFillColor:[UIColor colorWithHex:@"ffc600" alpha:.26]];
-    [circleView setStrokeColor:[UIColor clearColor]];
+    [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
     
     return circleView;
 
@@ -269,20 +276,8 @@
 
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-
-    //One degree of latitude = 69 miles
-    NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
     
-    if(self.operatingRadius == nil){
-    
-        [self updateAssignments];
-        
-    }
-    else if (fabsf([_operatingRadius floatValue] - [radius floatValue]) > 1) {
-        
-        [self updateAssignments];
-        
-    }
+    [self updateAssignments];
  
 }
 
@@ -294,11 +289,13 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     // center on the current location
-    if (!self.centeredUserLocation) [self zoomToCurrentLocation];
+    if (!self.centeredUserLocation){
     
-    self.centeredUserLocation = YES;
+        self.centeredUserLocation = YES;
     
-    [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+        [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+        
+    }
     
 }
 @end

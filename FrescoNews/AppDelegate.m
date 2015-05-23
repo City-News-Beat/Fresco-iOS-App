@@ -336,7 +336,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     ** Check the identifier for the type of notifcaiton
     */
     
-
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         
