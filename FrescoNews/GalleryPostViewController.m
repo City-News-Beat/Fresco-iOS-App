@@ -23,7 +23,7 @@
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
-@property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
+@property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -196,8 +196,8 @@
                         range:(NSRange){10, [titleString length] - 10}];
     }
     else {
-        titleString = [[NSMutableAttributedString alloc] initWithString:string ?: @"No assignment found"];
-        self.unlinkAssignmentButton.hidden = YES;
+        titleString = [[NSMutableAttributedString alloc] initWithString:@"No assignments nearby"];
+        self.linkAssignmentButton.hidden = YES;
     }
 
     self.assignmentLabel.attributedText = titleString;
@@ -209,9 +209,9 @@
     [self configureAssignmentLabelWithString:nil];
 }
 
-- (IBAction)unlinkAssignmentButtonTapped:(id)sender
+- (IBAction)linkAssignmentButtonTapped:(id)sender
 {
-    [self configureAssignmentLabelWithString:@"No assignment"];
+    [self configureAssignmentLabelWithString:@"Assignment unlinked"];
 }
 
 #pragma mark - Toolbar Items
