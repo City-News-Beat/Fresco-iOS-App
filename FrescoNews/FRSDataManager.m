@@ -7,9 +7,7 @@
 //
 
 #import "FRSDataManager.h"
-#import <ASIHTTPRequest/ASIFormDataRequest.h>
 #import "NSFileManager+Additions.h"
-#import "ASIFormDataRequest+Array.h"
 #import <NSArray+F.h>
 
 static NSString * const kPersistedStoriesFilename = @"stories.frs";

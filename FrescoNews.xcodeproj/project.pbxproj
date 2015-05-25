@@ -64,7 +64,6 @@
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
-		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
 		1EDF047D1B0E902900B35858 /* AssignmentNotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* AssignmentNotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
 		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
@@ -255,8 +254,6 @@
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
 		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
-		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
-		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
 		1EDF047B1B0E902900B35858 /* AssignmentNotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentNotificationCell.h; sourceTree = "<group>"; };
 		1EDF047C1B0E902900B35858 /* AssignmentNotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentNotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
@@ -714,8 +711,6 @@
 				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
 				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
 				1E408B741AA799750057AC16 /* UIColor+Additions.m */,
-				1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */,
-				1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */,
 				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
 				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
@@ -1213,7 +1208,6 @@
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
-				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
