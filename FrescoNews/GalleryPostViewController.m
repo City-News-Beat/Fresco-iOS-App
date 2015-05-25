@@ -121,6 +121,13 @@
     }
 
     button.selected = !button.selected;
+}
+
+- (void)crossPostToTwitter
+{
+    if (!self.twitterButton.selected) {
+        return;
+    }
 
     NSString *bodyString = @"status=this is a test with spaces";
     bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
@@ -133,10 +140,10 @@
 
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
-            NSLog(@"Error: %@", connectionError);
+            NSLog(@"Error crossposting to Twitter: %@", connectionError);
         }
         else {
-            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+            NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
     }];
 }
@@ -154,15 +161,25 @@
     }
 
     button.selected = !button.selected;
+}
+
+- (void)crossPostToFacebook
+{
+    if (!self.facebookButton.selected) {
+        return;
+    }
 
     if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
-                                           parameters: @{ @"message" : @"hello world"}
+                                           parameters: @{@"message" : @"hello world"}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-             if (!error) {
-                 NSLog(@"Post id:%@", result[@"id"]);
-             }
-         }];
+            if (error) {
+                NSLog(@"Error crossposting to Facebook");
+            }
+            else {
+                NSLog(@"Success crossposting to Facebook: Post id:%@", result[@"id"]);
+            }
+        }];
     }
 }
 
@@ -264,7 +281,7 @@
                                                                        progress:&progress
                                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
         if (uploadError) {
-            NSLog(@"Error: %@", uploadError);
+            NSLog(@"Error posting to Fresco: %@", uploadError);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self configureControlsForUpload:NO];
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed"
@@ -277,7 +294,10 @@
             });
         }
         else {
-            NSLog(@"Success: %@ %@", response, responseObject);
+            NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
+            [self crossPostToTwitter];
+            [self crossPostToFacebook];
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:nil
                                                                     preferredStyle:UIAlertControllerStyleAlert];
