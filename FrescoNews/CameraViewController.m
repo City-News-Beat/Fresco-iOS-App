@@ -146,6 +146,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.view.hidden = NO;
 
     dispatch_async([self sessionQueue], ^{
@@ -168,6 +169,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
 

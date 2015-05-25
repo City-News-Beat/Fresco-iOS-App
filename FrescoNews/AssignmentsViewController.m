@@ -58,6 +58,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     static BOOL firstTime = YES;
     if (firstTime) {
         // move the legal link in order to tuck the map behind nicely
