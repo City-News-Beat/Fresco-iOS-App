@@ -17,10 +17,11 @@
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "AppDelegate.h"
+#import "FRSDataManager.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-// TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
@@ -31,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
+
+@property (strong, nonatomic) NSArray *assignments;
 @end
 
 @implementation GalleryPostViewController
@@ -42,10 +45,10 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:@"Taken for Painting at Heart Castle"];
-    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
-                    range:NSMakeRange(10, [string length] - 10)];
-    self.assignmentLabel.attributedText = string;
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.assignments = responseObject;
+        [self configureAssignmentLabel];
+    }];
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
@@ -158,6 +161,28 @@
              }
          }];
     }
+}
+
+- (void)configureAssignmentLabelWithString:(NSString *)string
+{
+    NSMutableAttributedString *titleString;
+
+    if (self.assignments.count && !string) {
+        titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", ((FRSAssignment *)[self.assignments firstObject]).title]];
+        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                        range:(NSRange){10, [titleString length] - 10}];
+    }
+    else {
+        titleString = [[NSMutableAttributedString alloc] initWithString:string ?: @"No assignment found"];
+        self.unlinkAssignmentButton.hidden = YES;
+    }
+
+    self.assignmentLabel.attributedText = titleString;
+}
+
+- (void)configureAssignmentLabel
+{
+    [self configureAssignmentLabelWithString:nil];
 }
 
 - (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
