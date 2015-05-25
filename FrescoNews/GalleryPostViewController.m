@@ -84,11 +84,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    // TODO: Make a note of any caption the user started entering
-}
-
 - (void)setupButtons
 {
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
@@ -317,7 +312,7 @@
             [self presentViewController:alert animated:YES completion:nil];
         }
     }];
-    
+
     [uploadTask resume];
     [progress addObserver:self
                forKeyPath:@"fractionCompleted"
@@ -358,6 +353,7 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.captionTextView.text forKey:@"captionStringInProgress"];
         return YES;
     }
 
