@@ -33,7 +33,10 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 
+// TODO: "currentAssignment" and "assignments" redundant with AssignmentsViewController?
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
 @property (strong, nonatomic) NSArray *assignments;
+
 @end
 
 @implementation GalleryPostViewController
@@ -168,6 +171,7 @@
     NSMutableAttributedString *titleString;
 
     if (self.assignments.count && !string) {
+        self.currentAssignment = [self.assignments firstObject];
         titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", ((FRSAssignment *)[self.assignments firstObject]).title]];
         [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
                         range:(NSRange){10, [titleString length] - 10}];
