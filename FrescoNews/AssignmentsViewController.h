@@ -9,7 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSAssignment.h"
 
 @interface AssignmentsViewController : FRSBaseViewController
+
+@property (nonatomic, strong) FRSAssignment *currentAssignment;
+
+@property (nonatomic, strong) NSMutableArray *assignments;
+
+- (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate;
 
 @end

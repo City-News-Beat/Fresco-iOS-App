@@ -11,6 +11,7 @@
 #import <Mantle/Mantle.h>
 
 @class FRSUser, FRSTag;
+
 @interface FRSGallery : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, copy) NSNumber *galleryID;
