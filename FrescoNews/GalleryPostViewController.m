@@ -186,10 +186,14 @@
 
 - (void)configureAssignmentLabel
 {
+    self.currentAssignment = nil;
     [self configureAssignmentLabelWithString:nil];
 }
 
-- (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
+- (IBAction)unlinkAssignmentButtonTapped:(id)sender
+{
+    [self configureAssignmentLabelWithString:@"No assignment"];
+}
 
 #pragma mark - Toolbar Items
 
