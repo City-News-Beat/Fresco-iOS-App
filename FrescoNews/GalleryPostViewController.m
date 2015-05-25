@@ -55,6 +55,11 @@
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"];
+    self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+    self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -121,6 +126,7 @@
     }
 
     button.selected = !button.selected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"twitterButtonSelected"];
 }
 
 - (void)crossPostToTwitter
@@ -161,6 +167,7 @@
     }
 
     button.selected = !button.selected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
 - (void)crossPostToFacebook
