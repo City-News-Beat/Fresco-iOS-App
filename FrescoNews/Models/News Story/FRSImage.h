@@ -16,6 +16,8 @@
 @property (nonatomic, copy) NSNumber *width;
 @property (nonatomic, copy) NSNumber *height;
 @property (nonatomic, copy) UIImage *image;
+@property (strong, nonatomic) NSNumber *latitude;
+@property (strong, nonatomic) NSNumber *longitude;
 
 - (NSURL *)cdnImageURL;
 - (NSURL *)cdnImageInListURL;
