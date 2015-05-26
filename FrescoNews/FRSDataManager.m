@@ -58,7 +58,7 @@
 }
 
 
-#pragma - User State
+#pragma mark - User State
 
 - (void)currentUserFromParseUser
 {
@@ -101,8 +101,13 @@
     // log out
     else {
         _currentUser = nil;
-        [PFUser logOutInBackground];
+        [PFUser logOut];
     }
+}
+
+- (void)logout
+{
+    self.currentUser = nil;
 }
 
 - (FRSUser *)currentUser
@@ -112,11 +117,6 @@
        [self currentUserFromParseUser];
 
     return _currentUser;
-}
-
-- (void)logout
-{
-    [self setCurrentUser:nil];
 }
 
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock{

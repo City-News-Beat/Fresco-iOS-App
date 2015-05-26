@@ -218,17 +218,9 @@
                             <constraint firstItem="Mxj-w7-ehO" firstAttribute="top" secondItem="ugC-v5-eYQ" secondAttribute="top" id="xvN-XL-fn3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="pXV-wP-nof">
-                        <barButtonItem key="rightBarButtonItem" title="First Run" id="vYx-HH-oEE">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="primaryAction:" destination="e7j-a0-dqz" id="GQc-f3-0AL"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="pXV-wP-nof"/>
                     <connections>
                         <outlet property="galleriesView" destination="Mxj-w7-ehO" id="tKK-0N-RFG"/>
-                        <outlet property="primaryAction" destination="vYx-HH-oEE" id="0Hr-Te-m6J"/>
                         <segue destination="3S1-xO-1aC" kind="show" identifier="firstRunPush" id="Yet-yq-6JA"/>
                     </connections>
                 </viewController>
@@ -1705,12 +1697,12 @@
                                 <exclude reference="Eg5-zA-6Sa"/>
                                 <exclude reference="veL-2w-WHN"/>
                                 <exclude reference="yeE-qk-8tO"/>
-                                <exclude reference="15j-H1-shU"/>
-                                <exclude reference="DYj-r3-gq4"/>
-                                <exclude reference="CMT-uo-eIO"/>
                                 <exclude reference="Kap-LA-7kY"/>
                                 <exclude reference="bY5-AS-4ew"/>
+                                <exclude reference="15j-H1-shU"/>
+                                <exclude reference="DYj-r3-gq4"/>
                                 <exclude reference="Ki3-v2-zz9"/>
+                                <exclude reference="CMT-uo-eIO"/>
                                 <exclude reference="3E3-PS-qoV"/>
                                 <exclude reference="AzU-aU-nSh"/>
                                 <exclude reference="UUR-rK-OKZ"/>
@@ -2324,6 +2316,15 @@
                                                 <color key="textColor" red="0.38431372549999998" green="0.38431372549999998" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CPB-KY-1Ci">
+                                                <rect key="frame" x="16" y="839" width="49" height="30"/>
+                                                <state key="normal" title="Logout">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="logOut:" destination="fkO-PC-iRn" eventType="touchUpInside" id="uxK-nt-619"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>

@@ -16,7 +16,6 @@
 @interface HomeViewController ()
 //@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *primaryAction;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end
 
@@ -90,15 +89,6 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
-    }
-}
-
-- (IBAction)primaryAction:(id)sender {
-    if ([FRSDataManager sharedManager].currentUser) {
-        [FRSDataManager sharedManager].currentUser = nil;
-        self.primaryAction.title = @"First Run";
-    } else {
-        [self performSegueWithIdentifier:@"firstRunPush" sender:sender];
     }
 }
 

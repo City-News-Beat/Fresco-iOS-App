@@ -50,6 +50,11 @@
     return YES;
 }
 
+#pragma mark - Root View Controllers
+
+// because the app might launch into First Run mode
+// or regular (tab interface) we need to dynamically swap
+// root view controllers
 - (void)loadInitialViewController
 {
     if ([FRSDataManager sharedManager].currentUser.userID)

@@ -9,6 +9,7 @@
 #import "FRSBaseViewController.h"
 #import "FRSGallery.h"
 #import "GalleryHeader.h"
+#import "AppDelegate.h"
 
 @interface FRSBaseViewController ()
 
@@ -46,4 +47,10 @@
     return storyCellHeader;
 }
 
+// good for wholesale resetting of the app
+- (void)navigateToMainApp
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate setRootViewControllerToTabBar];
+}
 @end

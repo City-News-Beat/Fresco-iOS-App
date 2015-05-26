@@ -177,10 +177,10 @@
 - (IBAction)facebookLogin:(id)sender {
     [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ] block:^(PFUser *user, NSError *error) {
         if (!user) {
-
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
         } else {
             [[FRSDataManager sharedManager] currentUserFromParseUser];
+            [self navigateToMainApp];
             NSLog(@"User now has publish permissions!");
         }
     }];

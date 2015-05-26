@@ -8,6 +8,7 @@
 
 #import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
+#import "FRSDataManager.h"
 
 @interface ProfileSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
@@ -140,10 +141,8 @@
 }
 
 - (IBAction)logOut:(id)sender {
-    [PFUser logOut];
-    [self updateLinkingStatus];
+    [[FRSDataManager sharedManager] logout];
+    [self navigateToMainApp];
 }
-
-
 
 @end
