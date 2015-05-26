@@ -298,8 +298,11 @@
         }
         else {
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
+
+            // TODO: Handle error conditions
             [self crossPostToTwitter];
             [self crossPostToFacebook];
+
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:nil
