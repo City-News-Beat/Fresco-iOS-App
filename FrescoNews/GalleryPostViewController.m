@@ -50,7 +50,7 @@
 
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
-        [self configureAssignmentLabel];
+        self.currentAssignment = [self.assignments firstObject];
     }];
 
     self.captionTextView.delegate = self;
@@ -185,33 +185,34 @@
     }
 }
 
-- (void)configureAssignmentLabelWithString:(NSString *)string
-{
-    NSMutableAttributedString *titleString;
-
-    if (self.assignments.count && !string) {
-        self.currentAssignment = [self.assignments firstObject];
-        titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", ((FRSAssignment *)[self.assignments firstObject]).title]];
-        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
-                        range:(NSRange){10, [titleString length] - 10}];
-    }
-    else {
-        titleString = [[NSMutableAttributedString alloc] initWithString:@"No assignments nearby"];
-        self.linkAssignmentButton.hidden = YES;
-    }
-
-    self.assignmentLabel.attributedText = titleString;
-}
-
-- (void)configureAssignmentLabel
-{
-    self.currentAssignment = nil;
-    [self configureAssignmentLabelWithString:nil];
-}
-
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
-    [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+    if (self.currentAssignment) {
+        self.currentAssignment = nil;
+        // [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+    }
+    else {
+        self.currentAssignment = [self.assignments firstObject];
+    }
+}
+
+- (void)setCurrentAssignment:(FRSAssignment *)currentAssignment
+{
+    _currentAssignment = currentAssignment;
+    if (currentAssignment) {
+        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", currentAssignment.title]];
+        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                             range:(NSRange){10, [titleString length] - 10}];
+        self.assignmentLabel.attributedText = titleString;
+        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+    }
+    else if (self.assignments.count) {
+        self.assignmentLabel.text = @"Assignment unlinked";
+        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"plus-placeholder"] forState:UIControlStateNormal];
+    }
+    else {
+        self.assignmentLabel.text = @"No assignments nearby";
+    }
 }
 
 #pragma mark - Toolbar Items
