@@ -306,6 +306,7 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
+            // TODO: Post link to Web page: /post/[id]
             [self crossPostToTwitter];
             [self crossPostToFacebook];
 
