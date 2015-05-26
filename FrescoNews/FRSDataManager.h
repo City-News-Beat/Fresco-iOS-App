@@ -7,6 +7,7 @@
 //
 
 @import Foundation;
+#import <CoreLocation/CoreLocation.h>
 
 #import <AFNetworking/AFNetworking.h>
 #import "FRSStory.h"
@@ -51,8 +52,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 ** Assignments
 */
 
-- (void)getAssignment:(NSString *)assignmentId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getAssignmentsWithinLocation:(float)lat lon:(float)lon radius:(float)radius WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end

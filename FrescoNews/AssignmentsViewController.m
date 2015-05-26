@@ -106,23 +106,19 @@
 ** Update Assignments
 */
 
--(void)updateAssignments{
-    
-    //Grab the assignments in that region
-    //One degree of latitude = 69 miles
+-(void)updateAssignments
+{
+    // Grab the assignments in that region; one degree of latitude = 69 miles
     NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue]
+                                                    ofLocation:self.assignmentsMap.centerCoordinate
+                                             withResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
-            
             [self setAssignments:responseObject];
-            
             [self populateMapWithAnnotations];
-            
             [self setOperatingRadius:radius];
-            
         }
-        
     }];
 }
 
