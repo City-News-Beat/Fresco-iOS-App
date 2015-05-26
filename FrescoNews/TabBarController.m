@@ -8,27 +8,16 @@
 
 #import "TabBarController.h"
 #import "CameraViewController.h"
-#import "FRSUser.h"
 
 @implementation TabBarController
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     if ([item.title isEqualToString:@"Camera"]) {
-        if ([FRSUser loggedInUserId]) {
-            self.savedIndex = self.selectedIndex;
-            self.tabBar.hidden = YES;
-            CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
-            [self presentViewController:vc animated:NO completion:nil];
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Required"
-                                                            message:@"Please login to access the camera and post to Fresco"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
+        self.savedIndex = self.selectedIndex;
+        self.tabBar.hidden = YES;
+        CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+        [self presentViewController:vc animated:NO completion:nil];
     }
 }
 
