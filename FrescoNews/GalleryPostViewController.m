@@ -251,7 +251,7 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"type" : @"image",
+        postMetadata[filename] = @{ @"type" : ((FRSPost *)self.gallery.posts[i]).type,
                                     @"lat" : @10,
                                     @"lon" : @10 };
     }
