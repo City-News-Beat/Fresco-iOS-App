@@ -19,13 +19,14 @@
 
 @implementation AssignmentLocation
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate {
+- (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate {
     if ((self = [super init])) {
         if ([name isKindOfClass:[NSString class]]) {
             self.name = name;
         } else {
             self.name = @"Unknown Assignment";
         }
+        self.assignmentIndex = assignmentIndex;
         self.address = address;
         self.theCoordinate = coordinate;
     }

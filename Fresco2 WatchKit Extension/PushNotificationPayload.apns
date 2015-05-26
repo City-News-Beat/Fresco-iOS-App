@@ -7,5 +7,5 @@
         "category": "frescoNotification"
     },
     "image": "http://www.fresconews.com/uploads/422/large_de2035e499752c86358d9409586acab7a05a81db.jpg"
-}
-/Users/elmirkouliev/.Trash/iOS Simulator Screen Shot - Apple Watch Apr 7, 2015, 2.27.41 PM.png
+},
+{ "aps": { "alert": { "body": "New Assignment YO!", "title": "Fresco News" }, "category": "frescoNotification" }, "type": "assignment", "lat": "", "lng": "", "assignment_id": "555e57843764032b1d826dd7" }
