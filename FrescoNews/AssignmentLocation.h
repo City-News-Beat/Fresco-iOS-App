@@ -11,8 +11,10 @@
 
 @interface AssignmentLocation : NSObject <MKAnnotation>
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate;
 
 - (MKMapItem*)mapItem;
+
+@property (nonatomic) NSInteger assignmentIndex;
 
 @end

@@ -317,8 +317,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                 if (!error) {
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                     [tabBarController setSelectedIndex:3];
-                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setCurrentAssignment:responseObject];
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
                 }
             }];
         }
@@ -334,8 +334,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     /*
     ** Check the identifier for the type of notifcaiton
     */
-
-    // Assignment Action
+    //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an id
         if (notification[@"assignment_id"]) {
@@ -344,7 +343,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                     [tabBarController setSelectedIndex:3];
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setCurrentAssignment:responseObject];
+                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
                 }
             }];
         }
