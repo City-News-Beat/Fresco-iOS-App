@@ -19,6 +19,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
+#import "FirstRunViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -241,6 +242,11 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    if (![FRSUser loggedInUserId]) {
+        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        return;
+    }
+
     [self configureControlsForUpload:YES];
 
     NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
