@@ -60,7 +60,6 @@
     if ([self.gallery.posts count]) {
         FRSPost *post = [self.gallery.posts firstObject];
         
-        
         CGFloat aspectRatio;
         if (post.image) {
             aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];

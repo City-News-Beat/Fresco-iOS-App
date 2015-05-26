@@ -62,6 +62,9 @@
         [self.tableView.pullToRefreshView stopAnimating];
     }];
     
+    
+
+    
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
         // append data to data source, insert new cells at the end of table view

@@ -14,13 +14,16 @@
 #import "FRSImage.h"
 #import "FRSUser.h"
 #import "CameraViewController.h"
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "AppDelegate.h"
 #import "FRSDataManager.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-// TODO: Add assignment view, which is set automatically based on radius
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
-@property (weak, nonatomic) IBOutlet UIButton *unlinkAssignmentButton;
+@property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -29,6 +32,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
+
+// TODO: "currentAssignment" and "assignments" redundant with AssignmentsViewController?
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
+@property (strong, nonatomic) NSArray *assignments;
+
 @end
 
 @implementation GalleryPostViewController
@@ -40,13 +48,18 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:@"Taken for Painting at Heart Castle"];
-    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
-                    range:NSMakeRange(10, [string length] - 10)];
-    self.assignmentLabel.attributedText = string;
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.assignments = responseObject;
+        self.currentAssignment = [self.assignments firstObject];
+    }];
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"];
+    self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+    self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,12 +80,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    // TODO: Make a note of any caption the user started entering
 }
 
 - (void)setupButtons
@@ -101,15 +110,110 @@
 
 - (IBAction)twitterButtonTapped:(UIButton *)button
 {
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
+                                                        message:@"Go to Profile to link your Fresco account to Twitter"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     button.selected = !button.selected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"twitterButtonSelected"];
+}
+
+- (void)crossPostToTwitter
+{
+    if (!self.twitterButton.selected) {
+        return;
+    }
+
+    NSString *bodyString = @"status=this is a test with spaces";
+    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    [[PFTwitterUtils twitter] signRequest:tweetRequest];
+
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"Error crossposting to Twitter: %@", connectionError);
+        }
+        else {
+            NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+    }];
 }
 
 - (IBAction)facebookButtonTapped:(UIButton *)button
 {
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
+                                                        message:@"Go to Profile to link your Fresco account to Facebook"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
     button.selected = !button.selected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
-- (IBAction)unlinkAssignmentButtonTapped:(id)sender {}
+- (void)crossPostToFacebook
+{
+    if (!self.facebookButton.selected) {
+        return;
+    }
+
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
+                                           parameters: @{@"message" : @"hello world"}
+                                           HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            if (error) {
+                NSLog(@"Error crossposting to Facebook");
+            }
+            else {
+                NSLog(@"Success crossposting to Facebook: Post id:%@", result[@"id"]);
+            }
+        }];
+    }
+}
+
+- (IBAction)linkAssignmentButtonTapped:(id)sender
+{
+    if (self.currentAssignment) {
+        self.currentAssignment = nil;
+        // [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+    }
+    else {
+        self.currentAssignment = [self.assignments firstObject];
+    }
+}
+
+- (void)setCurrentAssignment:(FRSAssignment *)currentAssignment
+{
+    _currentAssignment = currentAssignment;
+    if (currentAssignment) {
+        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", currentAssignment.title]];
+        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                             range:(NSRange){10, [titleString length] - 10}];
+        self.assignmentLabel.attributedText = titleString;
+        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+    }
+    else if (self.assignments.count) {
+        self.assignmentLabel.text = @"Assignment unlinked";
+        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"plus-placeholder"] forState:UIControlStateNormal];
+    }
+    else {
+        self.assignmentLabel.text = @"No assignments nearby";
+    }
+}
 
 #pragma mark - Toolbar Items
 
@@ -147,7 +251,7 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"type" : @"image",
+        postMetadata[filename] = @{ @"type" : ((FRSPost *)self.gallery.posts[i]).type,
                                     @"lat" : @10,
                                     @"lon" : @10 };
     }
@@ -180,7 +284,7 @@
                                                                        progress:&progress
                                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
         if (uploadError) {
-            NSLog(@"Error: %@", uploadError);
+            NSLog(@"Error posting to Fresco: %@", uploadError);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self configureControlsForUpload:NO];
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed"
@@ -193,7 +297,13 @@
             });
         }
         else {
-            NSLog(@"Success: %@ %@", response, responseObject);
+            NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
+
+            // TODO: Handle error conditions
+            [self crossPostToTwitter];
+            [self crossPostToFacebook];
+
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:nil
                                                                     preferredStyle:UIAlertControllerStyleAlert];
@@ -206,7 +316,7 @@
             [self presentViewController:alert animated:YES completion:nil];
         }
     }];
-    
+
     [uploadTask resume];
     [progress addObserver:self
                forKeyPath:@"fractionCompleted"
@@ -247,6 +357,7 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.captionTextView.text forKey:@"captionStringInProgress"];
         return YES;
     }
 

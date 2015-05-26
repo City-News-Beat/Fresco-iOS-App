@@ -146,6 +146,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.view.hidden = NO;
 
     dispatch_async([self sessionQueue], ^{
@@ -168,6 +169,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
 
@@ -611,11 +613,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+#if TARGET_IPHONE_SIMULATOR
+    return YES;
+#else
     if (![asset valueForProperty:ALAssetPropertyLocation]) {
         return NO;
     }
 
     return YES;
+#endif
+
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset

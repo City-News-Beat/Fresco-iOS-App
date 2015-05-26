@@ -17,9 +17,6 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface FRSGallery ()
-@end
-
 @implementation FRSGallery
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
@@ -85,6 +82,9 @@
             continue;
         }
 
+#if TARGET_IPHONE_SIMULATOR
+        [posts addObject:post];
+#else
         if ([asset valueForProperty:ALAssetPropertyLocation]) {
             [posts addObject:post];
         }
@@ -92,8 +92,10 @@
             NSLog(@"Skipping - no location information available");
             continue;
         }
+#endif
+
     }
-    
+
     if (posts.count == 0) {
         return nil;
     }
