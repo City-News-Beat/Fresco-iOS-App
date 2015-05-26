@@ -37,6 +37,7 @@
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 @end
 
 @implementation GalleryPostViewController
@@ -50,6 +51,11 @@
 
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
+        if (self.currentAssignment) {
+            self.assignmentViewHeightConstraint.constant = 40;
+        } else {
+            self.assignmentViewHeightConstraint.constant = 0;
+        }
         self.currentAssignment = [self.assignments firstObject];
     }];
 
