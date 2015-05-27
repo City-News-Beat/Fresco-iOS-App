@@ -50,6 +50,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
+@property (weak, nonatomic) IBOutlet UIView *eventView;
+@property (weak, nonatomic) IBOutlet UILabel *eventViewVariableLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventViewWidthConstraint;
 
 @end
 
@@ -140,6 +143,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
+    
+    // Set fake data for eventView
+    //self.eventViewVariableLabel.text = @"Apartment Fire on Duncan St NE";
+    
+    // Set eventView layout styles
+    self.eventView.layer.cornerRadius = 2;
+    self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
+
 
     [self updateRecentPhotoView];
 }
