@@ -112,13 +112,7 @@
         [PFUser logInWithUsernameInBackground:[self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] password:self.passwordField.text
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
-                                            
-                                            //TODO: set the current user and pfuser in datamanager
-                                            // very first time the user needs to get a Fresco Id
-                                            NSLog(@"user : %@", user);
-                                            NSLog(@"cache: %@", [PFUser currentUser]);
-                                            
-                                            [((AppDelegate *)[[UIApplication sharedApplication] delegate]) setRootViewControllerToTabBar];
+                                            [self navigateToMainApp];
                                         } else {
                                             NSLog(@"Login failed : %@", error);
                                         }
@@ -144,19 +138,14 @@
     NSUInteger regExMatches = [regEx numberOfMatchesInString:user.email options:0 range:NSMakeRange(0, [user.email length])];
     
     if ([user.email length]!=0 && regExMatches!=0) { // Run Sign Up Method
-    
+        
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                // Hooray! Let them use the app now.
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You're signed up now" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
-                [alert addButtonWithTitle:@"GOO"];
-                [alert show];
-                
-                //[self.navigationController pushViewController: animated:YES]
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
             }
         }];
-        
-    } else { // Show error state
+    }
+    else { // Show error state
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You've screwed up and mistyped your email" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
         [alert addButtonWithTitle:@"Try Again"];
         [alert show];
@@ -193,12 +182,26 @@
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
             return;
-        } else if (user.isNew) {
-            NSLog(@"User signed up and logged in with Twitter!");
-        } else {
-            NSLog(@"User logged in with Twitter!");
+        }
+        else {
+            if (user.isNew)
+                NSLog(@"User signed up and logged in with Twitter!");
+            else
+                NSLog(@"User logged in with Twitter!");
+            [self navigateToMainApp];
         }
     }];
+}
+
+- (IBAction)buttonWontLogin:(UIButton *)sender {
+    [self navigateToMainApp];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"showSignUp"]) {
+    }
 }
 
 @end

@@ -60,12 +60,12 @@
 
 - (void)currentUserFromParseUser
 {
-    // make a blank user
-    self.currentUser = [[FRSUser alloc] init];
-    
     // user is logged into parse
     if ([PFUser currentUser]) {
         NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+        
+        // make a blank user
+        self.currentUser = [[FRSUser alloc] init];
         
         // but user isn't sync'd
         if (!userId || [userId length] == 0) {
@@ -75,12 +75,14 @@
             // or doesn't exist at all make one asynchronously
             if (!userId || [userId length] == 0) {
                 [self createFrescoUser:^(id responseObject, NSError *error) {
-                    FRSUser *frsUser = responseObject;
-                    _currentUser = frsUser;
-                    
-                    // send data back to Parse
-                    [[PFUser currentUser] setObject:_currentUser.userID forKey:kFrescoUserIdKey];
-                    [[PFUser currentUser] save];
+                    if (responseObject) {
+                        FRSUser *frsUser = responseObject;
+                        _currentUser = frsUser;
+                        
+                        // send data back to Parse
+                        [[PFUser currentUser] setObject:_currentUser.userID forKey:kFrescoUserIdKey];
+                        [[PFUser currentUser] save];
+                    }
                 }];
             }
             // this is synchronous
@@ -118,10 +120,10 @@
 }
 
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock{
-    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
-    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+ //   NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
+   // NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
     
-    [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
+    [self POST:@"/user/create" parameters:nil constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];

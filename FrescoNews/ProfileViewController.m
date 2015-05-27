@@ -56,8 +56,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    [self performNecessaryFetch:nil];
+    if (![FRSDataManager sharedManager].currentUser) {
+        [self navigateToFirstRun];
+    }
+    else {
+        [super viewWillAppear:animated];
+        [self performNecessaryFetch:nil];
+    }
 }
 
 #pragma mark - Data Loading

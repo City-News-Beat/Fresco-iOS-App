@@ -53,4 +53,10 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate setRootViewControllerToTabBar];
 }
+
+- (void)navigateToFirstRun
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate setRootViewControllerToFirstRun];
+}
 @end
