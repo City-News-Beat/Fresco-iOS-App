@@ -51,12 +51,14 @@
 
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
+        self.currentAssignment = [self.assignments firstObject];
+
         if (self.currentAssignment) {
             self.assignmentViewHeightConstraint.constant = 40;
-        } else {
+        }
+        else {
             self.assignmentViewHeightConstraint.constant = 0;
         }
-        self.currentAssignment = [self.assignments firstObject];
     }];
 
     self.captionTextView.delegate = self;
