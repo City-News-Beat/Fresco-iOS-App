@@ -36,6 +36,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
+@property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -151,7 +152,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.eventView.layer.cornerRadius = 2;
     self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
 
-
+    self.doneButtonBackground.layer.cornerRadius = 4;
     [self updateRecentPhotoView];
 }
 
