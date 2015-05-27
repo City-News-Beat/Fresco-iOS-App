@@ -197,7 +197,11 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.currentAssignment) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment" message:@"Are you sure you want remove this assignment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Remove", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
+                                                        message:@"Are you sure you want remove this assignment?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Remove", nil];
                         
         [alert show];
     }
@@ -404,20 +408,13 @@
                     
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-            if (buttonIndex == 0)
-            {
-                NSLog(@"You have clicked Cancel");
-            }
-            else if(buttonIndex == 1)
-            {
-                self.currentAssignment = nil;
-                [UIView animateWithDuration:0.25 animations:^{
-                    self.assignmentViewHeightConstraint.constant = 0;
-                    [self.view layoutIfNeeded];
-                }];
-            }
+    if (buttonIndex == 1) {
+        self.currentAssignment = nil;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.assignmentViewHeightConstraint.constant = 0;
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
-
-
 
 @end
