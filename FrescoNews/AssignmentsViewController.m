@@ -170,8 +170,8 @@
     
     [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
-    [mapView selectAnnotation:view.annotation animated:YES];
-    
+//    [mapView selectAnnotation:view.annotation animated:YES];
+//    
     [UIView animateWithDuration:1 animations:^(void) {
         [self.scrollView setAlpha:1];
     }];
@@ -224,17 +224,17 @@
 
 - (void)zoomToCurrentLocation {
     
-    // Zooming map after delay for effect
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-    
-    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-    
     //center on the current location
     if (!self.centeredUserLocation){
+        
+        // Zooming map after delay for effect
+        MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+        
+        MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+        
+        MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+        
+        [self.assignmentsMap setRegion:regionThatFits animated:YES];
         
         self.centeredUserLocation = YES;
     }
