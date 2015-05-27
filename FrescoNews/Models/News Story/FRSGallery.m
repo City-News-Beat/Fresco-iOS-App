@@ -68,6 +68,21 @@
         image.image = [UIImage imageFromAsset:asset];
         image.height = @1; // ?
         image.width = @1; // ?
+
+#if TARGET_IPHONE_SIMULATOR
+        image.latitude = @(40.6);
+        image.longitude = @(-74.1);
+#else
+        CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
+        if (location) {
+            image.latitude = @(location.coordinate.latitude);
+            image.longitude = @(location.coordinate.longitude);
+        }
+        else {
+            NSLog(@"Skipping - no location information available");
+            continue;
+        }
+#endif
         post.image = image;
 
         NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
@@ -82,18 +97,7 @@
             continue;
         }
 
-#if TARGET_IPHONE_SIMULATOR
         [posts addObject:post];
-#else
-        if ([asset valueForProperty:ALAssetPropertyLocation]) {
-            [posts addObject:post];
-        }
-        else {
-            NSLog(@"Skipping - no location information available");
-            continue;
-        }
-#endif
-
     }
 
     if (posts.count == 0) {

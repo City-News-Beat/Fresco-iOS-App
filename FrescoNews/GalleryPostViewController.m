@@ -19,9 +19,11 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
+#import "FirstRunViewController.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
@@ -37,6 +39,7 @@
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 @end
 
 @implementation GalleryPostViewController
@@ -51,13 +54,20 @@
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
         self.currentAssignment = [self.assignments firstObject];
+
+        if (self.currentAssignment) {
+            self.assignmentViewHeightConstraint.constant = 40;
+        }
+        else {
+            self.assignmentViewHeightConstraint.constant = 0;
+        }
     }];
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"] ?: @"What's Happening?";
     self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
     self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
@@ -188,8 +198,13 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.currentAssignment) {
-        self.currentAssignment = nil;
-        // [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
+                                                        message:@"Are you sure you want remove this assignment?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Remove", nil];
+                        
+        [alert show];
     }
     else {
         self.currentAssignment = [self.assignments firstObject];
@@ -207,8 +222,7 @@
         [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     }
     else if (self.assignments.count) {
-        self.assignmentLabel.text = @"Assignment unlinked";
-        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"plus-placeholder"] forState:UIControlStateNormal];
+        self.assignmentLabel.text = @"";
     }
     else {
         self.assignmentLabel.text = @"No assignments nearby";
@@ -241,6 +255,11 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    if (![FRSUser loggedInUserId]) {
+        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        return;
+    }
+
     [self configureControlsForUpload:YES];
 
     NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
@@ -251,9 +270,11 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"type" : ((FRSPost *)self.gallery.posts[i]).type,
-                                    @"lat" : @10,
-                                    @"lon" : @10 };
+
+        FRSPost *post = self.gallery.posts[i];
+        postMetadata[filename] = @{ @"type" : post.type,
+                                    @"lat" : post.image.latitude,
+                                    @"lon" : post.image.longitude };
     }
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
@@ -300,6 +321,7 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
+            // TODO: Post link to Web page: /post/[id]
             [self crossPostToTwitter];
             [self crossPostToFacebook];
 
@@ -391,6 +413,17 @@
                             self.twitterVerticalConstraint.constant = -2 * height;
                             [self.view layoutIfNeeded];
     } completion:nil];
+}
+                    
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        self.currentAssignment = nil;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.assignmentViewHeightConstraint.constant = 0;
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
 
 @end
