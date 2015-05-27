@@ -19,6 +19,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
+#import "FirstRunViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -66,7 +67,7 @@
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"] ?: @"What's Happening?";
     self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
     self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
@@ -254,6 +255,11 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    if (![FRSUser loggedInUserId]) {
+        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        return;
+    }
+
     [self configureControlsForUpload:YES];
 
     NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
@@ -264,9 +270,11 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-        postMetadata[filename] = @{ @"type" : ((FRSPost *)self.gallery.posts[i]).type,
-                                    @"lat" : @10,
-                                    @"lon" : @10 };
+
+        FRSPost *post = self.gallery.posts[i];
+        postMetadata[filename] = @{ @"type" : post.type,
+                                    @"lat" : post.image.latitude,
+                                    @"lon" : post.image.longitude };
     }
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
@@ -313,6 +321,7 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
+            // TODO: Post link to Web page: /post/[id]
             [self crossPostToTwitter];
             [self crossPostToFacebook];
 
