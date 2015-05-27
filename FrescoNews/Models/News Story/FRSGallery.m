@@ -73,7 +73,7 @@
         image.latitude = @(40.6);
         image.longitude = @(-74.1);
 #else
-        CLLocation *location = [asset valueForKey:ALAssetPropertyLocation];
+        CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
         if (location) {
             image.latitude = @(location.coordinate.latitude);
             image.longitude = @(location.coordinate.longitude);
