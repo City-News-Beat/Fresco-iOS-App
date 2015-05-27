@@ -34,28 +34,16 @@
 }
 
 - (NSString *)title {
-    return _name;
+    
+    return ![self.address isEqual:[NSNull null]] ? _address : NSLocalizedString(@"Get Directions", nil);
 }
 
-- (NSString *)subtitle {
-    return _address;
-}
+
 
 - (CLLocationCoordinate2D)coordinate {
     return _theCoordinate;
 }
 
-- (MKMapItem*)mapItem {
-    
-    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey : _address};
-    
-    MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:self.coordinate addressDictionary:addressDict];
-    
-    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-    
-    mapItem.name = self.title;
-    
-    return mapItem;
-}
+
 
 @end

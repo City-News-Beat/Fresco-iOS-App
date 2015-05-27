@@ -192,6 +192,10 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 
 #pragma mark - Assignments
 
+/*
+** Get a single assignment with an ID
+*/
+
 - (void)getAssignment:(NSString *)assignmentId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -212,6 +216,10 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     }];
 }
 
+/*
+** Get all assignments within a geo and radius
+*/
+
 - (void)getAssignmentsWithinLocation:(float)lat lon:(float)lon radius:(float)radius  WithResponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -231,11 +239,85 @@ static NSString * const kPersistedUserFilename = @"user.usr";
             
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);
         
     }];
 }
+
+
+#pragma mark - Notifications
+
+/*
+** Get notifications for the user
+*/
+
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"user_id" : @""};
+    
+    #warning will not work, endpoint does not exist
+    [self GET:@"/notifications/get" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *notifications = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSNotification class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(notifications, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+
+}
+
+/*
+** Delete a specific notification
+*/
+
+- (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : notificationId};
+    
+    #warning will not work, endpoint does not exist
+    [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
+
+
+
+
 
 @end

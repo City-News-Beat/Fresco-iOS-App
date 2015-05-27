@@ -17,7 +17,7 @@
 
 @class FRSAssignment;
 
-@interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate>
+@interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
 
     @property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
     @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
@@ -53,7 +53,11 @@
     
     //Go to user location
     
-    [self zoomToCurrentLocation];
+    if(self.currentAssignment == nil){
+    
+        [self zoomToCurrentLocation];
+        
+    }
     
     [self updateAssignments];
     
@@ -152,7 +156,7 @@
 
 - (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate{
     
-    [self setCurrentAssignment:assignment];
+    self.currentAssignment = assignment;
     
     self.assignmentTitle.text= self.currentAssignment.title;
     
@@ -160,7 +164,7 @@
     
     self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
     
-    [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon];
+    [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
     [UIView animateWithDuration:1 animations:^(void) {
         [self.scrollView setAlpha:1];
@@ -178,9 +182,11 @@
 ** Zoom to specified coordinates
 */
 
-- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lon{
+- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lon withRadius:(NSNumber *)radius{
 
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+    //Span uses degrees, 1 degree = 69 miles
+    
+    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 69.0), ([radius floatValue] / 69.0));
     
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     
@@ -196,7 +202,7 @@
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
-    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:assignment.location[@"address"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:assignment.location[@"googlemaps"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
     
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
     
@@ -213,14 +219,7 @@
 
 - (void)zoomToCurrentLocation {
     
-    // Zooming map after delay for effect
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-
+   
 }
 
 
@@ -249,7 +248,18 @@
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
-            annotationView.image = [UIImage imageNamed:@"assignment-dot"];//here we use a nice image instead of the default pins
+            
+            UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            
+            [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
+            
+            caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
+            
+            caret.contentMode = UIViewContentModeScaleAspectFit;
+            
+            annotationView.rightCalloutAccessoryView = caret;
+            
+            annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
        
         }
         else {
@@ -264,18 +274,77 @@
 
 }
 
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
-{
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
-    [mapView deselectAnnotation:view.annotation animated:YES];
+    [mapView selectAnnotation:view.annotation animated:YES];
     
     if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
-        
         
         [self setAssignment:[self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex] navigateToAssignment:NO];
 
     }
+
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
     
+    if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
+        
+
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                      initWithTitle:@"Navigate to the assignment"
+                                      delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      destructiveButtonTitle:nil
+                                      otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
+        
+        
+        // Google Maps
+        actionSheet.tag = 100;
+        
+
+        [actionSheet showInView:self.view];
+
+//
+//        [self setAssignment:[self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex] navigateToAssignment:NO];
+        
+    }
+    
+
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (actionSheet.tag == 100) {
+        
+        CLLocationCoordinate2D start = self.assignmentsMap.userLocation.location.coordinate;
+        
+        CLLocationCoordinate2D destination = { [self.currentAssignment.lat floatValue], [self.currentAssignment.lon floatValue] };
+
+        
+        //Google Maps
+        if(buttonIndex == 0){
+
+            NSString *googleMapsURLString = [NSString stringWithFormat:@"comgooglemapsurl://?saddr=%f,%f&daddr=%f,%f",
+                                             start.latitude, start.longitude, destination.latitude, destination.longitude];
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:googleMapsURLString]];
+                
+        }
+        //Apple Maps :/
+        else if(buttonIndex == 1){
+            
+            NSString *appleMapsURLString = [NSString stringWithFormat:@"http://maps.apple.com/?daddr=%f,%f&saddr=%f,%f",
+                                            start.latitude, start.longitude, destination.latitude, destination.longitude];
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appleMapsURLString]];
+            
+        }
+        
+        
+    }
+
+
 }
 
 -(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
@@ -304,14 +373,33 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    // center on the current location
+    
+    // Zooming map after delay for effect
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+    
+    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+    
+    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+    
+    
+    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    
+    //center on the current location
     if (!self.centeredUserLocation){
-    
-        self.centeredUserLocation = YES;
-    
-        [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
         
+        self.centeredUserLocation = YES;
     }
     
+
+//    // center on the current location
+//    if (!self.centeredUserLocation){
+//    
+//        self.centeredUserLocation = YES;
+//    
+//        [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
+//        
+//    }
+    
 }
+
 @end
