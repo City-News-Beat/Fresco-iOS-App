@@ -195,7 +195,7 @@
 {
     if (self.currentAssignment) {
         self.currentAssignment = nil;
-        // [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+        self.assignmentViewHeightConstraint.constant = 0;
     }
     else {
         self.currentAssignment = [self.assignments firstObject];
@@ -213,8 +213,7 @@
         [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     }
     else if (self.assignments.count) {
-        self.assignmentLabel.text = @"Assignment unlinked";
-        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"plus-placeholder"] forState:UIControlStateNormal];
+        self.assignmentLabel.text = @"";
     }
     else {
         self.assignmentLabel.text = @"No assignments nearby";
