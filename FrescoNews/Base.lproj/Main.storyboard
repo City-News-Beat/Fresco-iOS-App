@@ -919,6 +919,9 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1l-hi-b8h" userLabel="Spacer View 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="264" width="127" height="24"/>
+                                                </variation>
                                             </view>
                                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzJ-da-4aR" userLabel="Done Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -936,7 +939,8 @@
                                                         <exclude reference="aOs-Pw-hZN"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=compact">
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="20" y="288" width="87" height="88"/>
                                                     <mask key="constraints">
                                                         <include reference="aOs-Pw-hZN"/>
                                                     </mask>
@@ -1597,6 +1601,7 @@
                     <size key="freeformSize" width="600" height="1000"/>
                     <connections>
                         <outlet property="assignmentLabel" destination="IfG-Ph-Nex" id="5xQ-DF-IaI"/>
+                        <outlet property="assignmentView" destination="z9B-52-gor" id="i1W-TS-R8U"/>
                         <outlet property="assignmentViewHeightConstraint" destination="z4t-Mr-9U9" id="0qJ-mA-umt"/>
                         <outlet property="bottomVerticalSpaceConstraint" destination="g1f-oF-uoo" id="jpU-dR-Ca5"/>
                         <outlet property="captionTextView" destination="Y8g-aN-JKf" id="pz6-bp-bMA"/>
@@ -2765,7 +2770,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">

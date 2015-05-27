@@ -20,8 +20,9 @@
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
@@ -196,8 +197,9 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.currentAssignment) {
-        self.currentAssignment = nil;
-        self.assignmentViewHeightConstraint.constant = 0;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment" message:@"Are you sure you want remove this assignment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Remove", nil];
+                        
+        [alert show];
     }
     else {
         self.currentAssignment = [self.assignments firstObject];
@@ -399,5 +401,23 @@
                             [self.view layoutIfNeeded];
     } completion:nil];
 }
+                    
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+            if (buttonIndex == 0)
+            {
+                NSLog(@"You have clicked Cancel");
+            }
+            else if(buttonIndex == 1)
+            {
+                self.currentAssignment = nil;
+                [UIView animateWithDuration:0.25 animations:^{
+                    self.assignmentViewHeightConstraint.constant = 0;
+                    [self.view layoutIfNeeded];
+                }];
+            }
+}
+
+
 
 @end
