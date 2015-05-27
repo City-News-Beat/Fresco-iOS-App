@@ -17,6 +17,6 @@
 
 @property (nonatomic, strong) NSMutableArray *assignments;
 
-- (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate;
+- (void)updateCurrentAssignmentInView;
 
 @end

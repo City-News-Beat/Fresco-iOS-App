@@ -273,7 +273,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                 
-                [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
+                assignmentVC.currentAssignment = responseObject;
                 
             }
             

@@ -45,7 +45,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     for (FRSGallery *gallery in self.story.galleries) {
         for (FRSPost *post in gallery.posts) {
-#warning Broken by new data model
+            #warning Broken by new data model
             [tempArray addObject:post.image.URL];
         }
     }

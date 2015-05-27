@@ -51,23 +51,30 @@
 
     [self tweakUI];
     
-    //Go to user location
+    if(self.currentAssignment != nil){
+        
+        [self updateCurrentAssignmentInView];
     
-    if(self.currentAssignment == nil){
-    
-        [self zoomToCurrentLocation];
+    }
+    else{
+        
+        self.scrollView.alpha = 0;
         
     }
     
     [self updateAssignments];
-    
-    self.scrollView.alpha = 0;
-
 
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     static BOOL firstTime = YES;
+    
+    if(self.currentAssignment != nil){
+        
+        [self updateCurrentAssignmentInView];
+        
+    }
+
     if (firstTime) {
         // move the legal link in order to tuck the map behind nicely
         [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
@@ -83,8 +90,6 @@
     
     self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
     
-    // UI Values
-    self.storyBreaksView.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorStoryBreaksBackground];
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
@@ -141,6 +146,7 @@
 - (void)populateMapWithAnnotations{
     
     NSUInteger count = 0;
+    
     for(FRSAssignment *assignment in self.assignments){
         
         [self addAssignmentAnnotation:assignment index:count];
@@ -154,9 +160,7 @@
 ** Set the current assignment
 */
 
-- (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate{
-    
-    self.currentAssignment = assignment;
+- (void)updateCurrentAssignmentInView{
     
     self.assignmentTitle.text= self.currentAssignment.title;
     
@@ -166,15 +170,17 @@
     
     [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
+    [mapView selectAnnotation:view.annotation animated:YES];
+    
     [UIView animateWithDuration:1 animations:^(void) {
         [self.scrollView setAlpha:1];
     }];
     
-    //Navgiate to the location if true
-    if(navigate){
-    
-        
-    }
+//    //Navgiate to the location if true
+//    if(navigate){
+//    
+//        
+//    }
 
 }
 
@@ -185,7 +191,6 @@
 - (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lon withRadius:(NSNumber *)radius{
 
     //Span uses degrees, 1 degree = 69 miles
-    
     MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 69.0), ([radius floatValue] / 69.0));
     
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
@@ -214,12 +219,26 @@
 
 
 /*
-** Zooms to user locationter
+** Zooms to user location
 */
 
 - (void)zoomToCurrentLocation {
     
-   
+    // Zooming map after delay for effect
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+    
+    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+    
+    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+    
+    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    
+    //center on the current location
+    if (!self.centeredUserLocation){
+        
+        self.centeredUserLocation = YES;
+    }
+    
 }
 
 
@@ -280,9 +299,21 @@
     
     if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
         
-        [self setAssignment:[self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex] navigateToAssignment:NO];
+        self.currentAssignment = [self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex];
+        
+        [self updateCurrentAssignmentInView];
 
     }
+
+}
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
+
+    [mapView deselectAnnotation:view.annotation animated:YES];
+    
+    [UIView animateWithDuration:1 animations:^(void) {
+        [self.scrollView setAlpha:0];
+    }];
 
 }
 
@@ -302,11 +333,9 @@
         // Google Maps
         actionSheet.tag = 100;
         
-
         [actionSheet showInView:self.view];
 
-//
-//        [self setAssignment:[self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex] navigateToAssignment:NO];
+
         
     }
     
@@ -331,7 +360,7 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:googleMapsURLString]];
                 
         }
-        //Apple Maps :/
+        //Apple Maps :(
         else if(buttonIndex == 1){
             
             NSString *appleMapsURLString = [NSString stringWithFormat:@"http://maps.apple.com/?daddr=%f,%f&saddr=%f,%f",
@@ -374,31 +403,12 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     
-    // Zooming map after delay for effect
-    MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-    
-    MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-    
-    //center on the current location
-    if (!self.centeredUserLocation){
+    if(self.currentAssignment == nil){
         
-        self.centeredUserLocation = YES;
-    }
+        [self zoomToCurrentLocation];
     
+    }
 
-//    // center on the current location
-//    if (!self.centeredUserLocation){
-//    
-//        self.centeredUserLocation = YES;
-//    
-//        [self.assignmentsMap setCenterCoordinate:self.assignmentsMap.userLocation.location.coordinate animated:YES];
-//        
-//    }
     
 }
 
