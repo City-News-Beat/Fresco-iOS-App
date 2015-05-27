@@ -20,8 +20,9 @@
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
@@ -37,6 +38,7 @@
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 @end
 
 @implementation GalleryPostViewController
@@ -51,6 +53,13 @@
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
         self.currentAssignment = [self.assignments firstObject];
+
+        if (self.currentAssignment) {
+            self.assignmentViewHeightConstraint.constant = 40;
+        }
+        else {
+            self.assignmentViewHeightConstraint.constant = 0;
+        }
     }];
 
     self.captionTextView.delegate = self;
@@ -188,8 +197,13 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.currentAssignment) {
-        self.currentAssignment = nil;
-        // [self configureAssignmentLabelWithString:@"Assignment unlinked"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
+                                                        message:@"Are you sure you want remove this assignment?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Remove", nil];
+                        
+        [alert show];
     }
     else {
         self.currentAssignment = [self.assignments firstObject];
@@ -207,8 +221,7 @@
         [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     }
     else if (self.assignments.count) {
-        self.assignmentLabel.text = @"Assignment unlinked";
-        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"plus-placeholder"] forState:UIControlStateNormal];
+        self.assignmentLabel.text = @"";
     }
     else {
         self.assignmentLabel.text = @"No assignments nearby";
@@ -391,6 +404,17 @@
                             self.twitterVerticalConstraint.constant = -2 * height;
                             [self.view layoutIfNeeded];
     } completion:nil];
+}
+                    
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        self.currentAssignment = nil;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.assignmentViewHeightConstraint.constant = 0;
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
 
 @end
