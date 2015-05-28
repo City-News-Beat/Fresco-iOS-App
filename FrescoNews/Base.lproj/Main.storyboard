@@ -2201,6 +2201,9 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="130"/>
+                    <connections>
+                        <outlet property="labelDisplayName" destination="TqC-2K-fJV" id="DX3-nr-c14"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVc-qX-Ra0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3802,7 +3805,7 @@
         <image name="twitterButtonSmall" width="167" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QsB-rB-XyN"/>
+        <segue reference="SWl-Ux-T2G"/>
         <segue reference="RkU-nx-sgH"/>
     </inferredMetricsTieBreakers>
 </document>

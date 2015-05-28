@@ -11,17 +11,13 @@
 
 #import "ProfileViewController.h"
 #import "GalleriesViewController.h"
-#import "FirstRunViewController.h"
 #import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
+#import "ProfileHeaderViewController.h"
 
 @interface ProfileViewController ()
-//@property (weak, nonatomic) IBOutlet UIView *profileView;
-//@property (weak, nonatomic) IBOutlet UIView *profileWrapperView;
-//@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
-@property (weak, nonatomic) FirstRunViewController *firstRunViewController;
 @end
 
 @implementation ProfileViewController
@@ -44,7 +40,7 @@
 
 - (void)setup
 {
-    
+
 }
 
 - (void)viewDidLoad
@@ -96,7 +92,7 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
+        self.galleriesViewController.frsUser = [FRSDataManager sharedManager].currentUser;
     }
-
 }
 @end
