@@ -256,7 +256,7 @@
 
 - (void)submitGalleryPost:(id)sender
 {
-    if (![FRSUser loggedInUserId]) {
+    if (![FRSDataManager sharedManager].currentUser) {
         [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
         return;
     }
@@ -282,7 +282,7 @@
                                                        options:(NSJSONWritingOptions)0
                                                          error:&error];
 
-    NSDictionary *parameters = @{ @"owner" : [FRSUser loggedInUserId],
+    NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
                                   @"caption" : self.captionTextView.text,
                                   @"posts" : jsonData };
 

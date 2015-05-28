@@ -11,16 +11,14 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
+@class FRSUser;
+
 @interface GalleriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
 @property (strong, nonatomic) NSMutableArray *galleries;
-
+@property (strong, nonatomic) FRSUser *frsUser;
 @property (weak, nonatomic) UIViewController *containingViewController;
-
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
-
 
 /*
 ** Index of cell that is currently playing a video

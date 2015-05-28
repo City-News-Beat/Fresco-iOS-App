@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class FRSUser;
 @interface ProfileHeaderViewController : UIViewController
-
+@property (nonatomic, strong) FRSUser *frsUser;
 @end

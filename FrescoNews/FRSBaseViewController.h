@@ -10,4 +10,7 @@
 
 @interface FRSBaseViewController : UIViewController
 @property (strong, nonatomic) NSMutableArray *galleries;
+
+- (void)navigateToMainApp;
+- (void)navigateToFirstRun;
 @end

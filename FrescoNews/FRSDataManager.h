@@ -10,12 +10,15 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import <AFNetworking/AFNetworking.h>
+#import <Parse/Parse.h>
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
 #import "FRSGallery.h"
 #import "FRSAssignment.h"
+#import "FRSCluster.h"
+#import "FRSNotification.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 
@@ -27,19 +30,17 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-/*
-** User
-*/
-
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock;
-
+- (BOOL)login;
 - (void)logout;
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 
 /*
 ** Galleries
 */
 
-# warning for video
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
@@ -55,5 +56,15 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Notifications
+*/
+
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock;
+
+- (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end
