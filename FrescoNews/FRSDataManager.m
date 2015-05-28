@@ -212,10 +212,10 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 ** Get all assignments within a geo and radius
 */
 
-- (void)getAssignmentsWithinLocation:(float)lat lon:(float)lon radius:(float)radius  WithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    
+- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock
+{
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
+    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
 
     [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -233,6 +233,39 @@ static NSString * const kPersistedUserFilename = @"user.usr";
         if(responseBlock) responseBlock(nil, error);
     }];
 }
+
+/*
+** Get all clusters within a geo and radius
+*/
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
+    
+    [self GET:@"/assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *clusters = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSCluster class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(clusters, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+}
+
+
 
 
 #pragma mark - Notifications

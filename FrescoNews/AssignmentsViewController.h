@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) NSMutableArray *assignments;
 
+@property (nonatomic, strong) NSMutableArray *clusters;
+
 - (void)updateCurrentAssignmentInView;
 
 @end

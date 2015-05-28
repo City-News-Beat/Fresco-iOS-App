@@ -9,10 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface AssignmentLocation : NSObject <MKAnnotation>
+@interface AssignmentAnnotation : NSObject <MKAnnotation>
 
 - (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate;
-
 
 @property (nonatomic) NSInteger assignmentIndex;
 

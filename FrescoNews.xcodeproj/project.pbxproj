@@ -64,7 +64,6 @@
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
-		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
 		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
 		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
@@ -115,32 +114,11 @@
 		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
 		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
 		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
-		E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentLocation.m */; };
+		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
+		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
+		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
-		E7B7333B1B140727009C26D0 /* abc27.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733251B140727009C26D0 /* abc27.jpg */; };
-		E7B7333C1B140727009C26D0 /* abcnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733261B140727009C26D0 /* abcnews.png */; };
-		E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733271B140727009C26D0 /* aljazeera.png */; };
-		E7B7333E1B140727009C26D0 /* bbc.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733281B140727009C26D0 /* bbc.png */; };
-		E7B7333F1B140727009C26D0 /* cbsnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733291B140727009C26D0 /* cbsnews.png */; };
-		E7B733401B140727009C26D0 /* cnn.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332A1B140727009C26D0 /* cnn.png */; };
-		E7B733411B140727009C26D0 /* foxnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332B1B140727009C26D0 /* foxnews.png */; };
-		E7B733421B140727009C26D0 /* huffingtonpost.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332C1B140727009C26D0 /* huffingtonpost.png */; };
-		E7B733431B140727009C26D0 /* latimes.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332D1B140727009C26D0 /* latimes.png */; };
-		E7B733441B140727009C26D0 /* mashable.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332E1B140727009C26D0 /* mashable.png */; };
-		E7B733451B140727009C26D0 /* npr.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332F1B140727009C26D0 /* npr.png */; };
-		E7B733461B140727009C26D0 /* nytimes.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733301B140727009C26D0 /* nytimes.png */; };
-		E7B733471B140727009C26D0 /* reuters.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733311B140727009C26D0 /* reuters.png */; };
-		E7B733481B140727009C26D0 /* theguardian.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733321B140727009C26D0 /* theguardian.png */; };
-		E7B733491B140727009C26D0 /* theverge.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733331B140727009C26D0 /* theverge.png */; };
-		E7B7334A1B140727009C26D0 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733341B140727009C26D0 /* time.png */; };
-		E7B7334B1B140727009C26D0 /* unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733351B140727009C26D0 /* unknown.png */; };
-		E7B7334C1B140727009C26D0 /* usatoday.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733361B140727009C26D0 /* usatoday.png */; };
-		E7B7334D1B140727009C26D0 /* wishtv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733371B140727009C26D0 /* wishtv.jpg */; };
-		E7B7334E1B140727009C26D0 /* wpost.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733381B140727009C26D0 /* wpost.png */; };
-		E7B7334F1B140727009C26D0 /* wrbl.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733391B140727009C26D0 /* wrbl.jpg */; };
-		E7B733501B140727009C26D0 /* wsj.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7333A1B140727009C26D0 /* wsj.png */; };
-		E7B733521B14083A009C26D0 /* wfla.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733511B14083A009C26D0 /* wfla.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,8 +257,6 @@
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
 		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
-		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
-		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
 		1EDF047B1B0E902900B35858 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
 		1EDF047C1B0E902900B35858 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
@@ -375,36 +351,17 @@
 		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
 		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
 		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
-		E73E100B1B0F963800763240 /* AssignmentLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentLocation.h; sourceTree = "<group>"; };
-		E73E100C1B0F963800763240 /* AssignmentLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentLocation.m; sourceTree = "<group>"; };
+		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
+		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
+		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
+		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
+		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
+		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
-		E7B733251B140727009C26D0 /* abc27.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = abc27.jpg; sourceTree = "<group>"; };
-		E7B733261B140727009C26D0 /* abcnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = abcnews.png; sourceTree = "<group>"; };
-		E7B733271B140727009C26D0 /* aljazeera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aljazeera.png; sourceTree = "<group>"; };
-		E7B733281B140727009C26D0 /* bbc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bbc.png; sourceTree = "<group>"; };
-		E7B733291B140727009C26D0 /* cbsnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cbsnews.png; sourceTree = "<group>"; };
-		E7B7332A1B140727009C26D0 /* cnn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cnn.png; sourceTree = "<group>"; };
-		E7B7332B1B140727009C26D0 /* foxnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = foxnews.png; sourceTree = "<group>"; };
-		E7B7332C1B140727009C26D0 /* huffingtonpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = huffingtonpost.png; sourceTree = "<group>"; };
-		E7B7332D1B140727009C26D0 /* latimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = latimes.png; sourceTree = "<group>"; };
-		E7B7332E1B140727009C26D0 /* mashable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mashable.png; sourceTree = "<group>"; };
-		E7B7332F1B140727009C26D0 /* npr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = npr.png; sourceTree = "<group>"; };
-		E7B733301B140727009C26D0 /* nytimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nytimes.png; sourceTree = "<group>"; };
-		E7B733311B140727009C26D0 /* reuters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reuters.png; sourceTree = "<group>"; };
-		E7B733321B140727009C26D0 /* theguardian.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = theguardian.png; sourceTree = "<group>"; };
-		E7B733331B140727009C26D0 /* theverge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = theverge.png; sourceTree = "<group>"; };
-		E7B733341B140727009C26D0 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = time.png; sourceTree = "<group>"; };
-		E7B733351B140727009C26D0 /* unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unknown.png; sourceTree = "<group>"; };
-		E7B733361B140727009C26D0 /* usatoday.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usatoday.png; sourceTree = "<group>"; };
-		E7B733371B140727009C26D0 /* wishtv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wishtv.jpg; sourceTree = "<group>"; };
-		E7B733381B140727009C26D0 /* wpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wpost.png; sourceTree = "<group>"; };
-		E7B733391B140727009C26D0 /* wrbl.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wrbl.jpg; sourceTree = "<group>"; };
-		E7B7333A1B140727009C26D0 /* wsj.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wsj.png; sourceTree = "<group>"; };
-		E7B733511B14083A009C26D0 /* wfla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfla.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -832,7 +789,6 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E7B733241B140711009C26D0 /* Source Images */,
 				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
 				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
 			);
@@ -921,8 +877,10 @@
 			children = (
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
 				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
-				E73E100B1B0F963800763240 /* AssignmentLocation.h */,
-				E73E100C1B0F963800763240 /* AssignmentLocation.m */,
+				E73E100B1B0F963800763240 /* AssignmentAnnotation.h */,
+				E73E100C1B0F963800763240 /* AssignmentAnnotation.m */,
+				E76515B21B17581200AFDE1E /* ClusterAnnotation.h */,
+				E76515B31B17581200AFDE1E /* ClusterAnnotation.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -943,6 +901,8 @@
 			children = (
 				E796FA161B0E54B6002B30C4 /* FRSAssignment.h */,
 				E796FA171B0E54B6002B30C4 /* FRSAssignment.m */,
+				E76C1A461B168DDF00FB0B18 /* FRSCluster.h */,
+				E76C1A471B168DDF00FB0B18 /* FRSCluster.m */,
 			);
 			name = Assignment;
 			sourceTree = "<group>";
@@ -963,36 +923,6 @@
 				E7B733221B13E3F2009C26D0 /* FRSNotification.m */,
 			);
 			name = Notification;
-			sourceTree = "<group>";
-		};
-		E7B733241B140711009C26D0 /* Source Images */ = {
-			isa = PBXGroup;
-			children = (
-				E7B733511B14083A009C26D0 /* wfla.png */,
-				E7B733251B140727009C26D0 /* abc27.jpg */,
-				E7B733261B140727009C26D0 /* abcnews.png */,
-				E7B733271B140727009C26D0 /* aljazeera.png */,
-				E7B733281B140727009C26D0 /* bbc.png */,
-				E7B733291B140727009C26D0 /* cbsnews.png */,
-				E7B7332A1B140727009C26D0 /* cnn.png */,
-				E7B7332B1B140727009C26D0 /* foxnews.png */,
-				E7B7332C1B140727009C26D0 /* huffingtonpost.png */,
-				E7B7332D1B140727009C26D0 /* latimes.png */,
-				E7B7332E1B140727009C26D0 /* mashable.png */,
-				E7B7332F1B140727009C26D0 /* npr.png */,
-				E7B733301B140727009C26D0 /* nytimes.png */,
-				E7B733311B140727009C26D0 /* reuters.png */,
-				E7B733321B140727009C26D0 /* theguardian.png */,
-				E7B733331B140727009C26D0 /* theverge.png */,
-				E7B733341B140727009C26D0 /* time.png */,
-				E7B733351B140727009C26D0 /* unknown.png */,
-				E7B733361B140727009C26D0 /* usatoday.png */,
-				E7B733371B140727009C26D0 /* wishtv.jpg */,
-				E7B733381B140727009C26D0 /* wpost.png */,
-				E7B733391B140727009C26D0 /* wrbl.jpg */,
-				E7B7333A1B140727009C26D0 /* wsj.png */,
-			);
-			name = "Source Images";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1094,6 +1024,7 @@
 					};
 					E71F0E401B0B936200186BAD = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = Z7R96S8K3N;
 					};
 				};
 			};
@@ -1143,33 +1074,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */,
-				E7B7334F1B140727009C26D0 /* wrbl.jpg in Resources */,
-				E7B733521B14083A009C26D0 /* wfla.png in Resources */,
-				E7B7334E1B140727009C26D0 /* wpost.png in Resources */,
-				E7B7333E1B140727009C26D0 /* bbc.png in Resources */,
-				E7B7333F1B140727009C26D0 /* cbsnews.png in Resources */,
-				E7B733451B140727009C26D0 /* npr.png in Resources */,
-				E7B733491B140727009C26D0 /* theverge.png in Resources */,
-				E7B7334D1B140727009C26D0 /* wishtv.jpg in Resources */,
-				E7B733411B140727009C26D0 /* foxnews.png in Resources */,
-				E7B7334A1B140727009C26D0 /* time.png in Resources */,
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
-				E7B733481B140727009C26D0 /* theguardian.png in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
-				E7B733461B140727009C26D0 /* nytimes.png in Resources */,
-				E7B7334C1B140727009C26D0 /* usatoday.png in Resources */,
-				E7B733441B140727009C26D0 /* mashable.png in Resources */,
-				E7B733501B140727009C26D0 /* wsj.png in Resources */,
-				E7B733401B140727009C26D0 /* cnn.png in Resources */,
-				E7B733421B140727009C26D0 /* huffingtonpost.png in Resources */,
-				E7B733431B140727009C26D0 /* latimes.png in Resources */,
-				E7B7334B1B140727009C26D0 /* unknown.png in Resources */,
-				E7B7333B1B140727009C26D0 /* abc27.jpg in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
-				E7B7333C1B140727009C26D0 /* abcnews.png in Resources */,
-				E7B733471B140727009C26D0 /* reuters.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1309,6 +1217,7 @@
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */,
 				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
+				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
@@ -1325,7 +1234,7 @@
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
-				E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */,
+				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,
@@ -1334,6 +1243,7 @@
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
+				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
@@ -1630,6 +1540,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1640,6 +1552,7 @@
 				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -1650,6 +1563,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1657,6 +1572,7 @@
 				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";

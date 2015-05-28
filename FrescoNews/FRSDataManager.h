@@ -16,6 +16,7 @@
 #import "FRSTag.h"
 #import "FRSGallery.h"
 #import "FRSAssignment.h"
+#import "FRSCluster.h"
 #import "FRSNotification.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
@@ -56,6 +57,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Notifications

@@ -48,7 +48,6 @@
         
     }];
     
-    
 }
 
 + (NSValueTransformer *)timeCreatedJSONTransformer
