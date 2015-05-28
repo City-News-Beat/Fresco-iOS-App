@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) NSMutableArray *assignments;
 
-- (void)setAssignment:(FRSAssignment *)assignment navigateToAssignment:(BOOL)navigate;
+@property (nonatomic, strong) NSMutableArray *clusters;
+
+- (void)updateCurrentAssignmentInView;
 
 @end

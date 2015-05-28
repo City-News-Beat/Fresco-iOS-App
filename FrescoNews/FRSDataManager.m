@@ -357,8 +357,12 @@
 
 #pragma mark - Assignments
 
-- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock
-{
+/*
+** Get a single assignment with an ID
+*/
+
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:[NSString stringWithFormat:@"/assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -370,6 +374,10 @@
         if(responseBlock) responseBlock(nil, error);
     }];
 }
+
+/*
+** Get all assignments within a geo and radius
+*/
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
@@ -387,23 +395,113 @@
             if(responseBlock) responseBlock(assignments, nil);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if(responseBlock) responseBlock(nil, error);
     }];
 }
 
 /*
-- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock
-{
-    if (offset != nil) {
-        
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
-    }
-    else {
-        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
-    }
-}
+** Get all clusters within a geo and radius
 */
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
+    
+    [self GET:@"/assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *clusters = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSCluster class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(clusters, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+}
+
+
+
+
+#pragma mark - Notifications
+
+/*
+** Get notifications for the user
+*/
+
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"user_id" : @""};
+    
+    #warning will not work, endpoint does not exist
+    [self GET:@"/notifications/get" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *notifications = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSNotification class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(notifications, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+
+}
+
+/*
+** Delete a specific notification
+*/
+
+- (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : notificationId};
+    
+    #warning will not work, endpoint does not exist
+    [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
+}
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
