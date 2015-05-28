@@ -140,13 +140,29 @@
             [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
+                    NSMutableArray *copy;
+                    
+                    if(self.assignments != nil){
+                        
+                        copy = [responseObject mutableCopy];
+                        
+                        [copy removeObjectsInArray:self.assignments];
+                        
+                    }
+                    
+                    if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
+                        
+                        [self setAssignments:responseObject];
+                        
+                        [self populateMapWithAnnotations];
+                    
+                    }
+                    
+                    
                     _viewingClusters = false;
                     
-                    [self setAssignments:responseObject];
-                    
-                    [self populateMapWithAnnotations];
-                    
                     _updating = false;
+
                     
                 }
                 

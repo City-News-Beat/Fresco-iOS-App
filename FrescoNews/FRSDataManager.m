@@ -266,8 +266,6 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 
-
-
 #pragma mark - Notifications
 
 /*
