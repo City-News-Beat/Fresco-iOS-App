@@ -145,6 +145,27 @@
                                                        }];
 }
 
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block
+{
+    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        // upon success connect parse and frs login
+        if (user) {
+            if ([self login])
+                block(user, nil);
+            else {
+                [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
+                    if (succeeded)
+                        block(user, nil);
+                    else
+                        block (nil, error);
+                }];
+            }
+        }
+        else
+            block(nil, error);
+    }];
+}
+
 #warning Check for retain cycles
 - (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
 {

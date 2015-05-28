@@ -158,17 +158,12 @@
 }
 
 - (IBAction)twitterLogin:(id)sender {
-    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
-        if (!user) {
-            NSLog(@"Uh oh. The user cancelled the Twitter login.");
-            return;
+    [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
+        if (user) {
+            [self navigateToMainApp];
         }
         else {
-            if (user.isNew)
-                NSLog(@"User signed up and logged in with Twitter!");
-            else
-                NSLog(@"User logged in with Twitter!");
-            [self navigateToMainApp];
+            NSLog(@"Twitter login error: %@", error);
         }
     }];
 }

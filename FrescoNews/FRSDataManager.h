@@ -33,8 +33,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
-//- (void)currentUserFromParseUser;
-
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 
 /*
 ** Galleries
