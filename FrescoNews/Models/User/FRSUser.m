@@ -32,4 +32,16 @@
     }
 }
 
+- (NSString *)asJSONString
+{
+    NSString *jsonString;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[MTLJSONAdapter JSONDictionaryFromModel:self]
+                                                       options:0
+                                                         error:&error];
+    if (jsonData)
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return jsonString;
+}
 @end

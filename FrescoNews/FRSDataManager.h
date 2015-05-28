@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import <AFNetworking/AFNetworking.h>
+#import <Parse/Parse.h>
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
@@ -27,8 +28,12 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-- (void)currentUserFromParseUser;
+- (BOOL)login;
 - (void)logout;
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
+- (void)currentUserFromParseUser;
+
 
 /*
 ** Galleries

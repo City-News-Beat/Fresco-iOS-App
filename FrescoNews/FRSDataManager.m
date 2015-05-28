@@ -12,6 +12,7 @@
 #import "NSFileManager+Additions.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
+#define kFrescoUserData @"frescoUserData"
 
 @interface FRSDataManager () {
     @protected
@@ -58,42 +59,141 @@
 
 #pragma mark - User State
 
-- (void)currentUserFromParseUser
+#warning Make callback block
+- (BOOL)login
 {
+    FRSUser *frsUser;
+   
     // user is logged into parse
     if ([PFUser currentUser]) {
-        NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+        // check before syncing
+        frsUser = [self FRSUserFromPFUser];
+    }
+    else {
+        [[PFUser currentUser] fetch];
         
-        // make a blank user
-        self.currentUser = [[FRSUser alloc] init];
-        
-        // but user isn't sync'd
-        if (!userId || [userId length] == 0) {
-            [[PFUser currentUser] fetch];
-            userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
-            
-            // or doesn't exist at all make one asynchronously
-            if (!userId || [userId length] == 0) {
-                [self createFrescoUser:^(id responseObject, NSError *error) {
-                    if (responseObject) {
-                        FRSUser *frsUser = responseObject;
-                        _currentUser = frsUser;
-                        
-                        // send data back to Parse
-                        [[PFUser currentUser] setObject:_currentUser.userID forKey:kFrescoUserIdKey];
-                        [[PFUser currentUser] save];
-                    }
-                }];
-            }
-            // this is synchronous
+        // try again
+        frsUser = [self FRSUserFromPFUser];
+    }
+    if (frsUser) {
+        _currentUser = frsUser;
+        return YES;
+    }
+    return NO;
+}
+
+- (void)logout
+{
+    [PFUser logOut];
+    self.currentUser = nil;
+}
+
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block
+{
+    PFUser *user = [PFUser user];
+    user.username = [username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    user.password = password;
+    user.email = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([user.email length]) {
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            // now that we're signed in, let's bind the Parse and FRSUsers
+            if (succeeded)
+                [self bindParseUserToFrescoUser:block];
+            // bubble failure back up to caller
             else
-                self.currentUser.userID = userId;
-        }
-        else
-            self.currentUser.userID = userId;
+                block(succeeded, error);
+        }];
     }
 }
 
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block
+{
+    [PFUser logInWithUsernameInBackground:[username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                 password:[password stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                    block:^(PFUser *user, NSError *error) {
+                                        // upon success connect parse and frs login
+                                        if (user)
+                                            [self login];
+                                        
+                                        // call the block in any event
+                                        block(user, error);
+                                    }
+     ];
+}
+
+#warning Check for retain cycles
+- (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
+{
+    // user is logged into parse
+    if ([PFUser currentUser]) {
+        // check before syncing
+        FRSUser *frsUser = [self FRSUserFromPFUser];
+        if (frsUser) {
+            _currentUser = frsUser;
+            block(YES, nil);
+        }
+        // not locally, check/fetch Parse's server
+        else {
+            [[PFUser currentUser] fetch];
+            
+            // try again
+            frsUser = [self FRSUserFromPFUser];
+            
+            if (frsUser) {
+                _currentUser = frsUser;
+                block(YES, nil);
+            }
+            // still no FRS user? Make one
+            else {
+                [self createFrescoUser:^(id responseObject, NSError *error) {
+                    if (responseObject) {
+                        FRSUser *frsUser = [responseObject copy];
+                        
+                        frsUser.first = @"J.S.";
+                        frsUser.last = @"Bach";
+                        
+                        NSString *jsonUser = [frsUser asJSONString];
+                        if (jsonUser)
+                            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
+                        
+                        // save locally
+                        [[PFUser currentUser] pinWithName:kFrescoUserData];
+                        
+                        if ([[PFUser currentUser] save]) {
+                            _currentUser = frsUser;
+                            block(YES, nil);
+                        }
+                        else {
+                            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
+                            block (NO, saveError);
+                        }
+                    }
+                }];
+            }
+        }
+    }
+}
+
+// this extracts embedded FRSUser data within the PFUser which may or may not be sync'd to disk or the server
+- (FRSUser *)FRSUserFromPFUser
+{
+    FRSUser *frsUser;
+    NSString *serializedUserData = [[PFUser currentUser] objectForKey:kFrescoUserData];
+    
+    if ([serializedUserData length]) {
+        NSError *jsonError;
+        NSData *objectData = [serializedUserData dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:&jsonError];
+        
+        frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:jsonDict error:nil];
+    }
+    return frsUser;
+}
+
+/*
 - (void)setCurrentUser:(FRSUser *)currentUser
 {
     if (currentUser)
@@ -104,12 +204,10 @@
         [PFUser logOut];
     }
 }
+*/
 
-- (void)logout
-{
-    self.currentUser = nil;
-}
 
+/*
 - (FRSUser *)currentUser
 {
     // see if we can bootstrap the user from Parse
@@ -118,12 +216,14 @@
 
     return _currentUser;
 }
+*/
 
-- (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock{
- //   NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
-   // NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+- (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
+{
+    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
+    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
     
-    [self POST:@"/user/create" parameters:nil constructingBodyWithBlock:nil
+    [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];

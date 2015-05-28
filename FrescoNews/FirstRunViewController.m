@@ -102,56 +102,40 @@
 */
 
 - (IBAction)loginButtonAction:(id)sender {
-    
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:self.emailField.text options:0 range:NSMakeRange(0, [self.emailField.text length])];
-    
-    if ([self.emailField.text length]!=0 && regExMatches!=0) { // Run Log In Method
-        [PFUser logInWithUsernameInBackground:[self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] password:self.passwordField.text
-                                    block:^(PFUser *user, NSError *error) {
-                                        if (user) {
-                                            [self navigateToMainApp];
-                                        } else {
-                                            NSLog(@"Login failed : %@", error);
-                                        }
-                                    }];
-    } else { // Show error state
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You've screwed up and mistyped your email" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
-        [alert addButtonWithTitle:@"Try Again"];
-        [alert show];
-        
-        self.emailField.textColor = [UIColor redColor];
-    }
+    [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+        if (user) {
+            [self navigateToMainApp];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
+            [alert show];
+            
+            self.emailField.textColor = [UIColor redColor];
+        }
+    }];
 }
 
-- (IBAction) signUpButtonAction:(id)sender {
-    PFUser *user = [PFUser user];
-    user.password = self.passwordField.text;
-    user.username = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    user.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    
-    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger regExMatches = [regEx numberOfMatchesInString:user.email options:0 range:NSMakeRange(0, [user.email length])];
-    
-    if ([user.email length]!=0 && regExMatches!=0) { // Run Sign Up Method
-        
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                [self performSegueWithIdentifier:@"showSignUp" sender:self];
-            }
-        }];
-    }
-    else { // Show error state
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh boy" message:@"You've screwed up and mistyped your email" delegate: self cancelButtonTitle: @"Cancel" otherButtonTitles:nil, nil];
-        [alert addButtonWithTitle:@"Try Again"];
-        [alert show];
-        
-        self.emailField.textColor = [UIColor redColor];
-    }
+- (IBAction)signUpButtonAction:(id)sender
+{
+    [[FRSDataManager sharedManager] signupUser:self.emailField.text
+                                              email:self.emailField.text
+                                           password:self.passwordField.text
+                                              block:^(BOOL succeeded, NSError * __nullable error) {
+                                                  if (!error)
+                                                      [self performSegueWithIdentifier:@"showSignUp" sender:self];
+                                                  else {
+                                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                                                      message:@"Signup failed"
+                                                                                                     delegate: self
+                                                                                            cancelButtonTitle: @"Cancel"
+                                                                                            otherButtonTitles:nil, nil];
+                                                      [alert addButtonWithTitle:@"Try Again"];
+                                                      [alert show];
+                                                      
+                                                      self.emailField.textColor = [UIColor redColor];
+                                                  }
+                                                  
+                                              }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

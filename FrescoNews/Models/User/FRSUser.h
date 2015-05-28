@@ -16,5 +16,6 @@
 @property (nonatomic, copy) NSString *email;
 
 - (NSString *)displayName;
+- (NSString *)asJSONString;
 
 @end

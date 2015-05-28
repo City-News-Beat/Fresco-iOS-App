@@ -109,7 +109,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 // root view controllers
 - (void)loadInitialViewController
 {
-    if ([FRSDataManager sharedManager].currentUser.userID)
+    if ([[FRSDataManager sharedManager] login])
         [self setRootViewControllerToTabBar];
     else {
         [self setRootViewControllerToFirstRun];
