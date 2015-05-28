@@ -14,6 +14,7 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "FRSAssignment.h"
+#import "FRSNotification.h"
 
 @implementation MTLModel (Additions)
 

@@ -13,7 +13,6 @@
 
 - (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate;
 
-- (MKMapItem*)mapItem;
 
 @property (nonatomic) NSInteger assignmentIndex;
 

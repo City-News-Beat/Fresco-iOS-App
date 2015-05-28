@@ -318,7 +318,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                     [tabBarController setSelectedIndex:3];
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
+                    
+                    assignmentVC.currentAssignment = responseObject;
                 }
             }];
         }
@@ -343,7 +344,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                     [tabBarController setSelectedIndex:3];
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setAssignment:responseObject navigateToAssignment:NO];
+                    
+                    assignmentVC.currentAssignment = responseObject;
                 }
             }];
         }
