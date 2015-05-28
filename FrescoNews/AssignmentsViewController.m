@@ -135,10 +135,14 @@
         //One degree of latitude = 69 miles
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
         
-        if([radius integerValue] < 1000){
+        if([radius integerValue] < 500){
 
             [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
+                    
+                    _viewingClusters = false;
+                    
+                    _updating = false;
                     
                     NSMutableArray *copy;
                     
@@ -152,17 +156,11 @@
                     
                     if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
                         
-                        [self setAssignments:responseObject];
+                        self.assignments = responseObject;
                         
                         [self populateMapWithAnnotations];
                     
                     }
-                    
-                    
-                    _viewingClusters = false;
-                    
-                    _updating = false;
-
                     
                 }
                 
@@ -173,13 +171,13 @@
             [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
+                    _updating = false;
+                    
                     _viewingClusters = true;
                     
-                    [self setClusters:responseObject];
-                    
+                    self.clusters = responseObject;
+                
                     [self populateMapWithAnnotations];
-                    
-                    _updating = false;
                     
                 }
                 
@@ -219,6 +217,10 @@
                 
             }
             
+            
+            self.assignments = nil;
+            
+
         }
         
         for(FRSCluster *cluster in self.clusters){
@@ -422,7 +424,7 @@
     
     [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
     
-    circleView.alpha = .1;
+    circleView.alpha = .4;
     
     return circleView;
     
