@@ -120,7 +120,6 @@
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
-		E7B7333B1B140727009C26D0 /* abc27.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733251B140727009C26D0 /* abc27.jpg */; };
 		E7B7333C1B140727009C26D0 /* abcnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733261B140727009C26D0 /* abcnews.png */; };
 		E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733271B140727009C26D0 /* aljazeera.png */; };
 		E7B7333E1B140727009C26D0 /* bbc.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733281B140727009C26D0 /* bbc.png */; };
@@ -140,7 +139,6 @@
 		E7B7334C1B140727009C26D0 /* usatoday.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733361B140727009C26D0 /* usatoday.png */; };
 		E7B7334D1B140727009C26D0 /* wishtv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733371B140727009C26D0 /* wishtv.jpg */; };
 		E7B7334E1B140727009C26D0 /* wpost.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733381B140727009C26D0 /* wpost.png */; };
-		E7B7334F1B140727009C26D0 /* wrbl.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733391B140727009C26D0 /* wrbl.jpg */; };
 		E7B733501B140727009C26D0 /* wsj.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7333A1B140727009C26D0 /* wsj.png */; };
 		E7B733521B14083A009C26D0 /* wfla.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733511B14083A009C26D0 /* wfla.png */; };
 /* End PBXBuildFile section */
@@ -388,7 +386,6 @@
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
-		E7B733251B140727009C26D0 /* abc27.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = abc27.jpg; sourceTree = "<group>"; };
 		E7B733261B140727009C26D0 /* abcnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = abcnews.png; sourceTree = "<group>"; };
 		E7B733271B140727009C26D0 /* aljazeera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aljazeera.png; sourceTree = "<group>"; };
 		E7B733281B140727009C26D0 /* bbc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bbc.png; sourceTree = "<group>"; };
@@ -408,7 +405,6 @@
 		E7B733361B140727009C26D0 /* usatoday.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usatoday.png; sourceTree = "<group>"; };
 		E7B733371B140727009C26D0 /* wishtv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wishtv.jpg; sourceTree = "<group>"; };
 		E7B733381B140727009C26D0 /* wpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wpost.png; sourceTree = "<group>"; };
-		E7B733391B140727009C26D0 /* wrbl.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wrbl.jpg; sourceTree = "<group>"; };
 		E7B7333A1B140727009C26D0 /* wsj.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wsj.png; sourceTree = "<group>"; };
 		E7B733511B14083A009C26D0 /* wfla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfla.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -981,7 +977,6 @@
 			isa = PBXGroup;
 			children = (
 				E7B733511B14083A009C26D0 /* wfla.png */,
-				E7B733251B140727009C26D0 /* abc27.jpg */,
 				E7B733261B140727009C26D0 /* abcnews.png */,
 				E7B733271B140727009C26D0 /* aljazeera.png */,
 				E7B733281B140727009C26D0 /* bbc.png */,
@@ -1001,7 +996,6 @@
 				E7B733361B140727009C26D0 /* usatoday.png */,
 				E7B733371B140727009C26D0 /* wishtv.jpg */,
 				E7B733381B140727009C26D0 /* wpost.png */,
-				E7B733391B140727009C26D0 /* wrbl.jpg */,
 				E7B7333A1B140727009C26D0 /* wsj.png */,
 			);
 			name = "Source Images";
@@ -1157,7 +1151,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */,
-				E7B7334F1B140727009C26D0 /* wrbl.jpg in Resources */,
 				E7B733521B14083A009C26D0 /* wfla.png in Resources */,
 				E7B7334E1B140727009C26D0 /* wpost.png in Resources */,
 				E7B7333E1B140727009C26D0 /* bbc.png in Resources */,
@@ -1178,7 +1171,6 @@
 				E7B733421B140727009C26D0 /* huffingtonpost.png in Resources */,
 				E7B733431B140727009C26D0 /* latimes.png in Resources */,
 				E7B7334B1B140727009C26D0 /* unknown.png in Resources */,
-				E7B7333B1B140727009C26D0 /* abc27.jpg in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				E7B7333C1B140727009C26D0 /* abcnews.png in Resources */,
