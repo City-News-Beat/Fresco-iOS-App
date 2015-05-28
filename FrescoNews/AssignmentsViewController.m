@@ -11,7 +11,8 @@
 #import "MKMapView+LegalLabel.h"
 #import "MTLModel+Additions.h"
 #import "FRSDataManager.h"
-#import "AssignmentLocation.h"
+#import "AssignmentAnnotation.h"
+#import "ClusterAnnotation.h"
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -30,6 +31,10 @@
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
     @property (assign, nonatomic) BOOL centeredUserLocation;
+
+    @property (assign, nonatomic) BOOL updating;
+
+    @property (assign, nonatomic) BOOL viewingClusters;
 
     @property (assign, nonatomic) NSNumber *operatingRadius;
 
@@ -121,22 +126,52 @@
 
 -(void)updateAssignments{
     
-    //Grab the assignments in that region
-    //One degree of latitude = 69 miles
-    NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
+    if(!_updating){
+        
+        _updating = true;
+        
+        //Grab the assignments in that region
+        //One degree of latitude = 69 miles
+        NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
+        
+        if([radius integerValue] < 1000){
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
-        if (!error) {
-            
-            [self setAssignments:responseObject];
-            
-            [self populateMapWithAnnotations];
-            
-            [self setOperatingRadius:radius];
+            [[FRSDataManager sharedManager] getAssignmentsWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    _viewingClusters = false;
+                    
+                    [self setAssignments:responseObject];
+                    
+                    [self populateMapWithAnnotations];
+                    
+                    _updating = false;
+                    
+                }
+                
+            }];
             
         }
+        else{
+
+            [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    _viewingClusters = true;
+                    
+                    [self setClusters:responseObject];
+                    
+                    [self populateMapWithAnnotations];
+                    
+                    _updating = false;
+                    
+                }
+                
+            }];
         
-    }];
+        }
+        
+    }
 }
 
 /*
@@ -147,17 +182,92 @@
     
     NSUInteger count = 0;
     
-    for(FRSAssignment *assignment in self.assignments){
+    if(_viewingClusters){
         
-        [self addAssignmentAnnotation:assignment index:count];
-        count++;
+        if(self.assignmentsMap.annotations != nil){
+        
+            for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
+                
+                MKAnnotationView *view = [self.assignmentsMap viewForAnnotation:annotation];
+                
+                if (view) {
+                    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                        view.alpha = 0.0;
+                    } completion:^(BOOL finished) {
+                        [self.assignmentsMap removeAnnotation:annotation];
+                        view.alpha = 1.0;
+                    }];
+                } else {
+                    [self.assignmentsMap removeAnnotation:annotation];
+                }
+                
+            }
+            
+        }
+        
+        for(FRSCluster *cluster in self.clusters){
+            
+            [self addClusterAnnotation:cluster index:count];
+            count++;
+        }
+    
+    }
+    else{
+        
+        if(self.assignmentsMap.annotations != nil){
+        
+            for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
+                
+                if ([annotation isKindOfClass:[ClusterAnnotation class]]){
+                    
+                    [self.assignmentsMap removeAnnotation:annotation];
+                    
+                }
+                
+            }
+             
+         }
+        
+        for(FRSAssignment *assignment in self.assignments){
+            
+            [self addAssignmentAnnotation:assignment index:count];
+            count++;
+        }
+    
     }
     
 }
 
+/*
+ ** Adds assignment to map through annotation
+ */
+
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
+    
+    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithName:assignment.title address:assignment.location[@"googlemaps"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
+    
+    [self.assignmentsMap addOverlay:circle];
+    
+    [self.assignmentsMap addAnnotation:annotation];
+    
+}
 
 /*
-** Set the current assignment
+** Adds cluster to map through annotation
+*/
+
+- (void)addClusterAnnotation:(FRSCluster*)cluster index:(NSInteger)index{
+    
+    ClusterAnnotation *annotation = [[ClusterAnnotation alloc] initWithCoordinate:CLLocationCoordinate2DMake([cluster.lat floatValue], [cluster.lon floatValue]) clusterIndex:index];
+    
+    [self.assignmentsMap addAnnotation:annotation];
+    
+}
+
+/*
+** Set the current assignment in the view
 */
 
 - (void)updateCurrentAssignmentInView{
@@ -168,30 +278,22 @@
     
     self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
     
-    [self zoomToCoordinates:self.currentAssignment.lat lng:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
+    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
-//    [mapView selectAnnotation:view.annotation animated:YES];
-//    
     [UIView animateWithDuration:1 animations:^(void) {
         [self.scrollView setAlpha:1];
     }];
     
-//    //Navgiate to the location if true
-//    if(navigate){
-//    
-//        
-//    }
-
 }
 
 /*
 ** Zoom to specified coordinates
 */
 
-- (void)zoomToCoordinates:(NSNumber*)lat lng:(NSNumber *)lon withRadius:(NSNumber *)radius{
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius{
 
     //Span uses degrees, 1 degree = 69 miles
-    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 69.0), ([radius floatValue] / 69.0));
+    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
     
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     
@@ -199,22 +301,6 @@
     
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
 
-}
-
-/*
-** Adds assignment to map through annotation
-*/
-
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
-    
-    AssignmentLocation *annotation = [[AssignmentLocation alloc] initWithName:assignment.title address:assignment.location[@"googlemaps"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
-    
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
-    
-    [self.assignmentsMap addOverlay:circle];
-    
-    [self.assignmentsMap addAnnotation:annotation];
-    
 }
 
 
@@ -257,8 +343,9 @@
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
     static NSString *identifier = @"AssignmentAnnotation";
+    static NSString *clusterIdentifier = @"ClusterAnnotation";
     
-    if ([annotation isKindOfClass:[AssignmentLocation class]]){
+    if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
     
@@ -288,21 +375,60 @@
         return annotationView;
     
     }
+    else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
+        
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:clusterIdentifier];
+        
+        if (annotationView == nil) {
+            
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            
+            annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
+            
+        }
+        else {
+            annotationView.annotation = annotation;
+        }
+        
+        return annotationView;
+    
+    
+    }
 
     return nil;
 
+}
+
+-(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
+    
+    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
+    
+    [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
+    
+    circleView.alpha = .1;
+    
+    return circleView;
+    
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
     [mapView selectAnnotation:view.annotation animated:YES];
     
-    if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
+    if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        self.currentAssignment = [self.assignments objectAtIndex:((AssignmentLocation *) view.annotation).assignmentIndex];
+        self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
         
         [self updateCurrentAssignmentInView];
 
+    }
+    else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
+        
+        FRSCluster *cluster = [self.clusters objectAtIndex:((ClusterAnnotation *) view.annotation).clusterIndex];
+        
+        [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
+    
     }
 
 }
@@ -319,7 +445,7 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
     
-    if ([view.annotation isKindOfClass:[AssignmentLocation class]]){
+    if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
 
         UIActionSheet *actionSheet = [[UIActionSheet alloc]
@@ -334,12 +460,9 @@
         actionSheet.tag = 100;
         
         [actionSheet showInView:self.view];
-
-
         
     }
     
-
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -375,19 +498,6 @@
 
 
 }
-
--(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
-
-    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
-    
-    [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
-    
-    circleView.alpha = .1;
-    
-    return circleView;
-
-}
-
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     

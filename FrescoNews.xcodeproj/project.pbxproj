@@ -115,7 +115,9 @@
 		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
 		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
 		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
-		E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentLocation.m */; };
+		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
+		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
+		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7B7333B1B140727009C26D0 /* abc27.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733251B140727009C26D0 /* abc27.jpg */; };
@@ -375,8 +377,12 @@
 		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
 		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
 		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
-		E73E100B1B0F963800763240 /* AssignmentLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentLocation.h; sourceTree = "<group>"; };
-		E73E100C1B0F963800763240 /* AssignmentLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentLocation.m; sourceTree = "<group>"; };
+		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
+		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
+		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
+		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
+		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
+		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
@@ -923,8 +929,10 @@
 			children = (
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
 				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
-				E73E100B1B0F963800763240 /* AssignmentLocation.h */,
-				E73E100C1B0F963800763240 /* AssignmentLocation.m */,
+				E73E100B1B0F963800763240 /* AssignmentAnnotation.h */,
+				E73E100C1B0F963800763240 /* AssignmentAnnotation.m */,
+				E76515B21B17581200AFDE1E /* ClusterAnnotation.h */,
+				E76515B31B17581200AFDE1E /* ClusterAnnotation.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -945,6 +953,8 @@
 			children = (
 				E796FA161B0E54B6002B30C4 /* FRSAssignment.h */,
 				E796FA171B0E54B6002B30C4 /* FRSAssignment.m */,
+				E76C1A461B168DDF00FB0B18 /* FRSCluster.h */,
+				E76C1A471B168DDF00FB0B18 /* FRSCluster.m */,
 			);
 			name = Assignment;
 			sourceTree = "<group>";
@@ -1096,6 +1106,7 @@
 					};
 					E71F0E401B0B936200186BAD = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = Z7R96S8K3N;
 					};
 				};
 			};
@@ -1311,6 +1322,7 @@
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */,
 				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
+				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
@@ -1327,7 +1339,7 @@
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
-				E73E100D1B0F963800763240 /* AssignmentLocation.m in Sources */,
+				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,
@@ -1337,6 +1349,7 @@
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
 				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
+				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
@@ -1633,6 +1646,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1643,6 +1658,7 @@
 				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -1653,6 +1669,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1660,6 +1678,7 @@
 				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";

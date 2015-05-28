@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "AssignmentLocation.h"
+#import "AssignmentAnnotation.h"
 #import <AddressBook/AddressBook.h>
 
-@interface AssignmentLocation ()
+@interface AssignmentAnnotation ()
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *address;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation AssignmentLocation
+@implementation AssignmentAnnotation
 
 - (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate {
     if ((self = [super init])) {
