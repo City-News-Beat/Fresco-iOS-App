@@ -6,11 +6,16 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <Parse/Parse.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+
 #import "FirstRunViewController.h"
 #import "FRSDataManager.h"
 #import "AppDelegate.h"
 
-@interface FirstRunViewController ()
+@interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -91,16 +96,6 @@
                         } completion:nil];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (IBAction)loginButtonAction:(id)sender {
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
         if (user) {
@@ -138,7 +133,8 @@
                                               }];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     if(textField == self.emailField) {
         [self.passwordField becomeFirstResponder];
     } else if (textField == self.passwordField) {
@@ -149,14 +145,14 @@
     return YES;
 }
 
-- (IBAction)facebookLogin:(id)sender {
-    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ] block:^(PFUser *user, NSError *error) {
-        if (!user) {
-            NSLog(@"Uh oh. The user cancelled the Facebook login.");
-        } else {
-            [[FRSDataManager sharedManager] currentUserFromParseUser];
+- (IBAction)facebookLogin:(id)sender
+{
+    [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
+        if (user) {
             [self navigateToMainApp];
-            NSLog(@"User now has publish permissions!");
+        }
+        else {
+            NSLog(@"Facebook login error: %@", error);
         }
     }];
 }

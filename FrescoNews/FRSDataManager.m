@@ -8,6 +8,7 @@
 
 #import <NSArray+F.h>
 #import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
 
@@ -120,6 +121,28 @@
                                         block(user, error);
                                     }
      ];
+}
+
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block
+{
+    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ]
+                                                       block:^(PFUser *user, NSError *error) {
+                                                           // upon success connect parse and frs login
+                                                           if (user) {
+                                                               if ([self login])
+                                                                   block(user, nil);
+                                                               else {
+                                                                   [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
+                                                                       if (succeeded)
+                                                                           block(user, nil);
+                                                                       else
+                                                                           block (nil, error);
+                                                                   }];
+                                                               }
+                                                           }
+                                                           else
+                                                               block(nil, error);
+                                                       }];
 }
 
 #warning Check for retain cycles
