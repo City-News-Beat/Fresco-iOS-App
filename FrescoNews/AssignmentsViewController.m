@@ -72,6 +72,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     static BOOL firstTime = YES;
     
     if(self.currentAssignment != nil){
@@ -136,7 +137,7 @@
         
         if([radius integerValue] < 1000){
 
-            [[FRSDataManager sharedManager] getAssignmentsWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     _viewingClusters = false;
@@ -153,8 +154,7 @@
             
         }
         else{
-
-            [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     _viewingClusters = true;

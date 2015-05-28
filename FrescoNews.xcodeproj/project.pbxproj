@@ -64,7 +64,6 @@
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
-		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
 		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
 		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
@@ -120,27 +119,6 @@
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
-		E7B7333C1B140727009C26D0 /* abcnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733261B140727009C26D0 /* abcnews.png */; };
-		E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733271B140727009C26D0 /* aljazeera.png */; };
-		E7B7333E1B140727009C26D0 /* bbc.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733281B140727009C26D0 /* bbc.png */; };
-		E7B7333F1B140727009C26D0 /* cbsnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733291B140727009C26D0 /* cbsnews.png */; };
-		E7B733401B140727009C26D0 /* cnn.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332A1B140727009C26D0 /* cnn.png */; };
-		E7B733411B140727009C26D0 /* foxnews.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332B1B140727009C26D0 /* foxnews.png */; };
-		E7B733421B140727009C26D0 /* huffingtonpost.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332C1B140727009C26D0 /* huffingtonpost.png */; };
-		E7B733431B140727009C26D0 /* latimes.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332D1B140727009C26D0 /* latimes.png */; };
-		E7B733441B140727009C26D0 /* mashable.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332E1B140727009C26D0 /* mashable.png */; };
-		E7B733451B140727009C26D0 /* npr.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7332F1B140727009C26D0 /* npr.png */; };
-		E7B733461B140727009C26D0 /* nytimes.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733301B140727009C26D0 /* nytimes.png */; };
-		E7B733471B140727009C26D0 /* reuters.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733311B140727009C26D0 /* reuters.png */; };
-		E7B733481B140727009C26D0 /* theguardian.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733321B140727009C26D0 /* theguardian.png */; };
-		E7B733491B140727009C26D0 /* theverge.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733331B140727009C26D0 /* theverge.png */; };
-		E7B7334A1B140727009C26D0 /* time.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733341B140727009C26D0 /* time.png */; };
-		E7B7334B1B140727009C26D0 /* unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733351B140727009C26D0 /* unknown.png */; };
-		E7B7334C1B140727009C26D0 /* usatoday.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733361B140727009C26D0 /* usatoday.png */; };
-		E7B7334D1B140727009C26D0 /* wishtv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E7B733371B140727009C26D0 /* wishtv.jpg */; };
-		E7B7334E1B140727009C26D0 /* wpost.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733381B140727009C26D0 /* wpost.png */; };
-		E7B733501B140727009C26D0 /* wsj.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B7333A1B140727009C26D0 /* wsj.png */; };
-		E7B733521B14083A009C26D0 /* wfla.png in Resources */ = {isa = PBXBuildFile; fileRef = E7B733511B14083A009C26D0 /* wfla.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,8 +257,6 @@
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
 		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
-		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
-		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
 		1EDF047B1B0E902900B35858 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
 		1EDF047C1B0E902900B35858 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
@@ -386,27 +362,6 @@
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
-		E7B733261B140727009C26D0 /* abcnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = abcnews.png; sourceTree = "<group>"; };
-		E7B733271B140727009C26D0 /* aljazeera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aljazeera.png; sourceTree = "<group>"; };
-		E7B733281B140727009C26D0 /* bbc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bbc.png; sourceTree = "<group>"; };
-		E7B733291B140727009C26D0 /* cbsnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cbsnews.png; sourceTree = "<group>"; };
-		E7B7332A1B140727009C26D0 /* cnn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cnn.png; sourceTree = "<group>"; };
-		E7B7332B1B140727009C26D0 /* foxnews.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = foxnews.png; sourceTree = "<group>"; };
-		E7B7332C1B140727009C26D0 /* huffingtonpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = huffingtonpost.png; sourceTree = "<group>"; };
-		E7B7332D1B140727009C26D0 /* latimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = latimes.png; sourceTree = "<group>"; };
-		E7B7332E1B140727009C26D0 /* mashable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mashable.png; sourceTree = "<group>"; };
-		E7B7332F1B140727009C26D0 /* npr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = npr.png; sourceTree = "<group>"; };
-		E7B733301B140727009C26D0 /* nytimes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nytimes.png; sourceTree = "<group>"; };
-		E7B733311B140727009C26D0 /* reuters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reuters.png; sourceTree = "<group>"; };
-		E7B733321B140727009C26D0 /* theguardian.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = theguardian.png; sourceTree = "<group>"; };
-		E7B733331B140727009C26D0 /* theverge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = theverge.png; sourceTree = "<group>"; };
-		E7B733341B140727009C26D0 /* time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = time.png; sourceTree = "<group>"; };
-		E7B733351B140727009C26D0 /* unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unknown.png; sourceTree = "<group>"; };
-		E7B733361B140727009C26D0 /* usatoday.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usatoday.png; sourceTree = "<group>"; };
-		E7B733371B140727009C26D0 /* wishtv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wishtv.jpg; sourceTree = "<group>"; };
-		E7B733381B140727009C26D0 /* wpost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wpost.png; sourceTree = "<group>"; };
-		E7B7333A1B140727009C26D0 /* wsj.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wsj.png; sourceTree = "<group>"; };
-		E7B733511B14083A009C26D0 /* wfla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wfla.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -765,8 +720,6 @@
 				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
 				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
 				1E408B741AA799750057AC16 /* UIColor+Additions.m */,
-				1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */,
-				1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */,
 				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
 				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
@@ -836,7 +789,6 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E7B733241B140711009C26D0 /* Source Images */,
 				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
 				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
 			);
@@ -971,34 +923,6 @@
 				E7B733221B13E3F2009C26D0 /* FRSNotification.m */,
 			);
 			name = Notification;
-			sourceTree = "<group>";
-		};
-		E7B733241B140711009C26D0 /* Source Images */ = {
-			isa = PBXGroup;
-			children = (
-				E7B733511B14083A009C26D0 /* wfla.png */,
-				E7B733261B140727009C26D0 /* abcnews.png */,
-				E7B733271B140727009C26D0 /* aljazeera.png */,
-				E7B733281B140727009C26D0 /* bbc.png */,
-				E7B733291B140727009C26D0 /* cbsnews.png */,
-				E7B7332A1B140727009C26D0 /* cnn.png */,
-				E7B7332B1B140727009C26D0 /* foxnews.png */,
-				E7B7332C1B140727009C26D0 /* huffingtonpost.png */,
-				E7B7332D1B140727009C26D0 /* latimes.png */,
-				E7B7332E1B140727009C26D0 /* mashable.png */,
-				E7B7332F1B140727009C26D0 /* npr.png */,
-				E7B733301B140727009C26D0 /* nytimes.png */,
-				E7B733311B140727009C26D0 /* reuters.png */,
-				E7B733321B140727009C26D0 /* theguardian.png */,
-				E7B733331B140727009C26D0 /* theverge.png */,
-				E7B733341B140727009C26D0 /* time.png */,
-				E7B733351B140727009C26D0 /* unknown.png */,
-				E7B733361B140727009C26D0 /* usatoday.png */,
-				E7B733371B140727009C26D0 /* wishtv.jpg */,
-				E7B733381B140727009C26D0 /* wpost.png */,
-				E7B7333A1B140727009C26D0 /* wsj.png */,
-			);
-			name = "Source Images";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1150,31 +1074,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7B7333D1B140727009C26D0 /* aljazeera.png in Resources */,
-				E7B733521B14083A009C26D0 /* wfla.png in Resources */,
-				E7B7334E1B140727009C26D0 /* wpost.png in Resources */,
-				E7B7333E1B140727009C26D0 /* bbc.png in Resources */,
-				E7B7333F1B140727009C26D0 /* cbsnews.png in Resources */,
-				E7B733451B140727009C26D0 /* npr.png in Resources */,
-				E7B733491B140727009C26D0 /* theverge.png in Resources */,
-				E7B7334D1B140727009C26D0 /* wishtv.jpg in Resources */,
-				E7B733411B140727009C26D0 /* foxnews.png in Resources */,
-				E7B7334A1B140727009C26D0 /* time.png in Resources */,
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
-				E7B733481B140727009C26D0 /* theguardian.png in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
-				E7B733461B140727009C26D0 /* nytimes.png in Resources */,
-				E7B7334C1B140727009C26D0 /* usatoday.png in Resources */,
-				E7B733441B140727009C26D0 /* mashable.png in Resources */,
-				E7B733501B140727009C26D0 /* wsj.png in Resources */,
-				E7B733401B140727009C26D0 /* cnn.png in Resources */,
-				E7B733421B140727009C26D0 /* huffingtonpost.png in Resources */,
-				E7B733431B140727009C26D0 /* latimes.png in Resources */,
-				E7B7334B1B140727009C26D0 /* unknown.png in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
-				E7B7333C1B140727009C26D0 /* abcnews.png in Resources */,
-				E7B733471B140727009C26D0 /* reuters.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1339,7 +1242,6 @@
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
-				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,

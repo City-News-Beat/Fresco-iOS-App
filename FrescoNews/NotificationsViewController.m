@@ -264,7 +264,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     if([notification.type isEqualToString:@"assignment"]){
         
         //Get assignment and navigate to on assignments view
-        [[FRSDataManager sharedManager] getAssignment:notification.notificationData[@"assignment_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignment:notification.notificationData[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;

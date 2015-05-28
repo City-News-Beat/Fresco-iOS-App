@@ -36,6 +36,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
+@property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -50,6 +51,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
+@property (weak, nonatomic) IBOutlet UIView *eventView;
+@property (weak, nonatomic) IBOutlet UILabel *eventViewVariableLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventViewWidthConstraint;
 
 @end
 
@@ -140,12 +144,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
+    
+    // Set fake data for eventView
+    //self.eventViewVariableLabel.text = @"Apartment Fire on Duncan St NE";
+    
+    // Set eventView layout styles
+    self.eventView.layer.cornerRadius = 2;
+    self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
 
+    self.doneButtonBackground.layer.cornerRadius = 4;
     [self updateRecentPhotoView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.view.hidden = NO;
 
     dispatch_async([self sessionQueue], ^{
@@ -168,6 +181,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
 

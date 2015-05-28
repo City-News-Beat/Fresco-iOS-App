@@ -7,9 +7,7 @@
 //
 
 #import "FRSDataManager.h"
-#import <ASIHTTPRequest/ASIFormDataRequest.h>
 #import "NSFileManager+Additions.h"
-#import "ASIFormDataRequest+Array.h"
 #import <NSArray+F.h>
 
 static NSString * const kPersistedStoriesFilename = @"stories.frs";
@@ -196,23 +194,17 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 ** Get a single assignment with an ID
 */
 
-- (void)getAssignment:(NSString *)assignmentId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:[NSString stringWithFormat:@"/assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
         FRSAssignment *assignment = [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-        
         if(responseBlock) responseBlock(assignment, nil);
-    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
         if(responseBlock) responseBlock(nil, error);
-        
     }];
 }
 
@@ -220,30 +212,25 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 ** Get all assignments within a geo and radius
 */
 
-- (void)getAssignmentsWithinLocation:(float)lat lon:(float)lon radius:(float)radius  WithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    
+- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock
+{
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
-    
+    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
+
     [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        if(![responseObject[@"data"] isEqual:[NSNull null]]){
-        
+
+        if (![responseObject[@"data"] isEqual:[NSNull null]]) {
             NSArray *assignments = [[responseObject objectForKey:@"data"] map:^id(id obj) {
                 return [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:obj error:NULL];
             }];
-            
+
             if(responseBlock) responseBlock(assignments, nil);
-            
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
         if(responseBlock) responseBlock(nil, error);
-        
     }];
 }
 
@@ -251,7 +238,7 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 ** Get all clusters within a geo and radius
 */
 
-- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius  WithResponseBlock:(FRSAPIResponseBlock)responseBlock{
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

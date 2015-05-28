@@ -295,7 +295,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    #warning Nothing will happen yet, need to figure out how to handle gallery viewss
+                    #warning Nothing will happen yet, need to figure out how to handle gallery views
                     
                 }
                 
@@ -307,76 +307,52 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     
     }
     
-    //Assignments
-    if([userInfo[@"type"] isEqualToString:@"assignment"]){
+    // Assignments
+    if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
-        //Check to make sure the payload has an id
-        if(userInfo[@"assignment_id"] != nil){
+        // Check to make sure the payload has an id
+        if (userInfo[@"assignment_id"]) {
             
-            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                    
                     [tabBarController setSelectedIndex:3];
-                    
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
                     assignmentVC.currentAssignment = responseObject;
-                    
                 }
-                
             }];
-            
         }
-
     }
     
     //Use
     
     //Social
-    
-
-    
-    
 }
 
-- (void)application:(UIApplication *) application handleActionWithIdentifier: (NSString *) identifier forRemoteNotification: (NSDictionary *) notification
-  completionHandler: (void (^)()) completionHandler {
-    
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
+{
     /*
     ** Check the identifier for the type of notifcaiton
     */
-    
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
-        
-        //Check to make sure the payload has an id
-        if(notification[@"assignment_id"] != nil){
-            
-            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+        // Check to make sure the payload has an id
+        if (notification[@"assignment_id"]) {
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                    
                     [tabBarController setSelectedIndex:3];
-                    
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
                     assignmentVC.currentAssignment = responseObject;
-                    
                 }
-                
             }];
-        
         }
-        
     }
     
     // Must be called when finished
     completionHandler(UIBackgroundFetchResultNewData);
-    
 }
-
 
 @end
