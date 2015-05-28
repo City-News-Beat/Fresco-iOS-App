@@ -67,7 +67,8 @@
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"] ?: @"What's Happening?";
+    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
     self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
     self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
