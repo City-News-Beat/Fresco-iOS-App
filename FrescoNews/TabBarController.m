@@ -16,7 +16,7 @@
     if ([item.title isEqualToString:@"Camera"]) {
         self.savedIndex = self.selectedIndex;
         self.tabBar.hidden = YES;
-        CameraViewController *vc = (CameraViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"cameraVC"];
+        CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
         [self presentViewController:vc animated:NO completion:nil];
     }
 }
