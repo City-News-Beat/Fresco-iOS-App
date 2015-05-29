@@ -13,6 +13,7 @@
 #import "CTAssetsPickerController.h"
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
+#import "ALAsset+assetType.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -626,6 +627,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    NSString *mimeType = [asset mimeType];
+    if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
+        return NO;
+    }
+
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
