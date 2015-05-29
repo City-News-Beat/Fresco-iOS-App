@@ -87,7 +87,7 @@
 
         NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
         if ([assetType isEqualToString:ALAssetTypePhoto]) {
-            post.type = @"photo";
+            post.type = @"image";
         }
         else if ([assetType isEqualToString:ALAssetTypeVideo]) {
             post.type = @"video";
