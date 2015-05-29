@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
+#import "CrossPostButton.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -27,8 +28,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
@@ -119,9 +120,9 @@
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (IBAction)twitterButtonTapped:(UIButton *)button
+- (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
-    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
                                                         message:@"Go to Profile to link your Fresco account to Twitter"
                                                        delegate:nil
@@ -131,8 +132,8 @@
         return;
     }
 
-    button.selected = !button.selected;
-    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"twitterButtonSelected"];
+    button.selected = !button.isSelected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
 }
 
 - (void)crossPostToTwitter
@@ -160,9 +161,9 @@
     }];
 }
 
-- (IBAction)facebookButtonTapped:(UIButton *)button
+- (IBAction)facebookButtonTapped:(CrossPostButton *)button
 {
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
                                                         message:@"Go to Profile to link your Fresco account to Facebook"
                                                        delegate:nil
@@ -172,7 +173,7 @@
         return;
     }
 
-    button.selected = !button.selected;
+    button.selected = !button.isSelected;
     [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 

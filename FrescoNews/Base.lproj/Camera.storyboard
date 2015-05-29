@@ -955,7 +955,7 @@
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
                                         <rect key="frame" x="0.0" y="860" width="600" height="3"/>
                                     </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="CrossPostButton">
                                         <rect key="frame" x="0.0" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.32549019610000002" green="0.68235294120000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -970,7 +970,7 @@
                                             <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="CrossPostButton">
                                         <rect key="frame" x="300" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.57254901960000004" green="0.63921568630000003" blue="0.75686274509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
