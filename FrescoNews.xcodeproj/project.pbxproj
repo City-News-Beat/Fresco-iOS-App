@@ -120,6 +120,7 @@
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
+		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,6 +365,8 @@
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
+		E7BFA2E31B18CFB100B820C0 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
+		E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -619,9 +622,10 @@
 			children = (
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
+				E73E100A1B0F958D00763240 /* Home */,
 				E7B7331F1B13B522009C26D0 /* Notifications */,
 				E73E10091B0F957B00763240 /* Assignments */,
-				E73E100A1B0F958D00763240 /* Home */,
+				E7BFA2E21B18CF8100B820C0 /* Galleries */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
 				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
@@ -893,8 +897,6 @@
 			children = (
 				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
-				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
-				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -926,6 +928,17 @@
 				E7B733221B13E3F2009C26D0 /* FRSNotification.m */,
 			);
 			name = Notification;
+			sourceTree = "<group>";
+		};
+		E7BFA2E21B18CF8100B820C0 /* Galleries */ = {
+			isa = PBXGroup;
+			children = (
+				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
+				E7BFA2E31B18CFB100B820C0 /* GalleryViewController.h */,
+				E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */,
+			);
+			name = Galleries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1202,6 +1215,7 @@
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				424323DB1AB3D64900646278 /* TabBarController.m in Sources */,
+				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				1ED9A32E1AAA0009009BD7A3 /* ProfileViewController.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,

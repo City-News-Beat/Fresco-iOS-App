@@ -8,6 +8,7 @@
 
 #import "NotificationsViewController.h"
 #import "NotificationCell.h"
+#import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
 #import "MTLModel+Additions.h"
 #import "FRSNotification.h"
@@ -48,6 +49,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.estimatedRowHeight = 119;
     
     _notifications = [[NSMutableArray alloc] init];
+    
+    [self setFrescoNavigationBar];
     
     /** TEMPORARY */
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];

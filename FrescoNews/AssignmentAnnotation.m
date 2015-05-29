@@ -20,7 +20,7 @@
 @implementation AssignmentAnnotation
 
 - (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate {
-    if ((self = [super init])) {
+    if (self = [super init]) {
         if ([name isKindOfClass:[NSString class]]) {
             self.name = name;
         } else {

@@ -46,7 +46,7 @@
     
     [super viewDidLoad];
     
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     
     self.scrollView.delegate = self;
     

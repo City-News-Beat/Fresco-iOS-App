@@ -46,7 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     [self performNecessaryFetch:nil];
 }
 

@@ -17,15 +17,11 @@
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "GalleryView.h"
+#import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
 #import <UIScrollView+SVPullToRefresh.h>
 #import <UIScrollView+SVInfiniteScrolling.h>
-
-
-@interface GalleriesViewController()
-
-@end
 
 @implementation GalleriesViewController
 
@@ -146,14 +142,26 @@
     return galleryHeader;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // remember, one story per section
+    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+    
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryView setGallery:gallery];
+    
+    [self.navigationController pushViewController:galleryView animated:YES];
+
+
+}
+
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    float scrollViewHeight = scrollView.frame.size.height;
-    float scrollOffset = scrollView.contentOffset.y;
-    
-
     
     /*
     ** Video Conditioning
