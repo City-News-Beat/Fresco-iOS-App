@@ -36,7 +36,7 @@
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
-    @property (assign, nonatomic) NSNumber *operatingRadius;
+    @property (strong, nonatomic) NSNumber *operatingRadius;
 
 @end
 
@@ -129,60 +129,66 @@
     
     if(!_updating){
         
-        _updating = true;
-        
-        //Grab the assignments in that region
         //One degree of latitude = 69 miles
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
-        
-        if([radius integerValue] < 500){
 
-            [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    
-                    _viewingClusters = false;
-                    
-                    _updating = false;
-                    
-                    NSMutableArray *copy;
-                    
-                    if(self.assignments != nil){
-                        
-                        copy = [responseObject mutableCopy];
-                        
-                        [copy removeObjectsInArray:self.assignments];
-                        
-                    }
-                    
-                    if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
-                        
-                        self.assignments = responseObject;
-                        
-                        [self populateMapWithAnnotations];
-                    
-                    }
-                    
-                }
-                
-            }];
-            
-        }
-        else{
-            [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    
-                    _updating = false;
-                    
-                    _viewingClusters = true;
-                    
-                    self.clusters = responseObject;
-                
-                    [self populateMapWithAnnotations];
-                    
-                }
-                
-            }];
+        //Check if the user moves at least a difference greater than 1
+        if(fabsf(radius.floatValue - _operatingRadius.floatValue) > .4){
         
+            self.operatingRadius = radius;
+            
+            _updating = true;
+            
+            if([radius integerValue] < 500){
+
+                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+                    if (!error) {
+                        
+                        _viewingClusters = false;
+                        
+                        _updating = false;
+                        
+                        NSMutableArray *copy;
+                        
+                        if(self.assignments != nil){
+                            
+                            copy = [responseObject mutableCopy];
+                            
+                            [copy removeObjectsInArray:self.assignments];
+                            
+                        }
+                        
+                        if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
+                            
+                            self.assignments = responseObject;
+                            
+                            [self populateMapWithAnnotations];
+                        
+                        }
+                        
+                    }
+                    
+                }];
+                
+            }
+            else{
+                [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
+                    if (!error) {
+                        
+                        _updating = false;
+                        
+                        _viewingClusters = true;
+                        
+                        self.clusters = responseObject;
+                    
+                        [self populateMapWithAnnotations];
+                        
+                    }
+                    
+                }];
+            
+            }
+            
         }
         
     }
@@ -422,9 +428,9 @@
     
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
-    [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
+    [circleView setFillColor:[UIColor colorWithHex:@"#ffc600"]];
     
-    circleView.alpha = .4;
+    circleView.alpha = .26;
     
     return circleView;
     
