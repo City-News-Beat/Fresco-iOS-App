@@ -17,25 +17,9 @@
              @"first" : @"first",
              @"last" : @"last",
              @"email" : @"email",
-             @"userID" : @"userid"
+             @"userID" : @"_id"
              };
 }
-
-+ (NSString *)loggedInUserId;
-{
-#warning Need to add logout support
-    static NSString *loggedInUserId = nil;
-    
-    static dispatch_once_t oncePredicate;
-    
-    dispatch_once(&oncePredicate, ^{
-        [[PFUser currentUser] fetch];
-        loggedInUserId = [[PFUser currentUser] objectForKey:@"frescoUserId"];
-    });
-    
-    return loggedInUserId;
-}
-
 
 - (NSString *)displayName
 {
@@ -48,4 +32,16 @@
     }
 }
 
+- (NSString *)asJSONString
+{
+    NSString *jsonString;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[MTLJSONAdapter JSONDictionaryFromModel:self]
+                                                       options:0
+                                                         error:&error];
+    if (jsonData)
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return jsonString;
+}
 @end

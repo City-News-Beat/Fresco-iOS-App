@@ -23,6 +23,10 @@
 #import <UIScrollView+SVInfiniteScrolling.h>
 
 
+@interface GalleriesViewController()
+
+@end
+
 @implementation GalleriesViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -61,9 +65,6 @@
         
         [self.tableView.pullToRefreshView stopAnimating];
     }];
-    
-    
-
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
@@ -275,6 +276,7 @@
         }
         else {
             ProfileHeaderViewController *phvc = [segue destinationViewController];
+            phvc.frsUser = self.frsUser;
             self.tableView.tableHeaderView.frame = phvc.view.bounds;
         }
     }

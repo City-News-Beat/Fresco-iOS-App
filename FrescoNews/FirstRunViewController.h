@@ -7,11 +7,6 @@
 //
 
 #import "FRSBaseViewController.h"
-#import <Parse/Parse.h>
-
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface FirstRunViewController : FRSBaseViewController
 

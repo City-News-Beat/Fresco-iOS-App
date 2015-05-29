@@ -88,6 +88,7 @@
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
+		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
@@ -122,19 +123,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1ED4FF451B0E6E1B001EF06A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E71F0E401B0B936200186BAD;
+			remoteInfo = "Fresco2 WatchKit App";
+		};
 		1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1EDA44AF1AA4CCC70082E08D;
 			remoteInfo = FrescoNews;
-		};
-		E71F0E431B0B936200186BAD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E71F0E401B0B936200186BAD;
-			remoteInfo = "Fresco2 WatchKit App";
 		};
 		E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -302,6 +303,7 @@
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraPreviewView.h; path = Views/CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ALAsset.h"; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				420DC6F11ADB875000157762 /* CTAssetsPickerController */,
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
+				42C926751B18AB1200774A37 /* Camera.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
@@ -981,7 +984,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E71F0E441B0B936200186BAD /* PBXTargetDependency */,
+				1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */,
 			);
 			name = "Fresco2 WatchKit Extension";
 			productName = "Fresco2 WatchKit Extension";
@@ -1078,6 +1081,7 @@
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
+				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1290,15 +1294,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */;
+			targetProxy = 1ED4FF451B0E6E1B001EF06A /* PBXContainerItemProxy */;
+		};
 		1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1EDA44AF1AA4CCC70082E08D /* Fresco2 */;
 			targetProxy = 1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */;
-		};
-		E71F0E441B0B936200186BAD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */;
-			targetProxy = E71F0E431B0B936200186BAD /* PBXContainerItemProxy */;
 		};
 		E71F0E4E1B0B936200186BAD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1322,6 +1326,14 @@
 				420DC71B1ADB875000157762 /* en */,
 			);
 			name = CTAssetsPickerController.strings;
+			sourceTree = "<group>";
+		};
+		42C926751B18AB1200774A37 /* Camera.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42C926761B18AB1200774A37 /* Base */,
+			);
+			name = Camera.storyboard;
 			sourceTree = "<group>";
 		};
 		E71F0E481B0B936200186BAD /* Interface.storyboard */ = {

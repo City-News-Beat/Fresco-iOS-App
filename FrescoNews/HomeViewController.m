@@ -17,7 +17,6 @@
 @interface HomeViewController ()
 //@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *primaryAction;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @end
 
@@ -55,9 +54,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([PFUser currentUser]) {
-        self.primaryAction.title = @"Log Out";
-    }
 }
 
 #pragma mark - Data Loading
@@ -67,7 +63,9 @@
     [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:nil responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count]) {
+                self.galleries = responseObject;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
+
                 [self.galleriesViewController refresh];
                 //                self.galleriesViewController.galleries = self.galleries;
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
@@ -91,15 +89,6 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
-    }
-}
-
-- (IBAction)primaryAction:(id)sender {
-    if ([PFUser currentUser]) {
-        [PFUser logOut];
-        self.primaryAction.title = @"First Run";
-    } else {
-        [self performSegueWithIdentifier:@"firstRunPush" sender:sender];
     }
 }
 

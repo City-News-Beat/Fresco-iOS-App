@@ -8,6 +8,7 @@
 
 #import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
+#import "FRSDataManager.h"
 
 @interface ProfileSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
@@ -24,8 +25,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSString *frescoUserId = [FRSUser loggedInUserId];
     
     [self updateLinkingStatus];
     
@@ -142,10 +141,8 @@
 }
 
 - (IBAction)logOut:(id)sender {
-    [PFUser logOut];
-    [self updateLinkingStatus];
+    [[FRSDataManager sharedManager] logout];
+    [self navigateToMainApp];
 }
-
-
 
 @end

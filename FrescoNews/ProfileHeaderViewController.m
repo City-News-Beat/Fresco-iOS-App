@@ -7,8 +7,10 @@
 //
 
 #import "ProfileHeaderViewController.h"
+#import "FRSUser.h"
 
 @interface ProfileHeaderViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
 
 @end
 
@@ -16,8 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
+
+    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -15,6 +15,7 @@
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
 #import "FRSUser.h"
+#import "FRSDataManager.h"
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
@@ -95,8 +96,55 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     
     [self setupAppearances];
     
+    // this is where we determine whether to run the firstRun sequence
+    [self loadInitialViewController];
     
     return YES;
+}
+
+#pragma mark - Root View Controllers
+
+// because the app might launch into First Run mode
+// or regular (tab interface) we need to dynamically swap
+// root view controllers
+- (void)loadInitialViewController
+{
+    if ([[FRSDataManager sharedManager] login])
+        [self setRootViewControllerToTabBar];
+    else {
+        [self setRootViewControllerToFirstRun];
+    }
+}
+
+- (void)setRootViewControllerToTabBar
+{
+    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    [self setupTabBarAppearances];
+}
+
+- (void)setRootViewControllerToFirstRun
+{
+    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+}
+
+- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
+
+    self.window.rootViewController = viewController;
+    [self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -222,13 +270,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 {
     self.location = [locations lastObject];
 
-    if (![FRSUser loggedInUserId]) {
+    if (![FRSDataManager sharedManager].currentUser.userID) {
         [self.locationManager stopMonitoringSignificantLocationChanges];
         return;
     }
 
     AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"id" : [FRSUser loggedInUserId],
+    NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
                                  @"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
     [operationManager POST:[VariableStore endpointForPath:@"user/locate"]

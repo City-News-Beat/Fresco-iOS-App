@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import <AFNetworking/AFNetworking.h>
+#import <Parse/Parse.h>
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
@@ -29,19 +30,17 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-/*
-** User
-*/
-
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock;
-
+- (BOOL)login;
 - (void)logout;
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 
 /*
 ** Galleries
 */
 
-# warning for video
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
