@@ -1,40 +1,66 @@
 {
   "images" : [
     {
+      "size" : "24x24",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "38 notification@2x.png",
+      "role" : "notificationCenter",
+      "subtype" : "38mm"
+    },
+    {
+      "size" : "27.5x27.5",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "42-notification@2x.png",
+      "role" : "notificationCenter",
+      "subtype" : "42mm"
+    },
+    {
       "size" : "29x29",
-      "idiom" : "iphone",
-      "filename" : "icon-settings@2x.png",
+      "idiom" : "watch",
+      "filename" : "iphone@2x.png",
+      "role" : "companionSettings",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
-      "idiom" : "iphone",
-      "filename" : "icon-settings@3x.png",
+      "idiom" : "watch",
+      "filename" : "iphone@3x.png",
+      "role" : "companionSettings",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
-      "idiom" : "iphone",
-      "filename" : "icon-spotlight@2x.png",
-      "scale" : "2x"
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "42-homescreen@2x.png",
+      "role" : "appLauncher",
+      "subtype" : "38mm"
     },
     {
-      "size" : "40x40",
-      "idiom" : "iphone",
-      "filename" : "icon-spotlight@3x.png",
-      "scale" : "3x"
+      "size" : "44x44",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "42-longlook@2x-1.png",
+      "role" : "longLook",
+      "subtype" : "42mm"
     },
     {
-      "size" : "60x60",
-      "idiom" : "iphone",
-      "filename" : "icon-app@2x.png",
-      "scale" : "2x"
+      "size" : "86x86",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "38-shortlook@2x.png",
+      "role" : "quickLook",
+      "subtype" : "38mm"
     },
     {
-      "size" : "60x60",
-      "idiom" : "iphone",
-      "filename" : "icon-app@3x.png",
-      "scale" : "3x"
+      "size" : "98x98",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "filename" : "42 shortlook@2xfallback.png",
+      "role" : "quickLook",
+      "subtype" : "42mm"
     }
   ],
   "info" : {
