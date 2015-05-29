@@ -60,13 +60,13 @@
 		1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F91AA4D0730082E08D /* FRSTag.m */; };
 		1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */; };
 		1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FF1AA4D0730082E08D /* FRSUser.m */; };
-		1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */; };
 		1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA450C1AA4E2BD0082E08D /* PostView.m */; };
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
-		1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */; };
+		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
+		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */; };
 		420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F51ADB875000157762 /* ALAsset+assetType.m */; };
 		420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F71ADB875000157762 /* ALAsset+isEqual.m */; };
@@ -88,6 +88,7 @@
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
+		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
@@ -99,10 +100,36 @@
 		E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */; };
 		E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */; };
 		E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */; };
+		E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
+		E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E3D1B0B936200186BAD /* Images.xcassets */; };
+		E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */; };
+		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
+		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
+		E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
+		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
+		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
+		E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */; };
+		E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */; };
+		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
+		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
+		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
+		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
+		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
+		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
+		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
+		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1ED4FF451B0E6E1B001EF06A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E71F0E401B0B936200186BAD;
+			remoteInfo = "Fresco2 WatchKit App";
+		};
 		1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
@@ -110,7 +137,28 @@
 			remoteGlobalIDString = 1EDA44AF1AA4CCC70082E08D;
 			remoteInfo = FrescoNews;
 		};
+		E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E71F0E2E1B0B936200186BAD;
+			remoteInfo = "Fresco2 WatchKit Extension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E71F0E561B0B936200186BAD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
@@ -202,8 +250,6 @@
 		1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTradionalSource.m; sourceTree = "<group>"; };
 		1EDA44FE1AA4D0730082E08D /* FRSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUser.h; sourceTree = "<group>"; };
 		1EDA44FF1AA4D0730082E08D /* FRSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUser.m; sourceTree = "<group>"; };
-		1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RelativeDate.h"; sourceTree = "<group>"; };
-		1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RelativeDate.m"; sourceTree = "<group>"; };
 		1EDA450B1AA4E2BD0082E08D /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostView.h; path = Views/PostView.h; sourceTree = "<group>"; };
 		1EDA450C1AA4E2BD0082E08D /* PostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostView.m; path = Views/PostView.m; sourceTree = "<group>"; };
 		1EDA450F1AA4F8640082E08D /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
@@ -212,8 +258,8 @@
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Additions.h"; sourceTree = "<group>"; };
 		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Additions.m"; sourceTree = "<group>"; };
-		1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIFormDataRequest+Array.h"; sourceTree = "<group>"; };
-		1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ASIFormDataRequest+Array.m"; sourceTree = "<group>"; };
+		1EDF047B1B0E902900B35858 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
+		1EDF047C1B0E902900B35858 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
 		32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileSettingsViewController.m; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -257,6 +303,7 @@
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraPreviewView.h; path = Views/CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ALAsset.h"; sourceTree = "<group>"; };
@@ -278,8 +325,45 @@
 		E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunAccountViewController.m; sourceTree = "<group>"; };
 		E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunRadiusViewController.h; sourceTree = "<group>"; };
 		E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunRadiusViewController.m; sourceTree = "<group>"; };
+		E6AF8A5C1B0E3D9900CD8175 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
+		E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco2 WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E321B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		E71F0E3D1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fresco2 WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlanceInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlanceInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E591B0B948200186BAD /* FRSInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
+		E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationController.m; sourceTree = "<group>"; };
+		E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryRowController.h; sourceTree = "<group>"; };
+		E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryRowController.m; sourceTree = "<group>"; };
+		E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E631B0B948200186BAD /* FRSStoryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryRowController.h; sourceTree = "<group>"; };
+		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
+		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
+		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
+		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
+		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
+		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
+		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
+		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
+		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
+		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
+		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
+		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
+		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
+		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -315,6 +399,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E71F0E2C1B0B936200186BAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +524,8 @@
 			children = (
 				1EDA44B21AA4CCC70082E08D /* FrescoNews */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
+				E71F0E301B0B936200186BAD /* Fresco2 WatchKit Extension */,
+				E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */,
 				1EDA44B11AA4CCC70082E08D /* Products */,
 				BE77E1E79885C4C61AC87E44 /* Pods */,
 				1B35C7E2C0D16DEBE7A411F8 /* Frameworks */,
@@ -443,6 +537,8 @@
 			children = (
 				1EDA44B01AA4CCC70082E08D /* Fresco2.app */,
 				1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */,
+				E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */,
+				E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -450,6 +546,8 @@
 		1EDA44B21AA4CCC70082E08D /* FrescoNews */ = {
 			isa = PBXGroup;
 			children = (
+				1EDA44B71AA4CCC70082E08D /* AppDelegate.h */,
+				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1E408B771AA7A40A0057AC16 /* Base Classes */,
 				1EDA45041AA4D0B10082E08D /* Categories */,
 				1EDA44DF1AA4CD0D0082E08D /* Singletons */,
@@ -458,9 +556,8 @@
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
 				420DC6F11ADB875000157762 /* CTAssetsPickerController */,
 				420DC7151ADB875000157762 /* Resources */,
-				1EDA44B71AA4CCC70082E08D /* AppDelegate.h */,
-				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
+				42C926751B18AB1200774A37 /* Camera.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
@@ -475,6 +572,7 @@
 				1E408B761AA79A370057AC16 /* PrefixHeader.pch */,
 				1EDA44B41AA4CCC70082E08D /* Info.plist */,
 				1EDA44B51AA4CCC70082E08D /* main.m */,
+				E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -499,6 +597,8 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1EDF047B1B0E902900B35858 /* NotificationCell.h */,
+				1EDF047C1B0E902900B35858 /* NotificationCell.m */,
 				1EA27AA21AF14256003137CE /* Assignments */,
 				1E3592871AC3327000F60348 /* Post */,
 				1EA6F2E51ABB6C5000E74E68 /* Gallery */,
@@ -519,14 +619,11 @@
 			children = (
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
-				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
-				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
-				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
-				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				E7B7331F1B13B522009C26D0 /* Notifications */,
+				E73E10091B0F957B00763240 /* Assignments */,
+				E73E100A1B0F958D00763240 /* Home */,
 				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
 				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
-				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
-				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
@@ -569,6 +666,8 @@
 			children = (
 				1E407ADB1AB0B451006F4965 /* MTLModel+Additions.h */,
 				1E407ADC1AB0B458006F4965 /* MTLModel+Additions.m */,
+				E7B733201B13E2E5009C26D0 /* Notification */,
+				E796FA151B0E5244002B30C4 /* Assignment */,
 				1E407ADA1AB0A005006F4965 /* Gallery */,
 				1E407AD61AB09F36006F4965 /* Image */,
 				1E407AD21AB09107006F4965 /* Story */,
@@ -624,12 +723,8 @@
 				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
 				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
 				1E408B741AA799750057AC16 /* UIColor+Additions.m */,
-				1EDA451B1AA5067A0082E08D /* ASIFormDataRequest+Array.h */,
-				1EDA451C1AA5067A0082E08D /* ASIFormDataRequest+Array.m */,
 				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
 				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
-				1EDA45081AA4D1240082E08D /* NSDate+RelativeDate.h */,
-				1EDA45091AA4D1240082E08D /* NSDate+RelativeDate.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
 				1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */,
@@ -712,6 +807,127 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E71F0E301B0B936200186BAD /* Fresco2 WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
+				E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */,
+				E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */,
+				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
+				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
+				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
+				E71F0E701B0B99F100186BAD /* Stories */,
+				E71F0E6F1B0B99DD00186BAD /* Galleries */,
+				E71F0E3D1B0B936200186BAD /* Images.xcassets */,
+				E71F0E311B0B936200186BAD /* Supporting Files */,
+			);
+			path = "Fresco2 WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		E71F0E311B0B936200186BAD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E321B0B936200186BAD /* Info.plist */,
+				E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E481B0B936200186BAD /* Interface.storyboard */,
+				E71F0E4B1B0B936200186BAD /* Images.xcassets */,
+				E71F0E461B0B936200186BAD /* Supporting Files */,
+			);
+			path = "Fresco2 WatchKit App";
+			sourceTree = "<group>";
+		};
+		E71F0E461B0B936200186BAD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E471B0B936200186BAD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E71F0E6F1B0B99DD00186BAD /* Galleries */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */,
+				E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */,
+				E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */,
+				E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */,
+				E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */,
+				E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */,
+			);
+			name = Galleries;
+			sourceTree = "<group>";
+		};
+		E71F0E701B0B99F100186BAD /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+				E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */,
+				E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */,
+				E71F0E631B0B948200186BAD /* FRSStoryRowController.h */,
+				E71F0E641B0B948200186BAD /* FRSStoryRowController.m */,
+			);
+			name = Stories;
+			sourceTree = "<group>";
+		};
+		E73E10091B0F957B00763240 /* Assignments */ = {
+			isa = PBXGroup;
+			children = (
+				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
+				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
+				E73E100B1B0F963800763240 /* AssignmentAnnotation.h */,
+				E73E100C1B0F963800763240 /* AssignmentAnnotation.m */,
+				E76515B21B17581200AFDE1E /* ClusterAnnotation.h */,
+				E76515B31B17581200AFDE1E /* ClusterAnnotation.m */,
+			);
+			name = Assignments;
+			sourceTree = "<group>";
+		};
+		E73E100A1B0F958D00763240 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
+				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */,
+				1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		E796FA151B0E5244002B30C4 /* Assignment */ = {
+			isa = PBXGroup;
+			children = (
+				E796FA161B0E54B6002B30C4 /* FRSAssignment.h */,
+				E796FA171B0E54B6002B30C4 /* FRSAssignment.m */,
+				E76C1A461B168DDF00FB0B18 /* FRSCluster.h */,
+				E76C1A471B168DDF00FB0B18 /* FRSCluster.m */,
+			);
+			name = Assignment;
+			sourceTree = "<group>";
+		};
+		E7B7331F1B13B522009C26D0 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				E6AF8A5C1B0E3D9900CD8175 /* NotificationsViewController.h */,
+				E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
+		E7B733201B13E2E5009C26D0 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				E7B733211B13E3F2009C26D0 /* FRSNotification.h */,
+				E7B733221B13E3F2009C26D0 /* FRSNotification.m */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -724,10 +940,13 @@
 				1EDA44AD1AA4CCC70082E08D /* Frameworks */,
 				1EDA44AE1AA4CCC70082E08D /* Resources */,
 				BCA811ECB60B44FE48F07483 /* Copy Pods Resources */,
+				E71F0E561B0B936200186BAD /* Embed App Extensions */,
+				1EDF047A1B0E7E5800B35858 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E71F0E4E1B0B936200186BAD /* PBXTargetDependency */,
 			);
 			name = Fresco2;
 			productName = Fresco2;
@@ -752,6 +971,41 @@
 			productReference = 1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */;
+			buildPhases = (
+				D1CB606E0993A608E8927788 /* Check Pods Manifest.lock */,
+				E71F0E2B1B0B936200186BAD /* Sources */,
+				E71F0E2C1B0B936200186BAD /* Frameworks */,
+				E71F0E2D1B0B936200186BAD /* Resources */,
+				63CF859EF88AE3997746D05F /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */,
+			);
+			name = "Fresco2 WatchKit Extension";
+			productName = "Fresco2 WatchKit Extension";
+			productReference = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */;
+			buildPhases = (
+				E71F0E3F1B0B936200186BAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Fresco2 WatchKit App";
+			productName = "Fresco2 WatchKit App";
+			productReference = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -767,6 +1021,13 @@
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 1EDA44AF1AA4CCC70082E08D;
+					};
+					E71F0E2E1B0B936200186BAD = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					E71F0E401B0B936200186BAD = {
+						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = Z7R96S8K3N;
 					};
 				};
 			};
@@ -805,6 +1066,8 @@
 			targets = (
 				1EDA44AF1AA4CCC70082E08D /* Fresco2 */,
 				1EDA44CB1AA4CCC70082E08D /* Fresco2Tests */,
+				E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */,
+				E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -818,6 +1081,7 @@
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
+				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,9 +1092,55 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E71F0E2D1B0B936200186BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */,
+				E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E71F0E3F1B0B936200186BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */,
+				E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1EDF047A1B0E7E5800B35858 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf ~/Library/Developer/Xcode/DerivedData/FrescoNews-*/Build/Products/Debug-iphoneos/*.appex/\n";
+		};
+		63CF859EF88AE3997746D05F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A712045BA4FF7C3ECD55DD1A /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -861,6 +1171,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D1CB606E0993A608E8927788 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -872,6 +1197,7 @@
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
+				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
@@ -881,6 +1207,7 @@
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
+				E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */,
 				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
 				420DC7361ADB875000157762 /* CTAssetsPickerController.m in Sources */,
@@ -890,16 +1217,17 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
+				1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+LegalLabel.m in Sources */,
 				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
+				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
-				1EDA450A1AA4D1240082E08D /* NSDate+RelativeDate.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
@@ -910,6 +1238,7 @@
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
+				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */,
@@ -917,10 +1246,11 @@
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
-				1EDA451D1AA5067A0082E08D /* ASIFormDataRequest+Array.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
+				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
+				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
 				420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
@@ -946,13 +1276,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E71F0E2B1B0B936200186BAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */,
+				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
+				E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */,
+				E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */,
+				E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */,
+				E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */,
+				E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */,
+				E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */;
+			targetProxy = 1ED4FF451B0E6E1B001EF06A /* PBXContainerItemProxy */;
+		};
 		1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1EDA44AF1AA4CCC70082E08D /* Fresco2 */;
 			targetProxy = 1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */;
+		};
+		E71F0E4E1B0B936200186BAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */;
+			targetProxy = E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -971,6 +1326,22 @@
 				420DC71B1ADB875000157762 /* en */,
 			);
 			name = CTAssetsPickerController.strings;
+			sourceTree = "<group>";
+		};
+		42C926751B18AB1200774A37 /* Camera.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42C926761B18AB1200774A37 /* Base */,
+			);
+			name = Camera.storyboard;
+			sourceTree = "<group>";
+		};
+		E71F0E481B0B936200186BAD /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E71F0E491B0B936200186BAD /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1012,7 +1383,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1049,7 +1420,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1071,6 +1442,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1092,6 +1464,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1138,6 +1511,86 @@
 			};
 			name = Release;
 		};
+		E71F0E501B0B936200186BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E71F0E511B0B936200186BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E71F0E521B0B936200186BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = Fresco2_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		E71F0E531B0B936200186BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				IBSC_MODULE = Fresco2_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1164,6 +1617,24 @@
 			buildConfigurations = (
 				1EDA44DA1AA4CCC70082E08D /* Debug */,
 				1EDA44DB1AA4CCC70082E08D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E71F0E521B0B936200186BAD /* Debug */,
+				E71F0E531B0B936200186BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E71F0E501B0B936200186BAD /* Debug */,
+				E71F0E511B0B936200186BAD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

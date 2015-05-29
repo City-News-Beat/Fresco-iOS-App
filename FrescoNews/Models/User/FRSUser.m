@@ -17,24 +17,9 @@
              @"first" : @"first",
              @"last" : @"last",
              @"email" : @"email",
-             @"userID" : @"userid"
+             @"userID" : @"_id"
              };
 }
-
-- (NSNumber *)userID
-{
-    _userID = [[PFUser currentUser] objectForKey:@"frescoUserId"];
-
-    if (_userID)
-        return _userID;
-
-    // this call is synchronous but it's rare and it's what we want here
-    [[PFUser currentUser] fetch];
-    _userID = [[PFUser currentUser] objectForKey:@"frescoUserId"];
-    
-    return _userID;
-}
-
 
 - (NSString *)displayName
 {
@@ -47,4 +32,16 @@
     }
 }
 
+- (NSString *)asJSONString
+{
+    NSString *jsonString;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[MTLJSONAdapter JSONDictionaryFromModel:self]
+                                                       options:0
+                                                         error:&error];
+    if (jsonData)
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return jsonString;
+}
 @end

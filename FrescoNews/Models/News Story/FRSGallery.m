@@ -10,16 +10,12 @@
 #import "FRSUser.h"
 #import "FRSTag.h"
 #import "FRSTradionalSource.h"
-#import "NSDate+RelativeDate.h"
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "UIImage+ALAsset.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
-
-@interface FRSGallery ()
-@end
 
 @implementation FRSGallery
 
@@ -72,6 +68,21 @@
         image.image = [UIImage imageFromAsset:asset];
         image.height = @1; // ?
         image.width = @1; // ?
+
+#if TARGET_IPHONE_SIMULATOR
+        image.latitude = @(40.6);
+        image.longitude = @(-74.1);
+#else
+        CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
+        if (location) {
+            image.latitude = @(location.coordinate.latitude);
+            image.longitude = @(location.coordinate.longitude);
+        }
+        else {
+            NSLog(@"Skipping - no location information available");
+            continue;
+        }
+#endif
         post.image = image;
 
         NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
@@ -86,15 +97,9 @@
             continue;
         }
 
-        if ([asset valueForProperty:ALAssetPropertyLocation]) {
-            [posts addObject:post];
-        }
-        else {
-            NSLog(@"Skipping - no location information available");
-            continue;
-        }
+        [posts addObject:post];
     }
-    
+
     if (posts.count == 0) {
         return nil;
     }
@@ -102,6 +107,8 @@
     _posts = posts;
     return self;
 }
+
+
 
 - (NSString *)caption
 {

@@ -7,13 +7,18 @@
 //
 
 @import Foundation;
+#import <CoreLocation/CoreLocation.h>
 
 #import <AFNetworking/AFNetworking.h>
+#import <Parse/Parse.h>
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
 #import "FRSGallery.h"
+#import "FRSAssignment.h"
+#import "FRSCluster.h"
+#import "FRSNotification.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 
@@ -25,23 +30,41 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock;
-
+- (BOOL)login;
 - (void)logout;
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 
-- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+/*
+** Galleries
+*/
 
-- (void)getPostsWithTag:(FRSTag *)tag limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getPostsAfterId:(NSNumber *)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock;
+- (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getPostsWithId:(NSNumber *)postId responseBlock:(FRSAPIResponseBlock)responseBlock;
-
-- (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
-# warning for video
-- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Assignments
+*/
+
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Notifications
+*/
+
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock;
+
+- (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 @end

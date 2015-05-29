@@ -11,25 +11,80 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "CameraViewController.h"
+#import "FRSUser.h"
+#import "FRSDataManager.h"
+#import <AFNetworking.h>
+#import "FRSDataManager.h"
+#import "AssignmentsViewController.h"
+
+//Notification Categories
+
+static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY";
+
+//Notification Actions
+
+static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 @interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     [self setupLocationManager];
+
+    
+    // Register for Push Notitications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    
+    
+    //Set up action for navigate
+    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init];
+    
+    // Define an ID string to be passed back to your app when you handle the action
+    navigateAction.identifier = navigateIdentifier;
+    // Localized string displayed in the action button
+    navigateAction.title = @"Navigate";
+    // If you need to show UI, choose foreground
+    navigateAction.activationMode = UIUserNotificationActivationModeBackground;
+    // Destructive actions display in red
+    navigateAction.destructive = NO;
+    // Set whether the action requires the user to authenticate
+    navigateAction.authenticationRequired = NO;
+    
+    
+    // First create the category
+    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
+    // Identifier to include in your push payload and local notification
+    assignmentCategory.identifier = assignmentIdentifier;
+    // Add the actions to the category and set the action context
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
+    // Set the actions to present in a minimal context
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    
     //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
     // Parse Initialization
-    [Parse setApplicationId:@"8ngjMD9r7WB8wxUxtaOlaQdzyF8YVqgp0HRtohUd"
-                  clientKey:@"ov0p1rmGlUrUs384U0dxPXADNqsRveCzZeZcnEnh"];
+    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
+                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     // Facebook
@@ -40,8 +95,56 @@
                                consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
     
     [self setupAppearances];
-        
+    
+    // this is where we determine whether to run the firstRun sequence
+    [self loadInitialViewController];
+    
     return YES;
+}
+
+#pragma mark - Root View Controllers
+
+// because the app might launch into First Run mode
+// or regular (tab interface) we need to dynamically swap
+// root view controllers
+- (void)loadInitialViewController
+{
+    if ([[FRSDataManager sharedManager] login])
+        [self setRootViewControllerToTabBar];
+    else {
+        [self setRootViewControllerToFirstRun];
+    }
+}
+
+- (void)setRootViewControllerToTabBar
+{
+    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    [self setupTabBarAppearances];
+}
+
+- (void)setRootViewControllerToFirstRun
+{
+    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+}
+
+- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
+
+    self.window.rootViewController = viewController;
+    [self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -80,7 +183,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-#pragma mark - Utility methods
+#pragma mark - Apperance Delegate Methods
 
 - (void)setupAppearances
 {
@@ -103,21 +206,20 @@
                                      @"tab-assignments-highlighted",
                                      @"tab-following-highlighted"];
     
+    
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    
     tabBarController.delegate = self;
+    
     UITabBar *tabBar = tabBarController.tabBar;
+    
     int i = 0;
+    
     for (UITabBarItem *item in tabBar.items) {
         if (i == 4) {
-            if (!currentUser) {
-                item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-                item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
-                item.title = @"Following";
-            } else {
-                item.image = [[UIImage imageNamed:@"tab-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-                item.selectedImage = [UIImage imageNamed:@"tab-profile-highlighted"];
-                item.title = @"Profile";
-            }
+            item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+            item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
+            item.title = @"Following";
         } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -138,7 +240,7 @@
 
 - (void)setupToolbarAppearance
 {
-    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
 }
@@ -162,11 +264,29 @@
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
+#pragma mark - Location Delegate Methods
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     self.location = [locations lastObject];
-    // TODO: Report location to the server
-    
+
+    if (![FRSDataManager sharedManager].currentUser.userID) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
+        return;
+    }
+
+    AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
+                                 @"lat" : @(self.location.coordinate.latitude),
+                                 @"lon" : @(self.location.coordinate.longitude)};
+    [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
+                parameters:parameters
+                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
     // Set to YES to test monitoring of significant location changes even when the app is not running; also see didFinishLaunchingWithOptions above
     if (/* DISABLES CODE */ (NO)) {
         UILocalNotification *notification = [[UILocalNotification alloc] init];
@@ -197,6 +317,90 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     return ![viewController isKindOfClass:[CameraViewController class]];
+}
+
+
+#pragma mark - Notification Delegate Methods
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
+    
+    [PFPush handlePush:userInfo];
+    
+    
+    //Breaking News
+    if([userInfo[@"type"] isEqualToString:@"breaking"]){
+        
+        //Check to make sure the payload has an id
+        if(userInfo[@"gallery_id"] != nil){
+            
+            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    #warning Nothing will happen yet, need to figure out how to handle gallery views
+                    
+                }
+                
+            }];
+            
+        }
+
+        
+    
+    }
+    
+    // Assignments
+    if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
+        
+        // Check to make sure the payload has an id
+        if (userInfo[@"assignment_id"]) {
+            
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+                    [tabBarController setSelectedIndex:3];
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    
+                    assignmentVC.currentAssignment = responseObject;
+                }
+            }];
+        }
+    }
+    
+    //Use
+    
+    //Social
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
+{
+    /*
+    ** Check the identifier for the type of notifcaiton
+    */
+    //Assignment Action
+    if ([identifier isEqualToString: navigateIdentifier]) {
+        // Check to make sure the payload has an id
+        if (notification[@"assignment_id"]) {
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+                    [tabBarController setSelectedIndex:3];
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    
+                    assignmentVC.currentAssignment = responseObject;
+                }
+            }];
+        }
+    }
+    
+    // Must be called when finished
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 @end

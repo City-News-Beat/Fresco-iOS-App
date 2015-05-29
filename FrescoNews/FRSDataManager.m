@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import "FRSDataManager.h"
-#import <ASIHTTPRequest/ASIFormDataRequest.h>
-#import "NSFileManager+Additions.h"
-#import "ASIFormDataRequest+Array.h"
 #import <NSArray+F.h>
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import "FRSDataManager.h"
+#import "NSFileManager+Additions.h"
 
-static NSString * const kPersistedStoriesFilename = @"stories.frs";
-static NSString * const kPersistedUserFilename = @"user.usr";
+#define kFrescoUserIdKey @"frescoUserId"
+#define kFrescoUserData @"frescoUserData"
 
 @interface FRSDataManager () {
     @protected
@@ -23,7 +23,6 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
 
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
-+ (NSString *)userPath;
 
 @end
 
@@ -59,220 +58,233 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 
-#pragma - login
+#pragma mark - User State
 
-+ (NSString *)userPath
+#warning Make callback block
+- (BOOL)login
 {
-    return [[NSFileManager libraryDirectoryPath] stringByAppendingPathComponent:kPersistedUserFilename];
-}
-
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password responseBlock:(FRSAPIResponseBlock)responseBlock
-{
-    NSString *path = @"frs-login.php";
-    NSDictionary *params = @{@"username": username, @"password" : password};
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject error:NULL];
-        [self setCurrentUser:user];
-        if (responseBlock) responseBlock(user, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (responseBlock) responseBlock(nil, error);
-    }];
-}
-
-- (void)setCurrentUser:(FRSUser *)currentUser
-{
-    if (_currentUser != currentUser) {
-        NSString *userPath = [[self class] userPath];
-        if (currentUser) {
-            _currentUser = currentUser;
-            [NSKeyedArchiver archiveRootObject:_currentUser toFile:userPath];
-        }
-        else {
-            _currentUser = nil;
-            [[NSFileManager defaultManager] removeItemAtPath:userPath error:NULL];
-        }
+    FRSUser *frsUser;
+   
+    // user is logged into parse
+    if ([PFUser currentUser]) {
+        // check before syncing
+        frsUser = [self FRSUserFromPFUser];
     }
-}
-
-- (FRSUser *)currentUser
-{
-    if (!_currentUser) {
-        NSString *userPath = [[self class] userPath];
-        _currentUser = [NSKeyedUnarchiver unarchiveObjectWithFile:userPath];
+    else {
+        [[PFUser currentUser] fetch];
+        
+        // try again
+        frsUser = [self FRSUserFromPFUser];
     }
-    return _currentUser;
+    if (frsUser) {
+        _currentUser = frsUser;
+        return YES;
+    }
+    return NO;
 }
 
 - (void)logout
 {
-    [self setCurrentUser:nil];
+    [PFUser logOut];
+    self.currentUser = nil;
 }
 
-#pragma mark - posts
-
--(void)getPostsWithId:(NSNumber*)postId responseBlock:(FRSAPIResponseBlock)responseBlock
+- (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block
 {
-    NSString *path = @"frs-query.php";
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    PFUser *user = [PFUser user];
+    user.username = [username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    user.password = password;
+    user.email = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    [params setObject:@"getPost" forKey:@"type"];
-    [params setObject:postId forKey:@"postId"];
-   
-    if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.fresconews.Fresco"]){
-        [params setObject: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"sourcesFilter"];
-    
-    }
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        FRSPost *post = [MTLJSONAdapter modelOfClass:[FRSPost class] fromJSONDictionary:responseObject error:NULL];
-        
-        if (responseBlock) responseBlock(post, nil);
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        if (responseBlock) responseBlock(nil, error);
-    }];
-
-
-}
-
-- (void)getPostsWithTags:(NSArray *)tags limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
-{
-    NSString *path = @"frs-query.php";
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    
-    [params setObject:limit forKey:@"limit"];
-    
-    if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.fresconews.Fresco"])
-        [params setObject: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"sourcesFilter"];
-    
-    if ([tags count]) {
-        [params setObject:@"getPostsWithTags" forKey:@"type"];
-        NSArray *tagNames = [tags map:^NSString *(FRSTag * obj) {
-            return [obj identifier];
+    if ([user.email length]) {
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            // now that we're signed in, let's bind the Parse and FRSUsers
+            if (succeeded)
+                [self bindParseUserToFrescoUser:block];
+            // bubble failure back up to caller
+            else
+                block(succeeded, error);
         }];
-        [params setObject:tagNames forKey:@"tags"];
     }
+}
+
+- (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block
+{
+    [PFUser logInWithUsernameInBackground:[username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                 password:[password stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                    block:^(PFUser *user, NSError *error) {
+                                        // upon success connect parse and frs login
+                                        if (user)
+                                            [self login];
+                                        
+                                        // call the block in any event
+                                        block(user, error);
+                                    }
+     ];
+}
+
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block
+{
+    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ]
+                                                       block:^(PFUser *user, NSError *error) {
+                                                           // upon success connect parse and frs login
+                                                           if (user) {
+                                                               if ([self login])
+                                                                   block(user, nil);
+                                                               else {
+                                                                   [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
+                                                                       if (succeeded)
+                                                                           block(user, nil);
+                                                                       else
+                                                                           block (nil, error);
+                                                                   }];
+                                                               }
+                                                           }
+                                                           else
+                                                               block(nil, error);
+                                                       }];
+}
+
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block
+{
+    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        // upon success connect parse and frs login
+        if (user) {
+            if ([self login])
+                block(user, nil);
+            else {
+                [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
+                    if (succeeded)
+                        block(user, nil);
+                    else
+                        block (nil, error);
+                }];
+            }
+        }
+        else
+            block(nil, error);
+    }];
+}
+
+#warning Check for retain cycles
+- (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
+{
+    // user is logged into parse
+    if ([PFUser currentUser]) {
+        // check before syncing
+        FRSUser *frsUser = [self FRSUserFromPFUser];
+        if (frsUser) {
+            _currentUser = frsUser;
+            block(YES, nil);
+        }
+        // not locally, check/fetch Parse's server
+        else {
+            [[PFUser currentUser] fetch];
+            
+            // try again
+            frsUser = [self FRSUserFromPFUser];
+            
+            if (frsUser) {
+                _currentUser = frsUser;
+                block(YES, nil);
+            }
+            // still no FRS user? Make one
+            else {
+                [self createFrescoUser:^(id responseObject, NSError *error) {
+                    if (responseObject) {
+                        FRSUser *frsUser = [responseObject copy];
+                        
+                        frsUser.first = @"J.S.";
+                        frsUser.last = @"Bach";
+                        
+                        NSString *jsonUser = [frsUser asJSONString];
+                        if (jsonUser)
+                            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
+                        
+                        // save locally
+                        [[PFUser currentUser] pinWithName:kFrescoUserData];
+                        
+                        if ([[PFUser currentUser] save]) {
+                            _currentUser = frsUser;
+                            block(YES, nil);
+                        }
+                        else {
+                            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
+                            block (NO, saveError);
+                        }
+                    }
+                }];
+            }
+        }
+    }
+}
+
+// this extracts embedded FRSUser data within the PFUser which may or may not be sync'd to disk or the server
+- (FRSUser *)FRSUserFromPFUser
+{
+    FRSUser *frsUser;
+    NSString *serializedUserData = [[PFUser currentUser] objectForKey:kFrescoUserData];
+    
+    if ([serializedUserData length]) {
+        NSError *jsonError;
+        NSData *objectData = [serializedUserData dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:&jsonError];
+        
+        frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:jsonDict error:nil];
+    }
+    return frsUser;
+}
+
+/*
+- (void)setCurrentUser:(FRSUser *)currentUser
+{
+    if (currentUser)
+        _currentUser = currentUser;
+    // log out
     else {
-        [params setObject:@"getPosts" forKey:@"type"];
+        _currentUser = nil;
+        [PFUser logOut];
     }
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        NSArray *posts = [responseObject map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSPost class] fromJSONDictionary:obj error:NULL];
-        }];
-        
-        if (responseBlock) responseBlock(posts, nil);
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        if (responseBlock) responseBlock(nil, error);
-    }];
 }
+*/
 
-- (void)getPostsWithTag:(FRSTag *)tag limit:(NSNumber *)limit responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+
+/*
+- (FRSUser *)currentUser
 {
-    NSArray *tags = tag ? @[tag] : nil;
-    [self getPostsWithTags:tags limit:limit responseBlock:responseBlock];
+    // see if we can bootstrap the user from Parse
+    if (!_currentUser)
+       [self currentUserFromParseUser];
+
+    return _currentUser;
 }
+*/
 
-- (void)getPostsAfterId:(NSNumber*)lastId responseBlock:(FRSAPIArrayResponseBlock)responseBlock{
-    
-    NSString *path = @"frs-query.php";
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    
-    [params setObject:@"getPosts" forKey:@"type"];
-    [params setObject:lastId forKey:@"lastId"];
-    
-    if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.fresconews.Fresco"])
-        [params setObject: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"sourcesFilter"];
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-    
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
-        NSArray *posts = [responseObject map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSPost class] fromJSONDictionary:obj error:NULL];
-        }];
-        
-        if (responseBlock) responseBlock(posts, nil);
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
-        if (responseBlock) responseBlock(nil, error);
-    }];
-}
-
-
-#pragma mark - get tags
-- (void)getTagsWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    NSString *path = @"frs-query.php";
-    
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    [params setObject:@"getTagsWithPosts" forKey:@"type"];
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
-        NSArray *tags = [responseObject map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSTag class] fromJSONDictionary:obj error:NULL];
-        }];
-        if(responseBlock)
-            responseBlock(tags, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
-       if(responseBlock)
-           responseBlock(nil, error);
-    }];
-    
-}
-
-#pragma mark - tag search
-
-- (void)searchForTags:(NSString *)searchTerm responseBlock:(FRSAPIArrayResponseBlock)responseBlock
+- (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
-    [self cancelSearch];
-    NSString *path = @"frs-query.php";
-    NSDictionary *params = @{@"type": @"getTags", @"query" : (searchTerm ?: @"")};
-    NSURLSessionTask *task = [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        if (responseBlock) responseBlock(responseObject, nil);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (responseBlock) responseBlock(nil, error);
-    }];
-    [self setSearchTask:task];
+    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
+    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+    
+    [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           if (responseBlock) responseBlock(user, nil);
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
 }
 
-- (void)cancelSearch
-{
-    [[self searchTask] cancel];
-    [self setSearchTask:nil];
-}
 
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
     NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -292,7 +304,9 @@ static NSString * const kPersistedUserFilename = @"user.usr";
 }
 
 #pragma mark - Galleries
+
 - (void)getGalleriesAtURLString:(NSString *)urlString WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -310,13 +324,185 @@ static NSString * const kPersistedUserFilename = @"user.usr";
     }];
 }
 
-- (void)getHomeDataWithResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+- (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:[NSString stringWithFormat:@"/gallery/get?id=%@", galleryId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        FRSGallery *assignment = [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        if(responseBlock) responseBlock(assignment, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
 }
 
+- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    if (offset != nil) {
+        
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
+    }
+    else{
+        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+    }
+}
+
+#pragma mark - Assignments
+
+/*
+** Get a single assignment with an ID
+*/
+
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:[NSString stringWithFormat:@"/assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        FRSAssignment *assignment = [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if(responseBlock) responseBlock(assignment, nil);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if(responseBlock) responseBlock(nil, error);
+    }];
+}
+
+/*
+** Get all assignments within a geo and radius
+*/
+
+- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
+
+    [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
+        if (![responseObject[@"data"] isEqual:[NSNull null]]) {
+            NSArray *assignments = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:obj error:NULL];
+            }];
+
+            if(responseBlock) responseBlock(assignments, nil);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if(responseBlock) responseBlock(nil, error);
+    }];
+}
+
+/*
+** Get all clusters within a geo and radius
+*/
+
+- (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
+    
+    [self GET:@"/assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *clusters = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSCluster class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(clusters, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+}
+
+
+#pragma mark - Notifications
+
+/*
+** Get notifications for the user
+*/
+
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"user_id" : @""};
+    
+    #warning will not work, endpoint does not exist
+    [self GET:@"/notifications/get" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            NSArray *notifications = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSNotification class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(notifications, nil);
+            
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+
+}
+
+/*
+** Delete a specific notification
+*/
+
+- (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : notificationId};
+    
+    #warning will not work, endpoint does not exist
+    [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
+}
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:@"/user/galleries?id=55284ea411fe08b11f004297" WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
-
 @end
+

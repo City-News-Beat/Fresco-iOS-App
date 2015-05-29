@@ -21,13 +21,28 @@
              @"user" : @"owner",
              @"source" : @"source",
              @"type" : @"type",
-             //@"mediaSize" : @"meta",
+             @"mediaWidth" : @"meta.width",
+             @"mediaHeight" : @"meta.height",
              @"mediaURLString" : @"file",
              @"image" : @"file",
              @"date" : @"time_created",
              @"byline" : @"byline",
              @"visibility" : @"visibility",
              };
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError **)error {
+    self = [super initWithDictionary:dictionaryValue error:error];
+    
+    if (self) {
+        // because the image data is spread over different levels of the hierarchy
+        // we need to touch it up after the object is loaded
+        if (self.image) {
+            self.image.width = self.mediaWidth;
+            self.image.height = self.mediaHeight;
+        }
+    }
+    return self;
 }
 
 + (NSValueTransformer *)mediaURLStringJSONTransformer
@@ -40,11 +55,16 @@
     return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
         FRSImage *image = [[FRSImage alloc] init];
         image.URL = [NSURL URLWithString:imageURL];
-        image.width = [NSNumber numberWithFloat:800.0f];
-        image.height =  [NSNumber numberWithFloat:600.0f];
         return image;
     }];
 }
+
+- (BOOL)isVideo
+{
+    return [_type isEqualToString:@"video"] ? YES : NO;
+}
+
+
 
 - (NSURL *)largeImageURL
 {

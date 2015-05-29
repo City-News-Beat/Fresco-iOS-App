@@ -1,0 +1,11 @@
+{
+    "aps": {
+        "alert": {
+            "body": "A four-alarm fire has broken out at the GE Appliance Park in Louisville, Kentucky. Cause is unknown, but the building has been evacuated and no injuries have been reported.Heavy smoke continues to rise, and large pieces of ash are falling onto the area. Sources have confirmed that the fire started in an office and storage facility, and that the building was closed at the time the fire started.",
+            "title": "Fresco News",
+        },
+        "category": "frescoNotification"
+    },
+    "image": "http://www.fresconews.com/uploads/422/large_de2035e499752c86358d9409586acab7a05a81db.jpg"
+},
+{ "aps": { "alert": { "body": "New Assignment YO!", "title": "Fresco News" }, "category": "frescoNotification" }, "type": "assignment", "lat": "", "lng": "", "assignment_id": "555e57843764032b1d826dd7" }

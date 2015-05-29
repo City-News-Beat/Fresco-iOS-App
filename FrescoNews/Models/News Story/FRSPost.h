@@ -20,12 +20,14 @@
 @property (nonatomic, copy, readonly) NSString *source;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, strong) FRSImage *image;
-@property (nonatomic, copy, readonly) NSString *mediaURLString;
-//@property (nonatomic, assign) CGSize mediaSize;
+@property (nonatomic, copy) NSString *mediaURLString;
+@property (nonatomic, copy, readonly) NSNumber *mediaWidth;
+@property (nonatomic, copy, readonly) NSNumber *mediaHeight;
 @property (nonatomic, copy, readonly) NSDate *date;
 @property (nonatomic, copy, readonly) NSString *byline;
 @property (nonatomic, copy, readonly) NSNumber *visibility;
 
 - (NSURL *)largeImageURL;
+- (BOOL)isVideo;
 
 @end
