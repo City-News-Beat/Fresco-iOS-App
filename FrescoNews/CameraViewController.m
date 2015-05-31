@@ -148,16 +148,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self configureAssignmentLabel];
 }
 
-- (void)configureAssignmentLabel
-{
-    NSString *assignmentString = @"2nd Avenue building explosion";
-    NSString *space = @"  "; // lame
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
-    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
-                    range:(NSRange){14, [string length] - 14}];
-    self.assignmentLabel.attributedText = string;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -605,6 +595,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                failureBlock:^(NSError *error) {
                                    NSLog(@"error: %@", error);
                                }];
+}
+
+
+- (void)configureAssignmentLabel
+{
+    NSString *assignmentString = @"121 Second Avenue, NYC, explosion";
+    NSString *space = @"  "; // lame
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                    range:(NSRange){14, [string length] - 14}];
+    self.assignmentLabel.attributedText = string;
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
