@@ -98,7 +98,6 @@
 
 #pragma mark - UITableViewDataSource
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.galleries count];

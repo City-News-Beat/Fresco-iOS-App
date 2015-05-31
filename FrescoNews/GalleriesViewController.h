@@ -14,6 +14,7 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @class FRSUser;
 
 @interface GalleriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *galleries;
 @property (strong, nonatomic) FRSUser *frsUser;

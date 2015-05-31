@@ -11,7 +11,7 @@
 #import "FRSBaseViewController.h"
 #import "FRSGallery.h"
 
-@interface GalleryViewController : FRSBaseViewController
+@interface GalleryViewController : FRSBaseViewController  <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) FRSGallery *gallery;
 
