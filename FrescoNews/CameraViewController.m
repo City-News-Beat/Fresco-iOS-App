@@ -152,7 +152,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.eventView.layer.cornerRadius = 2;
     self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
 
-    self.doneButtonBackground.layer.cornerRadius = 4;
     [self updateRecentPhotoView];
 }
 
