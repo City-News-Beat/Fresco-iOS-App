@@ -423,6 +423,7 @@
         self.currentAssignment = nil;
         [UIView animateWithDuration:0.25 animations:^{
             self.assignmentViewHeightConstraint.constant = 0;
+            self.assignmentView.hidden = YES;
             [self.view layoutIfNeeded];
         }];
     }
