@@ -144,6 +144,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self updateRecentPhotoView];
+    [self configureAssignmentLabel];
+}
+
+- (void)configureAssignmentLabel
+{
+    NSString *assignmentString = @"2nd Avenue building explosion";
+    NSString *space = @"  "; // lame
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                    range:(NSRange){14, [string length] - 14}];
+    self.assignmentLabel.attributedText = string;
 }
 
 - (void)viewWillAppear:(BOOL)animated

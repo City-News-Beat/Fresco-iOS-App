@@ -667,7 +667,6 @@
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                             <mask key="constraints">
                                                 <include reference="Ibh-rR-p17"/>
                                             </mask>
@@ -705,20 +704,20 @@
                                         <exclude reference="8mh-3t-wzF"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="Hrw-Ps-5cv"/>
-                                        <exclude reference="tYn-JT-C9b"/>
-                                        <exclude reference="2EL-JD-Ubn"/>
-                                        <exclude reference="2pB-HU-L0Y"/>
-                                        <exclude reference="G6F-LT-5WG"/>
-                                        <exclude reference="OCf-NQ-dYw"/>
-                                        <exclude reference="cRU-Dp-axH"/>
                                         <exclude reference="Flj-Fd-jFx"/>
                                         <exclude reference="kmC-fp-t1W"/>
+                                        <exclude reference="Hrw-Ps-5cv"/>
+                                        <exclude reference="tYn-JT-C9b"/>
                                         <exclude reference="Gbc-F6-GGc"/>
                                         <exclude reference="Mcv-vn-tMx"/>
                                         <exclude reference="abK-2s-JCi"/>
                                         <exclude reference="otV-QZ-pCT"/>
                                         <exclude reference="snl-Sk-anJ"/>
+                                        <exclude reference="2EL-JD-Ubn"/>
+                                        <exclude reference="2pB-HU-L0Y"/>
+                                        <exclude reference="G6F-LT-5WG"/>
+                                        <exclude reference="OCf-NQ-dYw"/>
+                                        <exclude reference="cRU-Dp-axH"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
@@ -728,19 +727,19 @@
                                         <include reference="8mh-3t-wzF"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="Hrw-Ps-5cv"/>
-                                        <include reference="tYn-JT-C9b"/>
-                                        <include reference="2EL-JD-Ubn"/>
-                                        <include reference="G6F-LT-5WG"/>
-                                        <include reference="OCf-NQ-dYw"/>
-                                        <include reference="cRU-Dp-axH"/>
                                         <include reference="Flj-Fd-jFx"/>
                                         <include reference="kmC-fp-t1W"/>
+                                        <include reference="Hrw-Ps-5cv"/>
+                                        <include reference="tYn-JT-C9b"/>
                                         <include reference="Gbc-F6-GGc"/>
                                         <include reference="Mcv-vn-tMx"/>
                                         <include reference="abK-2s-JCi"/>
                                         <include reference="otV-QZ-pCT"/>
                                         <include reference="snl-Sk-anJ"/>
+                                        <include reference="2EL-JD-Ubn"/>
+                                        <include reference="G6F-LT-5WG"/>
+                                        <include reference="OCf-NQ-dYw"/>
+                                        <include reference="cRU-Dp-axH"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=regular">
