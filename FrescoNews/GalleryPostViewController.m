@@ -52,7 +52,7 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
         self.currentAssignment = [self.assignments firstObject];
 
