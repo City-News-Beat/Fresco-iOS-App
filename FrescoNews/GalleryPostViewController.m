@@ -359,7 +359,7 @@
 {
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
         NSProgress *progress = (NSProgress *)object;
-        NSLog(@"Progress... %f", progress.fractionCompleted);
+        // NSLog(@"Progress... %f", progress.fractionCompleted);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showUploadProgress:progress.fractionCompleted];
         });
