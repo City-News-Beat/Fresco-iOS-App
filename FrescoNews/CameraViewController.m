@@ -13,6 +13,7 @@
 #import "CTAssetsPickerController.h"
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
+#import "ALAsset+assetType.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -37,6 +38,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -51,9 +53,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
-@property (weak, nonatomic) IBOutlet UIView *eventView;
-@property (weak, nonatomic) IBOutlet UILabel *eventViewVariableLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventViewWidthConstraint;
 
 @end
 
@@ -144,16 +143,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
-    
-    // Set fake data for eventView
-    //self.eventViewVariableLabel.text = @"Apartment Fire on Duncan St NE";
-    
-    // Set eventView layout styles
-    self.eventView.layer.cornerRadius = 2;
-    self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
 
-    self.doneButtonBackground.layer.cornerRadius = 4;
     [self updateRecentPhotoView];
+    [self configureAssignmentLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -605,6 +597,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                }];
 }
 
+
+- (void)configureAssignmentLabel
+{
+    NSString *assignmentString = @"121 Second Avenue, NYC, explosion";
+    NSString *space = @"  "; // lame
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                    range:(NSRange){14, [string length] - 14}];
+    self.assignmentLabel.attributedText = string;
+}
+
 #pragma mark - CTAssetsPickerControllerDelegate methods
 
 - (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
@@ -625,6 +628,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    NSString *mimeType = [asset mimeType];
+    if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
+        return NO;
+    }
+
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
