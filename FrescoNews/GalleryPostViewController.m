@@ -295,6 +295,7 @@
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
+            // TODO: Video support
             [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
                                         name:filename
                                     fileName:filename
