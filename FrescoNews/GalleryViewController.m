@@ -7,9 +7,13 @@
 //
 
 #import "MTLModel+Additions.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
+#import <PBWebViewController.h>
 #import "FRSPost.h"
+#import "FRSArticle.h"
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
+
 
 @interface GalleryViewController ()
 
@@ -43,21 +47,16 @@
 - (void)viewDidLoad
 {
     self.postsPageControl.numberOfPages = 0;
-
-}
-
-- (void)setGallery:(FRSGallery *)gallery
-{
-    
-    _gallery = gallery;
     
     self.caption.text = self.gallery.caption;
     
-    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
+    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
 
+
 }
+
 
 #pragma mark - UITableViewDataSource
 
@@ -68,16 +67,82 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if(tableView == self.storiesTable){
+        return 0;
+    }
+    else if(tableView == self.articlesTable){
+        
+        return self.gallery.articles.count;
+        
+    }
+    
+    return 0;
+    
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
     
+    if(tableView == self.storiesTable){
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"relatedStoryCell"];
+        
+        UILabel *storyTitle = (UILabel *)[cell viewWithTag:100];
+        
+        [storyTitle setText:@"Test"];
+        
+        return cell;
+        
+    }
+    else if(tableView == self.articlesTable){
+        
+        FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
+        
+        UILabel *articleTitle = (UILabel *)[cell viewWithTag:100];
+        
+        UIImageView *articleImage = (UIImageView *)[cell viewWithTag:200];
+        
+        articleTitle.text = article.name;
+        [articleImage setImageWithURL:article.URL];
+        
+    }
     
-    return cell;
+    return 0;
     
+}
+
+#pragma mark - UITableViewDelegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if(tableView == self.storiesTable){
+        
+
+    }
+    else if(tableView == self.articlesTable){
+        
+        FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
+        
+        //Push to web view
+        PBWebViewController *webViewController = [[PBWebViewController alloc] init];
+        webViewController.URL = article.URL;
+        
+        //        PBSafariActivity *activity = [[PBSafariActivity alloc] init];
+        //        webViewController.applicationActivities = @[activity];
+        //
+        [[self navigationController] pushViewController:webViewController animated:YES];
+        
+        
+    }
+
+
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
 }
 
 

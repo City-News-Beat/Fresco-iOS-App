@@ -8,7 +8,7 @@
 
 #import "MTLModel+Additions.h"
 #import "FRSTag.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 #import "FRSUser.h"
 #import "FRSGallery.h"
 #import "FRSPost.h"
@@ -23,7 +23,7 @@
 
 + (NSValueTransformer *)sourcesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSTradionalSource class]];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSArticle class]];
 }
 
 + (NSValueTransformer *)postsJSONTransformer

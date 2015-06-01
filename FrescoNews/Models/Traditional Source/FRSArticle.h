@@ -9,10 +9,10 @@
 @import Foundation;
 #import <Mantle/Mantle.h>
 
-@interface FRSTradionalSource : MTLModel <MTLJSONSerializing>
+@interface FRSArticle : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, strong) NSString *prettyName;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSDictionary *outlet;
 @property (nonatomic, strong) NSURL *URL;
 
 @end

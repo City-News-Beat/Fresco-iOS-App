@@ -58,7 +58,7 @@
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
 		1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F61AA4D0730082E08D /* FRSPost.m */; };
 		1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44F91AA4D0730082E08D /* FRSTag.m */; };
-		1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */; };
+		1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSArticle.m */; };
 		1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FF1AA4D0730082E08D /* FRSUser.m */; };
 		1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA450C1AA4E2BD0082E08D /* PostView.m */; };
 		1EDA45121AA4F8640082E08D /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45101AA4F8640082E08D /* StoryCell.m */; };
@@ -247,8 +247,8 @@
 		1EDA44F61AA4D0730082E08D /* FRSPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPost.m; sourceTree = "<group>"; };
 		1EDA44F81AA4D0730082E08D /* FRSTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTag.h; sourceTree = "<group>"; };
 		1EDA44F91AA4D0730082E08D /* FRSTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTag.m; sourceTree = "<group>"; };
-		1EDA44FB1AA4D0730082E08D /* FRSTradionalSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTradionalSource.h; sourceTree = "<group>"; };
-		1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTradionalSource.m; sourceTree = "<group>"; };
+		1EDA44FB1AA4D0730082E08D /* FRSArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSArticle.h; sourceTree = "<group>"; };
+		1EDA44FC1AA4D0730082E08D /* FRSArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSArticle.m; sourceTree = "<group>"; };
 		1EDA44FE1AA4D0730082E08D /* FRSUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUser.h; sourceTree = "<group>"; };
 		1EDA44FF1AA4D0730082E08D /* FRSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUser.m; sourceTree = "<group>"; };
 		1EDA450B1AA4E2BD0082E08D /* PostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostView.h; path = Views/PostView.h; sourceTree = "<group>"; };
@@ -705,8 +705,8 @@
 		1EDA44FA1AA4D0730082E08D /* Traditional Source */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44FB1AA4D0730082E08D /* FRSTradionalSource.h */,
-				1EDA44FC1AA4D0730082E08D /* FRSTradionalSource.m */,
+				1EDA44FB1AA4D0730082E08D /* FRSArticle.h */,
+				1EDA44FC1AA4D0730082E08D /* FRSArticle.m */,
 			);
 			path = "Traditional Source";
 			sourceTree = "<group>";
@@ -1242,7 +1242,7 @@
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
 				1EDA450D1AA4E2BD0082E08D /* PostView.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
-				1EDA45021AA4D0730082E08D /* FRSTradionalSource.m in Sources */,
+				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,

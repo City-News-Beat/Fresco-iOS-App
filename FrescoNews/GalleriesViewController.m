@@ -143,15 +143,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    // remember, one story per section
-    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+    GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     
     //Retreieve Notifications View Controller from storyboard
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     
     GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
     
-    [galleryView setGallery:gallery];
+    [galleryView setGallery:cell.gallery];
     
     [self.navigationController pushViewController:galleryView animated:YES];
 

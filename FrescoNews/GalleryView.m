@@ -58,6 +58,7 @@
 - (void)setAspectRatio
 {
     if ([self.gallery.posts count]) {
+        
         FRSPost *post = [self.gallery.posts firstObject];
         
         CGFloat aspectRatio;

@@ -9,7 +9,7 @@
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 #import "FRSImage.h"
 
 @implementation FRSPost
