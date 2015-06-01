@@ -29,27 +29,40 @@
 -(void)goToNotifications:(UIBarButtonItem *)sender
 {
     
-    //Retreieve Notifications View Controller from storyboard
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    NotificationsViewController *notificationsController;
     
-    [self.navigationController.view setBackgroundColor:[UIColor whiteColor]];
+    if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
+        
+        [[self navigationController] popViewControllerAnimated:YES];
+        
+    }
+    else{
+        
+        //Retreieve Notifications View Controller from storyboard
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        
+        notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
+        
+//        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];    [UIView  beginAnimations: @"Showinfo"context: nil];
+//        
+//        [UIView setAnimationCurve: UIViewAnimationCurveEaseInOut];
+//        [UIView setAnimationDuration:0.75];
+//        [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:notificationsController.view cache:YES];
+//        
+//        [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+//        
+//        [UIView commitAnimations];
+        
+        self.navigationItem.leftBarButtonItem = nil;
+        [self.navigationItem setHidesBackButton:YES];
+        [self.navigationController pushViewController:notificationsController animated:YES];
+        
+    }
+
     
-    NotificationsViewController *notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
+
     
-    [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];    [UIView  beginAnimations: @"Showinfo"context: nil];
-    
-    [UIView setAnimationCurve: UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:0.75];
-    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:notificationsController.view cache:YES];
-    
-    [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-    
-    [UIView commitAnimations];
-    
-    [self.navigationController pushViewController:notificationsController animated:NO];
-    [self.navigationItem setLeftBarButtonItem:nil];
-    [self.navigationItem setHidesBackButton:YES];
-    
+
 }
 
 

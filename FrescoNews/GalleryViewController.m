@@ -8,8 +8,10 @@
 
 #import "MTLModel+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "FRSDataManager.h"
 #import <PBWebViewController.h>
 #import "FRSPost.h"
+#import "GalleryView.h"
 #import "FRSArticle.h"
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
@@ -17,20 +19,19 @@
 
 @interface GalleryViewController ()
 
+@property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+
 @property (weak, nonatomic) IBOutlet UILabel *timeAndPlace;
 
 @property (weak, nonatomic) IBOutlet UILabel *byline;
 
-
 @property (weak, nonatomic) IBOutlet UILabel *caption;
 @property (weak, nonatomic) IBOutlet UITableView *storiesTable;
 @property (weak, nonatomic) IBOutlet UITableView *articlesTable;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
-@property (weak, nonatomic) IBOutlet UIPageControl *postsPageControl;
+
 @end
 
 @implementation GalleryViewController
-
 
 - (id)init
 {
@@ -46,7 +47,9 @@
 
 - (void)viewDidLoad
 {
-    self.postsPageControl.numberOfPages = 0;
+    
+
+    self.galleryView.gallery = self.gallery;
     
     self.caption.text = self.gallery.caption;
     
@@ -54,6 +57,32 @@
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
 
+
+}
+//
+//- (void)setGallery:(FRSGallery *)gallery{
+//    
+//    self.galleryView.gallery = self.gallery;
+//    
+//    self.caption.text = self.gallery.caption;
+//    
+//    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
+//    
+//    self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
+//
+//}
+
+- (void)openGalleryWithId:(NSString *)galleryId{
+
+    [[FRSDataManager sharedManager] getGallery:galleryId WithResponseBlock:^(id responseObject, NSError *error) {
+        
+        if (!error) {
+            
+            [self setGallery:responseObject];
+            
+        }
+        
+    }];
 
 }
 
@@ -104,8 +133,13 @@
         
         UIImageView *articleImage = (UIImageView *)[cell viewWithTag:200];
         
-        articleTitle.text = article.name;
+        articleTitle.text = article.title;
+        
         [articleImage setImageWithURL:article.URL];
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        return cell;
         
     }
     
@@ -145,55 +179,15 @@
     return 0;
 }
 
-
-#pragma mark - UICollectionViewDataSource
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-     numberOfItemsInSection:(NSInteger)section
-{
-    return [self.gallery.posts count];
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
-    
-    cell.post = [self.gallery.posts objectAtIndex:indexPath.item];
-    cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
-    
-    return cell;
+    return nil;
 }
 
 
-#pragma mark - UICollectionViewDelegate
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return collectionView.bounds.size;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.0f;
-}
-
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.0f;
-}
-
-
-#pragma mark - ScrollViewDelegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSIndexPath *index = [[self.collectionPosts indexPathsForVisibleItems] lastObject];
-    
-    self.postsPageControl.currentPage = index.item;
-
-}
 
 @end

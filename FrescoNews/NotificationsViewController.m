@@ -48,91 +48,103 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
     
-    _notifications = [[NSMutableArray alloc] init];
+    
+    [[FRSDataManager sharedManager] getNotificationsForUser:@"55284ea411fe08b11f004297" responseBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            
+            self.notifications = responseObject;
+            
+            [[self tableView] reloadData];
+            
+        }
+        
+    }];
     
     [self setFrescoNavigationBar];
     
-    /** TEMPORARY */
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"MM/dd/yyyy HH:mm a"];
-    
-    NSArray *someData = @[
-                          @{@"title" : @"New Assignment",
-                            @"event" : @"St. Patrick's Day Parade",
-                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"assignment",
-                            @"notificationData" : @{
-                                    @"assignment_id" : @"55637a4831c804d53117e727"
-                                    }},
-                          
-                          @{@"title" : @"Photo used",
-                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting. WFLA downloaded your content and may use it soon in their reporting. WFLA downloaded your content and may use it soon in their reporting.",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"use",
-                            @"notificationData" : @{
-                                    @"gallery_id" : @"123asdbasd1254",
-                                    @"outlet" : @"wfla"
-                                    },
-                            },
-                          @{@"title" : @"New Assignment",
-                            @"event" : @"St. Patrick's Day Parade",
-                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"assignment",
-                            @"notificationData" : @{
-                                    @"assignment_id" : @"123asdbasd1254"
-                                    }},
-                          @{@"title" : @"Photo used",
-                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"use",
-                            @"notificationData" : @{
-                                    @"gallery_id" : @"123asdbasd1254",
-                                    @"outlet" : @"wfla"
-                                    },
-                            },
-                          @{@"title" : @"New Assignment",
-                            @"event" : @"St. Patrick's Day Parade",
-                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"assignment",
-                            @"notificationData" : @{
-                                    @"assignment_id" : @"123asdbasd1254"
-                                    }},
-                          
-                          @{@"title" : @"Photo used",
-                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting",
-                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
-                            @"type" : @"use",
-                            @"notificationData" : @{
-                                    @"gallery_id" : @"123asdbasd1254",
-                                    @"outlet" : @"wfla"
-                                    },
-                            }
-                          
-                          
-                          ];
-    
-    for(NSDictionary *data in someData ){
-        
-        FRSNotification *not = [[FRSNotification alloc] init];
-        
-        not.title = data[@"title"];
-        not.title = data[@"title"];
-        not.notificationDescription = data[@"notificationDescription"];
-        not.date = data[@"date"];
-        not.notificationData = data[@"notificationData"];
-        not.type = data[@"type"];
-        
-        if([not.type isEqualToString:@"assignment"]){
-            not.event = data[@"event"];
-        }
-        
-        [_notifications addObject:not];
-
-    }
-    
+//    /** TEMPORARY */
+//    self.notifications = [[NSMutableArray alloc] init];
+//    
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+//    [formatter setDateFormat:@"MM/dd/yyyy HH:mm a"];
+//    
+//    NSArray *someData = @[
+//                          @{@"title" : @"New Assignment",
+//                            @"event" : @"St. Patrick's Day Parade",
+//                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"assignment",
+//                            @"meta" : @{
+//                                    @"assignment_id" : @"55637a4831c804d53117e727"
+//                                    }},
+//                          
+//                          @{@"title" : @"Photo used",
+//                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting. WFLA downloaded your content and may use it soon in their reporting. WFLA downloaded your content and may use it soon in their reporting.",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"use",
+//                            @"meta" : @{
+//                                    @"gallery_id" : @"123asdbasd1254",
+//                                    @"outlet" : @"wfla"
+//                                    },
+//                            },
+//                          @{@"title" : @"New Assignment",
+//                            @"event" : @"St. Patrick's Day Parade",
+//                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"assignment",
+//                            @"meta" : @{
+//                                    @"assignment_id" : @"123asdbasd1254"
+//                                    }},
+//                          @{@"title" : @"Photo used",
+//                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"use",
+//                            @"meta" : @{
+//                                    @"gallery_id" : @"123asdbasd1254",
+//                                    @"outlet" : @"wfla"
+//                                    },
+//                            },
+//                          @{@"title" : @"New Assignment",
+//                            @"event" : @"St. Patrick's Day Parade",
+//                            @"notificationDescription" : @"The parade has started heading north from 5th Avenue and 44th Street.",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"assignment",
+//                            @"meta" : @{
+//                                    @"assignment_id" : @"123asdbasd1254"
+//                                    }},
+//                          
+//                          @{@"title" : @"Photo used",
+//                            @"notificationDescription" : @"WFLA downloaded your content and may use it soon in their reporting",
+//                            @"date" : [formatter dateFromString:@"5/25/2015 9:15 PM"],
+//                            @"type" : @"use",
+//                            @"meta" : @{
+//                                    @"gallery_id" : @"123asdbasd1254",
+//                                    @"outlet" : @"wfla"
+//                                    },
+//                            }
+//                          
+//                          
+//                          ];
+//    
+//    for(NSDictionary *data in someData ){
+//        
+//        FRSNotification *not = [[FRSNotification alloc] init];
+//        
+//        not.title = data[@"title"];
+//        not.title = data[@"title"];
+//        not.notificationDescription = data[@"notificationDescription"];
+//        not.date = data[@"date"];
+//        not.notificationData = data[@"meta"];
+//        not.type = data[@"type"];
+//        
+//        if([not.type isEqualToString:@"assignment"]){
+//            not.event = data[@"event"];
+//        }
+//        
+//        [_notifications addObject:not];
+//
+//    }
+//    
     
     /** TEMPORARY */
 
@@ -140,6 +152,11 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 //    [self updateNotifications];
 
     
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -165,8 +182,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 - (void)updateNotifications{
     
-
-    [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
+    
+    [[FRSDataManager sharedManager] getNotificationsForUser:@"" responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
             self.notifications = responseObject;
@@ -176,7 +193,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         }
         
     }];
-    
 
 }
 
@@ -208,7 +224,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     //Set Values from notificaiton
     cell.title.text = notification.title;
     cell.eventName.text = notification.event;
-    cell.notificationDescription.text = notification.notificationDescription;
+    cell.notificationDescription.text = notification.body;
     cell.timeElapsed.text = [MTLModel relativeDateStringFromDate:notification.date];
     
     //Check if assignment, then check if the assignment has expired
@@ -226,7 +242,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
         cell.constraintNotificationDescription.constant = 3.0f;
         
-        NSString *imageName = [NSString stringWithFormat:@"%@.png",notification. notificationData[@"outlet"]];
+        NSString *imageName = [NSString stringWithFormat:@"%@.png",notification. meta[@"outlet"]];
         
         if([UIImage imageNamed:imageName]) [[cell image] setImage:[UIImage imageNamed:imageName]];
     
@@ -267,16 +283,16 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     if([notification.type isEqualToString:@"assignment"]){
         
         //Get assignment and navigate to on assignments view
-        [[FRSDataManager sharedManager] getAssignment:notification.notificationData[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
                 
-                [tabBarController setSelectedIndex:3];
-                
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                 
-                assignmentVC.currentAssignment = responseObject;
+                [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
+                
+                [tabBarController setSelectedIndex:3];
                 
             }
             
@@ -294,6 +310,41 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 }
 
 - (IBAction)secondButton:(id)sender {
+    
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    
+    FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
+    
+    //Check the notificaiton type
+    if([notification.type isEqualToString:@"assignment"]){
+        
+        //Get assignment and navigate to on assignments view
+        [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+                
+                AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                
+                [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                
+                [tabBarController setSelectedIndex:3];
+                
+                
+            }
+            
+        }];
+        
+    }
+    else if([notification.type isEqualToString:@"use"]){
+        
+    }
+    else if([notification.type isEqualToString:@"social"]){
+        
+    }
+
     
 }
 

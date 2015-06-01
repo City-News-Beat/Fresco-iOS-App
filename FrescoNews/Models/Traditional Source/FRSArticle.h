@@ -11,7 +11,7 @@
 
 @interface FRSArticle : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSDictionary *outlet;
 @property (nonatomic, strong) NSURL *URL;
 
