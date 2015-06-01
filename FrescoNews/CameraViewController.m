@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
 #import "ALAsset+assetType.h"
+#import "FRSDataManager.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -39,6 +40,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+
+// Refactor
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -146,6 +150,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [self updateRecentPhotoView];
     [self configureAssignmentLabel];
+
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.currentAssignment = [responseObject firstObject];
+        [self configureAssignmentLabel];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -600,12 +609,24 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)configureAssignmentLabel
 {
-    NSString *assignmentString = @"121 Second Avenue, NYC, explosion";
+    NSString *assignmentString = self.currentAssignment.title;
     NSString *space = @"  "; // lame
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
     [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
                     range:(NSRange){14, [string length] - 14}];
     self.assignmentLabel.attributedText = string;
+
+    if (self.currentAssignment) {
+        self.assignmentLabel.hidden = NO;
+    }
+
+    [UIView animateWithDuration:0.5 animations:^{
+        self.assignmentLabel.alpha = self.currentAssignment ? 0.75 : 0.0;
+    } completion:^(BOOL finished) {
+        if (!self.currentAssignment) {
+            self.assignmentLabel.hidden = YES;
+        }
+    }];
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
