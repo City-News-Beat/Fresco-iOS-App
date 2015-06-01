@@ -53,6 +53,7 @@
     self.galleryView.gallery = self.gallery;
 
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        // TODO: currentAssignment should be based on location of assets, which may be different from the user's current location
         self.assignments = responseObject;
         self.currentAssignment = [self.assignments firstObject];
 

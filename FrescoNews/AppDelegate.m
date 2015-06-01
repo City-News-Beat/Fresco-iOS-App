@@ -20,18 +20,11 @@
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
 
-//Notification Categories
-
-static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY";
-
-//Notification Actions
-
-static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
+static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
+static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
 @interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
-
-@property (strong, nonatomic) CLLocationManager *locationManager;
-
+@property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
 @end
 
 @implementation AppDelegate
