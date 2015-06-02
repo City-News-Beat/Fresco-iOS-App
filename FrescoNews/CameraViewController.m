@@ -153,6 +153,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self updateRecentPhotoView];
+    [self configureAssignmentLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
