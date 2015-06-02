@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
 #import "ALAsset+assetType.h"
+#import "FRSDataManager.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -25,7 +26,7 @@ static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
 // iOS 8 - use PHPhotoLibrary?
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate>
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
@@ -39,6 +40,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+
+// Refactor
+@property (strong, nonatomic) CLLocation *location;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) FRSAssignment *defaultAssignment;
+@property (nonatomic) BOOL withinRangeOfDefaultAssignment;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -169,6 +177,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }]];
         [[self session] startRunning];
     });
+
+    // TODO: Confirm permissions
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -184,6 +198,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
         [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
     });
+
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -316,7 +332,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
-                                                                    metadata:[((AppDelegate *)[UIApplication sharedApplication].delegate).location EXIFMetadata]
+                                                                    metadata:[self.location EXIFMetadata]
                                                              completionBlock:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideUIForCameraMode:CameraModePhoto];
@@ -600,12 +616,27 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)configureAssignmentLabel
 {
-    NSString *assignmentString = @"121 Second Avenue, NYC, explosion";
+    NSString *assignmentString = self.defaultAssignment.title;
     NSString *space = @"  "; // lame
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
     [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
                     range:(NSRange){14, [string length] - 14}];
     self.assignmentLabel.attributedText = string;
+
+    CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
+    self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
+
+    if (self.withinRangeOfDefaultAssignment) {
+        self.assignmentLabel.hidden = NO;
+    }
+
+    [UIView animateWithDuration:0.5 animations:^{
+        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 0.75 : 0.0;
+    } completion:^(BOOL finished) {
+        if (!self.withinRangeOfDefaultAssignment) {
+            self.assignmentLabel.hidden = YES;
+        }
+    }];
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
@@ -667,6 +698,43 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // Do not show empty albums
     return group.numberOfAssets > 0;
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+
+    static dispatch_once_t onceToken;   
+    dispatch_once(&onceToken, ^{
+        [self configureDefaultAssignment];
+    });
+
+    [self configureAssignmentLabel];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+
+- (void)configureDefaultAssignment
+{
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.defaultAssignment = [responseObject firstObject];
+        self.defaultAssignment.locationObject = [[CLLocation alloc] initWithLatitude:[self.defaultAssignment.lat floatValue]
+                                                                           longitude:[self.defaultAssignment.lon floatValue]];
+    }];
 }
 
 @end
