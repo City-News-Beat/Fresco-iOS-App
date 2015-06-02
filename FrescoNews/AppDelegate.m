@@ -195,9 +195,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 - (void)setupTabBarAppearances
 {
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
+
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
     
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",

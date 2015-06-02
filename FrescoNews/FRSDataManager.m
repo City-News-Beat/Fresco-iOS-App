@@ -191,31 +191,44 @@
             // still no FRS user? Make one
             else {
                 [self createFrescoUser:^(id responseObject, NSError *error) {
-                    if (responseObject) {
-                        FRSUser *frsUser = [responseObject copy];
-                        
-                        frsUser.first = @"J.S.";
-                        frsUser.last = @"Bach";
-                        
-                        NSString *jsonUser = [frsUser asJSONString];
-                        if (jsonUser)
-                            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
-                        
-                        // save locally
-                        [[PFUser currentUser] pinWithName:kFrescoUserData];
-                        
-                        if ([[PFUser currentUser] save]) {
-                            _currentUser = frsUser;
-                            block(YES, nil);
-                        }
-                        else {
-                            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
-                            block (NO, saveError);
-                        }
+                    if ([responseObject isKindOfClass:[FRSUser class]])
+                        block(YES, nil);
+                    else {
+                        NSError *error = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't create user"}];
+                        block(NO, error);
                     }
                 }];
             }
         }
+    }
+}
+
+- (void)synchronizeFRSUser:(FRSUser *)frsUser withBlock:(PFBooleanResultBlock)block
+{
+    if ([frsUser isKindOfClass:[FRSUser class]]) {
+        NSString *jsonUser = [frsUser asJSONString];
+        if (jsonUser)
+            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
+        
+        // save locally
+        [[PFUser currentUser] pinWithName:kFrescoUserData];
+        
+        // save to parse
+        NSError *error;
+        if ([[PFUser currentUser] save:&error]) {
+            _currentUser = frsUser;
+            block(YES, nil);
+        }
+        else {
+            // if we're going to codify this it needs to be centralized -- this is arbitrary
+            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
+            block (NO, saveError);
+        }
+    }
+    else {
+        // if we're going to codify this it needs to be centralized -- this is arbitrary
+        NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Not a user"}];
+        block (NO, saveError);
     }
 }
 
@@ -237,41 +250,41 @@
     return frsUser;
 }
 
-/*
-- (void)setCurrentUser:(FRSUser *)currentUser
-{
-    if (currentUser)
-        _currentUser = currentUser;
-    // log out
-    else {
-        _currentUser = nil;
-        [PFUser logOut];
-    }
-}
-*/
-
-
-/*
-- (FRSUser *)currentUser
-{
-    // see if we can bootstrap the user from Parse
-    if (!_currentUser)
-       [self currentUserFromParseUser];
-
-    return _currentUser;
-}
-*/
-
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
-    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
-    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+    NSString *email = [PFUser currentUser].email;
+    NSDictionary *params = @{@"email" : email};
     
+#warning this shouldn't return success on email exists and/or I should handle null "data" element
     [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-           if (responseBlock) responseBlock(user, nil);
+           
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
+}
+
+- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self POST:@"/user/update" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
            NSLog(@"Error creating new user %@", error);
            if (responseBlock) responseBlock(nil, error);

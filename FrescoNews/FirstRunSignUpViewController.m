@@ -7,11 +7,14 @@
 //
 
 #import "FirstRunSignUpViewController.h"
+#import "FRSDataManager.h"
 
 @interface FirstRunSignUpViewController ()
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldFirstName;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldLastName;
 @end
 
 @implementation FirstRunSignUpViewController
@@ -64,15 +67,23 @@
                         } completion:nil];
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)actionNext:(id)sender {
+    NSDictionary *updateParams = @{@"firstname" : self.textfieldFirstName.text, @"lastname" : self.textfieldLastName.text};
+    
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+        if (!error) {
+            [self performSegueWithIdentifier:@"showPermissions" sender:self];
+        }
+        else
+            NSLog(@"Error: %@", error);
+    }];
 }
-*/
 
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Make sure your segue name in storyboard is the same as this line
+    if ([[segue identifier] isEqualToString:@"showPermissions"]) {
+    }
+}
 @end
