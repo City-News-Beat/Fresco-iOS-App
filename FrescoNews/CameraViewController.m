@@ -699,7 +699,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return group.numberOfAssets > 0;
 }
 
-#pragma mark - Location Delegate Methods
+#pragma mark - CLLocationManagerDelegate methods
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {

@@ -22,7 +22,7 @@
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -35,12 +35,12 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
-
-// TODO: "currentAssignment" and "assignments" redundant with AssignmentsViewController?
-@property (strong, nonatomic) FRSAssignment *currentAssignment;
-@property (strong, nonatomic) NSArray *assignments;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
+
+// Refactor
+@property (strong, nonatomic) FRSAssignment *defaultAssignment;
+@property (strong, nonatomic) NSArray *assignments;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation GalleryPostViewController
@@ -52,18 +52,11 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        // TODO: currentAssignment should be based on location of assets, which may be different from the user's current location
-        self.assignments = responseObject;
-        self.currentAssignment = [self.assignments firstObject];
-
-        if (self.currentAssignment) {
-            self.assignmentViewHeightConstraint.constant = 40;
-        }
-        else {
-            self.assignmentViewHeightConstraint.constant = 0;
-        }
-    }];
+    // TODO: Confirm permissions
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
@@ -200,7 +193,7 @@
 
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
-    if (self.currentAssignment) {
+    if (self.defaultAssignment) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
                                                         message:@"Are you sure you want remove this assignment?"
                                                        delegate:self
@@ -209,16 +202,13 @@
                         
         [alert show];
     }
-    else {
-        self.currentAssignment = [self.assignments firstObject];
-    }
 }
 
-- (void)setCurrentAssignment:(FRSAssignment *)currentAssignment
+- (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
-    _currentAssignment = currentAssignment;
-    if (currentAssignment) {
-        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", currentAssignment.title]];
+    _defaultAssignment = defaultAssignment;
+    if (defaultAssignment) {
+        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", defaultAssignment.title]];
         [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
                              range:(NSRange){10, [titleString length] - 10}];
         self.assignmentLabel.attributedText = titleString;
@@ -421,13 +411,38 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        self.currentAssignment = nil;
+        self.defaultAssignment = nil;
         [UIView animateWithDuration:0.25 animations:^{
             self.assignmentViewHeightConstraint.constant = 0;
             self.assignmentView.hidden = YES;
             [self.view layoutIfNeeded];
         }];
     }
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *location = [locations lastObject];
+    [self.locationManager stopUpdatingLocation];
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        // TODO: currentAssignment should be based on location of assets, which may be different from the user's current location
+        self.assignments = responseObject;
+        self.defaultAssignment = [self.assignments firstObject];
+
+        if (self.defaultAssignment) {
+            self.assignmentViewHeightConstraint.constant = 40;
+        }
+        else {
+            self.assignmentViewHeightConstraint.constant = 0;
+        }
+    }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [self.locationManager stopUpdatingLocation];
 }
 
 @end
