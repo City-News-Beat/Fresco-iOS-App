@@ -44,7 +44,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

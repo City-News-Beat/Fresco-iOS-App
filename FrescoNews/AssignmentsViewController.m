@@ -34,9 +34,13 @@
 
     @property (assign, nonatomic) BOOL updating;
 
+    @property (assign, nonatomic) BOOL navigateTo;
+
     @property (assign, nonatomic) BOOL viewingClusters;
 
     @property (strong, nonatomic) NSNumber *operatingRadius;
+
+    @property (strong, nonatomic) UIActionSheet *navigationSheet;
 
 @end
 
@@ -46,19 +50,29 @@
     
     [super viewDidLoad];
     
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     
-    self.scrollView.delegate = self;
+    [self tweakUI];
     
-    self.assignmentsMap.delegate = self;
+    self.navigationSheet = [[UIActionSheet alloc]
+                            initWithTitle:@"Navigate to the assignment"
+                            delegate:self
+                            cancelButtonTitle:@"Cancel"
+                            destructiveButtonTitle:nil
+                            otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
+    
+    
+    //Navigation Sheet Tag
+    self.navigationSheet.tag = 100;
 
     self.operatingRadius = 0;
 
-    [self tweakUI];
-    
     if(self.currentAssignment != nil){
         
         [self updateCurrentAssignmentInView];
+        
+        if(self.navigateTo)
+            [self navigateToCurrentAssignment];
     
     }
     else{
@@ -72,12 +86,16 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
     [super viewDidAppear:animated];
+    
     static BOOL firstTime = YES;
     
     if(self.currentAssignment != nil){
         
         [self updateCurrentAssignmentInView];
+        
+        if(self.navigateTo) [self navigateToCurrentAssignment];
         
     }
 
@@ -85,7 +103,9 @@
         // move the legal link in order to tuck the map behind nicely
         [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
     }
+    
     firstTime = NO;
+    
 }
 
 - (void)viewDidLayoutSubviews{
@@ -120,6 +140,14 @@
 
 }
 
+
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
+    
+    self.currentAssignment = currentAssignment;
+    
+    if(navigate) self.navigateTo = YES;
+
+}
 
 /*
 ** Update Assignments
@@ -172,6 +200,7 @@
                 
             }
             else{
+                
                 [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
                     if (!error) {
                         
@@ -222,10 +251,8 @@
                 }
                 
             }
-            
-            
+    
             self.assignments = nil;
-            
 
         }
         
@@ -308,6 +335,14 @@
         [self.scrollView setAlpha:1];
     }];
     
+}
+
+- (void)navigateToCurrentAssignment{
+    
+    [self.navigationSheet showInView:self.view];
+    
+    self.navigateTo = NO;
+
 }
 
 /*
@@ -438,13 +473,13 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
-    [mapView selectAnnotation:view.annotation animated:YES];
-    
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
         self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
         
         [self updateCurrentAssignmentInView];
+        
+        [mapView selectAnnotation:view.annotation animated:YES];
 
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
@@ -471,23 +506,36 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                      initWithTitle:@"Navigate to the assignment"
-                                      delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      destructiveButtonTitle:nil
-                                      otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
-        
-        
-        // Google Maps
-        actionSheet.tag = 100;
-        
-        [actionSheet showInView:self.view];
+        [self.navigationSheet showInView:self.view];
         
     }
     
 }
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    
+    [self updateAssignments];
+    
+}
+
+- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    NSLog(@"Failed to locate user: %@", error);
+}
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    
+    if(self.currentAssignment == nil){
+        
+        [self zoomToCurrentLocation];
+        
+    }
+    
+    
+}
+
+#pragma mark - Action Sheet Delegate
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
@@ -523,27 +571,5 @@
 
 }
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-    
-    [self updateAssignments];
- 
-}
-
-- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
-{
-    NSLog(@"Failed to locate user: %@", error);
-}
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
-{
-    
-    if(self.currentAssignment == nil){
-        
-        [self zoomToCurrentLocation];
-    
-    }
-
-    
-}
 
 @end
