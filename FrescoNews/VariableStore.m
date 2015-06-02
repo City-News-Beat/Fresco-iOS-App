@@ -42,7 +42,7 @@
         
         sharedInstance.baseURL = @"http://52.6.231.245/";
         sharedInstance.basePath = @"";
-        sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch/";
+        sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
     });
     
     return sharedInstance;

@@ -10,7 +10,7 @@
 
 #import <Mantle/Mantle.h>
 
-@class FRSUser, FRSTag;
+@class FRSUser, FRSTag, CLLocation;
 
 @interface FRSAssignment : MTLModel <MTLJSONSerializing>
 
@@ -20,6 +20,7 @@
 @property (nonatomic, copy) NSArray *galleries;
 @property (nonatomic, copy) NSString *active;
 @property (nonatomic, strong) NSDictionary *location;
+@property (strong, nonatomic) CLLocation *locationObject;
 @property (nonatomic, strong) NSNumber *lat;
 @property (nonatomic, strong) NSNumber *lon;
 @property (nonatomic, strong) NSNumber *radius;
