@@ -13,6 +13,8 @@
 #import "MTLModel+Additions.h"
 #import "FRSNotification.h"
 #import "AssignmentsViewController.h"
+#import "GalleryViewController.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
 
@@ -174,6 +176,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 }
 */
 
+- (void)exitNotificationView{
+
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
+
 #pragma mark - Notification API
 
 /*
@@ -242,9 +250,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
         cell.constraintNotificationDescription.constant = 3.0f;
         
-        NSString *imageName = [NSString stringWithFormat:@"%@.png",notification. meta[@"outlet"]];
+        #warning Won't return this yet
+        if([notification.meta[@"outlet"] isKindOfClass:[NSDictionary class]]){
         
-        if([UIImage imageNamed:imageName]) [[cell image] setImage:[UIImage imageNamed:imageName]];
+            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"outlet"][@"avatar"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+        
+        }
     
     }
     
@@ -260,10 +271,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     
     cell.firstButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
     cell.secondButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
-
-    cell.firstButton.titleEdgeInsets = UIEdgeInsetsMake(30.0f, 30.0f, 30.0f, 30.0f);
-    cell.secondButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, 30.0f, 0.0f, 30.0f);
-    
     
     return cell;
 }
@@ -301,10 +308,30 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     }
     else if([notification.type isEqualToString:@"use"]){
         
+        //Get assignment and navigate to on assignments view
+        [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                //Retreieve Gallery View Controller from storyboard
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                
+                GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                
+                [galleryView setGallery:responseObject];
+                
+                [self.navigationController pushViewController:galleryView animated:YES];
+                
+            }
+            
+        }];
+
+        
     }
     else if([notification.type isEqualToString:@"social"]){
         
     }
+    
+    [self exitNotificationView];
 
 
 }
@@ -344,6 +371,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     else if([notification.type isEqualToString:@"social"]){
         
     }
+    
+        [self exitNotificationView];
 
     
 }

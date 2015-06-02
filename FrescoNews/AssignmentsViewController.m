@@ -342,6 +342,8 @@
 - (void)navigateToCurrentAssignment{
     
     [self.navigationSheet showInView:self.view];
+    
+    self.navigateTo = NO;
 
 }
 

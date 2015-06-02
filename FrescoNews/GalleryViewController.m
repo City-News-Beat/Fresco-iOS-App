@@ -26,29 +26,36 @@
 @property (weak, nonatomic) IBOutlet UILabel *byline;
 
 @property (weak, nonatomic) IBOutlet UILabel *caption;
+@property (weak, nonatomic) IBOutlet UILabel *storiesLabel;
 @property (weak, nonatomic) IBOutlet UITableView *storiesTable;
+@property (weak, nonatomic) IBOutlet UILabel *articlesTitle;
 @property (weak, nonatomic) IBOutlet UITableView *articlesTable;
 
 @end
 
 @implementation GalleryViewController
 
-- (id)init
-{
-    
-    if (self = [super init]) {
-
-    }
-    
-    return self;
-    
-}
+//- (id)init
+//{
+//    
+//    if (self = [super init]) {
+//
+//    }
+//    
+//    return self;
+//    
+//}
 
 
 - (void)viewDidLoad
 {
     
+    [self setUpGallery];
 
+}
+
+- (void)setUpGallery{
+    
     self.galleryView.gallery = self.gallery;
     
     self.caption.text = self.gallery.caption;
@@ -56,21 +63,16 @@
     self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
-
+    
+    if(self.gallery.articles.count == 0){
+        
+        [self.articlesTable setHidden:YES];
+        
+        [self.articlesTitle setHidden:YES];
+        
+    }
 
 }
-//
-//- (void)setGallery:(FRSGallery *)gallery{
-//    
-//    self.galleryView.gallery = self.gallery;
-//    
-//    self.caption.text = self.gallery.caption;
-//    
-//    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
-//    
-//    self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
-//
-//}
 
 - (void)openGalleryWithId:(NSString *)galleryId{
 
@@ -79,6 +81,8 @@
         if (!error) {
             
             [self setGallery:responseObject];
+            
+            [self setUpGallery];
             
         }
         

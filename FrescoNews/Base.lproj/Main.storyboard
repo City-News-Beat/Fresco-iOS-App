@@ -2053,7 +2053,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V6V-dx-ZU2" customClass="GalleryView">
-                                        <rect key="frame" x="0.0" y="32" width="600" height="318"/>
+                                        <rect key="frame" x="0.0" y="35" width="600" height="318"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9nr-tu-WFZ" userLabel="Posts">
                                                 <rect key="frame" x="0.0" y="0.0" width="600" height="318"/>
@@ -2125,7 +2125,7 @@
                                         </connections>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RELATED STORIES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzB-nv-G1Y">
-                                        <rect key="frame" x="20" y="403" width="135" height="21"/>
+                                        <rect key="frame" x="20" y="406" width="135" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="7Wh-uV-Zqc"/>
                                             <constraint firstAttribute="width" constant="135" id="7dZ-D8-gjU"/>
@@ -2135,7 +2135,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="RelatedStories" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="jdl-WS-AmQ" userLabel="Related Stories">
-                                        <rect key="frame" x="0.0" y="432" width="600" height="66"/>
+                                        <rect key="frame" x="0.0" y="435" width="600" height="66"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="MQj-yA-n7b"/>
@@ -2162,7 +2162,7 @@
                                         </connections>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ARTICLES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y4K-Rh-Cgx">
-                                        <rect key="frame" x="20" y="535" width="64" height="21"/>
+                                        <rect key="frame" x="20" y="538" width="64" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="eR1-tH-9JR"/>
                                         </constraints>
@@ -2171,7 +2171,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Articles" bounces="NO" dataMode="prototypes" style="plain" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="982-UN-32e" userLabel="Articles">
-                                        <rect key="frame" x="0.0" y="568" width="600" height="66"/>
+                                        <rect key="frame" x="0.0" y="571" width="600" height="66"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="Tcl-nA-bkK"/>
@@ -2200,9 +2200,9 @@
                                             <outlet property="delegate" destination="l3e-Jp-wmk" id="V52-6c-pVa"/>
                                         </connections>
                                     </tableView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY7-64-YQf" userLabel="Caption">
-                                        <rect key="frame" x="20" y="364" width="36" height="17"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aY7-64-YQf" userLabel="Caption">
+                                        <rect key="frame" x="20" y="367" width="572" height="17"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2215,9 +2215,8 @@
                                     <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" constant="20" id="6e2-UL-vSS"/>
                                     <constraint firstItem="982-UN-32e" firstAttribute="top" secondItem="Y4K-Rh-Cgx" secondAttribute="bottom" constant="12" id="7WJ-Md-8MO"/>
                                     <constraint firstAttribute="trailing" secondItem="982-UN-32e" secondAttribute="trailing" id="9KL-aM-uK8"/>
-                                    <constraint firstAttribute="trailing" secondItem="aY7-64-YQf" secondAttribute="trailing" constant="544" id="AbJ-TJ-97U"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" constant="20" id="BVf-mI-jN5"/>
-                                    <constraint firstItem="V6V-dx-ZU2" firstAttribute="top" secondItem="auA-Ch-X60" secondAttribute="bottom" constant="7" id="Fgh-qw-TOg"/>
+                                    <constraint firstItem="V6V-dx-ZU2" firstAttribute="top" secondItem="auA-Ch-X60" secondAttribute="bottom" constant="10" id="Fgh-qw-TOg"/>
                                     <constraint firstItem="aY7-64-YQf" firstAttribute="top" secondItem="V6V-dx-ZU2" secondAttribute="bottom" constant="14" id="GdJ-fx-tuK"/>
                                     <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="MzB-nv-G1Y" secondAttribute="leading" id="Pmm-N8-uSg"/>
                                     <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="aY7-64-YQf" secondAttribute="leading" id="QNR-OS-5dG"/>
@@ -2231,6 +2230,7 @@
                                     <constraint firstAttribute="trailing" secondItem="jdl-WS-AmQ" secondAttribute="trailing" id="der-L8-fJM"/>
                                     <constraint firstAttribute="trailing" secondItem="gfT-dy-y2d" secondAttribute="trailing" constant="20" id="e5b-2o-wn6"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" id="f20-g5-dKW"/>
+                                    <constraint firstAttribute="trailing" secondItem="aY7-64-YQf" secondAttribute="trailing" constant="8" id="fqT-cP-Ejw"/>
                                     <constraint firstAttribute="trailing" secondItem="V6V-dx-ZU2" secondAttribute="trailing" id="het-FT-VRc"/>
                                     <constraint firstAttribute="bottom" secondItem="982-UN-32e" secondAttribute="bottom" constant="20" id="le8-pL-IWs"/>
                                     <constraint firstAttribute="trailing" secondItem="V6V-dx-ZU2" secondAttribute="trailing" id="mQP-43-K7G"/>
@@ -2278,9 +2278,11 @@
                     <size key="freeformSize" width="600" height="800"/>
                     <connections>
                         <outlet property="articlesTable" destination="982-UN-32e" id="yjX-qK-hzC"/>
+                        <outlet property="articlesTitle" destination="Y4K-Rh-Cgx" id="wAs-Tu-IM8"/>
                         <outlet property="byline" destination="gfT-dy-y2d" id="DYo-x8-lt6"/>
                         <outlet property="caption" destination="aY7-64-YQf" id="1Sf-bv-R3S"/>
                         <outlet property="galleryView" destination="V6V-dx-ZU2" id="RTF-c6-eLj"/>
+                        <outlet property="storiesLabel" destination="MzB-nv-G1Y" id="OLL-vg-oNg"/>
                         <outlet property="storiesTable" destination="jdl-WS-AmQ" id="vl2-qg-GLU"/>
                         <outlet property="timeAndPlace" destination="auA-Ch-X60" id="GFn-iH-1Od"/>
                     </connections>
