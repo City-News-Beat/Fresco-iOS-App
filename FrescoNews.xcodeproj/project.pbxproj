@@ -88,7 +88,9 @@
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* TabBarController.m */; };
+		425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 425790E61B1910C600C9C49C /* CrossPostButton.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
+		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
@@ -304,7 +306,10 @@
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		425790E51B1910C600C9C49C /* CrossPostButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPostButton.h; sourceTree = "<group>"; };
+		425790E61B1910C600C9C49C /* CrossPostButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossPostButton.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraPreviewView.h; path = Views/CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraPreviewView.m; path = Views/CameraPreviewView.m; sourceTree = "<group>"; };
 		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ALAsset.h"; sourceTree = "<group>"; };
@@ -568,6 +573,7 @@
 				420DC6F11ADB875000157762 /* CTAssetsPickerController */,
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
+				42C926751B18AB1200774A37 /* Camera.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
@@ -607,6 +613,8 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				425790E51B1910C600C9C49C /* CrossPostButton.h */,
+				425790E61B1910C600C9C49C /* CrossPostButton.m */,
 				1EDF047B1B0E902900B35858 /* NotificationCell.h */,
 				1EDF047C1B0E902900B35858 /* NotificationCell.m */,
 				1EA27AA21AF14256003137CE /* Assignments */,
@@ -1091,6 +1099,7 @@
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
+				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1245,6 +1254,7 @@
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
+				425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
 				1EAD00031B1E1124000C821D /* FRSReplaceSegue.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
@@ -1336,6 +1346,14 @@
 				420DC71B1ADB875000157762 /* en */,
 			);
 			name = CTAssetsPickerController.strings;
+			sourceTree = "<group>";
+		};
+		42C926751B18AB1200774A37 /* Camera.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42C926761B18AB1200774A37 /* Base */,
+			);
+			name = Camera.storyboard;
 			sourceTree = "<group>";
 		};
 		E71F0E481B0B936200186BAD /* Interface.storyboard */ = {

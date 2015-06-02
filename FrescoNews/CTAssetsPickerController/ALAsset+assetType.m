@@ -26,8 +26,7 @@
  */
 
 #import "ALAsset+assetType.h"
-
-
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @implementation ALAsset (assetType)
 
@@ -39,6 +38,11 @@
 - (BOOL)isVideo
 {
     return [[self valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo];
+}
+
+- (NSString *)mimeType
+{
+    return (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)[[self defaultRepresentation] UTI], kUTTagClassMIMEType);
 }
 
 @end

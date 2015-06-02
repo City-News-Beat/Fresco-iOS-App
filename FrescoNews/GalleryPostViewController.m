@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
+#import "CrossPostButton.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -27,8 +28,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
@@ -51,7 +52,7 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
         self.currentAssignment = [self.assignments firstObject];
 
@@ -67,7 +68,8 @@
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.captionTextView.text = [defaults objectForKey:@"captionStringInProgress"] ?: @"What's Happening?";
+    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
     self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
     self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
@@ -118,9 +120,9 @@
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (IBAction)twitterButtonTapped:(UIButton *)button
+- (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
-    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
                                                         message:@"Go to Profile to link your Fresco account to Twitter"
                                                        delegate:nil
@@ -130,8 +132,8 @@
         return;
     }
 
-    button.selected = !button.selected;
-    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"twitterButtonSelected"];
+    button.selected = !button.isSelected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
 }
 
 - (void)crossPostToTwitter
@@ -159,9 +161,9 @@
     }];
 }
 
-- (IBAction)facebookButtonTapped:(UIButton *)button
+- (IBAction)facebookButtonTapped:(CrossPostButton *)button
 {
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
                                                         message:@"Go to Profile to link your Fresco account to Facebook"
                                                        delegate:nil
@@ -171,7 +173,7 @@
         return;
     }
 
-    button.selected = !button.selected;
+    button.selected = !button.isSelected;
     [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
@@ -256,7 +258,7 @@
 - (void)submitGalleryPost:(id)sender
 {
     if (![FRSDataManager sharedManager].currentUser) {
-        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
         return;
     }
 
@@ -357,7 +359,7 @@
 {
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
         NSProgress *progress = (NSProgress *)object;
-        NSLog(@"Progress... %f", progress.fractionCompleted);
+        // NSLog(@"Progress... %f", progress.fractionCompleted);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showUploadProgress:progress.fractionCompleted];
         });
@@ -421,6 +423,7 @@
         self.currentAssignment = nil;
         [UIView animateWithDuration:0.25 animations:^{
             self.assignmentViewHeightConstraint.constant = 0;
+            self.assignmentView.hidden = YES;
             [self.view layoutIfNeeded];
         }];
     }
