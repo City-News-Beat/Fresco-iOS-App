@@ -279,15 +279,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-
-    // Set to YES to test monitoring of significant location changes even when the app is not running; also see didFinishLaunchingWithOptions above
-    if (/* DISABLES CODE */ (NO)) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = [self.location description];
-        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-        notification.timeZone = [NSTimeZone defaultTimeZone];
-        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
-    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
