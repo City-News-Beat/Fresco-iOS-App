@@ -2143,7 +2143,7 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="RelatedStories" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="jdl-WS-AmQ" userLabel="Related Stories">
+                                            <tableView contentMode="scaleToFill" restorationIdentifier="RelatedStories" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="jdl-WS-AmQ" userLabel="Related Stories">
                                                 <rect key="frame" x="20" y="29" width="600" height="66"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -2193,7 +2193,7 @@
                                                 <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Articles" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="982-UN-32e" userLabel="Articles">
+                                            <tableView contentMode="scaleToFill" restorationIdentifier="Articles" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="982-UN-32e" userLabel="Articles">
                                                 <rect key="frame" x="20" y="33" width="600" height="66"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -2235,6 +2235,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="W1j-gG-HH7" firstAttribute="top" secondItem="OUB-iE-TQU" secondAttribute="top" constant="538" id="1AB-62-XUD"/>
                                     <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="aY7-64-YQf" secondAttribute="leading" id="1kn-Lg-pcH"/>
@@ -2244,12 +2245,14 @@
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" constant="20" id="BVf-mI-jN5"/>
                                     <constraint firstItem="W1j-gG-HH7" firstAttribute="top" secondItem="4W8-zY-sW6" secondAttribute="bottom" constant="37" id="FZU-KL-yDh"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="top" secondItem="auA-Ch-X60" secondAttribute="bottom" constant="10" id="Fgh-qw-TOg"/>
+                                    <constraint firstAttribute="bottom" secondItem="982-UN-32e" secondAttribute="top" constant="116" id="FiC-VS-iAG"/>
                                     <constraint firstItem="aY7-64-YQf" firstAttribute="top" secondItem="V6V-dx-ZU2" secondAttribute="bottom" constant="14" id="GdJ-fx-tuK"/>
                                     <constraint firstItem="W1j-gG-HH7" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" constant="-20" id="NbV-s5-BmM"/>
                                     <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="aY7-64-YQf" secondAttribute="leading" id="QNR-OS-5dG"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="width" secondItem="OUB-iE-TQU" secondAttribute="width" id="RQ8-au-j3K"/>
                                     <constraint firstItem="W1j-gG-HH7" firstAttribute="top" secondItem="aY7-64-YQf" secondAttribute="bottom" priority="200" constant="154" id="SBS-oU-BOH"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" id="URn-lK-F09"/>
+                                    <constraint firstAttribute="bottom" secondItem="W1j-gG-HH7" secondAttribute="bottom" constant="50" id="Zxa-cb-jzc"/>
                                     <constraint firstAttribute="bottom" secondItem="W1j-gG-HH7" secondAttribute="bottom" constant="50" id="cPC-zT-zK4"/>
                                     <constraint firstAttribute="trailing" secondItem="gfT-dy-y2d" secondAttribute="trailing" constant="20" id="e5b-2o-wn6"/>
                                     <constraint firstItem="V6V-dx-ZU2" firstAttribute="leading" secondItem="OUB-iE-TQU" secondAttribute="leading" id="f20-g5-dKW"/>
@@ -2270,12 +2273,16 @@
                                         <exclude reference="het-FT-VRc"/>
                                         <exclude reference="e5b-2o-wn6"/>
                                         <exclude reference="1AB-62-XUD"/>
+                                        <exclude reference="SBS-oU-BOH"/>
+                                        <exclude reference="cPC-zT-zK4"/>
+                                        <exclude reference="FiC-VS-iAG"/>
                                     </mask>
                                 </variation>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="OUB-iE-TQU" firstAttribute="height" secondItem="Aft-bl-plj" secondAttribute="height" id="7ej-CJ-wSJ"/>
                             <constraint firstItem="Ope-Uk-vh8" firstAttribute="top" secondItem="OUB-iE-TQU" secondAttribute="bottom" id="8mI-Uf-15V"/>
                             <constraint firstItem="OUB-iE-TQU" firstAttribute="leading" secondItem="Aft-bl-plj" secondAttribute="leading" id="IP8-7C-1fG"/>
                             <constraint firstItem="OUB-iE-TQU" firstAttribute="leading" secondItem="Aft-bl-plj" secondAttribute="leadingMargin" constant="-16" id="NsD-3e-7rk"/>
@@ -2290,7 +2297,10 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="7ej-CJ-wSJ"/>
+                                <exclude reference="NsD-3e-7rk"/>
                                 <exclude reference="abK-8G-hfQ"/>
+                                <exclude reference="bxg-he-0xJ"/>
                                 <exclude reference="d4F-33-eW4"/>
                                 <exclude reference="g7K-3V-7LA"/>
                                 <exclude reference="o0b-jw-7re"/>
@@ -2307,10 +2317,12 @@
                         <outlet property="articlesView" destination="W1j-gG-HH7" id="mGU-an-XYk"/>
                         <outlet property="byline" destination="gfT-dy-y2d" id="DYo-x8-lt6"/>
                         <outlet property="caption" destination="aY7-64-YQf" id="1Sf-bv-R3S"/>
+                        <outlet property="constraintArticleTableHeight" destination="Tcl-nA-bkK" id="tKZ-6I-I7L"/>
                         <outlet property="constraintArticlesHeight" destination="ieB-4J-iZP" id="S67-eq-rsI"/>
                         <outlet property="constraintStoriesDiff" destination="FZU-KL-yDh" id="qCJ-h2-q4X"/>
                         <outlet property="constraintStoriesHeight" destination="wVQ-KZ-D8k" id="AYF-kt-s7t"/>
                         <outlet property="galleryView" destination="V6V-dx-ZU2" id="RTF-c6-eLj"/>
+                        <outlet property="scrollView" destination="OUB-iE-TQU" id="UrL-rZ-S0H"/>
                         <outlet property="storiesLabel" destination="MzB-nv-G1Y" id="OLL-vg-oNg"/>
                         <outlet property="storiesTable" destination="jdl-WS-AmQ" id="vl2-qg-GLU"/>
                         <outlet property="storiesView" destination="4W8-zY-sW6" id="TnT-c5-Nv8"/>
@@ -2319,7 +2331,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JNg-JO-kpb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2421" y="3259"/>
+            <point key="canvasLocation" x="2421" y="3271"/>
         </scene>
         <!--Assignments Navigation-->
         <scene sceneID="fo4-iP-5he">

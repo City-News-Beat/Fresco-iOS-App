@@ -18,6 +18,7 @@
 
 
 @interface GalleryViewController ()
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 
@@ -40,6 +41,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *articlesTable;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticleTableHeight;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticlesHeight;
 @end
@@ -53,6 +55,31 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    // just add this line to the end of this method or create it if it does not exist
+    [self.articlesTable reloadData];
+}
+
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    [self.scrollView layoutIfNeeded];
+//    
+//    CGFloat height = 0;
+//    
+//    for (UIView *view in self.scrollView.subviews) {
+//        height +=view.frame.size.height;
+//    }
+//    
+//    [self.scrollView setContentSize:CGSizeMake(320, height)];
+//
+//    
+
+}
+
+
 - (void)setUpGallery{
     
     self.galleryView.gallery = self.gallery;
@@ -62,10 +89,10 @@
     self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
-    
-    self.articlesView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight ;
-    
-    self.storiesTable.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight ;
+//    
+//    self.constraintArticleTableHeight.constant = 10 * 44.0f;
+//    
+    [self.scrollView layoutIfNeeded];
 
     if(self.gallery.articles.count == 0){
         
@@ -82,8 +109,7 @@
         self.constraintStoriesHeight.constant = 0.0f;
         
         self.constraintStoriesDiff.constant = 0.0f;
-        
-    
+
     }
 
 
@@ -120,7 +146,7 @@
     }
     else if(tableView == self.articlesTable){
         
-        return 20;
+        return self.gallery.articles.count;
         
     }
     
@@ -193,19 +219,21 @@
 
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0;
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     return nil;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 44.0f;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.0f;
+}
+
+
+
 
 
 
