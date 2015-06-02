@@ -66,11 +66,19 @@
     
     if(self.gallery.articles.count == 0){
         
-        [self.articlesTable setHidden:YES];
-        
-        [self.articlesTitle setHidden:YES];
-        
+        self.articlesTitle.hidden = YES;
+        [self.articlesTitle removeConstraints:self.articlesTable.constraints];
+        [self.articlesTable removeConstraints:self.articlesTable.constraints];
+    
     }
+    if(self.gallery.relatedStories == nil){
+        
+        self.storiesLabel.hidden = YES;
+        [self.storiesLabel removeConstraints:self.storiesLabel.constraints];
+        [self.storiesTable removeConstraints:self.storiesTable.constraints];
+    
+    }
+
 
 }
 

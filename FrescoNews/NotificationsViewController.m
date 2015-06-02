@@ -372,7 +372,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
     }
     
-        [self exitNotificationView];
+    
+    [self exitNotificationView];
 
     
 }

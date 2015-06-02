@@ -49,7 +49,9 @@
 {
     _gallery = gallery;
     self.labelCaption.text = self.gallery.caption;
+    
     self.pageControl.numberOfPages = [self.gallery.posts count];
+ 
     [self.collectionPosts reloadData];
 
     [self setAspectRatio];

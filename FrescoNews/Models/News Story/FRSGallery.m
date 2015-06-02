@@ -30,6 +30,7 @@
              @"byline" : @"byline",
              @"tags" : @"tags",
              @"articles" : @"articles",
+             @"relatedStories" : @"",
              @"posts" : @"posts"
              };
 }
