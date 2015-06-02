@@ -261,7 +261,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    self.location = [locations lastObject];
+    CLLocation *location = [locations lastObject];
 
     if (![FRSDataManager sharedManager].currentUser.userID) {
         [self.locationManager stopMonitoringSignificantLocationChanges];
@@ -270,8 +270,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                 @"lat" : @(self.location.coordinate.latitude),
-                                 @"lon" : @(self.location.coordinate.longitude)};
+                                 @"lat" : @(location.coordinate.latitude),
+                                 @"lon" : @(location.coordinate.longitude)};
     [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
                 parameters:parameters
                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
