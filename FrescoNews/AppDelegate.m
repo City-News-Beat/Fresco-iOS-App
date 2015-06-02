@@ -283,17 +283,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        // TODO: Only if the app is running in the foreground
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
-                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [self.locationManager stopMonitoringSignificantLocationChanges];
-    }
+    [self.locationManager stopMonitoringSignificantLocationChanges];
 }
 
 #pragma mark - UITabBarControllerDelegate methods
