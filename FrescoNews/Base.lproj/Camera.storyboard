@@ -991,9 +991,9 @@
                                             <action selector="facebookButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="RfE-qu-Rd5"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Press below to share this gallery on Twitter and Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="2SC-mV-bkV">
-                                        <rect key="frame" x="30" y="819" width="540" height="28"/>
-                                        <color key="backgroundColor" red="0.37254901960784315" green="0.37254901960784315" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Press below to share this gallery on Twitter and Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="2SC-mV-bkV">
+                                        <rect key="frame" x="30" y="808" width="540" height="28"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="Zcm-GB-y1F"/>
                                         </constraints>
@@ -1006,6 +1006,9 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="inverted-triangle" translatesAutoresizingMaskIntoConstraints="NO" id="nVh-Vj-T7V">
+                                        <rect key="frame" x="280" y="836" width="40" height="19"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1017,6 +1020,7 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                     </constraint>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="width" secondItem="q6D-z2-Jzy" secondAttribute="width" id="5Fy-a4-n8s"/>
+                                    <constraint firstItem="nVh-Vj-T7V" firstAttribute="top" secondItem="2SC-mV-bkV" secondAttribute="bottom" id="5Jm-dL-LiL"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="leading" secondItem="Znr-ql-7SW" secondAttribute="trailing" id="7K3-kM-chZ"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="838-s7-Ypr"/>
                                     <constraint firstItem="Q60-io-4Rt" firstAttribute="top" secondItem="ZZm-Kh-7Lh" secondAttribute="bottom" constant="1" id="CJY-kd-igk"/>
@@ -1029,11 +1033,12 @@
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
                                     <constraint firstAttribute="trailing" secondItem="q6D-z2-Jzy" secondAttribute="trailing" id="eb2-Ut-99h"/>
-                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="2SC-mV-bkV" secondAttribute="bottom" constant="15" id="fbe-bh-kL0"/>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="2SC-mV-bkV" secondAttribute="bottom" constant="26" id="fbe-bh-kL0"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" id="hYI-l2-WPS"/>
                                     <constraint firstItem="Q60-io-4Rt" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" constant="15" id="jXA-S5-SiW">
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                     </constraint>
+                                    <constraint firstAttribute="centerX" secondItem="nVh-Vj-T7V" secondAttribute="centerX" id="mlf-Mb-dit"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="Q60-io-4Rt" secondAttribute="bottom" constant="10" id="nzz-Am-UIf">
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                     </constraint>
@@ -1082,6 +1087,7 @@
         <image name="delete-small-white" width="14" height="14"/>
         <image name="flash-off" width="10" height="20"/>
         <image name="flash-on" width="10" height="20"/>
+        <image name="inverted-triangle" width="40" height="19"/>
         <image name="liveOff" width="85" height="44"/>
         <image name="overlay" width="140" height="231"/>
         <image name="picker" width="178" height="178"/>
