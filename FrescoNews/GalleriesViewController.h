@@ -22,7 +22,7 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 
 /*
-** Index of cell that is currently playing a video
+** Refresh function
 */
 
 - (void)refresh;

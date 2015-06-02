@@ -299,6 +299,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
                 
+                
+                [self exitNotificationView];
+                
+                
                 [tabBarController setSelectedIndex:3];
                 
             }
@@ -319,6 +323,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 [galleryView setGallery:responseObject];
                 
+                [self exitNotificationView];
+                
                 [self.navigationController pushViewController:galleryView animated:YES];
                 
             }
@@ -330,8 +336,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     else if([notification.type isEqualToString:@"social"]){
         
     }
-    
-    [self exitNotificationView];
 
 
 }

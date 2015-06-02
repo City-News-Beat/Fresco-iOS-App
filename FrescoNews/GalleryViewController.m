@@ -26,26 +26,25 @@
 @property (weak, nonatomic) IBOutlet UILabel *byline;
 
 @property (weak, nonatomic) IBOutlet UILabel *caption;
-@property (weak, nonatomic) IBOutlet UILabel *storiesLabel;
-@property (weak, nonatomic) IBOutlet UITableView *storiesTable;
-@property (weak, nonatomic) IBOutlet UILabel *articlesTitle;
-@property (weak, nonatomic) IBOutlet UITableView *articlesTable;
 
+@property (weak, nonatomic) IBOutlet UIView *storiesView;
+
+@property (weak, nonatomic) IBOutlet UIView *articlesView;
+
+@property (weak, nonatomic) IBOutlet UILabel *storiesLabel;
+
+@property (weak, nonatomic) IBOutlet UITableView *storiesTable;
+
+@property (weak, nonatomic) IBOutlet UILabel *articlesTitle;
+
+@property (weak, nonatomic) IBOutlet UITableView *articlesTable;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticlesHeight;
 @end
 
 @implementation GalleryViewController
-
-//- (id)init
-//{
-//    
-//    if (self = [super init]) {
-//
-//    }
-//    
-//    return self;
-//    
-//}
-
 
 - (void)viewDidLoad
 {
@@ -64,18 +63,26 @@
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
     
+    self.articlesView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight ;
+    
+    self.storiesTable.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight ;
+
     if(self.gallery.articles.count == 0){
         
-        self.articlesTitle.hidden = YES;
-        [self.articlesTitle removeConstraints:self.articlesTable.constraints];
-        [self.articlesTable removeConstraints:self.articlesTable.constraints];
+        [self.articlesView setHidden:YES];
+    
+        self.constraintArticlesHeight.constant = 0.0f;
+
     
     }
     if(self.gallery.relatedStories == nil){
         
-        self.storiesLabel.hidden = YES;
-        [self.storiesLabel removeConstraints:self.storiesLabel.constraints];
-        [self.storiesTable removeConstraints:self.storiesTable.constraints];
+        [self.storiesView setHidden:YES];
+        
+        self.constraintStoriesHeight.constant = 0.0f;
+        
+        self.constraintStoriesDiff.constant = 0.0f;
+        
     
     }
 
@@ -113,7 +120,7 @@
     }
     else if(tableView == self.articlesTable){
         
-        return self.gallery.articles.count;
+        return 20;
         
     }
     
@@ -137,7 +144,7 @@
     }
     else if(tableView == self.articlesTable){
         
-        FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
+        FRSArticle *article = [[[self gallery] articles] objectAtIndex:0];
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
         

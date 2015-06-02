@@ -251,10 +251,8 @@
                 }
                 
             }
-            
-            
+    
             self.assignments = nil;
-            
 
         }
         

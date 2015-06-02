@@ -65,8 +65,7 @@
             if ([responseObject count]) {
                 self.galleries = responseObject;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-
-                [self.galleriesViewController refresh];
+                [self.galleriesViewController.tableView reloadData];
                 //                self.galleriesViewController.galleries = self.galleries;
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";

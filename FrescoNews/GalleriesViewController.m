@@ -20,8 +20,13 @@
 #import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
-#import <UIScrollView+SVPullToRefresh.h>
 #import <UIScrollView+SVInfiniteScrolling.h>
+
+@interface GalleriesViewController()
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
+@end
 
 @implementation GalleriesViewController
 
@@ -54,13 +59,11 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     
-    //Pull to refresh handler
-    [self.tableView addPullToRefreshWithActionHandler:^{
-        // prepend data to dataSource, insert cells at top of table view
-        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
-        
-        [self.tableView.pullToRefreshView stopAnimating];
-    }];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl setTintColor:[UIColor blackColor]];
+    [self.tableView addSubview:self.refreshControl];
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
@@ -76,7 +79,7 @@
                     
                     [self.galleries addObjectsFromArray:responseObject];
                     
-                    [self refresh];
+                    [self.tableView reloadData];
                     
                     _isRunning = false;
                     
@@ -93,6 +96,10 @@
 
 - (void)refresh
 {
+    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+    
+    [self.refreshControl endRefreshing];
+    
     [self.tableView reloadData];
 }
 
