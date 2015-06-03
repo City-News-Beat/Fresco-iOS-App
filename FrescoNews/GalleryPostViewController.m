@@ -275,8 +275,9 @@
                                                          error:&error];
 
     NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
-                                  @"caption" : self.captionTextView.text,
-                                  @"posts" : jsonData };
+                                  @"caption" : self.captionTextView.text ?: [NSNull null],
+                                  @"posts" : jsonData,
+                                  @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
