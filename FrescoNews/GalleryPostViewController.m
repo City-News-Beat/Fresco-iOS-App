@@ -430,7 +430,6 @@
     CLLocation *location = [locations lastObject];
     [self.locationManager stopUpdatingLocation];
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        // TODO: currentAssignment should be based on location of assets, which may be different from the user's current location
         self.assignments = responseObject;
         self.defaultAssignment = [self.assignments firstObject];
 
