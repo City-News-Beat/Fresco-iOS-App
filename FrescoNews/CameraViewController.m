@@ -40,6 +40,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
 
 // Refactor
 @property (strong, nonatomic) CLLocation *location;
@@ -551,19 +553,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
         if (granted) {
-            //Granted access to mediaType
-            [self setDeviceAuthorized:YES];
+            self.deviceAuthorized = YES;
+            self.pleaseRotateLabel.text = @"Please rotate your phone";
+            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
         }
         else {
-            //Not granted access to mediaType
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:@"AVCam!"
-                                            message:@"AVCam doesn't have permission to use Camera, please change privacy settings"
-                                           delegate:self
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil] show];
-                [self setDeviceAuthorized:NO];
-            });
+            self.deviceAuthorized = NO;
+            self.pleaseRotateLabel.text = @"No permission to use the camera";
+            self.pleaseDisableLabel.text = @"Please change your privacy settings";
         }
     }];
 }

@@ -831,6 +831,8 @@
                         <outlet property="doneButtonBackground" destination="95f-lc-6mD" id="uE1-wB-2wT"/>
                         <outlet property="flashButton" destination="him-yf-QJK" id="9Tp-lf-4ga"/>
                         <outlet property="photoButton" destination="FX7-nn-rD1" id="36P-OZ-9OW"/>
+                        <outlet property="pleaseDisableLabel" destination="HiC-wM-TsL" id="XSi-86-Tck"/>
+                        <outlet property="pleaseRotateLabel" destination="JCi-O4-CBx" id="ORO-uA-zl6"/>
                         <outlet property="previewView" destination="A5I-FQ-wzG" id="sMD-jr-qnj"/>
                         <outlet property="shutterButton" destination="H43-Px-pxG" id="cd8-KT-y8w"/>
                         <outlet property="videoButton" destination="K9z-5e-5vf" id="QhG-ap-2XL"/>
