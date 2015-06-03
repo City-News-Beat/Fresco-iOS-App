@@ -288,6 +288,7 @@
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
             // TODO: Video support
+            // TODO: Investigate "Connection to assetsd was interrupted or assetsd died"
             [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
                                         name:filename
                                     fileName:filename
