@@ -103,8 +103,10 @@
             if (!([frsUser.first length] && [frsUser.last length])) {
                 [self performSegueWithIdentifier:@"showSignUp" sender:self];
             }
-            else
+            else {
+                [self.view endEditing:YES];
                 [self navigateToMainApp];
+            }
         }
         else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];

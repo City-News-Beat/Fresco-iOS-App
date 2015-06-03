@@ -362,7 +362,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     
     /*
-    ** Check the identifier for the type of notifcaiton
+    ** Check the identifier for the type of notification
     */
     
     //Assignment Action

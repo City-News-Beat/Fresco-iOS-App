@@ -25,7 +25,7 @@ static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
-// iOS 8 - use PHPhotoLibrary?
+// TODO: Upgrade to PHPhotoLibrary in app version 2.1
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
@@ -40,6 +40,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
 
 // Refactor
 @property (strong, nonatomic) CLLocation *location;
@@ -209,8 +211,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)shouldAutorotate
 {
-    // Disable autorotation of the interface when recording is in progress.
-    return ![self lockInterfaceRotation];
+    // Disable autorotation when no access to camera or when recording is in progress
+    return self.isDeviceAuthorized && ![self lockInterfaceRotation];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.isDeviceAuthorized ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -546,19 +553,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
         if (granted) {
-            //Granted access to mediaType
-            [self setDeviceAuthorized:YES];
+            self.deviceAuthorized = YES;
+            self.pleaseRotateLabel.text = @"Please rotate your phone";
+            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
         }
         else {
-            //Not granted access to mediaType
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:@"AVCam!"
-                                            message:@"AVCam doesn't have permission to use Camera, please change privacy settings"
-                                           delegate:self
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil] show];
-                [self setDeviceAuthorized:NO];
-            });
+            self.deviceAuthorized = NO;
+            self.pleaseRotateLabel.text = @"No permission to use the camera";
+            self.pleaseDisableLabel.text = @"Please change your privacy settings";
         }
     }];
 }
@@ -590,29 +592,25 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
-    
+
     // Grab the most recent image from the photo library
     ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
                                  usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
                                      if (group) {
                                          [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
                                              if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 ALAssetRepresentation *repr = [asset defaultRepresentation];
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[repr fullResolutionImage]] forState:UIControlStateNormal];
-                                                 *stop = YES;
+                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
+                                                 *innerStop = YES;
                                              }
                                          }];
                                      }
-                                     
-                                     *stop = NO;
                                  }
                                failureBlock:^(NSError *error) {
                                    NSLog(@"error: %@", error);
                                }];
 }
-
 
 - (void)configureAssignmentLabel
 {
@@ -646,15 +644,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self cancel];
 }
 
-- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
-{
-    // TODO: Use or remove
-    // Take the user to the "create a post" screen
-}
-
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
-    return picker.selectedAssets.count < 5;
+    return picker.selectedAssets.count < 10;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
@@ -678,11 +670,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
 {
-    // TODO: Disable video clip if too long?
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-//        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-//        return lround(duration) <= 60;
-        return YES;
+        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+        return lround(duration) <= 60;
     }
 
     return YES;

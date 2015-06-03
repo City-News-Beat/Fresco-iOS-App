@@ -275,8 +275,9 @@
                                                          error:&error];
 
     NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
-                                  @"caption" : self.captionTextView.text,
-                                  @"posts" : jsonData };
+                                  @"caption" : self.captionTextView.text ?: [NSNull null],
+                                  @"posts" : jsonData,
+                                  @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
@@ -287,6 +288,7 @@
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
             // TODO: Video support
+            // TODO: Investigate "Connection to assetsd was interrupted or assetsd died"
             [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
                                         name:filename
                                     fileName:filename
@@ -428,7 +430,6 @@
     CLLocation *location = [locations lastObject];
     [self.locationManager stopUpdatingLocation];
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        // TODO: currentAssignment should be based on location of assets, which may be different from the user's current location
         self.assignments = responseObject;
         self.defaultAssignment = [self.assignments firstObject];
 

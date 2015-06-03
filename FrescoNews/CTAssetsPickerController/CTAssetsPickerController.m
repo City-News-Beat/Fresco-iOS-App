@@ -360,11 +360,11 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *title =
     [self auxiliaryLabelWithFont:[UIFont boldSystemFontOfSize:17.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:@"This app does not have access to your photos or videos."];
+                            text:@"No access to your photos or videos."];
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:14.0]
                            color:[UIColor colorWithRed:129.0/255.0 green:136.0/255.0 blue:148.0/255.0 alpha:1]
-                            text:@"You can enable access in Privacy Settings."];
+                            text:@"Please enable access in Privacy Settings."];
     
     UIView *centerView = [self centerViewWithViews:@[padlock, title, message]];
     
