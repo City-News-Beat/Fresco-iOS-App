@@ -189,11 +189,11 @@
                                            failureBlock:failureBlock];
 
     // Then all other groups
-    NSUInteger type = ALAssetsGroupLibrary | ALAssetsGroupAlbum | ALAssetsGroupEvent | ALAssetsGroupFaces | ALAssetsGroupPhotoStream;
-
-    [self.picker.assetsLibrary enumerateGroupsWithTypes:type
-                                             usingBlock:resultsBlock
-                                           failureBlock:failureBlock];
+//    NSUInteger type = ALAssetsGroupLibrary | ALAssetsGroupAlbum | ALAssetsGroupEvent | ALAssetsGroupFaces | ALAssetsGroupPhotoStream;
+//
+//    [self.picker.assetsLibrary enumerateGroupsWithTypes:type
+//                                             usingBlock:resultsBlock
+//                                           failureBlock:failureBlock];
 }
 
 
