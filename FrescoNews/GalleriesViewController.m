@@ -96,7 +96,7 @@
 
 - (void)refresh
 {
-    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+  //  [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
     
     [self.refreshControl endRefreshing];
     
