@@ -99,6 +99,7 @@
 - (IBAction)loginButtonAction:(id)sender {
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
         if (user) {
+            [self.view endEditing:YES];
             [self navigateToMainApp];
         }
         else {
