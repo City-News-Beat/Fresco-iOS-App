@@ -6,13 +6,17 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 
-@implementation FRSTradionalSource
+@implementation FRSArticle
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
-    return @{@"identifier" : @"identifier", @"prettyName" : @"pretty_name", @"URL" : @"url"};
+    return @{
+             @"title" : @"title",
+             @"outlet" : @"outlet",
+             @"URL" : @"link"
+             };
 }
 
 + (NSValueTransformer *)URLJSONTransformer

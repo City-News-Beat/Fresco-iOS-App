@@ -17,13 +17,14 @@
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "GalleryView.h"
+#import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
-#import <UIScrollView+SVPullToRefresh.h>
 #import <UIScrollView+SVInfiniteScrolling.h>
 
-
 @interface GalleriesViewController()
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -58,13 +59,11 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     
-    //Pull to refresh handler
-    [self.tableView addPullToRefreshWithActionHandler:^{
-        // prepend data to dataSource, insert cells at top of table view
-        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
-        
-        [self.tableView.pullToRefreshView stopAnimating];
-    }];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl setTintColor:[UIColor blackColor]];
+    [self.tableView addSubview:self.refreshControl];
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
@@ -80,7 +79,7 @@
                     
                     [self.galleries addObjectsFromArray:responseObject];
                     
-                    [self refresh];
+                    [self.tableView reloadData];
                     
                     _isRunning = false;
                     
@@ -97,11 +96,14 @@
 
 - (void)refresh
 {
+    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+    
+    [self.refreshControl endRefreshing];
+    
     [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -146,14 +148,25 @@
     return galleryHeader;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryView setGallery:cell.gallery];
+    
+    [self.navigationController pushViewController:galleryView animated:YES];
+
+
+}
+
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    float scrollViewHeight = scrollView.frame.size.height;
-    float scrollOffset = scrollView.contentOffset.y;
-    
-
     
     /*
     ** Video Conditioning

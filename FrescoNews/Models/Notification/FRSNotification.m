@@ -16,11 +16,11 @@
     return @{
              @"notificaitonId": @"_id",
              @"title" : @"title",
-             @"event" : @"event",
-             @"notificationDescription" : @"description",
-             @"date" : @"timestamp",
+             @"event" : @"meta.event",
+             @"body" : @"body",
+             @"date" : @"time_created",
              @"type" : @"type",
-             @"notificationData": @"notificationData"
+             @"meta": @"meta"
              };
 }
 

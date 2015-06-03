@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
 
 @interface UIViewController (RelativeDate)
-- (void)setFrescoImageHeader;
+- (void)setFrescoNavigationBar;
 @end
