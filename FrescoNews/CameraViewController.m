@@ -670,11 +670,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
 {
-    // TODO: Disable video clip if too long?
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-//        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-//        return lround(duration) <= 60;
-        return YES;
+        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+        return lround(duration) <= 60;
     }
 
     return YES;
