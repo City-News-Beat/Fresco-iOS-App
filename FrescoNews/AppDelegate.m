@@ -355,7 +355,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
 {
     /*
-    ** Check the identifier for the type of notifcaiton
+    ** Check the identifier for the type of notification
     */
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
