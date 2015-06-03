@@ -209,8 +209,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)shouldAutorotate
 {
-    // Disable autorotation of the interface when recording is in progress.
-    return ![self lockInterfaceRotation];
+    // Disable autorotation when no access to camera or when recording is in progress
+    return self.isDeviceAuthorized && ![self lockInterfaceRotation];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.isDeviceAuthorized ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
