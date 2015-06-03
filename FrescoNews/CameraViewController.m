@@ -25,7 +25,7 @@ static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
-// iOS 8 - use PHPhotoLibrary?
+// TODO: Upgrade to PHPhotoLibrary in app version 2.1
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
@@ -590,29 +590,25 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
-    
+
     // Grab the most recent image from the photo library
     ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
                                  usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
                                      if (group) {
                                          [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
                                              if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 ALAssetRepresentation *repr = [asset defaultRepresentation];
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[repr fullResolutionImage]] forState:UIControlStateNormal];
-                                                 *stop = YES;
+                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
+                                                 *innerStop = YES;
                                              }
                                          }];
                                      }
-                                     
-                                     *stop = NO;
                                  }
                                failureBlock:^(NSError *error) {
                                    NSLog(@"error: %@", error);
                                }];
 }
-
 
 - (void)configureAssignmentLabel
 {
