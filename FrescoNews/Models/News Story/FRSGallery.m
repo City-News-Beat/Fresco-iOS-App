@@ -9,7 +9,7 @@
 #import "FRSGallery.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
@@ -30,6 +30,7 @@
              @"byline" : @"byline",
              @"tags" : @"tags",
              @"articles" : @"articles",
+             @"relatedStories" : @"",
              @"posts" : @"posts"
              };
 }

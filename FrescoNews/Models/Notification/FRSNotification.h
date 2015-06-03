@@ -10,14 +10,14 @@
 
 #import <Mantle/Mantle.h>
 
-@interface FRSNotification : MTLModel
+@interface FRSNotification : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, copy) NSNumber *notificaitonId;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *event;
-@property (nonatomic, copy) NSString *notificationDescription;
+@property (nonatomic, copy) NSString *body;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, copy) NSDate *date;
-@property (nonatomic, copy) NSDictionary *notificationData;
+@property (nonatomic, copy) NSDictionary *meta;
 
 @end

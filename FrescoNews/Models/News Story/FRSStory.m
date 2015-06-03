@@ -9,7 +9,7 @@
 #import "FRSStory.h"
 #import "MTLModel+Additions.h"
 #import "FRSUser.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 
 @implementation FRSStory
 

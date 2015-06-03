@@ -24,7 +24,6 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 }
 
 
-
 - (void)setGallery:(FRSGallery *)gallery
 {
     _gallery = gallery;

@@ -446,22 +446,19 @@
 }
 
 
-
-
 #pragma mark - Notifications
 
 /*
 ** Get notifications for the user
 */
 
-- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+- (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock{
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"user_id" : @""};
+    NSDictionary *params = @{@"id" : userId};
     
-    #warning will not work, endpoint does not exist
-    [self GET:@"/notifications/get" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"/notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
