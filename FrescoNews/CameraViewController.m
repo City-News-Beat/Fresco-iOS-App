@@ -644,12 +644,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self cancel];
 }
 
-- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
-{
-    // TODO: Use or remove
-    // Take the user to the "create a post" screen
-}
-
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
     return picker.selectedAssets.count < 5;
