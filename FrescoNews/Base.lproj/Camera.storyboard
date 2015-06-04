@@ -131,24 +131,45 @@
                                             </mask>
                                         </variation>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cPu-jq-piW">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <state key="normal" title="Cancel">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="cancelButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="S6C-Z2-Xrk"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="cPu-jq-piW" firstAttribute="leading" secondItem="fvs-oM-dtH" secondAttribute="leading" constant="8" id="R7D-el-veh"/>
                                     <constraint firstAttribute="trailing" secondItem="wX5-BE-yYg" secondAttribute="trailing" id="UzC-IW-7j2"/>
                                     <constraint firstAttribute="centerY" secondItem="wX5-BE-yYg" secondAttribute="centerY" constant="63.5" id="lXF-2R-J1y">
                                         <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                                     </constraint>
                                     <constraint firstItem="wX5-BE-yYg" firstAttribute="leading" secondItem="fvs-oM-dtH" secondAttribute="leading" id="okP-cR-wkh"/>
+                                    <constraint firstItem="cPu-jq-piW" firstAttribute="top" secondItem="fvs-oM-dtH" secondAttribute="top" constant="8" id="ygw-BW-5hi"/>
                                 </constraints>
                                 <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="cPu-jq-piW"/>
+                                    </mask>
                                     <mask key="constraints">
+                                        <exclude reference="R7D-el-veh"/>
+                                        <exclude reference="ygw-BW-5hi"/>
                                         <exclude reference="UzC-IW-7j2"/>
                                         <exclude reference="lXF-2R-J1y"/>
                                         <exclude reference="okP-cR-wkh"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="cPu-jq-piW"/>
+                                    </mask>
                                     <mask key="constraints">
+                                        <include reference="R7D-el-veh"/>
+                                        <include reference="ygw-BW-5hi"/>
                                         <include reference="UzC-IW-7j2"/>
                                         <include reference="lXF-2R-J1y"/>
                                         <include reference="okP-cR-wkh"/>
@@ -962,7 +983,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                     </textView>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="860" width="600" height="2.5"/>
+                                        <rect key="frame" x="0.0" y="860" width="600" height="3"/>
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="CrossPostButton">
                                         <rect key="frame" x="0.0" y="862" width="300" height="30"/>

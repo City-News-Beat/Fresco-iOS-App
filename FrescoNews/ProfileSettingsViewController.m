@@ -84,21 +84,22 @@
     }
 }
 
-- (IBAction)connectFacebook:(id)sender {
+- (IBAction)connectFacebook:(id)sender
+{
     [self.connectFacebookButton setTitle:@"" forState:UIControlStateNormal];
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectFacebookButton addSubview:spinner];
-        
+
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [PFFacebookUtils linkUserInBackground:[PFUser currentUser]
                        withPublishPermissions:@[@"publish_actions"]
                                         block:^(BOOL succeeded, NSError *error) {
                                             if (succeeded) {
                                                 NSLog(@"Woohoo, user is linked with Facebook!");
-                                            } else {
+                                            }
+                                            else {
                                                 NSLog(@"%@", error);
                                             }
                                             [spinner removeFromSuperview];
@@ -109,8 +110,8 @@
         [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"The user is no longer associated with their Facebook account.");
-                
-            } else {
+            }
+            else {
                 NSLog(@"%@", error);
             }
             [spinner removeFromSuperview];
@@ -120,11 +121,10 @@
 
 }
 
-- (IBAction)connectTwitter:(id)sender {
+- (IBAction)connectTwitter:(id)sender
+{
     [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
-    
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectTwitterButton addSubview:spinner];
@@ -133,30 +133,32 @@
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
                 NSLog(@"Woohoo, user logged in with Twitter!");
-            } else {
-                NSLog(@"%@", error);
             }
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        }];
-    } else {
-        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            if (!error && succeeded) {
-                NSLog(@"The user is no longer associated with their Twitter account.");
-            } else {
+            else {
                 NSLog(@"%@", error);
             }
             [spinner removeFromSuperview];
             [self updateLinkingStatus];
         }];
     }
-
+    else {
+        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+            if (!error && succeeded) {
+                NSLog(@"The user is no longer associated with their Twitter account.");
+            }
+            else {
+                NSLog(@"%@", error);
+            }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
+        }];
+    }
 }
-- (IBAction)saveChanges:(id)sender {
 
-}
+- (IBAction)saveChanges:(id)sender {}
 
-- (IBAction)logOut:(id)sender {
+- (IBAction)logOut:(id)sender
+{
     [[FRSDataManager sharedManager] logout];
     [self navigateToMainApp];
 }
