@@ -13,6 +13,7 @@
 #import "FRSDataManager.h"
 #import "AssignmentAnnotation.h"
 #import "ClusterAnnotation.h"
+#import <SVPulsingAnnotationView.h>
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -406,7 +407,56 @@
     static NSString *identifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     
-    if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
+    if (annotation == mapView.userLocation){
+        
+
+        static NSString *identifier = @"currentLocation";
+        
+        //If the user has a profile image
+        if([FRSDataManager sharedManager].currentUser.profileImageUrl != nil){
+            
+            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+            
+            if(pinView == nil){
+                
+                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                
+                
+                UIImageView *profileImageView = [[UIImageView alloc]init];
+                profileImageView.frame = CGRectMake(0, 0, 30, 30);
+                profileImageView.layer.masksToBounds = YES;
+                profileImageView.layer.cornerRadius = 27;
+                [profileImageView setImage:[UIImage imageNamed:@"Bitmap"]];
+                
+                [pinView addSubview:profileImageView];
+                
+            }
+            
+            return pinView;
+        
+        
+        }
+        //If the user does not have a profile image
+        else{
+            
+            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+            
+            if(pulsingView == nil) {
+                
+                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                
+                pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
+                
+            }
+            
+            return pulsingView;
+
+        }
+        
+
+    }
+
+    else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
     
@@ -456,6 +506,17 @@
     
     
     }
+
+    
+    identifier = @"currentLocation";
+    
+    MKAnnotationView *userLocation = (MKAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+    
+    userLocation.image = [UIImage imageNamed:@"user"]; //here we use a nice image instead of the default pins
+    
+
+    return userLocation;
+    
 
     return nil;
 
