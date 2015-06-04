@@ -253,6 +253,8 @@
             }
     
             self.assignments = nil;
+            
+            [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
 
         }
         
