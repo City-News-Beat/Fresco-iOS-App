@@ -10,7 +10,7 @@
 
 #import <Mantle/Mantle.h>
 
-@class FRSUser, FRSTag, CLLocation;
+@class FRSUser, CLLocation;
 
 @interface FRSAssignment : MTLModel <MTLJSONSerializing>
 
