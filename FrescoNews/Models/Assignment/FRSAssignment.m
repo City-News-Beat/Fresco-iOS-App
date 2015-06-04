@@ -17,7 +17,7 @@
              @"assignmentId": @"_id",
              @"title" : @"title",
              @"caption" : @"caption",
-             @"galleries" : @"galleries",
+             @"galleries" : @"galleryArray",
              @"active" : @"active",
              @"location": @"location",
              @"lat" : @"location.geo.coordinates",
