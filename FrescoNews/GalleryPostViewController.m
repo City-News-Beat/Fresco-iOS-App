@@ -179,7 +179,7 @@
         return;
     }
 
-    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+    if (YES /* TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] */) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
                                            parameters: @{@"message" : @"hello world"}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -319,7 +319,7 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
-            // TODO: Post link to Web page: /post/[id]
+            // TODO: Post link to Web page, see https://trello.com/c/kR8xTPQ8/87-need-crosspost-copy-including-url
             [self crossPostToTwitter];
             [self crossPostToFacebook];
 
