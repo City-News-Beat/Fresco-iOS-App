@@ -13,6 +13,7 @@
 #import "MTLModel+Additions.h"
 #import "FRSNotification.h"
 #import "AssignmentsViewController.h"
+#import "FRSUser.h"
 #import "GalleryViewController.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
@@ -51,7 +52,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.estimatedRowHeight = 119;
     
     
-    [[FRSDataManager sharedManager] getNotificationsForUser:@"55284ea411fe08b11f004297" responseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
             self.notifications = responseObject;
@@ -191,7 +192,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 - (void)updateNotifications{
     
     
-    [[FRSDataManager sharedManager] getNotificationsForUser:@"" responseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
             self.notifications = responseObject;
