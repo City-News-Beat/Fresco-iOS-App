@@ -295,8 +295,8 @@
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    
-    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
+//    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
+    NSString *path = @"/stories";
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
