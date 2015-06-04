@@ -33,6 +33,8 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)awakeFromNib
 {
     self.constraintHeight.constant = kImageHeight;
+    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
+
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
@@ -94,7 +96,9 @@ static CGFloat const kInterImageGap = 1.0f;
         
         // lay the view down
         StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
-        [thumbnailView setImageWithURL:[image cdnImageURLWithSize:frame.size]];
+        
+        // 3x is for retina displays
+        [thumbnailView setImageWithURL:[image cdnImageURLWithSize:CGSizeMake(frame.size.width * 3, frame.size.height * 3)]];
         [self.contentView addSubview:thumbnailView];
         
         /*
@@ -151,5 +155,6 @@ static CGFloat const kInterImageGap = 1.0f;
             [v removeFromSuperview];
     }
     self.constraintHeight.constant = kImageHeight;
+    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
 }
 @end

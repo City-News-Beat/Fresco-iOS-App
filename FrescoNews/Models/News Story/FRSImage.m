@@ -17,9 +17,9 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"URL": @"file",
-             @"width" : @"width",
-             @"height" : @"height"
+             @"URL": @"file"
+             /*@"width" : @"width",
+             @"height" : @"height"*/
              };
 }
 
