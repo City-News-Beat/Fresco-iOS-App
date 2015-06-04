@@ -150,7 +150,7 @@
         
         [[self sharedLayer] removeFromSuperlayer];
         
-        _sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:postCell.post.mediaURLString]];
+        _sharedPlayer = [AVPlayer playerWithURL:postCell.post.mediaURL];
         
         self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
         

@@ -23,7 +23,7 @@
              @"type" : @"type",
              @"mediaWidth" : @"meta.width",
              @"mediaHeight" : @"meta.height",
-             @"mediaURLString" : @"file",
+             @"mediaURL" : @"file",
              @"image" : @"file",
              @"date" : @"time_created",
              @"byline" : @"byline",
@@ -45,7 +45,7 @@
     return self;
 }
 
-+ (NSValueTransformer *)mediaURLStringJSONTransformer
++ (NSValueTransformer *)mediaURLJSONTransformer
 {
     return [MTLModel URLJSONTransformer];
 }
