@@ -137,6 +137,7 @@
         return;
     }
 
+    string = [NSString stringWithFormat:@"status=%@", string];
     NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
     NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
