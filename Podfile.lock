@@ -41,12 +41,12 @@ DEPENDENCIES:
   - SVPullToRefresh
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: d6a2d2755fada3a1fbf1f490ec0dd92224e092a4
-  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  Cloudinary: 1f3859b17f1c111671a1acf1f0e2648c34d3a207
-  Functional.m: e01ad5fc30324b63273af1f37284ac609192caa4
-  Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
-  PBWebViewController: 0a36bbd0f82741d9457177c9c37f5ff747cba312
-  SVPullToRefresh: d5161ebc833a38b465364412e5e307ca80bbb190
+  AFNetworkActivityLogger: e82c9ba285b37042d86729bff5b14036c4312cd7
+  AFNetworking: 96ac9bf3eda33582701cb1fcc5b896aa1e20311e
+  Cloudinary: b9f023dbe33b0f55d0d783a5398cd23e491debe2
+  Functional.m: 072ea6a57954f7792a3aaf19042ed6d3258e3026
+  Mantle: 1ec9076f091f3a2f95cb2c94939e92dba35c97e1
+  PBWebViewController: 909b1505da6ba7c5c82519a6457246027926061e
+  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
 
 COCOAPODS: 0.35.0

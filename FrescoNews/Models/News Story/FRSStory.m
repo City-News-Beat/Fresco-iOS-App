@@ -22,7 +22,7 @@
              @"byline" : @"byline",
              @"date" : @"time_created",
              @"tags" : @"tags",
-             @"galleryIds" : @"galleries",
+             @"galleries" : @"galleries",
              @"articleIds" : @"articles",
              @"curator" : @"curator"
              };
