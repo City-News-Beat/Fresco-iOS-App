@@ -19,6 +19,12 @@
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) int stepValue;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldMiddle;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 @end
 
 @implementation ProfileSettingsViewController
@@ -28,10 +34,15 @@
     
     [self updateLinkingStatus];
     
+    self.frsUser = [FRSDataManager sharedManager].currentUser;
+    
     // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
     self.stepValue = 5.0f;
 
+    self.textfieldFirst.text = self.frsUser.first;
+    self.textfieldLast.text = self.frsUser.last;
+    self.textfieldEmail.text = self.frsUser.email;
 }
 
 - (IBAction)valueChanged:(id)sender {
@@ -137,6 +148,9 @@
             [self updateLinkingStatus];
         }];
     }
+
+}
+- (IBAction)saveChanges:(id)sender {
 
 }
 

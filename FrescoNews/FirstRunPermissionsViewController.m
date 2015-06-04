@@ -1,26 +1,32 @@
 //
-//  FirstRunSkipViewController.m
+//  FirstRunPermissionsViewController.m
 //  FrescoNews
 //
 //  Created by Zachary Mayberry on 4/24/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "FirstRunProgressViewController.h"
+#import "FirstRunPermissionsViewController.h"
 
-@interface FirstRunProgressViewController ()
+@interface FirstRunPermissionsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
 @end
 
-@implementation FirstRunProgressViewController
+@implementation FirstRunPermissionsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.isSkipState = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,14 +56,14 @@
     self.skipFeatureButton.hidden = YES;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)actionNext:(id)sender {
+    [self performSegueWithIdentifier:@"showRadius" sender:self];
 }
-*/
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"showRadius"]) {
+    }
+}
 
 @end

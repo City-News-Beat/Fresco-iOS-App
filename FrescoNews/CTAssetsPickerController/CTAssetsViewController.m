@@ -160,15 +160,19 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
         if (asset) {
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
-                [self.assets insertObject:asset atIndex:0];
+                [self.assets addObject:asset];
+            }
+
+            if (self.assetsGroup.numberOfAssets - index > 1000) {
+                *stop = YES;
             }
         }
         else {
             [self reloadData];
         }
     };
-    
-    [self.assetsGroup enumerateAssetsUsingBlock:resultsBlock];
+
+    [self.assetsGroup enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:resultsBlock];
 }
 
 #pragma mark - Toolbar Items
