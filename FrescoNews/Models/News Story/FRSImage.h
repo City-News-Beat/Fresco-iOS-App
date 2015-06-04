@@ -21,5 +21,6 @@
 
 - (NSURL *)cdnImageURL;
 - (NSURL *)cdnImageInListURL;
+- (NSURL *)cdnImageURLWithSize:(CGSize)size;
 
 @end

@@ -94,7 +94,7 @@ static CGFloat const kInterImageGap = 1.0f;
         
         // lay the view down
         StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
-        [thumbnailView setImageWithURL:[image cdnImageURL]];
+        [thumbnailView setImageWithURL:[image cdnImageURLWithSize:frame.size]];
         [self.contentView addSubview:thumbnailView];
         
         /*

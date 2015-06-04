@@ -166,7 +166,6 @@
     }];
 }
 
-#warning Check for retain cycles
 - (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
 {
     // user is logged into parse

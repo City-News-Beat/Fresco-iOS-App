@@ -156,7 +156,10 @@
 {
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Facebook login error: %@", error);
@@ -167,7 +170,10 @@
 - (IBAction)twitterLogin:(id)sender {
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Twitter login error: %@", error);
