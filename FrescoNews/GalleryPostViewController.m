@@ -102,6 +102,7 @@
     self.uploadProgressView.hidden = !upload;
     self.view.userInteractionEnabled = !upload;
     self.navigationController.navigationBar.userInteractionEnabled = !upload;
+    self.navigationController.toolbar.userInteractionEnabled = !upload;
 }
 
 - (void)returnToTabBar
