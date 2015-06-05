@@ -318,7 +318,6 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
-            // TODO: Post link to Web page, see https://trello.com/c/kR8xTPQ8/87-need-crosspost-copy-including-url
             NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
             [self crossPostToTwitter:crossPostString];
             [self crossPostToFacebook:crossPostString];
