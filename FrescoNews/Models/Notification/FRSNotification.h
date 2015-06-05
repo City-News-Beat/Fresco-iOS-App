@@ -18,6 +18,7 @@
 @property (nonatomic, copy) NSString *body;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, copy) NSDate *date;
+@property (nonatomic, assign) BOOL seen;
 @property (nonatomic, copy) NSDictionary *meta;
 
 @end

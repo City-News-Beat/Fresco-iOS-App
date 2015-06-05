@@ -54,7 +54,7 @@
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
         
         //Make request for more posts, append to galleries array
         [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
