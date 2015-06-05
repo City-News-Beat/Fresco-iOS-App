@@ -60,10 +60,13 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)shuffle:(NSMutableArray *)array
 {
+    // seeding the random number generator with a constant
+    // will make the images come out the same every time which is an optimization
+    srand(42);
     NSUInteger count = [array count];
     for (NSUInteger i = 0; i < count; ++i) {
         NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+        NSInteger exchangeIndex = i + (rand() % remainingCount);
         [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
     }
 }
@@ -84,6 +87,9 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.constraintHeight.constant = kImageHeight;
     
+#warning Hack until variable sized cells are perfect
+    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
+ 
     int i = 0;
     for (FRSImage *image in self.imageArray) {
         // we don't want more than two rows of images
