@@ -12,7 +12,7 @@
 
 @interface FRSNotification : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSNumber *notificaitonId;
+@property (nonatomic, copy) NSString *notificaitonId;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *event;
 @property (nonatomic, copy) NSString *body;

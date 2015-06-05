@@ -49,6 +49,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+
     
     [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
@@ -125,6 +127,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     return [self.notifications count];
 }
 
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // since there is a section for every story
@@ -188,7 +191,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 #pragma mark - UITableViewDelegate and Actions
 
-
 - (IBAction)firstButton:(id)sender {
     
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
@@ -196,6 +198,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     
     FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
+    
+    if(notification.seen == false){
+        
+        [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
+        
+    }
     
     //Check the notificaiton type
     if([notification.type isEqualToString:@"assignment"]){
@@ -255,6 +263,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     
     FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
+    
+    if(notification.seen == false){
+        
+        [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
+        
+    }
     
     //Check the notificaiton type
     if([notification.type isEqualToString:@"assignment"]){
