@@ -13,7 +13,6 @@
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import "UIImage+ALAsset.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -66,9 +65,7 @@
     for (ALAsset *asset in assets) {
         FRSPost *post = [[FRSPost alloc] init];
         FRSImage *image = [[FRSImage alloc] init];
-        image.image = [UIImage imageFromAsset:asset];
-        image.height = @1; // ?
-        image.width = @1; // ?
+        image.asset = asset;
 
 #if TARGET_IPHONE_SIMULATOR
         image.latitude = @(40.6);

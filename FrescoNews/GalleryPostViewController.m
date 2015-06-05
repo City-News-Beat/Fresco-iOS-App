@@ -21,6 +21,7 @@
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
+#import "UIImage+ALAsset.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -290,8 +291,7 @@
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSLog(@"filename: %@" , filename);
             // TODO: Video support
-            // TODO: Investigate "Connection to assetsd was interrupted or assetsd died"
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
+            [formData appendPartWithFileData:UIImageJPEGRepresentation([UIImage imageFromAsset:post.image.asset], 1.0)
                                         name:filename
                                     fileName:filename
                                     mimeType:@"image/jpeg"];
