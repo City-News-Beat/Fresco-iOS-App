@@ -181,11 +181,12 @@
                     [cell.galleryView.sharedLayer removeFromSuperlayer];
                     
                     cell.galleryView.sharedPlayer = nil;
-                    
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:firstPost.mediaURLString]];
+
+                    // TODO: Check for missing/corrupt media at firstPost.mediaURL
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.mediaURL];
                     
                     [cell.galleryView.sharedPlayer setMuted:YES];
-                    
+
                     cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
                     
                     cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;

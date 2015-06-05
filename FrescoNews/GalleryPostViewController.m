@@ -117,6 +117,7 @@
 - (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
     if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
                                                         message:@"Go to Profile to link your Fresco account to Twitter"
                                                        delegate:nil
@@ -130,19 +131,18 @@
     [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
 }
 
-- (void)crossPostToTwitter
+- (void)crossPostToTwitter:(NSString *)string
 {
     if (!self.twitterButton.selected) {
         return;
     }
 
-    NSString *bodyString = @"status=this is a test with spaces";
-    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    string = [NSString stringWithFormat:@"status=%@", string];
     NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
     NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     tweetRequest.HTTPMethod = @"POST";
-    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
     [[PFTwitterUtils twitter] signRequest:tweetRequest];
 
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
@@ -158,6 +158,7 @@
 - (IBAction)facebookButtonTapped:(CrossPostButton *)button
 {
     if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
                                                         message:@"Go to Profile to link your Fresco account to Facebook"
                                                        delegate:nil
@@ -171,21 +172,21 @@
     [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
-- (void)crossPostToFacebook
+- (void)crossPostToFacebook:(NSString *)string
 {
     if (!self.facebookButton.selected) {
         return;
     }
 
-    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+    if (YES /* TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] */) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
-                                           parameters: @{@"message" : @"hello world"}
+                                           parameters: @{@"message" : string}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             if (error) {
                 NSLog(@"Error crossposting to Facebook");
             }
             else {
-                NSLog(@"Success crossposting to Facebook: Post id:%@", result[@"id"]);
+                NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
             }
         }];
     }
@@ -317,9 +318,10 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
-            // TODO: Post link to Web page: /post/[id]
-            [self crossPostToTwitter];
-            [self crossPostToFacebook];
+            // TODO: Post link to Web page, see https://trello.com/c/kR8xTPQ8/87-need-crosspost-copy-including-url
+            NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
+            [self crossPostToTwitter:crossPostString];
+            [self crossPostToFacebook:crossPostString];
 
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
