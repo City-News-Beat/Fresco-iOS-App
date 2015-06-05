@@ -20,7 +20,6 @@
 #import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
-#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface GalleriesViewController()
 
@@ -65,38 +64,12 @@
     [self.refreshControl setTintColor:[UIColor blackColor]];
     [self.tableView addSubview:self.refreshControl];
     
-    //Endless scroll handler
-    [self.tableView addInfiniteScrollingWithActionHandler:^{
-        // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
-        
-        _isRunning = true;
-        
-        //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    
-                    [self.galleries addObjectsFromArray:responseObject];
-                    
-                    [self.tableView reloadData];
-                    
-                    _isRunning = false;
-                    
-                }
-            }
-            [[self tableView] reloadData];
-        }];
-
-        [self.tableView.infiniteScrollingView stopAnimating];
-        
-    }];
     
 }
 
 - (void)refresh
 {
-  //  [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
     
     [self.refreshControl endRefreshing];
     

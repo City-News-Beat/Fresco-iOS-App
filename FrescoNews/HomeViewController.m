@@ -13,6 +13,7 @@
 #import "GalleryHeader.h"
 #import "GalleryTableViewCell.h"
 #import "AssignmentsViewController.h"
+#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface HomeViewController ()
 //@property (strong, nonatomic) NSArray *galleries;
@@ -48,6 +49,30 @@
     [super viewDidLoad];
     [self setFrescoNavigationBar];
     [self performNecessaryFetch:nil];
+    
+    
+    //Endless scroll handler
+    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    
+                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                    
+                    [self.galleriesViewController.tableView reloadData];
+                    
+                }
+            }
+            [[self.galleriesViewController tableView] reloadData];
+        }];
+        
+        [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+        
+    }];
 
     
 }
