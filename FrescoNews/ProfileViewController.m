@@ -8,12 +8,12 @@
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-
 #import "ProfileViewController.h"
 #import "GalleriesViewController.h"
 #import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
 #import "ProfileHeaderViewController.h"
+#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface ProfileViewController ()
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
@@ -48,6 +48,27 @@
     [super viewDidLoad];
     [self setFrescoNavigationBar];
     [self performNecessaryFetch:nil];
+    
+    //Endless scroll handler
+    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num WithResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                    
+                    [self.galleriesViewController.tableView reloadData];
+
+                }
+            }
+            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+
+        }];
+
+    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,12 +86,12 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getGalleriesWithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 WithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count]) {
                 self.galleries = responseObject;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
-                [self.galleriesViewController refresh];
+                [self.galleriesViewController.tableView reloadData];
             }
         }
         [self reloadData];
