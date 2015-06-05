@@ -16,15 +16,15 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"storyID": @"story_id",
+             @"storyID": @"_id",
              @"caption" : @"caption",
              @"title" : @"title",
              @"byline" : @"byline",
-             @"date" : @"timestamp",
+             @"date" : @"time_created",
              @"tags" : @"tags",
              @"galleries" : @"galleries",
-             @"articles" : @"articles"
-            // @"user" : @"user"
+             @"articleIds" : @"articles",
+             @"curator" : @"curator"
              };
 }
 

@@ -17,15 +17,20 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"URL": @"file",
-             @"width" : @"width",
-             @"height" : @"height"
+             @"URL": @"file"
+             /*@"width" : @"width",
+             @"height" : @"height"*/
              };
+}
+
+- (NSURL *)cdnImageURLWithSize:(CGSize)size
+{
+    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:size transformationString:nil];
 }
 
 - (NSURL *)cdnImageURL
 {
-    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
+    return [self cdnImageURLWithSize:CGSizeMake([self.width floatValue], [self.height floatValue])];
 }
 
 - (NSURL *)cdnImageInListURL
