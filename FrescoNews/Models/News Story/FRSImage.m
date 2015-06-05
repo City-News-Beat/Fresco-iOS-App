@@ -33,11 +33,19 @@
 - (NSURL *)cdnAssetURL
 {
     // TODO: Use local asset, if available?
+    if ([[self.URL absoluteString] containsString:@"/videos/"]) {
+        return self.URL;
+    }
+
     return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
 }
 
 - (NSURL *)cdnAssetInListURL
 {
+    if ([[self.URL absoluteString] containsString:@"/videos/"]) {
+        return self.URL;
+    }
+
     CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
     NSString *transformString;
     
