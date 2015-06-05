@@ -66,13 +66,14 @@
         FRSPost *post = [[FRSPost alloc] init];
         FRSImage *image = [[FRSImage alloc] init];
         image.asset = asset;
+        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
 
 #if TARGET_IPHONE_SIMULATOR
         image.latitude = @(40.6);
         image.longitude = @(-74.1);
 #else
         CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
-        if (location) {
+        if (location || [assetType isEqualToString:ALAssetTypeVideo] /* Location temporarily not required for video */) {
             image.latitude = @(location.coordinate.latitude);
             image.longitude = @(location.coordinate.longitude);
         }
@@ -83,7 +84,6 @@
 #endif
         post.image = image;
 
-        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
         if ([assetType isEqualToString:ALAssetTypePhoto]) {
             post.type = @"image";
         }
