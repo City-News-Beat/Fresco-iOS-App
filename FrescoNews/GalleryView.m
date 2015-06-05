@@ -49,7 +49,9 @@
 {
     _gallery = gallery;
     self.labelCaption.text = self.gallery.caption;
+    
     self.pageControl.numberOfPages = [self.gallery.posts count];
+ 
     [self.collectionPosts reloadData];
 
     [self setAspectRatio];
@@ -58,13 +60,15 @@
 - (void)setAspectRatio
 {
     if ([self.gallery.posts count]) {
+        
         FRSPost *post = [self.gallery.posts firstObject];
         
         CGFloat aspectRatio;
         if (post.image) {
             aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
-            if (aspectRatio < 1.0f)
+            if (aspectRatio < 1.0f || !post.image.height /* shouldn't happen... */) {
                 aspectRatio = 1.0f;
+            }
         }
         else {
             aspectRatio = 600/800;
@@ -147,7 +151,7 @@
         
         [[self sharedLayer] removeFromSuperlayer];
         
-        _sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:postCell.post.mediaURLString]];
+        _sharedPlayer = [AVPlayer playerWithURL:postCell.post.mediaURL];
         
         self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
         

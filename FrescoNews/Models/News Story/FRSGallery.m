@@ -9,11 +9,10 @@
 #import "FRSGallery.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import "UIImage+ALAsset.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -30,6 +29,7 @@
              @"byline" : @"byline",
              @"tags" : @"tags",
              @"articles" : @"articles",
+             @"relatedStories" : @"",
              @"posts" : @"posts"
              };
 }
@@ -65,16 +65,15 @@
     for (ALAsset *asset in assets) {
         FRSPost *post = [[FRSPost alloc] init];
         FRSImage *image = [[FRSImage alloc] init];
-        image.image = [UIImage imageFromAsset:asset];
-        image.height = @1; // ?
-        image.width = @1; // ?
+        image.asset = asset;
+        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
 
 #if TARGET_IPHONE_SIMULATOR
         image.latitude = @(40.6);
         image.longitude = @(-74.1);
 #else
         CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
-        if (location) {
+        if (location || [assetType isEqualToString:ALAssetTypeVideo] /* Location temporarily not required for video */) {
             image.latitude = @(location.coordinate.latitude);
             image.longitude = @(location.coordinate.longitude);
         }
@@ -85,9 +84,8 @@
 #endif
         post.image = image;
 
-        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
         if ([assetType isEqualToString:ALAssetTypePhoto]) {
-            post.type = @"photo";
+            post.type = @"image";
         }
         else if ([assetType isEqualToString:ALAssetTypeVideo]) {
             post.type = @"video";

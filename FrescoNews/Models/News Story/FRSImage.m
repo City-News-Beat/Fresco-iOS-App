@@ -16,19 +16,27 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
-    return @{
-             @"URL": @"file",
-             @"width" : @"width",
-             @"height" : @"height"
-             };
+    return @{ @"URL": @"file" };
 }
 
-- (NSURL *)cdnImageURL
+- (NSURL *)cdnAssetURLWithSize:(CGSize)size
 {
-    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
+    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:nil];
 }
 
-- (NSURL *)cdnImageInListURL
+/*
+- (NSURL *)cdnAssetURL
+{
+    return [self cdnAssetURLWithSize:CGSizeMake([self.width floatValue], [self.height floatValue])];
+}
+*/
+- (NSURL *)cdnAssetURL
+{
+    // TODO: Use local asset, if available?
+    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
+}
+
+- (NSURL *)cdnAssetInListURL
 {
     CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
     NSString *transformString;
@@ -39,7 +47,7 @@
         transformString = @"c_fill,g_faces";
     }
     
-    return [self cdnImageURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
+    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
 }
 
 @end

@@ -23,6 +23,7 @@
 @property (nonatomic, copy) NSString *byline;
 @property (nonatomic, strong) NSArray *tags;
 @property (nonatomic, strong) NSArray *articles;
+@property (nonatomic, strong) NSArray *relatedStories;
 @property (nonatomic, strong) NSArray *posts;
 
 - (instancetype)initWithAssets:(NSArray *)assets;

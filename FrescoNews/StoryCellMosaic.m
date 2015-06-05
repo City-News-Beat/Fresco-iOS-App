@@ -33,6 +33,7 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)awakeFromNib
 {
     self.constraintHeight.constant = kImageHeight;
+
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
@@ -42,11 +43,13 @@ static CGFloat const kInterImageGap = 1.0f;
         return _imageArray;
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:10];
-    
+
     for (FRSGallery *gallery in self.story.galleries) {
         for (FRSPost *post in gallery.posts) {
-            #warning Broken by new data model
-            [tempArray addObject:post.image.URL];
+            // this finds cleaner data
+            if (post && post.image && post.image.height && post.image.width) {
+                [tempArray addObject:post.image];
+            }
         }
     }
     [self shuffle:tempArray];
@@ -57,10 +60,13 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)shuffle:(NSMutableArray *)array
 {
+    // seeding the random number generator with a constant
+    // will make the images come out the same every time which is an optimization
+    srand(42);
     NSUInteger count = [array count];
     for (NSUInteger i = 0; i < count; ++i) {
         NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+        NSInteger exchangeIndex = i + (rand() % remainingCount);
         [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
     }
 }
@@ -81,6 +87,9 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.constraintHeight.constant = kImageHeight;
     
+#warning Hack until variable sized cells are perfect
+    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
+ 
     int i = 0;
     for (FRSImage *image in self.imageArray) {
         // we don't want more than two rows of images
@@ -95,7 +104,10 @@ static CGFloat const kInterImageGap = 1.0f;
         
         // lay the view down
         StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
-        [thumbnailView setImageWithURL:[image cdnImageURL]];
+
+        // 3x is for retina displays
+        [thumbnailView setImageWithURL:[image cdnAssetURLWithSize:CGSizeMake(frame.size.width * 3, frame.size.height * 3)]];
+
         [self.contentView addSubview:thumbnailView];
         
         /*
@@ -113,8 +125,10 @@ static CGFloat const kInterImageGap = 1.0f;
         if (x > self.frame.size.width) {
             ++rows;
             y += kImageHeight + kInterImageGap;
+            
             self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
             [self updateConstraints];
+
             x = 0.0f;
             
             // we almost always want to redo this image on the next row
@@ -126,6 +140,9 @@ static CGFloat const kInterImageGap = 1.0f;
         
         ++i;
     }
+    [self updateConstraints];
+    [self layoutIfNeeded];
+
 }
 
 - (void)setupTapHandlingForThumbnail:(StoryThumbnailView *)thumbnailView
@@ -151,6 +168,6 @@ static CGFloat const kInterImageGap = 1.0f;
         if ([v isKindOfClass:[StoryThumbnailView class]])
             [v removeFromSuperview];
     }
-    self.constraintHeight.constant = kImageHeight;
+    self.imageArray = nil;
 }
 @end

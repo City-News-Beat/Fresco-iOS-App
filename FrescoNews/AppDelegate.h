@@ -13,7 +13,6 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) CLLocation *location;
 
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;

@@ -1,5 +1,5 @@
 //
-//  FirstRunSkipViewController.h
+//  FirstRunPermissionsViewController.h
 //  FrescoNews
 //
 //  Created by Zachary Mayberry on 4/24/15.
@@ -8,6 +8,6 @@
 
 #import "FRSBaseViewController.h"
 
-@interface FirstRunProgressViewController : FRSBaseViewController
+@interface FirstRunPermissionsViewController : FRSBaseViewController
 @property (assign) BOOL isSkipState;
 @end

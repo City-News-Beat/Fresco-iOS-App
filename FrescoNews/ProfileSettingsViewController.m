@@ -19,6 +19,12 @@
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) int stepValue;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldMiddle;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 @end
 
 @implementation ProfileSettingsViewController
@@ -28,10 +34,15 @@
     
     [self updateLinkingStatus];
     
+    self.frsUser = [FRSDataManager sharedManager].currentUser;
+    
     // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
     self.stepValue = 5.0f;
 
+    self.textfieldFirst.text = self.frsUser.first;
+    self.textfieldLast.text = self.frsUser.last;
+    self.textfieldEmail.text = self.frsUser.email;
 }
 
 - (IBAction)valueChanged:(id)sender {
@@ -73,31 +84,34 @@
     }
 }
 
-- (IBAction)connectFacebook:(id)sender {
+- (IBAction)connectFacebook:(id)sender
+{
     [self.connectFacebookButton setTitle:@"" forState:UIControlStateNormal];
-    
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectFacebookButton addSubview:spinner];
-        
+
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withReadPermissions:nil block:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"Woohoo, user is linked with Facebook!");
-            } else {
-                NSLog(@"%@", error);
-            }
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        }];
-    } else {
+        [PFFacebookUtils linkUserInBackground:[PFUser currentUser]
+                       withPublishPermissions:@[@"publish_actions"]
+                                        block:^(BOOL succeeded, NSError *error) {
+                                            if (succeeded) {
+                                                NSLog(@"Woohoo, user is linked with Facebook!");
+                                            }
+                                            else {
+                                                NSLog(@"%@", error);
+                                            }
+                                            [spinner removeFromSuperview];
+                                            [self updateLinkingStatus];
+                                        }];
+    }
+    else {
         [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"The user is no longer associated with their Facebook account.");
-                
-            } else {
+            }
+            else {
                 NSLog(@"%@", error);
             }
             [spinner removeFromSuperview];
@@ -107,11 +121,10 @@
 
 }
 
-- (IBAction)connectTwitter:(id)sender {
+- (IBAction)connectTwitter:(id)sender
+{
     [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
-    
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectTwitterButton addSubview:spinner];
@@ -120,27 +133,32 @@
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
                 NSLog(@"Woohoo, user logged in with Twitter!");
-            } else {
-                NSLog(@"%@", error);
             }
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        }];
-    } else {
-        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            if (!error && succeeded) {
-                NSLog(@"The user is no longer associated with their Twitter account.");
-            } else {
+            else {
                 NSLog(@"%@", error);
             }
             [spinner removeFromSuperview];
             [self updateLinkingStatus];
         }];
     }
-
+    else {
+        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+            if (!error && succeeded) {
+                NSLog(@"The user is no longer associated with their Twitter account.");
+            }
+            else {
+                NSLog(@"%@", error);
+            }
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
+        }];
+    }
 }
 
-- (IBAction)logOut:(id)sender {
+- (IBAction)saveChanges:(id)sender {}
+
+- (IBAction)logOut:(id)sender
+{
     [[FRSDataManager sharedManager] logout];
     [self navigateToMainApp];
 }

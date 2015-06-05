@@ -11,7 +11,7 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
-
+#import "FRSStory.h"
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoUserData @"frescoUserData"
 
@@ -166,7 +166,6 @@
     }];
 }
 
-#warning Check for retain cycles
 - (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
 {
     // user is logged into parse
@@ -191,31 +190,44 @@
             // still no FRS user? Make one
             else {
                 [self createFrescoUser:^(id responseObject, NSError *error) {
-                    if (responseObject) {
-                        FRSUser *frsUser = [responseObject copy];
-                        
-                        frsUser.first = @"J.S.";
-                        frsUser.last = @"Bach";
-                        
-                        NSString *jsonUser = [frsUser asJSONString];
-                        if (jsonUser)
-                            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
-                        
-                        // save locally
-                        [[PFUser currentUser] pinWithName:kFrescoUserData];
-                        
-                        if ([[PFUser currentUser] save]) {
-                            _currentUser = frsUser;
-                            block(YES, nil);
-                        }
-                        else {
-                            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
-                            block (NO, saveError);
-                        }
+                    if ([responseObject isKindOfClass:[FRSUser class]])
+                        block(YES, nil);
+                    else {
+                        NSError *error = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't create user"}];
+                        block(NO, error);
                     }
                 }];
             }
         }
+    }
+}
+
+- (void)synchronizeFRSUser:(FRSUser *)frsUser withBlock:(PFBooleanResultBlock)block
+{
+    if ([frsUser isKindOfClass:[FRSUser class]]) {
+        NSString *jsonUser = [frsUser asJSONString];
+        if (jsonUser)
+            [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
+        
+        // save locally
+        [[PFUser currentUser] pinWithName:kFrescoUserData];
+        
+        // save to parse
+        NSError *error;
+        if ([[PFUser currentUser] save:&error]) {
+            _currentUser = frsUser;
+            block(YES, nil);
+        }
+        else {
+            // if we're going to codify this it needs to be centralized -- this is arbitrary
+            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
+            block (NO, saveError);
+        }
+    }
+    else {
+        // if we're going to codify this it needs to be centralized -- this is arbitrary
+        NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Not a user"}];
+        block (NO, saveError);
     }
 }
 
@@ -237,41 +249,41 @@
     return frsUser;
 }
 
-/*
-- (void)setCurrentUser:(FRSUser *)currentUser
-{
-    if (currentUser)
-        _currentUser = currentUser;
-    // log out
-    else {
-        _currentUser = nil;
-        [PFUser logOut];
-    }
-}
-*/
-
-
-/*
-- (FRSUser *)currentUser
-{
-    // see if we can bootstrap the user from Parse
-    if (!_currentUser)
-       [self currentUserFromParseUser];
-
-    return _currentUser;
-}
-*/
-
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
-    NSString *randomEmail = [NSString stringWithFormat:@"jrgresh+fresco%8.f@gmail.com", [NSDate timeIntervalSinceReferenceDate]];
-    NSDictionary *params = @{@"email" : randomEmail, @"password" : @"foobar"};
+    NSString *email = [PFUser currentUser].email;
+    NSDictionary *params = @{@"email" : email ?: [NSNull null]};
     
+#warning this shouldn't return success on email exists and/or I should handle null "data" element
     [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-           if (responseBlock) responseBlock(user, nil);
+           
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
+}
+
+- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self POST:@"/user/update" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
            NSLog(@"Error creating new user %@", error);
            if (responseBlock) responseBlock(nil, error);
@@ -282,16 +294,17 @@
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    
-    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
-    
+    NSString *path = @"/story/highlights";
+    NSDictionary *params = @{@"limit" : @"10", @"notags" : @"true"};
+
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSArray *stories = [responseObject map:^id(id obj) {
+        NSArray *stories = [[responseObject objectForKey:@"data" ] map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
         }];
+
         if(responseBlock)
             responseBlock(stories, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -304,6 +317,31 @@
 }
 
 #pragma mark - Galleries
+
+- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    offset = offset ?: 0;
+    
+    [self GET:[NSString stringWithFormat:@"/user/galleries?id=%@&offset=%@", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+}
 
 - (void)getGalleriesAtURLString:(NSString *)urlString WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
@@ -382,6 +420,7 @@
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
 
     [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -439,14 +478,13 @@
 ** Get notifications for the user
 */
 
-- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+- (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock{
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"user_id" : @""};
+    NSDictionary *params = @{@"id" : userId};
     
-    #warning will not work, endpoint does not exist
-    [self GET:@"/notifications/get" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"/notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         

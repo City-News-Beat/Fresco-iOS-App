@@ -18,9 +18,9 @@
 @property (nonatomic, copy, readonly) NSNumber *postID;
 @property (nonatomic, strong) FRSUser *user;
 @property (nonatomic, copy, readonly) NSString *source;
-@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSString *type; // TODO: -> enum
 @property (nonatomic, strong) FRSImage *image;
-@property (nonatomic, copy) NSString *mediaURLString;
+@property (nonatomic, copy) NSURL *mediaURL;
 @property (nonatomic, copy, readonly) NSNumber *mediaWidth;
 @property (nonatomic, copy, readonly) NSNumber *mediaHeight;
 @property (nonatomic, copy, readonly) NSDate *date;

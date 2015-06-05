@@ -13,6 +13,7 @@
 #import "GalleryHeader.h"
 #import "GalleryTableViewCell.h"
 #import "AssignmentsViewController.h"
+#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface HomeViewController ()
 //@property (strong, nonatomic) NSArray *galleries;
@@ -46,8 +47,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     [self performNecessaryFetch:nil];
+    
+    
+    //Endless scroll handler
+    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    
+                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                    
+                    [self.galleriesViewController.tableView reloadData];
+                    
+                }
+            }
+            [[self.galleriesViewController tableView] reloadData];
+        }];
+        
+        [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+        
+    }];
 
     
 }
@@ -65,8 +90,7 @@
             if ([responseObject count]) {
                 self.galleries = responseObject;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-
-                [self.galleriesViewController refresh];
+                [self.galleriesViewController.tableView reloadData];
                 //                self.galleriesViewController.galleries = self.galleries;
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";

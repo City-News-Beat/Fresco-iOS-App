@@ -44,7 +44,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -106,7 +106,6 @@
     // the section will tell us the "row"
     NSUInteger index = indexPath.section;
     
-    // get story for cell at this index -- tags for now actually
     FRSStory *story = [self.stories objectAtIndex:index];
     
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];

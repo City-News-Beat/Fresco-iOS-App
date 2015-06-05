@@ -143,61 +143,57 @@
 
 - (void)setupGroup
 {
-    if (!self.groups)
+    if (!self.groups) {
         self.groups = [[NSMutableArray alloc] init];
-    else
+    }
+    else {
         [self.groups removeAllObjects];
-    
+    }
+
     ALAssetsFilter *assetsFilter = self.picker.assetsFilter;
-    
-    ALAssetsLibraryGroupsEnumerationResultsBlock resultsBlock = ^(ALAssetsGroup *group, BOOL *stop)
-    {
-        if (group)
-        {
+
+    ALAssetsLibraryGroupsEnumerationResultsBlock resultsBlock = ^(ALAssetsGroup *group, BOOL *stop) {
+        if (group) {
             [group setAssetsFilter:assetsFilter];
-            
             BOOL shouldShowGroup;
             
-            if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldShowAssetsGroup:)])
+            if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldShowAssetsGroup:)]) {
                 shouldShowGroup = [self.picker.delegate assetsPickerController:self.picker shouldShowAssetsGroup:group];
-            else
+            }
+            else {
                 shouldShowGroup = YES;
+            }
             
-            if (shouldShowGroup)
-            {
+            if (shouldShowGroup) {
                 [self.groups addObject:group];
                 
-                if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:isDefaultAssetsGroup:)])
-                {
-                    if ([self.picker.delegate assetsPickerController:self.picker isDefaultAssetsGroup:group])
+                if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:isDefaultAssetsGroup:)]) {
+                    if ([self.picker.delegate assetsPickerController:self.picker isDefaultAssetsGroup:group]) {
                         self.defaultGroup = group;
+                    }
                 }
             }
         }
-        else
-        {
+        else {
             [self reloadData];
         }
     };
-    
-    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
-    {
+
+    ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error) {
         [self showNotAllowed];
     };
-    
+
     // Enumerate Camera roll first
     [self.picker.assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
                                              usingBlock:resultsBlock
                                            failureBlock:failureBlock];
-    
+
     // Then all other groups
-    NSUInteger type =
-    ALAssetsGroupLibrary | ALAssetsGroupAlbum | ALAssetsGroupEvent |
-    ALAssetsGroupFaces | ALAssetsGroupPhotoStream;
-    
-    [self.picker.assetsLibrary enumerateGroupsWithTypes:type
-                                             usingBlock:resultsBlock
-                                           failureBlock:failureBlock];
+//    NSUInteger type = ALAssetsGroupLibrary | ALAssetsGroupAlbum | ALAssetsGroupEvent | ALAssetsGroupFaces | ALAssetsGroupPhotoStream;
+//
+//    [self.picker.assetsLibrary enumerateGroupsWithTypes:type
+//                                             usingBlock:resultsBlock
+//                                           failureBlock:failureBlock];
 }
 
 

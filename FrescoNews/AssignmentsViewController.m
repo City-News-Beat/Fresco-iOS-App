@@ -13,6 +13,7 @@
 #import "FRSDataManager.h"
 #import "AssignmentAnnotation.h"
 #import "ClusterAnnotation.h"
+#import <SVPulsingAnnotationView.h>
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -34,9 +35,13 @@
 
     @property (assign, nonatomic) BOOL updating;
 
+    @property (assign, nonatomic) BOOL navigateTo;
+
     @property (assign, nonatomic) BOOL viewingClusters;
 
-    @property (assign, nonatomic) NSNumber *operatingRadius;
+    @property (strong, nonatomic) NSNumber *operatingRadius;
+
+    @property (strong, nonatomic) UIActionSheet *navigationSheet;
 
 @end
 
@@ -46,19 +51,29 @@
     
     [super viewDidLoad];
     
-    [self setFrescoImageHeader];
+    [self setFrescoNavigationBar];
     
-    self.scrollView.delegate = self;
+    [self tweakUI];
     
-    self.assignmentsMap.delegate = self;
+    self.navigationSheet = [[UIActionSheet alloc]
+                            initWithTitle:@"Navigate to the assignment"
+                            delegate:self
+                            cancelButtonTitle:@"Cancel"
+                            destructiveButtonTitle:nil
+                            otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
+    
+    
+    //Navigation Sheet Tag
+    self.navigationSheet.tag = 100;
 
     self.operatingRadius = 0;
 
-    [self tweakUI];
-    
     if(self.currentAssignment != nil){
         
         [self updateCurrentAssignmentInView];
+        
+        if(self.navigateTo)
+            [self navigateToCurrentAssignment];
     
     }
     else{
@@ -72,12 +87,16 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
     [super viewDidAppear:animated];
+    
     static BOOL firstTime = YES;
     
     if(self.currentAssignment != nil){
         
         [self updateCurrentAssignmentInView];
+        
+        if(self.navigateTo) [self navigateToCurrentAssignment];
         
     }
 
@@ -85,7 +104,9 @@
         // move the legal link in order to tuck the map behind nicely
         [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
     }
+    
     firstTime = NO;
+    
 }
 
 - (void)viewDidLayoutSubviews{
@@ -121,6 +142,14 @@
 }
 
 
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
+    
+    self.currentAssignment = currentAssignment;
+    
+    if(navigate) self.navigateTo = YES;
+
+}
+
 /*
 ** Update Assignments
 */
@@ -129,62 +158,67 @@
     
     if(!_updating){
         
-        _updating = true;
-        
-        //Grab the assignments in that region
         //One degree of latitude = 69 miles
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
+
+        //Check if the user moves at least a difference greater than 1
+        if(fabsf(radius.floatValue - _operatingRadius.floatValue) > .4){
         
-        if([radius integerValue] < 1000){
-
-            [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    
-                    NSMutableArray *copy;
-                    
-                    if(self.assignments != nil){
-                        
-                        copy = [responseObject mutableCopy];
-                        
-                        [copy removeObjectsInArray:self.assignments];
-                        
-                    }
-                    
-                    if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
-                        
-                        [self setAssignments:responseObject];
-                        
-                        [self populateMapWithAnnotations];
-                    
-                    }
-                    
-                    
-                    _viewingClusters = false;
-                    
-                    _updating = false;
-
-                    
-                }
-                
-            }];
+            self.operatingRadius = radius;
             
-        }
-        else{
-            [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
+            _updating = true;
+            
+            if([radius integerValue] < 500){
+
+                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+                    if (!error) {
+                        
+                        _viewingClusters = false;
+                        
+                        _updating = false;
+                        
+                        NSMutableArray *copy;
+                        
+                        if(self.assignments != nil){
+                            
+                            copy = [responseObject mutableCopy];
+                            
+                            [copy removeObjectsInArray:self.assignments];
+                            
+                        }
+                        
+                        if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
+                            
+                            self.assignments = responseObject;
+                            
+                            [self populateMapWithAnnotations];
+                        
+                        }
+                        
+                    }
                     
-                    _viewingClusters = true;
-                    
-                    [self setClusters:responseObject];
-                    
-                    [self populateMapWithAnnotations];
-                    
-                    _updating = false;
-                    
-                }
+                }];
                 
-            }];
-        
+            }
+            else{
+                
+                [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
+                    if (!error) {
+                        
+                        _updating = false;
+                        
+                        _viewingClusters = true;
+                        
+                        self.clusters = responseObject;
+                    
+                        [self populateMapWithAnnotations];
+                        
+                    }
+                    
+                }];
+            
+            }
+            
         }
         
     }
@@ -218,7 +252,11 @@
                 }
                 
             }
+    
+            self.assignments = nil;
             
+            [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
+
         }
         
         for(FRSCluster *cluster in self.clusters){
@@ -302,6 +340,14 @@
     
 }
 
+- (void)navigateToCurrentAssignment{
+    
+    [self.navigationSheet showInView:self.view];
+    
+    self.navigateTo = NO;
+
+}
+
 /*
 ** Zoom to specified coordinates
 */
@@ -361,7 +407,56 @@
     static NSString *identifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     
-    if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
+    if (annotation == mapView.userLocation){
+        
+
+        static NSString *identifier = @"currentLocation";
+        
+        //If the user has a profile image
+        if([FRSDataManager sharedManager].currentUser.profileImageUrl != nil){
+            
+            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+            
+            if(pinView == nil){
+                
+                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                
+                
+                UIImageView *profileImageView = [[UIImageView alloc]init];
+                profileImageView.frame = CGRectMake(0, 0, 30, 30);
+                profileImageView.layer.masksToBounds = YES;
+                profileImageView.layer.cornerRadius = 27;
+                [profileImageView setImage:[UIImage imageNamed:@"Bitmap"]];
+                
+                [pinView addSubview:profileImageView];
+                
+            }
+            
+            return pinView;
+        
+        
+        }
+        //If the user does not have a profile image
+        else{
+            
+            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+            
+            if(pulsingView == nil) {
+                
+                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                
+                pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
+                
+            }
+            
+            return pulsingView;
+
+        }
+        
+
+    }
+
+    else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
     
@@ -412,6 +507,17 @@
     
     }
 
+    
+    identifier = @"currentLocation";
+    
+    MKAnnotationView *userLocation = (MKAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+    
+    userLocation.image = [UIImage imageNamed:@"user"]; //here we use a nice image instead of the default pins
+    
+
+    return userLocation;
+    
+
     return nil;
 
 }
@@ -420,9 +526,9 @@
     
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
-    [circleView setFillColor:[UIColor colorWithHex:@"e8d2a2" alpha:.3]];
+    [circleView setFillColor:[UIColor colorWithHex:@"#ffc600"]];
     
-    circleView.alpha = .1;
+    circleView.alpha = .26;
     
     return circleView;
     
@@ -430,13 +536,13 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
-    [mapView selectAnnotation:view.annotation animated:YES];
-    
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
         self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
         
         [self updateCurrentAssignmentInView];
+        
+        [mapView selectAnnotation:view.annotation animated:YES];
 
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
@@ -463,23 +569,36 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                      initWithTitle:@"Navigate to the assignment"
-                                      delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      destructiveButtonTitle:nil
-                                      otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
-        
-        
-        // Google Maps
-        actionSheet.tag = 100;
-        
-        [actionSheet showInView:self.view];
+        [self.navigationSheet showInView:self.view];
         
     }
     
 }
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    
+    [self updateAssignments];
+    
+}
+
+- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    NSLog(@"Failed to locate user: %@", error);
+}
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    
+    if(self.currentAssignment == nil){
+        
+        [self zoomToCurrentLocation];
+        
+    }
+    
+    
+}
+
+#pragma mark - Action Sheet Delegate
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
@@ -515,27 +634,5 @@
 
 }
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-    
-    [self updateAssignments];
- 
-}
-
-- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
-{
-    NSLog(@"Failed to locate user: %@", error);
-}
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
-{
-    
-    if(self.currentAssignment == nil){
-        
-        [self zoomToCurrentLocation];
-    
-    }
-
-    
-}
 
 @end

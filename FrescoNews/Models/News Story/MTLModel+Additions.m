@@ -8,7 +8,7 @@
 
 #import "MTLModel+Additions.h"
 #import "FRSTag.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 #import "FRSUser.h"
 #import "FRSGallery.h"
 #import "FRSPost.h"
@@ -23,7 +23,7 @@
 
 + (NSValueTransformer *)sourcesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSTradionalSource class]];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSArticle class]];
 }
 
 + (NSValueTransformer *)postsJSONTransformer
@@ -55,7 +55,7 @@
 + (NSValueTransformer *)dateJSONTransformer
 {
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSNumber *UNIXTimestamp) {
-       return [NSDate dateWithTimeIntervalSince1970:[UNIXTimestamp integerValue]];
+       return [NSDate dateWithTimeIntervalSince1970:[UNIXTimestamp integerValue] / 1000];
 
     } reverseBlock:^NSNumber *(NSDate *date) {
         return [NSNumber numberWithInteger:[date timeIntervalSince1970]];
@@ -123,7 +123,7 @@
 #pragma mark - Image CDN
 
 // makes a URL something like http://res.cloudinary.com/dnd5ngsax/image/fetch/w_375,h_375,c_faces/
-- (NSURL *)cdnImageURLForURLString:(NSString *)url withSize:(CGSize)size transformationString:(NSString *)transformationString
+- (NSURL *)cdnAssetURLForURLString:(NSString *)url withSize:(CGSize)size transformationString:(NSString *)transformationString
 {
     NSString *sizeString;
     if (size.width > 0) {

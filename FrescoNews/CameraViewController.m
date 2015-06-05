@@ -13,6 +13,8 @@
 #import "CTAssetsPickerController.h"
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
+#import "ALAsset+assetType.h"
+#import "FRSDataManager.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -23,8 +25,8 @@ static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
-// iOS 8 - use PHPhotoLibrary?
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate>
+// TODO: Upgrade to PHPhotoLibrary in app version 2.1
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
@@ -37,6 +39,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
+
+// Refactor
+@property (strong, nonatomic) CLLocation *location;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) FRSAssignment *defaultAssignment;
+@property (nonatomic) BOOL withinRangeOfDefaultAssignment;
 
 // Session management
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -51,9 +63,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
-@property (weak, nonatomic) IBOutlet UIView *eventView;
-@property (weak, nonatomic) IBOutlet UILabel *eventViewVariableLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventViewWidthConstraint;
 
 @end
 
@@ -144,16 +153,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
-    
-    // Set fake data for eventView
-    //self.eventViewVariableLabel.text = @"Apartment Fire on Duncan St NE";
-    
-    // Set eventView layout styles
-    self.eventView.layer.cornerRadius = 2;
-    self.eventViewWidthConstraint.constant = self.eventViewVariableLabel.intrinsicContentSize.width + 44;
 
-    self.doneButtonBackground.layer.cornerRadius = 4;
     [self updateRecentPhotoView];
+    [self configureAssignmentLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -177,6 +179,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }]];
         [[self session] startRunning];
     });
+
+    // TODO: Confirm permissions
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -192,6 +200,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
         [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
     });
+
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -201,8 +211,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)shouldAutorotate
 {
-    // Disable autorotation of the interface when recording is in progress.
-    return ![self lockInterfaceRotation];
+    // Disable autorotation when no access to camera or when recording is in progress
+    return self.isDeviceAuthorized && ![self lockInterfaceRotation];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.isDeviceAuthorized ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -324,7 +339,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
-                                                                    metadata:[((AppDelegate *)[UIApplication sharedApplication].delegate).location EXIFMetadata]
+                                                                    metadata:[self.location EXIFMetadata]
                                                              completionBlock:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideUIForCameraMode:CameraModePhoto];
@@ -538,19 +553,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
         if (granted) {
-            //Granted access to mediaType
-            [self setDeviceAuthorized:YES];
+            self.deviceAuthorized = YES;
+            self.pleaseRotateLabel.text = @"Please rotate your phone";
+            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
         }
         else {
-            //Not granted access to mediaType
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[[UIAlertView alloc] initWithTitle:@"AVCam!"
-                                            message:@"AVCam doesn't have permission to use Camera, please change privacy settings"
-                                           delegate:self
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil] show];
-                [self setDeviceAuthorized:NO];
-            });
+            self.deviceAuthorized = NO;
+            self.pleaseRotateLabel.text = @"No permission to use the camera";
+            self.pleaseDisableLabel.text = @"Please change your privacy settings";
         }
     }];
 }
@@ -582,27 +592,49 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
-    
+
     // Grab the most recent image from the photo library
     ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
                                  usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
                                      if (group) {
                                          [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
                                              if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 ALAssetRepresentation *repr = [asset defaultRepresentation];
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[repr fullResolutionImage]] forState:UIControlStateNormal];
-                                                 *stop = YES;
+                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
+                                                 *innerStop = YES;
                                              }
                                          }];
                                      }
-                                     
-                                     *stop = NO;
                                  }
                                failureBlock:^(NSError *error) {
                                    NSLog(@"error: %@", error);
                                }];
+}
+
+- (void)configureAssignmentLabel
+{
+    NSString *assignmentString = self.defaultAssignment.title;
+    NSString *space = @"  "; // lame
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
+    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                    range:(NSRange){14, [string length] - 14}];
+    self.assignmentLabel.attributedText = string;
+
+    CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
+    self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
+
+    if (self.withinRangeOfDefaultAssignment) {
+        self.assignmentLabel.hidden = NO;
+    }
+
+    [UIView animateWithDuration:0.5 animations:^{
+        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 0.75 : 0.0;
+    } completion:^(BOOL finished) {
+        if (!self.withinRangeOfDefaultAssignment) {
+            self.assignmentLabel.hidden = YES;
+        }
+    }];
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
@@ -612,23 +644,26 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self cancel];
 }
 
-- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
-{
-    // TODO: Use or remove
-    // Take the user to the "create a post" screen
-}
-
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
-    return picker.selectedAssets.count < 5;
+    return picker.selectedAssets.count < 10;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    NSString *mimeType = [asset mimeType];
+    if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
+        return NO;
+    }
+
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
-    if (![asset valueForProperty:ALAssetPropertyLocation]) {
+    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+        // TOOO: Add location metadata to in-app recorded video
+        return YES;
+    }
+    else if (![asset valueForProperty:ALAssetPropertyLocation]) {
         return NO;
     }
 
@@ -639,11 +674,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
 {
-    // TODO: Disable video clip if too long?
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-//        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-//        return lround(duration) <= 60;
-        return YES;
+        NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+        // TODO: Direct the user to edit the video for time
+        return lround(duration) <= 60;
     }
 
     return YES;
@@ -659,6 +693,43 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // Do not show empty albums
     return group.numberOfAssets > 0;
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+
+    static dispatch_once_t onceToken;   
+    dispatch_once(&onceToken, ^{
+        [self configureDefaultAssignment];
+    });
+
+    [self configureAssignmentLabel];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+
+- (void)configureDefaultAssignment
+{
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.defaultAssignment = [responseObject firstObject];
+        self.defaultAssignment.locationObject = [[CLLocation alloc] initWithLatitude:[self.defaultAssignment.lat floatValue]
+                                                                           longitude:[self.defaultAssignment.lon floatValue]];
+    }];
 }
 
 @end

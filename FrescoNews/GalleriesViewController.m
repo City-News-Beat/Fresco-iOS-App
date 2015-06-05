@@ -17,13 +17,13 @@
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "GalleryView.h"
+#import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "UIView+Additions.h"
-#import <UIScrollView+SVPullToRefresh.h>
-#import <UIScrollView+SVInfiniteScrolling.h>
-
 
 @interface GalleriesViewController()
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -58,50 +58,25 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     
-    //Pull to refresh handler
-    [self.tableView addPullToRefreshWithActionHandler:^{
-        // prepend data to dataSource, insert cells at top of table view
-        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
-        
-        [self.tableView.pullToRefreshView stopAnimating];
-    }];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl setTintColor:[UIColor blackColor]];
+    [self.tableView addSubview:self.refreshControl];
     
-    //Endless scroll handler
-    [self.tableView addInfiniteScrollingWithActionHandler:^{
-        // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
-        
-        _isRunning = true;
-        
-        //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    
-                    [self.galleries addObjectsFromArray:responseObject];
-                    
-                    [self refresh];
-                    
-                    _isRunning = false;
-                    
-                }
-            }
-            [[self tableView] reloadData];
-        }];
-
-        [self.tableView.infiniteScrollingView stopAnimating];
-        
-    }];
     
 }
 
 - (void)refresh
 {
+    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+    
+    [self.refreshControl endRefreshing];
+    
     [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -146,14 +121,25 @@
     return galleryHeader;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryView setGallery:cell.gallery];
+    
+    [self.navigationController pushViewController:galleryView animated:YES];
+
+
+}
+
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    float scrollViewHeight = scrollView.frame.size.height;
-    float scrollOffset = scrollView.contentOffset.y;
-    
-
     
     /*
     ** Video Conditioning
@@ -195,11 +181,12 @@
                     [cell.galleryView.sharedLayer removeFromSuperlayer];
                     
                     cell.galleryView.sharedPlayer = nil;
-                    
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:firstPost.mediaURLString]];
+
+                    // TODO: Check for missing/corrupt media at firstPost.mediaURL
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.mediaURL];
                     
                     [cell.galleryView.sharedPlayer setMuted:YES];
-                    
+
                     cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
                     
                     cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;

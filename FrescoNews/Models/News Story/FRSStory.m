@@ -9,22 +9,22 @@
 #import "FRSStory.h"
 #import "MTLModel+Additions.h"
 #import "FRSUser.h"
-#import "FRSTradionalSource.h"
+#import "FRSArticle.h"
 
 @implementation FRSStory
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"storyID": @"story_id",
+             @"storyID": @"_id",
              @"caption" : @"caption",
              @"title" : @"title",
              @"byline" : @"byline",
-             @"date" : @"timestamp",
+             @"date" : @"time_created",
              @"tags" : @"tags",
              @"galleries" : @"galleries",
-             @"articles" : @"articles"
-            // @"user" : @"user"
+             @"articleIds" : @"articles",
+             @"curator" : @"curator"
              };
 }
 

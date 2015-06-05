@@ -33,5 +33,6 @@
 
 - (BOOL)isPhoto;
 - (BOOL)isVideo;
+- (NSString *)mimeType;
 
 @end

@@ -20,26 +20,30 @@
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
+#import "CrossPostButton.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "UIImage+ALAsset.h"
+#import "ALAsset+assetType.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
-
-// TODO: "currentAssignment" and "assignments" redundant with AssignmentsViewController?
-@property (strong, nonatomic) FRSAssignment *currentAssignment;
-@property (strong, nonatomic) NSArray *assignments;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
+
+// Refactor
+@property (strong, nonatomic) FRSAssignment *defaultAssignment;
+@property (strong, nonatomic) NSArray *assignments;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation GalleryPostViewController
@@ -51,17 +55,11 @@
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
 
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:((AppDelegate *)[UIApplication sharedApplication].delegate).location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        self.assignments = responseObject;
-        self.currentAssignment = [self.assignments firstObject];
-
-        if (self.currentAssignment) {
-            self.assignmentViewHeightConstraint.constant = 40;
-        }
-        else {
-            self.assignmentViewHeightConstraint.constant = 0;
-        }
-    }];
+    // TODO: Confirm permissions
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
 
     self.captionTextView.delegate = self;
     self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
@@ -107,6 +105,7 @@
     self.uploadProgressView.hidden = !upload;
     self.view.userInteractionEnabled = !upload;
     self.navigationController.navigationBar.userInteractionEnabled = !upload;
+    self.navigationController.toolbar.userInteractionEnabled = !upload;
 }
 
 - (void)returnToTabBar
@@ -119,9 +118,10 @@
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (IBAction)twitterButtonTapped:(UIButton *)button
+- (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
-    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
                                                         message:@"Go to Profile to link your Fresco account to Twitter"
                                                        delegate:nil
@@ -131,23 +131,22 @@
         return;
     }
 
-    button.selected = !button.selected;
-    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"twitterButtonSelected"];
+    button.selected = !button.isSelected;
+    [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
 }
 
-- (void)crossPostToTwitter
+- (void)crossPostToTwitter:(NSString *)string
 {
     if (!self.twitterButton.selected) {
         return;
     }
 
-    NSString *bodyString = @"status=this is a test with spaces";
-    bodyString = [bodyString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    string = [NSString stringWithFormat:@"status=%@", string];
     NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
     NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     tweetRequest.HTTPMethod = @"POST";
-    tweetRequest.HTTPBody = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
     [[PFTwitterUtils twitter] signRequest:tweetRequest];
 
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
@@ -160,9 +159,10 @@
     }];
 }
 
-- (IBAction)facebookButtonTapped:(UIButton *)button
+- (IBAction)facebookButtonTapped:(CrossPostButton *)button
 {
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
                                                         message:@"Go to Profile to link your Fresco account to Facebook"
                                                        delegate:nil
@@ -172,25 +172,25 @@
         return;
     }
 
-    button.selected = !button.selected;
+    button.selected = !button.isSelected;
     [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
-- (void)crossPostToFacebook
+- (void)crossPostToFacebook:(NSString *)string
 {
     if (!self.facebookButton.selected) {
         return;
     }
 
-    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+    if (YES /* TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] */) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
-                                           parameters: @{@"message" : @"hello world"}
+                                           parameters: @{@"message" : string}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             if (error) {
                 NSLog(@"Error crossposting to Facebook");
             }
             else {
-                NSLog(@"Success crossposting to Facebook: Post id:%@", result[@"id"]);
+                NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
             }
         }];
     }
@@ -198,7 +198,7 @@
 
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
-    if (self.currentAssignment) {
+    if (self.defaultAssignment) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
                                                         message:@"Are you sure you want remove this assignment?"
                                                        delegate:self
@@ -207,16 +207,13 @@
                         
         [alert show];
     }
-    else {
-        self.currentAssignment = [self.assignments firstObject];
-    }
 }
 
-- (void)setCurrentAssignment:(FRSAssignment *)currentAssignment
+- (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
-    _currentAssignment = currentAssignment;
-    if (currentAssignment) {
-        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", currentAssignment.title]];
+    _defaultAssignment = defaultAssignment;
+    if (defaultAssignment) {
+        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", defaultAssignment.title]];
         [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
                              range:(NSRange){10, [titleString length] - 10}];
         self.assignmentLabel.attributedText = titleString;
@@ -283,8 +280,9 @@
                                                          error:&error];
 
     NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
-                                  @"caption" : self.captionTextView.text,
-                                  @"posts" : jsonData };
+                                  @"caption" : self.captionTextView.text ?: [NSNull null],
+                                  @"posts" : jsonData,
+                                  @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
 
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
@@ -293,11 +291,26 @@
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSLog(@"filename: %@" , filename);
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
+            NSData *data;
+            NSString *mimeType;
+
+            if (post.image.asset.isVideo) {
+                // TODO: Support for larger video files (longer than 60 seconds)
+                ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
+                UInt8 *buffer = (UInt8 *)malloc(representation.size);
+                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:representation.size error:nil];
+                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                mimeType = @"video/mp4";
+            }
+            else {
+                data = UIImageJPEGRepresentation([UIImage imageFromAsset:post.image.asset], 1.0);
+                mimeType = @"image/jpeg";
+            }
+
+            [formData appendPartWithFileData:data
                                         name:filename
                                     fileName:filename
-                                    mimeType:@"image/jpeg"];
+                                    mimeType:mimeType];
             count++;
         }
     } error:nil];
@@ -322,9 +335,9 @@
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
-            // TODO: Post link to Web page: /post/[id]
-            [self crossPostToTwitter];
-            [self crossPostToFacebook];
+            NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
+            [self crossPostToTwitter:crossPostString];
+            [self crossPostToFacebook:crossPostString];
 
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
@@ -358,7 +371,7 @@
 {
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
         NSProgress *progress = (NSProgress *)object;
-        NSLog(@"Progress... %f", progress.fractionCompleted);
+        // NSLog(@"Progress... %f", progress.fractionCompleted);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showUploadProgress:progress.fractionCompleted];
         });
@@ -419,12 +432,37 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        self.currentAssignment = nil;
+        self.defaultAssignment = nil;
         [UIView animateWithDuration:0.25 animations:^{
             self.assignmentViewHeightConstraint.constant = 0;
+            self.assignmentView.hidden = YES;
             [self.view layoutIfNeeded];
         }];
     }
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *location = [locations lastObject];
+    [self.locationManager stopUpdatingLocation];
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.assignments = responseObject;
+        self.defaultAssignment = [self.assignments firstObject];
+
+        if (self.defaultAssignment) {
+            self.assignmentViewHeightConstraint.constant = 40;
+        }
+        else {
+            self.assignmentViewHeightConstraint.constant = 0;
+        }
+    }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [self.locationManager stopUpdatingLocation];
 }
 
 @end

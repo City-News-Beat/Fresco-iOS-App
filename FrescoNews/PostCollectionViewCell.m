@@ -7,10 +7,10 @@
 //
 
 #import <AFNetworking/UIImageView+AFNetworking.h>
-
 #import "PostCollectionViewCell.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "UIImage+ALAsset.h"
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
@@ -41,7 +41,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     }
     else {
         // local
-        self.imageView.image = post.image.image;
+        self.imageView.image = [UIImage imageFromAsset:post.image.asset];
     }
 }
 

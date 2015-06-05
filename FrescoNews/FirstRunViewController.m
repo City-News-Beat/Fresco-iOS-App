@@ -13,7 +13,6 @@
 
 #import "FirstRunViewController.h"
 #import "FRSDataManager.h"
-#import "AppDelegate.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
@@ -43,7 +42,6 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -99,7 +97,16 @@
 - (IBAction)loginButtonAction:(id)sender {
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            FRSUser *frsUser = [FRSDataManager sharedManager].currentUser;
+            
+            // make sure first and last name are set
+            if (!([frsUser.first length] && [frsUser.last length])) {
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            }
+            else {
+                [self.view endEditing:YES];
+                [self navigateToMainApp];
+            }
         }
         else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
@@ -115,7 +122,7 @@
     [[FRSDataManager sharedManager] signupUser:self.emailField.text
                                               email:self.emailField.text
                                            password:self.passwordField.text
-                                              block:^(BOOL succeeded, NSError * __nullable error) {
+                                              block:^(BOOL succeeded, NSError *error) {
                                                   if (!error)
                                                       [self performSegueWithIdentifier:@"showSignUp" sender:self];
                                                   else {
@@ -149,7 +156,10 @@
 {
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Facebook login error: %@", error);
@@ -160,7 +170,10 @@
 - (IBAction)twitterLogin:(id)sender {
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Twitter login error: %@", error);

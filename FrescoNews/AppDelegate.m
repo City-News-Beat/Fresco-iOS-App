@@ -20,18 +20,11 @@
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
 
-//Notification Categories
-
-static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY";
-
-//Notification Actions
-
-static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
+static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
+static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
 @interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
-
-@property (strong, nonatomic) CLLocationManager *locationManager;
-
+@property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
 @end
 
 @implementation AppDelegate
@@ -79,6 +72,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     
+    
     //[self setupFacebookAndParse];
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
@@ -98,6 +92,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     
     // this is where we determine whether to run the firstRun sequence
     [self loadInitialViewController];
+    
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+    }
     
     return YES;
 }
@@ -195,9 +193,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 - (void)setupTabBarAppearances
 {
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
+
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
     
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
@@ -268,7 +264,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    self.location = [locations lastObject];
+    CLLocation *location = [locations lastObject];
 
     if (![FRSDataManager sharedManager].currentUser.userID) {
         [self.locationManager stopMonitoringSignificantLocationChanges];
@@ -277,8 +273,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
     AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                 @"lat" : @(self.location.coordinate.latitude),
-                                 @"lon" : @(self.location.coordinate.longitude)};
+                                 @"lat" : @(location.coordinate.latitude),
+                                 @"lon" : @(location.coordinate.longitude)};
     [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
                 parameters:parameters
                    success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -286,30 +282,11 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-
-    // Set to YES to test monitoring of significant location changes even when the app is not running; also see didFinishLaunchingWithOptions above
-    if (/* DISABLES CODE */ (NO)) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = [self.location description];
-        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-        notification.timeZone = [NSTimeZone defaultTimeZone];
-        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
-    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        // TODO: Only if the app is running in the foreground
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
-                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [self.locationManager stopMonitoringSignificantLocationChanges];
-    }
+    [self.locationManager stopMonitoringSignificantLocationChanges];
 }
 
 #pragma mark - UITabBarControllerDelegate methods
@@ -332,7 +309,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
     
     [PFPush handlePush:userInfo];
-    
     
     //Breaking News
     if([userInfo[@"type"] isEqualToString:@"breaking"]){
@@ -363,11 +339,15 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
             
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
+                    
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                    [tabBarController setSelectedIndex:3];
+
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    assignmentVC.currentAssignment = responseObject;
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
+                    
+                    [tabBarController setSelectedIndex:3];
+                    
                 }
             }];
         }
@@ -380,20 +360,26 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER";
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
 {
+    
     /*
-    ** Check the identifier for the type of notifcaiton
+    ** Check the identifier for the type of notification
     */
+    
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an id
         if (notification[@"assignment_id"]) {
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
+                    
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                    [tabBarController setSelectedIndex:3];
+
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    assignmentVC.currentAssignment = responseObject;
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                    
+                    [tabBarController setSelectedIndex:3];
+                    
                 }
             }];
         }
