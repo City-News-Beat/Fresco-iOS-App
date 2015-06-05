@@ -341,7 +341,7 @@
 
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
-                                                                           message:nil
+                                                                           message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
                                                                     preferredStyle:UIAlertControllerStyleAlert];
 
             [alert addAction:[UIAlertAction actionWithTitle:@"OK"
