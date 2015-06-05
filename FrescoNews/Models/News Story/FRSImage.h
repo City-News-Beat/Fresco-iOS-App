@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSNumber *latitude;
 @property (strong, nonatomic) NSNumber *longitude;
 
-- (NSURL *)cdnImageURL;
-- (NSURL *)cdnImageInListURL;
+- (NSURL *)cdnAssetURL;
+- (NSURL *)cdnAssetInListURL;
 
 @end
