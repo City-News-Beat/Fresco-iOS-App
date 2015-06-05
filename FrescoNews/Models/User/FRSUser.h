@@ -14,6 +14,7 @@
 @property (nonatomic, copy) NSString *first;
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *profileImageUrl;
 
 - (NSString *)displayName;
 - (NSString *)asJSONString;

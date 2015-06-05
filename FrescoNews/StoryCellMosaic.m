@@ -126,6 +126,7 @@ static CGFloat const kInterImageGap = 1.0f;
             y += kImageHeight + kInterImageGap;
             
             self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
+            [self updateConstraints];
 
             x = 0.0f;
             
