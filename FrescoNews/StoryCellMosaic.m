@@ -33,7 +33,6 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)awakeFromNib
 {
     self.constraintHeight.constant = kImageHeight;
-    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
 
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
@@ -47,7 +46,10 @@ static CGFloat const kInterImageGap = 1.0f;
 
     for (FRSGallery *gallery in self.story.galleries) {
         for (FRSPost *post in gallery.posts) {
-            [tempArray addObject:post.image];
+            // this finds cleaner data
+            if (post && post.image && post.image.height && post.image.width) {
+                [tempArray addObject:post.image];
+            }
         }
     }
     [self shuffle:tempArray];
@@ -116,8 +118,9 @@ static CGFloat const kInterImageGap = 1.0f;
         if (x > self.frame.size.width) {
             ++rows;
             y += kImageHeight + kInterImageGap;
+            
             self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
-            [self updateConstraints];
+
             x = 0.0f;
             
             // we almost always want to redo this image on the next row
@@ -129,6 +132,9 @@ static CGFloat const kInterImageGap = 1.0f;
         
         ++i;
     }
+    [self updateConstraints];
+    [self layoutIfNeeded];
+
 }
 
 - (void)setupTapHandlingForThumbnail:(StoryThumbnailView *)thumbnailView
@@ -154,7 +160,6 @@ static CGFloat const kInterImageGap = 1.0f;
         if ([v isKindOfClass:[StoryThumbnailView class]])
             [v removeFromSuperview];
     }
-    self.constraintHeight.constant = kImageHeight;
-    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
+    self.imageArray = nil;
 }
 @end
