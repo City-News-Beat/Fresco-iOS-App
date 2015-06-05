@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSNumber *latitude;
 @property (strong, nonatomic) NSNumber *longitude;
 
+- (NSURL *)cdnAssetURLWithSize:(CGSize)size;
 - (NSURL *)cdnAssetURL;
 - (NSURL *)cdnAssetInListURL;
 

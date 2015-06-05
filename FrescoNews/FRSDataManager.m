@@ -11,7 +11,7 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
-
+#import "FRSStory.h"
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoUserData @"frescoUserData"
 
@@ -166,7 +166,6 @@
     }];
 }
 
-#warning Check for retain cycles
 - (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
 {
     // user is logged into parse
@@ -295,16 +294,17 @@
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    
-    NSString *path = @"http://monorail.theburgg.com/fresco/stories.php?type=stories";
-    
+    NSString *path = @"/story/highlights";
+    NSDictionary *params = @{@"limit" : @"10", @"notags" : @"true"};
+
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        NSArray *stories = [responseObject map:^id(id obj) {
+        NSArray *stories = [[responseObject objectForKey:@"data" ] map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
         }];
+
         if(responseBlock)
             responseBlock(stories, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {

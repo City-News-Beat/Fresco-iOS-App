@@ -38,8 +38,10 @@
         // because the image data is spread over different levels of the hierarchy
         // we need to touch it up after the object is loaded
         if (self.image) {
-            self.image.width = self.mediaWidth;
-            self.image.height = self.mediaHeight;
+            if ([self.mediaWidth isKindOfClass:[NSNumber class]]) {
+                self.image.width = self.mediaWidth ?: [NSNumber numberWithFloat:800.0f];
+                self.image.height = self.mediaHeight ?: [NSNumber numberWithFloat:600.0f];
+            }
         }
     }
     return self;
