@@ -64,12 +64,10 @@
     return [_type isEqualToString:@"video"] ? YES : NO;
 }
 
-
-
 - (NSURL *)largeImageURL
 {
-    return [self.image cdnImageInListURL];
-    //return [self.largeImage cdnImageInListURL];
+    return [self.image cdnAssetInListURL];
+    //return [self.largeImage cdnAssetInListURL];
 }
 
 @end

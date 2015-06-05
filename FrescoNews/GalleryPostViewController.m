@@ -21,6 +21,9 @@
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "UIImage+ALAsset.h"
+#import "ALAsset+assetType.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -102,6 +105,7 @@
     self.uploadProgressView.hidden = !upload;
     self.view.userInteractionEnabled = !upload;
     self.navigationController.navigationBar.userInteractionEnabled = !upload;
+    self.navigationController.toolbar.userInteractionEnabled = !upload;
 }
 
 - (void)returnToTabBar
@@ -287,13 +291,26 @@
         NSInteger count = 0;
         for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSLog(@"filename: %@" , filename);
-            // TODO: Video support
-            // TODO: Investigate "Connection to assetsd was interrupted or assetsd died"
-            [formData appendPartWithFileData:UIImageJPEGRepresentation(post.image.image, 1.0)
+            NSData *data;
+            NSString *mimeType;
+
+            if (post.image.asset.isVideo) {
+                // TODO: Support for larger video files (longer than 60 seconds)
+                ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
+                UInt8 *buffer = (UInt8 *)malloc(representation.size);
+                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:representation.size error:nil];
+                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                mimeType = @"video/mp4";
+            }
+            else {
+                data = UIImageJPEGRepresentation([UIImage imageFromAsset:post.image.asset], 1.0);
+                mimeType = @"image/jpeg";
+            }
+
+            [formData appendPartWithFileData:data
                                         name:filename
                                     fileName:filename
-                                    mimeType:@"image/jpeg"];
+                                    mimeType:mimeType];
             count++;
         }
     } error:nil];
