@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@import Parse;
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 #import "FirstRunViewController.h"

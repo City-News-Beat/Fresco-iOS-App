@@ -6,8 +6,8 @@
 //
 
 #import "CameraViewController.h"
-#import <AVFoundation/AVFoundation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AVFoundation;
+@import AssetsLibrary;
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"

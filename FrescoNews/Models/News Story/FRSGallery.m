@@ -13,8 +13,8 @@
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <CoreLocation/CoreLocation.h>
+@import AssetsLibrary;
+@import CoreLocation;
 
 @implementation FRSGallery
 

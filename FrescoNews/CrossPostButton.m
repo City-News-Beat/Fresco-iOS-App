@@ -7,7 +7,7 @@
 //
 
 #import "CrosspostButton.h"
-#import <Parse/Parse.h>
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @implementation CrossPostButton

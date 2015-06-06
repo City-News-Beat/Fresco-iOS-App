@@ -7,10 +7,10 @@
 //
 
 @import Foundation;
-#import <CoreLocation/CoreLocation.h>
+@import CoreLocation;
 
 #import <AFNetworking/AFNetworking.h>
-#import <Parse/Parse.h>
+@import Parse;
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"

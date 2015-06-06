@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <CoreLocation/CoreLocation.h>
+@import CoreLocation;
 
 @interface CLLocation (EXIFGPS)
 

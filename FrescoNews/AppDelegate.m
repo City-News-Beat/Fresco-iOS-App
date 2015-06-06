@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <CoreLocation/CoreLocation.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <Parse/Parse.h>
+@import CoreLocation;
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"

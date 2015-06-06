@@ -26,8 +26,8 @@
  */
 
 
-#import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+@import UIKit;
+@import AssetsLibrary;
 #import "BaseNavigationController.h"
 
 

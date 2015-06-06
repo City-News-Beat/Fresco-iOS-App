@@ -8,7 +8,7 @@
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "FRSBaseViewController.h"
 
 @class FRSUser;

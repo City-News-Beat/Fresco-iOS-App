@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
 #import "ProfileViewController.h"
 #import "GalleriesViewController.h"
 #import "FRSDataManager.h"

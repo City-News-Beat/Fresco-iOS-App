@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <WatchKit/WatchKit.h>
+@import Foundation;
+@import WatchKit;
 
 @interface FRSStoryRowController : NSObject
 
