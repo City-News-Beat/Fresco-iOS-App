@@ -119,7 +119,13 @@
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    [[FRSDataManager sharedManager] signupUser:self.emailField.text
+    if ([self.emailField.text length] == 0 || [self.passwordField.text length] == 0) {
+        [self performSegueWithIdentifier:@"showInitialSignUp" sender:self];
+        return;
+    }
+    else {
+    
+        [[FRSDataManager sharedManager] signupUser:self.emailField.text
                                               email:self.emailField.text
                                            password:self.passwordField.text
                                               block:^(BOOL succeeded, NSError *error) {
@@ -138,6 +144,7 @@
                                                   }
                                                   
                                               }];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -147,7 +154,7 @@
     } else if (textField == self.passwordField) {
         //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         //[self.loginButtonAction:sender];
-        [self.loginButton resignFirstResponder];
+        [self.passwordField resignFirstResponder];
     }
     return YES;
 }
@@ -190,6 +197,19 @@
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"showSignUp"]) {
     }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
+        [self.emailField resignFirstResponder];
+    }
+    
+    if ([self.passwordField isFirstResponder] && [touch view] != self.passwordField) {
+        [self.passwordField resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
 }
 
 @end
