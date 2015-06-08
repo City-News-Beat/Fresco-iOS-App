@@ -29,70 +29,22 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    [self setupLocationManager];
-
-    
-    // Register for Push Notitications
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
-                                                    UIUserNotificationTypeBadge |
-                                                    UIUserNotificationTypeSound);
-    
-    
-    //Set up action for navigate
-    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init];
-    
-    // Define an ID string to be passed back to your app when you handle the action
-    navigateAction.identifier = navigateIdentifier;
-    // Localized string displayed in the action button
-    navigateAction.title = @"Navigate";
-    // If you need to show UI, choose foreground
-    navigateAction.activationMode = UIUserNotificationActivationModeBackground;
-    // Destructive actions display in red
-    navigateAction.destructive = NO;
-    // Set whether the action requires the user to authenticate
-    navigateAction.authenticationRequired = NO;
-    
-    
-    // First create the category
-    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
-    // Identifier to include in your push payload and local notification
-    assignmentCategory.identifier = assignmentIdentifier;
-    // Add the actions to the category and set the action context
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
-    // Set the actions to present in a minimal context
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
-    
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
-                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
-    
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    
-    
-    //[self setupFacebookAndParse];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     [[AFNetworkActivityLogger sharedLogger] startLogging];
-    
-    // Parse Initialization
-    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
-                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
-    // Facebook
-    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    
-    // Twitter
-    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
-                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
-    
+    [self configureParseWithLaunchOptions:launchOptions];
     [self setupAppearances];
-    
-    // this is where we determine whether to run the firstRun sequence
-    [self loadInitialViewController];
-    
+
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [self setupLocationManager];
+        [self registerForPushNotifications];
+        [self setRootViewControllerToTabBar];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+        [self setRootViewControllerToFirstRun];
+    }
+
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
@@ -101,18 +53,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 }
 
 #pragma mark - Root View Controllers
-
-// because the app might launch into First Run mode
-// or regular (tab interface) we need to dynamically swap
-// root view controllers
-- (void)loadInitialViewController
-{
-    if ([[FRSDataManager sharedManager] login])
-        [self setRootViewControllerToTabBar];
-    else {
-        [self setRootViewControllerToFirstRun];
-    }
-}
 
 - (void)setRootViewControllerToTabBar
 {
@@ -246,6 +186,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [UIBarButtonItem appearance].tintColor = [UIColor colorWithHex:@"76541E"];
 }
 
+#pragma mark - Miscellaneous Configuration
+
 - (void)setupLocationManager
 {
     if (![CLLocationManager locationServicesEnabled]) {
@@ -258,6 +200,39 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager requestAlwaysAuthorization];
     [self.locationManager startMonitoringSignificantLocationChanges];
+}
+
+- (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
+{
+    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
+                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
+                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
+}
+
+- (void)registerForPushNotifications
+{
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init]; // Set up action for navigate
+    navigateAction.identifier = navigateIdentifier; // Define an ID string to be passed back to your app when you handle the action
+    navigateAction.title = @"Navigate";
+    navigateAction.activationMode = UIUserNotificationActivationModeBackground; // If you need to show UI, choose foreground
+    navigateAction.destructive = NO; // Destructive actions display in red
+    navigateAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
+    assignmentCategory.identifier = assignmentIdentifier; // Identifier to include in your push payload and local notification
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
+
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 }
 
 #pragma mark - Location Delegate Methods

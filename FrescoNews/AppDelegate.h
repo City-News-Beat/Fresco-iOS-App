@@ -8,14 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class CLLocation;
-
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
+- (void)setupLocationManager;
+- (void)registerForPushNotifications;
 
 @end
-
