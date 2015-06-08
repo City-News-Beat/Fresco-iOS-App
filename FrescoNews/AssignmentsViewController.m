@@ -588,14 +588,9 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    
-    if(self.currentAssignment == nil){
-        
+    if(self.currentAssignment == nil) {
         [self zoomToCurrentLocation];
-        
     }
-    
-    
 }
 
 #pragma mark - Action Sheet Delegate

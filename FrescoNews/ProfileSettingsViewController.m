@@ -6,11 +6,14 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
+
+#import "MKMapView+LegalLabel.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 
-@interface ProfileSettingsViewController ()
+@interface ProfileSettingsViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 
@@ -25,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
+@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @end
 
 @implementation ProfileSettingsViewController
@@ -161,6 +165,40 @@
 {
     [[FRSDataManager sharedManager] logout];
     [self navigateToMainApp];
+}
+
+- (IBAction)sliderValueChanged:(UISlider *)slider
+{
+    CGFloat roundedValue = [self roundedValueForSlider:slider];
+    
+    NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+    
+    NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
+    
+    // only update changes
+    if (![self.radiusStepperLabel.text isEqualToString:newValue])
+        self.radiusStepperLabel.text = newValue;
+}
+
+- (IBAction)sliderTouchUpInside:(UISlider *)slider {
+    self.radiusStepper.value = [self roundedValueForSlider:slider];
+}
+
+- (CGFloat)roundedValueForSlider:(UISlider *)slider
+{
+    CGFloat roundedValue;
+    if (slider.value < 10)
+        roundedValue = (int)slider.value;
+    else
+        roundedValue = ((int)slider.value / 10) * 10;
+    
+    return roundedValue;
+}
+
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    [mapView zoomToCurrentLocation];
 }
 
 @end

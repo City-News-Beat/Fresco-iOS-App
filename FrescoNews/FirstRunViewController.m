@@ -142,7 +142,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if(textField == self.emailField) {
+    if (textField == self.emailField) {
         [self.passwordField becomeFirstResponder];
     } else if (textField == self.passwordField) {
         //[MBProgressHUD showHUDAddedTo:self.view animated:YES];

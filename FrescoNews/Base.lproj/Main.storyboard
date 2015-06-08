@@ -2392,17 +2392,21 @@
                                                 <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                     <rect key="frame" x="0.0" y="358" width="374" height="215"/>
                                                 </variation>
+                                                <connections>
+                                                    <outlet property="delegate" destination="fkO-PC-iRn" id="d12-nP-NpT"/>
+                                                </connections>
                                             </mapView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CxU-na-Xtd">
                                                 <rect key="frame" x="0.0" y="541" width="375" height="58"/>
                                                 <subviews>
-                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="U9s-rE-jxC">
+                                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="U9s-rE-jxC">
                                                         <rect key="frame" x="15" y="14" width="274" height="31"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="15" y="14" width="269" height="31"/>
                                                         </variation>
                                                         <connections>
-                                                            <action selector="valueChanged:" destination="fkO-PC-iRn" eventType="valueChanged" id="FaB-NG-RhI"/>
+                                                            <action selector="sliderTouchUpInside:" destination="fkO-PC-iRn" eventType="touchUpInside" id="IFz-IT-Nai"/>
+                                                            <action selector="sliderValueChanged:" destination="fkO-PC-iRn" eventType="valueChanged" id="3VJ-Ev-ZaH"/>
                                                         </connections>
                                                     </slider>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 miles" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bcm-cw-UW6">
@@ -2684,6 +2688,7 @@
                     <connections>
                         <outlet property="connectFacebookButton" destination="bbh-OR-5Lb" id="BNX-La-u9e"/>
                         <outlet property="connectTwitterButton" destination="UCq-t6-lmB" id="eF5-W9-fTU"/>
+                        <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
                         <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
                         <outlet property="radiusStepperLabel" destination="Bcm-cw-UW6" id="ncR-tA-4na"/>
                         <outlet property="scrollView" destination="xHX-Av-OJh" id="ieX-b7-EzZ"/>
@@ -4029,7 +4034,7 @@
                                     <action selector="actionDone:" destination="RUL-6b-83L" eventType="touchUpInside" id="8Ke-wu-geX"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-tF-KOl">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-tF-KOl">
                                 <rect key="frame" x="0.0" y="239" width="375" height="215"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="215" id="dfD-qb-auh"/>
@@ -4043,12 +4048,18 @@
                                 <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                     <rect key="frame" x="0.0" y="145" width="130" height="75"/>
                                 </variation>
+                                <connections>
+                                    <outlet property="delegate" destination="RUL-6b-83L" id="Ouh-Ft-2E5"/>
+                                </connections>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h6s-lZ-yZI">
                                 <rect key="frame" x="0.0" y="454" width="375" height="58"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="oZ3-Qq-mIR">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="500" minValue="0.0" maxValue="2000" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ3-Qq-mIR">
                                         <rect key="frame" x="15" y="14" width="249" height="31"/>
+                                        <connections>
+                                            <action selector="sliderValueChanged:" destination="RUL-6b-83L" eventType="valueChanged" id="qsf-da-I23"/>
+                                        </connections>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 miles" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knO-Du-1YV">
                                         <rect key="frame" x="312" y="18" width="55" height="21"/>
@@ -4132,6 +4143,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="VMV-t7-Jqf"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="labelRadius" destination="knO-Du-1YV" id="MH9-eZ-fyv"/>
+                        <outlet property="mapviewRadiusMap" destination="Kpl-tF-KOl" id="fTe-nf-tEx"/>
+                        <outlet property="sliderRadius" destination="oZ3-Qq-mIR" id="9G2-ge-sh3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jma-gk-3Ha" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
