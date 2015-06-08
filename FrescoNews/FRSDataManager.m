@@ -7,7 +7,7 @@
 //
 
 #import <NSArray+F.h>
-#import <Parse/Parse.h>
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"

@@ -6,9 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
-@class CLLocation;
+@import UIKit;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -16,6 +14,7 @@
 
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
+- (void)setupLocationManager;
+- (void)registerForPushNotifications;
 
 @end
-

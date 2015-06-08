@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface UIViewController (RelativeDate)
 - (void)setFrescoNavigationBar;

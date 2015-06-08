@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import <Mantle/Mantle.h>
 @interface FRSUser : MTLModel <MTLJSONSerializing>
 

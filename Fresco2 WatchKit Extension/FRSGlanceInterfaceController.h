@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import <WatchKit/WatchKit.h>
-#import <Foundation/Foundation.h>
+@import WatchKit;
+@import Foundation;
 
 @interface FRSGlanceInterfaceController : WKInterfaceController
 

@@ -7,7 +7,7 @@
 //
 
 #import "CLLocation+EXIFGPS.h"
-#import <ImageIO/ImageIO.h>
+@import ImageIO;
 #import "NSDate+ISO.h"
 
 @implementation CLLocation (EXIFGPS)

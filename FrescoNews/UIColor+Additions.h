@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #define FBBHexColor(component) (((CGFloat)(component)) / (CGFloat)0xff)
 
 @interface UIColor (Additions)

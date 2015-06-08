@@ -14,14 +14,14 @@
 #import "FRSImage.h"
 #import "FRSUser.h"
 #import "CameraViewController.h"
-#import <Parse/Parse.h>
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
+@import FBSDKCoreKit;
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AssetsLibrary;
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 
