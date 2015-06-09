@@ -195,6 +195,19 @@
     }];
 }
 
+- (IBAction)changePassword:(UIButton *)sender
+{
+    NSString *email = self.textfieldEmail.text;
+    if (![email length])
+        email = [FRSDataManager sharedManager].currentUser.email;
+    
+    if ([email length]) {
+        [PFUser requestPasswordResetForEmail:email];
+    }
+    else
+        NSLog(@"Unxexpected error changing password");
+}
+
 - (IBAction)logOut:(id)sender
 {
     [[FRSDataManager sharedManager] logout];

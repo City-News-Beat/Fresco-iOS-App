@@ -86,6 +86,12 @@
 
 }
 
+- (void)dealloc
+{
+    self.scrollView.delegate = nil;
+    self.assignmentsMap.delegate = nil;
+}
+
 - (void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];

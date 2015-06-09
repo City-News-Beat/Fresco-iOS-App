@@ -19,6 +19,7 @@
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
+#import "SwitchingRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
@@ -107,25 +108,31 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 // root view controllers
 - (void)loadInitialViewController
 {
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     if ([[FRSDataManager sharedManager] login])
-        [self setRootViewControllerToTabBar];
+        [rootViewController setRootViewControllerToTabBar];
     else {
-        [self setRootViewControllerToFirstRun];
+        [rootViewController setRootViewControllerToFirstRun];
     }
 }
 
 - (void)setRootViewControllerToTabBar
 {
-    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    [self setupTabBarAppearances];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToTabBar];
+//
+//    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+//    [self setupTabBarAppearances];
 }
 
 - (void)setRootViewControllerToFirstRun
 {
-    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToFirstRun];
+//    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
 }
 
-- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+- (void)setRootViewControllerWithIdentifierOLD:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
 {
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
@@ -143,6 +150,27 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
+}
+
+- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
+   // self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+    
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
+    
+    [self.window.rootViewController.view viewWithTag:1000];
+    
+    //[self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -185,7 +213,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupAppearances
 {
-    [self setupTabBarAppearances];
+    //[self setupTabBarAppearances];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];
