@@ -7,21 +7,38 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import "MKMapView+LegalLabel.h"
 #import "FirstRunRadiusViewController.h"
 
-@interface FirstRunRadiusViewController ()
-
+@interface FirstRunRadiusViewController () <MKMapViewDelegate>
+@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadiusMap;
+@property (weak, nonatomic) IBOutlet UISlider *sliderRadius;
+@property (weak, nonatomic) IBOutlet UILabel *labelRadius;
 @end
 
 @implementation FirstRunRadiusViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
 }
 
-- (IBAction)actionDone:(id)sender {
+- (IBAction)actionDone:(id)sender
+{
     [self navigateToMainApp];
 }
 
+- (IBAction)sliderValueChanged:(UISlider *)sender
+{
+    self.labelRadius.text = [NSString stringWithFormat:@"%3.0f", self.sliderRadius.value];
+}
+
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    [mapView zoomToCurrentLocation];
+}
 @end

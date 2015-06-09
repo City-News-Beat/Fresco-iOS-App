@@ -20,5 +20,6 @@ typedef enum {
 
 - (void)offsetLegalLabel:(CGSize)distance;
 - (void)setLegalLabelCenter:(CGPoint)point;
-
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius;
+- (void)zoomToCurrentLocation;
 @end

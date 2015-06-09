@@ -450,6 +450,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1E1AC1AA1B2602D5003BECE0 /* FirstRun */ = {
+			isa = PBXGroup;
+			children = (
+				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
+				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
+				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
+				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
+				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
+				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
+				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
+				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
+			);
+			name = FirstRun;
+			sourceTree = "<group>";
+		};
 		1E3592871AC3327000F60348 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -638,6 +655,7 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
 				E73E100A1B0F958D00763240 /* Home */,
@@ -649,16 +667,6 @@
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
-				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
-				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
-				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
-				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
-				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
-				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
-				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
-				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
