@@ -294,7 +294,9 @@
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    NSString *path = @"/story/highlights";
+    
+    NSString *path = @"/story/recent";
+    
     NSDictionary *params = @{@"limit" : @"10", @"notags" : @"true"};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -312,6 +314,29 @@
         
         if(responseBlock)
             responseBlock(nil, error);
+    }];
+    
+}
+
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"id" : storyId};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/story/get/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+       
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        if(responseBlock) responseBlock(story, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
     }];
     
 }
@@ -382,14 +407,39 @@
     }];
 }
 
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"galleries" : ids};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
     
     if (offset != nil) {
         
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
     }
     else{
-        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:@"/gallery/highlights?stories=true" WithResponseBlock:responseBlock];
     }
 }
 
@@ -508,6 +558,37 @@
 }
 
 /*
+** Set notification as seen
+*/
+
+- (void)setNotificationSeen:(NSNumber *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : notificationId};
+    
+    [self POST:@"/notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
+
+/*
 ** Delete a specific notification
 */
 
@@ -517,7 +598,6 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
-    #warning will not work, endpoint does not exist
     [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -536,7 +616,7 @@
         
     }];
     
-    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
+
 }
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {

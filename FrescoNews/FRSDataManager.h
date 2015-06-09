@@ -49,25 +49,38 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getGalleriesFromIds:(NSArray *)ids withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Stories
+*/
+
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Assignments
 */
 
-- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getAssignment:(NSNumber *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Notifications
 */
 
 - (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)setNotificationSeen:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
     
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 

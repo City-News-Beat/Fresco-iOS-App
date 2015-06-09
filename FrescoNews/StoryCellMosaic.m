@@ -42,14 +42,14 @@ static CGFloat const kInterImageGap = 1.0f;
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:10];
 
-    for (FRSGallery *gallery in self.story.galleries) {
-        for (FRSPost *post in gallery.posts) {
-            // this finds cleaner data
-            if (post && post.image && post.image.height && post.image.width) {
-                [tempArray addObject:post.image];
-            }
-        }
-    }
+//    for (FRSGallery *gallery in self.story.galleries) {
+//        for (FRSPost *post in gallery.posts) {
+//            // this finds cleaner data
+//            if (post && post.image && post.image.height && post.image.width) {
+//                [tempArray addObject:post.image];
+//            }
+//        }
+//    }
     [self shuffle:tempArray];
     
     _imageArray = [[NSArray alloc]initWithArray:tempArray];

@@ -71,57 +71,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     [rootViewController setRootViewControllerToTabBar];
-//
-//    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-//    [self setupTabBarAppearances];
 }
 
 - (void)setRootViewControllerToFirstRun
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     [rootViewController setRootViewControllerToFirstRun];
-//    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
-}
-
-- (void)setRootViewControllerWithIdentifierOLD:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
-{
-    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
-    
-    UIViewController *viewController;
-
-    if (underNavigationController) {
-        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
-        vc.navigationController.navigationBar.hidden = YES;
-    }
-    else
-        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
-
-    self.window.rootViewController = viewController;
-    [self.window makeKeyAndVisible];
-}
-
-- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
-{
-   // self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
-    
-    UIViewController *viewController;
-    
-    if (underNavigationController) {
-        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
-        vc.navigationController.navigationBar.hidden = YES;
-    }
-    else
-        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
-    
-    [self.window.rootViewController.view viewWithTag:1000];
-    
-    //[self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -132,8 +87,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                                           openURL:url
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
-    
-    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -324,9 +277,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if([userInfo[@"type"] isEqualToString:@"breaking"]){
         
         //Check to make sure the payload has an id
-        if(userInfo[@"gallery_id"] != nil){
+        if(userInfo[@"gallery"] != nil){
             
-            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     #warning Nothing will happen yet, need to figure out how to handle gallery views
@@ -345,9 +298,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
         // Check to make sure the payload has an id
-        if (userInfo[@"assignment_id"]) {
+        if (userInfo[@"assignment"]) {
             
-            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -378,8 +331,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an id
-        if (notification[@"assignment_id"]) {
-            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+        if (notification[@"assignment"]) {
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;

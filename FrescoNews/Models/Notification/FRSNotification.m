@@ -20,7 +20,8 @@
              @"body" : @"body",
              @"date" : @"time_created",
              @"type" : @"type",
-             @"meta": @"meta"
+             @"meta": @"meta",
+             @"seen": @"seen"
              };
 }
 
