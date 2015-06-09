@@ -159,7 +159,41 @@
     }
 }
 
-- (IBAction)saveChanges:(id)sender {}
+- (IBAction)saveChanges:(id)sender
+{
+    NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
+  
+    if ([self.textfieldFirst.text length])
+        [updateParams setObject:self.textfieldFirst.text forKey:@"firstname"];
+    
+    if ([self.textfieldLast.text length])
+        [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
+ 
+    if ([self.textfieldEmail.text length])
+        [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
+    
+    
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+        NSString *title;
+        NSString *message;
+        if (!error) {
+            title = @"Success";
+            message = @"Profile settings updated";
+        }
+        else {
+            title = @"Error";
+            message = @"Could not save Profile settings";
+        }
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+
+    }];
+}
 
 - (IBAction)logOut:(id)sender
 {
