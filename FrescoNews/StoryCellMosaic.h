@@ -16,9 +16,10 @@
 
 @interface StoryCellMosaic : UITableViewCell
 @property (strong, nonatomic) FRSStory *story;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (strong, nonatomic) id <StoryThumbnailViewTapHandler> tapHandler;
 
 + (NSString *)identifier;
+- (void)configureImages;
+
 @end
 

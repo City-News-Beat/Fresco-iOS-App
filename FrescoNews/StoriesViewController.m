@@ -13,6 +13,10 @@
 #import "StoryCellMosaic.h"
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"
+#import "FRSImage.h"
+
+static CGFloat const kImageHeight = 96.0;
+static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -111,9 +115,8 @@
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     storyCell.story = story;
     storyCell.tapHandler = self;
-    
-    [storyCell layoutIfNeeded];
-    
+    [storyCell configureImages];
+
     return storyCell;
 }
 
@@ -126,6 +129,26 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 40;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat width;
+    FRSStory *story = self.stories[indexPath.section];
+    for (FRSGallery *gallery in story.galleries) {
+        for (FRSPost *post in gallery.posts) {
+            if (post.image.height && post.image.width) {
+                CGFloat scale = kImageHeight / [post.image.height floatValue];
+                CGFloat imageWidth = [post.image.width floatValue] * scale;
+                width += imageWidth + kInterImageGap;
+                if (width > self.view.frame.size.width) {
+                    return 96.0 * 2;
+                }
+            }
+        }
+    }
+
+    return 96.0;
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
