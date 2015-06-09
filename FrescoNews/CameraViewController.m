@@ -155,7 +155,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self updateRecentPhotoView];
-    [self configureAssignmentLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -614,18 +613,24 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)configureAssignmentLabel
 {
-    NSString *assignmentString = self.defaultAssignment.title;
-    NSString *space = @"  "; // lame
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@In range of %@%@", space, assignmentString, space]];
-    [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
-                    range:(NSRange){14, [string length] - 14}];
-    self.assignmentLabel.attributedText = string;
-
-    CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
-    self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
+    if (self.defaultAssignment) {
+        CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
+        self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
+    }
+    else {
+        self.withinRangeOfDefaultAssignment = NO;
+    }
 
     if (self.withinRangeOfDefaultAssignment) {
         self.assignmentLabel.hidden = NO;
+        NSString *assignmentString = self.defaultAssignment.title;
+
+        // Leave lame leading and trailing space
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  In range of %@  ", assignmentString]];
+
+        [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                        range:(NSRange){14, [string length] - 14}];
+        self.assignmentLabel.attributedText = string;
     }
 
     [UIView animateWithDuration:0.5 animations:^{
@@ -643,6 +648,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [self cancel];
 }
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets {} // required by protocol
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
@@ -676,8 +683,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
         NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-        // TODO: Direct the user to edit the video for time
-        return lround(duration) <= 60;
+        return lround(duration) <= [VariableStore sharedInstance].maximumVideoLength;
     }
 
     return YES;
@@ -701,9 +707,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     self.location = [locations lastObject];
 
-    static dispatch_once_t onceToken;   
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [self configureDefaultAssignment];
+        // TODO: Make this smarter
+        [self findNearbyAssignments];
     });
 
     [self configureAssignmentLabel];
@@ -723,7 +730,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)configureDefaultAssignment
+- (void)findNearbyAssignments
 {
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.defaultAssignment = [responseObject firstObject];

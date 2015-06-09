@@ -22,7 +22,7 @@
 {
     [super viewDidLoad];
     [self styleButtons];
-    [(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
+    //[(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

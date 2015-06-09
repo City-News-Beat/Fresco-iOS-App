@@ -30,20 +30,15 @@
 #import "ALAsset+accessibilityLabel.h"
 #import "NSDateFormatter+timeIntervalFormatter.h"
 
-
-
 @interface CTAssetsViewCell ()
 
 @property (nonatomic, strong) ALAsset *asset;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) UIImage *videoImage;
+@property (assign) BOOL videoExceedsMaximumLength;
 
 @end
-
-
-
-
 
 @implementation CTAssetsViewCell
 
@@ -54,16 +49,18 @@ static UIColor *titleColor;
 static UIImage *checkedIcon;
 static UIColor *selectedColor;
 static UIColor *disabledColor;
+static UIColor *disabledVideoTitleColor;
 
 + (void)initialize
 {
-    titleFont       = [UIFont systemFontOfSize:12];
-    titleHeight     = 20.0f;
-    videoIcon       = [UIImage imageNamed:@"CTAssetsPickerVideo"];
-    titleColor      = [UIColor whiteColor];
-    checkedIcon     = [UIImage imageNamed:@"CTAssetsPickerChecked"];
-    selectedColor   = [UIColor colorWithWhite:1 alpha:0.3];
-    disabledColor   = [UIColor colorWithWhite:1 alpha:0.9];
+    titleFont = [UIFont systemFontOfSize:12];
+    titleHeight = 20.0f;
+    videoIcon = [UIImage imageNamed:@"CTAssetsPickerVideo"];
+    titleColor = [UIColor whiteColor];
+    checkedIcon = [UIImage imageNamed:@"CTAssetsPickerChecked"];
+    selectedColor = [UIColor colorWithWhite:1 alpha:0.3];
+    disabledColor = [UIColor clearColor];
+    disabledVideoTitleColor = [UIColor redColor];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -81,13 +78,17 @@ static UIColor *disabledColor;
 
 - (void)bind:(ALAsset *)asset
 {
-    self.asset  = asset;
-    self.image  = (asset.thumbnail == NULL) ? [UIImage imageNamed:@"CTAssetsPickerEmptyCell"] : [UIImage imageWithCGImage:asset.thumbnail];
+    self.asset = asset;
+    self.image = (asset.thumbnail == NULL) ? [UIImage imageNamed:@"CTAssetsPickerEmptyCell"] : [UIImage imageWithCGImage:asset.thumbnail];
     
-    if ([self.asset isVideo])
-    {
+    if ([self.asset isVideo]) {
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         self.title = [df stringFromTimeInterval:[[asset valueForProperty:ALAssetPropertyDuration] doubleValue]];
+
+        if ([[asset valueForProperty:ALAssetPropertyDuration] doubleValue] > [VariableStore sharedInstance].maximumVideoLength) {
+            self.title = [self.title stringByAppendingFormat:@" > 0:%@", @([VariableStore sharedInstance].maximumVideoLength)];
+            self.videoExceedsMaximumLength = YES;
+        }
     }
 }
 
@@ -154,7 +155,8 @@ static UIColor *disabledColor;
     
     [self.title drawInRect:titleRect
             withAttributes:@{NSFontAttributeName : titleFont,
-                             NSForegroundColorAttributeName : titleColor,
+                             NSBackgroundColorAttributeName : [UIColor lightGrayColor],
+                             NSForegroundColorAttributeName : self.videoExceedsMaximumLength ? disabledVideoTitleColor : titleColor,
                              NSParagraphStyleAttributeName : titleStyle}];
     
     [videoIcon drawAtPoint:CGPointMake(4, startPoint.y + 1 + (titleHeight - videoIcon.size.height) / 2)];
