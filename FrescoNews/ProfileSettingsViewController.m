@@ -202,10 +202,29 @@
         email = [FRSDataManager sharedManager].currentUser.email;
     
     if ([email length]) {
-        [PFUser requestPasswordResetForEmail:email];
+        [PFUser requestPasswordResetForEmailInBackground:email
+                                                   block:^(BOOL succeeded, NSError *error) {
+                                                       if (!error) {
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
+                                                                                                           message:@"Email sent. Follow the instructions in the email to change your password."
+                                                                                                          delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                           [alert show];
+                                                       }
+                                                       else {
+                                                           NSLog(@"Error: %@", error);
+                                                       }
+                                                   }];
     }
-    else
-        NSLog(@"Unxexpected error changing password");
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Please enter an email address"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (IBAction)logOut:(id)sender
