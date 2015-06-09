@@ -32,8 +32,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)awakeFromNib
 {
-    self.constraintHeight.constant = kImageHeight;
-
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
@@ -71,7 +69,7 @@ static CGFloat const kInterImageGap = 1.0f;
     }
 }
 
-- (void)layoutSubviews
+- (void)configureImages
 {
     for (UIView *view in self.contentView.subviews) {
         if ([view isKindOfClass:[StoryThumbnailView class]]) {
@@ -85,11 +83,6 @@ static CGFloat const kInterImageGap = 1.0f;
     CGFloat y = 0.0f;
     int rows = 1;
     
-    self.constraintHeight.constant = kImageHeight;
-    
-#warning Hack until variable sized cells are perfect
-    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
- 
     int i = 0;
     for (FRSImage *image in self.imageArray) {
         // we don't want more than two rows of images
@@ -110,10 +103,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
         [self.contentView addSubview:thumbnailView];
         
-        /*
-        NSString *format = [NSString stringWithFormat:@"H:|-(%f)-view-(%f)-|", frame.origin.x, frame.origin.x + frame.size.width
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:nil views:nil]]*/
-        
         thumbnailView.story_id = [self.story.storyID integerValue];
         thumbnailView.thumbSequence = i;
         [self setupTapHandlingForThumbnail:thumbnailView];
@@ -125,10 +114,6 @@ static CGFloat const kInterImageGap = 1.0f;
         if (x > self.frame.size.width) {
             ++rows;
             y += kImageHeight + kInterImageGap;
-            
-            self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
-            [self updateConstraints];
-
             x = 0.0f;
             
             // we almost always want to redo this image on the next row
@@ -140,9 +125,6 @@ static CGFloat const kInterImageGap = 1.0f;
         
         ++i;
     }
-    [self updateConstraints];
-    [self layoutIfNeeded];
-
 }
 
 - (void)setupTapHandlingForThumbnail:(StoryThumbnailView *)thumbnailView
