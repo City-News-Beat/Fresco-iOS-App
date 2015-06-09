@@ -26,7 +26,7 @@
  */
 
 #import "ALAsset+assetType.h"
-#import <MobileCoreServices/MobileCoreServices.h>
+@import MobileCoreServices;
 
 @implementation ALAsset (assetType)
 

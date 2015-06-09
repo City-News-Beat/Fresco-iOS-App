@@ -6,13 +6,11 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "FRSBaseViewController.h"
 
-@class GalleryView, FRSStory;
+@class FRSStory;
 
 @interface StoryViewController : FRSBaseViewController
-
-@property (weak, nonatomic) FRSStory *story;
-
+@property (nonatomic) FRSStory *story;
 @end

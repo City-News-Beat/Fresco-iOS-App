@@ -7,7 +7,7 @@
 //
 
 #import "UIImage+ALAsset.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AssetsLibrary;
 
 @implementation UIImage (ALAsset)
 

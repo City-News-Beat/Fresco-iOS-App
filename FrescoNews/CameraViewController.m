@@ -6,8 +6,8 @@
 //
 
 #import "CameraViewController.h"
-#import <AVFoundation/AVFoundation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AVFoundation;
+@import AssetsLibrary;
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
@@ -659,7 +659,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
-    if (![asset valueForProperty:ALAssetPropertyLocation]) {
+    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+        // TOOO: Add location metadata to in-app recorded video
+        return YES;
+    }
+    else if (![asset valueForProperty:ALAssetPropertyLocation]) {
         return NO;
     }
 
@@ -672,6 +676,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
         NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+        // TODO: Direct the user to edit the video for time
         return lround(duration) <= 60;
     }
 

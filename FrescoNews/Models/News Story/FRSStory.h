@@ -14,16 +14,14 @@
 
 @interface FRSStory : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSNumber *storyID;
+@property (nonatomic, copy) NSString *storyID;
 @property (nonatomic, copy) NSString *caption;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *byline;
 @property (nonatomic, copy) NSDate *date;
 @property (nonatomic, strong) NSArray *tags;
 @property (nonatomic, strong) NSArray *galleries;
-@property (nonatomic, strong) NSArray *articles;
-//@property (nonatomic, strong) FRSUser *user;
-
-//@property (nonatomic, strong) NSMutableArray *traditionalSources;
+@property (nonatomic, strong) NSArray *articleIds;
+@property (nonatomic, strong) FRSUser *curator;
 
 @end

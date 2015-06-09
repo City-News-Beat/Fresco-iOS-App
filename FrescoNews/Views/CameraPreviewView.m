@@ -7,7 +7,7 @@
 //
 
 #import "CameraPreviewView.h"
-#import <AVFoundation/AVFoundation.h>
+@import AVFoundation;
 
 @implementation CameraPreviewView
 

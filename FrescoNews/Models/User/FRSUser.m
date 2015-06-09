@@ -7,7 +7,7 @@
 //
 
 #import "FRSUser.h"
-#import <Parse/Parse.h>
+@import Parse;
 
 @implementation FRSUser
 

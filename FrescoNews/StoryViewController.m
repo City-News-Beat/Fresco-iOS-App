@@ -44,7 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.title = self.story.title;
 }
 
 #pragma mark - Data Loading
@@ -54,7 +54,7 @@
     if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
+        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.story.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 }

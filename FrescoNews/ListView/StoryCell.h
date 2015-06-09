@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "FRSPost.h"
 
 @interface StoryCell : UITableViewCell

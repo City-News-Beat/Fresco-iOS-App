@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
+@import UIKit;
+@import AVFoundation;
 
 @class FRSGallery;
 

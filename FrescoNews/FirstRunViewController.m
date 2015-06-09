@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@import Parse;
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 #import "FirstRunViewController.h"
@@ -156,7 +156,10 @@
 {
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Facebook login error: %@", error);
@@ -167,7 +170,10 @@
 - (IBAction)twitterLogin:(id)sender {
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
-            [self navigateToMainApp];
+            if (user.isNew)
+                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+            else
+                [self navigateToMainApp];
         }
         else {
             NSLog(@"Twitter login error: %@", error);
