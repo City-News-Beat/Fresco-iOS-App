@@ -294,7 +294,9 @@
 #pragma mark - Stories
 
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    NSString *path = @"/story/highlights";
+    
+    NSString *path = @"/story/recent";
+    
     NSDictionary *params = @{@"limit" : @"10", @"notags" : @"true"};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
