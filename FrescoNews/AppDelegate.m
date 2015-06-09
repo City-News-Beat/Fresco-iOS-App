@@ -200,7 +200,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
                                      @"tab-assignments-highlighted",
-                                     @"tab-following-highlighted"];
+                                     @"tab-profile-highlighted"];
     
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -212,11 +212,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     int i = 0;
     
     for (UITabBarItem *item in tabBar.items) {
-        if (i == 4) {
-            item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-            item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
-            item.title = @"Following";
-        } else if (i == 2) {
+       if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.imageInsets = UIEdgeInsetsMake(5.5, 0, -6, 0);
