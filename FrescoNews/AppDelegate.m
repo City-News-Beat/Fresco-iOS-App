@@ -159,7 +159,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         } else if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -6, 0);
+            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
         }
         else {
             item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
