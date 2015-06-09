@@ -79,6 +79,18 @@
     }];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.textfieldFirstName isFirstResponder] && [touch view] != self.textfieldFirstName) {
+        [self.textfieldFirstName resignFirstResponder];
+    }
+    
+    if ([self.textfieldLastName isFirstResponder] && [touch view] != self.textfieldLastName) {
+        [self.textfieldLastName resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
