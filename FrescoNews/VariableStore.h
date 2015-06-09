@@ -34,4 +34,6 @@
 @property NSString *basePath;
 @property NSString *cdnBaseURL;
 
+@property CGFloat maximumVideoLength;
+
 @end

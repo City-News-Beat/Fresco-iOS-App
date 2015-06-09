@@ -683,8 +683,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
         NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-        // TODO: Direct the user to edit the video for time
-        return lround(duration) <= 60;
+        return lround(duration) <= [VariableStore sharedInstance].maximumVideoLength;
     }
 
     return YES;
