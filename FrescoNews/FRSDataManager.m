@@ -316,6 +316,29 @@
     
 }
 
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"id" : storyId};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/story/get/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+       
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        if(responseBlock) responseBlock(story, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 #pragma mark - Galleries
 
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset WithResponseBlock:(FRSAPIResponseBlock)responseBlock {

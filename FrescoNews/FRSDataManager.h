@@ -49,9 +49,16 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Stories
+*/
+
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 - (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Assignments

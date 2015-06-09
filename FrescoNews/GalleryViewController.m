@@ -6,15 +6,16 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "MTLModel+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "FRSDataManager.h"
 #import <PBWebViewController.h>
+#import "MTLModel+Additions.h"
+#import "FRSDataManager.h"
 #import "FRSPost.h"
 #import "GalleryView.h"
 #import "FRSArticle.h"
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
+#import "StoryViewController.h"
 
 @interface GalleryViewController ()
 
@@ -209,6 +210,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(tableView == self.storiesTable){
+        
+        NSString *storyId = [[[self gallery] relatedStories] objectAtIndex:indexPath.row][@"_id"];
+        
+        [[FRSDataManager sharedManager] getStory:storyId withResponseBlock:^(id responseObject, NSError *error) {
+            
+            if (!error) {
+                
+                StoryViewController *storyViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
+                
+                storyViewController.story = responseObject;
+                
+                [self.navigationController pushViewController:storyViewController animated:YES];
+                
+            }
+            
+        }];
+        
         
 
     }
