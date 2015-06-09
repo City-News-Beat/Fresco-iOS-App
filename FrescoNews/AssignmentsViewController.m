@@ -86,6 +86,12 @@
 
 }
 
+- (void)dealloc
+{
+    self.scrollView.delegate = nil;
+    self.assignmentsMap.delegate = nil;
+}
+
 - (void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
@@ -588,14 +594,9 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    
-    if(self.currentAssignment == nil){
-        
+    if(self.currentAssignment == nil) {
         [self zoomToCurrentLocation];
-        
     }
-    
-    
 }
 
 #pragma mark - Action Sheet Delegate

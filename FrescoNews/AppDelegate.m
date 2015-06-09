@@ -19,6 +19,7 @@
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
 #import "AssignmentsViewController.h"
+#import "SwitchingRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
@@ -53,19 +54,36 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 }
 
 #pragma mark - Root View Controllers
+// because the app might launch into First Run mode
+// or regular (tab interface) we need to dynamically swap
+// root view controllers
+- (void)loadInitialViewController
+{
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    if ([[FRSDataManager sharedManager] login])
+        [rootViewController setRootViewControllerToTabBar];
+    else {
+        [rootViewController setRootViewControllerToFirstRun];
+    }
+}
 
 - (void)setRootViewControllerToTabBar
 {
-    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    [self setupTabBarAppearances];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToTabBar];
+//
+//    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+//    [self setupTabBarAppearances];
 }
 
 - (void)setRootViewControllerToFirstRun
 {
-    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToFirstRun];
+//    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
 }
 
-- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+- (void)setRootViewControllerWithIdentifierOLD:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
 {
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     
@@ -83,6 +101,27 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
+}
+
+- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
+   // self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+    
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
+    
+    [self.window.rootViewController.view viewWithTag:1000];
+    
+    //[self.window makeKeyAndVisible];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -125,7 +164,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupAppearances
 {
-    [self setupTabBarAppearances];
+    //[self setupTabBarAppearances];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];
@@ -140,7 +179,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
                                      @"tab-assignments-highlighted",
-                                     @"tab-following-highlighted"];
+                                     @"tab-profile-highlighted"];
     
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -152,11 +191,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     int i = 0;
     
     for (UITabBarItem *item in tabBar.items) {
-        if (i == 4) {
-            item.image = [[UIImage imageNamed:@"tab-following"] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-            item.selectedImage = [UIImage imageNamed:@"tab-following-highlighted"];
-            item.title = @"Following";
-        } else if (i == 2) {
+       if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);

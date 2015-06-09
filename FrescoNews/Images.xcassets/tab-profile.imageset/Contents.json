@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "profile-tabbar-stroke.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "profile-tabbar-stroke@2x.png"
+      "filename" : "profile-toolbar@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "profile-tabbar-stroke@3x.png"
+      "filename" : "profile-toolbar@3x.png"
     }
   ],
   "info" : {

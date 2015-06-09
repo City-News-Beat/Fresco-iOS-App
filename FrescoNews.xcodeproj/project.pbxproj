@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E1AC1AE1B2771C7003BECE0 /* SwitchingRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* SwitchingRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */; };
 		1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592891AC3329900F60348 /* PostCollectionViewCell.m */; };
@@ -164,6 +165,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1E1AC1AC1B2771C7003BECE0 /* SwitchingRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchingRootViewController.h; sourceTree = "<group>"; };
+		1E1AC1AD1B2771C7003BECE0 /* SwitchingRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchingRootViewController.m; sourceTree = "<group>"; };
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
 		1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleriesViewController.m; sourceTree = "<group>"; };
 		1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GalleryTableViewCell.h; path = ListView/GalleryTableViewCell.h; sourceTree = "<group>"; };
@@ -450,6 +453,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1E1AC1AA1B2602D5003BECE0 /* FirstRun */ = {
+			isa = PBXGroup;
+			children = (
+				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
+				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
+				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
+				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
+				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
+				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
+				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
+				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
+			);
+			name = FirstRun;
+			sourceTree = "<group>";
+		};
 		1E3592871AC3327000F60348 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -638,6 +658,9 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1E1AC1AC1B2771C7003BECE0 /* SwitchingRootViewController.h */,
+				1E1AC1AD1B2771C7003BECE0 /* SwitchingRootViewController.m */,
+				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
 				E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */,
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
 				E73E100A1B0F958D00763240 /* Home */,
@@ -649,16 +672,6 @@
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				424323D91AB3D64900646278 /* TabBarController.h */,
-				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
-				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
-				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
-				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
-				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
-				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
-				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
-				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
 				424323DA1AB3D64900646278 /* TabBarController.m */,
 				1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */,
 				1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */,
@@ -1282,6 +1295,7 @@
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
+				1E1AC1AE1B2771C7003BECE0 /* SwitchingRootViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
 				420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */,

@@ -6,11 +6,14 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
+
+#import "MKMapView+LegalLabel.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 
-@interface ProfileSettingsViewController ()
+@interface ProfileSettingsViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 
@@ -25,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
+@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @end
 
 @implementation ProfileSettingsViewController
@@ -155,12 +159,112 @@
     }
 }
 
-- (IBAction)saveChanges:(id)sender {}
+- (IBAction)saveChanges:(id)sender
+{
+    NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
+  
+    if ([self.textfieldFirst.text length])
+        [updateParams setObject:self.textfieldFirst.text forKey:@"firstname"];
+    
+    if ([self.textfieldLast.text length])
+        [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
+ 
+    if ([self.textfieldEmail.text length])
+        [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
+    
+    
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+        NSString *title;
+        NSString *message;
+        if (!error) {
+            title = @"Success";
+            message = @"Profile settings updated";
+        }
+        else {
+            title = @"Error";
+            message = @"Could not save Profile settings";
+        }
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+
+    }];
+}
+
+- (IBAction)changePassword:(UIButton *)sender
+{
+    NSString *email = self.textfieldEmail.text;
+    if (![email length])
+        email = [FRSDataManager sharedManager].currentUser.email;
+    
+    if ([email length]) {
+        [PFUser requestPasswordResetForEmailInBackground:email
+                                                   block:^(BOOL succeeded, NSError *error) {
+                                                       if (!error) {
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
+                                                                                                           message:@"Email sent. Follow the instructions in the email to change your password."
+                                                                                                          delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                           [alert show];
+                                                       }
+                                                       else {
+                                                           NSLog(@"Error: %@", error);
+                                                       }
+                                                   }];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Please enter an email address"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
 
 - (IBAction)logOut:(id)sender
 {
     [[FRSDataManager sharedManager] logout];
     [self navigateToMainApp];
+}
+
+- (IBAction)sliderValueChanged:(UISlider *)slider
+{
+    CGFloat roundedValue = [self roundedValueForSlider:slider];
+    
+    NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+    
+    NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
+    
+    // only update changes
+    if (![self.radiusStepperLabel.text isEqualToString:newValue])
+        self.radiusStepperLabel.text = newValue;
+}
+
+- (IBAction)sliderTouchUpInside:(UISlider *)slider {
+    self.radiusStepper.value = [self roundedValueForSlider:slider];
+}
+
+- (CGFloat)roundedValueForSlider:(UISlider *)slider
+{
+    CGFloat roundedValue;
+    if (slider.value < 10)
+        roundedValue = (int)slider.value;
+    else
+        roundedValue = ((int)slider.value / 10) * 10;
+    
+    return roundedValue;
+}
+
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    [mapView zoomToCurrentLocation];
 }
 
 @end
