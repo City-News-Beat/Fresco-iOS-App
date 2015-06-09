@@ -17,14 +17,13 @@
 {
     return @{
              @"storyID": @"_id",
-             @"caption" : @"caption",
+             @"curator" : @"curator",
              @"title" : @"title",
-             @"byline" : @"byline",
-             @"date" : @"time_created",
+             @"caption" : @"caption",
              @"tags" : @"tags",
-             @"galleries" : @"galleries",
+             @"galleryIds" : @"galleries",
              @"articleIds" : @"articles",
-             @"curator" : @"curator"
+             @"date" : @"time_created"
              };
 }
 

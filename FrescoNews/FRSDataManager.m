@@ -407,6 +407,31 @@
     }];
 }
 
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"galleries" : ids};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
     
     if (offset != nil) {

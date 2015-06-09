@@ -51,6 +51,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+- (void)getGalleriesFromIds:(NSArray *)ids withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 /*
 ** Stories
 */
@@ -69,6 +71,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Notifications
