@@ -295,7 +295,6 @@
             NSString *mimeType;
 
             if (post.image.asset.isVideo) {
-                // TODO: Support for larger video files (longer than 60 seconds)
                 ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
                 UInt8 *buffer = (UInt8 *)malloc(representation.size);
                 NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:representation.size error:nil];
