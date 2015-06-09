@@ -289,9 +289,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if([userInfo[@"type"] isEqualToString:@"breaking"]){
         
         //Check to make sure the payload has an id
-        if(userInfo[@"gallery_id"] != nil){
+        if(userInfo[@"gallery"] != nil){
             
-            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     #warning Nothing will happen yet, need to figure out how to handle gallery views
@@ -310,9 +310,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
         // Check to make sure the payload has an id
-        if (userInfo[@"assignment_id"]) {
+        if (userInfo[@"assignment"]) {
             
-            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -343,8 +343,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an id
-        if (notification[@"assignment_id"]) {
-            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+        if (notification[@"assignment"]) {
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;

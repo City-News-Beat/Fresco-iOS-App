@@ -29,7 +29,7 @@
              @"byline" : @"byline",
              @"tags" : @"tags",
              @"articles" : @"articles",
-             @"relatedStories" : @"",
+             @"relatedStories" : @"related_stories",
              @"posts" : @"posts"
              };
 }

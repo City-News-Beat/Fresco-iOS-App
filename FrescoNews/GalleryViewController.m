@@ -16,8 +16,8 @@
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
 
-
 @interface GalleryViewController ()
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -39,11 +39,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *articlesTitle;
 
 @property (weak, nonatomic) IBOutlet UITableView *articlesTable;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticleTableHeight;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticlesHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesTableHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
+
 @end
 
 @implementation GalleryViewController
@@ -52,31 +53,34 @@
 {
     
     [self setUpGallery];
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     // just add this line to the end of this method or create it if it does not exist
-    [self.articlesTable reloadData];
+
 }
 
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
     
+    //Redraw Table Views
+    [self.articlesTable setNeedsLayout];
+    [self.articlesTable layoutIfNeeded];
+    [self.storiesTable setNeedsLayout];
+    [self.storiesTable layoutIfNeeded];
+    
+    //
+    self.constraintArticleTableHeight.constant = self.articlesTable.contentSize.height;
+    self.constraintStoriesTableHeight.constant = self.storiesTable.contentSize.height;
+    
+    [self.storiesView setNeedsLayout];
+    [self.storiesView layoutIfNeeded];
+    
     [self.scrollView layoutIfNeeded];
-//    
-//    CGFloat height = 0;
-//    
-//    for (UIView *view in self.scrollView.subviews) {
-//        height +=view.frame.size.height;
-//    }
-//    
-//    [self.scrollView setContentSize:CGSizeMake(320, height)];
-//
-//    
-
+    
 }
 
 
@@ -89,27 +93,35 @@
     self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
     
     self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
-//    
-//    self.constraintArticleTableHeight.constant = 10 * 44.0f;
-//    
-    [self.scrollView layoutIfNeeded];
 
     if(self.gallery.articles.count == 0){
-        
-        [self.articlesView setHidden:YES];
-    
-        self.constraintArticlesHeight.constant = 0.0f;
 
+        self.articlesView.hidden = YES;
     
+        [self.view addConstraints:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[articlesView(0)]"
+                                                 options:0
+                                                 metrics:nil
+                                                   views: @{@"articlesView":self.articlesView}]];
+
     }
-    if(self.gallery.relatedStories == nil){
-        
-        [self.storiesView setHidden:YES];
-        
-        self.constraintStoriesHeight.constant = 0.0f;
-        
-        self.constraintStoriesDiff.constant = 0.0f;
+    if(self.gallery.relatedStories.count == 0){
+    
+        self.storiesView.hidden = YES;
+    
+        self.constraintStoriesDiff.constant = 0;
 
+        [self.view addConstraints:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
+                                                 options:0
+                                                 metrics:nil
+                                                   views: @{@"storiesView":self.storiesView}]];
+    
+        [self.storiesView addConstraints:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
+                                                 options:0
+                                                 metrics:nil
+                                                   views: @{@"storiesView":self.storiesTable}]];
     }
 
 
@@ -142,7 +154,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(tableView == self.storiesTable){
-        return 0;
+        return self.gallery.relatedStories.count;
     }
     else if(tableView == self.articlesTable){
         
@@ -163,14 +175,14 @@
         
         UILabel *storyTitle = (UILabel *)[cell viewWithTag:100];
         
-        [storyTitle setText:@"Test"];
+        [storyTitle setText:[[[self gallery] relatedStories] objectAtIndex:indexPath.row][@"title"]];
         
         return cell;
         
     }
     else if(tableView == self.articlesTable){
         
-        FRSArticle *article = [[[self gallery] articles] objectAtIndex:0];
+        FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
         
@@ -217,11 +229,6 @@
     }
 
 
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

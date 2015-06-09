@@ -206,12 +206,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     }
     
     //Check the notificaiton type
-    if([notification.type isEqualToString:@"assignment"]){
+    if([notification.type isEqualToString:@"assignment"] && notification.meta[@"assignment"] != nil){
         
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
-                
+
                 UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
                 
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
@@ -271,7 +271,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     }
     
     //Check the notificaiton type
-    if([notification.type isEqualToString:@"assignment"]){
+    if([notification.type isEqualToString:@"assignment"] && notification.meta[@"assignment"] != nil){
         
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {

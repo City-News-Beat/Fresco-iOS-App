@@ -386,10 +386,10 @@
     
     if (offset != nil) {
         
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
     }
     else{
-        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:@"/gallery/highlights?stories=true" WithResponseBlock:responseBlock];
     }
 }
 
@@ -534,7 +534,6 @@
         if(responseBlock) responseBlock(nil, error);
         
     }];
-    
     
 }
 
