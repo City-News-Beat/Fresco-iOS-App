@@ -297,7 +297,7 @@
     
     NSString *path = @"/story/recent";
     
-    NSDictionary *params = @{@"limit" : @"6", @"notags" : @"true"};
+    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true"};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
