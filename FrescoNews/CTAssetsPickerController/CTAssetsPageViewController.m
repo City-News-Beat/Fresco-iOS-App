@@ -80,15 +80,12 @@
     return self.isStatusBarHidden;
 }
 
-
 #pragma mark - Update Title
 
 - (void)setTitleIndex:(NSInteger)index
 {
-    NSInteger count = self.assets.count;
-    self.title      = [NSString stringWithFormat:@"%ld of %ld", index, count];
+    self.title = [NSString stringWithFormat:@"%@ of %@", @(index), @(self.assets.count)];
 }
-
 
 #pragma mark - Page Index
 

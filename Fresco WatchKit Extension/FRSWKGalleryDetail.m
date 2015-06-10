@@ -18,7 +18,7 @@
     
     [self.galleryLocation setText:context[@"location"]];
     
-    #warning Set to relative
+#warning Set to relative
     //[self.postTime setText:[NSRelativeDate relativeDateString:context[@"timestamp"]]];
 
     [self.galleryCaption setText:context[@"caption"]];
