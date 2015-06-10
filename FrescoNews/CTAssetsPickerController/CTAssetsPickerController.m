@@ -48,7 +48,6 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         _assetsFilter           = [ALAssetsFilter allAssets];
         _selectedAssets         = [[NSMutableArray alloc] init];
         _showsNumberOfAssets    = YES;
-        _alwaysEnableDoneButton = NO;
         
         self.preferredContentSize = CTAssetPickerPopoverContentSize;
         
@@ -159,31 +158,14 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     [self removeObserver:self forKeyPath:@"selectedAssets"];
 }
 
-
 #pragma mark - Key-Value Changed
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqual:@"selectedAssets"])
-    {
-        [self toggleDoneButton];
+    if ([keyPath isEqual:@"selectedAssets"]) {
         [self postNotification:[object valueForKey:keyPath]];
     }
 }
-
-
-#pragma mark - Toggle Button
-
-- (void)toggleDoneButton
-{
-    UINavigationController *nav = (UINavigationController *)self.childViewControllers[0];
-    
-    BOOL enabled = (self.alwaysEnableDoneButton) ? YES : (self.selectedAssets.count > 0);
-    
-    for (UIViewController *viewController in nav.viewControllers)
-        viewController.navigationItem.rightBarButtonItem.enabled = enabled;
-}
-
 
 #pragma mark - Post Notification
 
