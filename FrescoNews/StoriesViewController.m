@@ -135,15 +135,13 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     CGFloat width;
     FRSStory *story = self.stories[indexPath.section];
-    for (FRSGallery *gallery in story.galleryIds) {
-        for (FRSPost *post in gallery.posts) {
-            if (post.image.height && post.image.width) {
-                CGFloat scale = kImageHeight / [post.image.height floatValue];
-                CGFloat imageWidth = [post.image.width floatValue] * scale;
-                width += imageWidth + kInterImageGap;
-                if (width > self.view.frame.size.width) {
-                    return 96.0 * 2;
-                }
+    for (FRSPost *post in story.thumbnails) {
+        if (post.image.height && post.image.width) {
+            CGFloat scale = kImageHeight / [post.image.height floatValue];
+            CGFloat imageWidth = [post.image.width floatValue] * scale;
+            width += imageWidth + kInterImageGap;
+            if (width > self.view.frame.size.width) {
+                return 96.0 * 2;
             }
         }
     }
