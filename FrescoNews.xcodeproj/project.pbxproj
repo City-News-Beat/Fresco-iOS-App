@@ -236,7 +236,7 @@
 		1ED9A3331AAE01D9009BD7A3 /* StoryCellMosaicHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCellMosaicHeader.m; sourceTree = "<group>"; };
 		1ED9A3361AAE2E4B009BD7A3 /* StoryThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryThumbnailView.h; sourceTree = "<group>"; };
 		1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryThumbnailView.m; sourceTree = "<group>"; };
-		1EDA44B01AA4CCC70082E08D /* Fresco2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fresco2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EDA44B01AA4CCC70082E08D /* Fresco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fresco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B41AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44B71AA4CCC70082E08D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -573,7 +573,7 @@
 		1EDA44B11AA4CCC70082E08D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44B01AA4CCC70082E08D /* Fresco2.app */,
+				1EDA44B01AA4CCC70082E08D /* Fresco.app */,
 				1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */,
 				E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */,
 				E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */,
@@ -995,7 +995,7 @@
 			);
 			name = Fresco;
 			productName = Fresco2;
-			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco2.app */;
+			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1EDA44CB1AA4CCC70082E08D /* Fresco2Tests */ = {
