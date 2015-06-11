@@ -146,6 +146,7 @@ static CGFloat const kInterImageGap = 1.0f;
     // we might optimize this for reuse if need be
     for (UIView *v in [self.contentView subviews]) {
         if ([v isKindOfClass:[StoryThumbnailView class]])
+            [((StoryThumbnailView *) v) cancelImageRequestOperation];
             [v removeFromSuperview];
     }
     self.imageArray = nil;

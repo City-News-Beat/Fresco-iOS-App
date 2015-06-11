@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <UIScrollView+SVInfiniteScrolling.h>
 #import "StoriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -56,17 +57,42 @@ static CGFloat const kInterImageGap = 1.0f;
     self.tableView.estimatedRowHeight = 96;
     
     [self performNecessaryFetch:nil];
+    
+    //Endless scroll handler
+    [self.tableView addInfiniteScrollingWithActionHandler:^{
+        
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
+        
+        [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num withReponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                [self.stories addObjectsFromArray:responseObject];
+                
+                [self reloadData];
+                
+                [self.tableView.infiniteScrollingView stopAnimating];
+                
+            }
+
+        }];
+                
+    }];
+    
+    
 }
 
 #pragma mark - Data Loading
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
+    
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil withReponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             [self.stories setArray:responseObject];
         }
         [self reloadData];
     }];
+
 }
 
 - (void)reloadData
