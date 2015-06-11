@@ -23,6 +23,7 @@
              @"tags" : @"tags",
              @"galleryIds" : @"galleries",
              @"articleIds" : @"articles",
+             @"thumbnails" : @"thumbnails",
              @"date" : @"time_created"
              };
 }
@@ -37,4 +38,13 @@
     return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
 }
 
++ (NSValueTransformer *)curatorJSONTransformer
+{
+    return [MTLModel userJSONTransformer];
+}
+
++ (NSValueTransformer *)thumbnailsJSONTransformer
+{
+    return [MTLModel postsJSONTransformer];
+}
 @end

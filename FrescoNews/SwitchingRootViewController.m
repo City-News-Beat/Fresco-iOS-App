@@ -105,6 +105,11 @@
     }
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 #pragma mark - UITabBarControllerDelegate methods
 
 // Probably no longer needed, but doesn't hurt
