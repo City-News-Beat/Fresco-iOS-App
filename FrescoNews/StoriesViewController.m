@@ -20,7 +20,7 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong, nonatomic) NSMutableArray *imageArrays;
 @end
 
 @implementation StoriesViewController
@@ -43,6 +43,7 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)setup
 {
     _stories = [[NSMutableArray alloc] init];
+    _imageArrays = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -115,6 +116,7 @@ static CGFloat const kInterImageGap = 1.0f;
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     storyCell.story = story;
     storyCell.tapHandler = self;
+    storyCell.imageArray = self.imageArrays[index];
     [storyCell configureImages];
 
     return storyCell;
@@ -133,16 +135,16 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSUInteger index = indexPath.section;
+    self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+
     CGFloat width;
-    FRSStory *story = self.stories[indexPath.section];
-    for (FRSPost *post in story.thumbnails) {
-        if (post.image.height && post.image.width) {
-            CGFloat scale = kImageHeight / [post.image.height floatValue];
-            CGFloat imageWidth = [post.image.width floatValue] * scale;
-            width += imageWidth + kInterImageGap;
-            if (width > self.view.frame.size.width) {
-                return 96.0 * 2;
-            }
+    for (FRSImage *image in self.imageArrays[index]) {
+        CGFloat scale = kImageHeight / [image.height floatValue];
+        CGFloat imageWidth = [image.width floatValue] * scale;
+        width += imageWidth + kInterImageGap;
+        if (width > self.view.frame.size.width) {
+            return 96.0 * 2;
         }
     }
 
@@ -171,4 +173,36 @@ static CGFloat const kInterImageGap = 1.0f;
 {
 
 }
+
+#pragma mark - Image shuffling
+
+- (NSArray *)imageArrayForStory:(FRSStory *)story
+{
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
+
+    for (FRSPost *post in story.thumbnails) {
+        // this finds cleaner data
+        if (post.image.height && post.image.width) {
+            [array addObject:post.image];
+        }
+    }
+
+    return [self shuffle:array];
+}
+
+- (NSArray *)shuffle:(NSMutableArray *)array
+{
+    // seeding the random number generator with a constant
+    // will make the images come out the same every time which is an optimization
+    srand(42);
+    NSUInteger count = [array count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        NSInteger remainingCount = count - i;
+        NSInteger exchangeIndex = i + (rand() % remainingCount);
+        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+    }
+
+    return [array copy];
+}
+
 @end
