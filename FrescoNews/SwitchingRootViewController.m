@@ -7,6 +7,7 @@
 //
 
 #import "SwitchingRootViewController.h"
+#import "TabBarController.h"
 
 @interface SwitchingRootViewController () <UITabBarControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
@@ -32,8 +33,8 @@
 
 - (void)setRootViewControllerToTabBar
 {
-    UITabBarController *tbc = (UITabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    [self setupTabBarAppearances:tbc];
+    self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    [self setupTabBarAppearances:self.tbc];
 }
 
 - (void)setRootViewControllerToFirstRun

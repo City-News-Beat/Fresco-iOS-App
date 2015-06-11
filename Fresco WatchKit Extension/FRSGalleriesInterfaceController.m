@@ -64,7 +64,7 @@
             
             FRSGalleryRowController* row = [self.postTable rowControllerAtIndex:i];
             
-            #warning Set to relative
+#warning Set to relative
             
             [row.galleryTime setText:_posts[i][@"timestamp"]];
             

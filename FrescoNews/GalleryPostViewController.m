@@ -296,8 +296,8 @@
 
             if (post.image.asset.isVideo) {
                 ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
-                UInt8 *buffer = (UInt8 *)malloc(representation.size);
-                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:representation.size error:nil];
+                UInt8 *buffer = malloc((unsigned long)representation.size);
+                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
                 data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
                 mimeType = @"video/mp4";
             }

@@ -56,7 +56,7 @@
         
         [row.storyLocation setText:_stories[i][@"location"]];
         
-        #warning Set to realative date
+#warning Set to relative date
 //        [row.storyTime setText:[NSRelativeDate relativeDateString:[MTLModel relativeDateStringFromDate:gallery.createTime]]];
 //        
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){

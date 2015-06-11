@@ -106,10 +106,10 @@
 		E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
 		E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E3D1B0B936200186BAD /* Images.xcassets */; };
-		E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */; };
+		E71F0E421B0B936200186BAD /* Fresco WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */; };
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
 		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
-		E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E71F0E4F1B0B936200186BAD /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
 		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
 		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
@@ -132,7 +132,7 @@
 			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E71F0E401B0B936200186BAD;
-			remoteInfo = "Fresco2 WatchKit App";
+			remoteInfo = "Fresco WatchKit App";
 		};
 		1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -146,7 +146,7 @@
 			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E71F0E2E1B0B936200186BAD;
-			remoteInfo = "Fresco2 WatchKit Extension";
+			remoteInfo = "Fresco WatchKit Extension";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -157,7 +157,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E71F0E4F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex in Embed App Extensions */,
+				E71F0E4F1B0B936200186BAD /* Fresco WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,7 +236,7 @@
 		1ED9A3331AAE01D9009BD7A3 /* StoryCellMosaicHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCellMosaicHeader.m; sourceTree = "<group>"; };
 		1ED9A3361AAE2E4B009BD7A3 /* StoryThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryThumbnailView.h; sourceTree = "<group>"; };
 		1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryThumbnailView.m; sourceTree = "<group>"; };
-		1EDA44B01AA4CCC70082E08D /* Fresco2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fresco2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EDA44B01AA4CCC70082E08D /* Fresco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Fresco.app; path = Fresco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B41AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44B71AA4CCC70082E08D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -247,7 +247,7 @@
 		1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoriesViewController.m; sourceTree = "<group>"; };
 		1EDA44C11AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EDA44C31AA4CCC70082E08D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Fresco2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EDA44CC1AA4CCC70082E08D /* FrescoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrescoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44D11AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrescoNewsTests.m; sourceTree = "<group>"; };
 		1EDA44F51AA4D0730082E08D /* FRSPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPost.h; sourceTree = "<group>"; };
@@ -339,11 +339,11 @@
 		E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
-		E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco2 WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E71F0E321B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		E71F0E3D1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fresco2 WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fresco WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -563,7 +563,7 @@
 				1EDA44B21AA4CCC70082E08D /* FrescoNews */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
 				E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */,
-				E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */,
+				E71F0E451B0B936200186BAD /* Fresco WatchKit App */,
 				1EDA44B11AA4CCC70082E08D /* Products */,
 				BE77E1E79885C4C61AC87E44 /* Pods */,
 				1B35C7E2C0D16DEBE7A411F8 /* Frameworks */,
@@ -573,10 +573,10 @@
 		1EDA44B11AA4CCC70082E08D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44B01AA4CCC70082E08D /* Fresco2.app */,
-				1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */,
-				E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */,
-				E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */,
+				1EDA44B01AA4CCC70082E08D /* Fresco.app */,
+				1EDA44CC1AA4CCC70082E08D /* FrescoTests.xctest */,
+				E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */,
+				E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -857,7 +857,7 @@
 				E71F0E311B0B936200186BAD /* Supporting Files */,
 			);
 			name = "Fresco WatchKit Extension";
-			path = "Fresco2 WatchKit Extension";
+			path = "Fresco WatchKit Extension";
 			sourceTree = "<group>";
 		};
 		E71F0E311B0B936200186BAD /* Supporting Files */ = {
@@ -869,14 +869,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E71F0E451B0B936200186BAD /* Fresco2 WatchKit App */ = {
+		E71F0E451B0B936200186BAD /* Fresco WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
 				E71F0E481B0B936200186BAD /* Interface.storyboard */,
 				E71F0E4B1B0B936200186BAD /* Images.xcassets */,
 				E71F0E461B0B936200186BAD /* Supporting Files */,
 			);
-			path = "Fresco2 WatchKit App";
+			path = "Fresco WatchKit App";
 			sourceTree = "<group>";
 		};
 		E71F0E461B0B936200186BAD /* Supporting Files */ = {
@@ -994,13 +994,13 @@
 				E71F0E4E1B0B936200186BAD /* PBXTargetDependency */,
 			);
 			name = Fresco;
-			productName = Fresco2;
-			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco2.app */;
+			productName = Fresco;
+			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1EDA44CB1AA4CCC70082E08D /* Fresco2Tests */ = {
+		1EDA44CB1AA4CCC70082E08D /* FrescoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco2Tests" */;
+			buildConfigurationList = 1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoTests" */;
 			buildPhases = (
 				1EDA44C81AA4CCC70082E08D /* Sources */,
 				1EDA44C91AA4CCC70082E08D /* Frameworks */,
@@ -1011,14 +1011,14 @@
 			dependencies = (
 				1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */,
 			);
-			name = Fresco2Tests;
-			productName = Fresco2Tests;
-			productReference = 1EDA44CC1AA4CCC70082E08D /* Fresco2Tests.xctest */;
+			name = FrescoTests;
+			productName = FrescoTests;
+			productReference = 1EDA44CC1AA4CCC70082E08D /* FrescoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */ = {
+		E71F0E2E1B0B936200186BAD /* Fresco WatchKit Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */;
+			buildConfigurationList = E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco WatchKit Extension" */;
 			buildPhases = (
 				D1CB606E0993A608E8927788 /* Check Pods Manifest.lock */,
 				E71F0E2B1B0B936200186BAD /* Sources */,
@@ -1031,14 +1031,14 @@
 			dependencies = (
 				1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */,
 			);
-			name = "Fresco2 WatchKit Extension";
-			productName = "Fresco2 WatchKit Extension";
-			productReference = E71F0E2F1B0B936200186BAD /* Fresco2 WatchKit Extension.appex */;
+			name = "Fresco WatchKit Extension";
+			productName = "Fresco WatchKit Extension";
+			productReference = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */;
 			productType = "com.apple.product-type.watchkit-extension";
 		};
-		E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */ = {
+		E71F0E401B0B936200186BAD /* Fresco WatchKit App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */;
+			buildConfigurationList = E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco WatchKit App" */;
 			buildPhases = (
 				E71F0E3F1B0B936200186BAD /* Resources */,
 			);
@@ -1046,9 +1046,9 @@
 			);
 			dependencies = (
 			);
-			name = "Fresco2 WatchKit App";
-			productName = "Fresco2 WatchKit App";
-			productReference = E71F0E411B0B936200186BAD /* Fresco2 WatchKit App.app */;
+			name = "Fresco WatchKit App";
+			productName = "Fresco WatchKit App";
+			productReference = E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */;
 			productType = "com.apple.product-type.application.watchapp";
 		};
 /* End PBXNativeTarget section */
@@ -1109,9 +1109,9 @@
 			projectRoot = "";
 			targets = (
 				1EDA44AF1AA4CCC70082E08D /* Fresco */,
-				1EDA44CB1AA4CCC70082E08D /* Fresco2Tests */,
-				E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */,
-				E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */,
+				1EDA44CB1AA4CCC70082E08D /* FrescoTests */,
+				E71F0E2E1B0B936200186BAD /* Fresco WatchKit Extension */,
+				E71F0E401B0B936200186BAD /* Fresco WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -1141,7 +1141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */,
-				E71F0E421B0B936200186BAD /* Fresco2 WatchKit App.app in Resources */,
+				E71F0E421B0B936200186BAD /* Fresco WatchKit App.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1344,7 +1344,7 @@
 /* Begin PBXTargetDependency section */
 		1ED4FF461B0E6E1B001EF06A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E71F0E401B0B936200186BAD /* Fresco2 WatchKit App */;
+			target = E71F0E401B0B936200186BAD /* Fresco WatchKit App */;
 			targetProxy = 1ED4FF451B0E6E1B001EF06A /* PBXContainerItemProxy */;
 		};
 		1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */ = {
@@ -1354,7 +1354,7 @@
 		};
 		E71F0E4E1B0B936200186BAD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E71F0E2E1B0B936200186BAD /* Fresco2 WatchKit Extension */;
+			target = E71F0E2E1B0B936200186BAD /* Fresco WatchKit Extension */;
 			targetProxy = E71F0E4D1B0B936200186BAD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1537,7 +1537,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fresco2.app/Fresco2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fresco.app/Fresco";
 			};
 			name = Debug;
 		};
@@ -1551,11 +1551,11 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Fresco2/Info.plist;
+				INFOPLIST_FILE = Fresco/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fresco2.app/Fresco2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fresco.app/Fresco";
 			};
 			name = Release;
 		};
@@ -1571,7 +1571,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				INFOPLIST_FILE = "Fresco WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -1588,7 +1588,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Fresco2 WatchKit Extension/Info.plist";
+				INFOPLIST_FILE = "Fresco WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -1608,8 +1608,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				IBSC_MODULE = Fresco2_WatchKit_Extension;
-				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IBSC_MODULE = Fresco_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1628,8 +1628,8 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				IBSC_MODULE = Fresco2_WatchKit_Extension;
-				INFOPLIST_FILE = "Fresco2 WatchKit App/Info.plist";
+				IBSC_MODULE = Fresco_WatchKit_Extension;
+				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1660,7 +1660,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco2Tests" */ = {
+		1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1EDA44DA1AA4CCC70082E08D /* Debug */,
@@ -1669,7 +1669,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit App" */ = {
+		E71F0E541B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco WatchKit App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E71F0E521B0B936200186BAD /* Debug */,
@@ -1678,7 +1678,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco2 WatchKit Extension" */ = {
+		E71F0E551B0B936200186BAD /* Build configuration list for PBXNativeTarget "Fresco WatchKit Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E71F0E501B0B936200186BAD /* Debug */,
