@@ -21,6 +21,7 @@
 
 - (void)setRootViewControllerToTabBar
 {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor: before instantiating?
     self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     [self setupTabBarAppearances:self.tbc];
@@ -28,6 +29,7 @@
 
 - (void)setRootViewControllerToFirstRun
 {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
 }
 
