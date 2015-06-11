@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
-        <!--Highlights-->
+        <!--Galleries-->
         <scene sceneID="iWt-CA-Njd">
             <objects>
-                <controller identifier="posts" title="Highlights" id="2MF-GS-TfT" customClass="FRSGalleriesInterfaceController">
+                <controller identifier="posts" title="Galleries" id="2MF-GS-TfT" customClass="FRSGalleriesInterfaceController">
                     <items>
                         <table alignment="left" id="amK-e8-C8f">
                             <items>
@@ -133,7 +133,7 @@
                                             <imageView width="24" height="24" alignment="left" verticalAlignment="center" image="star" contentMode="scaleAspectFit" id="02c-Nj-GEw"/>
                                         </items>
                                     </group>
-                                    <label alignment="left" verticalAlignment="center" text="Highlights" textAlignment="center" id="URO-7P-gWF"/>
+                                    <label alignment="left" verticalAlignment="center" text="Galleries" textAlignment="center" id="URO-7P-gWF"/>
                                 </items>
                                 <edgeInsets key="margins" left="8" right="0.0" top="6" bottom="0.0"/>
                                 <variation key="device=watch42mm">
@@ -296,6 +296,23 @@
                 </glanceController>
             </objects>
             <point key="canvasLocation" x="388" y="309"/>
+        </scene>
+        <!--Interface Controller-->
+        <scene sceneID="szo-7F-Evp">
+            <objects>
+                <controller id="xfR-6h-WEI">
+                    <items>
+                        <table alignment="left" id="eHv-lz-ZkU">
+                            <items>
+                                <tableRow id="vRm-NA-PY4">
+                                    <group key="rootItem" width="1" alignment="left" id="uoN-sk-1Aw"/>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="394" y="554"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="Gsw-eC-X1M">

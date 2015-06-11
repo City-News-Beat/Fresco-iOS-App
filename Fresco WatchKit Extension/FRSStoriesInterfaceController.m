@@ -25,7 +25,7 @@
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    [manager GET:@"http://www.fresconews.com/api/frs-query.php?type=getTagsWithPosts&watch=true" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:@"http://52.6.231.245/v1/story/recent" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSArray *stories = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         
@@ -56,7 +56,7 @@
         
         [row.storyLocation setText:_stories[i][@"location"]];
         
-#warning Set to relative date
+        #warning Set to relative date
 //        [row.storyTime setText:[NSRelativeDate relativeDateString:[MTLModel relativeDateStringFromDate:gallery.createTime]]];
 //        
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){

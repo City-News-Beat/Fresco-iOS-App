@@ -18,6 +18,7 @@
 #import "FRSDataManager.h"
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
+#import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "SwitchingRootViewController.h"
 
@@ -203,7 +204,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)registerForPushNotifications
 {
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    //Navigate Action
     UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init]; // Set up action for navigate
     navigateAction.identifier = navigateIdentifier; // Define an ID string to be passed back to your app when you handle the action
     navigateAction.title = @"Navigate";
@@ -211,10 +212,15 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     navigateAction.destructive = NO; // Destructive actions display in red
     navigateAction.authenticationRequired = NO;
 
+    //Assignments Actions Category
     UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
     assignmentCategory.identifier = assignmentIdentifier; // Identifier to include in your push payload and local notification
     [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    //Notification Types
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    
+    //Notification Settings
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
                                                                              categories:[NSSet setWithObjects:assignmentCategory, nil]];
 
@@ -282,8 +288,15 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-#warning Nothing will happen yet, need to figure out how to handle gallery views
+                    //Retreieve Gallery View Controller from storyboard
+                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
                     
+                    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    
+                    [galleryView setGallery:responseObject];
+                    
+                    [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
+
                 }
                 
             }];
