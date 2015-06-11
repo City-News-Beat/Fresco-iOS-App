@@ -282,7 +282,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    #warning Nothing will happen yet, need to figure out how to handle gallery views
+#warning Nothing will happen yet, need to figure out how to handle gallery views
                     
                 }
                 

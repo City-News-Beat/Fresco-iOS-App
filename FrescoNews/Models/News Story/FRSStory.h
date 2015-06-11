@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSArray *tags;
 @property (nonatomic, strong) NSArray *galleryIds;
 @property (nonatomic, strong) NSArray *articleIds;
+@property (nonatomic, strong) NSArray *thumbnails;
 @property (nonatomic, strong) FRSUser *curator;
 
 @end

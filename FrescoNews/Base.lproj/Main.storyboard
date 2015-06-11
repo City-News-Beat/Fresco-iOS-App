@@ -678,7 +678,7 @@
         <!--Camera-->
         <scene sceneID="8Xq-LW-j2N">
             <objects>
-                <viewController storyboardIdentifier="cameraVC" id="ZRN-7D-fGO" customClass="CameraViewController" sceneMemberID="viewController">
+                <viewController id="ZRN-7D-fGO" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="g3c-6x-9TF"/>
                         <viewControllerLayoutGuide type="bottom" id="Rl9-vH-Ngs"/>

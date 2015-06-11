@@ -15,6 +15,7 @@
 #import "CLLocation+EXIFGPS.h"
 #import "ALAsset+assetType.h"
 #import "FRSDataManager.h"
+#import "SwitchingRootViewController.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -376,7 +377,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
-    TabBarController *vc = ((TabBarController *)self.presentingViewController);
+    TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
     vc.selectedIndex = vc.savedIndex;
     vc.tabBar.hidden = NO;
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];

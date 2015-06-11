@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class TabBarController;
+
 @interface SwitchingRootViewController : UIViewController
+
+@property (strong, nonatomic) TabBarController *tbc;
+
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
+
 @end
