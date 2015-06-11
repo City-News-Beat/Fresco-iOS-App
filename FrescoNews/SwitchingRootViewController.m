@@ -33,12 +33,14 @@
 
 - (void)setRootViewControllerToTabBar
 {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     [self setupTabBarAppearances:self.tbc];
 }
 
 - (void)setRootViewControllerToFirstRun
 {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
 }
 
