@@ -63,6 +63,7 @@
 #warning Make callback block
 - (BOOL)login
 {
+    BOOL ret;
     FRSUser *frsUser;
    
     // user is logged into parse
@@ -78,9 +79,21 @@
     }
     if (frsUser) {
         _currentUser = frsUser;
-        return YES;
+        ret = YES;
     }
-    return NO;
+    
+    if (ret) {
+        // silently and asynchronously sync up the fresco user
+        [self getFrescoUser:frsUser.userID WithResponseBlock:^(FRSUser *responseUser, NSError *error) {
+            if (!error) {
+                _currentUser = responseUser;
+            }
+            else {
+                NSLog(@"Error getting fresco user %@", error);
+            }
+        }];
+    }
+    return ret;
 }
 
 - (void)logout
@@ -249,6 +262,21 @@
     return frsUser;
 }
 
+- (void)getFrescoUser:(NSString *)userId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSDictionary *params = @{@"id" : userId};
+
+    [self GET:@"/user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if(responseBlock) responseBlock(frsUser, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if(responseBlock) responseBlock(nil, error);
+    }];
+}
+
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
     NSString *email = [PFUser currentUser].email;
@@ -290,6 +318,25 @@
        }];
 }
 
+- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self POST:@"/user/settings" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
+}
 
 #pragma mark - Stories
 
