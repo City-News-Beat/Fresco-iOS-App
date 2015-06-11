@@ -50,8 +50,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
-
-    [self loadInitialViewController];
+    
+    // try to bootstrap the user
+    [[FRSDataManager sharedManager] login];
     
     return YES;
 }

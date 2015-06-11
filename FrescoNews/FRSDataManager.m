@@ -87,6 +87,9 @@
         [self getFrescoUser:frsUser.userID WithResponseBlock:^(FRSUser *responseUser, NSError *error) {
             if (!error) {
                 _currentUser = responseUser;
+                
+                // synchronize this data back to Parse
+                [[PFUser currentUser] saveInBackground];
             }
             else {
                 NSLog(@"Error getting fresco user %@", error);
