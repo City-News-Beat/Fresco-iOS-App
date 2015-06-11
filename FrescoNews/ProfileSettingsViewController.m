@@ -21,7 +21,6 @@
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
-@property (nonatomic) int stepValue;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldMiddle;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
@@ -42,22 +41,13 @@
     
     // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
-    self.stepValue = 5.0f;
 
     self.textfieldFirst.text = self.frsUser.first;
     self.textfieldLast.text = self.frsUser.last;
     self.textfieldEmail.text = self.frsUser.email;
-}
-
-- (IBAction)valueChanged:(id)sender {
-    float newStep = roundf((self.radiusStepper.value) / self.stepValue);
-    self.radiusStepper.value = newStep * self.stepValue;
+    self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
     
-    if (self.radiusStepper.value < 2) {
-        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i mile", (int) self.radiusStepper.value];
-    } else {
-        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i miles", (int) self.radiusStepper.value];
-    }
+    [self sliderValueChanged:self.radiusStepper];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -193,6 +183,26 @@
         [alert show];
 
     }];
+    
+    // send a second post to save the radius -- ignore success
+    [updateParams removeAllObjects];
+    [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
+    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
+                                                                 block:^(id responseObject, NSError *error) {
+                                                                     NSString *title;
+                                                                     NSString *message;
+                                                                     if (error) {
+                                                                         title = @"Error";
+                                                                         message = @"Could not save notification radius";
+                                                                         
+                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                                                                                         message:message
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                         [alert show];
+                                                                     }
+                                                                 }];
 }
 
 - (IBAction)changePassword:(UIButton *)sender
@@ -246,8 +256,15 @@
         self.radiusStepperLabel.text = newValue;
 }
 
-- (IBAction)sliderTouchUpInside:(UISlider *)slider {
+- (IBAction)sliderTouchUpInside:(UISlider *)slider
+{
     self.radiusStepper.value = [self roundedValueForSlider:slider];
+   
+    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
+    [self.mapviewRadius zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
+                                      lon:[NSNumber numberWithDouble:coordinate.longitude]
+                               withRadius:[NSNumber numberWithDouble:self.radiusStepper.value]];
+    [self addRadiusCircle];
 }
 
 - (CGFloat)roundedValueForSlider:(UISlider *)slider
@@ -264,7 +281,33 @@
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView zoomToCurrentLocation];
+    [self updateMap];
 }
 
+#pragma mark - Map utility methods
+- (void)updateMap
+{
+    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
+    [self.mapviewRadius zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
+                                      lon:[NSNumber numberWithDouble:coordinate.longitude]
+                               withRadius:[NSNumber numberWithDouble:self.radiusStepper.value]];
+    [self addRadiusCircle];
+}
+
+- (void)addRadiusCircle
+{
+    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:self.radiusStepper.value * 1609.34];
+
+    [self.mapviewRadius removeOverlays:self.mapviewRadius.overlays];
+    [self.mapviewRadius addOverlay:circle];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
+    [circleView setFillColor:[UIColor colorWithHex:@"#0077ff"]];
+    circleView.alpha = .26;
+    return circleView;
+}
 @end

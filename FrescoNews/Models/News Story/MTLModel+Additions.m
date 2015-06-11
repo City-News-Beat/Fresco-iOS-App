@@ -36,7 +36,6 @@
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[FRSGallery class]];
 }
 
-
 + (NSValueTransformer *)imageJSONTransformer
 {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[FRSImage class]];
