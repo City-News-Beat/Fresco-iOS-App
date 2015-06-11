@@ -8,6 +8,7 @@
 
 #import "SwitchingRootViewController.h"
 #import "TabBarController.h"
+#import "CameraViewController.h"
 
 @interface SwitchingRootViewController () <UITabBarControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
@@ -16,23 +17,11 @@
 
 @implementation SwitchingRootViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 #pragma mark - View Controller swapping
 
 - (void)setRootViewControllerToTabBar
 {
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor: before instantiating?
     self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     [self setupTabBarAppearances:self.tbc];
 }
@@ -91,15 +80,11 @@
 
 - (void)setupTabBarAppearances:(UITabBarController *)tabBarController
 {
-    
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
-    
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
                                      @"tab-assignments-highlighted",
                                      @"tab-profile-highlighted"];
-    
     
     tabBarController.delegate = self;
     
@@ -111,13 +96,21 @@
         if (i == 2) {
             item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -6, 0);
+            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
         }
         else {
             item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
         }
         ++i;
     }
+}
+
+#pragma mark - UITabBarControllerDelegate methods
+
+// Probably no longer needed, but doesn't hurt
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    return ![viewController isKindOfClass:[CameraViewController class]];
 }
 
 @end
