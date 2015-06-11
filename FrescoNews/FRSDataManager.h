@@ -52,7 +52,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getGalleriesFromIds:(NSArray *)ids withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Stories
@@ -60,7 +60,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 
 /*

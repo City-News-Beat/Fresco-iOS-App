@@ -340,11 +340,13 @@
 
 #pragma mark - Stories
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     NSString *path = @"/story/recent";
     
-    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true"};
+    offset = offset ?: [NSNumber numberWithInteger:0];
+    
+    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true", @"offset" : offset};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
