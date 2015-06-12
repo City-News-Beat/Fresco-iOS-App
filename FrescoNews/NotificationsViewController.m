@@ -303,9 +303,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                 
-                [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-                
                 [tabBarController setSelectedIndex:3];
+                
+                [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+
                 
                 
             }

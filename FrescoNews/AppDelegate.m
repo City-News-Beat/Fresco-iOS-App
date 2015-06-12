@@ -48,7 +48,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        
+        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] fetchCompletionHandler:nil];
     }
     
     return YES;
@@ -322,9 +323,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
-                    
                     [tabBarController setSelectedIndex:3];
+                    
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                    
                     
                 }
             }];
@@ -348,16 +350,18 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         
         // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
+            
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
 
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    
+
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-                    
+
                     [tabBarController setSelectedIndex:3];
+                    
                     
                 }
             }];
