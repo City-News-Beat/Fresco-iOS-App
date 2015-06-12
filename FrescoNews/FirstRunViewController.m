@@ -10,15 +10,14 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
 #import "FirstRunViewController.h"
 #import "FRSDataManager.h"
+#import "CameraViewController.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
-
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
@@ -63,11 +62,6 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)styleButtons {
@@ -188,8 +182,14 @@
     }];
 }
 
-- (IBAction)buttonWontLogin:(UIButton *)sender {
-    [self navigateToMainApp];
+- (IBAction)buttonWontLogin:(UIButton *)sender
+{
+    if ([self.presentingViewController isKindOfClass:[CameraViewController class]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else {
+        [self navigateToMainApp];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

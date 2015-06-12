@@ -13,7 +13,6 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
-#import "CameraViewController.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import <AFNetworking.h>
@@ -25,7 +24,7 @@
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
-@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@interface AppDelegate () <CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
 @end
 
@@ -121,43 +120,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupAppearances
 {
-    //[self setupTabBarAppearances];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];
-}
-
-- (void)setupTabBarAppearances
-{
-
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
-    
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
-                                     @"tab-stories-highlighted",
-                                     @"tab-camera-highlighted",
-                                     @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
-    
-    
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    
-    tabBarController.delegate = self;
-    
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    
-    for (UITabBarItem *item in tabBar.items) {
-       if (i == 2) {
-            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
-        }
-        else {
-            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
-        }
-        ++i;
-    }
 }
 
 - (void)setupNavigationBarAppearance
@@ -260,14 +225,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     [self.locationManager stopMonitoringSignificantLocationChanges];
 }
-
-#pragma mark - UITabBarControllerDelegate methods
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
-{
-    return ![viewController isKindOfClass:[CameraViewController class]];
-}
-
 
 #pragma mark - Notification Delegate Methods
 
