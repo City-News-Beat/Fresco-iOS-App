@@ -11,7 +11,7 @@
 
 @interface FRSGalleriesInterfaceController : WKInterfaceController
 
-@property (nonatomic, strong) NSArray *posts;
+@property (nonatomic, strong) NSArray *galleries;
 
 @property (weak, nonatomic) IBOutlet WKInterfaceTable *postTable;
 

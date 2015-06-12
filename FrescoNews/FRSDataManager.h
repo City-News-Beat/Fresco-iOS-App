@@ -33,6 +33,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (BOOL)login;
 - (void)logout;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
+- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
@@ -51,7 +52,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getGalleriesFromIds:(NSArray *)ids withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Stories
@@ -59,7 +60,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 
 /*

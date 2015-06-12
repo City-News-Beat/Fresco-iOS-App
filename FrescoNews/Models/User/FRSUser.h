@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *profileImageUrl;
+@property (nonatomic, copy) NSNumber *notificationRadius;
 
 - (NSString *)displayName;
 - (NSString *)asJSONString;

@@ -20,10 +20,6 @@ static NSString * const kCellIdentifier = @"StoryCellMosaic";
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
-@interface StoryCellMosaic()
-@property (nonatomic, strong) NSArray *imageArray;
-@end
-
 @implementation StoryCellMosaic
 + (NSString *)identifier
 {
@@ -33,38 +29,6 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)awakeFromNib
 {
     self.contentView.backgroundColor = [UIColor whiteColor];
-}
-
-- (NSArray *)imageArray
-{
-    if (_imageArray)
-        return _imageArray;
-    
-    NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:10];
-
-    for (FRSPost *post in self.story.thumbnails) {
-        // this finds cleaner data
-        if (post && post.image && post.image.height && post.image.width) {
-            [tempArray addObject:post.image];
-        }
-    }
-    [self shuffle:tempArray];
-    
-    _imageArray = [[NSArray alloc]initWithArray:tempArray];
-    return _imageArray;
-}
-
-- (void)shuffle:(NSMutableArray *)array
-{
-    // seeding the random number generator with a constant
-    // will make the images come out the same every time which is an optimization
-    srand(42);
-    NSUInteger count = [array count];
-    for (NSUInteger i = 0; i < count; ++i) {
-        NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + (rand() % remainingCount);
-        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
-    }
 }
 
 - (void)configureImages
@@ -146,6 +110,7 @@ static CGFloat const kInterImageGap = 1.0f;
     // we might optimize this for reuse if need be
     for (UIView *v in [self.contentView subviews]) {
         if ([v isKindOfClass:[StoryThumbnailView class]])
+            [((StoryThumbnailView *) v) cancelImageRequestOperation];
             [v removeFromSuperview];
     }
     self.imageArray = nil;
