@@ -338,7 +338,11 @@
             [self crossPostToTwitter:crossPostString];
             [self crossPostToFacebook:crossPostString];
 
+            // TODO: DRY
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"defaultAssignmentID"];
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"selectedAssets"];
+
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
                                                                     preferredStyle:UIAlertControllerStyleAlert];

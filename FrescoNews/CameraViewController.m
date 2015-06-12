@@ -377,6 +377,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
+    // TODO: DRY
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"defaultAssignmentID"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"selectedAssets"];
+
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
     vc.selectedIndex = vc.savedIndex;
     vc.tabBar.hidden = NO;
