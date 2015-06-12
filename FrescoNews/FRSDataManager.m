@@ -50,8 +50,11 @@
 
 - (id)init
 {
+    
     NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseURL];
+
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
+        
         [[self responseSerializer] setAcceptableContentTypes:nil];
     }
     return self;
@@ -63,6 +66,7 @@
 #warning Make callback block
 - (BOOL)login
 {
+    BOOL ret;
     FRSUser *frsUser;
    
     // user is logged into parse
@@ -78,9 +82,24 @@
     }
     if (frsUser) {
         _currentUser = frsUser;
-        return YES;
+        ret = YES;
     }
-    return NO;
+    
+    if (ret) {
+        // silently and asynchronously sync up the fresco user
+        [self getFrescoUser:frsUser.userID WithResponseBlock:^(FRSUser *responseUser, NSError *error) {
+            if (!error) {
+                _currentUser = responseUser;
+                
+                // synchronize this data back to Parse
+                [[PFUser currentUser] saveInBackground];
+            }
+            else {
+                NSLog(@"Error getting fresco user %@", error);
+            }
+        }];
+    }
+    return ret;
 }
 
 - (void)logout
@@ -249,13 +268,28 @@
     return frsUser;
 }
 
+- (void)getFrescoUser:(NSString *)userId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSDictionary *params = @{@"id" : userId};
+
+    [self GET:@"/user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if(responseBlock) responseBlock(frsUser, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if(responseBlock) responseBlock(nil, error);
+    }];
+}
+
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
     NSString *email = [PFUser currentUser].email;
     NSDictionary *params = @{@"email" : email ?: [NSNull null]};
     
 #warning this shouldn't return success on email exists and/or I should handle null "data" element
-    [self POST:@"/user/create" parameters:params constructingBodyWithBlock:nil
+    [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
@@ -275,7 +309,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
     [params addEntriesFromDictionary:inputParams];
     
-    [self POST:@"/user/update" parameters:params constructingBodyWithBlock:nil
+    [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
@@ -290,14 +324,35 @@
        }];
 }
 
+- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self POST:@"/user/settings" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
+}
 
 #pragma mark - Stories
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock {
     
-    NSString *path = @"/story/recent";
+    NSString *path = @"story/recent";
     
-    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true"};
+    offset = offset ?: [NSNumber numberWithInteger:0];
+    
+    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true", @"offset" : offset};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -324,7 +379,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:@"/story/get/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"story/get/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -349,7 +404,7 @@
     
     offset = offset ?: 0;
     
-    [self GET:[NSString stringWithFormat:@"/user/galleries?id=%@&offset=%@", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:[NSString stringWithFormat:@"user/galleries?id=%@&offset=%@", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -391,7 +446,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:[NSString stringWithFormat:@"/gallery/get?id=%@", galleryId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:[NSString stringWithFormat:@"gallery/get?id=%@", galleryId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -413,7 +468,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:@"/gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -436,10 +491,10 @@
     
     if (offset != nil) {
         
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
     }
     else{
-        [self getGalleriesAtURLString:@"/gallery/highlights?stories=true" WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:@"gallery/highlights?stories=true" WithResponseBlock:responseBlock];
     }
 }
 
@@ -453,7 +508,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:[NSString stringWithFormat:@"/assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:[NSString stringWithFormat:@"assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         FRSAssignment *assignment = [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:responseObject[@"data"] error:NULL];
         if(responseBlock) responseBlock(assignment, nil);
@@ -473,7 +528,7 @@
     
     NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
 
-    [self GET:@"/assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
         if (![responseObject[@"data"] isEqual:[NSNull null]]) {
@@ -500,7 +555,7 @@
     
     NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
     
-    [self GET:@"/assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(![responseObject[@"data"] isEqual:[NSNull null]]){
@@ -534,7 +589,7 @@
     
     NSDictionary *params = @{@"id" : userId};
     
-    [self GET:@"/notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -567,7 +622,7 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
-    [self POST:@"/notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self POST:@"notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -598,7 +653,7 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
-    [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self POST:@"notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -620,7 +675,7 @@
 }
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
+    [self getGalleriesAtURLString:[NSString stringWithFormat:@"user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
 @end
 

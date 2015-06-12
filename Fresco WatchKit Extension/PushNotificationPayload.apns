@@ -8,4 +8,4 @@
     },
     "image": "http://www.fresconews.com/uploads/422/large_de2035e499752c86358d9409586acab7a05a81db.jpg"
 },
-{ "aps": { "alert": { "body": "New Assignment YO!", "title": "Fresco News" }, "category": "frescoNotification" }, "type": "assignment", "lat": "", "lng": "", "assignment_id": "555e57843764032b1d826dd7" }
+{ "aps": { "alert": { "body": "New Assignment YO!", "title": "Fresco News" }, "category": "frescoNotification" }, "type": "assignment", "lat": "", "lng": "", "assignment_id": "5570854d53b1c9a37a41560c" }

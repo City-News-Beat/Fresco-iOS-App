@@ -17,6 +17,7 @@
              @"first" : @"firstname",
              @"last" : @"lastname",
              @"email" : @"email",
+             @"notificationRadius" : @"settings.radius",
              @"userID" : @"_id"
              };
 }

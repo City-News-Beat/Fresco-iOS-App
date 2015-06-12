@@ -13,18 +13,18 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
-#import "CameraViewController.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
+#import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "SwitchingRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
-@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@interface AppDelegate () <CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
 @end
 
@@ -47,8 +47,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        
+        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] fetchCompletionHandler:nil];
     }
+    
+    // try to bootstrap the user
+    [[FRSDataManager sharedManager] login];
     
     return YES;
 }
@@ -117,43 +121,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupAppearances
 {
-    //[self setupTabBarAppearances];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];
-}
-
-- (void)setupTabBarAppearances
-{
-
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
-    
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
-                                     @"tab-stories-highlighted",
-                                     @"tab-camera-highlighted",
-                                     @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
-    
-    
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    
-    tabBarController.delegate = self;
-    
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    
-    for (UITabBarItem *item in tabBar.items) {
-       if (i == 2) {
-            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
-        }
-        else {
-            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
-        }
-        ++i;
-    }
 }
 
 - (void)setupNavigationBarAppearance
@@ -203,7 +173,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)registerForPushNotifications
 {
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    //Navigate Action
     UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init]; // Set up action for navigate
     navigateAction.identifier = navigateIdentifier; // Define an ID string to be passed back to your app when you handle the action
     navigateAction.title = @"Navigate";
@@ -211,10 +181,15 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     navigateAction.destructive = NO; // Destructive actions display in red
     navigateAction.authenticationRequired = NO;
 
+    //Assignments Actions Category
     UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
     assignmentCategory.identifier = assignmentIdentifier; // Identifier to include in your push payload and local notification
     [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    //Notification Types
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    
+    //Notification Settings
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
                                                                              categories:[NSSet setWithObjects:assignmentCategory, nil]];
 
@@ -252,14 +227,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [self.locationManager stopMonitoringSignificantLocationChanges];
 }
 
-#pragma mark - UITabBarControllerDelegate methods
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
-{
-    return ![viewController isKindOfClass:[CameraViewController class]];
-}
-
-
 #pragma mark - Notification Delegate Methods
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -273,43 +240,53 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     [PFPush handlePush:userInfo];
     
+    /*
+    ** Check the type of the notifications
+    */
+    
     //Breaking News
-    if([userInfo[@"type"] isEqualToString:@"breaking"]){
+    if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
         
-        //Check to make sure the payload has an id
+        //Check to make sure the payload has a galelry ID
         if(userInfo[@"gallery"] != nil){
             
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-#warning Nothing will happen yet, need to figure out how to handle gallery views
+                    //Retreieve Gallery View Controller from storyboard
+                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
                     
+                    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    
+                    [galleryView setGallery:responseObject];
+                    
+                    [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
+
                 }
                 
             }];
             
         }
-
-        
     
     }
     
     // Assignments
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
-        // Check to make sure the payload has an id
+        // Check to make sure the payload has an assignment ID
         if (userInfo[@"assignment"]) {
             
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-
+                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
-                    
                     [tabBarController setSelectedIndex:3];
+                    
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                    
                     
                 }
             }];
@@ -330,18 +307,21 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
-        // Check to make sure the payload has an id
+        
+        // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
+            
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
 
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    
+
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-                    
+
                     [tabBarController setSelectedIndex:3];
+                    
                     
                 }
             }];

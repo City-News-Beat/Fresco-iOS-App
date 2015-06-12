@@ -14,6 +14,8 @@
 
 @property (strong, nonatomic) TabBarController *tbc;
 
+@property (weak, nonatomic) UIViewController *viewController;
+
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
 

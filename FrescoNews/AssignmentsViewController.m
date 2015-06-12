@@ -8,7 +8,7 @@
 
 #import "AssignmentsViewController.h"
 #import "UIViewController+Additions.h"
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "MTLModel+Additions.h"
 #import "FRSDataManager.h"
 #import "AssignmentAnnotation.h"
@@ -33,9 +33,11 @@
 
     @property (assign, nonatomic) BOOL centeredUserLocation;
 
-    @property (assign, nonatomic) BOOL updating;
+    @property (assign, nonatomic) BOOL centeredAssignment;
 
     @property (assign, nonatomic) BOOL navigateTo;
+
+    @property (assign, nonatomic) BOOL updating;
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
@@ -67,23 +69,17 @@
     self.navigationSheet.tag = 100;
 
     self.operatingRadius = 0;
-
-    if(self.currentAssignment != nil){
-        
-        [self updateCurrentAssignmentInView];
-        
-        if(self.navigateTo)
-            [self navigateToCurrentAssignment];
     
+    
+    if(self.currentAssignment == nil){
+        [self updateAssignments];
+        
     }
     else{
-        
-        self.scrollView.alpha = 0;
-        
+        [self presentCurrentAssignment];
     }
-    
-    [self updateAssignments];
 
+    
 }
 
 - (void)dealloc
@@ -98,12 +94,8 @@
     
     static BOOL firstTime = YES;
     
-    if(self.currentAssignment != nil){
-        
-        [self updateCurrentAssignmentInView];
-        
-        if(self.navigateTo) [self navigateToCurrentAssignment];
-        
+    if(self.currentAssignment == nil){
+        [self updateAssignments];
     }
 
     if (firstTime) {
@@ -122,6 +114,8 @@
 - (void)tweakUI {
     
     self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
+    
+    self.scrollView.alpha = 0;
     
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
@@ -152,7 +146,27 @@
     
     self.currentAssignment = currentAssignment;
     
-    if(navigate) self.navigateTo = YES;
+    self.centeredUserLocation = YES;
+    
+    [self presentCurrentAssignment];
+    
+}
+
+-(void)presentCurrentAssignment{
+    
+    self.assignmentTitle.text= self.currentAssignment.title;
+    
+    self.assignmentDescription.text = self.currentAssignment.caption;
+    
+    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
+    
+    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
+    
+    [UIView animateWithDuration:1 animations:^(void) {
+        [self.scrollView setAlpha:1];
+    }];
+    
+    if(self.navigateTo) [self.navigationSheet showInView:self.view];
 
 }
 
@@ -326,33 +340,6 @@
     
 }
 
-/*
-** Set the current assignment in the view
-*/
-
-- (void)updateCurrentAssignmentInView{
-    
-    self.assignmentTitle.text= self.currentAssignment.title;
-    
-    self.assignmentDescription.text = self.currentAssignment.caption;
-    
-    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
-    
-    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
-    
-    [UIView animateWithDuration:1 animations:^(void) {
-        [self.scrollView setAlpha:1];
-    }];
-    
-}
-
-- (void)navigateToCurrentAssignment{
-    
-    [self.navigationSheet showInView:self.view];
-    
-    self.navigateTo = NO;
-
-}
 
 /*
 ** Zoom to specified coordinates
@@ -410,23 +397,21 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
-    static NSString *identifier = @"AssignmentAnnotation";
+    static NSString *assignmentIdentifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
+    static NSString *userIdentifier = @"currentLocation";
+
     
     if (annotation == mapView.userLocation){
-        
-
-        static NSString *identifier = @"currentLocation";
         
         //If the user has a profile image
         if([FRSDataManager sharedManager].currentUser.profileImageUrl != nil){
             
-            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
             
             if(pinView == nil){
                 
-                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-                
+                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
                 
                 UIImageView *profileImageView = [[UIImageView alloc]init];
                 profileImageView.frame = CGRectMake(0, 0, 30, 30);
@@ -445,11 +430,11 @@
         //If the user does not have a profile image
         else{
             
-            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
             
             if(pulsingView == nil) {
                 
-                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
                 
                 pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
                 
@@ -464,11 +449,11 @@
 
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:assignmentIdentifier];
     
         if (annotationView == nil) {
           
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:assignmentIdentifier];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
@@ -498,7 +483,7 @@
         
         if (annotationView == nil) {
             
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:clusterIdentifier];
             annotationView.enabled = YES;
             
             annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
@@ -512,17 +497,6 @@
     
     
     }
-
-    
-    identifier = @"currentLocation";
-    
-    MKAnnotationView *userLocation = (MKAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
-    
-    userLocation.image = [UIImage imageNamed:@"user"]; //here we use a nice image instead of the default pins
-    
-
-    return userLocation;
-    
 
     return nil;
 
@@ -542,14 +516,11 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
+
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
+        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO];
         
-        [self updateCurrentAssignmentInView];
-        
-        [mapView selectAnnotation:view.annotation animated:YES];
-
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
         
@@ -558,6 +529,9 @@
         [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
     
     }
+    
+    [mapView selectAnnotation:view.annotation animated:YES];
+
 
 }
 
@@ -565,8 +539,11 @@
 
     [mapView deselectAnnotation:view.annotation animated:YES];
     
+    self.currentAssignment = nil;
+    
     [UIView animateWithDuration:1 animations:^(void) {
-        [self.scrollView setAlpha:0];
+        self.scrollView.alpha = 0.0f;
+        self.centeredAssignment = NO;
     }];
 
 }
