@@ -55,9 +55,30 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
-            self.notifications = responseObject;
-            
-            [[self tableView] reloadData];
+            if(responseObject == nil || [responseObject count] == 0){
+                
+                UILabel  * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 70, 150, 100)];
+                
+                label.text = @"No Notifications";
+                
+                label.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
+                
+                [label sizeToFit];
+                
+                label.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
+                
+                [self.view addSubview:label];
+                
+                self.tableView.hidden = YES;
+                
+            }
+            else{
+                
+                self.notifications = responseObject;
+                
+                [[self tableView] reloadData];
+                
+            }
             
         }
         
@@ -165,6 +186,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
         cell.constraintNotificationDescription.constant = 3.0f;
         
+        cell.secondButton.hidden = YES;
+        
         if(notification.meta[@"icon"] != nil){
         
             [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
@@ -226,7 +249,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         }];
         
     }
-    else if([notification.type isEqualToString:@"use"]){
+    else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:@"breaking"] ){
         
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
@@ -244,7 +267,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
             }
             
         }];
-
         
     }
     else if([notification.type isEqualToString:@"social"]){

@@ -539,8 +539,7 @@
     }
     
     [mapView selectAnnotation:view.annotation animated:YES];
-    
-    
+
 
 }
 
