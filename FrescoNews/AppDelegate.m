@@ -279,10 +279,14 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     [PFPush handlePush:userInfo];
     
+    /*
+    ** Check the type of the notifications
+    */
+    
     //Breaking News
-    if([userInfo[@"type"] isEqualToString:@"breaking"]){
+    if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
         
-        //Check to make sure the payload has an id
+        //Check to make sure the payload has a galelry ID
         if(userInfo[@"gallery"] != nil){
             
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
@@ -302,15 +306,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
             }];
             
         }
-
-        
     
     }
     
     // Assignments
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
-        // Check to make sure the payload has an id
+        // Check to make sure the payload has an assignment ID
         if (userInfo[@"assignment"]) {
             
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
@@ -343,7 +345,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
-        // Check to make sure the payload has an id
+        
+        // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
