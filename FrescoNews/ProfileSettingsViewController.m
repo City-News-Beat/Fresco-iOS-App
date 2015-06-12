@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
 
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 
@@ -21,7 +21,6 @@
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
-@property (nonatomic) int stepValue;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldMiddle;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
@@ -42,22 +41,13 @@
     
     // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
-    self.stepValue = 5.0f;
 
     self.textfieldFirst.text = self.frsUser.first;
     self.textfieldLast.text = self.frsUser.last;
     self.textfieldEmail.text = self.frsUser.email;
-}
-
-- (IBAction)valueChanged:(id)sender {
-    float newStep = roundf((self.radiusStepper.value) / self.stepValue);
-    self.radiusStepper.value = newStep * self.stepValue;
+    self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
     
-    if (self.radiusStepper.value < 2) {
-        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i mile", (int) self.radiusStepper.value];
-    } else {
-        self.radiusStepperLabel.text = [NSString stringWithFormat:@"%i miles", (int) self.radiusStepper.value];
-    }
+    [self sliderValueChanged:self.radiusStepper];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -193,6 +183,26 @@
         [alert show];
 
     }];
+    
+    // send a second post to save the radius -- ignore success
+    [updateParams removeAllObjects];
+    [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
+    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
+                                                                 block:^(id responseObject, NSError *error) {
+                                                                     NSString *title;
+                                                                     NSString *message;
+                                                                     if (error) {
+                                                                         title = @"Error";
+                                                                         message = @"Could not save notification radius";
+                                                                         
+                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                                                                                         message:message
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                         [alert show];
+                                                                     }
+                                                                 }];
 }
 
 - (IBAction)changePassword:(UIButton *)sender
@@ -235,7 +245,8 @@
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
-    CGFloat roundedValue = [self roundedValueForSlider:slider];
+   // CGFloat roundedValue = [self roundedValueForSlider:slider];
+    CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
     NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
     
@@ -246,25 +257,21 @@
         self.radiusStepperLabel.text = newValue;
 }
 
-- (IBAction)sliderTouchUpInside:(UISlider *)slider {
-    self.radiusStepper.value = [self roundedValueForSlider:slider];
-}
-
-- (CGFloat)roundedValueForSlider:(UISlider *)slider
+- (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
-    CGFloat roundedValue;
-    if (slider.value < 10)
-        roundedValue = (int)slider.value;
-    else
-        roundedValue = ((int)slider.value / 10) * 10;
-    
-    return roundedValue;
+    self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
+    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView zoomToCurrentLocation];
+    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
 }
 
 @end

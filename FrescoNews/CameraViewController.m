@@ -733,6 +733,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)findNearbyAssignments
 {
+    // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.defaultAssignment = [responseObject firstObject];
         self.defaultAssignment.locationObject = [[CLLocation alloc] initWithLatitude:[self.defaultAssignment.lat floatValue]

@@ -41,6 +41,7 @@
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
         
         sharedInstance.baseURL = @"http://52.6.231.245/v1/";
+        sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
 
         sharedInstance.maximumVideoLength = 60.0f;
