@@ -21,8 +21,5 @@
 
 - (void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate;
 
-- (void)updateCurrentAssignment;
-
-- (void)navigateToCurrentAssignment;
 
 @end

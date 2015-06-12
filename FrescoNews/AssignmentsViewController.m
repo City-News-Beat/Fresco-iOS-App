@@ -33,9 +33,11 @@
 
     @property (assign, nonatomic) BOOL centeredUserLocation;
 
-    @property (assign, nonatomic) BOOL updating;
+    @property (assign, nonatomic) BOOL centeredAssignment;
 
     @property (assign, nonatomic) BOOL navigateTo;
+
+    @property (assign, nonatomic) BOOL updating;
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
@@ -68,10 +70,16 @@
 
     self.operatingRadius = 0;
     
-    [self updateCurrentAssignment];
     
-    [self updateAssignments];
+    if(self.currentAssignment == nil){
+        [self updateAssignments];
+        
+    }
+    else{
+        [self presentCurrentAssignment];
+    }
 
+    
 }
 
 - (void)dealloc
@@ -86,7 +94,9 @@
     
     static BOOL firstTime = YES;
     
-    [self updateCurrentAssignment];
+    if(self.currentAssignment == nil){
+        [self updateAssignments];
+    }
 
     if (firstTime) {
         // move the legal link in order to tuck the map behind nicely
@@ -104,6 +114,8 @@
 - (void)tweakUI {
     
     self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
+    
+    self.scrollView.alpha = 0;
     
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
@@ -134,7 +146,27 @@
     
     self.currentAssignment = currentAssignment;
     
-    if(navigate) self.navigateTo = YES;
+    self.centeredUserLocation = YES;
+    
+    [self presentCurrentAssignment];
+    
+}
+
+-(void)presentCurrentAssignment{
+    
+    self.assignmentTitle.text= self.currentAssignment.title;
+    
+    self.assignmentDescription.text = self.currentAssignment.caption;
+    
+    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
+    
+    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
+    
+    [UIView animateWithDuration:1 animations:^(void) {
+        [self.scrollView setAlpha:1];
+    }];
+    
+    if(self.navigateTo) [self.navigationSheet showInView:self.view];
 
 }
 
@@ -308,44 +340,6 @@
     
 }
 
-/*
-** Set the current assignment in the view
-*/
-
-- (void)updateCurrentAssignment{
-    
-    if(self.currentAssignment != nil){
-        
-        self.assignmentTitle.text= self.currentAssignment.title;
-        
-        self.assignmentDescription.text = self.currentAssignment.caption;
-        
-        self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
-        
-        [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
-        
-        [UIView animateWithDuration:1 animations:^(void) {
-            [self.scrollView setAlpha:1];
-        }];
-        
-        if(self.navigateTo)  [self navigateToCurrentAssignment];
-        
-    }
-    else{
-        
-        self.scrollView.alpha = 0;
-        
-    }
-    
-}
-
-- (void)navigateToCurrentAssignment{
-    
-    [self.navigationSheet showInView:self.view];
-    
-    self.navigateTo = NO;
-
-}
 
 /*
 ** Zoom to specified coordinates
@@ -525,9 +519,7 @@
 
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
-        
-        [self updateCurrentAssignment];
+        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO];
         
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
@@ -539,8 +531,7 @@
     }
     
     [mapView selectAnnotation:view.annotation animated:YES];
-    
-    
+
 
 }
 
@@ -548,8 +539,11 @@
 
     [mapView deselectAnnotation:view.annotation animated:YES];
     
+    self.currentAssignment = nil;
+    
     [UIView animateWithDuration:1 animations:^(void) {
-        [self.scrollView setAlpha:0];
+        self.scrollView.alpha = 0.0f;
+        self.centeredAssignment = NO;
     }];
 
 }

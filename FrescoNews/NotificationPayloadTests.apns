@@ -20,13 +20,11 @@
 {
     "aps": {
         "alert": {
-            "body": "New Assignment YO!",
+            "body": "Reports of a severe Tornado in Little Falls, Minnesota",
             "title": "Fresco News"
         },
         "category": "ASSIGNMENT_CATEGORY"
     },
     "type" : "assignment",
-    "lat": "",
-    "lng":"",
-    "assignment_id" : "555fd76a263c21c930f9974c"
+    "assignment" : "5570868553b1c9a37a41560d"
 }
