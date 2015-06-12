@@ -148,6 +148,8 @@
     
     self.centeredUserLocation = YES;
     
+    if(navigate) self.navigateTo = YES;
+    
     [self presentCurrentAssignment];
     
 }
