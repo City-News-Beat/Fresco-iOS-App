@@ -16,9 +16,11 @@
 #import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface HomeViewController ()
+
 //@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+
 @end
 
 @implementation HomeViewController
@@ -53,8 +55,9 @@
     
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+        
         // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+        NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
         
         //Make request for more posts, append to galleries array
         [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
@@ -65,12 +68,11 @@
                     
                     [self.galleriesViewController.tableView reloadData];
                     
+                    [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+                    
                 }
             }
-            [[self.galleriesViewController tableView] reloadData];
         }];
-        
-        [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
         
     }];
 
@@ -96,13 +98,7 @@
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
             }
         }
-        [self reloadData];
     }];
-}
-
-- (void)reloadData
-{
-
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

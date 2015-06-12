@@ -67,23 +67,17 @@
     self.navigationSheet.tag = 100;
 
     self.operatingRadius = 0;
-
-    if(self.currentAssignment != nil){
-        
-        [self updateCurrentAssignmentInView];
-        
-        if(self.navigateTo)
-            [self navigateToCurrentAssignment];
     
-    }
-    else{
-        
-        self.scrollView.alpha = 0;
-        
-    }
+    [self updateCurrentAssignment];
     
     [self updateAssignments];
 
+}
+
+- (void)dealloc
+{
+    self.scrollView.delegate = nil;
+    self.assignmentsMap.delegate = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -92,13 +86,7 @@
     
     static BOOL firstTime = YES;
     
-    if(self.currentAssignment != nil){
-        
-        [self updateCurrentAssignmentInView];
-        
-        if(self.navigateTo) [self navigateToCurrentAssignment];
-        
-    }
+    [self updateCurrentAssignment];
 
     if (firstTime) {
         // move the legal link in order to tuck the map behind nicely
@@ -324,19 +312,30 @@
 ** Set the current assignment in the view
 */
 
-- (void)updateCurrentAssignmentInView{
+- (void)updateCurrentAssignment{
     
-    self.assignmentTitle.text= self.currentAssignment.title;
-    
-    self.assignmentDescription.text = self.currentAssignment.caption;
-    
-    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
-    
-    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
-    
-    [UIView animateWithDuration:1 animations:^(void) {
-        [self.scrollView setAlpha:1];
-    }];
+    if(self.currentAssignment != nil){
+        
+        self.assignmentTitle.text= self.currentAssignment.title;
+        
+        self.assignmentDescription.text = self.currentAssignment.caption;
+        
+        self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
+        
+        [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
+        
+        [UIView animateWithDuration:1 animations:^(void) {
+            [self.scrollView setAlpha:1];
+        }];
+        
+        if(self.navigateTo)  [self navigateToCurrentAssignment];
+        
+    }
+    else{
+        
+        self.scrollView.alpha = 0;
+        
+    }
     
 }
 
@@ -404,23 +403,21 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
-    static NSString *identifier = @"AssignmentAnnotation";
+    static NSString *assignmentIdentifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
+    static NSString *userIdentifier = @"currentLocation";
+
     
     if (annotation == mapView.userLocation){
-        
-
-        static NSString *identifier = @"currentLocation";
         
         //If the user has a profile image
         if([FRSDataManager sharedManager].currentUser.profileImageUrl != nil){
             
-            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
             
             if(pinView == nil){
                 
-                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-                
+                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
                 
                 UIImageView *profileImageView = [[UIImageView alloc]init];
                 profileImageView.frame = CGRectMake(0, 0, 30, 30);
@@ -439,11 +436,11 @@
         //If the user does not have a profile image
         else{
             
-            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
             
             if(pulsingView == nil) {
                 
-                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
                 
                 pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
                 
@@ -458,11 +455,11 @@
 
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:assignmentIdentifier];
     
         if (annotationView == nil) {
           
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:assignmentIdentifier];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
@@ -492,7 +489,7 @@
         
         if (annotationView == nil) {
             
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:clusterIdentifier];
             annotationView.enabled = YES;
             
             annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
@@ -506,17 +503,6 @@
     
     
     }
-
-    
-    identifier = @"currentLocation";
-    
-    MKAnnotationView *userLocation = (MKAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:identifier];
-    
-    userLocation.image = [UIImage imageNamed:@"user"]; //here we use a nice image instead of the default pins
-    
-
-    return userLocation;
-    
 
     return nil;
 
@@ -536,14 +522,13 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
+
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
         self.currentAssignment = [self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex];
         
-        [self updateCurrentAssignmentInView];
+        [self updateCurrentAssignment];
         
-        [mapView selectAnnotation:view.annotation animated:YES];
-
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
         
@@ -552,6 +537,10 @@
         [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
     
     }
+    
+    [mapView selectAnnotation:view.annotation animated:YES];
+    
+    
 
 }
 

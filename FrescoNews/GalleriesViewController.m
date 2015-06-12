@@ -69,7 +69,12 @@
 
 - (void)refresh
 {
-    [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+    
+    if([self.parentViewController isKindOfClass:[HomeViewController class]]){
+    
+        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+        
+    }
     
     [self.refreshControl endRefreshing];
     

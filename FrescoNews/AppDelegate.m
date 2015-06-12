@@ -6,143 +6,80 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <CoreLocation/CoreLocation.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <Parse/Parse.h>
+@import CoreLocation;
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
-#import "CameraViewController.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import <AFNetworking.h>
 #import "FRSDataManager.h"
+#import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
+#import "SwitchingRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
-@interface AppDelegate () <UITabBarControllerDelegate, CLLocationManagerDelegate>
+@interface AppDelegate () <CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
 @end
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    [self setupLocationManager];
-
-    
-    // Register for Push Notitications
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
-                                                    UIUserNotificationTypeBadge |
-                                                    UIUserNotificationTypeSound);
-    
-    
-    //Set up action for navigate
-    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init];
-    
-    // Define an ID string to be passed back to your app when you handle the action
-    navigateAction.identifier = navigateIdentifier;
-    // Localized string displayed in the action button
-    navigateAction.title = @"Navigate";
-    // If you need to show UI, choose foreground
-    navigateAction.activationMode = UIUserNotificationActivationModeBackground;
-    // Destructive actions display in red
-    navigateAction.destructive = NO;
-    // Set whether the action requires the user to authenticate
-    navigateAction.authenticationRequired = NO;
-    
-    
-    // First create the category
-    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
-    // Identifier to include in your push payload and local notification
-    assignmentCategory.identifier = assignmentIdentifier;
-    // Add the actions to the category and set the action context
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
-    // Set the actions to present in a minimal context
-    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextMinimal];
-    
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
-                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
-    
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    
-    
-    //[self setupFacebookAndParse];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     [[AFNetworkActivityLogger sharedLogger] startLogging];
-    
-    // Parse Initialization
-    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
-                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
-    // Facebook
-    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    
-    // Twitter
-    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
-                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
-    
+    [self configureParseWithLaunchOptions:launchOptions];
     [self setupAppearances];
-    
-    // this is where we determine whether to run the firstRun sequence
-    [self loadInitialViewController];
-    
+
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [self setupLocationManager];
+        [self registerForPushNotifications];
+        [self setRootViewControllerToTabBar];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+        [self setRootViewControllerToFirstRun];
+    }
+
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
+    
+    // try to bootstrap the user
+    [[FRSDataManager sharedManager] login];
     
     return YES;
 }
 
 #pragma mark - Root View Controllers
-
 // because the app might launch into First Run mode
 // or regular (tab interface) we need to dynamically swap
 // root view controllers
 - (void)loadInitialViewController
 {
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     if ([[FRSDataManager sharedManager] login])
-        [self setRootViewControllerToTabBar];
+        [rootViewController setRootViewControllerToTabBar];
     else {
-        [self setRootViewControllerToFirstRun];
+        [rootViewController setRootViewControllerToFirstRun];
     }
 }
 
 - (void)setRootViewControllerToTabBar
 {
-    [self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    [self setupTabBarAppearances];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToTabBar];
 }
 
 - (void)setRootViewControllerToFirstRun
 {
-    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
-}
-
-- (void)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
-{
-    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
-    
-    UIViewController *viewController;
-
-    if (underNavigationController) {
-        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
-        vc.navigationController.navigationBar.hidden = YES;
-    }
-    else
-        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
-
-    self.window.rootViewController = viewController;
-    [self.window makeKeyAndVisible];
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToFirstRun];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -153,8 +90,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                                           openURL:url
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
-    
-    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -185,43 +120,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupAppearances
 {
-    [self setupTabBarAppearances];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];
-}
-
-- (void)setupTabBarAppearances
-{
-
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]];
-    
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
-                                     @"tab-stories-highlighted",
-                                     @"tab-camera-highlighted",
-                                     @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
-    
-    
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    
-    tabBarController.delegate = self;
-    
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    
-    for (UITabBarItem *item in tabBar.items) {
-       if (i == 2) {
-            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -6, 0);
-        }
-        else {
-            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
-        }
-        ++i;
-    }
 }
 
 - (void)setupNavigationBarAppearance
@@ -242,6 +143,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [UIBarButtonItem appearance].tintColor = [UIColor colorWithHex:@"76541E"];
 }
 
+#pragma mark - Miscellaneous Configuration
+
 - (void)setupLocationManager
 {
     if (![CLLocationManager locationServicesEnabled]) {
@@ -254,6 +157,44 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager requestAlwaysAuthorization];
     [self.locationManager startMonitoringSignificantLocationChanges];
+}
+
+- (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
+{
+    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
+                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
+                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
+}
+
+- (void)registerForPushNotifications
+{
+    //Navigate Action
+    UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init]; // Set up action for navigate
+    navigateAction.identifier = navigateIdentifier; // Define an ID string to be passed back to your app when you handle the action
+    navigateAction.title = @"Navigate";
+    navigateAction.activationMode = UIUserNotificationActivationModeBackground; // If you need to show UI, choose foreground
+    navigateAction.destructive = NO; // Destructive actions display in red
+    navigateAction.authenticationRequired = NO;
+
+    //Assignments Actions Category
+    UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
+    assignmentCategory.identifier = assignmentIdentifier; // Identifier to include in your push payload and local notification
+    [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
+    
+    //Notification Types
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    
+    //Notification Settings
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:[NSSet setWithObjects:assignmentCategory, nil]];
+
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 }
 
 #pragma mark - Location Delegate Methods
@@ -285,14 +226,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [self.locationManager stopMonitoringSignificantLocationChanges];
 }
 
-#pragma mark - UITabBarControllerDelegate methods
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
-{
-    return ![viewController isKindOfClass:[CameraViewController class]];
-}
-
-
 #pragma mark - Notification Delegate Methods
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -310,13 +243,20 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if([userInfo[@"type"] isEqualToString:@"breaking"]){
         
         //Check to make sure the payload has an id
-        if(userInfo[@"gallery_id"] != nil){
+        if(userInfo[@"gallery"] != nil){
             
-            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery_id"] WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    #warning Nothing will happen yet, need to figure out how to handle gallery views
+                    //Retreieve Gallery View Controller from storyboard
+                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
                     
+                    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    
+                    [galleryView setGallery:responseObject];
+                    
+                    [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
+
                 }
                 
             }];
@@ -331,9 +271,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
         
         // Check to make sure the payload has an id
-        if (userInfo[@"assignment_id"]) {
+        if (userInfo[@"assignment"]) {
             
-            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -364,8 +304,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an id
-        if (notification[@"assignment_id"]) {
-            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment_id"] withResponseBlock:^(id responseObject, NSError *error) {
+        if (notification[@"assignment"]) {
+            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;

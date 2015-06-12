@@ -13,8 +13,8 @@
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <CoreLocation/CoreLocation.h>
+@import AssetsLibrary;
+@import CoreLocation;
 
 @implementation FRSGallery
 
@@ -29,7 +29,7 @@
              @"byline" : @"byline",
              @"tags" : @"tags",
              @"articles" : @"articles",
-             @"relatedStories" : @"",
+             @"relatedStories" : @"related_stories",
              @"posts" : @"posts"
              };
 }

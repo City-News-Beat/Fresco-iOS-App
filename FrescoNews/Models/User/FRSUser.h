@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import <Mantle/Mantle.h>
 @interface FRSUser : MTLModel <MTLJSONSerializing>
 
@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *profileImageUrl;
+@property (nonatomic, copy) NSNumber *notificationRadius;
 
 - (NSString *)displayName;
 - (NSString *)asJSONString;

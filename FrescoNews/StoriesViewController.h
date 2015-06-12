@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "FRSBaseViewController.h"
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);

@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <UIScrollView+SVInfiniteScrolling.h>
 #import "StoriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -13,10 +14,14 @@
 #import "StoryCellMosaic.h"
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"
+#import "FRSImage.h"
+
+static CGFloat const kImageHeight = 96.0;
+static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong, nonatomic) NSMutableArray *imageArrays;
 @end
 
 @implementation StoriesViewController
@@ -39,6 +44,7 @@
 - (void)setup
 {
     _stories = [[NSMutableArray alloc] init];
+    _imageArrays = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -52,17 +58,42 @@
     self.tableView.estimatedRowHeight = 96;
     
     [self performNecessaryFetch:nil];
+    
+    //Endless scroll handler
+    [self.tableView addInfiniteScrollingWithActionHandler:^{
+        
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
+        
+        [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num withReponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                [self.stories addObjectsFromArray:responseObject];
+                
+                [self reloadData];
+                
+                [self.tableView.infiniteScrollingView stopAnimating];
+                
+            }
+
+        }];
+                
+    }];
+    
+    
 }
 
 #pragma mark - Data Loading
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:^(id responseObject, NSError *error) {
+    
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil withReponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             [self.stories setArray:responseObject];
         }
         [self reloadData];
     }];
+
 }
 
 - (void)reloadData
@@ -111,9 +142,9 @@
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     storyCell.story = story;
     storyCell.tapHandler = self;
-    
-    [storyCell layoutIfNeeded];
-    
+    storyCell.imageArray = self.imageArrays[index];
+    [storyCell configureImages];
+
     return storyCell;
 }
 
@@ -126,6 +157,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 40;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger index = indexPath.section;
+    self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+
+    CGFloat width;
+    for (FRSImage *image in self.imageArrays[index]) {
+        CGFloat scale = kImageHeight / [image.height floatValue];
+        CGFloat imageWidth = [image.width floatValue] * scale;
+        width += imageWidth + kInterImageGap;
+        if (width > self.view.frame.size.width) {
+            return 96.0 * 2;
+        }
+    }
+
+    return 96.0;
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -150,4 +199,36 @@
 {
 
 }
+
+#pragma mark - Image shuffling
+
+- (NSArray *)imageArrayForStory:(FRSStory *)story
+{
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
+
+    for (FRSPost *post in story.thumbnails) {
+        // this finds cleaner data
+        if (post.image.height && post.image.width) {
+            [array addObject:post.image];
+        }
+    }
+
+    return [self shuffle:array];
+}
+
+- (NSArray *)shuffle:(NSMutableArray *)array
+{
+    // seeding the random number generator with a constant
+    // will make the images come out the same every time which is an optimization
+    srand(42);
+    NSUInteger count = [array count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        NSInteger remainingCount = count - i;
+        NSInteger exchangeIndex = i + (rand() % remainingCount);
+        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+    }
+
+    return [array copy];
+}
+
 @end

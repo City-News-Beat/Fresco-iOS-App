@@ -7,7 +7,7 @@
 //
 
 #import "AssignmentAnnotation.h"
-#import <AddressBook/AddressBook.h>
+@import AddressBook;
 
 @interface AssignmentAnnotation ()
 

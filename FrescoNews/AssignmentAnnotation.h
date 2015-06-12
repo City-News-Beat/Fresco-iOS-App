@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <MapKit/MapKit.h>
+@import Foundation;
+@import MapKit;
 
 @interface AssignmentAnnotation : NSObject <MKAnnotation>
 

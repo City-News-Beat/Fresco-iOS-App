@@ -7,7 +7,7 @@
 //
 
 #import <NSArray+F.h>
-#import <Parse/Parse.h>
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
@@ -63,6 +63,7 @@
 #warning Make callback block
 - (BOOL)login
 {
+    BOOL ret;
     FRSUser *frsUser;
    
     // user is logged into parse
@@ -78,9 +79,24 @@
     }
     if (frsUser) {
         _currentUser = frsUser;
-        return YES;
+        ret = YES;
     }
-    return NO;
+    
+    if (ret) {
+        // silently and asynchronously sync up the fresco user
+        [self getFrescoUser:frsUser.userID WithResponseBlock:^(FRSUser *responseUser, NSError *error) {
+            if (!error) {
+                _currentUser = responseUser;
+                
+                // synchronize this data back to Parse
+                [[PFUser currentUser] saveInBackground];
+            }
+            else {
+                NSLog(@"Error getting fresco user %@", error);
+            }
+        }];
+    }
+    return ret;
 }
 
 - (void)logout
@@ -249,6 +265,21 @@
     return frsUser;
 }
 
+- (void)getFrescoUser:(NSString *)userId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSDictionary *params = @{@"id" : userId};
+
+    [self GET:@"/user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if(responseBlock) responseBlock(frsUser, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if(responseBlock) responseBlock(nil, error);
+    }];
+}
+
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
     NSString *email = [PFUser currentUser].email;
@@ -290,12 +321,35 @@
        }];
 }
 
+- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self POST:@"/user/settings" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           
+           // synchronize the user
+           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       }];
+}
 
 #pragma mark - Stories
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    NSString *path = @"/story/highlights";
-    NSDictionary *params = @{@"limit" : @"10", @"notags" : @"true"};
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSString *path = @"/story/recent";
+    
+    offset = offset ?: [NSNumber numberWithInteger:0];
+    
+    NSDictionary *params = @{@"limit" : @"3", @"notags" : @"true", @"offset" : offset};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -312,6 +366,29 @@
         
         if(responseBlock)
             responseBlock(nil, error);
+    }];
+    
+}
+
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"id" : storyId};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/story/get/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+       
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        if(responseBlock) responseBlock(story, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
     }];
     
 }
@@ -382,14 +459,39 @@
     }];
 }
 
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock {
+    
+    NSDictionary *params = @{@"galleries" : ids};
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:@"/gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
     
     if (offset != nil) {
         
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@", offset] WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:[NSString stringWithFormat:@"/gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
     }
     else{
-        [self getGalleriesAtURLString:@"/gallery/highlights/" WithResponseBlock:responseBlock];
+        [self getGalleriesAtURLString:@"/gallery/highlights?stories=true" WithResponseBlock:responseBlock];
     }
 }
 
@@ -508,6 +610,37 @@
 }
 
 /*
+** Set notification as seen
+*/
+
+- (void)setNotificationSeen:(NSNumber *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : notificationId};
+    
+    [self POST:@"/notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
+
+/*
 ** Delete a specific notification
 */
 
@@ -517,7 +650,6 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
-    #warning will not work, endpoint does not exist
     [self POST:@"/notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -536,7 +668,7 @@
         
     }];
     
-    [self getGalleriesAtURLString:[NSString stringWithFormat:@"/user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
+
 }
 
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {

@@ -7,10 +7,10 @@
 //
 
 @import Foundation;
-#import <CoreLocation/CoreLocation.h>
+@import CoreLocation;
 
 #import <AFNetworking/AFNetworking.h>
-#import <Parse/Parse.h>
+@import Parse;
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
@@ -33,6 +33,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (BOOL)login;
 - (void)logout;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
+- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
@@ -49,25 +50,38 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-- (void)getStoriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
+
+/*
+** Stories
+*/
+
+- (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock;
+
 
 /*
 ** Assignments
 */
 
-- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getAssignment:(NSNumber *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 /*
 ** Notifications
 */
 
 - (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock;
+
+- (void)setNotificationSeen:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
     
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 

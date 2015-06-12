@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface VariableStore : NSObject
 + (VariableStore *)sharedInstance;
@@ -33,5 +33,7 @@
 @property NSString *baseURL;
 @property NSString *basePath;
 @property NSString *cdnBaseURL;
+
+@property CGFloat maximumVideoLength;
 
 @end

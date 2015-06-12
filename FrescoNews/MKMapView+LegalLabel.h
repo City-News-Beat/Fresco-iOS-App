@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <MapKit/MapKit.h>
+@import MapKit;
 
 @interface MKMapView (LegalLabel)
 

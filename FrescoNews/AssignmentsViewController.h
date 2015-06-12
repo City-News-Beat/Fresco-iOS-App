@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
+@import UIKit;
+@import MapKit;
 #import "FRSBaseViewController.h"
 #import "FRSAssignment.h"
 
@@ -21,7 +21,7 @@
 
 - (void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate;
 
-- (void)updateCurrentAssignmentInView;
+- (void)updateCurrentAssignment;
 
 - (void)navigateToCurrentAssignment;
 

@@ -58,4 +58,9 @@
     return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
 }
 
+- (NSString *)description
+{
+    return [self.URL description];
+}
+
 @end

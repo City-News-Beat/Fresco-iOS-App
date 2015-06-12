@@ -26,13 +26,13 @@
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         
-        [manager GET:@"http://www.fresconews.com/api/frs-query.php?type=getPosts&limit=8" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [manager GET:@"http://52.6.231.245/v1/gallery/highlights?stories=true" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-            NSArray *posts = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+            NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
             
-            _posts = posts;
+            self.galleries = galleries;
             
-            [self populatePosts];
+            [self populateGalleries];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@", error);
@@ -42,37 +42,36 @@
     else{
     
         // Configure interface objects here.
-        _posts = context;
+        _galleries = context;
         
         [self setTitle:@"Story"]; 
         
-        [self populatePosts];
+        [self populateGalleries];
         
     }
     
 
 }
 
--(void)populatePosts{
+-(void)populateGalleries{
 
     //Populate table
-    if(_posts){
+    if(_galleries){
         
-        [_postTable setNumberOfRows:[_posts count] withRowType:@"postRow"];
+        [_postTable setNumberOfRows:[_galleries count] withRowType:@"postRow"];
         
-        for (NSInteger i = 0; i < _posts.count; i++) {
+        for (NSInteger i = 0; i < self.galleries.count; i++) {
             
             FRSGalleryRowController* row = [self.postTable rowControllerAtIndex:i];
             
             #warning Set to relative
+            [row.galleryTime setText:self.galleries[i][@"timestamp"]];
             
-            [row.galleryTime setText:_posts[i][@"timestamp"]];
-            
-            [row.galleryLocation setText:_posts[i][@"caption"]];
+            [row.galleryLocation setText:self.galleries[i][@"caption"]];
             
             dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
                 //Background Thread
-                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_posts[i][@"small_path"]]]];
+                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.galleries[i][@"small_path"]]]];
                 
             });
 
@@ -85,7 +84,7 @@
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex{
     
-    NSDictionary *postData = [_posts objectAtIndex:rowIndex];
+    NSDictionary *postData = [self.galleries objectAtIndex:rowIndex];
     
     [self pushControllerWithName:@"postDetail" context:postData];
     

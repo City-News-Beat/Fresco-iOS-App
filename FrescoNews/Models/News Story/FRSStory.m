@@ -17,14 +17,14 @@
 {
     return @{
              @"storyID": @"_id",
-             @"caption" : @"caption",
+             @"curator" : @"curator",
              @"title" : @"title",
-             @"byline" : @"byline",
-             @"date" : @"time_created",
+             @"caption" : @"caption",
              @"tags" : @"tags",
-             @"galleries" : @"galleries",
+             @"galleryIds" : @"galleries",
              @"articleIds" : @"articles",
-             @"curator" : @"curator"
+             @"thumbnails" : @"thumbnails",
+             @"date" : @"time_created"
              };
 }
 
@@ -38,4 +38,13 @@
     return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
 }
 
++ (NSValueTransformer *)curatorJSONTransformer
+{
+    return [MTLModel userJSONTransformer];
+}
+
++ (NSValueTransformer *)thumbnailsJSONTransformer
+{
+    return [MTLModel postsJSONTransformer];
+}
 @end

@@ -20,10 +20,6 @@ static NSString * const kCellIdentifier = @"StoryCellMosaic";
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
-@interface StoryCellMosaic()
-@property (nonatomic, strong) NSArray *imageArray;
-@end
-
 @implementation StoryCellMosaic
 + (NSString *)identifier
 {
@@ -32,46 +28,10 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)awakeFromNib
 {
-    self.constraintHeight.constant = kImageHeight;
-
     self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
-- (NSArray *)imageArray
-{
-    if (_imageArray)
-        return _imageArray;
-    
-    NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:10];
-
-    for (FRSGallery *gallery in self.story.galleries) {
-        for (FRSPost *post in gallery.posts) {
-            // this finds cleaner data
-            if (post && post.image && post.image.height && post.image.width) {
-                [tempArray addObject:post.image];
-            }
-        }
-    }
-    [self shuffle:tempArray];
-    
-    _imageArray = [[NSArray alloc]initWithArray:tempArray];
-    return _imageArray;
-}
-
-- (void)shuffle:(NSMutableArray *)array
-{
-    // seeding the random number generator with a constant
-    // will make the images come out the same every time which is an optimization
-    srand(42);
-    NSUInteger count = [array count];
-    for (NSUInteger i = 0; i < count; ++i) {
-        NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + (rand() % remainingCount);
-        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
-    }
-}
-
-- (void)layoutSubviews
+- (void)configureImages
 {
     for (UIView *view in self.contentView.subviews) {
         if ([view isKindOfClass:[StoryThumbnailView class]]) {
@@ -85,11 +45,6 @@ static CGFloat const kInterImageGap = 1.0f;
     CGFloat y = 0.0f;
     int rows = 1;
     
-    self.constraintHeight.constant = kImageHeight;
-    
-#warning Hack until variable sized cells are perfect
-    self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
- 
     int i = 0;
     for (FRSImage *image in self.imageArray) {
         // we don't want more than two rows of images
@@ -110,10 +65,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
         [self.contentView addSubview:thumbnailView];
         
-        /*
-        NSString *format = [NSString stringWithFormat:@"H:|-(%f)-view-(%f)-|", frame.origin.x, frame.origin.x + frame.size.width
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:nil views:nil]]*/
-        
         thumbnailView.story_id = [self.story.storyID integerValue];
         thumbnailView.thumbSequence = i;
         [self setupTapHandlingForThumbnail:thumbnailView];
@@ -125,10 +76,6 @@ static CGFloat const kInterImageGap = 1.0f;
         if (x > self.frame.size.width) {
             ++rows;
             y += kImageHeight + kInterImageGap;
-            
-            self.constraintHeight.constant = kImageHeight * 2 + kInterImageGap;
-            [self updateConstraints];
-
             x = 0.0f;
             
             // we almost always want to redo this image on the next row
@@ -140,9 +87,6 @@ static CGFloat const kInterImageGap = 1.0f;
         
         ++i;
     }
-    [self updateConstraints];
-    [self layoutIfNeeded];
-
 }
 
 - (void)setupTapHandlingForThumbnail:(StoryThumbnailView *)thumbnailView
@@ -166,6 +110,7 @@ static CGFloat const kInterImageGap = 1.0f;
     // we might optimize this for reuse if need be
     for (UIView *v in [self.contentView subviews]) {
         if ([v isKindOfClass:[StoryThumbnailView class]])
+            [((StoryThumbnailView *) v) cancelImageRequestOperation];
             [v removeFromSuperview];
     }
     self.imageArray = nil;

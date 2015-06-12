@@ -7,7 +7,7 @@
 //
 
 #import "FRSUser.h"
-#import <Parse/Parse.h>
+@import Parse;
 
 @implementation FRSUser
 
@@ -17,6 +17,7 @@
              @"first" : @"firstname",
              @"last" : @"lastname",
              @"email" : @"email",
+             @"notificationRadius" : @"settings.radius",
              @"userID" : @"_id"
              };
 }

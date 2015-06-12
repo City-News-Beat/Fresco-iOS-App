@@ -26,8 +26,8 @@
  */
 
 
-#import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+@import UIKit;
+@import AssetsLibrary;
 #import "BaseNavigationController.h"
 
 
@@ -74,14 +74,6 @@
  *  set this property’s value to `NO`.
  */
 @property (nonatomic, assign) BOOL showsNumberOfAssets;
-
-/**
- *  Determines whether or not the done button is always enabled.
- *
- *  The done button is enabled only when assets are selected. To enable the done button even without assets selected,
- *  set this property’s value to `YES`.
- */
-@property (nonatomic, assign) BOOL alwaysEnableDoneButton;
 
 /**
  *  The navigation controller of the picker hierarchy. (read-only)

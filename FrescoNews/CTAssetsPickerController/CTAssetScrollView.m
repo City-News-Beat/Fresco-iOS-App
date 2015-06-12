@@ -25,7 +25,7 @@
  
  */
 
-#import <MediaPlayer/MediaPlayer.h>
+@import MediaPlayer;
 #import "CTAssetScrollView.h"
 #import "ALAsset+assetType.h"
 #import "ALAsset+accessibilityLabel.h"

@@ -14,14 +14,14 @@
 #import "FRSImage.h"
 #import "FRSUser.h"
 #import "CameraViewController.h"
-#import <Parse/Parse.h>
+@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
+@import FBSDKCoreKit;
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AssetsLibrary;
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 
@@ -295,10 +295,9 @@
             NSString *mimeType;
 
             if (post.image.asset.isVideo) {
-                // TODO: Support for larger video files (longer than 60 seconds)
                 ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
-                UInt8 *buffer = (UInt8 *)malloc(representation.size);
-                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:representation.size error:nil];
+                UInt8 *buffer = malloc((unsigned long)representation.size);
+                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
                 data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
                 mimeType = @"video/mp4";
             }
@@ -447,6 +446,8 @@
 {
     CLLocation *location = [locations lastObject];
     [self.locationManager stopUpdatingLocation];
+
+    // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.assignments = responseObject;
         self.defaultAssignment = [self.assignments firstObject];

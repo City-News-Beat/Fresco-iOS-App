@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @interface TabBarController : UITabBarController <UITabBarDelegate>
 @property (nonatomic) NSUInteger savedIndex;

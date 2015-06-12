@@ -7,12 +7,12 @@
 //
 
 
-#import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
+@import UIKit;
+@import Parse;
 #import "FRSBaseViewController.h"
 
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @class FRSUser;

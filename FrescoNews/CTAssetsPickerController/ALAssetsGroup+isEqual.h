@@ -25,7 +25,7 @@
  
  */
 
-#import <AssetsLibrary/AssetsLibrary.h>
+@import AssetsLibrary;
 
 
 

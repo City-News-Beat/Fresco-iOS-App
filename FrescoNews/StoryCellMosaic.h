@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @class FRSStory;
 
@@ -16,9 +16,11 @@
 
 @interface StoryCellMosaic : UITableViewCell
 @property (strong, nonatomic) FRSStory *story;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (strong, nonatomic) id <StoryThumbnailViewTapHandler> tapHandler;
+@property (strong, nonatomic) NSArray *imageArray;
 
 + (NSString *)identifier;
+- (void)configureImages;
+
 @end
 

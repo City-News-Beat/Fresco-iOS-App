@@ -25,7 +25,7 @@
  
  */
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "CTAssetItemViewController.h"
 
 
