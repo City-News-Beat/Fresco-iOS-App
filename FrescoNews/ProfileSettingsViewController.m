@@ -310,4 +310,5 @@
     circleView.alpha = .26;
     return circleView;
 }
+
 @end

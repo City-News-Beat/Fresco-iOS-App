@@ -2247,7 +2247,7 @@
                         <rect key="frame" x="0.0" y="44" width="375" height="1156"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHX-Av-OJh">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="xHX-Av-OJh">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="1156"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqH-iM-sZZ">
@@ -2784,10 +2784,12 @@
                         <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
                         <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
                         <outlet property="radiusStepperLabel" destination="Bcm-cw-UW6" id="ncR-tA-4na"/>
-                        <outlet property="scrollView" destination="xHX-Av-OJh" id="ieX-b7-EzZ"/>
-                        <outlet property="textfieldEmail" destination="P2F-Ip-NTP" id="POz-2M-Hhy"/>
+                        <outlet property="scrollView" destination="xHX-Av-OJh" id="2yd-hv-KUH"/>
+                        <outlet property="textfieldCurrentPassword" destination="P2F-Ip-NTP" id="AVl-rs-J36"/>
+                        <outlet property="textfieldEmail" destination="D5m-F0-BHd" id="hye-Cd-by7"/>
                         <outlet property="textfieldFirst" destination="crc-X1-iUD" id="1TT-g3-2Wv"/>
                         <outlet property="textfieldLast" destination="L36-Rz-Ank" id="Kmt-2l-uLZ"/>
+                        <outlet property="textfieldNewPassword" destination="67E-q7-Q6W" id="Ii3-eE-mIs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J84-lZ-k57" userLabel="First Responder" sceneMemberID="firstResponder"/>
