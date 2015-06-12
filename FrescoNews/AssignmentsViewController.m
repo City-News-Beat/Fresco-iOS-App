@@ -8,7 +8,7 @@
 
 #import "AssignmentsViewController.h"
 #import "UIViewController+Additions.h"
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "MTLModel+Additions.h"
 #import "FRSDataManager.h"
 #import "AssignmentAnnotation.h"

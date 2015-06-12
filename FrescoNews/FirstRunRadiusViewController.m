@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "FirstRunRadiusViewController.h"
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
