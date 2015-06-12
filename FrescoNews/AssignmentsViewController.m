@@ -547,6 +547,8 @@
 
     [mapView deselectAnnotation:view.annotation animated:YES];
     
+    self.currentAssignment = nil;
+    
     [UIView animateWithDuration:1 animations:^(void) {
         [self.scrollView setAlpha:0];
     }];

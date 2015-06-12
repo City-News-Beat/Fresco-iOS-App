@@ -16,6 +16,7 @@
 #import "FRSUser.h"
 #import "GalleryViewController.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "SwitchingRootViewController.h"
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
 
@@ -234,13 +235,12 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
-
-                UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+                
+                UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                 
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                 
                 [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
-                
                 
                 [tabBarController setSelectedIndex:3];
                 
@@ -299,7 +299,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                UITabBarController *tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+                UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                 
                 AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                 
