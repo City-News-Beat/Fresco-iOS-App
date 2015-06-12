@@ -15,7 +15,7 @@
 
 @interface FRSPost : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy, readonly) NSNumber *postID;
+@property (nonatomic, copy, readonly) NSString *postID;
 @property (nonatomic, strong) FRSUser *user;
 @property (nonatomic, copy, readonly) NSString *source;
 @property (nonatomic, copy) NSString *type; // TODO: -> enum

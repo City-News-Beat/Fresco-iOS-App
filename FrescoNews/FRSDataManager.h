@@ -67,7 +67,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 ** Assignments
 */
 
-- (void)getAssignment:(NSNumber *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 

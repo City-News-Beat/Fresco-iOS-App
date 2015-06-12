@@ -14,7 +14,7 @@
 
 @interface FRSAssignment : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSNumber *assignmentId;
+@property (nonatomic, copy) NSString *assignmentId;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *caption;
 @property (nonatomic, copy) NSArray *galleries;
