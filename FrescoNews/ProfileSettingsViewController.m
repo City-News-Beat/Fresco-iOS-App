@@ -266,7 +266,6 @@
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-  //  [self updateMap];
     [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
