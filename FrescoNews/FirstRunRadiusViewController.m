@@ -9,13 +9,14 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "FirstRunRadiusViewController.h"
+#import "FRSDataManager.h"
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
-@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadiusMap;
-@property (weak, nonatomic) IBOutlet UISlider *sliderRadius;
-@property (weak, nonatomic) IBOutlet UILabel *labelRadius;
+@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
+@property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
+@property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @end
 
 @implementation FirstRunRadiusViewController
@@ -23,22 +24,68 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.radiusStepper.value = 5;
+    [self sliderValueChanged:self.radiusStepper];
 }
 
 - (IBAction)actionDone:(id)sender
 {
+    [self save];
     [self navigateToMainApp];
 }
 
-- (IBAction)sliderValueChanged:(UISlider *)sender
+- (IBAction)sliderValueChanged:(UISlider *)slider
 {
-    self.labelRadius.text = [NSString stringWithFormat:@"%3.0f", self.sliderRadius.value];
+    // CGFloat roundedValue = [self roundedValueForSlider:slider];
+    CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
+    
+    NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+    
+    NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
+    
+    // only update changes
+    if (![self.radiusStepperLabel.text isEqualToString:newValue])
+        self.radiusStepperLabel.text = newValue;
+}
+
+- (IBAction)sliderTouchUpInside:(UISlider *)slider
+{
+    self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
+    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView zoomToCurrentLocation];
+    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
+}
+
+#pragma mark - Utility methods
+- (void)save
+{
+    NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
+
+    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
+                                                                 block:^(id responseObject, NSError *error) {
+                                                                     NSString *title;
+                                                                     NSString *message;
+                                                                     if (error) {
+                                                                         title = @"Error";
+                                                                         message = @"Could not save notification radius";
+                                                                         
+                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                                                                                         message:message
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                         [alert show];
+                                                                     }
+                                                                 }];
+}
+
 @end

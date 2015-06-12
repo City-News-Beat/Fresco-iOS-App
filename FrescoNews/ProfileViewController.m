@@ -47,7 +47,7 @@
 {
     [super viewDidLoad];
     [self setFrescoNavigationBar];
-    [self performNecessaryFetch:nil];
+  //  [self performNecessaryFetch:nil];
     
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
