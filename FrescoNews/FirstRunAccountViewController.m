@@ -14,6 +14,10 @@
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
 @end
 
 @implementation FirstRunAccountViewController
@@ -70,5 +74,23 @@
                             [self.view layoutIfNeeded];
                         } completion:nil];
 }
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
+        [self.emailField resignFirstResponder];
+    }
+    
+    if ([self.passwordField isFirstResponder] && [touch view] != self.passwordField) {
+        [self.passwordField resignFirstResponder];
+    }
+    
+    if ([self.confirmPasswordField isFirstResponder] && [touch view] != self.confirmPasswordField) {
+        [self.confirmPasswordField resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
 
 @end
