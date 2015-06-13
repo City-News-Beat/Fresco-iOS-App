@@ -83,7 +83,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
-    self.photoButton.selected = YES;
+    self.photoButton.selected = YES; // TODO: Persist this and other camera state
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
