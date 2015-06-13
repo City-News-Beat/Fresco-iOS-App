@@ -161,6 +161,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         if (asset) {
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
                 [self.assets addObject:asset];
+                if ([[[NSUserDefaults standardUserDefaults] arrayForKey:@"selectedAssets"] containsObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
+                {
+                    if (![self.picker.selectedAssets containsObject:asset]) {
+                        [self.picker.selectedAssets addObject:asset];
+                    }
+                }
             }
 
             if (self.assetsGroup.numberOfAssets - index > 1000) {
@@ -281,14 +287,13 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)selectedAssetsChanged:(NSNotification *)notification
 {
-//    NSArray *selectedAssets = (NSArray *)notification.object;
-//    
-//    [[self.toolbarItems objectAtIndex:1] setTitle:[self.picker toolbarTitle]];
-//    
-//    [self.navigationController setToolbarHidden:(selectedAssets.count == 0) animated:YES];
-//    
-//    // Reload assets for calling de/selectAsset method programmatically
-//    [self.collectionView reloadData];
+    NSArray *selectedAssets = (NSArray *)notification.object;
+    NSMutableArray *selectedAssetURLs = [NSMutableArray new];
+    for (ALAsset *asset in selectedAssets) {
+        [selectedAssetURLs addObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]];
+    }
+
+    [[NSUserDefaults standardUserDefaults] setObject:selectedAssetURLs forKey:@"selectedAssets"];
 }
 
 #pragma mark - Gesture Recognizer
