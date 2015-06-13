@@ -154,8 +154,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
-
-    [self updateRecentPhotoView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -185,6 +183,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
+
+    [self updateRecentPhotoView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
