@@ -1091,7 +1091,9 @@
                         <outlet property="captionTextView" destination="Q60-io-4Rt" id="Pg2-J8-lg3"/>
                         <outlet property="facebookButton" destination="q6D-z2-Jzy" id="RJG-6a-i3j"/>
                         <outlet property="galleryView" destination="VgT-z6-Ir7" id="tgI-Io-0lJ"/>
+                        <outlet property="invertedTriangleImageView" destination="nVh-Vj-T7V" id="QCj-KD-TXI"/>
                         <outlet property="linkAssignmentButton" destination="1pe-Up-bZs" id="HKN-iX-LpS"/>
+                        <outlet property="pressBelowLabel" destination="2SC-mV-bkV" id="fLe-eV-qrq"/>
                         <outlet property="topVerticalSpaceConstraint" destination="Gat-oT-xKz" id="NPE-0k-w6K"/>
                         <outlet property="twitterButton" destination="Znr-ql-7SW" id="D3D-HZ-uvR"/>
                         <outlet property="twitterHeightConstraint" destination="O4K-1a-aIo" id="Jmu-mT-zzg"/>

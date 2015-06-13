@@ -39,6 +39,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *pressBelowLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *invertedTriangleImageView;
 
 // Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
@@ -62,18 +64,32 @@
     [self.locationManager startUpdatingLocation];
 
     self.captionTextView.delegate = self;
-    self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
-
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
-    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
-    self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
-    self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
+
+    if ([PFUser currentUser]) {
+        self.twitterButton.hidden = NO;
+        self.facebookButton.hidden = NO;
+        self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+        self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
+        self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
+        self.pressBelowLabel.hidden = NO;
+        self.invertedTriangleImageView.hidden = NO;
+    }
+    else {
+        self.twitterButton.hidden = YES;
+        self.facebookButton.hidden = YES;
+        self.twitterHeightConstraint.constant = 0;
+        self.pressBelowLabel.hidden = YES;
+        self.invertedTriangleImageView.hidden = YES;
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
