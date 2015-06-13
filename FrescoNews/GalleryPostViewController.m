@@ -80,8 +80,10 @@
         self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
         self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
         self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
-        self.pressBelowLabel.hidden = NO;
-        self.invertedTriangleImageView.hidden = NO;
+
+        BOOL hideCrosspostingHelp = [[NSUserDefaults standardUserDefaults] boolForKey:@"galleryPreviouslyPosted"];
+        self.pressBelowLabel.hidden = hideCrosspostingHelp;
+        self.invertedTriangleImageView.hidden = hideCrosspostingHelp;
     }
     else {
         self.twitterButton.hidden = YES;
@@ -354,10 +356,13 @@
             [self crossPostToTwitter:crossPostString];
             [self crossPostToFacebook:crossPostString];
 
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setBool:YES forKey:@"galleryPreviouslyPosted"];
+
             // TODO: DRY
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"defaultAssignmentID"];
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"selectedAssets"];
+            [defaults setObject:nil forKey:@"captionStringInProgress"];
+            [defaults setObject:nil forKey:@"defaultAssignmentID"];
+            [defaults setObject:nil forKey:@"selectedAssets"];
 
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
