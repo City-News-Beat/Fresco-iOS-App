@@ -7,10 +7,11 @@
 //
 
 @import UIKit;
+#import "FRSBaseViewController.h"
 
 @class FRSGallery;
 
-@interface GalleryPostViewController : UIViewController
+@interface GalleryPostViewController : FRSBaseViewController
 
 @property (strong, nonatomic) FRSGallery *gallery;
 

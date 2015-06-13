@@ -273,7 +273,7 @@
 - (void)submitGalleryPost:(id)sender
 {
     if (![FRSDataManager sharedManager].currentUser) {
-        [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        [self navigateToFirstRun];
         return;
     }
 
