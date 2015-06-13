@@ -392,12 +392,16 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
-        [[NSUserDefaults standardUserDefaults] setObject:self.captionTextView.text forKey:@"captionStringInProgress"];
         return YES;
     }
 
     [textView resignFirstResponder];
     return NO;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }
 
 #pragma mark - Notification methods
