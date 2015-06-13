@@ -249,17 +249,18 @@
 
 - (UIBarButtonItem *)titleButtonItem
 {
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
-                                                              style:UIBarButtonItemStylePlain
-                                                             target:self
-                                                             action:@selector(submitGalleryPost:)];
-    
-    return title;
+    // TODO: Capture all UIToolbar touches
+    return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
+                                            style:UIBarButtonItemStylePlain
+                                           target:self
+                                           action:@selector(submitGalleryPost:)];
 }
 
 - (UIBarButtonItem *)spaceButtonItem
 {
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                         target:nil
+                                                         action:nil];
 }
 
 - (NSArray *)toolbarItems
