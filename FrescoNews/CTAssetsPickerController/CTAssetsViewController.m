@@ -91,10 +91,15 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self setupAssets];
+
+    if (self.picker.autoSubmit) {
+        [self createGalleryPost:nil];
+    }
+
     [super viewWillAppear:animated];
     [self setupButtons];
     [self setupToolbar];
-    [self setupAssets];
 
     if (self.assets.count) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
@@ -511,7 +516,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                                                                             action:nil];
 
     vc.gallery = gallery;
-    [self.navigationController pushViewController:vc animated:YES];
+    [self.navigationController pushViewController:vc animated:(sender ? YES : NO)];
 }
 
 @end

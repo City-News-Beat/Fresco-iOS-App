@@ -13,6 +13,7 @@
 @interface SwitchingRootViewController () <UITabBarControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
 @property (weak, nonatomic) UIViewController *viewController;
+@property (nonatomic) BOOL returnToGalleryPost;
 @end
 
 @implementation SwitchingRootViewController
@@ -23,9 +24,17 @@
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor: before instantiating?
+
     self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     [self setupTabBarAppearances:self.tbc];
-    self.tbc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+
+    if (self.returnToGalleryPost) {
+        self.returnToGalleryPost = NO;
+        [self.tbc returnToGalleryPost];
+    }
+    else {
+        self.tbc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+    }
 }
 
 - (void)setRootViewControllerToFirstRun
@@ -65,6 +74,7 @@
             [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
         }];
         duration = 0.0; // TODO: Address the need for 0.0 duration special case
+        self.returnToGalleryPost = YES;
     }
 
     if (source) {

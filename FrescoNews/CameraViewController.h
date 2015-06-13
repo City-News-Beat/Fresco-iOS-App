@@ -11,5 +11,6 @@
 @interface CameraViewController : UIViewController <UINavigationControllerDelegate>
 
 - (void)cancel;
+- (IBAction)doneButtonTapped:(id)sender;
 
 @end

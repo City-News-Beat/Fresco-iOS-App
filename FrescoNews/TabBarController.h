@@ -10,4 +10,6 @@
 
 @interface TabBarController : UITabBarController <UITabBarDelegate>
 
+- (void)returnToGalleryPost;
+
 @end

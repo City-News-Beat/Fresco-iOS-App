@@ -15,9 +15,7 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:@"previouslySelectedTab"];
     if ([item.title isEqualToString:@"Camera"]) {
-        self.tabBar.hidden = YES;
-        CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
-        [self presentViewController:vc animated:NO completion:nil];
+        [self presentCamera];
     }
 }
 
@@ -38,6 +36,22 @@
     }
 
     return UIInterfaceOrientationMaskPortrait;
+}
+
+- (void)presentCamera
+{
+    self.tabBar.hidden = YES;
+    CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    [self presentViewController:vc animated:NO completion:nil];
+}
+
+- (void)returnToGalleryPost
+{
+    self.tabBar.hidden = YES;
+    CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    [self presentViewController:vc animated:NO completion:^{
+        [vc doneButtonTapped:nil];
+    }];
 }
 
 @end

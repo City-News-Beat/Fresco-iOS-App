@@ -416,8 +416,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
     picker.title =  @"Choose Media";
+    picker.autoSubmit = sender ? NO : YES;
     self.view.hidden = YES;
-    [self presentViewController:picker animated:YES completion:nil];
+    [self presentViewController:picker animated:(sender ? YES : NO) completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
