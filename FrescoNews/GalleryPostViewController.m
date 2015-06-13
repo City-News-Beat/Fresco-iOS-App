@@ -151,6 +151,7 @@
 
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
+            // TODO: Notify the user
             NSLog(@"Error crossposting to Twitter: %@", connectionError);
         }
         else {
@@ -187,6 +188,7 @@
                                            parameters: @{@"message" : string}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             if (error) {
+                // TODO: Notify the user
                 NSLog(@"Error crossposting to Facebook");
             }
             else {
