@@ -13,8 +13,8 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:@"previouslySelectedTab"];
     if ([item.title isEqualToString:@"Camera"]) {
-        self.savedIndex = self.selectedIndex;
         self.tabBar.hidden = YES;
         CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
         [self presentViewController:vc animated:NO completion:nil];

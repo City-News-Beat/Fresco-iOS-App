@@ -25,6 +25,7 @@
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor: before instantiating?
     self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     [self setupTabBarAppearances:self.tbc];
+    self.tbc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
 }
 
 - (void)setRootViewControllerToFirstRun

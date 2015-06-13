@@ -9,5 +9,5 @@
 @import UIKit;
 
 @interface TabBarController : UITabBarController <UITabBarDelegate>
-@property (nonatomic) NSUInteger savedIndex;
+
 @end
