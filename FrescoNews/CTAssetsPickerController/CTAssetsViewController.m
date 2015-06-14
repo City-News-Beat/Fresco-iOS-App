@@ -95,6 +95,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
     if (self.picker.autoSubmit) {
         [self createGalleryPost:nil];
+        self.picker.autoSubmit = NO;
     }
 
     [super viewWillAppear:animated];
