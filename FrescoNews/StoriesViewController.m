@@ -165,12 +165,17 @@ static CGFloat const kInterImageGap = 1.0f;
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
 
     CGFloat width;
+    BOOL flag = NO;
     for (FRSImage *image in self.imageArrays[index]) {
+        if (flag) {
+            return 96.0 * 2;
+        }
+
         CGFloat scale = kImageHeight / [image.height floatValue];
         CGFloat imageWidth = [image.width floatValue] * scale;
         width += imageWidth + kInterImageGap;
         if (width > self.view.frame.size.width) {
-            return 96.0 * 2;
+            flag = YES; // Return 192.0 on next iteration, if there is one
         }
     }
 

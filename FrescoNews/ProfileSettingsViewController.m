@@ -9,7 +9,7 @@
 #import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
 
-#import "MKMapView+LegalLabel.h"
+#import "MKMapView+Additions.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 
@@ -245,7 +245,8 @@
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
-    CGFloat roundedValue = [self roundedValueForSlider:slider];
+   // CGFloat roundedValue = [self roundedValueForSlider:slider];
+    CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
     NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
     
@@ -258,57 +259,19 @@
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
-    self.radiusStepper.value = [self roundedValueForSlider:slider];
-   
-    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
-    [self.mapviewRadius zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
-                                      lon:[NSNumber numberWithDouble:coordinate.longitude]
-                               withRadius:[NSNumber numberWithDouble:self.radiusStepper.value]];
-    [self addRadiusCircle];
-}
-
-- (CGFloat)roundedValueForSlider:(UISlider *)slider
-{
-    CGFloat roundedValue;
-    if (slider.value < 10)
-        roundedValue = (int)slider.value;
-    else
-        roundedValue = ((int)slider.value / 10) * 10;
-    
-    return roundedValue;
+    self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
+    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [self updateMap];
-}
-
-#pragma mark - Map utility methods
-- (void)updateMap
-{
-    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
-    [self.mapviewRadius zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
-                                      lon:[NSNumber numberWithDouble:coordinate.longitude]
-                               withRadius:[NSNumber numberWithDouble:self.radiusStepper.value]];
-    [self addRadiusCircle];
-}
-
-- (void)addRadiusCircle
-{
-    CLLocationCoordinate2D coordinate = self.mapviewRadius.userLocation.location.coordinate;
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:self.radiusStepper.value * 1609.34];
-
-    [self.mapviewRadius removeOverlays:self.mapviewRadius.overlays];
-    [self.mapviewRadius addOverlay:circle];
+    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
-    [circleView setFillColor:[UIColor colorWithHex:@"#0077ff"]];
-    circleView.alpha = .26;
-    return circleView;
+    return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
 }
 
 @end

@@ -53,15 +53,37 @@
 - (void)viewDidLoad
 {
     
+
+    CALayer *topLayerArticles = [CALayer layer];
+    topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
+    topLayerArticles.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    
+    CALayer *bottomLayerArticles = [CALayer layer];
+    bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
+    bottomLayerArticles.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    
+    
+    [self.articlesTable.layer addSublayer:topLayerArticles];
+    [self.articlesTable.layer addSublayer:bottomLayerArticles];
+    
+
+    CALayer *topLayerStories = [CALayer layer];
+    topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
+    topLayerStories.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    
+    
+    CALayer *bottomLayerStories = [CALayer layer];
+    bottomLayerStories.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
+    bottomLayerStories.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    
+    [self.storiesTable.layer addSublayer:bottomLayerStories];
+    [self.storiesTable.layer addSublayer:topLayerStories];
+    
+    
     [self setUpGallery];
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    // just add this line to the end of this method or create it if it does not exist
-
-}
 
 -(void)viewDidLayoutSubviews
 {
@@ -77,8 +99,8 @@
     self.constraintArticleTableHeight.constant = self.articlesTable.contentSize.height;
     self.constraintStoriesTableHeight.constant = self.storiesTable.contentSize.height;
     
-    [self.storiesView setNeedsLayout];
-    [self.storiesView layoutIfNeeded];
+
+
     
     [self.scrollView layoutIfNeeded];
     

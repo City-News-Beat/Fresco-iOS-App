@@ -12,7 +12,6 @@
 
 @interface SwitchingRootViewController () <UITabBarControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
-@property (weak, nonatomic) UIViewController *viewController;
 @property (nonatomic) BOOL returnToGalleryPost;
 @end
 
