@@ -20,11 +20,10 @@
              @"postID" : @"_id",
              @"user" : @"owner",
              @"source" : @"source",
-             @"type" : @"type",
              @"mediaWidth" : @"meta.width",
              @"mediaHeight" : @"meta.height",
-             @"mediaURL" : @"file",
-             @"image" : @"file",
+             @"image" : @"image",
+             @"video" : @"video",
              @"date" : @"time_created",
              @"byline" : @"byline",
              @"visibility" : @"visibility",
@@ -47,7 +46,8 @@
     return self;
 }
 
-+ (NSValueTransformer *)mediaURLJSONTransformer
+
++ (NSValueTransformer *)videoJSONTransformer
 {
     return [MTLModel URLJSONTransformer];
 }
@@ -63,7 +63,7 @@
 
 - (BOOL)isVideo
 {
-    return [_type isEqualToString:@"video"] ? YES : NO;
+    return self.video != nil ? YES : NO;
 }
 
 - (NSURL *)largeImageURL

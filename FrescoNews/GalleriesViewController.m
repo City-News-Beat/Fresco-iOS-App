@@ -67,6 +67,38 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:NO];
+    
+    self.playingIndex = nil;
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    
+    //If the player is actually playing
+    if(self.playingIndex != nil){
+        
+        GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:self.playingIndex];
+       
+        if(cell.galleryView.sharedPlayer != nil){
+        
+            //Stop the player from playing
+
+            self.playingIndex = nil;
+
+            [cell.galleryView.sharedPlayer pause];
+
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
+           
+        }
+        
+    }
+
+
+}
+
 - (void)refresh
 {
     
@@ -167,7 +199,7 @@
         //[cell.videoImage setAlpha:1];
         
         //If the video current playing isn't this one, or no video has played yet
-        if((_playingIndex.row != visibleIndexPath.row || _playingIndex == nil)){
+        if((self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil)){
             
             cell.galleryView.sharedPlayer = nil;
             
@@ -179,7 +211,7 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
                 //Code to be executed on the main queue after delay
-                if((_playingIndex.row != visibleIndexPath.row || _playingIndex == nil) && cell != nil){
+                if((self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil) && cell != nil){
                     
                     self.playingIndex = visibleIndexPath;
                     
@@ -187,8 +219,8 @@
                     
                     cell.galleryView.sharedPlayer = nil;
 
-                    // TODO: Check for missing/corrupt media at firstPost.mediaURL
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.mediaURL];
+                    // TODO: Check for missing/corrupt media at firstPost.url
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
                     
                     [cell.galleryView.sharedPlayer setMuted:YES];
 
@@ -243,7 +275,7 @@
             
             //Stop the player from playing
             
-            _playingIndex = nil;
+            self.playingIndex = nil;
             
             [cell.galleryView.sharedPlayer pause];
             

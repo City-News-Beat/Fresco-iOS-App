@@ -157,7 +157,7 @@
         
         [[self sharedLayer] removeFromSuperlayer];
         
-        _sharedPlayer = [AVPlayer playerWithURL:postCell.post.mediaURL];
+        _sharedPlayer = [AVPlayer playerWithURL:postCell.post.video];
         
         self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
         
