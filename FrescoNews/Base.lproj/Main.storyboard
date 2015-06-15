@@ -502,7 +502,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q63-7s-eVb" id="KVY-9S-kjr">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
+                                                <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
@@ -2825,7 +2825,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pcv-NY-d2a" id="Lsi-xJ-FAo">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view alpha="0.87000000476837158" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cOX-LF-lGx" userLabel="Opaque Background">
+                                                <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cOX-LF-lGx" userLabel="Opaque Background">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
