@@ -58,4 +58,12 @@
             endpoint];
 }
 
++ (void)resetDraftGalleryPost
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:nil forKey:@"captionStringInProgress"];
+    [defaults setObject:nil forKey:@"defaultAssignmentID"];
+    [defaults setObject:nil forKey:@"selectedAssets"];
+}
+
 @end

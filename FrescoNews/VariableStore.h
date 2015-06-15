@@ -11,6 +11,7 @@
 @interface VariableStore : NSObject
 + (VariableStore *)sharedInstance;
 + (NSString *)endpointForPath:(NSString *)endpoint;
++ (void)resetDraftGalleryPost;
 
 // colors
 @property NSString *colorBrandDark;
