@@ -128,7 +128,7 @@
 
 - (void)returnToTabBar
 {
-    [((CameraViewController *)self.presentingViewController) cancel];
+    [((CameraViewController *)self.presentingViewController) cancelAndReturnToPreviousTab:NO];
 }
 
 - (void)returnToCamera:(id)sender

@@ -377,9 +377,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
+    [self cancelAndReturnToPreviousTab:YES];
+}
+
+- (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
+{
     [VariableStore resetDraftGalleryPost];
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    vc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+    vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     vc.tabBar.hidden = NO;
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
