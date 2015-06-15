@@ -24,24 +24,15 @@
 
 @implementation FirstRunRadiusViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.delegate = self;
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        [self.locationManager requestWhenInUseAuthorization];
-        [self.locationManager startUpdatingLocation];
-    }
-    
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
     
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
@@ -109,20 +100,12 @@
 
 
 #pragma mark - CLLocationManagerDelegate methods
-/*
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    self.location = [locations lastObject];
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        // TODO: Make this smarter
-        [self findNearbyAssignments];
-    });
-    
-    [self configureAssignmentLabel];
+    self.mapviewRadius.showsUserLocation = YES;
+    self.mapviewRadius.delegate = self;
 }
-*/
+
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways

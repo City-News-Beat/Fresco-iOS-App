@@ -131,7 +131,7 @@
                                                       [self performSegueWithIdentifier:@"showSignUp" sender:self];
                                                   else {
                                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                      message:@"Signup failed"
+                                                                                                      message:[error.userInfo objectForKey:@"error"]
                                                                                                      delegate: self
                                                                                             cancelButtonTitle: @"Cancel"
                                                                                             otherButtonTitles:nil, nil];

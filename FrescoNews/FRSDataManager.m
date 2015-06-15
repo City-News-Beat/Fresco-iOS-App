@@ -128,7 +128,7 @@
             else {
                 NSError *frsError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
                                                         code:ErrorSignupNoUserFromParseUser
-                                                    userInfo:@{@"msg" : @"Couldn't extract user from PFUser"}];
+                                                    userInfo:@{@"error" : @"Couldn't extract user from PFUser"}];
                 block(NO, frsError);
             }
         }
@@ -272,13 +272,13 @@
         }
         else {
             // if we're going to codify this it needs to be centralized -- this is arbitrary
-            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't save user"}];
+            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"error" : @"Couldn't save user"}];
             block (NO, saveError);
         }
     }
     else {
         // if we're going to codify this it needs to be centralized -- this is arbitrary
-        NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Not a user"}];
+        NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"error" : @"Not a user"}];
         block (NO, saveError);
     }
 }
@@ -307,7 +307,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSDictionary *params = @{@"id" : userId};
 
-    [self GET:@"/user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
         if(responseBlock) responseBlock(frsUser, nil);
@@ -329,7 +329,7 @@
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
            
-           if (user) {
+           if (user.userID) {
                // synchronize the user
                [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
                    if (responseBlock)
@@ -337,9 +337,15 @@
                }];
            }
            else {
-               NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+               NSError *error;
+               if ([[responseObject objectForKey:@"err"] isEqualToString:@"EMAIL_IN_USE"])
+                   error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                               code:ErrorSignupCantCreateUser
+                                           userInfo:@{@"error" : @"Email is already in use"}];
+               else
+                   error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
                                                        code:ErrorSignupCantCreateUser
-                                                   userInfo:@{@"msg" : @"Couldn't create FRSUser"}];
+                                                   userInfo:@{@"error" : @"Couldn't create FRSUser"}];
                if (responseBlock)
                    responseBlock(nil, error);
            }
@@ -376,7 +382,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
     [params addEntriesFromDictionary:inputParams];
     
-    [self POST:@"/user/settings" parameters:params constructingBodyWithBlock:nil
+    [self POST:@"user/settings" parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
