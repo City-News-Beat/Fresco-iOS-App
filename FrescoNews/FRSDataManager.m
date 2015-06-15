@@ -6,12 +6,13 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
-#import <NSArray+F.h>
 @import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <NSArray+F.h>
 #import "FRSDataManager.h"
 #import "NSFileManager+Additions.h"
 #import "FRSStory.h"
+
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoUserData @"frescoUserData"
 
@@ -350,7 +351,9 @@
 
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
 {
+    
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    
     [params addEntriesFromDictionary:inputParams];
     
     [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
@@ -627,11 +630,11 @@
 ** Get notifications for the user
 */
 
-- (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock{
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"id" : userId};
+    NSDictionary *params = @{@"id" : [FRSDataManager sharedManager].currentUser.userID};
     
     [self GET:@"notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
@@ -721,5 +724,5 @@
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     [self getGalleriesAtURLString:[NSString stringWithFormat:@"user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
-@end
 
+@end

@@ -53,7 +53,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
 
     
-    [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
         if (!error) {
             
             if(responseObject == nil || [responseObject count] == 0){
@@ -123,7 +123,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 - (void)updateNotifications{
     
     
-    [[FRSDataManager sharedManager] getNotificationsForUser:[FRSDataManager sharedManager].currentUser.userID responseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
         if (!error) {
             
             self.notifications = responseObject;
