@@ -8,9 +8,21 @@
 
 @import Foundation;
 
+//NSError *frsError = [NSError errorWithDomain:@"com.fresconews" code:101 userInfo:@{@"msg" : @"Couldn't get FRSUser from server"}];
+
+enum FRSErrorCodes {
+    ErrorSignupDuplicateEmail = 101,
+    ErrorSignupCantCreateUser,
+    ErrorSignupNoUserOnServer,
+    ErrorSignupNoUserFromParseUser,
+} frsErrorCodes;
+
 @interface VariableStore : NSObject
 + (VariableStore *)sharedInstance;
 + (NSString *)endpointForPath:(NSString *)endpoint;
+
+// errors
+@property NSString *errorDomain;
 
 // colors
 @property NSString *colorBrandDark;

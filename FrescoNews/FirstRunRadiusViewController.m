@@ -13,17 +13,36 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 
-@interface FirstRunRadiusViewController () <MKMapViewDelegate>
+@interface FirstRunRadiusViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation FirstRunRadiusViewController
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager startUpdatingLocation];
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
 }
@@ -88,4 +107,33 @@
                                                                  }];
 }
 
+
+#pragma mark - CLLocationManagerDelegate methods
+/*
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    self.location = [locations lastObject];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // TODO: Make this smarter
+        [self findNearbyAssignments];
+    });
+    
+    [self configureAssignmentLabel];
+}
+*/
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
+                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [self.locationManager stopUpdatingLocation];
+    }
+}
 @end

@@ -22,6 +22,9 @@
     dispatch_once(&pred, ^{
         sharedInstance = [[VariableStore alloc] init];
         
+        // errors
+        sharedInstance.errorDomain = @"com.fresconews";
+        
         // colors
         sharedInstance.colorBrandDark = @"FFB814";
         sharedInstance.colorBrandPrimary = @"FFC53D";

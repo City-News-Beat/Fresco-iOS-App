@@ -62,32 +62,21 @@
 
 
 #pragma mark - User State
-
-#warning Make callback block
 - (BOOL)login
 {
-    BOOL ret;
     FRSUser *frsUser;
-   
-    // user is logged into parse
-    if ([PFUser currentUser]) {
-        // check before syncing
-        frsUser = [self FRSUserFromPFUser];
-    }
-    else {
-        [[PFUser currentUser] fetch];
-        
-        // try again
-        frsUser = [self FRSUserFromPFUser];
-    }
+
+    // synchronously fetch the current user from Parse
+    [[PFUser currentUser] fetch];
+    
+    // extract embedded FRSUser data
+    frsUser = [self FRSUserFromPFUser];
+
     if (frsUser) {
         _currentUser = frsUser;
-        ret = YES;
-    }
-    
-    if (ret) {
+
         // silently and asynchronously sync up the fresco user
-        [self getFrescoUser:frsUser.userID WithResponseBlock:^(FRSUser *responseUser, NSError *error) {
+        [self getFrescoUser:frsUser.userID withResponseBlock:^(FRSUser *responseUser, NSError *error) {
             if (!error) {
                 _currentUser = responseUser;
                 
@@ -98,8 +87,55 @@
                 NSLog(@"Error getting fresco user %@", error);
             }
         }];
+        
+        return YES;
     }
-    return ret;
+    return NO;
+}
+
+- (void)loginWithBlock:(PFBooleanResultBlock)block
+{
+    // get the user from Parse
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
+        if (!error) {
+            FRSUser *frsUser = [self FRSUserFromPFUser];
+            
+            if (frsUser) {
+                // set the "global" user variable
+                //_currentUser = frsUser;
+                
+                // pull the fresco API user
+                [self getFrescoUser:frsUser.userID withResponseBlock:^(FRSUser *responseUser, NSError *error) {
+                    if (!error) {
+                        _currentUser = responseUser;
+                        
+                        // and write the FRSUser portiong back to Parse
+                        [self syncFRSUser:_currentUser toParse:^(BOOL succeeded, NSError *error) {
+                            if (!error)
+                                // here, we're returning successfuly to the caller
+                                block(YES, nil);
+                            else
+                                block(NO, error);
+                        }];
+                    }
+                    else {
+                        block(NO, error);
+                    }
+                }];
+                
+            }
+            else {
+                NSError *frsError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                        code:ErrorSignupNoUserFromParseUser
+                                                    userInfo:@{@"msg" : @"Couldn't extract user from PFUser"}];
+                block(NO, frsError);
+            }
+        }
+        else {
+            NSLog(@"Error fetching user from Parse: %@", error);
+            block(NO, error);
+        }
+    }];
 }
 
 - (void)logout
@@ -185,50 +221,46 @@
     }];
 }
 
+// maybe skip the local check becuase this is limited to signup and login
 - (void)bindParseUserToFrescoUser:(PFBooleanResultBlock)block
 {
-    // user is logged into parse
-    if ([PFUser currentUser]) {
-        // check before syncing
-        FRSUser *frsUser = [self FRSUserFromPFUser];
-        if (frsUser) {
-            _currentUser = frsUser;
-            block(YES, nil);
-        }
-        // not locally, check/fetch Parse's server
-        else {
-            [[PFUser currentUser] fetch];
-            
-            // try again
-            frsUser = [self FRSUserFromPFUser];
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            FRSUser *frsUser = [self FRSUserFromPFUser];
             
             if (frsUser) {
                 _currentUser = frsUser;
                 block(YES, nil);
             }
-            // still no FRS user? Make one
+            // no FRS user? Then this must be the very first time. Make one
             else {
                 [self createFrescoUser:^(id responseObject, NSError *error) {
                     if ([responseObject isKindOfClass:[FRSUser class]])
                         block(YES, nil);
                     else {
-                        NSError *error = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"msg" : @"Couldn't create user"}];
                         block(NO, error);
                     }
                 }];
             }
         }
-    }
+        // error fetching the current user
+        else {
+            block(NO, error);
+        }
+    }];
 }
 
-- (void)synchronizeFRSUser:(FRSUser *)frsUser withBlock:(PFBooleanResultBlock)block
+// this copies a serialized FRSUser to Parse which allows us to use Parse as the
+// authoritative place to read FRSUser data and will make transitioning to a "webhooked"
+// architecture easier
+- (void)syncFRSUser:(FRSUser *)frsUser toParse:(PFBooleanResultBlock)block
 {
     if ([frsUser isKindOfClass:[FRSUser class]]) {
         NSString *jsonUser = [frsUser asJSONString];
         if (jsonUser)
             [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
         
-        // save locally
+        // save locally -- not doing anything with this yet
         [[PFUser currentUser] pinWithName:kFrescoUserData];
         
         // save to parse
@@ -268,7 +300,9 @@
     return frsUser;
 }
 
-- (void)getFrescoUser:(NSString *)userId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+// pull fresco user information from Fresco's API
+// we could transition away from this when webhooks or other server solution is in place
+- (void)getFrescoUser:(NSString *)userId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSDictionary *params = @{@"id" : userId};
 
@@ -288,16 +322,26 @@
     NSString *email = [PFUser currentUser].email;
     NSDictionary *params = @{@"email" : email ?: [NSNull null]};
     
-#warning this shouldn't return success on email exists and/or I should handle null "data" element
-    [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil
+    [self POST:@"user/create"
+    parameters:params constructingBodyWithBlock:nil
        success:^(NSURLSessionDataTask *task, id responseObject) {
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
            
-           // synchronize the user
-           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
-               if (responseBlock) responseBlock(user, nil);
-           }];
+           if (user) {
+               // synchronize the user
+               [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
+                   if (responseBlock)
+                       responseBlock(user, nil);
+               }];
+           }
+           else {
+               NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                       code:ErrorSignupCantCreateUser
+                                                   userInfo:@{@"msg" : @"Couldn't create FRSUser"}];
+               if (responseBlock)
+                   responseBlock(nil, error);
+           }
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
            NSLog(@"Error creating new user %@", error);
            if (responseBlock) responseBlock(nil, error);
@@ -315,7 +359,7 @@
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
 
            // synchronize the user
-           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+           [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
                if (responseBlock) responseBlock(user, nil);
            }];
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -335,7 +379,7 @@
            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
            
            // synchronize the user
-           [self synchronizeFRSUser:user withBlock:^(BOOL succeeded, NSError *error) {
+           [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
                if (responseBlock) responseBlock(user, nil);
            }];
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
