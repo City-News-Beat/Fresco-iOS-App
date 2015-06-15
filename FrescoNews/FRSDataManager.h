@@ -28,6 +28,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 @property (nonatomic, strong) FRSUser *currentUser;
 
+@property (nonatomic, assign) BOOL updatedNotifications;
+
 + (FRSDataManager *)sharedManager;
 
 - (BOOL)login;
@@ -78,7 +80,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 ** Notifications
 */
 
-- (void)getNotificationsForUser:(NSString *)userId responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock;
 
 - (void)setNotificationSeen:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
     
