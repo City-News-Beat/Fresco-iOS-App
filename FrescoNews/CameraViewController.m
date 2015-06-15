@@ -377,14 +377,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
-    // TODO: DRY
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:nil forKey:@"captionStringInProgress"];
-    [defaults setObject:nil forKey:@"defaultAssignmentID"];
-    [defaults setObject:nil forKey:@"selectedAssets"];
-
+    [VariableStore resetDraftGalleryPost];
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    vc.selectedIndex = [defaults integerForKey:@"previouslySelectedTab"];
+    vc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
     vc.tabBar.hidden = NO;
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }

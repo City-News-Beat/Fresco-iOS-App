@@ -361,11 +361,7 @@
 
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setBool:YES forKey:@"galleryPreviouslyPosted"];
-
-            // TODO: DRY
-            [defaults setObject:nil forKey:@"captionStringInProgress"];
-            [defaults setObject:nil forKey:@"defaultAssignmentID"];
-            [defaults setObject:nil forKey:@"selectedAssets"];
+            [VariableStore resetDraftGalleryPost];
 
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
