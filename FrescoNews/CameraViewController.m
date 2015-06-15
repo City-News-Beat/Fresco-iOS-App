@@ -89,6 +89,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [self setSession:session];
 
+    // Prevent conflict between background music and camera
+    session.automaticallyConfiguresApplicationAudioSession = NO;
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+
     // Setup the preview view
     [[self previewView] setSession:session];
 
@@ -292,9 +296,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[self movieFileOutput] isRecording]) {
         [self showUIForCameraMode:CameraModeVideo];
+
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
+                                         withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
+                                               error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES
+                                             error: nil];
     }
     else {
         [self hideUIForCameraMode:CameraModeVideo];
+
+        // Stops background audio
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES
+                                             error:nil];
     }
 
     dispatch_async([self sessionQueue], ^{
@@ -377,14 +392,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
-    // TODO: DRY
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:nil forKey:@"captionStringInProgress"];
-    [defaults setObject:nil forKey:@"defaultAssignmentID"];
-    [defaults setObject:nil forKey:@"selectedAssets"];
+    [self cancelAndReturnToPreviousTab:YES];
+}
 
+- (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
+{
+    [VariableStore resetDraftGalleryPost];
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    vc.selectedIndex = [defaults integerForKey:@"previouslySelectedTab"];
+    vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     vc.tabBar.hidden = NO;
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }

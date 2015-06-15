@@ -20,6 +20,7 @@ enum FRSErrorCodes {
 @interface VariableStore : NSObject
 + (VariableStore *)sharedInstance;
 + (NSString *)endpointForPath:(NSString *)endpoint;
++ (void)resetDraftGalleryPost;
 
 // errors
 @property NSString *errorDomain;
