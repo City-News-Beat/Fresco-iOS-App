@@ -9,10 +9,8 @@
 #import "GalleryPostViewController.h"
 #import "GalleryView.h"
 #import <AFNetworking.h>
-#import "FRSGallery.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import "FRSUser.h"
 #import "CameraViewController.h"
 @import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>

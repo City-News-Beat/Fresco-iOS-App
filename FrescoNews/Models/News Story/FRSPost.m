@@ -63,7 +63,7 @@
 
 - (BOOL)isVideo
 {
-    return self.video != nil ? YES : NO;
+    return self.video ? YES : NO;
 }
 
 - (NSURL *)largeImageURL
