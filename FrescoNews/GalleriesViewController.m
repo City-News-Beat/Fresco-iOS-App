@@ -107,13 +107,6 @@
         [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
         
     }
-    else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
- 
-        
-        [((ProfileViewController *) self.parentViewController) performNecessaryFetch:nil];
-        
-        
-    }
     
     [self.refreshControl endRefreshing];
     
@@ -241,6 +234,31 @@
                     
                     [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
                     
+                    //Pulsing Animation for video image, uncomment if wished to be implemented
+                    
+//                    CABasicAnimation *pulseAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+//                    
+//                    pulseAnimation.duration = .4;
+//                    
+//                    pulseAnimation.toValue = [NSNumber numberWithFloat:1.2];
+//                    
+//                    pulseAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//                    
+//                    pulseAnimation.autoreverses = YES;
+//                    
+//                    pulseAnimation.repeatCount = FLT_MAX;
+//                    
+//                    [cell.videoImage.layer addAnimation:pulseAnimation forKey:nil];
+//                    
+//                    [UIView animateWithDuration:0.5
+//                                          delay:1
+//                                        options:UIViewAnimationOptionCurveEaseInOut
+//                                     animations:^{
+//                                         [cell.videoImage setAlpha:0];
+//                                     } completion:^(BOOL finished) {
+//                                         [cell.videoImage.layer removeAllAnimations];
+//                                     }];
+                    
                 }
                 
             });
@@ -252,22 +270,16 @@
     //If the cell doesn't have a video
     else{
         
-        if(self.playingIndex != nil){
-        
-            GalleryTableViewCell *playingCell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:self.playingIndex];
-
-            //If the player is actually playing
-            if(playingCell.galleryView.sharedPlayer != nil){
-                
-                //Stop the player from playing
-                
-                self.playingIndex = nil;
-                
-                [playingCell.galleryView.sharedPlayer pause];
-                
-                [playingCell.galleryView.sharedLayer removeFromSuperlayer];
-                
-            }
+        //If the player is actually playing
+        if(cell.galleryView.sharedPlayer != nil){
+            
+            //Stop the player from playing
+            
+            self.playingIndex = nil;
+            
+            [cell.galleryView.sharedPlayer pause];
+            
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
             
         }
         
