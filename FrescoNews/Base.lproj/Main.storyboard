@@ -3642,6 +3642,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
+                                    <action selector="clickedNext:" destination="APe-K0-XGS" eventType="touchUpInside" id="Hvd-Rv-9eY"/>
                                     <segue destination="pdb-B6-s7T" kind="show" id="Lvk-Qw-Hiw"/>
                                 </connections>
                             </button>
@@ -3908,7 +3909,7 @@
                         <viewControllerLayoutGuide type="bottom" id="o45-Zf-EkA"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YMa-j9-IJc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="JKE-q2-wd3">
@@ -4042,7 +4043,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5l-p6-bTl">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5l-p6-bTl">
                                 <rect key="frame" x="0.0" y="509" width="375" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -4063,7 +4064,7 @@
                                     <action selector="actionNext:" destination="pdb-B6-s7T" eventType="touchUpInside" id="DLE-xj-cqD"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="progressPersonal" translatesAutoresizingMaskIntoConstraints="NO" id="fIo-hA-9oC">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="progressPersonal" translatesAutoresizingMaskIntoConstraints="NO" id="fIo-hA-9oC">
                                 <rect key="frame" x="0.0" y="497" width="375" height="20"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="lewisCarolPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="qoS-Ll-17i">
@@ -4636,13 +4637,13 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="zX9-Ej-56i"/>
                                 <exclude reference="TQ7-11-hO9"/>
                                 <exclude reference="YVV-0m-UwZ"/>
+                                <exclude reference="zX9-Ej-56i"/>
                                 <exclude reference="UgP-tN-bdg"/>
-                                <exclude reference="y1l-52-ZEK"/>
-                                <exclude reference="Nh7-tZ-CEx"/>
                                 <exclude reference="JaB-la-hzj"/>
+                                <exclude reference="Nh7-tZ-CEx"/>
+                                <exclude reference="y1l-52-ZEK"/>
                             </mask>
                         </variation>
                     </view>
@@ -4693,7 +4694,7 @@
         <image name="twitterButtonSmall" width="167" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RkU-nx-sgH"/>
+        <segue reference="Lvk-Qw-Hiw"/>
         <segue reference="qw6-i4-1D2"/>
     </inferredMetricsTieBreakers>
 </document>
