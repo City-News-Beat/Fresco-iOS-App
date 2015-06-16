@@ -212,9 +212,11 @@ static CGFloat const kInterImageGap = 1.0f;
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
 
     for (FRSPost *post in story.thumbnails) {
-        // this finds cleaner data
-        if (post.image.height && post.image.width) {
+        if (post.image.height && post.image.width && post.image.URL) {
             [array addObject:post.image];
+        }
+        else {
+            NSLog(@"Post ID missing image, height, and/or width: %@", post.postID);
         }
     }
 
