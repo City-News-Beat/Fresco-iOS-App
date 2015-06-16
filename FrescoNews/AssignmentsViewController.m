@@ -14,6 +14,7 @@
 #import "AssignmentAnnotation.h"
 #import "ClusterAnnotation.h"
 #import <SVPulsingAnnotationView.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -397,58 +398,41 @@
 
 #pragma mark - MKMapViewDelegate
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-    
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
     static NSString *assignmentIdentifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     static NSString *userIdentifier = @"currentLocation";
 
-    
-    if (annotation == mapView.userLocation){
-        
-        //If the user has a profile image
-        if([FRSDataManager sharedManager].currentUser.profileImageUrl != nil){
-            
-            MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
-            
-            if(pinView == nil){
-                
+    if (NO /* annotation == mapView.userLocation */) {
+        if ([FRSDataManager sharedManager].currentUser.profileImageUrl) {
+            MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
+
+            if (!pinView) {
                 pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-                
-                UIImageView *profileImageView = [[UIImageView alloc]init];
+
+                UIImageView *profileImageView = [[UIImageView alloc] init];
                 profileImageView.frame = CGRectMake(0, 0, 30, 30);
                 profileImageView.layer.masksToBounds = YES;
                 profileImageView.layer.cornerRadius = 27;
-                [profileImageView setImage:[UIImage imageNamed:@"Bitmap"]];
-                
+                profileImageView.contentMode = UIViewContentModeScaleAspectFit;
+
+                [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]];
                 [pinView addSubview:profileImageView];
-                
             }
-            
+
             return pinView;
-        
-        
         }
-        //If the user does not have a profile image
-        else{
-            
+        else {
             SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
-            
-            if(pulsingView == nil) {
-                
+            if (!pulsingView) {
                 pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-                
                 pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
-                
             }
             
             return pulsingView;
-
         }
-        
-
     }
-
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:assignmentIdentifier];
