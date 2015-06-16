@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>23</string>
+	<string>25</string>
 	<key>FacebookAppID</key>
 	<string>468404689990350</string>
 	<key>FacebookDisplayName</key>
@@ -39,6 +39,8 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>See Info.plist &gt; NSLocationAlwaysUsageDescription</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>See Info.plist &gt; NSLocationWhenInUseUsageDescription</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -70,7 +72,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>See Info.plist &gt; NSLocationWhenInUseUsageDescription</string>
 </dict>
 </plist>

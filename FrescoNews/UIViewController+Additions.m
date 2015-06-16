@@ -12,7 +12,11 @@
 {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbar-frescoimage"]];
     
-    [self setRightBarButtonItem:YES];
+    if([FRSDataManager sharedManager].currentUser != nil){
+    
+        [self setRightBarButtonItem:YES];
+            
+    }
 
 }
 

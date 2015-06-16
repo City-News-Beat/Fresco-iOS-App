@@ -51,8 +51,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         [self setRootViewControllerToTabBar];
     }
     else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
-        [self setRootViewControllerToFirstRun];
+        [self setRootViewControllerToOnboard];
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -84,6 +83,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     [rootViewController setRootViewControllerToTabBar];
+}
+
+- (void)setRootViewControllerToOnboard
+{
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToOnboard];
 }
 
 - (void)setRootViewControllerToFirstRun

@@ -40,6 +40,11 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated

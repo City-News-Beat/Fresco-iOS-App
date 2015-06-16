@@ -42,6 +42,12 @@
     [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
 }
 
+- (void)setRootViewControllerToOnboard{
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    [self setRootViewControllerWithIdentifier:@"initialOnboard" underNavigationController:YES];
+
+}
+
 - (UIViewController *)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
