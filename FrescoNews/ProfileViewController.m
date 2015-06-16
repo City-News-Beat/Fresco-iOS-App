@@ -47,8 +47,7 @@
 {
     [super viewDidLoad];
     [self setFrescoNavigationBar];
-  //  [self performNecessaryFetch:nil];
-    
+
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         // append data to data source, insert new cells at the end of table view
