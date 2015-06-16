@@ -12,26 +12,31 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "ProfileHeaderViewController.h"
 #import "FRSUser.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 
 @interface ProfileHeaderViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
+
 @property (weak, nonatomic) IBOutlet UILabel *twitterLabel;
 @property (weak, nonatomic) IBOutlet UILabel *facebookLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *twitterIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+
 @end
 
 @implementation ProfileHeaderViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
     
-    self.profileImage.image = [UIImage imageNamed:@"Bitmap"];
+    [self.profileImageView setImageWithURL:[self.frsUser cdnProfileImageURL]];
     
     
     [self setTwitterInfo];
