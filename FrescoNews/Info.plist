@@ -70,5 +70,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>See Info.plist &gt; NSLocationWhenInUseUsageDescription</string>
 </dict>
 </plist>
