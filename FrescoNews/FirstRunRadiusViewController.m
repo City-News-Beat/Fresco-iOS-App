@@ -78,24 +78,24 @@
 #pragma mark - Utility methods
 - (void)save
 {
-    NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
-
-    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
-                                                                 block:^(id responseObject, NSError *error) {
-                                                                     NSString *title;
-                                                                     NSString *message;
-                                                                     if (error) {
-                                                                         title = @"Error";
-                                                                         message = @"Could not save notification radius";
-                                                                         
-                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                                                                                         message:message
-                                                                                                                        delegate:nil
-                                                                                                               cancelButtonTitle:@"Dismiss"
-                                                                                                               otherButtonTitles:nil];
-                                                                         [alert show];
-                                                                     }
-                                                                 }];
+//    NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
+//
+//    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
+//                                                                 block:^(id responseObject, NSError *error) {
+//                                                                     NSString *title;
+//                                                                     NSString *message;
+//                                                                     if (error) {
+//                                                                         title = @"Error";
+//                                                                         message = @"Could not save notification radius";
+//                                                                         
+//                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+//                                                                                                                         message:message
+//                                                                                                                        delegate:nil
+//                                                                                                               cancelButtonTitle:@"Dismiss"
+//                                                                                                               otherButtonTitles:nil];
+//                                                                         [alert show];
+//                                                                     }
+//                                                                 }];
 }
 
 
