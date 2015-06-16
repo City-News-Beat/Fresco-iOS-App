@@ -7,7 +7,6 @@
 //
 
 #import "FirstRunAccountViewController.h"
-#import "FRSDataManager.h"
 
 @interface FirstRunAccountViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -74,38 +73,6 @@
                             self.bottomVerticalSpaceConstraint.constant = -1 * height;
                             [self.view layoutIfNeeded];
                         } completion:nil];
-}
-- (IBAction)clickedNext:(id)sender {
-    
-    if ([self.emailField.text length] == 0 || [self.passwordField.text length] == 0) {
-        [self performSegueWithIdentifier:@"showInitialSignUp" sender:self];
-        return;
-    }
-    else {
-        
-        [[FRSDataManager sharedManager] signupUser:self.emailField.text
-                                             email:self.emailField.text
-                                          password:self.passwordField.text
-                                             block:^(BOOL succeeded, NSError *error) {
-                                                 if (!error){
-                                                 }
-
-                                                 else {
-                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                     message:[error.userInfo objectForKey:@"error"]
-                                                                                                    delegate: self
-                                                                                           cancelButtonTitle: @"Cancel"
-                                                                                           otherButtonTitles:nil, nil];
-                                                     [alert addButtonWithTitle:@"Try Again"];
-                                                     [alert show];
-                                                     
-                                                     self.emailField.textColor = [UIColor redColor];
-                                                 }
-                                                 
-                                             }];
-    }
-    
-    
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

@@ -117,7 +117,32 @@
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:@"showInitialSignUp" sender:self];
+    if ([self.emailField.text length] == 0 || [self.passwordField.text length] == 0) {
+        [self performSegueWithIdentifier:@"showInitialSignUp" sender:self];
+        return;
+    }
+    else {
+    
+        [[FRSDataManager sharedManager] signupUser:self.emailField.text
+                                              email:self.emailField.text
+                                           password:self.passwordField.text
+                                              block:^(BOOL succeeded, NSError *error) {
+                                                  if (!error)
+                                                      [self performSegueWithIdentifier:@"showSignUp" sender:self];
+                                                  else {
+                                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                                                      message:[error.userInfo objectForKey:@"error"]
+                                                                                                     delegate: self
+                                                                                            cancelButtonTitle: @"Cancel"
+                                                                                            otherButtonTitles:nil, nil];
+                                                      [alert addButtonWithTitle:@"Try Again"];
+                                                      [alert show];
+                                                      
+                                                      self.emailField.textColor = [UIColor redColor];
+                                                  }
+                                                  
+                                              }];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
