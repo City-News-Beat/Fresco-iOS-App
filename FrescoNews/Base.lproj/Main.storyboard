@@ -2050,7 +2050,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zuI-Ja-5FX" userLabel="Wrapper">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="130"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bitmap" translatesAutoresizingMaskIntoConstraints="NO" id="whK-Iz-Wt2" userLabel="Profile Image">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="whK-Iz-Wt2" userLabel="Profile Image">
                                         <rect key="frame" x="15" y="15" width="104" height="104"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="104" id="HXG-uu-hlZ"/>
@@ -2240,6 +2240,7 @@
                     <size key="freeformSize" width="600" height="130"/>
                     <connections>
                         <outlet property="labelDisplayName" destination="TqC-2K-fJV" id="DX3-nr-c14"/>
+                        <outlet property="profileImageView" destination="whK-Iz-Wt2" id="V4s-AH-WSZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVc-qX-Ra0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2264,7 +2265,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqH-iM-sZZ">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1006"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bitmap" translatesAutoresizingMaskIntoConstraints="NO" id="zlq-SA-Ipu">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="zlq-SA-Ipu">
                                                 <rect key="frame" x="8" y="8" width="96" height="96"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="96" id="4ga-Dp-1Ed"/>
@@ -2793,6 +2794,7 @@
                         <outlet property="connectFacebookButton" destination="bbh-OR-5Lb" id="BNX-La-u9e"/>
                         <outlet property="connectTwitterButton" destination="UCq-t6-lmB" id="eF5-W9-fTU"/>
                         <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
+                        <outlet property="profileImageView" destination="zlq-SA-Ipu" id="Ecy-r8-lw7"/>
                         <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
                         <outlet property="radiusStepperLabel" destination="Bcm-cw-UW6" id="ncR-tA-4na"/>
                         <outlet property="scrollView" destination="xHX-Av-OJh" id="2yd-hv-KUH"/>
@@ -4321,7 +4323,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Bitmap" width="192" height="192"/>
         <image name="assignmentWarningIcon" width="20" height="20"/>
         <image name="backCaret" width="25" height="41"/>
         <image name="camera-shutter-icon" width="121" height="121"/>
@@ -4349,6 +4350,7 @@
         <image name="tab-stories" width="26" height="23"/>
         <image name="twitter" width="40" height="40"/>
         <image name="twitterButtonSmall" width="167" height="46"/>
+        <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="qw6-i4-1D2"/>

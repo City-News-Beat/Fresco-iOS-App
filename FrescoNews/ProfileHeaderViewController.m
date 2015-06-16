@@ -8,33 +8,21 @@
 
 #import "ProfileHeaderViewController.h"
 #import "FRSUser.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface ProfileHeaderViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
-
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @end
 
 @implementation ProfileHeaderViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
+    [self.profileImageView setImageWithURL:[self.frsUser cdnProfileImageURL]];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
