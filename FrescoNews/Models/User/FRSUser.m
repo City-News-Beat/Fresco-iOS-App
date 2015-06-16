@@ -7,6 +7,7 @@
 //
 
 #import "FRSUser.h"
+#import "MTLModel+Additions.h"
 @import Parse;
 
 @implementation FRSUser
@@ -18,17 +19,18 @@
              @"last" : @"lastname",
              @"email" : @"email",
              @"notificationRadius" : @"settings.radius",
-             @"userID" : @"_id"
+             @"userID" : @"_id",
+             @"profileImageUrl" : @"avatar"
              };
 }
 
 - (NSString *)displayName
 {
-    if ([[self first] length] && [[self last] length]) {
-        return [NSString stringWithFormat:@"%@ %@", [self first], [self last]];
+    if (self.first.length && self.last.length) {
+        return [NSString stringWithFormat:@"%@ %@", self.first, self.last];
     }
-    // this shouldn't happen
     else {
+        // this shouldn't happen
         return @"No display name";
     }
 }
@@ -45,4 +47,12 @@
 
     return jsonString;
 }
+
+- (NSURL *)cdnProfileImageURL
+{
+    return [self cdnAssetURLForURLString:[self.profileImageUrl absoluteString]
+                                withSize:(CGSize){150.0, 150.0}
+                    transformationString:@"c_fit"];
+}
+
 @end

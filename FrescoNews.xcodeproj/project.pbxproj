@@ -1111,7 +1111,6 @@
 				TargetAttributes = {
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = Z7R96S8K3N;
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -1122,7 +1121,6 @@
 					};
 					E71F0E401B0B936200186BAD = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = Z7R96S8K3N;
 					};
 				};
 			};

@@ -32,7 +32,8 @@
         [self.tbc returnToGalleryPost];
     }
     else {
-        self.tbc.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+        NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+        self.tbc.selectedIndex = (index == 4 ? 0 : index);
     }
 }
 

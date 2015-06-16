@@ -8,10 +8,10 @@
 
 #import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
-
 #import "MKMapView+Additions.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface ProfileSettingsViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @end
 
 @implementation ProfileSettingsViewController
@@ -48,11 +49,8 @@
     self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
-}
+    [self.profileImageView setImageWithURL:[self.frsUser cdnProfileImageURL]];
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)updateLinkingStatus {
