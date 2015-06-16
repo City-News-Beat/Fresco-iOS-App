@@ -65,7 +65,7 @@
     // we'll always be replacing our whole view
     destination.view.frame = self.view.bounds;
     
-    NSTimeInterval duration = 0.5; // default
+    NSTimeInterval duration = 0.0; // default
 
     // Kind of gross
     if ([self.presentedViewController isKindOfClass:[CameraViewController class]]) {
