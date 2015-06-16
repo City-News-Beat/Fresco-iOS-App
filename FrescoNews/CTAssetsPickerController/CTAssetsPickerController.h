@@ -82,6 +82,7 @@
  */
 @property (nonatomic, readonly, strong) BaseNavigationController *childNavigationController;
 
+@property (nonatomic) BOOL autoSubmit;
 
 /**
  *  @name Managing Selections

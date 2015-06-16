@@ -83,11 +83,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
-    self.photoButton.selected = YES;
+    self.photoButton.selected = YES; // TODO: Persist this and other camera state
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [self setSession:session];
+
+    // Prevent conflict between background music and camera
+    session.automaticallyConfiguresApplicationAudioSession = NO;
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
 
     // Setup the preview view
     [[self previewView] setSession:session];
@@ -154,8 +158,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setStillImageOutput:stillImageOutput];
         }
     });
-
-    [self updateRecentPhotoView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -185,6 +187,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
+
+    [self updateRecentPhotoView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -292,9 +296,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[self movieFileOutput] isRecording]) {
         [self showUIForCameraMode:CameraModeVideo];
+
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
+                                         withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
+                                               error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES
+                                             error: nil];
     }
     else {
         [self hideUIForCameraMode:CameraModeVideo];
+
+        // Stops background audio
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES
+                                             error:nil];
     }
 
     dispatch_async([self sessionQueue], ^{
@@ -377,8 +392,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancel
 {
+    [self cancelAndReturnToPreviousTab:YES];
+}
+
+- (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
+{
+    [VariableStore resetDraftGalleryPost];
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    vc.selectedIndex = vc.savedIndex;
+    vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     vc.tabBar.hidden = NO;
     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
@@ -410,8 +431,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
     picker.title =  @"Choose Media";
+    picker.autoSubmit = sender ? NO : YES;
     self.view.hidden = YES;
-    [self presentViewController:picker animated:YES completion:nil];
+    [self presentViewController:picker animated:(sender ? YES : NO) completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

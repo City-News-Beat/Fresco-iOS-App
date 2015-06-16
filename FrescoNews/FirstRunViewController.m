@@ -12,7 +12,6 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FirstRunViewController.h"
 #import "FRSDataManager.h"
-#import "CameraViewController.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
@@ -62,6 +61,11 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (void)styleButtons {
@@ -127,7 +131,7 @@
                                                       [self performSegueWithIdentifier:@"showSignUp" sender:self];
                                                   else {
                                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                      message:@"Signup failed"
+                                                                                                      message:[error.userInfo objectForKey:@"error"]
                                                                                                      delegate: self
                                                                                             cancelButtonTitle: @"Cancel"
                                                                                             otherButtonTitles:nil, nil];
@@ -182,14 +186,8 @@
     }];
 }
 
-- (IBAction)buttonWontLogin:(UIButton *)sender
-{
-    if ([self.presentingViewController isKindOfClass:[CameraViewController class]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else {
-        [self navigateToMainApp];
-    }
+- (IBAction)buttonWontLogin:(UIButton *)sender {
+    [self navigateToMainApp];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

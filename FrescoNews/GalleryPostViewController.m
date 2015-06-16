@@ -39,6 +39,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *pressBelowLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *invertedTriangleImageView;
 
 // Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
@@ -62,18 +64,34 @@
     [self.locationManager startUpdatingLocation];
 
     self.captionTextView.delegate = self;
-    self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
-
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
-    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
-    self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
-    self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
+    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
+
+    if ([PFUser currentUser]) {
+        self.twitterButton.hidden = NO;
+        self.facebookButton.hidden = NO;
+        self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+        self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
+        self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
+
+        BOOL hideCrosspostingHelp = [[NSUserDefaults standardUserDefaults] boolForKey:@"galleryPreviouslyPosted"];
+        self.pressBelowLabel.hidden = hideCrosspostingHelp;
+        self.invertedTriangleImageView.hidden = hideCrosspostingHelp;
+    }
+    else {
+        self.twitterButton.hidden = YES;
+        self.facebookButton.hidden = YES;
+        self.twitterHeightConstraint.constant = 0;
+        self.pressBelowLabel.hidden = YES;
+        self.invertedTriangleImageView.hidden = YES;
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -110,7 +128,7 @@
 
 - (void)returnToTabBar
 {
-    [((CameraViewController *)self.presentingViewController) cancel];
+    [((CameraViewController *)self.presentingViewController) cancelAndReturnToPreviousTab:NO];
 }
 
 - (void)returnToCamera:(id)sender
@@ -151,6 +169,7 @@
 
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
+            // TODO: Notify the user
             NSLog(@"Error crossposting to Twitter: %@", connectionError);
         }
         else {
@@ -187,6 +206,7 @@
                                            parameters: @{@"message" : string}
                                            HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             if (error) {
+                // TODO: Notify the user
                 NSLog(@"Error crossposting to Facebook");
             }
             else {
@@ -231,17 +251,18 @@
 
 - (UIBarButtonItem *)titleButtonItem
 {
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
-                                                              style:UIBarButtonItemStylePlain
-                                                             target:self
-                                                             action:@selector(submitGalleryPost:)];
-    
-    return title;
+    // TODO: Capture all UIToolbar touches
+    return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
+                                            style:UIBarButtonItemStylePlain
+                                           target:self
+                                           action:@selector(submitGalleryPost:)];
 }
 
 - (UIBarButtonItem *)spaceButtonItem
 {
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                         target:nil
+                                                         action:nil];
 }
 
 - (NSArray *)toolbarItems
@@ -254,7 +275,7 @@
 - (void)submitGalleryPost:(id)sender
 {
     if (![FRSDataManager sharedManager].currentUser) {
-        [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"firstRunViewController"] animated:YES];
+        [self navigateToFirstRun];
         return;
     }
 
@@ -338,7 +359,10 @@
             [self crossPostToTwitter:crossPostString];
             [self crossPostToFacebook:crossPostString];
 
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"captionStringInProgress"];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setBool:YES forKey:@"galleryPreviouslyPosted"];
+            [VariableStore resetDraftGalleryPost];
+
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
                                                                            message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
                                                                     preferredStyle:UIAlertControllerStyleAlert];
@@ -392,12 +416,16 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
-        [[NSUserDefaults standardUserDefaults] setObject:self.captionTextView.text forKey:@"captionStringInProgress"];
         return YES;
     }
 
     [textView resignFirstResponder];
     return NO;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }
 
 #pragma mark - Notification methods

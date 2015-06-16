@@ -34,4 +34,6 @@
 
 @property (nonatomic, strong) ALAssetsGroup *assetsGroup;
 
+- (void)createGalleryPost:(id)sender;
+
 @end

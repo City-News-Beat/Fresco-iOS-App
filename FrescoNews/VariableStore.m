@@ -22,6 +22,9 @@
     dispatch_once(&pred, ^{
         sharedInstance = [[VariableStore alloc] init];
         
+        // errors
+        sharedInstance.errorDomain = @"com.fresconews";
+        
         // colors
         sharedInstance.colorBrandDark = @"FFB814";
         sharedInstance.colorBrandPrimary = @"FFC53D";
@@ -56,6 +59,14 @@
             [NSURL URLWithString:[VariableStore sharedInstance].baseURL],
             [NSURL URLWithString:[VariableStore sharedInstance].basePath],
             endpoint];
+}
+
++ (void)resetDraftGalleryPost
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:nil forKey:@"captionStringInProgress"];
+    [defaults setObject:nil forKey:@"defaultAssignmentID"];
+    [defaults setObject:nil forKey:@"selectedAssets"];
 }
 
 @end

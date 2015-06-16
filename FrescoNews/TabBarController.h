@@ -9,5 +9,7 @@
 @import UIKit;
 
 @interface TabBarController : UITabBarController <UITabBarDelegate>
-@property (nonatomic) NSUInteger savedIndex;
+
+- (void)returnToGalleryPost;
+
 @end

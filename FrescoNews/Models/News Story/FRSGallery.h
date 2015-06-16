@@ -14,7 +14,7 @@
 
 @interface FRSGallery : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSNumber *galleryID;
+@property (nonatomic, copy) NSString *galleryID;
 @property (nonatomic, copy) NSString *visibility;
 @property (nonatomic, copy) NSDate *createTime;
 @property (nonatomic, copy) NSDate *modifiedTime;

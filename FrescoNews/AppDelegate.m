@@ -10,6 +10,7 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 @import Parse;
+@import AVFoundation;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
@@ -33,6 +34,14 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[AFNetworkActivityLogger sharedLogger] startLogging];
+
+    // Prevent conflict between background music and camera
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
+                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
+                                           error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES
+                                         error:nil];
+
     [self configureParseWithLaunchOptions:launchOptions];
     [self setupAppearances];
 
