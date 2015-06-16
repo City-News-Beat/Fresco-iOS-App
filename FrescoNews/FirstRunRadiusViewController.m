@@ -13,13 +13,11 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 
-@interface FirstRunRadiusViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
+@interface FirstRunRadiusViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
-
 @property (strong, nonatomic) CLLocationManager *locationManager;
-
 @end
 
 @implementation FirstRunRadiusViewController
@@ -27,13 +25,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager requestWhenInUseAuthorization];
-    [self.locationManager startUpdatingLocation];
-    
+    [self.locationManager requestAlwaysAuthorization];
+
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
 }
@@ -78,45 +73,24 @@
 #pragma mark - Utility methods
 - (void)save
 {
-//    NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
-//
-//    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
-//                                                                 block:^(id responseObject, NSError *error) {
-//                                                                     NSString *title;
-//                                                                     NSString *message;
-//                                                                     if (error) {
-//                                                                         title = @"Error";
-//                                                                         message = @"Could not save notification radius";
-//                                                                         
-//                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-//                                                                                                                         message:message
-//                                                                                                                        delegate:nil
-//                                                                                                               cancelButtonTitle:@"Dismiss"
-//                                                                                                               otherButtonTitles:nil];
-//                                                                         [alert show];
-//                                                                     }
-//                                                                 }];
+    NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
+
+    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
+                                                                 block:^(id responseObject, NSError *error) {
+                                                                     NSString *title;
+                                                                     NSString *message;
+                                                                     if (error) {
+                                                                         title = @"Error";
+                                                                         message = @"Could not save notification radius";
+                                                                         
+                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                                                                                         message:message
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                         [alert show];
+                                                                     }
+                                                                 }];
 }
 
-
-#pragma mark - CLLocationManagerDelegate methods
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    self.mapviewRadius.showsUserLocation = YES;
-    self.mapviewRadius.delegate = self;
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
-                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [self.locationManager stopUpdatingLocation];
-    }
-}
 @end

@@ -399,9 +399,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [VariableStore resetDraftGalleryPost];
     TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
-    vc.tabBar.hidden = NO;
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:^{
+        vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
+        vc.tabBar.hidden = NO;
+    }];
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification

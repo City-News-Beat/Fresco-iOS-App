@@ -68,15 +68,30 @@
 }
 
 - (IBAction)actionNext:(id)sender {
-    NSDictionary *updateParams = @{@"firstname" : self.textfieldFirstName.text, @"lastname" : self.textfieldLastName.text};
+    // save this to allow backing to the VC
+    self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
-        if (!error) {
-            [self performSegueWithIdentifier:@"showPermissions" sender:self];
-        }
-        else
-            NSLog(@"Error: %@", error);
-    }];
+    // both fields must be populated
+    if (([self.firstName length] && [self.lastName length])) {
+        NSDictionary *updateParams = @{ @"firstname" : self.firstName, @"lastname" : self.lastName };
+        
+        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+            if (!error) {
+                [self performSegueWithIdentifier:@"showPermissions" sender:self];
+            }
+            else
+                NSLog(@"Error: %@", error);
+        }];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Please enter both first and last name"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil, nil];
+        [alert show];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
