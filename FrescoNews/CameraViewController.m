@@ -16,6 +16,7 @@
 #import "ALAsset+assetType.h"
 #import "FRSDataManager.h"
 #import "SwitchingRootViewController.h"
+#import "MKMapView+Additions.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -638,7 +639,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)configureAssignmentLabel
 {
     if (self.defaultAssignment) {
-        CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
+        CGFloat distanceInMiles = [self.location distanceFromLocation:self.defaultAssignment.locationObject] / kMetersInAMile;
         self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
     }
     else {
