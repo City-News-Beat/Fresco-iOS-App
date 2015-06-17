@@ -8,6 +8,7 @@
 #import "CameraViewController.h"
 @import AVFoundation;
 @import AssetsLibrary;
+@import ImageIO;
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
@@ -354,8 +355,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
+                NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
+
+                // There may be a more correct way to do this
+                NSString *assignmentID = [NSString stringWithFormat:@"FrescoAssignmentID=%@", self.defaultAssignment.assignmentId];
+
+                NSDictionary *frescoDict = @{ (NSString *)kCGImagePropertyExifUserComment : assignmentID };
+                [metadata setObject:frescoDict forKey:(NSString *)kCGImagePropertyExifDictionary];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
-                                                                    metadata:[self.location EXIFMetadata]
+                                                                    metadata:metadata
                                                              completionBlock:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideUIForCameraMode:CameraModePhoto];
