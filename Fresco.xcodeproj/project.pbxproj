@@ -1125,7 +1125,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1EDA44AB1AA4CCC70082E08D /* Build configuration list for PBXProject "FrescoNews" */;
+			buildConfigurationList = 1EDA44AB1AA4CCC70082E08D /* Build configuration list for PBXProject "Fresco" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1704,7 +1704,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1EDA44AB1AA4CCC70082E08D /* Build configuration list for PBXProject "FrescoNews" */ = {
+		1EDA44AB1AA4CCC70082E08D /* Build configuration list for PBXProject "Fresco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1EDA44D41AA4CCC70082E08D /* Debug */,
