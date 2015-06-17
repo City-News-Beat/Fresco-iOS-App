@@ -944,17 +944,17 @@
                                             <outlet property="pageControl" destination="1A7-Wa-uJe" id="csb-YJ-X2B"/>
                                         </connections>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZm-Kh-7Lh" userLabel="Assignment View">
-                                        <rect key="frame" x="0.0" y="450" width="600" height="40"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZm-Kh-7Lh" userLabel="Assignment View">
+                                        <rect key="frame" x="0.0" y="450" width="600" height="0.0"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Assignments..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oz9-5U-NeN" userLabel="Assignment Label">
-                                                <rect key="frame" x="13" y="12" width="553" height="16"/>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Assignments..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oz9-5U-NeN" userLabel="Assignment Label">
+                                                <rect key="frame" x="13" y="-8" width="553" height="16"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1pe-Up-bZs">
-                                                <rect key="frame" x="576" y="9" width="14" height="22"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1pe-Up-bZs">
+                                                <rect key="frame" x="576" y="-11" width="14" height="22"/>
                                                 <state key="normal" image="delete-small-white">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -965,7 +965,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.35686274509999999" green="0.53333333329999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="11Y-q1-cDc"/>
+                                            <constraint firstAttribute="height" id="11Y-q1-cDc"/>
                                             <constraint firstItem="1pe-Up-bZs" firstAttribute="leading" secondItem="oz9-5U-NeN" secondAttribute="trailing" constant="10" id="85y-0N-Cnl"/>
                                             <constraint firstItem="oz9-5U-NeN" firstAttribute="leading" secondItem="ZZm-Kh-7Lh" secondAttribute="leading" constant="13" id="CbG-bf-gX4">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="14"/>
@@ -976,7 +976,7 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="Q60-io-4Rt" userLabel="Caption Text View">
-                                        <rect key="frame" x="15" y="491" width="585" height="361"/>
+                                        <rect key="frame" x="15" y="451" width="585" height="401"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
