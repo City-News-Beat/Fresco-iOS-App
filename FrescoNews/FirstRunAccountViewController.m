@@ -7,6 +7,7 @@
 //
 
 #import "FirstRunAccountViewController.h"
+#import "FRSDataManager.h"
 
 @interface FirstRunAccountViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -32,6 +33,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // we may prepopulate these either during pushing or backing
+    if (self.email)
+        self.emailField.text = self.email;
+    
+    if (self.password)
+        self.passwordField.text = self.password;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -74,6 +82,49 @@
                             [self.view layoutIfNeeded];
                         } completion:nil];
 }
+
+- (IBAction)clickedNext:(id)sender {
+    if ([self.emailField.text length] && [self.passwordField.text length]) {
+        
+        // save this to allow backing to the VC
+        self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+        if (![self.password isEqualToString:confirmPassword]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Passwords do not match"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil, nil];
+            [alert show];
+        }
+        else {
+            [[FRSDataManager sharedManager] signupUser:self.email
+                                                 email:self.email
+                                              password:self.password
+                                                 block:^(BOOL succeeded, NSError *error) {
+                                                     if (error) {
+                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                                                         message:[error.userInfo objectForKey:@"error"]
+                                                                                                        delegate: self
+                                                                                               cancelButtonTitle: @"Cancel"
+                                                                                               otherButtonTitles:nil, nil];
+                                                         [alert addButtonWithTitle:@"Try Again"];
+                                                         [alert show];
+                                                         
+                                                         self.emailField.textColor = [UIColor redColor];
+                                                     }
+                                                     else{
+                                                         
+                                                         [self performSegueWithIdentifier:@"showPersonalInfo" sender:self];
+                                                     }
+                                                     
+                                                 }];
+        }
+    }
+}
+
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     

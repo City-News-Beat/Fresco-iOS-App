@@ -11,6 +11,7 @@
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FirstRunViewController.h"
+#import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
@@ -40,6 +41,11 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,14 +99,18 @@
 }
 
 - (IBAction)loginButtonAction:(id)sender {
+    self.loginButton.enabled = NO;
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+        self.loginButton.enabled = YES;
         if (user) {
             FRSUser *frsUser = [FRSDataManager sharedManager].currentUser;
             
             // make sure first and last name are set
+            // if not collect them
             if (!([frsUser.first length] && [frsUser.last length])) {
-                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
             }
+            // otherwise just go into the app
             else {
                 [self.view endEditing:YES];
                 [self navigateToMainApp];
@@ -117,32 +127,7 @@
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    if ([self.emailField.text length] == 0 || [self.passwordField.text length] == 0) {
-        [self performSegueWithIdentifier:@"showInitialSignUp" sender:self];
-        return;
-    }
-    else {
-    
-        [[FRSDataManager sharedManager] signupUser:self.emailField.text
-                                              email:self.emailField.text
-                                           password:self.passwordField.text
-                                              block:^(BOOL succeeded, NSError *error) {
-                                                  if (!error)
-                                                      [self performSegueWithIdentifier:@"showSignUp" sender:self];
-                                                  else {
-                                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                      message:[error.userInfo objectForKey:@"error"]
-                                                                                                     delegate: self
-                                                                                            cancelButtonTitle: @"Cancel"
-                                                                                            otherButtonTitles:nil, nil];
-                                                      [alert addButtonWithTitle:@"Try Again"];
-                                                      [alert show];
-                                                      
-                                                      self.emailField.textColor = [UIColor redColor];
-                                                  }
-                                                  
-                                              }];
-    }
+    [self performSegueWithIdentifier:@"showAccountInfo" sender:self];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -162,7 +147,7 @@
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
             else
                 [self navigateToMainApp];
         }
@@ -176,7 +161,7 @@
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"showSignUp" sender:self];
+                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
             else
                 [self navigateToMainApp];
         }
@@ -192,8 +177,16 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Make sure your segue name in storyboard is the same as this line
-    if ([[segue identifier] isEqualToString:@"showSignUp"]) {
+    // normal push segue for Fresco signup
+    if ([[segue identifier] isEqualToString:@"showAccountInfo"]) {
+        FirstRunAccountViewController *fracvc = [segue destinationViewController];
+        fracvc.email = self.emailField.text;
+        fracvc.password = self.passwordField.text;
+    }
+    
+    // custom replace segue for social signup
+    else if ([[segue identifier] isEqualToString:@"replaceWithSignUp"]) {
+        
     }
 }
 

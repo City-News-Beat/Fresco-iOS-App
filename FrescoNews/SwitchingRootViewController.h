@@ -18,5 +18,6 @@
 
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
+- (void)setRootViewControllerToOnboard;
 
 @end

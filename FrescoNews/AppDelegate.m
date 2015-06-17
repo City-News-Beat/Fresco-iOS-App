@@ -51,8 +51,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         [self setRootViewControllerToTabBar];
     }
     else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
-        [self setRootViewControllerToFirstRun];
+        [self setRootViewControllerToOnboard];
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -84,6 +83,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
     [rootViewController setRootViewControllerToTabBar];
+}
+
+- (void)setRootViewControllerToOnboard
+{
+    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
+    [rootViewController setRootViewControllerToOnboard];
 }
 
 - (void)setRootViewControllerToFirstRun
@@ -176,8 +181,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    [PFTwitterUtils initializeWithConsumerKey:@"uCNLr9NBpjzamTiDCgp5t5KPP"
-                               consumerSecret:@"Qb78pKABSTUKUZEZYXwNqf7oJ8jCWLoMlDuEadC8wclHD9A05J"];
+    [PFTwitterUtils initializeWithConsumerKey:@"o6y4zv5yq0AfCU4HKUHQYJMXE"
+                               consumerSecret:@"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz"];
 }
 
 - (void)registerForPushNotifications
