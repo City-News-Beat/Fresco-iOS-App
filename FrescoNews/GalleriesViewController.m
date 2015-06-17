@@ -22,35 +22,13 @@
 #import "UIView+Additions.h"
 
 @interface GalleriesViewController()
-
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-
 @end
 
 @implementation GalleriesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (void)viewDidLoad
 {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup
-{
-    
-}
-
-- (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     self.tableView.delegate = self;
@@ -63,8 +41,9 @@
                   forControlEvents:UIControlEventValueChanged];
     [self.refreshControl setTintColor:[UIColor blackColor]];
     [self.tableView addSubview:self.refreshControl];
-    
-    
+
+    // YES by default, but needs to be the only such visible UIScrollView
+    self.tableView.scrollsToTop = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

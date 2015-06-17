@@ -40,6 +40,7 @@
 
 - (void)awakeFromNib
 {
+    self.collectionPosts.scrollsToTop = NO;
     self.collectionPosts.dataSource = self;
     self.collectionPosts.delegate = self;
     self.pageControl.numberOfPages = 0;
