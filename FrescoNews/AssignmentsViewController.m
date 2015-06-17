@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "AssignmentsViewController.h"
 #import "UIViewController+Additions.h"
 #import "MKMapView+Additions.h"
@@ -53,6 +54,10 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    
+    [appDelegate setupLocationManager];
     
     [self setFrescoNavigationBar];
     

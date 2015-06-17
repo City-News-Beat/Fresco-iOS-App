@@ -50,13 +50,9 @@
     _gallery = gallery;
     self.labelCaption.text = self.gallery.caption;
     
-    if(self.gallery.posts.count < 2){
-        self.pageControl.hidden = YES;
-    }
-    else{
-        
+
         self.pageControl.numberOfPages = [self.gallery.posts count];
-    }
+    
 
     [self.collectionPosts reloadData];
 
