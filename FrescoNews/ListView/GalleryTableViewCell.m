@@ -30,6 +30,20 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
     self.galleryView.gallery = gallery;
 }
 
+#pragma mark - UIButtons Actions
+
+- (IBAction)readMore:(id)sender {
+    
+    [self.galleryTableViewCellDelegate readMoreTapped:self.gallery];
+    
+}
+
+- (IBAction)shareGallery:(id)sender {
+    
+    [self.galleryTableViewCellDelegate shareTapped:self.gallery];
+    
+}
+
 - (void)prepareForReuse
 {
     self.gallery = nil;

@@ -48,16 +48,16 @@
 - (void)setGallery:(FRSGallery *)gallery
 {
     _gallery = gallery;
+    
     self.labelCaption.text = self.gallery.caption;
     
-
-        self.pageControl.numberOfPages = [self.gallery.posts count];
+    self.pageControl.numberOfPages = [self.gallery.posts count];
     
-
     [self.collectionPosts reloadData];
 
     [self setAspectRatio];
 }
+
 
 - (void)setAspectRatio
 {
@@ -90,6 +90,7 @@
         [self updateConstraints];
     }
 }
+
 
 #pragma mark - UICollectionViewDataSource
 

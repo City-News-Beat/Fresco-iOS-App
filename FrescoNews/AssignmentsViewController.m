@@ -14,6 +14,7 @@
 #import "FRSDataManager.h"
 #import "AssignmentAnnotation.h"
 #import "ClusterAnnotation.h"
+#import "ProfileSettingsViewController.h"
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
@@ -23,7 +24,6 @@
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
 
-    @property (weak, nonatomic) IBOutlet UILabel *storyBreaksNotification;
     @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
     @property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
 
@@ -100,6 +100,10 @@
     
     static BOOL firstTime = YES;
     
+    if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
+        self.storyBreaksView.hidden = YES;
+    }
+    
     if(self.currentAssignment == nil){
         [self updateAssignments];
     }
@@ -118,8 +122,10 @@
 }
 
 - (void)tweakUI {
-    
-    self.storyBreaksNotification.text = @"Click here to be notified when a story breaks in your area";
+   
+   if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
+       self.storyBreaksView.hidden = YES;
+   }
     
     self.scrollView.alpha = 0;
     
@@ -147,6 +153,16 @@
 
 }
 
+- (IBAction)clickedRadiusNotificationButton:(id)sender {
+    
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    ProfileSettingsViewController *profileSettings = [storyboard instantiateViewControllerWithIdentifier:@"ProfileSettingsViewController"];
+    
+    [self.navigationController pushViewController:profileSettings animated:YES];
+    
+}
 
 -(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
     
@@ -321,8 +337,8 @@
 }
 
 /*
- ** Adds assignment to map through annotation
- */
+** Adds assignment to map through annotation
+*/
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
@@ -409,8 +425,8 @@
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     static NSString *userIdentifier = @"currentLocation";
 
-    if (NO /* annotation == mapView.userLocation */) {
-        if ([FRSDataManager sharedManager].currentUser.profileImageUrl) {
+    if (annotation == mapView.userLocation) {
+        if ([FRSDataManager sharedManager].currentUser.profileImageUrl == nil) {
             MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
 
             if (!pinView) {
