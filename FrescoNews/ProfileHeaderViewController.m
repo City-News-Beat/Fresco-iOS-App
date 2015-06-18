@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *facebookLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *twitterIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
-@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @end
 
