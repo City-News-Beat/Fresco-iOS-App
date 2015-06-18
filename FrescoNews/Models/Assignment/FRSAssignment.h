@@ -7,7 +7,6 @@
 //
 
 @import Foundation;
-
 #import <Mantle/Mantle.h>
 
 @class FRSUser, CLLocation;
@@ -27,7 +26,6 @@
 @property (nonatomic, strong) NSDate *timeCreated;
 @property (nonatomic, strong) NSDate *timeEdited;
 @property (nonatomic, strong) NSDate *expirationTime;
-
 @property (nonatomic, strong) FRSUser *owner;
 
 @end
