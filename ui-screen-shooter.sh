@@ -89,7 +89,7 @@ function _check_ui_script {
   # Abort if the UI script does not exist.
 
   if [ -z "$ui_script" ]; then
-    ui_script="./config-automation.js"
+    ui_script="./config-automation-signup.js"
   fi
   if [ ! -f "$ui_script" ]; then
     if [ -f "./config-automation.example.js" ]; then
