@@ -43,6 +43,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlViewWidthConstraint;
 
 // Refactor
 @property (strong, nonatomic) CLLocation *location;
@@ -164,6 +165,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     self.view.hidden = NO;
+    self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
 
     dispatch_async([self sessionQueue], ^{
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
