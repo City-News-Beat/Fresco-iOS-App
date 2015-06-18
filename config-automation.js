@@ -45,3 +45,17 @@ window.tabBar().buttons()[3].tap();
 target.delay(4.5);
 
 captureLocalizedScreenshot("assignments");
+
+window.tabBar().buttons()[2].tap();
+target.delay(1.5);
+target.setDeviceOrientation(UIA_DEVICE_ORIENTATION_LANDSCAPELEFT);
+target.delay(1.5);
+
+captureLocalizedScreenshot("camera-portrait");
+
+target.setDeviceOrientation(UIA_DEVICE_ORIENTATION_LANDSCAPELEFT);
+target.delay(1.5);
+
+captureLocalizedScreenshot("camera-landscape");
+
+target.setDeviceOrientation(UIA_DEVICE_ORIENTATION_PORTRAIT);
