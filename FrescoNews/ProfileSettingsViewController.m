@@ -164,21 +164,22 @@
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
         NSString *title;
         NSString *message;
-        if (!error) {
-            title = @"Success";
-            message = @"Profile settings updated";
-        }
-        else {
+        if (error) {
             title = @"Error";
             message = @"Could not save Profile settings";
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+            [alert show];
         }
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
+        // on success just dismiss
+        else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
 
     }];
     
