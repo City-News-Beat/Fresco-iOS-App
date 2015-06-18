@@ -13,9 +13,35 @@
 var target = UIATarget.localTarget();
 var window = target.frontMostApp().mainWindow();
 
-captureLocalizedScreenshot("screen1");
+captureLocalizedScreenshot("onboard1");
 
 window.buttons()[0].tap();
 target.delay(0.5);
 
-captureLocalizedScreenshot("screen2");
+captureLocalizedScreenshot("onboard2");
+
+window.buttons()[0].tap();
+target.delay(0.5);
+
+captureLocalizedScreenshot("onboard3");
+
+window.buttons()[0].tap();
+target.delay(0.5);
+
+captureLocalizedScreenshot("initialFirstRun");
+
+target.delay(0.5);
+window.buttons()[4].tap();
+target.delay(2.5);
+
+captureLocalizedScreenshot("highlights");
+
+window.tabBar().buttons()[1].tap();
+target.delay(2.5);
+
+captureLocalizedScreenshot("stories");
+
+window.tabBar().buttons()[3].tap();
+target.delay(4.5);
+
+captureLocalizedScreenshot("assignments");

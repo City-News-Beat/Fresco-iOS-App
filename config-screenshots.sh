@@ -12,7 +12,7 @@
 #  - Download .itmsp file with iTMSTransporter
 #  - Run `grep locale ~/Desktop/*.itmsp/metadata.xml  | grep name | sort -u`
 
-export languages="en-US fr ja"
+export languages="en-US"
 
 
 # SIMULATORS
