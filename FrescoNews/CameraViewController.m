@@ -35,7 +35,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UIButton *shutterButton;
+@property (weak, nonatomic) IBOutlet UIButton *apertureButton;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
@@ -253,7 +253,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - Actions
 
-- (IBAction)shutterButtonTapped:(id)sender
+- (IBAction)apertureButtonTapped:(id)sender
 {
     if (self.photoButton.selected) {
         [self snapStillImage];
@@ -266,10 +266,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)showUIForCameraMode:(CameraMode)cameraMode
 {
     self.controlsView.backgroundColor = [UIColor whiteColor];
-    self.shutterButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
+    self.apertureButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
 
     if (cameraMode == CameraModeVideo) {
-        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
     }
 
     for (UIView *view in [self.controlsView subviews]) {
@@ -285,13 +285,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         view.hidden = YES;
     }
 
-    self.shutterButton.hidden = NO;
+    self.apertureButton.hidden = NO;
     self.flashButton.hidden = NO;
     if (cameraMode == CameraModeVideo) {
-        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
+        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
     }
 
-    self.shutterButton.backgroundColor = [UIColor clearColor];
+    self.apertureButton.backgroundColor = [UIColor clearColor];
 }
 
 - (void)toggleMovieRecording
@@ -593,13 +593,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateCameraMode:(CameraMode)cameraMode
 {
     if (cameraMode == CameraModePhoto) {
-        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"camera-shutter-icon"] forState:UIControlStateNormal];
+        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"camera-aperture-icon"] forState:UIControlStateNormal];
         [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
         [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
         // self.broadcastStatus.hidden = YES;
     }
     else {
-        [self.shutterButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
         [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
         [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
         // self.broadcastStatus.hidden = NO;
