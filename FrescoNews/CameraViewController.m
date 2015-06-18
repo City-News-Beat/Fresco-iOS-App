@@ -8,6 +8,7 @@
 #import "CameraViewController.h"
 @import AVFoundation;
 @import AssetsLibrary;
+@import ImageIO;
 #import "TabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
@@ -16,6 +17,7 @@
 #import "ALAsset+assetType.h"
 #import "FRSDataManager.h"
 #import "SwitchingRootViewController.h"
+#import "MKMapView+Additions.h"
 
 typedef enum : NSUInteger {
     CameraModePhoto,
@@ -355,8 +357,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
+                NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
+
+                // There may be a more correct way to do this
+                NSString *assignmentID = [NSString stringWithFormat:@"FrescoAssignmentID=%@", self.defaultAssignment.assignmentId];
+
+                NSDictionary *frescoDict = @{ (NSString *)kCGImagePropertyExifUserComment : assignmentID };
+                [metadata setObject:frescoDict forKey:(NSString *)kCGImagePropertyExifDictionary];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
-                                                                    metadata:[self.location EXIFMetadata]
+                                                                    metadata:metadata
                                                              completionBlock:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideUIForCameraMode:CameraModePhoto];
@@ -640,7 +649,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)configureAssignmentLabel
 {
     if (self.defaultAssignment) {
-        CGFloat distanceInMiles = 0.00062137 * [self.location distanceFromLocation:self.defaultAssignment.locationObject]; // TODO: API metric system
+        CGFloat distanceInMiles = [self.location distanceFromLocation:self.defaultAssignment.locationObject] / kMetersInAMile;
         self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
     }
     else {
@@ -761,8 +770,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.defaultAssignment = [responseObject firstObject];
-        self.defaultAssignment.locationObject = [[CLLocation alloc] initWithLatitude:[self.defaultAssignment.lat floatValue]
-                                                                           longitude:[self.defaultAssignment.lon floatValue]];
     }];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "FRSAssignment.h"
+@import CoreLocation;
 #import "MTLModel+Additions.h"
 
 @implementation FRSAssignment
@@ -29,25 +30,18 @@
              };
 }
 
-+ (NSValueTransformer *)latJSONTransformer{
-
++ (NSValueTransformer *)latJSONTransformer
+{
     return [MTLValueTransformer reversibleTransformerWithBlock:^NSNumber *(NSArray *location) {
-    
         return location[1];
-        
     }];
-
-    
 }
 
-+ (NSValueTransformer *)lonJSONTransformer{
-    
++ (NSValueTransformer *)lonJSONTransformer
+{
     return [MTLValueTransformer reversibleTransformerWithBlock:^NSNumber *(NSArray *location) {
-        
         return location[0];
-        
     }];
-    
 }
 
 + (NSValueTransformer *)timeCreatedJSONTransformer
@@ -67,7 +61,17 @@
 
 - (NSString *)caption
 {
-    return [_caption length] ? _caption : NSLocalizedString(@"No Caption", nil);
+    return [self.caption length] ? self.caption : NSLocalizedString(@"No Caption", nil);
+}
+
+- (CLLocation *)locationObject
+{
+    if (!_locationObject) {
+        _locationObject  = [[CLLocation alloc] initWithLatitude:[self.lat floatValue]
+                                                      longitude:[self.lon floatValue]];
+    }
+
+    return _locationObject;
 }
 
 @end
