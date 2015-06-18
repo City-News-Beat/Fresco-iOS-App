@@ -20,8 +20,11 @@ static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *imageArrays;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 
 @implementation StoriesViewController
@@ -57,6 +60,13 @@ static CGFloat const kInterImageGap = 1.0f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 96;
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.alpha = .54;
+    [self.refreshControl addTarget:self action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl setTintColor:[UIColor blackColor]];
+    [self.tableView addSubview:self.refreshControl];
+    
     [self performNecessaryFetch:nil];
     
     //Endless scroll handler
@@ -84,6 +94,7 @@ static CGFloat const kInterImageGap = 1.0f;
 }
 
 #pragma mark - Data Loading
+
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
     
@@ -94,6 +105,16 @@ static CGFloat const kInterImageGap = 1.0f;
         [self reloadData];
     }];
 
+}
+
+- (void)refresh
+{
+
+    [self performNecessaryFetch:nil];
+    
+    [self.refreshControl endRefreshing];
+    
+    [self.tableView reloadData];
 }
 
 - (void)reloadData
@@ -120,6 +141,7 @@ static CGFloat const kInterImageGap = 1.0f;
 }
 
 #pragma mark - UITableViewDataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.stories count];
@@ -193,6 +215,7 @@ static CGFloat const kInterImageGap = 1.0f;
 }
 
 #pragma mark - StoryThumbnailViewTapHandler
+
 - (void)story:(FRSStory *)story tappedAtGalleryIndex:(NSInteger)index
 {
     StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];

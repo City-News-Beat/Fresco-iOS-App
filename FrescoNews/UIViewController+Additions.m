@@ -2,6 +2,7 @@
 #import "NotificationsViewController.h"
 #import "FRSDataManager.h"
 #import "FRSDataManager.h"
+#import "VariableStore.h"
 #import <BTBadgeView.h>
 
 @implementation UIViewController (Additions)
@@ -11,6 +12,8 @@
 - (void)setFrescoNavigationBar
 {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbar-frescoimage"]];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
     
     if([FRSDataManager sharedManager].currentUser != nil){
     

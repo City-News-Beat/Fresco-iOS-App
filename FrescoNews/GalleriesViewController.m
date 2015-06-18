@@ -37,6 +37,7 @@
     self.tableView.estimatedRowHeight = 400.0f;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.alpha = .54;
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
     [self.refreshControl setTintColor:[UIColor blackColor]];
@@ -121,6 +122,8 @@
     FRSGallery *gallery = [self.galleries objectAtIndex:index];
     
     GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
+    
+    galleryTableViewCell.galleryTableViewCellDelegate = self;
     
     galleryTableViewCell.gallery = gallery;
     
@@ -254,6 +257,37 @@
     
 }
 
+
+#pragma mark - Gallery Table View Cell Delegate
+
+- (void)readMoreTapped:(FRSGallery *)gallery{
+
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryView setGallery:gallery];
+    
+    [self.navigationController pushViewController:galleryView animated:YES];
+
+}
+
+- (void)shareTapped:(FRSGallery *)gallery{
+    
+    NSString *string = [NSString stringWithFormat:@"http://fresconews.com/gallery/%@", gallery.galleryID];
+    NSURL *URL = [NSURL URLWithString:string];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
+                                      applicationActivities:nil];
+    [self.navigationController presentViewController:activityViewController
+                                            animated:YES
+                                          completion:^{
+                                              // ...
+                                          }];
+
+}
 
 #pragma mark - Segues
 

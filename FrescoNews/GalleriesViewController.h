@@ -10,10 +10,11 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @import UIKit;
 #import "FRSBaseViewController.h"
+#import "GalleryTableViewCell.h"
 
 @class FRSUser;
 
-@interface GalleriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface GalleriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, GalleryTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *galleries;
