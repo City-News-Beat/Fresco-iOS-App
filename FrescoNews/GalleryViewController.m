@@ -52,6 +52,7 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     
     UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
     

@@ -57,6 +57,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     
+    [super viewWillDisappear:NO];
+    
     //If the player is actually playing
     if(self.playingIndex != nil){
         
