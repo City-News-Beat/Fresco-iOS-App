@@ -51,6 +51,7 @@ static CGFloat const kInterImageGap = 1.0f;
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
