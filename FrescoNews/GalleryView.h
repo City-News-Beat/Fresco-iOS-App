@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet UILabel *labelCaption;
 
+@property (weak, nonatomic) IBOutlet UIButton *readmore;
+
 @property (weak, nonatomic) FRSGallery *gallery;
 
 /*

@@ -9,6 +9,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "AppDelegate.h"
 #import "MKMapView+Additions.h"
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
@@ -25,10 +26,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager requestAlwaysAuthorization];
-
+    
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate setupLocationManager];
+    
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
 }

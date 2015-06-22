@@ -22,6 +22,7 @@
 @import AssetsLibrary;
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
+#import "MKMapView+Additions.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
@@ -54,20 +55,19 @@
     [self setupButtons];
     self.title = @"Create a Gallery Post";
     self.galleryView.gallery = self.gallery;
+    self.captionTextView.delegate = self;
 
     // TODO: Confirm permissions
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager startUpdatingLocation];
-
-    self.captionTextView.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
+    [self.locationManager startUpdatingLocation];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
     self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
@@ -225,24 +225,64 @@
                         
         [alert show];
     }
+    else {
+        [self showAssignment:NO];
+    }
 }
 
 - (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
     _defaultAssignment = defaultAssignment;
-    if (defaultAssignment) {
-        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", defaultAssignment.title]];
+    [self configureAssignmentLabelForAssignment:defaultAssignment];
+}
+
+- (void)configureAssignmentLabelForAssignment:(FRSAssignment *)assignment
+{
+    self.linkAssignmentButton.hidden = NO;
+    if (assignment) {
+        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", assignment.title]];
         [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
                              range:(NSRange){10, [titleString length] - 10}];
         self.assignmentLabel.attributedText = titleString;
         [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     }
-    else if (self.assignments.count) {
-        self.assignmentLabel.text = @"";
+}
+
+- (void)configureAssignmentForLocation:(CLLocation *)location
+{
+    // TODO: Add support for expiring/expired assignments
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        self.assignments = responseObject;
+
+        // Find a photo that is within an assignment radius
+        for (FRSPost *post in self.gallery.posts) {
+            CLLocation *location = [post.image.asset valueForProperty:ALAssetPropertyLocation];
+            for (FRSAssignment *assignment in self.assignments) {
+                if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
+                    self.defaultAssignment = assignment;
+                    [self showAssignment:YES];
+                    return;
+                }
+            }
+        }
+
+        // No matching assignment found
+        self.defaultAssignment = nil;
+    }];
+}
+
+- (void)showAssignment:(BOOL)show
+{
+    if (!show) {
+        self.defaultAssignment = nil;
     }
-    else {
-        self.assignmentLabel.text = @"No assignments nearby";
-    }
+
+    [UIView animateWithDuration:0.25 animations:^{
+        self.assignmentViewHeightConstraint.constant = show ? 40 : 0;
+        self.assignmentView.hidden = !show;
+        self.assignmentLabel.hidden = !show;
+        [self.view layoutIfNeeded];
+    }];
 }
 
 #pragma mark - Toolbar Items
@@ -457,12 +497,7 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        self.defaultAssignment = nil;
-        [UIView animateWithDuration:0.25 animations:^{
-            self.assignmentViewHeightConstraint.constant = 0;
-            self.assignmentView.hidden = YES;
-            [self.view layoutIfNeeded];
-        }];
+        [self showAssignment:NO];
     }
 }
 
@@ -470,25 +505,13 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    CLLocation *location = [locations lastObject];
     [self.locationManager stopUpdatingLocation];
-
-    // TODO: Add support for expiring/expired assignments
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:0 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        self.assignments = responseObject;
-        self.defaultAssignment = [self.assignments firstObject];
-
-        if (self.defaultAssignment) {
-            self.assignmentViewHeightConstraint.constant = 40;
-        }
-        else {
-            self.assignmentViewHeightConstraint.constant = 0;
-        }
-    }];
+    [self configureAssignmentForLocation:[locations lastObject]];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
+    // Undefined behavior
     [self.locationManager stopUpdatingLocation];
 }
 

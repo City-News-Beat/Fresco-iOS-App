@@ -22,35 +22,13 @@
 #import "UIView+Additions.h"
 
 @interface GalleriesViewController()
-
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-
 @end
 
 @implementation GalleriesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (void)viewDidLoad
 {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup
-{
-    
-}
-
-- (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     self.tableView.delegate = self;
@@ -59,12 +37,14 @@
     self.tableView.estimatedRowHeight = 400.0f;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.alpha = .54;
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
     [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
     [self.tableView addSubview:self.refreshControl];
-    
-    
+
+    // YES by default, but needs to be the only such visible UIScrollView
+    self.tableView.scrollsToTop = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -142,6 +122,8 @@
     FRSGallery *gallery = [self.galleries objectAtIndex:index];
     
     GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
+    
+    galleryTableViewCell.galleryTableViewCellDelegate = self;
     
     galleryTableViewCell.gallery = gallery;
     
@@ -275,6 +257,37 @@
     
 }
 
+
+#pragma mark - Gallery Table View Cell Delegate
+
+- (void)readMoreTapped:(FRSGallery *)gallery{
+
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryView setGallery:gallery];
+    
+    [self.navigationController pushViewController:galleryView animated:YES];
+
+}
+
+- (void)shareTapped:(FRSGallery *)gallery{
+    
+    NSString *string = [NSString stringWithFormat:@"http://fresconews.com/gallery/%@", gallery.galleryID];
+    NSURL *URL = [NSURL URLWithString:string];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
+                                      applicationActivities:nil];
+    [self.navigationController presentViewController:activityViewController
+                                            animated:YES
+                                          completion:^{
+                                              // ...
+                                          }];
+
+}
 
 #pragma mark - Segues
 

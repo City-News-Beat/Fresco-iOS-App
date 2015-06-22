@@ -13,6 +13,9 @@
 #import "AppDelegate.h"
 
 @interface FirstRunPermissionsViewController ()
+@property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionImage;
+@property (weak, nonatomic) IBOutlet UIImageView *microphonePermissionImage;
+@property (weak, nonatomic) IBOutlet UIImageView *locationPermissionImage;
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
@@ -27,7 +30,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.isSkipState = YES;
+    
+    [self requestCameraAuthorization];
+    [self requestMicrophoneAuthorization];
+    [self requestCameraRollAuthorization];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate setupLocationManager];
+    [appDelegate registerForPushNotifications];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -64,12 +75,12 @@
 
 - (IBAction)buttonTapped:(id)sender
 {
-    [self requestCameraAuthorization];
-    [self requestMicrophoneAuthorization];
-    [self requestCameraRollAuthorization];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate setupLocationManager];
-    [appDelegate registerForPushNotifications];
+//    [self requestCameraAuthorization];
+//    [self requestMicrophoneAuthorization];
+//    [self requestCameraRollAuthorization];
+//    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+//    [appDelegate setupLocationManager];
+//    [appDelegate registerForPushNotifications];
 }
 
 - (IBAction)actionNext:(id)sender
@@ -95,6 +106,7 @@
         [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
             if (!granted) {
                 // TODO: Complain?
+                self.cameraPermissionImage.image = [UIImage imageNamed:@"cameraOnIcon"];
             }
         }];
     }
@@ -105,6 +117,7 @@
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (!granted) {
             // TODO: Complain?
+            self.microphonePermissionImage.image = [UIImage imageNamed:@"micOnIcon"];
         }
     }];
 }

@@ -7,7 +7,6 @@
 //
 
 @import Foundation;
-
 #import <Mantle/Mantle.h>
 
 @class FRSUser, CLLocation;
@@ -23,11 +22,10 @@
 @property (strong, nonatomic) CLLocation *locationObject;
 @property (nonatomic, strong) NSNumber *lat;
 @property (nonatomic, strong) NSNumber *lon;
-@property (nonatomic, strong) NSNumber *radius;
+@property (nonatomic, strong) NSNumber *radius; // in miles
 @property (nonatomic, strong) NSDate *timeCreated;
 @property (nonatomic, strong) NSDate *timeEdited;
 @property (nonatomic, strong) NSDate *expirationTime;
-
 @property (nonatomic, strong) FRSUser *owner;
 
 @end

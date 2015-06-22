@@ -53,14 +53,17 @@
 - (void)viewDidLoad
 {
     
-
+    UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
+    
+    [self.navigationItem setRightBarButtonItem:shareIcon];
+    
     CALayer *topLayerArticles = [CALayer layer];
     topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
-    topLayerArticles.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    topLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
     
     CALayer *bottomLayerArticles = [CALayer layer];
     bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
-    bottomLayerArticles.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    bottomLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
     
     
     [self.articlesTable.layer addSublayer:topLayerArticles];
@@ -69,12 +72,12 @@
 
     CALayer *topLayerStories = [CALayer layer];
     topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
-    topLayerStories.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
     
     
     CALayer *bottomLayerStories = [CALayer layer];
     bottomLayerStories.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
-    bottomLayerStories.backgroundColor = [UIColor colorWithHex:@"b9b9b9"].CGColor;
+    bottomLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
     
     [self.storiesTable.layer addSublayer:bottomLayerStories];
     [self.storiesTable.layer addSublayer:topLayerStories];
@@ -98,12 +101,26 @@
     //
     self.constraintArticleTableHeight.constant = self.articlesTable.contentSize.height;
     self.constraintStoriesTableHeight.constant = self.storiesTable.contentSize.height;
-    
-
 
     
     [self.scrollView layoutIfNeeded];
     
+}
+
+-(void)shareGallery:(id)sender{
+    
+    NSString *string = [NSString stringWithFormat:@"http://fresconews.com/gallery/%@", self.gallery.galleryID];
+    NSURL *URL = [NSURL URLWithString:string];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
+                                      applicationActivities:nil];
+    [self.navigationController presentViewController:activityViewController
+                                       animated:YES
+                                     completion:^{
+                                         // ...
+                                     }];
+
 }
 
 

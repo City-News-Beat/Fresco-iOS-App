@@ -33,13 +33,12 @@
 
 @implementation ProfileSettingsViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self updateLinkingStatus];
-    
     self.frsUser = [FRSDataManager sharedManager].currentUser;
-    
+
     // Radius slider values
     self.scrollView.alwaysBounceHorizontal = NO;
 
@@ -47,10 +46,17 @@
     self.textfieldLast.text = self.frsUser.last;
     self.textfieldEmail.text = self.frsUser.email;
     self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
-    
-    [self sliderValueChanged:self.radiusStepper];
-    [self.profileImageView setImageWithURL:[self.frsUser cdnProfileImageURL]];
 
+    [self sliderValueChanged:self.radiusStepper];
+    [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
+                                 placeholderImage:[UIImage imageNamed:@"user"]
+                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                              self.profileImageView.image = image;
+                                              self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+                                              self.profileImageView.clipsToBounds = YES;
+                                          } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                              // Do something...
+                                          }];
 }
 
 - (void)updateLinkingStatus {
@@ -164,21 +170,22 @@
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
         NSString *title;
         NSString *message;
-        if (!error) {
-            title = @"Success";
-            message = @"Profile settings updated";
-        }
-        else {
+        if (error) {
             title = @"Error";
             message = @"Could not save Profile settings";
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+            [alert show];
         }
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
+        // on success just dismiss
+        else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
 
     }];
     
