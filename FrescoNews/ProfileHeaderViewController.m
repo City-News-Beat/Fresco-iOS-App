@@ -61,7 +61,7 @@
                                                      error:nil];
     
     NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-    self.twitterLabel.text = [NSString stringWithFormat:@"%@", [results objectForKey:@"screen_name"]];
+    self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
 }
 
 - (void)setFacebookInfo
