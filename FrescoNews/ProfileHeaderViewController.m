@@ -29,7 +29,17 @@
 {
     [super viewWillAppear:animated];
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
-    [self.profileImageView setImageWithURL:[self.frsUser cdnProfileImageURL]];
+    [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
+                                 placeholderImage:[UIImage imageNamed:@"user"]
+                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                              self.profileImageView.image = image;
+                                              self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+                                              self.profileImageView.clipsToBounds = YES;
+                                          } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                              // Do something...
+                                          }];
+
+
     [self setTwitterInfo];
     [self setFacebookInfo];
 }
