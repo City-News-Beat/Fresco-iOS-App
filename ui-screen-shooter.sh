@@ -181,6 +181,7 @@ function _run_automation {
     sleep 2
   done
 
+
   find $trace_results_dir/Run\ 1/ -name *landscape*png -type f -exec sips -r -90 \{\} \;
 }
 
@@ -190,9 +191,10 @@ function _copy_screenshots {
   # to the destination's language folder!
 
   language="$1"
+  gitid="$(git log --format="%H" -n 1)"
 
-  mkdir -p "$destination/$language"
-  cp $trace_results_dir/Run\ 1/*.png "$destination/$language"
+  mkdir -p "$destination/$gitid"
+  cp $trace_results_dir/Run\ 1/*.png "$destination/$gitid"
 }
 
 function _reset_all_sim {
@@ -223,6 +225,10 @@ function _remove_alpha_from_screenshots {
     done
     echo -e "\nScreenshots' alpha channel removed."
   fi
+}
+
+function _get_latest_commit_id {
+    return id
 }
 
 main
