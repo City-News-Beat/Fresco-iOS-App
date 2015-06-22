@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "camera-shutter-icon.png"
+      "filename" : "shutter.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "camera-shutter-icon@2x.png"
+      "filename" : "shutter@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "camera-shutter-icon@3x.png"
+      "filename" : "shutter@3x.png"
     }
   ],
   "info" : {
