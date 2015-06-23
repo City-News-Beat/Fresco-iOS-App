@@ -364,6 +364,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
                 NSDictionary *frescoDict = @{ (NSString *)kCGImagePropertyExifUserComment : assignmentID };
                 [metadata setObject:frescoDict forKey:(NSString *)kCGImagePropertyExifDictionary];
+
+                // magic numbers...
+                AVCaptureVideoOrientation captureOrientation = [[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation];
+                NSInteger CGImagePropertyOrientation = 3; // AVCaptureVideoOrientationLandscapeLeft
+                if (captureOrientation == AVCaptureVideoOrientationLandscapeRight) {
+                    CGImagePropertyOrientation = 1;
+                }
+                [metadata setObject:@(CGImagePropertyOrientation) forKeyedSubscript:(NSString *)kCGImagePropertyOrientation];
+
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
                                                                     metadata:metadata
                                                              completionBlock:nil];
