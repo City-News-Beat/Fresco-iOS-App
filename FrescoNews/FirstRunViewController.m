@@ -147,9 +147,15 @@
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
-            else
-                [self navigateToMainApp];
+                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            else {
+                // check to see if the user finished signup
+                if ([[FRSDataManager sharedManager] currentUserValid])
+                    [self navigateToMainApp];
+                // user didn't complete a prior signup flow
+                else
+                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            }
         }
         else {
             NSLog(@"Facebook login error: %@", error);
@@ -161,9 +167,15 @@
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
-            else
-                [self navigateToMainApp];
+                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            else {
+                // check to see if the user finished signup
+                if ([[FRSDataManager sharedManager] currentUserValid])
+                    [self navigateToMainApp];
+                // user didn't complete a prior signup flow
+                else
+                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            }
         }
         else {
             NSLog(@"Twitter login error: %@", error);
