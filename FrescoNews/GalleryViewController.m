@@ -46,6 +46,9 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesTableHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
 
+
+@property (nonatomic, assign) BOOL bordersLaidOut;
+
 @end
 
 @implementation GalleryViewController
@@ -56,10 +59,14 @@
     
     UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
     
+    
     [self.navigationItem setRightBarButtonItem:shareIcon];
     
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
-    
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"NewTitle"
+                                     style:UIBarButtonItemStylePlain
+                                    target:[self navigationController]
+                                    action:@selector(popViewControllerAnimated:)];
+    [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     [self setUpGallery];
     
@@ -76,40 +83,50 @@
     
 
     //Redraw Table Views
+    [self.articlesTable.layer layoutIfNeeded];
     [self.articlesTable setNeedsLayout];
     [self.articlesTable layoutIfNeeded];
+    [self.storiesTable.layer setNeedsLayout];
+    [self.storiesTable.layer layoutIfNeeded];
     [self.storiesTable setNeedsLayout];
     [self.storiesTable layoutIfNeeded];
     
     [self.scrollView setNeedsLayout];
     [self.scrollView layoutIfNeeded];
     
-    /* Borders */
-    if(self.gallery.articles.count != 0){
-        CALayer *topLayerArticles = [CALayer layer];
-        topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
-        topLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+    if(!self.bordersLaidOut){
+    
+        /* Borders */
+        if(self.gallery.articles.count != 0){
+            CALayer *topLayerArticles = [CALayer layer];
+            topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
+            topLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            CALayer *bottomLayerArticles = [CALayer layer];
+            bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1.0f, self.articlesTable.frame.size.width, 1.0f);
+            bottomLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            [self.articlesTable.layer addSublayer:topLayerArticles];
+            [self.articlesTable.layer addSublayer:bottomLayerArticles];
+        }
+        if(self.gallery.relatedStories.count != 0){
+            
+            CALayer *topLayerStories = [CALayer layer];
+            topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.storiesTable.frame.size.width, 1.0f);
+            topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            CALayer *bottomLayerStories = [CALayer layer];
+            bottomLayerStories.frame = CGRectMake(0.0f, self.storiesTable.frame.size.height - 1.0f, self.storiesTable.frame.size.width, 1.0f);
+            bottomLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            [self.storiesTable.layer addSublayer:bottomLayerStories];
+            [self.storiesTable.layer addSublayer:topLayerStories];
+        }
         
-        CALayer *bottomLayerArticles = [CALayer layer];
-        bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1.0f, self.articlesTable.frame.size.width, 1.0f);
-        bottomLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-        
-        [self.articlesTable.layer addSublayer:topLayerArticles];
-        [self.articlesTable.layer addSublayer:bottomLayerArticles];
     }
-    if(self.gallery.relatedStories.count != 0){
-        
-        CALayer *topLayerStories = [CALayer layer];
-        topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.storiesTable.frame.size.width, 1.0f);
-        topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-        
-        CALayer *bottomLayerStories = [CALayer layer];
-        bottomLayerStories.frame = CGRectMake(0.0f, self.storiesTable.frame.size.height - 1.0f, self.storiesTable.frame.size.width, 1.0f);
-        bottomLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-        
-        [self.storiesTable.layer addSublayer:bottomLayerStories];
-        [self.storiesTable.layer addSublayer:topLayerStories];
-    }
+    
+    self.bordersLaidOut = YES;
+    
 
 }
 
@@ -172,9 +189,7 @@
                                                  metrics:nil
                                                    views: @{@"storiesView":self.storiesTable}]];
     }
-
     
-
 }
 
 - (void)openGalleryWithId:(NSString *)galleryId{

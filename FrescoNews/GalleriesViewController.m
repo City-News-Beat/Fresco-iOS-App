@@ -162,7 +162,6 @@
     
     [self.navigationController pushViewController:galleryView animated:YES];
 
-
 }
 
 #pragma mark - UIScrollViewDelegate
