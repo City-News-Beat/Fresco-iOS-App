@@ -62,12 +62,7 @@
     
     [self.navigationItem setRightBarButtonItem:shareIcon];
     
-    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"NewTitle"
-                                     style:UIBarButtonItemStylePlain
-                                    target:[self navigationController]
-                                    action:@selector(popViewControllerAnimated:)];
-    [[self navigationItem] setBackBarButtonItem:newBackButton];
-    
+
     [self setUpGallery];
     
 }

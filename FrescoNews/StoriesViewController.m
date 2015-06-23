@@ -88,8 +88,14 @@ static CGFloat const kInterImageGap = 1.0f;
             }
 
         }];
-                
+        
     }];
+    
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Stories"
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:[self navigationController]
+                                                                     action:@selector(popViewControllerAnimated:)];
+    [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
 }
