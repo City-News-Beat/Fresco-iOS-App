@@ -72,14 +72,13 @@
     // we'll always be replacing our whole view
     destination.view.frame = self.view.bounds;
     
-    NSTimeInterval duration = 0.0; // default
+    NSTimeInterval duration = 0.0;
 
     // Kind of gross
     if ([self.presentedViewController isKindOfClass:[CameraViewController class]]) {
         [[self.presentedViewController presentedViewController] dismissViewControllerAnimated:NO completion:^{
             [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
         }];
-        duration = 0.0; // TODO: Address the need for 0.0 duration special case
         self.returnToGalleryPost = YES;
     }
 

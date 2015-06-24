@@ -147,9 +147,15 @@
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
-            else
-                [self navigateToMainApp];
+                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            else {
+                // check to see if the user finished signup
+                if ([[FRSDataManager sharedManager] currentUserValid])
+                    [self navigateToMainApp];
+                // user didn't complete a prior signup flow
+                else
+                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            }
         }
         else {
             NSLog(@"Facebook login error: %@", error);
@@ -161,9 +167,15 @@
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
         if (user) {
             if (user.isNew)
-                [self performSegueWithIdentifier:@"replaceWithSignup" sender:self];
-            else
-                [self navigateToMainApp];
+                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            else {
+                // check to see if the user finished signup
+                if ([[FRSDataManager sharedManager] currentUserValid])
+                    [self navigateToMainApp];
+                // user didn't complete a prior signup flow
+                else
+                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            }
         }
         else {
             NSLog(@"Twitter login error: %@", error);
@@ -201,6 +213,43 @@
         [self.passwordField resignFirstResponder];
     }
     [super touchesBegan:touches withEvent:event];
+}
+
+- (IBAction)forgotPassword:(id)sender {
+    NSString *email = self.emailField.text;
+    if (![email length])
+        email = [FRSDataManager sharedManager].currentUser.email;
+    
+    if ([email length]) {
+        [PFUser requestPasswordResetForEmailInBackground:email
+                                                   block:^(BOOL succeeded, NSError *error) {
+                                                       if (!error) {
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
+                                                                                                           message:@"Email sent. Follow the instructions in the email to change your password."
+                                                                                                          delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                           [alert show];
+                                                       }
+                                                       else {
+                                                           NSLog(@"Error: %@", error);
+                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
+                                                                                                           message:@"This email has not been registered."
+                                                                                                          delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                           [alert show];
+                                                       }
+                                                   }];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Please enter an email address"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Dismiss"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 @end

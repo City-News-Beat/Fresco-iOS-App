@@ -40,7 +40,7 @@
     self.refreshControl.alpha = .54;
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[UIColor blackColor]];
+    [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
     [self.tableView addSubview:self.refreshControl];
 
     // YES by default, but needs to be the only such visible UIScrollView

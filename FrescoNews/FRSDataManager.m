@@ -318,6 +318,14 @@
     }];
 }
 
+- (BOOL)currentUserValid
+{
+    if (self.currentUser.first && self.currentUser.last) {
+        return YES;
+    }
+    return NO;
+}
+
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
     NSString *email = [PFUser currentUser].email;
