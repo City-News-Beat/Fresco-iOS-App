@@ -1412,7 +1412,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="420" height="1156"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqH-iM-sZZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="420" height="1089"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="420" height="1056"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="zlq-SA-Ipu" userLabel="Icon">
                                                 <rect key="frame" x="8" y="8" width="96" height="96"/>
@@ -1897,7 +1897,7 @@
                                             <constraint firstItem="d4m-tG-TCs" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" id="FbI-C8-rx4"/>
                                             <constraint firstItem="LU0-z9-8vq" firstAttribute="top" secondItem="doJ-jB-8QL" secondAttribute="bottom" constant="50.5" id="GDM-fR-Vd4"/>
                                             <constraint firstItem="mpg-Nr-jZG" firstAttribute="leading" secondItem="CxU-na-Xtd" secondAttribute="leading" id="HTv-if-lcg"/>
-                                            <constraint firstAttribute="bottom" secondItem="d4m-tG-TCs" secondAttribute="bottom" constant="33" id="IuW-J1-qSX"/>
+                                            <constraint firstAttribute="bottom" secondItem="d4m-tG-TCs" secondAttribute="bottom" id="IuW-J1-qSX"/>
                                             <constraint firstItem="uA6-wt-D8J" firstAttribute="top" secondItem="uPo-C5-rMv" secondAttribute="bottom" constant="36" id="L8R-aG-hPm"/>
                                             <constraint firstItem="zlq-SA-Ipu" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leadingMargin" id="Mmw-uI-hkV"/>
                                             <constraint firstItem="uPo-C5-rMv" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" id="NUX-8M-ceA"/>
@@ -1935,7 +1935,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="nqH-iM-sZZ" secondAttribute="trailing" id="IF6-cx-AWR"/>
-                                    <constraint firstAttribute="bottom" secondItem="nqH-iM-sZZ" secondAttribute="bottom" constant="67" id="Sgy-ui-FQE"/>
+                                    <constraint firstAttribute="bottom" secondItem="nqH-iM-sZZ" secondAttribute="bottom" id="Sgy-ui-FQE"/>
                                     <constraint firstItem="nqH-iM-sZZ" firstAttribute="leading" secondItem="xHX-Av-OJh" secondAttribute="leading" id="goY-LX-8hu"/>
                                     <constraint firstItem="nqH-iM-sZZ" firstAttribute="top" secondItem="xHX-Av-OJh" secondAttribute="top" id="tfK-Yg-l6P"/>
                                 </constraints>
