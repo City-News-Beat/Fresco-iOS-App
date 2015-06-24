@@ -112,9 +112,13 @@
     
     static BOOL firstTime = YES;
     
-    if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
-        self.storyBreaksView.hidden = YES;
+    if([FRSDataManager sharedManager].currentUser != nil){
+        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
+            self.storyBreaksView.hidden = YES;
+        }
     }
+    else
+        self.storyBreaksView.hidden = YES;
     
     if(self.currentAssignment == nil){
         [self updateAssignments];

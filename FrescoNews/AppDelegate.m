@@ -249,7 +249,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     PFUser *user = [PFUser currentUser];
-    [currentInstallation setObject:user forKey: @"owner"];
+    
+    if(user != nil)
+        [currentInstallation setObject:user forKey: @"owner"];
+    
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
 }
