@@ -210,6 +210,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    
 }
 
 #pragma mark - Location Delegate Methods
@@ -246,17 +248,22 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    PFUser *user = [PFUser currentUser];
+    
+    if(user != nil)
+        [currentInstallation setObject:user forKey: @"owner"];
+    
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
+- (void)handlePush:(NSDictionary *)userInfo{
     
     [PFPush handlePush:userInfo];
     
     /*
-    ** Check the type of the notifications
-    */
+     ** Check the type of the notifications
+     */
     
     //Breaking News
     if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
@@ -275,13 +282,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     [galleryView setGallery:responseObject];
                     
                     [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
-
+                    
                 }
                 
             }];
             
         }
-    
+        
     }
     
     // Assignments
@@ -299,7 +306,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     
                     [tabBarController setSelectedIndex:3];
                     
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
                     
                     
                 }
@@ -310,6 +317,14 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     //Use
     
     //Social
+
+}
+
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
+    
+    [self handlePush:userInfo];
+
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
@@ -337,6 +352,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     [tabBarController setSelectedIndex:3];
                     
                     
+                }
+                else{
+                
+                
                 }
             }];
         }

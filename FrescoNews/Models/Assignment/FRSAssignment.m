@@ -59,10 +59,6 @@
     return [MTLModel dateJSONTransformer];
 }
 
-- (NSString *)caption
-{
-    return [self.caption length] ? self.caption : NSLocalizedString(@"No Caption", nil);
-}
 
 - (CLLocation *)locationObject
 {
