@@ -254,13 +254,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [currentInstallation saveInBackground];
 }
 
-- (void)handlePush:(NSDictionary *)userInfo{
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
     
     [PFPush handlePush:userInfo];
     
     /*
-     ** Check the type of the notifications
-     */
+    ** Check the type of the notifications
+    */
     
     //Breaking News
     if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
@@ -279,13 +279,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     [galleryView setGallery:responseObject];
                     
                     [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
-                    
+
                 }
                 
             }];
             
         }
-        
+    
     }
     
     // Assignments
@@ -303,7 +303,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     
                     [tabBarController setSelectedIndex:3];
                     
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
                     
                     
                 }
@@ -314,14 +314,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     //Use
     
     //Social
-
-}
-
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
-    
-    [self handlePush:userInfo];
-
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
@@ -349,10 +341,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     [tabBarController setSelectedIndex:3];
                     
                     
-                }
-                else{
-                
-                
                 }
             }];
         }
