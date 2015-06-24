@@ -3435,7 +3435,7 @@
                                     <action selector="actionDone:" destination="RUL-6b-83L" eventType="touchUpInside" id="8Ke-wu-geX"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-tF-KOl">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-tF-KOl">
                                 <rect key="frame" x="0.0" y="259" width="375" height="215"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="215" id="dfD-qb-auh"/>
@@ -3450,7 +3450,7 @@
                                     <rect key="frame" x="0.0" y="145" width="130" height="75"/>
                                 </variation>
                                 <connections>
-                                    <outlet property="delegate" destination="RUL-6b-83L" id="qBU-mC-HFQ"/>
+                                    <outlet property="delegate" destination="RUL-6b-83L" id="pbz-12-abn"/>
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h6s-lZ-yZI">
