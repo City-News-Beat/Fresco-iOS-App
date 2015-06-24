@@ -321,7 +321,8 @@
 - (void)createFrescoUser:(FRSAPIResponseBlock)responseBlock
 {
     NSString *email = [PFUser currentUser].email;
-    NSDictionary *params = @{@"email" : email ?: [NSNull null]};
+    
+    NSDictionary *params = @{@"email" : email ?: [NSNull null], @"parse_id" : [PFUser currentUser].objectId};
     
     [self POST:@"user/create"
     parameters:params constructingBodyWithBlock:nil
