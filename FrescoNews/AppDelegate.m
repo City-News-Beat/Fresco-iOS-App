@@ -149,9 +149,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         // User has disabled location services on this device
         return;
     }
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+    });
+
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager requestAlwaysAuthorization];
     [self.locationManager startMonitoringSignificantLocationChanges];
