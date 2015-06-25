@@ -76,10 +76,11 @@ trace_results_dir="$build_dir/traces"
 function _check_destination {
   # Abort if the destination directory already exists. Better safe than sorry.
 
-  gitid="$(git log --format="%H" -n 1)"
+  gitid="$(git log --format="%H" -n 1 | cut -c1-8)"
+  branchname="$(git rev-parse --abbrev-ref HEAD)"
 
   if [ -z "$destination" ]; then
-    destination="$HOME/Dropbox/Monorail/Fresco/automation/$gitid"
+    destination="$HOME/Dropbox/Monorail/Fresco/automation/$branchname-$gitid"
   fi
   if [ -d "$destination" ]; then
     echo "Destination directory \"$destination\" already exists! Aborting."
@@ -193,10 +194,9 @@ function _copy_screenshots {
   # to the destination's language folder!
 
   language="$1"
-  gitid="$(git log --format="%H" -n 1)"
 
-  mkdir -p "$destination/$gitid"
-  cp $trace_results_dir/Run\ 1/*.png "$destination/$gitid"
+  mkdir -p "$destination"
+  cp $trace_results_dir/Run\ 1/*.png "$destination"
 }
 
 function _reset_all_sim {
