@@ -72,8 +72,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)loadInitialViewController
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    if ([[FRSDataManager sharedManager] login])
+    if ([[FRSDataManager sharedManager] login]) {
         [rootViewController setRootViewControllerToTabBar];
+    }
     else {
         [rootViewController setRootViewControllerToFirstRun];
     }
@@ -107,28 +108,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                                        annotation:annotation];
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
     [FBSDKAppEvents activateApp];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 #pragma mark - Apperance Delegate Methods
@@ -245,122 +228,82 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 #pragma mark - Notification Delegate Methods
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     PFUser *user = [PFUser currentUser];
     
-    if(user != nil)
-        [currentInstallation setObject:user forKey: @"owner"];
+    if (user) {
+        [currentInstallation setObject:user forKey:@"owner"];
+    }
     
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
 }
 
-- (void)handlePush:(NSDictionary *)userInfo{
-    
+- (void)handlePush:(NSDictionary *)userInfo
+{
     [PFPush handlePush:userInfo];
     
-    /*
-     ** Check the type of the notifications
-     */
-    
+    // Check the type of the notifications
     //Breaking News
-    if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
-        
-        //Check to make sure the payload has a galelry ID
-        if(userInfo[@"gallery"] != nil){
-            
+    if ([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]) {
+        //Check to make sure the payload has a gallery ID
+        if (userInfo[@"gallery"]) {
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     //Retreieve Gallery View Controller from storyboard
                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                    
                     GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
-                    
                     [galleryView setGallery:responseObject];
-                    
                     [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
-                    
                 }
-                
             }];
-            
         }
-        
     }
-    
+
     // Assignments
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
-        
         // Check to make sure the payload has an assignment ID
         if (userInfo[@"assignment"]) {
-            
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-                    
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    
                     [tabBarController setSelectedIndex:3];
-                    
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
-                    
-                    
                 }
             }];
         }
     }
-    
     //Use
-    
     //Social
-
 }
 
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
-    
-    [self handlePush:userInfo];
-
-}
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    
-    /*
-    ** Check the identifier for the type of notification
-    */
-    
+    [self handlePush:userInfo];
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler
+{
+    // Check the identifier for the type of notification
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
-        
         // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
-            
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-
-                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-
                     [tabBarController setSelectedIndex:3];
-                    
-                    
-                }
-                else{
-                
-                
                 }
             }];
         }
     }
-    
+
     // Must be called when finished
     completionHandler(UIBackgroundFetchResultNewData);
 }
