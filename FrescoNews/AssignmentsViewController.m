@@ -376,7 +376,7 @@
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
-    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithName:assignment.title address:assignment.location[@"googlemaps"] assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithName:assignment.title address:(assignment.location[@"address"] ?: @"Get Directions") assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
     
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
     
