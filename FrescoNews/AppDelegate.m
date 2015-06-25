@@ -69,7 +69,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
            2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
            3. Simulate location via iOS Simulator > Debug > Location > Freeway Drive
            4. Unpause
-           5. Monitor app (including background processing) via iOS Simulator > Debug > Open System Log...
+           5. Terminate the app
+           6. Monitor background launches via iOS Simulator > Debug > Open System Log...
+           6b. Also you may be able to debug background launches using scheme launch option "Wait for executable to be launched"
          */
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         [self.locationManager startMonitoringSignificantLocationChanges];
