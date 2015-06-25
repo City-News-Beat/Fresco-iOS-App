@@ -1,4 +1,3 @@
-
 //
 //  FirstRunRadiusViewController.m
 //  FrescoNews
@@ -18,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation FirstRunRadiusViewController
@@ -26,10 +24,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate setupLocationManager];
-    
+    [appDelegate setupLocationMonitoring];
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
 }
