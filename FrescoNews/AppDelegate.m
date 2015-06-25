@@ -249,7 +249,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
             // NSLog(@"not a new location");
         }
 
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
     }
     else {
         [self.locationManager stopMonitoringSignificantLocationChanges];
