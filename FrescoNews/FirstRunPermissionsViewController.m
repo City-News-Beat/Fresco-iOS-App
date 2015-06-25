@@ -23,10 +23,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
-
-// Authorization "...dialog disappears on its own (without any user interaction) if the CLLocationManager object is released
-//   before the user responds to the dialog"
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation FirstRunPermissionsViewController
@@ -34,13 +30,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.isSkipState = YES;
-    
     [self requestCameraAuthorization];
     [self requestCameraRollAuthorization];
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate setupLocationManager];
+    [appDelegate setupLocationMonitoring];
     [appDelegate registerForPushNotifications];
 }
 
