@@ -15,6 +15,7 @@
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
 - (void)setupLocationManager;
+- (void)setupLocationMonitoring;
 - (void)registerForPushNotifications;
 
 @end
