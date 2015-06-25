@@ -27,6 +27,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 @interface AppDelegate () <CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
+@property (strong, nonatomic) CLLocation *location;
+@property (strong, nonatomic) NSTimer *timer;
 @end
 
 @implementation AppDelegate
@@ -43,6 +45,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                          error:nil];
 
     [self configureParseWithLaunchOptions:launchOptions];
+
+    // try to bootstrap the user
+    [[FRSDataManager sharedManager] login];
+
     [self setupAppearances];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
@@ -55,13 +61,24 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        
         [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] fetchCompletionHandler:nil];
     }
-    
-    // try to bootstrap the user
-    [[FRSDataManager sharedManager] login];
-    
+    else if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        /* How to debug background location updates, in the simulator
+           1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
+           2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
+           3. Simulate location via iOS Simulator > Debug > Location > Freeway Drive
+           4. Unpause
+           5. Monitor app (including background processing) via iOS Simulator > Debug > Open System Log...
+         */
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        [self.locationManager startMonitoringSignificantLocationChanges];
+    }
+    else {
+        // Ordinary app launch
+        [self setupLocationMonitoring];
+    }
+
     return YES;
 }
 
@@ -155,9 +172,16 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
     });
+}
 
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+- (void)setupLocationMonitoring
+{
     [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+
+    // TODO: Stop monitoring significant location changes on logout
+    [self.locationManager startUpdatingLocation];
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
@@ -197,37 +221,54 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    
 }
 
 #pragma mark - Location Delegate Methods
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    CLLocation *location = [locations lastObject];
+    if ([FRSDataManager sharedManager].currentUser.userID) {
+        if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
+            // NSLog(@"new location");
+            self.location = [locations lastObject];
 
-    if (![FRSDataManager sharedManager].currentUser.userID) {
+            AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
+            NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
+                                         @"lat" : @(self.location.coordinate.latitude),
+                                         @"lon" : @(self.location.coordinate.longitude)};
+            [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
+                        parameters:parameters
+                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                               // NSLog(@"JSON: %@", responseObject);
+                               NSLog(@"called user/locate");
+                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                               NSLog(@"Error: %@", error);
+                           }];
+        }
+        else {
+            // NSLog(@"not a new location");
+        }
+
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:300 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
+    }
+    else {
         [self.locationManager stopMonitoringSignificantLocationChanges];
-        return;
     }
 
-    AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                 @"lat" : @(location.coordinate.latitude),
-                                 @"lon" : @(location.coordinate.longitude)};
-    [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
-                parameters:parameters
-                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        // NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     [self.locationManager stopMonitoringSignificantLocationChanges];
+    [self.locationManager stopUpdatingLocation];
+}
+
+- (void)restartLocationUpdates
+{
+    [self.timer invalidate];
+    self.timer = nil;
+    [self.locationManager startUpdatingLocation];
 }
 
 #pragma mark - Notification Delegate Methods
