@@ -24,8 +24,8 @@
 set -e
 
 # We require a parameter for where to put the results and the test script
-destination="$1"
-ui_script="$2"
+ui_script="$1"
+destination="$2"
 
 function main {
   # Load configuration
@@ -76,8 +76,10 @@ trace_results_dir="$build_dir/traces"
 function _check_destination {
   # Abort if the destination directory already exists. Better safe than sorry.
 
+  gitid="$(git log --format="%H" -n 1)"
+
   if [ -z "$destination" ]; then
-    destination="$HOME/Dropbox/Fresco/automation"
+    destination="$HOME/Dropbox/Monorail/Fresco/automation/$gitid"
   fi
   if [ -d "$destination" ]; then
     echo "Destination directory \"$destination\" already exists! Aborting."
