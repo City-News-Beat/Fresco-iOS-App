@@ -38,6 +38,7 @@
     return layer;
 }
 
+
 - (void)awakeFromNib
 {
     self.collectionPosts.scrollsToTop = NO;
@@ -52,7 +53,10 @@
     
     self.labelCaption.text = self.gallery.caption;
     
-    self.pageControl.numberOfPages = [self.gallery.posts count];
+    if([self.gallery.posts count] == 1)
+        self.pageControl.hidden = YES;
+    else
+        self.pageControl.numberOfPages = [self.gallery.posts count];
     
     [self.collectionPosts reloadData];
 
