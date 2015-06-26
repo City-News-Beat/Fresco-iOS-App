@@ -24,15 +24,21 @@
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
 
+    /*
+    ** UI Elements
+    */
     @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
     @property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
-
     @property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
     @property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
     @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+    @property (strong, nonatomic) UIActionSheet *navigationSheet;
 
+    /*
+    ** Conditionaing Variables
+    */
     @property (assign, nonatomic) BOOL centeredUserLocation;
 
     @property (assign, nonatomic) BOOL centeredAssignment;
@@ -45,7 +51,9 @@
 
     @property (strong, nonatomic) NSNumber *operatingRadius;
 
-    @property (strong, nonatomic) UIActionSheet *navigationSheet;
+    @property (strong, nonatomic) NSNumber *operatingLat;
+
+    @property (strong, nonatomic) NSNumber *operatingLon;
 
 @end
 
@@ -56,8 +64,8 @@
     [super viewDidLoad];
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
     [appDelegate setupLocationManager];
+    [appDelegate setupLocationMonitoring];
     
     [self setFrescoNavigationBar];
     
@@ -75,6 +83,10 @@
     self.navigationSheet.tag = 100;
 
     self.operatingRadius = 0;
+    
+    self.operatingLat = 0;
+    
+    self.operatingLon = 0;
     
     
     if(self.currentAssignment == nil){
@@ -100,9 +112,13 @@
     
     static BOOL firstTime = YES;
     
-    if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
-        self.storyBreaksView.hidden = YES;
+    if([FRSDataManager sharedManager].currentUser != nil){
+        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
+            self.storyBreaksView.hidden = YES;
+        }
     }
+    else
+        self.storyBreaksView.hidden = YES;
     
     if(self.currentAssignment == nil){
         [self updateAssignments];
@@ -200,34 +216,48 @@
 
 -(void)updateAssignments{
     
-    if(!_updating){
+    if(!self.updating){
         
         //One degree of latitude = 69 miles
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
-
-        //Check if the user moves at least a difference greater than 1
-        if(fabsf(radius.floatValue - _operatingRadius.floatValue) > .4){
+    
+        //Check if the user moves at least a difference greater than .4
+        if((fabsf(radius.floatValue - _operatingRadius.floatValue) > .4 &&  ([radius floatValue] > [self.operatingRadius floatValue]))
+           
+           ||
+           
+           (fabs((self.assignmentsMap.centerCoordinate.latitude - [self.operatingLat floatValue]) * 69) > .7 || fabs((self.assignmentsMap.centerCoordinate.longitude - [self.operatingLon floatValue]) * 69) > .7 )
+           ){
+            
+            self.updating = true;
         
             self.operatingRadius = radius;
             
-            _updating = true;
+            self.operatingLat = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.latitude];
+            
+            self.operatingLon = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.longitude];
+            
             
             if([radius integerValue] < 500){
 
                 [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
                     if (!error) {
                         
-                        _viewingClusters = false;
+                        self.viewingClusters = false;
                         
-                        _updating = false;
+                        NSMutableArray *copy = [[NSMutableArray alloc] init];
                         
-                        NSMutableArray *copy;
+                        for(FRSAssignment* assignment in responseObject){
+                            [copy addObject:assignment.assignmentId];
+                        }
                         
                         if(self.assignments != nil){
                             
-                            copy = [responseObject mutableCopy];
+                            for(FRSAssignment *assignment in self.assignments){
+                                
+                                [copy removeObject:assignment.assignmentId];
                             
-                            [copy removeObjectsInArray:self.assignments];
+                            }
                             
                         }
                         
@@ -241,6 +271,8 @@
                         
                     }
                     
+                    self.updating = false;
+                    
                 }];
                 
             }
@@ -249,15 +281,15 @@
                 [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
                     if (!error) {
                         
-                        _updating = false;
-                        
-                        _viewingClusters = true;
+                        self.viewingClusters = true;
                         
                         self.clusters = responseObject;
                     
                         [self populateMapWithAnnotations];
                         
                     }
+            
+                    self.updating = false;
                     
                 }];
             
@@ -326,6 +358,8 @@
              
          }
         
+        [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
+        
         for(FRSAssignment *assignment in self.assignments){
             
             [self addAssignmentAnnotation:assignment index:count];
@@ -379,6 +413,8 @@
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
     
     [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    
+    self.operatingRadius = 0;
 
 }
 
@@ -402,6 +438,9 @@
         [self.assignmentsMap setRegion:regionThatFits animated:YES];
         
         self.centeredUserLocation = YES;
+    
+        self.operatingRadius = 0;
+        
     }
     
 }
@@ -426,7 +465,8 @@
     static NSString *userIdentifier = @"currentLocation";
 
     if (annotation == mapView.userLocation) {
-        if ([FRSDataManager sharedManager].currentUser.profileImageUrl == nil) {
+        
+        if ([FRSDataManager sharedManager].currentUser.profileImageUrl) {
             MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
 
             if (!pinView) {

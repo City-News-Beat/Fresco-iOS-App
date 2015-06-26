@@ -89,6 +89,9 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 }
 
 - (void) viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:NO];
+    
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
 }

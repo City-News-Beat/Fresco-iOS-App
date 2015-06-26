@@ -27,6 +27,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 @interface AppDelegate () <CLLocationManagerDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
+@property (strong, nonatomic) CLLocation *location;
+@property (strong, nonatomic) NSTimer *timer;
 @end
 
 @implementation AppDelegate
@@ -43,6 +45,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                          error:nil];
 
     [self configureParseWithLaunchOptions:launchOptions];
+
+    // try to bootstrap the user
+    [[FRSDataManager sharedManager] login];
+
     [self setupAppearances];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
@@ -55,13 +61,24 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        
         [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] fetchCompletionHandler:nil];
     }
-    
-    // try to bootstrap the user
-    [[FRSDataManager sharedManager] login];
-    
+    else if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        /* How to debug background location updates, in the simulator
+           1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
+           2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
+           3. Simulate location via iOS Simulator > Debug > Location > Freeway Drive
+           4. Unpause
+           5. Monitor app (including background processing) via iOS Simulator > Debug > Open System Log...
+         */
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        [self.locationManager startMonitoringSignificantLocationChanges];
+    }
+    else {
+        // Ordinary app launch
+        [self setupLocationMonitoring];
+    }
+
     return YES;
 }
 
@@ -72,8 +89,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)loadInitialViewController
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    if ([[FRSDataManager sharedManager] login])
+    if ([[FRSDataManager sharedManager] login]) {
         [rootViewController setRootViewControllerToTabBar];
+    }
     else {
         [rootViewController setRootViewControllerToFirstRun];
     }
@@ -107,28 +125,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                                        annotation:annotation];
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
     [FBSDKAppEvents activateApp];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 #pragma mark - Apperance Delegate Methods
@@ -166,11 +166,22 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         // User has disabled location services on this device
         return;
     }
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+    });
+}
+
+- (void)setupLocationMonitoring
+{
     [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+
+    // TODO: Stop monitoring significant location changes on logout
+    [self.locationManager startUpdatingLocation];
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
@@ -216,132 +227,128 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    CLLocation *location = [locations lastObject];
+    if ([FRSDataManager sharedManager].currentUser.userID) {
+        if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
+            // NSLog(@"new location");
+            self.location = [locations lastObject];
 
-    if (![FRSDataManager sharedManager].currentUser.userID) {
+            AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
+            NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
+                                         @"lat" : @(self.location.coordinate.latitude),
+                                         @"lon" : @(self.location.coordinate.longitude)};
+            [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
+                        parameters:parameters
+                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                               // NSLog(@"JSON: %@", responseObject);
+                               NSLog(@"called user/locate");
+                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                               NSLog(@"Error: %@", error);
+                           }];
+        }
+        else {
+            // NSLog(@"not a new location");
+        }
+
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
+    }
+    else {
         [self.locationManager stopMonitoringSignificantLocationChanges];
-        return;
     }
 
-    AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                 @"lat" : @(location.coordinate.latitude),
-                                 @"lon" : @(location.coordinate.longitude)};
-    [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
-                parameters:parameters
-                   success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        // NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     [self.locationManager stopMonitoringSignificantLocationChanges];
+    [self.locationManager stopUpdatingLocation];
+}
+
+- (void)restartLocationUpdates
+{
+    [self.timer invalidate];
+    self.timer = nil;
+    [self.locationManager startUpdatingLocation];
 }
 
 #pragma mark - Notification Delegate Methods
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    PFUser *user = [PFUser currentUser];
+    
+    if (user) {
+        [currentInstallation setObject:user forKey:@"owner"];
+    }
+    
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler{
-    
+- (void)handlePush:(NSDictionary *)userInfo
+{
     [PFPush handlePush:userInfo];
     
-    /*
-    ** Check the type of the notifications
-    */
-    
+    // Check the type of the notifications
     //Breaking News
-    if([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]){
-        
-        //Check to make sure the payload has a galelry ID
-        if(userInfo[@"gallery"] != nil){
-            
+    if ([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]) {
+        //Check to make sure the payload has a gallery ID
+        if (userInfo[@"gallery"]) {
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     //Retreieve Gallery View Controller from storyboard
                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                    
                     GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
-                    
                     [galleryView setGallery:responseObject];
-                    
                     [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
-
                 }
-                
             }];
-            
         }
-    
     }
-    
+
     // Assignments
     if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
-        
         // Check to make sure the payload has an assignment ID
         if (userInfo[@"assignment"]) {
-            
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-                    
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    
                     [tabBarController setSelectedIndex:3];
-                    
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-                    
-                    
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
                 }
             }];
         }
     }
-    
     //Use
-    
     //Social
 }
 
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler: (void (^)()) completionHandler
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    
-    /*
-    ** Check the identifier for the type of notification
-    */
-    
+    [self handlePush:userInfo];
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler
+{
+    // Check the identifier for the type of notification
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
-        
         // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
-            
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    
                     UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-
-                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
-
                     [tabBarController setSelectedIndex:3];
-                    
-                    
                 }
             }];
         }
     }
-    
+
     // Must be called when finished
     completionHandler(UIBackgroundFetchResultNewData);
 }

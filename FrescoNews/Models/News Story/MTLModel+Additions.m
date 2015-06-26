@@ -66,6 +66,13 @@
     }];
 }
 
++ (NSValueTransformer *)bylineJSONTransformer
+{
+    return [MTLValueTransformer transformerWithBlock:^NSString *(NSString *byline) {
+        return [byline stringByReplacingOccurrencesOfString:@" via Fresco News" withString:@""];
+    }];
+}
+
 + (NSString *)relativeDateStringFromDate:(NSDate *)date
 {
     double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];

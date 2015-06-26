@@ -7,7 +7,7 @@
 //
 
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import <PBWebViewController.h>
+#import <STKWebKitViewController.h>
 #import "MTLModel+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSPost.h"
@@ -17,7 +17,7 @@
 #import "PostCollectionViewCell.h"
 #import "StoryViewController.h"
 
-@interface GalleryViewController ()
+@interface GalleryViewController ()  <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
@@ -46,43 +46,23 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesTableHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
 
+
+@property (nonatomic, assign) BOOL bordersLaidOut;
+
 @end
 
 @implementation GalleryViewController
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     
     UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
     
+    
     [self.navigationItem setRightBarButtonItem:shareIcon];
     
-    CALayer *topLayerArticles = [CALayer layer];
-    topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
-    topLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-    
-    CALayer *bottomLayerArticles = [CALayer layer];
-    bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
-    bottomLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-    
-    
-    [self.articlesTable.layer addSublayer:topLayerArticles];
-    [self.articlesTable.layer addSublayer:bottomLayerArticles];
-    
 
-    CALayer *topLayerStories = [CALayer layer];
-    topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
-    topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-    
-    
-    CALayer *bottomLayerStories = [CALayer layer];
-    bottomLayerStories.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1, self.articlesTable.frame.size.width, 1.0f);
-    bottomLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
-    
-    [self.storiesTable.layer addSublayer:bottomLayerStories];
-    [self.storiesTable.layer addSublayer:topLayerStories];
-    
-    
     [self setUpGallery];
     
 }
@@ -92,19 +72,57 @@
 {
     [super viewDidLayoutSubviews];
     
-    //Redraw Table Views
-    [self.articlesTable setNeedsLayout];
-    [self.articlesTable layoutIfNeeded];
-    [self.storiesTable setNeedsLayout];
-    [self.storiesTable layoutIfNeeded];
-    
     //
     self.constraintArticleTableHeight.constant = self.articlesTable.contentSize.height;
     self.constraintStoriesTableHeight.constant = self.storiesTable.contentSize.height;
-
     
+
+    //Redraw Table Views
+    [self.articlesTable.layer layoutIfNeeded];
+    [self.articlesTable setNeedsLayout];
+    [self.articlesTable layoutIfNeeded];
+    [self.storiesTable.layer setNeedsLayout];
+    [self.storiesTable.layer layoutIfNeeded];
+    [self.storiesTable setNeedsLayout];
+    [self.storiesTable layoutIfNeeded];
+    
+    [self.scrollView setNeedsLayout];
     [self.scrollView layoutIfNeeded];
     
+    if(!self.bordersLaidOut){
+    
+        /* Borders */
+        if(self.gallery.articles.count != 0){
+            CALayer *topLayerArticles = [CALayer layer];
+            topLayerArticles.frame = CGRectMake(0.0f, 0.0f, self.articlesTable.frame.size.width, 1.0f);
+            topLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            CALayer *bottomLayerArticles = [CALayer layer];
+            bottomLayerArticles.frame = CGRectMake(0.0f, self.articlesTable.frame.size.height - 1.0f, self.articlesTable.frame.size.width, 1.0f);
+            bottomLayerArticles.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            [self.articlesTable.layer addSublayer:topLayerArticles];
+            [self.articlesTable.layer addSublayer:bottomLayerArticles];
+        }
+        if(self.gallery.relatedStories.count != 0){
+            
+            CALayer *topLayerStories = [CALayer layer];
+            topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.storiesTable.frame.size.width, 1.0f);
+            topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            CALayer *bottomLayerStories = [CALayer layer];
+            bottomLayerStories.frame = CGRectMake(0.0f, self.storiesTable.frame.size.height - 1.0f, self.storiesTable.frame.size.width, 1.0f);
+            bottomLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            
+            [self.storiesTable.layer addSublayer:bottomLayerStories];
+            [self.storiesTable.layer addSublayer:topLayerStories];
+        }
+        
+    }
+    
+    self.bordersLaidOut = YES;
+    
+
 }
 
 -(void)shareGallery:(id)sender{
@@ -125,6 +143,9 @@
 
 
 - (void)setUpGallery{
+    
+    self.articlesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     self.galleryView.gallery = self.gallery;
     
@@ -163,8 +184,7 @@
                                                  metrics:nil
                                                    views: @{@"storiesView":self.storiesTable}]];
     }
-
-
+    
 }
 
 - (void)openGalleryWithId:(NSString *)galleryId{
@@ -217,6 +237,12 @@
         
         [storyTitle setText:[[[self gallery] relatedStories] objectAtIndex:indexPath.row][@"title"]];
         
+        if (indexPath.row != self.gallery.relatedStories.count -1) {
+            UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)];/// change size as you need.
+            separatorLineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12];// you can also put image here
+            [cell.contentView addSubview:separatorLineView];
+        }
+        
         return cell;
         
     }
@@ -235,6 +261,12 @@
         [articleImage setImageWithURL:article.URL];
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (indexPath.row != self.gallery.articles.count -1) {
+            UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)];/// change size as you need.
+            separatorLineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12];// you can also put image here
+            [cell.contentView addSubview:separatorLineView];
+        }
         
         return cell;
         
@@ -273,20 +305,14 @@
         
         FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
         
-        //Push to web view
-        PBWebViewController *webViewController = [[PBWebViewController alloc] init];
-        webViewController.URL = article.URL;
+        STKWebKitViewController *controller = [[STKWebKitViewController alloc] initWithURL:article.URL];
         
-        //        PBSafariActivity *activity = [[PBSafariActivity alloc] init];
-        //        webViewController.applicationActivities = @[activity];
-        //
-        [[self navigationController] pushViewController:webViewController animated:YES];
-        
-        
+        [self.navigationController pushViewController:controller animated:YES];
+
     }
 
-
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 44.0f;
@@ -295,9 +321,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.0f;
 }
-
-
-
 
 
 

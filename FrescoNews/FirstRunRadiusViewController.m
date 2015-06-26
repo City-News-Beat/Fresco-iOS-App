@@ -1,4 +1,3 @@
-
 //
 //  FirstRunRadiusViewController.m
 //  FrescoNews
@@ -25,10 +24,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate setupLocationManager];
-        
+    [appDelegate setupLocationMonitoring];
+    
     self.radiusStepper.value = 5;
     [self sliderValueChanged:self.radiusStepper];
 }

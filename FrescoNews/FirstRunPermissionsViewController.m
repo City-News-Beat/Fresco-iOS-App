@@ -13,16 +13,16 @@
 #import "AppDelegate.h"
 
 @interface FirstRunPermissionsViewController ()
-@property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionImage;
-@property (weak, nonatomic) IBOutlet UIImageView *microphonePermissionImage;
-@property (weak, nonatomic) IBOutlet UIImageView *locationPermissionImage;
+@property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIImageView *locationPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIImageView *notificationsPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsLabel;
+@property (weak, nonatomic) IBOutlet UIButton *locationPermissionsLabel;
+@property (weak, nonatomic) IBOutlet UIButton *notificationsPermissionsLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
-
-// Authorization "...dialog disappears on its own (without any user interaction) if the CLLocationManager object is released
-//   before the user responds to the dialog"
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation FirstRunPermissionsViewController
@@ -30,14 +30,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.isSkipState = YES;
-    
     [self requestCameraAuthorization];
-    [self requestMicrophoneAuthorization];
     [self requestCameraRollAuthorization];
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate setupLocationManager];
+    [appDelegate setupLocationMonitoring];
     [appDelegate registerForPushNotifications];
 }
 
@@ -106,20 +104,14 @@
         [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
             if (!granted) {
                 // TODO: Complain?
-                self.cameraPermissionImage.image = [UIImage imageNamed:@"cameraOnIcon"];
+                self.cameraPermissionsImage.image = [UIImage imageNamed:@"cameraOnIcon"];
+                [self.cameraPermissionsLabel setTitle:@"Camera Enabled" forState:UIControlStateNormal];
             }
         }];
+        
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        }];
     }
-}
-
-- (void)requestMicrophoneAuthorization
-{
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (!granted) {
-            // TODO: Complain?
-            self.microphonePermissionImage.image = [UIImage imageNamed:@"micOnIcon"];
-        }
-    }];
 }
 
 - (void)requestCameraRollAuthorization

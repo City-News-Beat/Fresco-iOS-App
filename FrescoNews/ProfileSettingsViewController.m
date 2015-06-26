@@ -47,16 +47,22 @@
     self.textfieldEmail.text = self.frsUser.email;
     self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
 
-    [self sliderValueChanged:self.radiusStepper];
-    [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
-                                 placeholderImage:[UIImage imageNamed:@"user"]
-                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                              self.profileImageView.image = image;
-                                              self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-                                              self.profileImageView.clipsToBounds = YES;
-                                          } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                              // Do something...
-                                          }];
+    if (self.frsUser.profileImageUrl) {
+        [self sliderValueChanged:self.radiusStepper];
+        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
+                                     placeholderImage:[UIImage imageNamed:@"user"]
+                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                  self.profileImageView.image = image;
+                                                  self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+                                                  self.profileImageView.clipsToBounds = YES;
+                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                  // Do something...
+                                              }];
+    }
+    else {
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+        self.profileImageView.clipsToBounds = YES;
+    }
 }
 
 - (void)updateLinkingStatus {
