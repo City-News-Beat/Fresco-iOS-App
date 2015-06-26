@@ -608,7 +608,7 @@
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius)};
+    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius), @"active" : @"true"};
 
     [self GET:@"assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -635,7 +635,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius)};
+    NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius), @"active" : @"true"};
     
     [self GET:@"assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
