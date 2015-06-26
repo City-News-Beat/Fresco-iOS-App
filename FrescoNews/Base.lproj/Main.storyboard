@@ -1363,16 +1363,6 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D5m-F0-BHd">
-                                                        <rect key="frame" x="165" y="88.5" width="247" height="18"/>
-                                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
-                                                            <rect key="frame" x="136" y="49" width="230" height="18"/>
-                                                        </variation>
-                                                    </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-wc-UFl" userLabel="View - spacer">
                                                         <rect key="frame" x="17" y="77.5" width="403" height="1"/>
                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.080000000000000002" colorSpace="calibratedRGB"/>
@@ -1383,7 +1373,7 @@
                                                             <rect key="frame" x="17" y="39" width="357" height="1"/>
                                                         </variation>
                                                     </view>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Confirm Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73o-wN-STb">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Confirm Password" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73o-wN-STb">
                                                         <rect key="frame" x="17" y="86" width="135.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
@@ -1409,18 +1399,8 @@
                                                             <rect key="frame" x="17" y="39" width="357" height="1"/>
                                                         </variation>
                                                     </view>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P2F-Ip-NTP">
-                                                        <rect key="frame" x="165" y="13" width="247" height="18"/>
-                                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
-                                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
-                                                            <rect key="frame" x="130" y="91" width="236" height="18"/>
-                                                        </variation>
-                                                    </textField>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Olr-qE-EoT">
-                                                        <rect key="frame" x="169" y="87" width="9" height="19"/>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D5m-F0-BHd">
+                                                        <rect key="frame" x="165" y="88" width="247" height="18"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -1429,11 +1409,22 @@
                                                             <rect key="frame" x="136" y="49" width="230" height="18"/>
                                                         </variation>
                                                     </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P2F-Ip-NTP">
+                                                        <rect key="frame" x="165" y="13" width="247" height="18"/>
+                                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
+                                                            <rect key="frame" x="130" y="91" width="236" height="18"/>
+                                                        </variation>
+                                                    </textField>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="D5m-F0-BHd" secondAttribute="trailing" constant="8" id="0Ve-3e-OIf"/>
                                                     <constraint firstAttribute="trailing" secondItem="67E-q7-Q6W" secondAttribute="trailing" constant="8" id="36e-aj-EVa"/>
+                                                    <constraint firstItem="D5m-F0-BHd" firstAttribute="leading" secondItem="73o-wN-STb" secondAttribute="trailing" constant="12.5" id="3Tn-GE-3mt"/>
                                                     <constraint firstItem="P2F-Ip-NTP" firstAttribute="leading" secondItem="S65-Q0-LQi" secondAttribute="trailing" constant="16" id="4aA-vh-JWC"/>
                                                     <constraint firstAttribute="trailing" secondItem="LB7-fn-wMJ" secondAttribute="trailing" id="4ou-Kl-9aF"/>
                                                     <constraint firstItem="liL-r5-HRa" firstAttribute="baseline" secondItem="B50-qw-5qm" secondAttribute="baseline" constant="0.5" id="6eG-ph-cFF"/>
@@ -1444,18 +1435,15 @@
                                                     <constraint firstItem="HhN-wc-UFl" firstAttribute="top" secondItem="tem-71-UNn" secondAttribute="bottom" constant="8" id="C83-Jz-5Nn"/>
                                                     <constraint firstAttribute="trailing" secondItem="P2F-Ip-NTP" secondAttribute="trailing" constant="8" id="CMf-8K-RcA"/>
                                                     <constraint firstItem="liL-r5-HRa" firstAttribute="top" secondItem="tem-71-UNn" secondAttribute="bottom" constant="76" id="CRi-jl-AGr"/>
-                                                    <constraint firstItem="Olr-qE-EoT" firstAttribute="baseline" secondItem="73o-wN-STb" secondAttribute="baseline" constant="-1.5" id="FjP-a5-jO6"/>
                                                     <constraint firstAttribute="trailing" secondItem="B50-qw-5qm" secondAttribute="trailing" constant="8" id="Gzh-j6-TkY"/>
                                                     <constraint firstItem="73o-wN-STb" firstAttribute="baseline" secondItem="D5m-F0-BHd" secondAttribute="baseline" id="Jo8-JY-CQU"/>
                                                     <constraint firstItem="73o-wN-STb" firstAttribute="height" secondItem="tem-71-UNn" secondAttribute="height" id="LWw-St-l5C"/>
                                                     <constraint firstItem="S65-Q0-LQi" firstAttribute="top" secondItem="doJ-jB-8QL" secondAttribute="top" constant="12" id="MWz-Xh-IV9"/>
-                                                    <constraint firstItem="Olr-qE-EoT" firstAttribute="leading" secondItem="73o-wN-STb" secondAttribute="trailing" constant="17" id="Q3z-xs-422"/>
                                                     <constraint firstItem="D5m-F0-BHd" firstAttribute="leading" secondItem="liL-r5-HRa" secondAttribute="trailing" constant="43" id="S2H-uO-CgI"/>
                                                     <constraint firstItem="tem-71-UNn" firstAttribute="leading" secondItem="doJ-jB-8QL" secondAttribute="leading" constant="17" id="Swu-2t-3Cl"/>
                                                     <constraint firstItem="p6Q-KK-0TX" firstAttribute="leading" secondItem="73o-wN-STb" secondAttribute="leading" id="TK4-oL-S4R"/>
-                                                    <constraint firstItem="p6Q-KK-0TX" firstAttribute="trailing" secondItem="73o-wN-STb" secondAttribute="trailing" constant="267.5" id="UYT-Ui-isN"/>
+                                                    <constraint firstItem="p6Q-KK-0TX" firstAttribute="trailing" secondItem="73o-wN-STb" secondAttribute="trailing" constant="258.5" id="UYT-Ui-isN"/>
                                                     <constraint firstItem="p6Q-KK-0TX" firstAttribute="trailing" secondItem="HhN-wc-UFl" secondAttribute="trailing" id="UkX-QO-1i1"/>
-                                                    <constraint firstItem="Olr-qE-EoT" firstAttribute="bottom" secondItem="73o-wN-STb" secondAttribute="bottom" constant="-1" id="WXr-Sv-Qbb"/>
                                                     <constraint firstAttribute="bottom" secondItem="tem-71-UNn" secondAttribute="bottom" constant="115.5" id="aU8-Ar-55t"/>
                                                     <constraint firstAttribute="bottom" secondItem="liL-r5-HRa" secondAttribute="bottom" constant="12" id="aqW-Fi-Zf9"/>
                                                     <constraint firstItem="p6Q-KK-0TX" firstAttribute="top" secondItem="doJ-jB-8QL" secondAttribute="top" constant="133" id="dNw-dN-rCX"/>
@@ -1469,6 +1457,7 @@
                                                     <constraint firstItem="S65-Q0-LQi" firstAttribute="leading" secondItem="doJ-jB-8QL" secondAttribute="leading" constant="17" id="ox8-Ej-1nn"/>
                                                     <constraint firstItem="LB7-fn-wMJ" firstAttribute="leading" secondItem="tem-71-UNn" secondAttribute="leading" id="sjl-lq-QvK"/>
                                                     <constraint firstItem="tem-71-UNn" firstAttribute="top" secondItem="LB7-fn-wMJ" secondAttribute="bottom" constant="8" id="uPZ-jh-4Ue"/>
+                                                    <constraint firstItem="73o-wN-STb" firstAttribute="leading" secondItem="doJ-jB-8QL" secondAttribute="leading" constant="17" id="wDp-Um-dHC"/>
                                                     <constraint firstItem="B50-qw-5qm" firstAttribute="leading" secondItem="liL-r5-HRa" secondAttribute="trailing" constant="43" id="wzd-LN-CTD"/>
                                                     <constraint firstItem="73o-wN-STb" firstAttribute="top" secondItem="HhN-wc-UFl" secondAttribute="bottom" constant="8" id="xuF-fQ-gpg"/>
                                                     <constraint firstItem="67E-q7-Q6W" firstAttribute="bottom" secondItem="tem-71-UNn" secondAttribute="bottom" constant="-1" id="ynB-QL-LuP"/>
@@ -1477,11 +1466,13 @@
                                                 <variation key="default">
                                                     <mask key="constraints">
                                                         <exclude reference="aU8-Ar-55t"/>
+                                                        <exclude reference="UYT-Ui-isN"/>
                                                         <exclude reference="dNw-dN-rCX"/>
                                                         <exclude reference="yxa-Cy-oHj"/>
                                                         <exclude reference="CRi-jl-AGr"/>
                                                         <exclude reference="lOG-Ne-pL3"/>
                                                         <exclude reference="ynB-QL-LuP"/>
+                                                        <exclude reference="S2H-uO-CgI"/>
                                                         <exclude reference="meY-BH-FgD"/>
                                                     </mask>
                                                 </variation>
