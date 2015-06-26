@@ -428,19 +428,71 @@
     //center on the current location
     if (!self.centeredUserLocation){
         
-        // Zooming map after delay for effect
-        MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+        __block BOOL runUserLocation = true;
         
-        MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+        //Find nearby assignments in a 20 mile radius
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                //If the assignments exists, navigate to the avg location respective to the current location
+                if(responseObject != nil){
+                    
+                    float avgLat = 0;
+                    
+                    float avgLng = 0;
+                    
+                    self.assignments = responseObject;
+                    
+                    runUserLocation = false;
+                    
+                    //Add up lat/lng
+                    for(FRSAssignment *assignment in self.assignments){
+                        
+                        avgLat += [assignment.lat floatValue];
+                        
+                        avgLng += [assignment.lon floatValue];
+                    
+                    }
+                    
+                    // Zooming map after delay for effect
+                    MKCoordinateSpan span = MKCoordinateSpanMake(0.2f, 0.2f);
+                    
+                    
+                    //Get Average location of all assignments and current location
+                    CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
+                                                                                (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
+                                                                                (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1));
         
-        MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+   
+                    MKCoordinateRegion region = {avgLoc, span};
+                    
+                    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+                    
+                    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+                    
+                }
+                
+            }
+
+        }];
         
-        [self.assignmentsMap setRegion:regionThatFits animated:YES];
+        if(runUserLocation){
+        
+            // Zooming map after delay for effect
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+            
+            MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+            
+            MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+            
+            [self.assignmentsMap setRegion:regionThatFits animated:YES];
+        
+        }
         
         self.centeredUserLocation = YES;
-    
-        self.operatingRadius = 0;
         
+        self.operatingRadius = 0;
+
     }
     
 }
@@ -579,7 +631,6 @@
     
     [mapView selectAnnotation:view.annotation animated:YES];
 
-
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
@@ -632,7 +683,6 @@
         CLLocationCoordinate2D start = self.assignmentsMap.userLocation.location.coordinate;
         
         CLLocationCoordinate2D destination = { [self.currentAssignment.lat floatValue], [self.currentAssignment.lon floatValue] };
-
         
         //Google Maps
         if(buttonIndex == 0){
@@ -652,11 +702,7 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appleMapsURLString]];
             
         }
-        
-        
     }
-
-
 }
 
 
