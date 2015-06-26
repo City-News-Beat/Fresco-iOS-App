@@ -164,6 +164,26 @@
     }
 }
 
+- (void)updateUserPassword:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block
+{
+    PFUser *user = [PFUser user];
+    user.username = [username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    user.password = password;
+    user.email = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([user.email length]) {
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            // now that we're signed in, let's bind the Parse and FRSUsers
+            if (succeeded)
+                [self bindParseUserToFrescoUser:block];
+            // bubble failure back up to caller
+            else
+                block(succeeded, error);
+        }];
+    }
+}
+
+
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block
 {
     [PFUser logInWithUsernameInBackground:[username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
