@@ -2242,10 +2242,10 @@
             </objects>
             <point key="canvasLocation" x="2421" y="2469"/>
         </scene>
-        <!--Read More-->
+        <!--Gallery View Controller-->
         <scene sceneID="3bT-KS-E4W">
             <objects>
-                <viewController storyboardIdentifier="GalleryViewController" title="Read More" id="l3e-Jp-wmk" customClass="GalleryViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GalleryViewController" title="Read More" id="l3e-Jp-wmk" userLabel="Gallery View Controller" customClass="GalleryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="V6e-yJ-kTg"/>
                         <viewControllerLayoutGuide type="bottom" id="Ope-Uk-vh8"/>
