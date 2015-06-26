@@ -2960,7 +2960,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Ro-ba-ich" userLabel="Confirm Password Field">
-                                        <rect key="frame" x="156" y="89" width="211" height="18"/>
+                                        <rect key="frame" x="165" y="89" width="202" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -2974,7 +2974,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MpB-fB-YXj">
-                                        <rect key="frame" x="17" y="87" width="139" height="20.5"/>
+                                        <rect key="frame" x="17" y="87" width="146" height="20.5"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -2987,14 +2987,14 @@
                                         </constraints>
                                     </view>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vBt-ig-Pax" userLabel="Email Field">
-                                        <rect key="frame" x="156" y="14" width="211" height="18"/>
+                                        <rect key="frame" x="165" y="14" width="202" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xJx-Uq-74r" userLabel="Password Field">
-                                        <rect key="frame" x="156" y="50" width="211" height="18"/>
+                                        <rect key="frame" x="165" y="50" width="202" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -3021,10 +3021,10 @@
                                     <constraint firstItem="0Om-xn-gww" firstAttribute="leading" secondItem="0qC-R2-kGU" secondAttribute="leading" constant="17" id="Gp4-0d-6Aj"/>
                                     <constraint firstItem="0Om-xn-gww" firstAttribute="baseline" secondItem="vBt-ig-Pax" secondAttribute="baseline" id="J8M-Jt-tdC"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="height" secondItem="xJx-Uq-74r" secondAttribute="height" id="JeK-fP-qFh"/>
-                                    <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="trailing" constant="99" id="Jzr-Ch-Yfh"/>
-                                    <constraint firstItem="xJx-Uq-74r" firstAttribute="leading" secondItem="Pa6-Y2-X73" secondAttribute="trailing" constant="66" id="NQv-oP-SiN"/>
+                                    <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="trailing" constant="108" id="Jzr-Ch-Yfh"/>
+                                    <constraint firstItem="xJx-Uq-74r" firstAttribute="leading" secondItem="Pa6-Y2-X73" secondAttribute="trailing" constant="75" id="NQv-oP-SiN"/>
                                     <constraint firstAttribute="trailing" secondItem="vBt-ig-Pax" secondAttribute="trailing" constant="8" id="NRT-Dq-Bf6"/>
-                                    <constraint firstItem="MpB-fB-YXj" firstAttribute="width" secondItem="Pa6-Y2-X73" secondAttribute="width" constant="66" id="Qm6-0w-VLX"/>
+                                    <constraint firstItem="MpB-fB-YXj" firstAttribute="width" secondItem="Pa6-Y2-X73" secondAttribute="width" constant="73" id="Qm6-0w-VLX"/>
                                     <constraint firstItem="xJx-Uq-74r" firstAttribute="top" secondItem="ZIf-HL-jUI" secondAttribute="bottom" constant="10" id="RAa-9N-0LY"/>
                                     <constraint firstItem="Sqx-Jg-j83" firstAttribute="leading" secondItem="MpB-fB-YXj" secondAttribute="leading" id="T9F-b0-mU2"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="baseline" secondItem="0Om-xn-gww" secondAttribute="baseline" constant="-1" id="Tfw-xh-9Y6"/>
@@ -3041,7 +3041,7 @@
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="ZIf-HL-jUI" secondAttribute="trailing" constant="-290" id="hrG-Kk-gea"/>
                                     <constraint firstAttribute="trailing" secondItem="0Ro-ba-ich" secondAttribute="trailing" constant="8" id="jGg-KF-d1g"/>
                                     <constraint firstItem="MpB-fB-YXj" firstAttribute="baseline" secondItem="0Ro-ba-ich" secondAttribute="baseline" constant="2.5" id="jfD-QR-x7J"/>
-                                    <constraint firstItem="0Ro-ba-ich" firstAttribute="leading" secondItem="MpB-fB-YXj" secondAttribute="trailing" id="keR-H2-jR5"/>
+                                    <constraint firstItem="0Ro-ba-ich" firstAttribute="leading" secondItem="MpB-fB-YXj" secondAttribute="trailing" constant="2" id="keR-H2-jR5"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="trailing" constant="8" id="l0w-4v-dNc"/>
                                     <constraint firstItem="xJx-Uq-74r" firstAttribute="bottom" secondItem="Sqx-Jg-j83" secondAttribute="bottom" constant="-4" id="ml5-ip-WUt"/>
                                     <constraint firstItem="ZIf-HL-jUI" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="leading" id="o17-Tj-Cbp"/>
@@ -4078,7 +4078,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aKt-Le-1wQ"/>
-        <segue reference="BrQ-Qn-DKp"/>
+        <segue reference="6TG-Ef-MS9"/>
         <segue reference="qw6-i4-1D2"/>
     </inferredMetricsTieBreakers>
 </document>
