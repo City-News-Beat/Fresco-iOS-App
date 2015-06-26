@@ -1,5 +1,5 @@
 //
-//  StoryCellHeader.h
+//  GalleryHeader.h
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/17/15.
@@ -11,5 +11,5 @@
 
 @interface GalleryHeader : UITableViewCell
 + (NSString *)identifier;
-- (void)setGallery:(FRSGallery *)post;
+- (void)setGallery:(FRSGallery *)gallery;
 @end

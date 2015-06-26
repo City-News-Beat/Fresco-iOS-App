@@ -1,5 +1,5 @@
 //
-//  StoryCellHeader.m
+//  GalleryHeader.m
 //  FrescoNews
 //
 //  Created by Jason Gresh on 3/17/15.
@@ -25,8 +25,9 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 
 - (void)setGallery:(FRSGallery *)gallery
 {
-    self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", ((FRSPost *)[gallery.posts firstObject]).address,
+    FRSPost *firstPost = (FRSPost *)[gallery.posts firstObject];
+    self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", firstPost.address,
                                                                         [MTLModel relativeDateStringFromDate:gallery.createTime]];
-    self.labelByLine.text = ((FRSPost *)[gallery.posts firstObject]).byline;
+    self.labelByLine.text = firstPost.byline;
 }
 @end
