@@ -1119,6 +1119,7 @@
 					};
 					E71F0E2E1B0B936200186BAD = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = Z7R96S8K3N;
 					};
 					E71F0E401B0B936200186BAD = {
 						CreatedOnToolsVersion = 6.3.1;
