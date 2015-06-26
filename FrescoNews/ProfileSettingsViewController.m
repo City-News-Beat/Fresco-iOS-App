@@ -22,10 +22,10 @@
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
-@property (weak, nonatomic) IBOutlet UITextField *textfieldMiddle;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
+@property (weak, nonatomic) IBOutlet UITextField *textfieldConfirmPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
@@ -47,8 +47,10 @@
     self.textfieldEmail.text = self.frsUser.email;
     self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
 
+    // update the slider label
+    [self sliderValueChanged:self.radiusStepper];
+
     if (self.frsUser.profileImageUrl) {
-        [self sliderValueChanged:self.radiusStepper];
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -110,7 +112,7 @@
                                             [self updateLinkingStatus];
                                         }];
     }
-    else {
+    else {  
         [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSLog(@"The user is no longer associated with their Facebook account.");
@@ -214,6 +216,18 @@
                                                                          [alert show];
                                                                      }
                                                                  }];
+    
+    // password change is trickier
+    if ([self.textfieldNewPassword.text length]) {
+        if (!([self.textfieldCurrentPassword.text length] && [self.textfieldConfirmPassword.text length])) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"If updating password, all ACCOUNT fields are required"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+    }
 }
 
 - (IBAction)changePassword:(UIButton *)sender
@@ -256,7 +270,6 @@
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
-   // CGFloat roundedValue = [self roundedValueForSlider:slider];
     CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
     NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
