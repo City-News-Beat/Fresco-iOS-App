@@ -1358,10 +1358,10 @@
             </objects>
             <point key="canvasLocation" x="3287" y="2469"/>
         </scene>
-        <!--Profile Settings View Controller-->
+        <!--Settings-->
         <scene sceneID="F4V-xt-Y26">
             <objects>
-                <viewController storyboardIdentifier="ProfileSettingsViewController" hidesBottomBarWhenPushed="YES" id="fkO-PC-iRn" customClass="ProfileSettingsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileSettingsViewController" title="Settings" hidesBottomBarWhenPushed="YES" id="fkO-PC-iRn" customClass="ProfileSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3Kw-5z-LCT"/>
                         <viewControllerLayoutGuide type="bottom" id="dgS-nd-hEW"/>
