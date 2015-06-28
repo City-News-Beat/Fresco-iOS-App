@@ -77,15 +77,15 @@
         [self.connectFacebookButton setHidden:NO];
     
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitterDisconnectButton"] forState:UIControlStateNormal];
         } else {
-            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitterConnectButton"] forState:UIControlStateNormal];
         }
     
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebookDisconnectButton"] forState:UIControlStateNormal];
         } else {
-            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebookConnectButton"] forState:UIControlStateNormal];
         }
     }
 }
