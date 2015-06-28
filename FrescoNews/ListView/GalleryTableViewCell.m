@@ -47,5 +47,6 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 - (void)prepareForReuse
 {
     self.gallery = nil;
+    self.galleryView.pageControl.hidden = NO;
 }
 @end
