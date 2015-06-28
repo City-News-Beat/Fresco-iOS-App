@@ -26,6 +26,7 @@
 @property (nonatomic, copy, readonly) NSDate *date;
 @property (nonatomic, copy, readonly) NSString *byline;
 @property (nonatomic, copy, readonly) NSNumber *visibility;
+@property (nonatomic, copy, readonly) NSString *address;
 
 - (NSURL *)largeImageURL;
 - (BOOL)isVideo;

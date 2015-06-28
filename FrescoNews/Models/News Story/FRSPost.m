@@ -27,6 +27,7 @@
              @"date" : @"time_created",
              @"byline" : @"byline",
              @"visibility" : @"visibility",
+             @"address" : @"location.address",
              };
 }
 

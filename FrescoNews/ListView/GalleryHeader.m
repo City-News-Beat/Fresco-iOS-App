@@ -23,13 +23,10 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
     return kCellIdentifier;
 }
 
-- (void)awakeFromNib {
-    // Initialization code
-}
-
 - (void)setGallery:(FRSGallery *)gallery
 {
-    self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
+    self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", ((FRSPost *)[gallery.posts firstObject]).address,
+                                                                        [MTLModel relativeDateStringFromDate:gallery.createTime]];
     self.labelByLine.text = ((FRSPost *)[gallery.posts firstObject]).byline;
 }
 @end
