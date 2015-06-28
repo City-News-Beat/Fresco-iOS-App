@@ -94,6 +94,32 @@
     }
 }
 
+#pragma mark - Social data
+- (void)setFacebookInfo
+{
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        self.facebookLabel.hidden = YES;
+        self.facebookIcon.hidden = YES;
+        return;
+    }
+    
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
+                                                                   parameters:nil
+                                                                   HTTPMethod:@"GET"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                          id result,
+                                          NSError *error) {
+        NSLog(@"%@", error);
+        if (!error) {
+            self.facebookLabel.text = [result objectForKey:@"name"];
+        }
+        else {
+            self.facebookLabel.hidden = YES;
+            self.facebookIcon.hidden = YES;
+        }
+    }];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch = [[event allTouches] anyObject];
