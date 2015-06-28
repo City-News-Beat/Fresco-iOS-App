@@ -1531,13 +1531,13 @@
                                                     </mask>
                                                     <mask key="constraints">
                                                         <exclude reference="u5x-lw-vfo"/>
-                                                        <exclude reference="ek4-n0-hRN"/>
-                                                        <exclude reference="lct-u0-o6u"/>
                                                         <exclude reference="4YN-Zx-QTJ"/>
                                                         <exclude reference="QhC-Wv-kc1"/>
                                                         <exclude reference="ROj-a8-uay"/>
                                                         <exclude reference="VUD-MR-Uky"/>
                                                         <exclude reference="ahK-Sm-2Lr"/>
+                                                        <exclude reference="ek4-n0-hRN"/>
+                                                        <exclude reference="lct-u0-o6u"/>
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
@@ -3140,6 +3140,7 @@
                                 <exclude reference="sBr-P1-Di8"/>
                                 <exclude reference="h9z-hs-acX"/>
                                 <exclude reference="Uyo-L2-4Fd"/>
+                                <exclude reference="lgq-9N-5cc"/>
                                 <exclude reference="Zel-rL-hoT"/>
                                 <exclude reference="mte-fF-ogD"/>
                                 <exclude reference="gnW-Hs-LfD"/>
@@ -4082,8 +4083,8 @@
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aKt-Le-1wQ"/>
-        <segue reference="BrQ-Qn-DKp"/>
         <segue reference="qw6-i4-1D2"/>
+        <segue reference="6TG-Ef-MS9"/>
+        <segue reference="aKt-Le-1wQ"/>
     </inferredMetricsTieBreakers>
 </document>
