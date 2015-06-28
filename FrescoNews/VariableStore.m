@@ -43,7 +43,7 @@
         sharedInstance.opacityInnerListDividers = 0.08f;
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
         
-        sharedInstance.baseURL = @"http://api.fresconews.com/v1/";
+        sharedInstance.baseURL = @"https://api.fresconews.com/v1/";
         sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
 

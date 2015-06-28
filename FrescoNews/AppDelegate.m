@@ -229,6 +229,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    return;
+    
     if ([FRSDataManager sharedManager].currentUser.userID) {
         if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
             // NSLog(@"new location");

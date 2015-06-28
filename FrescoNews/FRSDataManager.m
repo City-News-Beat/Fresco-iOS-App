@@ -19,6 +19,7 @@
 @interface FRSDataManager () {
     @protected
     FRSUser *_currentUser;
+    NSString *_frescoAPIToken;
 }
 
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
@@ -89,6 +90,12 @@
             }
         }];
         
+        // silently and asynchronously authenticate to the API
+        [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
+            if (error)
+                NSLog(@"Could not authenticate to the API");
+        }];
+        
         return YES;
     }
     return NO;
@@ -124,6 +131,12 @@
                     }
                 }];
                 
+                // Authenticate to the API
+                [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
+                    if (error)
+                        NSLog(@"Could not authenticate to the API");
+                }];
+                
             }
             else {
                 NSError *frsError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
@@ -136,6 +149,31 @@
             NSLog(@"Error fetching user from Parse: %@", error);
             block(NO, error);
         }
+    }];
+}
+
+- (void)getFrescoAPITokenWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    NSDictionary *params = @{@"parseSession" : [PFUser currentUser].sessionToken};
+    
+    it's happening right here. This call destroys the session row in Parse
+    [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+        NSString *token = [responseObject valueForKeyPath:@"data.token"];
+       
+        if (token) {
+            // this token will be used to authenticate data calls that require it
+            self.frescoAPIToken = token;
+            
+            // this sets the header on all requests (not that we need it on all requests)
+            AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+            [manager.requestSerializer setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
+        }
+        
+        if (responseBlock)
+            responseBlock(token, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if(responseBlock)
+            responseBlock(nil, error);
     }];
 }
 
@@ -282,19 +320,19 @@
             [[PFUser currentUser] setObject:jsonUser forKey:kFrescoUserData];
         
         // save locally -- not doing anything with this yet
-        [[PFUser currentUser] pinWithName:kFrescoUserData];
+        //[[PFUser currentUser] pinWithName:kFrescoUserData];
         
-        // save to parse
-        NSError *error;
-        if ([[PFUser currentUser] save:&error]) {
-            _currentUser = frsUser;
-            block(YES, nil);
-        }
-        else {
-            // if we're going to codify this it needs to be centralized -- this is arbitrary
-            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"error" : @"Couldn't save user"}];
-            block (NO, saveError);
-        }
+        [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
+            if (success) {
+                _currentUser = frsUser;
+                block(YES, nil);
+            }
+            else {
+                // if we're going to codify this it needs to be centralized -- this is arbitrary
+                NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"error" : @"Couldn't save user"}];
+                block (NO, saveError);
+            }
+        }];
     }
     else {
         // if we're going to codify this it needs to be centralized -- this is arbitrary
@@ -386,24 +424,44 @@
 
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
 {
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
     
     [params addEntriesFromDictionary:inputParams];
-    
-    [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
-       success:^(NSURLSessionDataTask *task, id responseObject) {
-           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
 
-           // synchronize the user
-           [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
-               if (responseBlock) responseBlock(user, nil);
+    NSLog(@"Fresco %@: Parse %@", self.frescoAPIToken, [PFUser currentUser].sessionToken);
+    
+    // if we don't have an API token request one
+    if (!self.frescoAPIToken) {
+        [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
+            // on success we call ourselves again
+            if (!error) {
+                // self.frescoAPIToken is set on success so this will not endlessly loop
+                // but let's check just to make this code trustable when read
+                if (self.frescoAPIToken)
+                    [self updateFrescoUserWithParams:inputParams block:responseBlock];
+                else
+                    NSLog(@"Unexpected error authenticating to the API");
+            }
+            else {
+                NSLog(@"Could not authenticate to the API");
+            }
+        }];
+    }
+    else {
+        [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
+           success:^(NSURLSessionDataTask *task, id responseObject) {
+               NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+               FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+               
+               // synchronize the user
+               [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
+                   if (responseBlock) responseBlock(user, nil);
+               }];
+           } failure:^(NSURLSessionDataTask *task, NSError *error) {
+               NSLog(@"Error creating new user %@", error);
+               if (responseBlock) responseBlock(nil, error);
            }];
-       } failure:^(NSURLSessionDataTask *task, NSError *error) {
-           NSLog(@"Error creating new user %@", error);
-           if (responseBlock) responseBlock(nil, error);
-       }];
+    }
 }
 
 - (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock

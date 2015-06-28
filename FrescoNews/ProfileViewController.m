@@ -78,7 +78,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (![[FRSDataManager sharedManager] login]) {
+    // if (![[FRSDataManager sharedManager] login]) {
+
+    if (![FRSDataManager sharedManager].currentUser) {
         [self navigateToFirstRun];
     }
     else {
