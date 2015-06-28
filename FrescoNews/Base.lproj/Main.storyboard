@@ -1358,10 +1358,10 @@
             </objects>
             <point key="canvasLocation" x="3287" y="2469"/>
         </scene>
-        <!--Profile Settings View Controller-->
+        <!--Settings-->
         <scene sceneID="F4V-xt-Y26">
             <objects>
-                <viewController storyboardIdentifier="ProfileSettingsViewController" hidesBottomBarWhenPushed="YES" id="fkO-PC-iRn" customClass="ProfileSettingsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileSettingsViewController" title="Settings" hidesBottomBarWhenPushed="YES" id="fkO-PC-iRn" customClass="ProfileSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3Kw-5z-LCT"/>
                         <viewControllerLayoutGuide type="bottom" id="dgS-nd-hEW"/>
@@ -2216,10 +2216,10 @@
             </objects>
             <point key="canvasLocation" x="2421" y="2469"/>
         </scene>
-        <!--Read More-->
+        <!--Gallery View Controller-->
         <scene sceneID="3bT-KS-E4W">
             <objects>
-                <viewController storyboardIdentifier="GalleryViewController" title="Read More" id="l3e-Jp-wmk" customClass="GalleryViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GalleryViewController" title="Read More" id="l3e-Jp-wmk" userLabel="Gallery View Controller" customClass="GalleryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="V6e-yJ-kTg"/>
                         <viewControllerLayoutGuide type="bottom" id="Ope-Uk-vh8"/>
@@ -2239,6 +2239,11 @@
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="JCM-wN-FvI"/>
+                                            </mask>
+                                        </variation>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gfT-dy-y2d" userLabel="By Line">
                                         <rect key="frame" x="270" y="10" width="310" height="14.5"/>
