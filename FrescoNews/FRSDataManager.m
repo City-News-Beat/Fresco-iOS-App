@@ -155,7 +155,6 @@
 - (void)getFrescoAPITokenWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     NSDictionary *params = @{@"parseSession" : [PFUser currentUser].sessionToken};
     
-    it's happening right here. This call destroys the session row in Parse
     [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         NSString *token = [responseObject valueForKeyPath:@"data.token"];
        
@@ -428,8 +427,7 @@
     
     [params addEntriesFromDictionary:inputParams];
 
-    NSLog(@"Fresco %@: Parse %@", self.frescoAPIToken, [PFUser currentUser].sessionToken);
-    
+    /*
     // if we don't have an API token request one
     if (!self.frescoAPIToken) {
         [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
@@ -447,12 +445,12 @@
             }
         }];
     }
-    else {
+    else {*/
         [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
            success:^(NSURLSessionDataTask *task, id responseObject) {
                NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
                FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-               
+                              
                // synchronize the user
                [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
                    if (responseBlock) responseBlock(user, nil);
@@ -461,7 +459,7 @@
                NSLog(@"Error creating new user %@", error);
                if (responseBlock) responseBlock(nil, error);
            }];
-    }
+   // }
 }
 
 - (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
