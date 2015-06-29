@@ -1733,24 +1733,6 @@
                                                     <action selector="logOut:" destination="fkO-PC-iRn" eventType="touchUpInside" id="FEE-Y1-OkH"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4m-tG-TCs" userLabel="Save">
-                                                <rect key="frame" x="0.0" y="962.5" width="420" height="52"/>
-                                                <color key="backgroundColor" red="0.29803921568627451" green="0.84313725490196079" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="d4m-tG-TCs" secondAttribute="height" multiplier="375:34" constant="-154.41176470588232" id="k82-G4-udD"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                                <state key="normal" title="Save Changes">
-                                                    <color key="titleColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
-                                                    <rect key="frame" x="0.0" y="877" width="374" height="47"/>
-                                                </variation>
-                                                <connections>
-                                                    <action selector="saveChanges:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Uor-kQ-v8b"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UCq-t6-lmB">
                                                 <rect key="frame" x="186.5" y="8" width="216.5" height="49"/>
                                                 <constraints>
@@ -1778,6 +1760,24 @@
                                                 </variation>
                                                 <connections>
                                                     <action selector="connectTwitter:" destination="fkO-PC-iRn" eventType="touchUpInside" id="HkT-IO-nMc"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4m-tG-TCs" userLabel="Save">
+                                                <rect key="frame" x="0.0" y="963" width="420" height="52"/>
+                                                <color key="backgroundColor" red="0.29803921568627451" green="0.84313725490196079" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="d4m-tG-TCs" secondAttribute="height" multiplier="375:34" constant="-154.41176470588232" id="k82-G4-udD"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                                <state key="normal" title="Save Changes">
+                                                    <color key="titleColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="877" width="374" height="47"/>
+                                                </variation>
+                                                <connections>
+                                                    <action selector="saveChanges:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Uor-kQ-v8b"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1851,7 +1851,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="nqH-iM-sZZ" secondAttribute="trailing" id="IF6-cx-AWR"/>
-                                    <constraint firstAttribute="bottom" secondItem="nqH-iM-sZZ" secondAttribute="bottom" constant="101.5" id="Sgy-ui-FQE"/>
+                                    <constraint firstAttribute="bottom" secondItem="nqH-iM-sZZ" secondAttribute="bottom" id="Sgy-ui-FQE"/>
                                     <constraint firstItem="nqH-iM-sZZ" firstAttribute="leading" secondItem="xHX-Av-OJh" secondAttribute="leading" id="goY-LX-8hu"/>
                                     <constraint firstItem="nqH-iM-sZZ" firstAttribute="top" secondItem="xHX-Av-OJh" secondAttribute="top" id="tfK-Yg-l6P"/>
                                 </constraints>
