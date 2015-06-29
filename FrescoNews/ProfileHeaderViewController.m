@@ -13,6 +13,7 @@
 #import "ProfileHeaderViewController.h"
 #import "FRSUser.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "FRSDataManager.h"
 
 @interface ProfileHeaderViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
@@ -27,6 +28,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // this will have to change for displaying other users
+    self.frsUser = [FRSDataManager sharedManager].currentUser;
+    
     [super viewWillAppear:animated];
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
 
