@@ -59,14 +59,11 @@
     
     UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
     
-    
     [self.navigationItem setRightBarButtonItem:shareIcon];
     
-
     [self setUpGallery];
     
 }
-
 
 -(void)viewDidLayoutSubviews
 {
@@ -147,7 +144,7 @@
     self.articlesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    self.galleryView.gallery = self.gallery;
+    [self.galleryView setGallery:self.gallery isInList:NO];
     
     self.caption.text = self.gallery.caption;
     
@@ -297,8 +294,6 @@
             }
             
         }];
-        
-        
 
     }
     else if(tableView == self.articlesTable){

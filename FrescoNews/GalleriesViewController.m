@@ -22,7 +22,28 @@
 #import "UIView+Additions.h"
 
 @interface GalleriesViewController()
+
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+
+/*
+** Index of cell that is currently playing a video
+*/
+
+@property (nonatomic, assign) NSIndexPath *playingIndex;
+
+
+/*
+** Check if the navigation is in the detail
+*/
+
+@property (nonatomic, assign) BOOL inDetail;
+
+/*
+** Check if the navigation is in the detail
+*/
+
+@property (nonatomic, assign) BOOL sustainDisptach;
+
 @end
 
 @implementation GalleriesViewController
@@ -51,6 +72,8 @@
     
     [super viewWillAppear:NO];
     
+    self.inDetail = NO;
+    
     self.playingIndex = nil;
     
 }
@@ -59,24 +82,7 @@
     
     [super viewWillDisappear:NO];
     
-    //If the player is actually playing
-    if(self.playingIndex != nil){
-        
-        GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:self.playingIndex];
-       
-        if(cell.galleryView.sharedPlayer != nil){
-        
-            //Stop the player from playing
-
-            self.playingIndex = nil;
-
-            [cell.galleryView.sharedPlayer pause];
-
-            [cell.galleryView.sharedLayer removeFromSuperlayer];
-           
-        }
-        
-    }
+    [self disableVideo];
 
 
 }
@@ -91,15 +97,47 @@
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
  
-        
         [((ProfileViewController *) self.parentViewController) performNecessaryFetch:nil];
-        
         
     }
     
     [self.refreshControl endRefreshing];
     
     [self.tableView reloadData];
+}
+
+- (void)disableVideo
+{
+    
+    self.playingIndex = nil;
+    
+    for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
+        //If the player is actually playing
+        if(cell.galleryView.sharedPlayer != nil){
+            [cell.galleryView.sharedPlayer pause];
+            cell.galleryView.sharedPlayer = nil;
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
+        }
+    }
+    
+}
+
+- (void)openDetailWithGallery:(FRSGallery *)gallery{
+    
+    [self disableVideo];
+    
+    self.inDetail = true;
+    
+    //Retreieve Notifications View Controller from storyboard
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    GalleryViewController *galleryViewController = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+    
+    [galleryViewController setGallery:gallery];
+    
+    
+    [self.navigationController pushViewController:galleryViewController animated:YES];
+
 }
 
 #pragma mark - UITableViewDataSource
@@ -153,14 +191,7 @@
     
     GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     
-    //Retreieve Notifications View Controller from storyboard
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    
-    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
-    
-    [galleryView setGallery:cell.gallery];
-    
-    [self.navigationController pushViewController:galleryView animated:YES];
+    [self openDetailWithGallery:cell.gallery];
 
 }
 
@@ -171,6 +202,8 @@
     /*
     ** Video Conditioning
     */
+    
+    if(self.inDetail) return;
     
     CGRect visibleRect = (CGRect){.origin = self.tableView.contentOffset, .size = self.tableView.bounds.size};
     
@@ -189,70 +222,59 @@
         //[cell.videoImage setAlpha:1];
         
         //If the video current playing isn't this one, or no video has played yet
-        if((self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil)){
+        if((self.playingIndex != visibleIndexPath || self.playingIndex == nil)){
             
-            cell.galleryView.sharedPlayer = nil;
-            
-            [cell.galleryView.sharedLayer removeFromSuperlayer];
+            [self disableVideo];
+
+            self.sustainDisptach = true;
             
             //Dispatch event to make sure the condition is true for more than one second
             double delayInSeconds = 1;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
-                //Code to be executed on the main queue after delay
-                if((self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil) && cell != nil){
+                //If the video current playing isn't this one, or no video has played yet
+                if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.sustainDisptach){
                     
-                    self.playingIndex = visibleIndexPath;
-                    
-                    [cell.galleryView.sharedLayer removeFromSuperlayer];
-                    
-                    cell.galleryView.sharedPlayer = nil;
-
-                    // TODO: Check for missing/corrupt media at firstPost.url
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
-                    
-                    [cell.galleryView.sharedPlayer setMuted:YES];
-
-                    cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
-                    
-                    cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                    
-                    cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
-                    
-                    [cell.galleryView.sharedPlayer play];
-                    
-                    [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                    //Check to make sure the current playing video isn't the same as the one about to play
+                    if(![((AVURLAsset *)cell.galleryView.sharedPlayer.currentItem.asset).URL isEqual:firstPost.video]
+                       || (AVURLAsset *)cell.galleryView.sharedPlayer == nil ){
+                        
+                        [self disableVideo];
+                        
+                        self.playingIndex = visibleIndexPath;
+                        
+                        // TODO: Check for missing/corrupt media at firstPost.url
+                        cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
+                        
+                        [cell.galleryView.sharedPlayer setMuted:NO];
+                        
+                        cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
+                        
+                        cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                        
+                        cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
+                        
+                        [cell.galleryView.sharedPlayer play];
+                        
+                        [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                        
+                    }
                     
                 }
-                
+            
             });
             
         }
-        
+
     }
     
     //If the cell doesn't have a video
     else{
         
-        if(self.playingIndex != nil){
+        self.sustainDisptach = false;
         
-            GalleryTableViewCell *playingCell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:self.playingIndex];
-
-            //If the player is actually playing
-            if(playingCell.galleryView.sharedPlayer != nil){
-                
-                //Stop the player from playing
-                
-                self.playingIndex = nil;
-                
-                [playingCell.galleryView.sharedPlayer pause];
-                
-                [playingCell.galleryView.sharedLayer removeFromSuperlayer];
-                
-            }
-            
-        }
+        [self disableVideo];
         
     }
     
@@ -263,14 +285,7 @@
 
 - (void)readMoreTapped:(FRSGallery *)gallery{
 
-    //Retreieve Notifications View Controller from storyboard
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    
-    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
-    
-    [galleryView setGallery:gallery];
-    
-    [self.navigationController pushViewController:galleryView animated:YES];
+    [self openDetailWithGallery:gallery];
 
 }
 

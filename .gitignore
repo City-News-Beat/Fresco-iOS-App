@@ -32,3 +32,5 @@ Podfile.lock
 Podfile.lock
 
 *.lock
+
+*.pbxproj

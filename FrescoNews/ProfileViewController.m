@@ -16,55 +16,61 @@
 #import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface ProfileViewController ()
+
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+@property (strong, nonatomic) UILabel *noContentLabel;
+@property (nonatomic, assign) BOOL loginChecked;
+
+@property (nonatomic, assign) BOOL disableEndlessScroll;
+
 @end
 
 @implementation ProfileViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup
-{
-
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setFrescoNavigationBar];
+    
 
+    if ([FRSDataManager sharedManager].currentUser == nil) {
+        [self navigateToFirstRun];
+    }
+    else {
+        [self performNecessaryFetch:nil];
+        [super viewDidLoad];
+    }
+
+ 
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
-        // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
         
-        [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num WithResponseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
-                    
-                    [self.galleriesViewController.tableView reloadData];
+        if(self.disableEndlessScroll){
+        
+            // append data to data source, insert new cells at the end of table view
+            NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+            
+            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num WithResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    if ([responseObject count]) {
+                        
+                        [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                        
+                        [self.galleriesViewController.tableView reloadData];
+                        
+                        self.noContentLabel.hidden = YES;
 
+                    }
+                    else self.disableEndlessScroll = YES;
                 }
-            }
-            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
 
-        }];
+            }];
+            
+        }
+        
+        [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+
 
     }];
     
@@ -78,12 +84,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (![[FRSDataManager sharedManager] login]) {
+    if ([FRSDataManager sharedManager].currentUser == nil) {
         [self navigateToFirstRun];
     }
     else {
         [super viewWillAppear:animated];
-        [self performNecessaryFetch:nil];
     }
 }
 
@@ -93,20 +98,35 @@
 {
     [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 WithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
-            if ([responseObject count]) {
+            
+            if(responseObject == nil || [responseObject count] == 0){
+    
+                self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 70, 150, 100)];
+                
+                self.noContentLabel.text = @"Upload content to see it appear here";
+                
+                self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                
+                [self.noContentLabel sizeToFit];
+                
+                self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
+                
+                [self.view addSubview:self.noContentLabel];
+            
+            }
+            else{
+            
                 self.galleries = responseObject;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController.tableView reloadData];
+            
+            
             }
+            
         }
-        [self reloadData];
     }];
 }
 
-- (void)reloadData
-{
-    
-}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
