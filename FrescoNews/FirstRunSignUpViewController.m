@@ -5,9 +5,13 @@
 //  Created by Zachary Mayberry on 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
+
+@import FBSDKLoginKit;
+@import FBSDKCoreKit;
 
 @interface FirstRunSignUpViewController ()
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
@@ -38,6 +42,8 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    [self setFacebookInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -98,24 +104,26 @@
 - (void)setFacebookInfo
 {
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        self.facebookLabel.hidden = YES;
-        self.facebookIcon.hidden = YES;
+       // self.firstName
+//        self.facebookLabel.hidden = YES;
+//        self.facebookIcon.hidden = YES;
         return;
     }
     
+    NSDictionary *params = @{@"fields": @"name,picture"};
+    
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
-                                                                   parameters:nil
+                                                                   parameters:params
                                                                    HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,
                                           NSError *error) {
-        NSLog(@"%@", error);
         if (!error) {
-            self.facebookLabel.text = [result objectForKey:@"name"];
+           // self.facebookLabel.text = [result objectForKey:@"name"];
         }
         else {
-            self.facebookLabel.hidden = YES;
-            self.facebookIcon.hidden = YES;
+//            self.facebookLabel.hidden = YES;
+//            self.facebookIcon.hidden = YES;
         }
     }];
 }
