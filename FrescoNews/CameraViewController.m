@@ -85,7 +85,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [UIView setAnimationsEnabled:NO];
     self.photoButton.selected = YES; // TODO: Persist this and other camera state
 
     // Create the AVCaptureSession
@@ -228,11 +227,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return self.isDeviceAuthorized ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] setVideoOrientation:(AVCaptureVideoOrientation)toInterfaceOrientation];
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == CapturingStillImageContext) {
@@ -251,6 +245,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    // Suppress UI animation on interface rotation
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        // You could make a call to update constraints based on the new orientation here.
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [CATransaction commit];
+        [[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] setVideoOrientation:(AVCaptureVideoOrientation)self.interfaceOrientation];
+    }];
 }
 
 #pragma mark - Actions
