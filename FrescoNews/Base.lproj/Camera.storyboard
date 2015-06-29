@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -501,6 +501,16 @@
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w03-fr-wZa">
+                                                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                    <state key="normal" title="Cancel">
+                                                        <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="cancelButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="fDH-RK-8MP"/>
+                                                    </connections>
+                                                </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K5X-1J-x5n">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <state key="normal" title="Or go directly to &quot;Choose Media&quot;">
@@ -527,13 +537,6 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="overlay" translatesAutoresizingMaskIntoConstraints="NO" id="1tA-CV-TR2">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w03-fr-wZa">
-                                                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                    <state key="normal" title="Cancel">
-                                                        <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="w03-fr-wZa" secondAttribute="trailing" constant="8" id="4ap-Nu-YzK"/>
@@ -554,54 +557,54 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
+                                                    <exclude reference="w03-fr-wZa"/>
                                                     <exclude reference="K5X-1J-x5n"/>
                                                     <exclude reference="FTA-SU-bC0"/>
                                                     <exclude reference="e9h-oM-KzP"/>
                                                     <exclude reference="1tA-CV-TR2"/>
-                                                    <exclude reference="w03-fr-wZa"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <exclude reference="98c-0F-CHy"/>
+                                                    <exclude reference="WGN-np-iq3"/>
+                                                    <exclude reference="x9g-gQ-2tp"/>
+                                                    <exclude reference="G4L-ma-Lxp"/>
+                                                    <exclude reference="M8w-8D-c7L"/>
+                                                    <exclude reference="uew-Zz-DhF"/>
+                                                    <exclude reference="Zp8-5G-sdw"/>
+                                                    <exclude reference="jmW-ux-Umc"/>
+                                                    <exclude reference="sMu-bu-fV6"/>
                                                     <exclude reference="4ap-Nu-YzK"/>
                                                     <exclude reference="FX0-lU-dMe"/>
                                                     <exclude reference="qVO-y0-HJh"/>
                                                     <exclude reference="OBD-W9-pvO"/>
                                                     <exclude reference="d5D-7B-Ekh"/>
                                                     <exclude reference="esK-o4-gig"/>
-                                                    <exclude reference="98c-0F-CHy"/>
-                                                    <exclude reference="WGN-np-iq3"/>
-                                                    <exclude reference="x9g-gQ-2tp"/>
-                                                    <exclude reference="Zp8-5G-sdw"/>
-                                                    <exclude reference="jmW-ux-Umc"/>
-                                                    <exclude reference="sMu-bu-fV6"/>
-                                                    <exclude reference="G4L-ma-Lxp"/>
-                                                    <exclude reference="M8w-8D-c7L"/>
-                                                    <exclude reference="uew-Zz-DhF"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
+                                                    <include reference="w03-fr-wZa"/>
                                                     <include reference="K5X-1J-x5n"/>
                                                     <include reference="FTA-SU-bC0"/>
                                                     <include reference="e9h-oM-KzP"/>
                                                     <include reference="1tA-CV-TR2"/>
-                                                    <include reference="w03-fr-wZa"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <include reference="98c-0F-CHy"/>
+                                                    <include reference="WGN-np-iq3"/>
+                                                    <include reference="x9g-gQ-2tp"/>
+                                                    <include reference="G4L-ma-Lxp"/>
+                                                    <include reference="M8w-8D-c7L"/>
+                                                    <include reference="uew-Zz-DhF"/>
+                                                    <include reference="Zp8-5G-sdw"/>
+                                                    <include reference="jmW-ux-Umc"/>
+                                                    <include reference="sMu-bu-fV6"/>
                                                     <include reference="4ap-Nu-YzK"/>
                                                     <include reference="FX0-lU-dMe"/>
                                                     <include reference="qVO-y0-HJh"/>
                                                     <include reference="OBD-W9-pvO"/>
                                                     <include reference="d5D-7B-Ekh"/>
                                                     <include reference="esK-o4-gig"/>
-                                                    <include reference="98c-0F-CHy"/>
-                                                    <include reference="WGN-np-iq3"/>
-                                                    <include reference="x9g-gQ-2tp"/>
-                                                    <include reference="Zp8-5G-sdw"/>
-                                                    <include reference="jmW-ux-Umc"/>
-                                                    <include reference="sMu-bu-fV6"/>
-                                                    <include reference="G4L-ma-Lxp"/>
-                                                    <include reference="M8w-8D-c7L"/>
-                                                    <include reference="uew-Zz-DhF"/>
                                                 </mask>
                                             </variation>
                                         </view>
@@ -756,12 +759,11 @@
                         <outlet property="assignmentLabel" destination="8mh-3t-wzF" id="QZs-oi-k9q"/>
                         <outlet property="broadcastLabel" destination="gho-P9-ZSg" id="wDT-db-8B8"/>
                         <outlet property="broadcastStatus" destination="vtC-Th-Apc" id="TLl-05-jqD"/>
-                        <outlet property="cancelButton" destination="IXz-7M-G3x" id="9lG-Cw-san"/>
+                        <outlet property="cancelButton" destination="w03-fr-wZa" id="osX-rb-cCC"/>
                         <outlet property="controlViewWidthConstraint" destination="bmI-Zu-5lR" id="aDk-eA-SDc"/>
                         <outlet property="controlsView" destination="U4D-IQ-UYa" id="wVa-7w-OZA"/>
                         <outlet property="doneButton" destination="U0E-i7-DeO" id="1nZ-0Y-xHZ"/>
                         <outlet property="doneButtonBackground" destination="95f-lc-6mD" id="uE1-wB-2wT"/>
-                        <outlet property="flashButton" destination="him-yf-QJK" id="9Tp-lf-4ga"/>
                         <outlet property="photoButton" destination="FX7-nn-rD1" id="36P-OZ-9OW"/>
                         <outlet property="previewView" destination="A5I-FQ-wzG" id="sMD-jr-qnj"/>
                         <outlet property="videoButton" destination="K9z-5e-5vf" id="QhG-ap-2XL"/>
