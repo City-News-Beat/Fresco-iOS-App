@@ -2931,7 +2931,7 @@
                                 <rect key="frame" x="0.0" y="391" width="375" height="135.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Om-xn-gww">
-                                        <rect key="frame" x="17" y="12" width="47" height="20.5"/>
+                                        <rect key="frame" x="17" y="12" width="39.5" height="20.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="jYx-Sq-33a"/>
                                         </constraints>
@@ -2944,14 +2944,8 @@
                                             </mask>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pa6-Y2-X73">
-                                        <rect key="frame" x="17" y="57.5" width="73" height="20.5"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Ro-ba-ich" userLabel="Confirm Password Field">
-                                        <rect key="frame" x="170" y="105" width="197" height="18"/>
+                                        <rect key="frame" x="162.5" y="105" width="204.5" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -2965,7 +2959,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MpB-fB-YXj">
-                                        <rect key="frame" x="17" y="103" width="145" height="20.5"/>
+                                        <rect key="frame" x="17" y="103" width="137.5" height="20.5"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -2978,19 +2972,25 @@
                                         </constraints>
                                     </view>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vBt-ig-Pax" userLabel="Email Field">
-                                        <rect key="frame" x="170" y="14" width="197" height="18"/>
+                                        <rect key="frame" x="162.5" y="14" width="204.5" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xJx-Uq-74r" userLabel="Password Field">
-                                        <rect key="frame" x="170" y="58.5" width="197" height="18"/>
+                                        <rect key="frame" x="162.5" y="58.5" width="204.5" height="18"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pa6-Y2-X73">
+                                        <rect key="frame" x="17" y="57" width="78.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -3013,15 +3013,15 @@
                                     <constraint firstItem="0Om-xn-gww" firstAttribute="baseline" secondItem="vBt-ig-Pax" secondAttribute="baseline" id="J8M-Jt-tdC"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="height" secondItem="xJx-Uq-74r" secondAttribute="height" id="JeK-fP-qFh"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="trailing" constant="106" id="Jzr-Ch-Yfh"/>
-                                    <constraint firstItem="xJx-Uq-74r" firstAttribute="leading" secondItem="Pa6-Y2-X73" secondAttribute="trailing" constant="80" id="NQv-oP-SiN"/>
+                                    <constraint firstItem="xJx-Uq-74r" firstAttribute="leading" secondItem="Pa6-Y2-X73" secondAttribute="trailing" constant="67" id="NQv-oP-SiN"/>
                                     <constraint firstAttribute="trailing" secondItem="vBt-ig-Pax" secondAttribute="trailing" constant="8" id="NRT-Dq-Bf6"/>
-                                    <constraint firstItem="MpB-fB-YXj" firstAttribute="width" secondItem="Pa6-Y2-X73" secondAttribute="width" constant="72" id="Qm6-0w-VLX"/>
+                                    <constraint firstItem="MpB-fB-YXj" firstAttribute="width" secondItem="Pa6-Y2-X73" secondAttribute="width" constant="59" id="Qm6-0w-VLX"/>
                                     <constraint firstItem="xJx-Uq-74r" firstAttribute="top" secondItem="ZIf-HL-jUI" secondAttribute="bottom" constant="10" id="RAa-9N-0LY"/>
                                     <constraint firstItem="Sqx-Jg-j83" firstAttribute="leading" secondItem="MpB-fB-YXj" secondAttribute="leading" id="T9F-b0-mU2"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="baseline" secondItem="0Om-xn-gww" secondAttribute="baseline" constant="-1" id="Tfw-xh-9Y6"/>
                                     <constraint firstItem="Pa6-Y2-X73" firstAttribute="top" secondItem="ZIf-HL-jUI" secondAttribute="bottom" constant="12" id="VhU-Mg-Cfw"/>
                                     <constraint firstItem="Sqx-Jg-j83" firstAttribute="leading" secondItem="Pa6-Y2-X73" secondAttribute="leading" id="WSu-xe-Jv4"/>
-                                    <constraint firstItem="Pa6-Y2-X73" firstAttribute="width" secondItem="0Om-xn-gww" secondAttribute="width" constant="26" id="YdY-Nl-8Lt"/>
+                                    <constraint firstItem="Pa6-Y2-X73" firstAttribute="width" secondItem="0Om-xn-gww" secondAttribute="width" constant="39" id="YdY-Nl-8Lt"/>
                                     <constraint firstAttribute="trailing" secondItem="xJx-Uq-74r" secondAttribute="trailing" constant="8" id="Z6v-lo-hjT"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0qC-R2-kGU" secondAttribute="leading" constant="98" id="cAg-pR-PVH"/>
                                     <constraint firstItem="vBt-ig-Pax" firstAttribute="leading" secondItem="0Om-xn-gww" secondAttribute="trailing" constant="8" id="cOJ-rl-IE5"/>
@@ -4114,7 +4114,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aKt-Le-1wQ"/>
-        <segue reference="BrQ-Qn-DKp"/>
+        <segue reference="6TG-Ef-MS9"/>
         <segue reference="qw6-i4-1D2"/>
     </inferredMetricsTieBreakers>
 </document>
