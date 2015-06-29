@@ -22,6 +22,11 @@
 @property (weak, nonatomic) FRSGallery *gallery;
 
 /*
+**
+*/
+- (void)setGallery:(FRSGallery *)gallery isInList:(BOOL)inList;
+
+/*
 ** Shared Video Player of Controller
 */
 
