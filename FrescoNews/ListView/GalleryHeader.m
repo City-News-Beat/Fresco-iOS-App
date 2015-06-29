@@ -18,6 +18,7 @@
 static NSString * const kCellIdentifier = @"GalleryHeader";
 
 @implementation GalleryHeader
+
 + (NSString *)identifier
 {
     return kCellIdentifier;
@@ -25,9 +26,14 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 
 - (void)setGallery:(FRSGallery *)gallery
 {
-    FRSPost *firstPost = (FRSPost *)[gallery.posts firstObject];
-    self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", firstPost.address,
-                                                                        [MTLModel relativeDateStringFromDate:gallery.createTime]];
-    self.labelByLine.text = firstPost.byline;
+    FRSPost *post = (FRSPost *)[gallery.posts firstObject];
+    self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
+
+    if (post.address.length) {
+        self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.labelTimeAndPlace.text];
+    }
+
+    self.labelByLine.text = post.byline;
 }
+
 @end
