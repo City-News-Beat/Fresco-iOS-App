@@ -27,6 +27,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 @interface FRSDataManager : AFHTTPSessionManager
 
 @property (nonatomic, strong) FRSUser *currentUser;
+@property (nonatomic, strong) NSString *frescoAPIToken;
 
 @property (nonatomic, assign) BOOL updatedNotifications;
 

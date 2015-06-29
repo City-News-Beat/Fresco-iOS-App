@@ -67,6 +67,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         /* How to debug background location updates, in the simulator
            1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
            2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
+           2b. Better: Edit Scheme > Run > Options > Core Location > Default Location > Set to "None"
            3. Simulate location via iOS Simulator > Debug > Location > Freeway Drive
            4. Unpause
            5. Terminate the app

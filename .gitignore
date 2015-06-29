@@ -22,15 +22,3 @@ DerivedData
 *.ipa
 *.xcuserstate
 Pods/
-
-*.lock
-
-*.lock
-
-Podfile.lock
-
-Podfile.lock
-
-*.lock
-
-*.pbxproj

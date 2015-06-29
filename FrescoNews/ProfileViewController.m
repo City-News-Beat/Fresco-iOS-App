@@ -84,7 +84,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if ([FRSDataManager sharedManager].currentUser == nil) {
+    if (![FRSDataManager sharedManager].currentUser) {
         [self navigateToFirstRun];
     }
     else {
