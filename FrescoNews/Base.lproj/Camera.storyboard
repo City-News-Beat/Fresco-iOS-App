@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="44" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A5I-FQ-wzG" customClass="CameraPreviewView">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A5I-FQ-wzG" customClass="CameraPreviewView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IXz-7M-G3x" userLabel="Cancel Button">
@@ -723,6 +723,9 @@
                             <constraint firstAttribute="trailing" secondItem="A5I-FQ-wzG" secondAttribute="trailing" id="wiU-uD-Yd8"/>
                         </constraints>
                         <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="A5I-FQ-wzG"/>
+                            </mask>
                             <mask key="constraints">
                                 <exclude reference="AOQ-PP-drW"/>
                                 <exclude reference="GcI-rt-9aR"/>
@@ -735,6 +738,9 @@
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
+                            <mask key="subviews">
+                                <include reference="A5I-FQ-wzG"/>
+                            </mask>
                             <mask key="constraints">
                                 <include reference="GcI-rt-9aR"/>
                                 <include reference="UqQ-rH-U6T"/>
@@ -743,6 +749,9 @@
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="A5I-FQ-wzG"/>
+                            </mask>
                             <mask key="constraints">
                                 <include reference="AOQ-PP-drW"/>
                                 <include reference="hTs-v0-3wA"/>
