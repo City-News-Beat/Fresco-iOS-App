@@ -27,7 +27,7 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 - (void)setGallery:(FRSGallery *)gallery
 {
     _gallery = gallery;
-    self.galleryView.gallery = gallery;
+    [self.galleryView setGallery:gallery isInList:YES];
 }
 
 #pragma mark - UIButtons Actions
@@ -47,5 +47,6 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 - (void)prepareForReuse
 {
     self.gallery = nil;
+    self.galleryView.pageControl.hidden = NO;
 }
 @end

@@ -11,5 +11,5 @@
 
 @interface GalleryHeader : UITableViewCell
 + (NSString *)identifier;
-- (void)setGallery:(FRSGallery *)post;
+- (void)setGallery:(FRSGallery *)gallery;
 @end
