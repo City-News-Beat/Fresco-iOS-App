@@ -131,6 +131,65 @@
     
 }
 
++ (NSString *)futureDateStringFromDate:(NSDate *)date
+{
+    
+    double ti = [date timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970];
+    
+    if(ti < 60){
+        return @"just now";
+    }
+    else if(ti < 3600){
+        
+        int diff = round(ti / 60);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"in %d minute", diff] : [NSString stringWithFormat:@"in %d minutes", diff];
+        
+    }
+    else if(ti<86400){
+        
+        int diff = round(ti / 60 / 60);
+        
+        return diff == 1 ?[NSString stringWithFormat:@"in %d hour", diff] : [NSString stringWithFormat:@"in %d hours", diff];
+        
+    }
+    else if(ti < 604800){
+        
+        int diff = round(ti / 60 / 60 / 24);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"in %d day", diff] : [NSString stringWithFormat:@"in %d days", diff];
+        
+    }
+    else if(ti < 2629740){
+        
+        int diff = round(ti / 60 / 60 / 24 / 4);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"in %d weeks", diff] : [NSString stringWithFormat:@"in %d weeks", diff];
+        
+        
+    }
+    else if(ti < 31556900){
+        
+        int diff = round(ti / 60 / 60 / 24 / 4 / 12);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"in %d month", diff] : [NSString stringWithFormat:@"in %d months", diff];
+        
+        
+    }
+    else if(ti < 3155690000){
+        
+        int diff = round(ti / 60 / 60 / 24 / 30 / 52);
+        
+        return diff == 1 ? [NSString stringWithFormat:@"%d year ago", diff] : [NSString stringWithFormat:@"%d years ago", diff];
+        
+    }
+    else
+        return @"Never";
+    
+    return 0;
+    
+}
+
 #pragma mark - Image CDN
 
 // makes a URL something like http://res.cloudinary.com/dnd5ngsax/image/fetch/w_375,h_375,c_faces/

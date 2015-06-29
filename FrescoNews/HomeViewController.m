@@ -17,34 +17,14 @@
 
 @interface HomeViewController ()
 
-//@property (strong, nonatomic) NSArray *galleries;
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+
+@property (nonatomic, assign) BOOL disableEndlessScroll;
 
 @end
 
 @implementation HomeViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
-
-- (void)setup
-{
-
-}
 
 - (void)viewDidLoad
 {
@@ -52,27 +32,35 @@
     [self setFrescoNavigationBar];
     [self performNecessaryFetch:nil];
     
+    self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
     
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         
-        // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
-        
-        //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                if ([responseObject count]) {
-                    
-                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
-                    
-                    [self.galleriesViewController.tableView reloadData];
-                    
-                    [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
-                    
+        if(self.disableEndlessScroll){
+            
+            // append data to data source, insert new cells at the end of table view
+            NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
+            
+            //Make request for more posts, append to galleries array
+            [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    if ([responseObject count]) {
+                        
+                        [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                        
+                        [self.galleriesViewController.tableView reloadData];
+                        
+                    }
+                    else {
+                     self.disableEndlessScroll = true;
+                    }
                 }
-            }
-        }];
+            }];
+            
+            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+            
+        }
         
     }];
     
@@ -83,10 +71,6 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 }
 
 #pragma mark - Data Loading

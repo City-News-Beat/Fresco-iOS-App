@@ -14,6 +14,12 @@
 
 @interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 
+/*
+** Index of cell that is currently playing a video
+*/
+
+@property (nonatomic) NSIndexPath *playingIndex;
+
 @end
 
 @implementation GalleryView
@@ -47,7 +53,8 @@
     self.pageControl.numberOfPages = 0;
 }
 
-- (void)setGallery:(FRSGallery *)gallery
+
+- (void)setGallery:(FRSGallery *)gallery isInList:(BOOL)inList
 {
     _gallery = gallery;
     
@@ -58,9 +65,79 @@
     else
         self.pageControl.numberOfPages = [self.gallery.posts count];
     
-    [self.collectionPosts reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionPosts reloadData];
+        [self.collectionPosts layoutIfNeeded];
+    });
+    
+    if(!inList){
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if(self.collectionPosts.visibleCells.count){
+        
+                if(self.collectionPosts.visibleCells[0] != nil){
+                    
+                    PostCollectionViewCell *postCell = (PostCollectionViewCell *) self.collectionPosts.visibleCells[0];
+                
+                    //If the cell has a video
+                    if([postCell.post isVideo]){
+                
+                        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+                
+                    }
+                
+                    //If the cell doesn't have a video
+                    else{
+                
+                        //If the Player is actually playing
+                        if([self sharedPlayer] != nil){
+                
+                            //Stop the player
+                
+                            [[self sharedPlayer] pause];
+                            
+                            [[self sharedLayer] removeFromSuperlayer];
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
 
+        });
+            
+    }
+    
     [self setAspectRatio];
+    
+}
+
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
+{
+    
+    [[self sharedPlayer] pause];
+    
+    [[self sharedLayer] removeFromSuperlayer];
+    
+    self.sharedPlayer = [AVPlayer playerWithURL:url];
+    
+    self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    
+    self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
+    
+    self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
+    
+    self.sharedLayer.frame = postCell.imageView.bounds;
+    
+    [self.sharedPlayer play];
+    
+    [self.sharedPlayer setMuted:NO];
+
+    [postCell.imageView.layer addSublayer:self.sharedLayer];
+    
 }
 
 
@@ -99,8 +176,7 @@
 
 #pragma mark - UICollectionViewDataSource
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-     numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.gallery.posts count];
 }
@@ -115,12 +191,22 @@
     return cell;
 }
 
-
 #pragma mark - UICollectionViewDelegate
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+
+    PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    //If the cell has a video
+    if(cell.post.isVideo){
+        
+        self.sharedPlayer.rate > 0 ? [self.sharedPlayer pause] : [self.sharedPlayer play];
+
+    }
+
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return collectionView.bounds.size;
 }
@@ -155,28 +241,8 @@
     //If the cell has a video
     if([postCell.post isVideo]){
     
-        [[self sharedPlayer] pause];
-        
-        [[self sharedLayer] removeFromSuperlayer];
-        
-        _sharedPlayer = [AVPlayer playerWithURL:postCell.post.video];
-        
-        self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-        
-        self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
-        
-        self.sharedLayer.frame = postCell.imageView.bounds;
-        
-        self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
-        
-        [_sharedPlayer play];
-        
-        [_sharedPlayer setMuted:NO];
-        
-        [postCell.imageView.layer addSublayer:self.sharedLayer];
-        
+        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
     }
-    
     //If the cell doesn't have a video
     else{
         

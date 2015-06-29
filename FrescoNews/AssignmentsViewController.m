@@ -198,7 +198,7 @@
     
     self.assignmentDescription.text = self.currentAssignment.caption;
     
-    self.assignmentTimeElapsed.text = [MTLModel relativeDateStringFromDate:self.currentAssignment.timeCreated];
+    self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
     
     [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
@@ -455,7 +455,7 @@
                     }
                     
                     // Zooming map after delay for effect
-                    MKCoordinateSpan span = MKCoordinateSpanMake(0.2f, 0.2f);
+                    MKCoordinateSpan span = MKCoordinateSpanMake(0.1f, 0.1f);
                     
                     
                     //Get Average location of all assignments and current location
