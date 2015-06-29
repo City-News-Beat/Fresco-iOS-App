@@ -115,10 +115,15 @@
     self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.galleryView.gallery = self.gallery;
     self.caption.text = self.gallery.caption;
-    self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", ((FRSPost *)[self.gallery.posts firstObject]).address,
-                                                                   [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
+    
+    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
+    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
 
-    self.byline.text = ((FRSPost *)[self.gallery.posts firstObject]).byline;
+    if (post.address.length) {
+        self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
+    }
+
+    self.byline.text = post.byline;
 
     if (self.gallery.articles.count == 0) {
         self.articlesView.hidden = YES;
