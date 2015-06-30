@@ -74,6 +74,7 @@
 }
 
 - (IBAction)clickedNext:(id)sender {
+
     if ([self.emailField.text length] && [self.passwordField.text length]) {
         
         // save this to allow backing to the VC

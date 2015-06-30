@@ -13,7 +13,7 @@
 #import "FRSDataManager.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
-@interface ProfileSettingsViewController () <MKMapViewDelegate>
+@interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 
@@ -29,9 +29,23 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (strong, nonatomic) UIImage *selectedImage;
 @end
 
 @implementation ProfileSettingsViewController
+
+- (void)viewDidLoad{
+
+    [super viewDidLoad];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.profileImageView setUserInteractionEnabled:YES];
+    [self.profileImageView addGestureRecognizer:singleTap];
+
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -50,21 +64,15 @@
     // update the slider label
     [self sliderValueChanged:self.radiusStepper];
 
-    if (self.frsUser.profileImageUrl) {
+    if (self.frsUser.cdnProfileImageURL) {
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
-                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                  self.profileImageView.image = image;
-                                                  self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-                                                  self.profileImageView.clipsToBounds = YES;
-                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                  // Do something...
-                                              }];
+                                              success:nil failure:nil];
     }
-    else {
-        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-        self.profileImageView.clipsToBounds = YES;
-    }
+    
+    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+    self.profileImageView.clipsToBounds = YES;
+    
 }
 
 - (void)updateLinkingStatus {
@@ -174,8 +182,14 @@
     if ([self.textfieldEmail.text length])
         [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
     
+    NSData *imageData = nil;
     
-    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+    if(self.selectedImage){
+        
+        imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
+    }
+    
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
         NSString *title;
         NSString *message;
         if (error) {
@@ -288,6 +302,7 @@
 }
 
 #pragma mark - MKMapViewDelegate
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
@@ -296,6 +311,29 @@
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
     return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
+}
+
+
+#pragma mark - UIImagePickerController Delegate
+
+-(void)tapDetected{
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+    
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    // Code here to work with media
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 @end

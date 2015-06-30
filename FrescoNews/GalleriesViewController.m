@@ -115,6 +115,7 @@
         //If the player is actually playing
         if(cell.galleryView.sharedPlayer != nil){
             [cell.galleryView.sharedPlayer pause];
+            cell.galleryView.sharedPlayer = nil;
             [cell.galleryView.sharedLayer removeFromSuperlayer];
         }
     }

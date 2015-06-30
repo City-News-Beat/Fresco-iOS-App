@@ -3329,6 +3329,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="addPhotoImageView" destination="qoS-Ll-17i" id="79R-0b-qGv"/>
                         <outlet property="bottomVerticalSpaceConstraint" destination="hH7-NZ-dw6" id="qND-xD-ZOc"/>
                         <outlet property="fieldsWrapper" destination="roU-yt-LLK" id="GbE-YX-4F0"/>
                         <outlet property="textfieldFirstName" destination="lha-BA-OBE" id="BUF-QU-gDi"/>
@@ -3979,8 +3980,8 @@
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="BrQ-Qn-DKp"/>
         <segue reference="aKt-Le-1wQ"/>
-        <segue reference="6TG-Ef-MS9"/>
         <segue reference="qw6-i4-1D2"/>
     </inferredMetricsTieBreakers>
 </document>

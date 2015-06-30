@@ -421,7 +421,7 @@
        }];
 }
 
-- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
     
@@ -446,19 +446,30 @@
         }];
     }
     else {*/
-        [self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
-           success:^(NSURLSessionDataTask *task, id responseObject) {
-               NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-               FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-                              
-               // synchronize the user
-               [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
-                   if (responseBlock) responseBlock(user, nil);
-               }];
-           } failure:^(NSURLSessionDataTask *task, NSError *error) {
-               NSLog(@"Error creating new user %@", error);
-               if (responseBlock) responseBlock(nil, error);
-           }];
+    
+    [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+        if(imageData != nil){
+        
+            [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+            
+        }
+        
+        } success:^(NSURLSessionDataTask *task, id responseObject) {
+           
+           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+            // synchronize the user
+            [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
+                if (responseBlock) responseBlock(user, nil);
+            }];
+           
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error creating new user %@", error);
+           if (responseBlock) responseBlock(nil, error);
+       
+       }];
+    
    // }
 }
 
