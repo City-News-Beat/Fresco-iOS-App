@@ -5,25 +5,25 @@
 //  Created by Zachary Mayberry on 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
-
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
+@import FBSDKLoginKit;
+@import FBSDKCoreKit;
 
 @interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
-
 @property (weak, nonatomic) IBOutlet UIImageView *addPhotoImageView;
-
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirstName;
-
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLastName;
-
 @property (strong, nonatomic) UIImage *selectedImage;
+@property (nonatomic) NSURL *socialImageURL;
 
 @end
 
@@ -37,6 +37,10 @@
     singleTap.numberOfTapsRequired = 1;
     [self.addPhotoImageView setUserInteractionEnabled:YES];
     [self.addPhotoImageView addGestureRecognizer:singleTap];
+
+    // this creates the circular mask around the image
+    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+    self.addPhotoImageView.clipsToBounds = YES;
 
 }
 
@@ -52,9 +56,6 @@
     
 }
 
-
-
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -68,6 +69,9 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    [self setTwitterInfo];
+    [self setFacebookInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -112,7 +116,11 @@
     
     // both fields must be populated
     if (([self.firstName length] && [self.lastName length])) {
-        NSDictionary *updateParams = @{ @"firstname" : self.firstName, @"lastname" : self.lastName };
+        
+        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
+        
+        if (self.socialImageURL)
+            [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
         
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
             if (!error) {
@@ -130,6 +138,92 @@
                                               otherButtonTitles:nil, nil];
         [alert show];
     }
+}
+
+#pragma mark - Social data
+
+- (void)setTwitterInfo
+{
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        return;
+    }
+
+    NSString *twitterUserID = [PFTwitterUtils twitter].userId;
+    NSString *twitterScreenName = [PFTwitterUtils twitter].screenName;
+
+    NSString *urlString = @"https://api.twitter.com/1.1/users/show.json?";
+    if (twitterUserID.length > 0) {
+        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"user_id=%@", twitterUserID]];
+    }
+    else if (twitterScreenName.length > 0) {
+        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"screen_name=%@", twitterScreenName]];
+    }
+    else {
+        // Something really went wrong
+        return;
+    }
+
+    NSURL *verify = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
+    [[PFTwitterUtils twitter] signRequest:request];
+
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (!connectionError) {
+            NSError *error = nil;
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            NSString *profileImageURL = result[@"profile_image_url_https"];
+            if (profileImageURL.length > 0) {
+                self.socialImageURL = [NSURL URLWithString:profileImageURL];
+                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
+            }
+
+            NSString *names = result[@"name"];
+            // Poor man's first name/last name parsing
+            if (names.length > 0) {
+                NSMutableArray *array = [NSMutableArray arrayWithArray:[names componentsSeparatedByString:@" "]];
+                if (array.count > 1) {
+                    self.lastName = [array lastObject];
+                    self.textfieldLastName.text = self.lastName;
+
+                    [array removeLastObject];
+                    self.firstName = [array componentsJoinedByString:@" "];
+                    self.textfieldFirstName.text = self.firstName;
+                }
+            }
+        }
+    }];
+}
+
+- (void)setFacebookInfo
+{
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+        return;
+    
+   NSDictionary *params = @{@"fields": @"first_name,last_name,id"};
+    
+
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
+                                                                   parameters:params
+                                                                   HTTPMethod:@"GET"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                          id result,
+                                          NSError *error) {
+        if (!error) {
+            self.firstName = [result objectForKey:@"first_name"];
+            self.lastName = [result objectForKey:@"last_name"];
+
+            self.textfieldFirstName.text = self.firstName;
+            self.textfieldLastName.text = self.lastName;
+            
+            // grab the image url
+            NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", [VariableStore sharedInstance].cdnFacebookBaseURL, [result valueForKeyPath:@"id"]];
+            if (urlString) {
+                self.socialImageURL = [NSURL URLWithString:urlString];
+                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
+            }
+        }
+    }];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
