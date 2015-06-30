@@ -723,17 +723,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
-    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-        // TOOO: Add location metadata to in-app recorded video
+    if ([asset valueForProperty:ALAssetPropertyLocation]) {
         return YES;
     }
-    else if (![asset valueForProperty:ALAssetPropertyLocation]) {
-        return NO;
-    }
 
-    return YES;
+    return NO;
 #endif
-
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
