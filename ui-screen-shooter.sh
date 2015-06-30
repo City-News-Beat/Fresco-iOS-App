@@ -80,7 +80,7 @@ function _check_destination {
   branchname="$(git rev-parse --abbrev-ref HEAD)"
 
   if [ -z "$destination" ]; then
-    destination="$HOME/Dropbox/Monorail/Fresco/automation/$branchname-$gitid"
+    destination="$HOME/Dropbox/Monorail/Fresco/automation/$branchname-$gitid-$ui_script"
   fi
   if [ -d "$destination" ]; then
     echo "Destination directory \"$destination\" already exists! Aborting."
