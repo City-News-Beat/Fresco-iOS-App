@@ -326,8 +326,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording]) {
-
             [self setLockInterfaceRotation:YES];
+
+            AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+            item.keySpace = AVMetadataKeySpaceCommon;
+            item.key = AVMetadataCommonKeyLocation;
+            item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", self.location.coordinate.latitude, self.location.coordinate.longitude];
+            self.movieFileOutput.metadata = @[item];
 
             if ([[UIDevice currentDevice] isMultitaskingSupported]) {
                 // Setup background task. This is needed because the captureOutput:didFinishRecordingToOutputFileAtURL: callback is not received until AVCam returns to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error: after the recorded file has been saved.
@@ -718,17 +723,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
-    if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-        // TOOO: Add location metadata to in-app recorded video
+    if ([asset valueForProperty:ALAssetPropertyLocation]) {
         return YES;
     }
-    else if (![asset valueForProperty:ALAssetPropertyLocation]) {
-        return NO;
-    }
 
-    return YES;
+    return NO;
 #endif
-
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
