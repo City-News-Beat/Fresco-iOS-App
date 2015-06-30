@@ -42,7 +42,7 @@
 ** Check if the navigation is in the detail
 */
 
-@property (nonatomic, assign) BOOL sustainDisptach;
+@property (nonatomic, assign) NSIndexPath *dispatchIndex;
 
 @end
 
@@ -115,7 +115,6 @@
         //If the player is actually playing
         if(cell.galleryView.sharedPlayer != nil){
             [cell.galleryView.sharedPlayer pause];
-            cell.galleryView.sharedPlayer = nil;
             [cell.galleryView.sharedLayer removeFromSuperlayer];
         }
     }
@@ -218,13 +217,12 @@
     //Check if the cell is a video first!
     if([firstPost isVideo]){
         
-        
         //If the video current playing isn't this one, or no video has played yet
-        if((self.playingIndex != visibleIndexPath || self.playingIndex == nil)){
+        if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
             
             [self disableVideo];
 
-            self.sustainDisptach = true;
+            self.dispatchIndex = visibleIndexPath;
             
             //Dispatch event to make sure the condition is true for more than one second
             double delayInSeconds = 1;
@@ -232,33 +230,27 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
                 //If the video current playing isn't this one, or no video has played yet
-                if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.sustainDisptach){
+                if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.dispatchIndex == visibleIndexPath){
+                        
+                    [self disableVideo];
                     
-                    //Check to make sure the current playing video isn't the same as the one about to play
-                    if(![((AVURLAsset *)cell.galleryView.sharedPlayer.currentItem.asset).URL isEqual:firstPost.video]
-                       || (AVURLAsset *)cell.galleryView.sharedPlayer == nil ){
-                        
-                        [self disableVideo];
-                        
-                        self.playingIndex = visibleIndexPath;
-                        
-                        // TODO: Check for missing/corrupt media at firstPost.url
-                        cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
+                    self.playingIndex = visibleIndexPath;
+                    
+                    // TODO: Check for missing/corrupt media at firstPost.url
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
 
-                        [cell.galleryView.sharedPlayer setMuted:NO];
+                    [cell.galleryView.sharedPlayer setMuted:NO];
 
-                        cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
+                    cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
 
-                        cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                    cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 
-                        cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
+                    cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
 
-                        [cell.galleryView.sharedPlayer play];
+                    [cell.galleryView.sharedPlayer play];
 
-                        [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
-                        
-
-                    }
+                    [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                
                     
                 }
             
@@ -271,7 +263,7 @@
     //If the cell doesn't have a video
     else{
         
-        self.sustainDisptach = false;
+        self.dispatchIndex = nil;
         
         [self disableVideo];
         

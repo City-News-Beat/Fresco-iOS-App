@@ -200,7 +200,7 @@
     PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     //If the cell has a video
-    if(cell.post.isVideo){
+    if(cell.post.isVideo && !cell.processingVideo){
         
         if(self.sharedPlayer.rate > 0){
             
@@ -214,10 +214,7 @@
             [UIView animateWithDuration:.5 animations:^{
                 cell.playPause.alpha = 0.0f;
                 cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }
-             completion:^(BOOL finished){
-               
-             }];
+            }];
 
         }
         else{
@@ -232,10 +229,7 @@
             [UIView animateWithDuration:.5 animations:^{
                 cell.playPause.alpha = 0.0f;
                 cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }
-             completion:^(BOOL finished){
-                cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
-             }];
+            }];
 
         }
         
