@@ -14,6 +14,13 @@
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
+@interface PostCollectionViewCell ()
+
+@property (nonatomic, strong) UIImageView *transcodeImage;
+
+@property (nonatomic, strong) UILabel *transcodeLabel;
+
+@end
 
 @implementation PostCollectionViewCell
 + (NSString *)identifier
@@ -24,6 +31,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 -(void)prepareForReuse{
     [[self imageView] setImage:nil];
     [[self imageView] cancelImageRequestOperation];
+    [self.transcodeImage removeFromSuperview];
+    [self.transcodeLabel removeFromSuperview];
 }
 
 - (void)setPost:(FRSPost *)post
@@ -52,14 +61,40 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            weakSelf.imageView.image = image;
-        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
 
+            
+            weakSelf.imageView.image = image;
+            
+            
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            
+            if(response.statusCode == 403 && self.post.isVideo){
+                
+                self.processingVideo = true;
+            
+                self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
+
+                self.transcodeImage.image = [UIImage imageNamed:@"transcoding"];
+                self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
+                self.transcodeImage.center = self.center;
+            
+                self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
+                self.transcodeLabel.text = @"We’re still processing this video!";
+                self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
+                self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+
+                [weakSelf addSubview:self.transcodeImage];
+                [weakSelf addSubview:self.transcodeLabel];
+                
+            }
+            
         }];
     }
     else {
         // local
         self.imageView.image = [UIImage imageFromAsset:post.image.asset];
+   
     }
 }
 
