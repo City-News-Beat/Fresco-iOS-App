@@ -82,6 +82,7 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
+    [self setTwitterInfo];
     [self setFacebookInfo];
 }
 
@@ -148,6 +149,60 @@
 }
 
 #pragma mark - Social data
+
+- (void)setTwitterInfo
+{
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        return;
+    }
+
+    NSString *twitterUserID = [PFTwitterUtils twitter].userId;
+    NSString *twitterScreenName = [PFTwitterUtils twitter].screenName;
+
+    NSString *urlString = @"https://api.twitter.com/1.1/users/show.json?";
+    if (twitterUserID.length > 0) {
+        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"user_id=%@", twitterUserID]];
+    }
+    else if (twitterScreenName.length > 0) {
+        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"screen_name=%@", twitterScreenName]];
+    }
+    else {
+        // Something really went wrong
+        return;
+    }
+
+    NSURL *verify = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
+    [[PFTwitterUtils twitter] signRequest:request];
+
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (!connectionError) {
+            NSError *error = nil;
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            NSString *profileImageURL = result[@"profile_image_url_https"];
+            if (profileImageURL.length > 0) {
+                self.socialImageURL = [NSURL URLWithString:profileImageURL];
+                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
+            }
+
+            NSString *names = result[@"name"];
+            // Poor man's first name/last name parsing
+            if (names.length > 0) {
+                NSMutableArray *array = [NSMutableArray arrayWithArray:[names componentsSeparatedByString:@" "]];
+                if (array.count > 1) {
+                    self.lastName = [array lastObject];
+                    self.textfieldLastName.text = self.lastName;
+
+                    [array removeLastObject];
+                    self.firstName = [array componentsJoinedByString:@" "];
+                    self.textfieldFirstName.text = self.firstName;
+                }
+            }
+        }
+    }];
+}
+
 - (void)setFacebookInfo
 {
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
