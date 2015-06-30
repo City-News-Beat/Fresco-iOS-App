@@ -136,7 +136,6 @@
             
                 self.galleries = responseObject;
                 self.noContentLabel.hidden = YES;
-                self.noContentImage.hidden = YES;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController.tableView reloadData];
             
