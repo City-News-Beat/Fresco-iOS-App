@@ -30,13 +30,19 @@
 @implementation FirstRunSignUpViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     singleTap.numberOfTapsRequired = 1;
-    [self.addPhotoImageView setUserInteractionEnabled:YES];
+
     [self.addPhotoImageView addGestureRecognizer:singleTap];
+    
+    self.addPhotoImageView.userInteractionEnabled = YES;
+    self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+    self.addPhotoImageView.clipsToBounds = YES;
 
 }
 
@@ -160,10 +166,6 @@
     self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
     
     self.addPhotoImageView.image = self.selectedImage;
-    
-    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
-    
-    self.addPhotoImageView.clipsToBounds = YES;
     
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
