@@ -46,7 +46,6 @@
 }
 
 
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -323,13 +322,28 @@
     picker.delegate = self;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
+
     [self presentViewController:picker animated:YES completion:NULL];
     
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated
+{
+    if ([navigationController isKindOfClass:[UIImagePickerController class]])
+    {
+        viewController.navigationItem.title = @"Choose a new avatar";
+        navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
+        [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
+    }
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    self.profileImageView.image = self.selectedImage;
     
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];

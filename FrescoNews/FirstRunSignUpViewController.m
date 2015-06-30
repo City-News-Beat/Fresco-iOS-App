@@ -52,19 +52,7 @@
     
 }
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-    
-    self.addPhotoImageView.image = self.selectedImage;
-    
-    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
-    
-    self.addPhotoImageView.clipsToBounds = YES;
-    
-    // Code here to work with media
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+
 
 
 - (void)viewWillAppear:(BOOL)animated
@@ -162,5 +150,35 @@
     // Make sure your segue name in storyboard is the same as this line
     if ([[segue identifier] isEqualToString:@"showPermissions"]) {
     }
+    
 }
+
+#pragma mark - UIImagePickerController Delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    self.addPhotoImageView.image = self.selectedImage;
+    
+    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+    
+    self.addPhotoImageView.clipsToBounds = YES;
+    
+    // Code here to work with media
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated
+{
+    if ([navigationController isKindOfClass:[UIImagePickerController class]])
+    {
+        viewController.navigationItem.title = @"Choose a new avatar";
+        navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
+        [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
+    }
+}
+
 @end
