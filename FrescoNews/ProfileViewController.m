@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @property (strong, nonatomic) UILabel *noContentLabel;
+@property (strong, nonatomic) UIImageView *noContentImage;
 @property (nonatomic, assign) BOOL loginChecked;
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
@@ -100,29 +101,47 @@
         if (!error) {
             
             if(responseObject == nil || [responseObject count] == 0){
-    
-                self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 70, 150, 100)];
-                
-                self.noContentLabel.text = @"Upload content to see it appear here";
-                
-                self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
-                
-                [self.noContentLabel sizeToFit];
-                
-                self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
-                
-                [self.view addSubview:self.noContentLabel];
+            
+                if(self.noContentLabel == nil && self.noContentImage == nil){
+                    
+                    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString: @"Nothing here yet! \n Open your camera to get started"];
+                    
+                    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+                    
+                    [style setLineSpacing:18];
+                    [style setAlignment:NSTextAlignmentCenter];
+                    [attrString addAttribute:NSParagraphStyleAttributeName
+                                       value:style
+                                       range:NSMakeRange(0, attrString.length)];
+        
+                    self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+                    self.noContentLabel.numberOfLines = 2;
+                    self.noContentLabel.attributedText = attrString;
+                    self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                    self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
+                    
+                    self.noContentImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
+                    self.noContentImage.frame = CGRectMake(0, 0, 100, 100);
+                    self.noContentImage.contentMode = UIViewContentModeScaleAspectFit;
+                    self.noContentImage.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
+                    self.noContentImage.alpha = .54f;
+                    
+                    [self.view addSubview:self.noContentImage];
+                    [self.view addSubview:self.noContentLabel];
+                    
+                }
             
             }
             else{
             
                 self.galleries = responseObject;
+                self.noContentLabel.hidden = YES;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController.tableView reloadData];
             
             
             }
-            
+        
         }
     }];
 }

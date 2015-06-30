@@ -244,20 +244,40 @@
                         
                         self.playingIndex = visibleIndexPath;
                         
-                        // TODO: Check for missing/corrupt media at firstPost.url
-                        cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
+                        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                         
-                        [cell.galleryView.sharedPlayer setMuted:NO];
-                        
-                        cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
-                        
-                        cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                        
-                        cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
-                        
-                        [cell.galleryView.sharedPlayer play];
-                        
-                        [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                        [manager GET:[firstPost.video absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
+                             
+                              NSLog(@"Response: %@", operation.responseString);
+                     
+                          }
+                         failure:^(AFHTTPRequestOperation *operation, NSError *error){
+                              
+                              if((long)[operation.response statusCode] == 403){
+                                  
+                                  
+                              }
+                              else{
+                                  
+                                  // TODO: Check for missing/corrupt media at firstPost.url
+                                  cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
+                                  
+                                  [cell.galleryView.sharedPlayer setMuted:NO];
+                                  
+                                  cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
+                                  
+                                  cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                                  
+                                  cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
+                                  
+                                  [cell.galleryView.sharedPlayer play];
+                                  
+                                  
+                                  [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                              
+                              }
+
+                          }];
                         
                     }
                     
