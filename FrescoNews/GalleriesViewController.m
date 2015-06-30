@@ -110,6 +110,7 @@
 {
     
     self.playingIndex = nil;
+    self.dispatchIndex = nil;
     
     for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
         //If the player is actually playing

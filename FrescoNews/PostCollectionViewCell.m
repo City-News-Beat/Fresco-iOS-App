@@ -31,8 +31,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 -(void)prepareForReuse{
     [[self imageView] setImage:nil];
     [[self imageView] cancelImageRequestOperation];
-    [self.transcodeImage removeFromSuperview];
-    [self.transcodeLabel removeFromSuperview];
+    self.transcodeImage.hidden = YES;
+    self.transcodeLabel.hidden = YES;
 }
 
 - (void)setPost:(FRSPost *)post
@@ -62,8 +62,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     if (_post.postID) {
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            [self.transcodeImage removeFromSuperview];
-            [self.transcodeLabel removeFromSuperview];
+            self.transcodeImage.hidden = YES;
+            self.transcodeLabel.hidden = YES;
             
             weakSelf.imageView.image = image;
             
