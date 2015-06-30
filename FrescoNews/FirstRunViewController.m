@@ -76,10 +76,10 @@
 }
 
 - (void)styleButtons {
-    self.loginButton.layer.cornerRadius = 8;
+    self.loginButton.layer.cornerRadius = 4;
     self.loginButton.clipsToBounds = YES;
     
-    self.signUpButton.layer.cornerRadius = 8;
+    self.signUpButton.layer.cornerRadius = 4;
     self.signUpButton.clipsToBounds = YES;
 }
 
