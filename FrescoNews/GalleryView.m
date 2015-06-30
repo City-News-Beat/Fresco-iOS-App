@@ -138,6 +138,8 @@
 
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
+    [postCell bringSubviewToFront:postCell.playPause];
+    
 }
 
 
@@ -198,9 +200,39 @@
     PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     //If the cell has a video
-    if(cell.post.isVideo){
+    if(cell.post.isVideo && !cell.processingVideo){
         
-        self.sharedPlayer.rate > 0 ? [self.sharedPlayer pause] : [self.sharedPlayer play];
+        if(self.sharedPlayer.rate > 0){
+            
+            [self.sharedPlayer pause];
+            cell.playPause.image = [UIImage imageNamed:@"pause"];
+            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+            [cell bringSubviewToFront:cell.playPause];
+
+            cell.playPause.alpha = 1.0f;
+            
+            [UIView animateWithDuration:.5 animations:^{
+                cell.playPause.alpha = 0.0f;
+                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+            }];
+
+        }
+        else{
+            
+            [self.sharedPlayer play];
+            cell.playPause.image = [UIImage imageNamed:@"play"];
+            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+            [cell bringSubviewToFront:cell.playPause];
+            
+            cell.playPause.alpha = 1.0f;
+            
+            [UIView animateWithDuration:.5 animations:^{
+                cell.playPause.alpha = 0.0f;
+                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+            }];
+
+        }
+        
 
     }
 

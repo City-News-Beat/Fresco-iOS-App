@@ -6,19 +6,24 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
 
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController ()
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet UIImageView *addPhotoImageView;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLastName;
+@property (strong, nonatomic) UIImage *selectedImage;
+@property (nonatomic) NSURL *socialImageURL;
+
 @end
 
 @implementation FirstRunSignUpViewController
@@ -26,6 +31,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.addPhotoImageView setUserInteractionEnabled:YES];
+    [self.addPhotoImageView addGestureRecognizer:singleTap];
+
+    // this creates the circular mask around the image
+    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+}
+
+
+-(void)tapDetected{
+
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+    
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    self.addPhotoImageView.image = self.selectedImage;
+    
+    //self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+    
+    self.addPhotoImageView.clipsToBounds = YES;
+    
+    // Code here to work with media
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -74,15 +113,23 @@
 }
 
 - (IBAction)actionNext:(id)sender {
+    
     // save this to allow backing to the VC
     self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    NSData *imageData = nil;
+    
+    if(self.selectedImage){
+        
+        imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
+    }
     
     // both fields must be populated
     if (([self.firstName length] && [self.lastName length])) {
         NSDictionary *updateParams = @{ @"firstname" : self.firstName, @"lastname" : self.lastName };
         
-        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams block:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
             if (!error) {
                 [self performSegueWithIdentifier:@"showPermissions" sender:self];
             }
@@ -134,6 +181,13 @@
                     self.lastName = [lastNames componentsJoinedByString:@" "];
                     self.textfieldLastName.text = self.lastName;
                 }
+            }
+                        
+            // grab the image url
+            NSString *urlString = [result valueForKeyPath:@"picture.data.url"];
+            if (urlString) {
+                self.socialImageURL = [NSURL URLWithString:urlString];
+                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
             }
         }
     }];

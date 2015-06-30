@@ -26,7 +26,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self styleButtons];
     //[(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
 }
 
@@ -58,15 +57,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)styleButtons
-{
-    self.twitterButton.layer.cornerRadius = 8;
-    self.twitterButton.clipsToBounds = YES;
-    
-    self.facebookButton.layer.cornerRadius = 8;
-    self.facebookButton.clipsToBounds = YES;
-}
-
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
@@ -84,6 +74,7 @@
 }
 
 - (IBAction)clickedNext:(id)sender {
+
     if ([self.emailField.text length] && [self.passwordField.text length]) {
         
         // save this to allow backing to the VC

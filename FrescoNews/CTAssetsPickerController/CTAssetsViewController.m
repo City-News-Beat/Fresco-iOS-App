@@ -102,6 +102,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [self setupButtons];
     [self setupToolbar];
 
+    // Do not delete - needed if a new asset has just been created
     if (self.assets.count) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
@@ -229,7 +230,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
     else
     {
-        layout.sectionInset            = UIEdgeInsetsMake(9.0, 0, 0, 0);
+        layout.sectionInset            = UIEdgeInsetsMake(2.0, 0, 0, 0);
         layout.minimumInteritemSpacing = (CTIPhone6Plus) ? 0.5 : ( (CTIPhone6) ? 1.0 : 2.0 );
         layout.minimumLineSpacing      = (CTIPhone6Plus) ? 0.5 : ( (CTIPhone6) ? 1.0 : 2.0 );
     }

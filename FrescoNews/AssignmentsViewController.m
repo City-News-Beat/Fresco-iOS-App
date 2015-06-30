@@ -455,7 +455,7 @@
                     }
                     
                     // Zooming map after delay for effect
-                    MKCoordinateSpan span = MKCoordinateSpanMake(0.1f, 0.1f);
+                    MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
                     
                     
                     //Get Average location of all assignments and current location

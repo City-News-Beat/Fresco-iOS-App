@@ -16,6 +16,10 @@
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 
+@property (nonatomic, strong) UIImageView *playPause;
+
+@property (nonatomic, assign) BOOL processingVideo;
+
 + (NSString *)identifier;
 
 @end

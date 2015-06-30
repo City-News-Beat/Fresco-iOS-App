@@ -37,30 +37,25 @@
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         
-        if(self.disableEndlessScroll){
-            
-            // append data to data source, insert new cells at the end of table view
-            NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
-            
-            //Make request for more posts, append to galleries array
-            [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    if ([responseObject count]) {
-                        
-                        [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
-                        
-                        [self.galleriesViewController.tableView reloadData];
-                        
-                    }
-                    else {
-                     self.disableEndlessScroll = true;
-                    }
+
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:self.galleriesViewController.galleries.count];
+        
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                if ([responseObject count]) {
+                    
+                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                    
+                    [self.galleriesViewController.tableView reloadData];
+                    
+                    [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+                    
                 }
-            }];
-            
-            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
-            
-        }
+            }
+        }];
+        
         
     }];
     
