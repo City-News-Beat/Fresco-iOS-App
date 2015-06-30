@@ -101,6 +101,11 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     [super viewWillAppear:animated];
     [self setupButtons];
     [self setupToolbar];
+
+    // Do not delete - needed if a new asset has just been created
+    if (self.assets.count) {
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+    }
 }
 
 - (void)dealloc
