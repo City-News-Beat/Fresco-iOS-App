@@ -448,8 +448,10 @@
     }*/
     
     [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                if (imageData != nil)
-                    [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+        if (imageData != nil) {
+            [params removeObjectForKey:@"avatar"];
+            [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+        }
     }
        success:^(NSURLSessionDataTask *task, id responseObject) {
            

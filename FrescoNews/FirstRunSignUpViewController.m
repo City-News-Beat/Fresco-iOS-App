@@ -9,6 +9,7 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
@@ -39,6 +40,8 @@
 
     // this creates the circular mask around the image
     self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+    self.addPhotoImageView.clipsToBounds = YES;
+
 }
 
 
@@ -128,7 +131,11 @@
     
     // both fields must be populated
     if (([self.firstName length] && [self.lastName length])) {
-        NSDictionary *updateParams = @{ @"firstname" : self.firstName, @"lastname" : self.lastName };
+        
+        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
+        
+        if (self.socialImageURL)
+            [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
         
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
             if (!error) {
@@ -208,8 +215,9 @@
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         return;
     
-    NSDictionary *params = @{@"fields": @"name,picture"};
+   NSDictionary *params = @{@"fields": @"first_name,last_name,picture.width(400).height(400)"};
     
+
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
                                                                    parameters:params
                                                                    HTTPMethod:@"GET"];
@@ -217,27 +225,12 @@
                                           id result,
                                           NSError *error) {
         if (!error) {
-            // facebook only gives us a full name so we parse out first name and put everything else in last
-            NSArray *nameComponents = [[result objectForKey:@"name"] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            if ([nameComponents count]) {
-                self.firstName = nameComponents[0];
-                self.textfieldFirstName.text = self.firstName;
+            self.firstName = [result objectForKey:@"first_name"];
+            self.lastName = [result objectForKey:@"last_name"];
 
-                // last name
-                if ([nameComponents count] > 1) {
-                    NSArray *lastNames;
-                    NSRange theRange;
-                    
-                    theRange.location = 1;
-                    theRange.length = [nameComponents count] - 1;
-                    
-                    lastNames = [nameComponents subarrayWithRange:theRange];
-
-                    self.lastName = [lastNames componentsJoinedByString:@" "];
-                    self.textfieldLastName.text = self.lastName;
-                }
-            }
-                        
+            self.textfieldFirstName.text = self.firstName;
+            self.textfieldLastName.text = self.lastName;
+            
             // grab the image url
             NSString *urlString = [result valueForKeyPath:@"picture.data.url"];
             if (urlString) {
