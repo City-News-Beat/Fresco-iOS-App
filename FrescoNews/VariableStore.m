@@ -46,6 +46,7 @@
         sharedInstance.baseURL = @"https://api.fresconews.com/v1/";
         sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
+        sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
         sharedInstance.maximumVideoLength = 60.0f;
     });

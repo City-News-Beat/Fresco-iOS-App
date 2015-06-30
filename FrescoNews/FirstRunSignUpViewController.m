@@ -160,7 +160,7 @@
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         return;
     
-   NSDictionary *params = @{@"fields": @"first_name,last_name,picture.width(400).height(400)"};
+   NSDictionary *params = @{@"fields": @"first_name,last_name,id"};
     
 
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
@@ -177,7 +177,7 @@
             self.textfieldLastName.text = self.lastName;
             
             // grab the image url
-            NSString *urlString = [result valueForKeyPath:@"picture.data.url"];
+            NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", [VariableStore sharedInstance].cdnFacebookBaseURL, [result valueForKeyPath:@"id"]];
             if (urlString) {
                 self.socialImageURL = [NSURL URLWithString:urlString];
                 [self.addPhotoImageView setImageWithURL:self.socialImageURL];
