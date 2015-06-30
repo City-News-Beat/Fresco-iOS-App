@@ -121,9 +121,10 @@
     FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
     self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
 
-    if (post.address.length) {
+    if([post.address isKindOfClass:[NSString class]]){
         self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
     }
+
 
     self.byline.text = post.byline;
 
