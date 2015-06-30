@@ -103,12 +103,8 @@
 #pragma mark - Social data
 - (void)setFacebookInfo
 {
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-       // self.firstName
-//        self.facebookLabel.hidden = YES;
-//        self.facebookIcon.hidden = YES;
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         return;
-    }
     
     NSDictionary *params = @{@"fields": @"name,picture"};
     
@@ -119,11 +115,26 @@
                                           id result,
                                           NSError *error) {
         if (!error) {
-           // self.facebookLabel.text = [result objectForKey:@"name"];
-        }
-        else {
-//            self.facebookLabel.hidden = YES;
-//            self.facebookIcon.hidden = YES;
+            // facebook only gives us a full name so we parse out first name and put everything else in last
+            NSArray *nameComponents = [[result objectForKey:@"name"] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if ([nameComponents count]) {
+                self.firstName = nameComponents[0];
+                self.textfieldFirstName.text = self.firstName;
+
+                // last name
+                if ([nameComponents count] > 1) {
+                    NSArray *lastNames;
+                    NSRange theRange;
+                    
+                    theRange.location = 1;
+                    theRange.length = [nameComponents count] - 1;
+                    
+                    lastNames = [nameComponents subarrayWithRange:theRange];
+
+                    self.lastName = [lastNames componentsJoinedByString:@" "];
+                    self.textfieldLastName.text = self.lastName;
+                }
+            }
         }
     }];
 }
