@@ -2654,6 +2654,9 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="enableLocationButtonTapped:" destination="AgQ-8w-jNp" eventType="touchUpInside" id="Bej-cE-se0"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dd1-zH-BLP">
                                 <rect key="frame" x="162" y="388" width="152" height="32"/>
@@ -2662,6 +2665,9 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="enableNotificationsTapped:" destination="AgQ-8w-jNp" eventType="touchUpInside" id="KAY-2b-myz"/>
+                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cameraOffIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hf3-CA-XlM">
                                 <rect key="frame" x="66" y="234" width="48" height="48"/>
@@ -2726,7 +2732,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="buttonTapped:" destination="AgQ-8w-jNp" eventType="touchUpInside" id="3dn-Ee-1IS"/>
+                                    <action selector="cameraButtonTapped:" destination="AgQ-8w-jNp" eventType="touchUpInside" id="ab7-IA-Lk4"/>
                                 </connections>
                             </button>
                         </subviews>

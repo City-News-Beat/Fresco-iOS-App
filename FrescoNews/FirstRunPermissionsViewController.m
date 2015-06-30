@@ -19,10 +19,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsLabel;
 @property (weak, nonatomic) IBOutlet UIButton *locationPermissionsLabel;
 @property (weak, nonatomic) IBOutlet UIButton *notificationsPermissionsLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation FirstRunPermissionsViewController
@@ -31,12 +31,6 @@
 {
     [super viewDidLoad];
     self.isSkipState = YES;
-    [self requestCameraAuthorization];
-    [self requestCameraRollAuthorization];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate setupLocationManager];
-    [appDelegate setupLocationMonitoring];
-    [appDelegate registerForPushNotifications];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,14 +65,24 @@
     self.skipFeatureButton.hidden = YES;
 }
 
-- (IBAction)buttonTapped:(id)sender
+- (IBAction)cameraButtonTapped:(id)sender
 {
-//    [self requestCameraAuthorization];
-//    [self requestMicrophoneAuthorization];
-//    [self requestCameraRollAuthorization];
-//    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-//    [appDelegate setupLocationManager];
-//    [appDelegate registerForPushNotifications];
+    [self requestCameraAuthorization];
+    [self requestMicrophoneAuthorization];
+    [self requestCameraRollAuthorization];
+}
+
+- (IBAction)enableLocationButtonTapped:(id)sender
+{
+    self.locationManager = [[CLLocationManager alloc] init];
+    [self.locationManager requestAlwaysAuthorization];
+    // If the user declines, prompt the user (at some point) to approve "when in use" location tracking - manually!
+}
+
+- (IBAction)enableNotificationsTapped:(id)sender
+{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate registerForPushNotifications];
 }
 
 - (IBAction)actionNext:(id)sender
@@ -108,10 +112,16 @@
                 [self.cameraPermissionsLabel setTitle:@"Camera Enabled" forState:UIControlStateNormal];
             }
         }];
-        
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        }];
     }
+}
+
+- (void)requestMicrophoneAuthorization
+{
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (!granted) {
+            // TODO: Complain?
+        }
+    }];
 }
 
 - (void)requestCameraRollAuthorization
