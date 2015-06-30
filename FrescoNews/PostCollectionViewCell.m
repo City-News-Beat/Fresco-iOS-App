@@ -61,7 +61,9 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-
+            
+            [self.transcodeImage removeFromSuperview];
+            [self.transcodeLabel removeFromSuperview];
             
             weakSelf.imageView.image = image;
             
