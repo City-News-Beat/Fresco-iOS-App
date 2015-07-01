@@ -199,7 +199,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (UIBarButtonItem *)titleButtonItem
 {
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery Post"
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery"
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(createGalleryPost:)];
