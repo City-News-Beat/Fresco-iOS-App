@@ -518,18 +518,18 @@
 
     if (annotation == mapView.userLocation) {
         
-        if ([FRSDataManager sharedManager].currentUser.profileImageUrl) {
+        if ([FRSDataManager sharedManager].currentUser.cdnProfileImageURL) {
+            
             MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
 
             if (!pinView) {
                 pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
 
                 UIImageView *profileImageView = [[UIImageView alloc] init];
-                profileImageView.frame = CGRectMake(0, 0, 30, 30);
+                profileImageView.frame = CGRectMake(0, 0, 22, 22);
                 profileImageView.layer.masksToBounds = YES;
-                profileImageView.layer.cornerRadius = 27;
-                profileImageView.contentMode = UIViewContentModeScaleAspectFit;
-
+                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
+    
                 [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]];
                 [pinView addSubview:profileImageView];
             }

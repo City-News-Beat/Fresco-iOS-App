@@ -23,6 +23,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 @end
 
 @implementation PostCollectionViewCell
+
 + (NSString *)identifier
 {
     return kCellIdentifier;
@@ -31,8 +32,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 -(void)prepareForReuse{
     [[self imageView] setImage:nil];
     [[self imageView] cancelImageRequestOperation];
-    [self.transcodeImage removeFromSuperview];
-    [self.transcodeLabel removeFromSuperview];
+    self.transcodeImage.hidden = YES;
+    self.transcodeLabel.hidden = YES;
 }
 
 - (void)setPost:(FRSPost *)post
@@ -42,9 +43,9 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     __weak PostCollectionViewCell *weakSelf = self;
     
     if(self.post.isVideo) {
-    
-        self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(self.center.x, self.center.y, 132/2, 132/2)];
-        self.playPause.center = self.center;
+
+        self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
+        self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
         self.playPause.contentMode = UIViewContentModeScaleAspectFit;
         self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
         self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
@@ -62,8 +63,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     if (_post.postID) {
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            [self.transcodeImage removeFromSuperview];
-            [self.transcodeLabel removeFromSuperview];
+            self.transcodeImage.hidden = YES;
+            self.transcodeLabel.hidden = YES;
             
             weakSelf.imageView.image = image;
             

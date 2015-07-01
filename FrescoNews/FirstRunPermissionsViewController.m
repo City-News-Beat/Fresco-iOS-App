@@ -10,13 +10,14 @@
 @import CoreLocation;
 @import AVFoundation;
 @import Photos;
+@import AssetsLibrary;
 #import "AppDelegate.h"
 
-@interface FirstRunPermissionsViewController ()
+@interface FirstRunPermissionsViewController () <CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *locationPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *notificationsPermissionsImage;
-@property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsLabel;
+@property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsLabel; // rename these to "button"
 @property (weak, nonatomic) IBOutlet UIButton *locationPermissionsLabel;
 @property (weak, nonatomic) IBOutlet UIButton *notificationsPermissionsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
@@ -65,22 +66,40 @@
     self.skipFeatureButton.hidden = YES;
 }
 
-- (IBAction)cameraButtonTapped:(id)sender
+- (IBAction)cameraButtonTapped:(UIButton *)button
 {
+    button.enabled = NO;
+    // Don't change the order without testing - see -requestCameraRollAuthorization below
     [self requestCameraAuthorization];
     [self requestMicrophoneAuthorization];
     [self requestCameraRollAuthorization];
 }
 
-- (IBAction)enableLocationButtonTapped:(id)sender
+- (IBAction)enableLocationButtonTapped:(UIButton *)button
 {
+    button.enabled = NO;
     self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
     // If the user declines, prompt the user (at some point) to approve "when in use" location tracking - manually!
 }
 
-- (IBAction)enableNotificationsTapped:(id)sender
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
+            self.locationPermissionsImage.image = [UIImage imageNamed:@"locationOnIcon"];
+            [self.locationPermissionsLabel setTitle:@"Location Enabled" forState:UIControlStateNormal];
+        }
+        else {
+            [self.locationPermissionsLabel setTitle:@"Location Disabled" forState:UIControlStateNormal];
+        }
+    });
+}
+
+- (IBAction)enableNotificationsTapped:(UIButton *)button
+{
+    button.enabled = NO;
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate registerForPushNotifications];
 }
@@ -92,8 +111,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showRadius"]) {
-    }
+    if ([[segue identifier] isEqualToString:@"showRadius"]) {}
 }
 
 #pragma mark - Request authorization methods
@@ -105,13 +123,7 @@
     else if (status == AVAuthorizationStatusDenied) {}
     else if (status == AVAuthorizationStatusRestricted) {}
     else if (status == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            if (!granted) {
-                // TODO: Complain?
-                self.cameraPermissionsImage.image = [UIImage imageNamed:@"cameraOnIcon"];
-                [self.cameraPermissionsLabel setTitle:@"Camera Enabled" forState:UIControlStateNormal];
-            }
-        }];
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:nil];
     }
 }
 
@@ -129,6 +141,7 @@
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         switch (status) {
             case PHAuthorizationStatusAuthorized:
+                [self updateCameraButton];
                 break;
             case PHAuthorizationStatusRestricted:
                 // TODO
@@ -140,6 +153,23 @@
                 break;
         }
     }];
+}
+
+- (void)updateCameraButton
+{
+    // All of camera, microphone, and camera roll authorizations must be granted for "Camera Enabled" status
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized &&
+                // [AVAudioSession sharedInstance].recordPermission == AVAudioSessionRecordPermissionGranted && // on hold pending a good way to test
+                [ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized)
+        {
+            self.cameraPermissionsImage.image = [UIImage imageNamed:@"cameraOnIcon"];
+            [self.cameraPermissionsLabel setTitle:@"Camera Enabled" forState:UIControlStateNormal];
+        }
+        else {
+            [self.cameraPermissionsLabel setTitle:@"Camera Disabled" forState:UIControlStateNormal];
+        }
+    });
 }
 
 @end

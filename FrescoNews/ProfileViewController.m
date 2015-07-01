@@ -40,7 +40,6 @@
     }
     else {
         [self performNecessaryFetch:nil];
-        [super viewDidLoad];
     }
 
  
@@ -85,11 +84,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (![FRSDataManager sharedManager].currentUser) {
         [self navigateToFirstRun];
     }
     else {
-        [super viewWillAppear:animated];
+         [self performNecessaryFetch:nil];
     }
 }
 

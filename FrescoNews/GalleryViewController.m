@@ -16,6 +16,7 @@
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
 #import "StoryViewController.h"
+#import "GalleryTableViewCell.h"
 
 @interface GalleryViewController ()  <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -44,6 +45,13 @@
     [self.navigationItem setRightBarButtonItem:shareIcon];
 
     [self setUpGallery];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:NO];
+
+    [self disableVideo];
 }
 
 - (void)viewDidLayoutSubviews
@@ -94,6 +102,17 @@
     }
     
     self.bordersLaidOut = YES;
+}
+
+- (void)disableVideo
+{
+    
+    if(self.galleryView.sharedPlayer != nil){
+        [self.galleryView.sharedPlayer pause];
+        self.galleryView.sharedPlayer = nil;
+        [self.galleryView.sharedLayer removeFromSuperlayer];
+    }
+
 }
 
 - (void)shareGallery:(id)sender

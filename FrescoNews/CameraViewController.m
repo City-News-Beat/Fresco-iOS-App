@@ -715,6 +715,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+    if ([date timeIntervalSinceDate:[NSDate date]] < -3600 * 6) {
+        // Six hours, per @im
+        return NO;
+    }
+
     NSString *mimeType = [asset mimeType];
     if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
         return NO;
