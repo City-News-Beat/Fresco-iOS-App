@@ -170,27 +170,29 @@
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (!connectionError) {
-            NSError *error = nil;
-            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-            NSString *profileImageURL = result[@"profile_image_url_https"];
-            if (profileImageURL.length > 0) {
-                self.socialImageURL = [NSURL URLWithString:profileImageURL];
-                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
-            }
-
-            NSString *names = result[@"name"];
-            // Poor man's first name/last name parsing
-            if (names.length > 0) {
-                NSMutableArray *array = [NSMutableArray arrayWithArray:[names componentsSeparatedByString:@" "]];
-                if (array.count > 1) {
-                    self.lastName = [array lastObject];
-                    self.textfieldLastName.text = self.lastName;
-
-                    [array removeLastObject];
-                    self.firstName = [array componentsJoinedByString:@" "];
-                    self.textfieldFirstName.text = self.firstName;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSError *error = nil;
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                NSString *profileImageURL = result[@"profile_image_url_https"];
+                if (profileImageURL.length > 0) {
+                    self.socialImageURL = [NSURL URLWithString:profileImageURL];
+                    [self.addPhotoImageView setImageWithURL:self.socialImageURL];
                 }
-            }
+
+                NSString *names = result[@"name"];
+                // Poor man's first name/last name parsing
+                if (names.length > 0) {
+                    NSMutableArray *array = [NSMutableArray arrayWithArray:[names componentsSeparatedByString:@" "]];
+                    if (array.count > 1) {
+                        self.lastName = [array lastObject];
+                        self.textfieldLastName.text = self.lastName;
+
+                        [array removeLastObject];
+                        self.firstName = [array componentsJoinedByString:@" "];
+                        self.textfieldFirstName.text = self.firstName;
+                    }
+                }
+            });
         }
     }];
 }
@@ -210,18 +212,20 @@
                                           id result,
                                           NSError *error) {
         if (!error) {
-            self.firstName = [result objectForKey:@"first_name"];
-            self.lastName = [result objectForKey:@"last_name"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.firstName = [result objectForKey:@"first_name"];
+                self.lastName = [result objectForKey:@"last_name"];
 
-            self.textfieldFirstName.text = self.firstName;
-            self.textfieldLastName.text = self.lastName;
-            
-            // grab the image url
-            NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", [VariableStore sharedInstance].cdnFacebookBaseURL, [result valueForKeyPath:@"id"]];
-            if (urlString) {
-                self.socialImageURL = [NSURL URLWithString:urlString];
-                [self.addPhotoImageView setImageWithURL:self.socialImageURL];
-            }
+                self.textfieldFirstName.text = self.firstName;
+                self.textfieldLastName.text = self.lastName;
+
+                // grab the image url
+                NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", [VariableStore sharedInstance].cdnFacebookBaseURL, [result valueForKeyPath:@"id"]];
+                if (urlString) {
+                    self.socialImageURL = [NSURL URLWithString:urlString];
+                    [self.addPhotoImageView setImageWithURL:self.socialImageURL];
+                }
+            });
         }
     }];
 }
