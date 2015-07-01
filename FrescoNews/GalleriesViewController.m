@@ -72,6 +72,8 @@
     
     [super viewWillAppear:NO];
     
+    self.tableView.delegate = self;
+    
     self.inDetail = NO;
     
     self.playingIndex = nil;
@@ -82,8 +84,9 @@
     
     [super viewWillDisappear:NO];
     
+    self.tableView.delegate = nil;
+    
     [self disableVideo];
-
 
 }
 
