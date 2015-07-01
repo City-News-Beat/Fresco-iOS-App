@@ -23,8 +23,9 @@
             "body": "Reports of a severe Tornado in Little Falls, Minnesota",
             "title": "Fresco News"
         },
-        "category": "ASSIGNMENT_CATEGORY"
+        "category": "ASSIGNMENT_CATEGORY",
+        "sound" : "chime.aiff"
     },
     "type" : "assignment",
-    "assignment" : "5570868553b1c9a37a41560d"
+    "assignment" : "55944eaf72aa69e2401f5c7f"
 }
