@@ -166,8 +166,15 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     // TODO: Explain in the UI why some photos cannot be selected (no location information)?
     ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
         if (asset) {
+            // Only show assets less than six hours old (see -shouldShowAsset:)
+            NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+            if ([date timeIntervalSinceDate:[NSDate date]] <  [VariableStore sharedInstance].maximumAssetAge) {
+                *stop = YES;
+            }
+
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
                 [self.assets addObject:asset];
+                // TODO: Look into optimizing this
                 if ([[[NSUserDefaults standardUserDefaults] arrayForKey:@"selectedAssets"] containsObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
                 {
                     if (![self.picker.selectedAssets containsObject:asset]) {

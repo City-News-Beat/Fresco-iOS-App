@@ -49,5 +49,6 @@ enum FRSErrorCodes {
 @property NSString *cdnFacebookBaseURL;
 
 @property CGFloat maximumVideoLength;
+@property NSInteger maximumAssetAge;
 
 @end
