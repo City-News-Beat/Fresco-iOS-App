@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @property (strong, nonatomic) UILabel *noContentLabel;
+@property (strong, nonatomic) UILabel *noContentLabelSmall;
 @property (strong, nonatomic) UIImageView *noContentImage;
 @property (nonatomic, assign) BOOL loginChecked;
 
@@ -60,6 +61,7 @@
                         [self.galleriesViewController.tableView reloadData];
                         
                         self.noContentLabel.hidden = YES;
+                        self.noContentLabelSmall.hidden = YES;
 
                     }
                     else self.disableEndlessScroll = YES;
@@ -105,7 +107,8 @@
             
                 if(self.noContentLabel == nil && self.noContentImage == nil){
                     
-                    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString: @"Nothing here yet! \n Open your camera to get started"];
+                    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString: @"Nothing here yet!"];
+                    NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: @"Open your camera to get started"];
                     
                     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
                     
@@ -114,21 +117,34 @@
                     [attrString addAttribute:NSParagraphStyleAttributeName
                                        value:style
                                        range:NSMakeRange(0, attrString.length)];
+                    
+                    [attrStringSmall addAttribute:NSParagraphStyleAttributeName
+                                       value:style
+                                       range:NSMakeRange(0, attrString.length)];
         
                     self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
-                    self.noContentLabel.numberOfLines = 2;
+                    self.noContentLabel.numberOfLines = 1;
                     self.noContentLabel.attributedText = attrString;
-                    self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                    self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0f];
                     self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
+                    self.noContentLabel.alpha = .87f;
+                    
+                    self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+                    self.noContentLabelSmall.numberOfLines = 1;
+                    self.noContentLabelSmall.attributedText = attrStringSmall;
+                    self.noContentLabelSmall.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0f];
+                    self.noContentLabelSmall.center = CGPointMake(self.view.center.x, self.view.center.y + 30);
+                    self.noContentLabelSmall.alpha = .54f;
                     
                     self.noContentImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
                     self.noContentImage.frame = CGRectMake(0, 0, 100, 100);
                     self.noContentImage.contentMode = UIViewContentModeScaleAspectFit;
-                    self.noContentImage.center = CGPointMake(self.view.center.x, self.view.center.y - 100);
+                    self.noContentImage.center = CGPointMake(self.view.center.x, self.view.center.y - 70);
                     self.noContentImage.alpha = .54f;
                     
                     [self.view addSubview:self.noContentImage];
                     [self.view addSubview:self.noContentLabel];
+                    [self.view addSubview:self.noContentLabelSmall];
                     
                 }
             
@@ -137,6 +153,7 @@
             
                 self.galleries = responseObject;
                 self.noContentLabel.hidden = YES;
+                self.noContentLabelSmall.hidden = YES;
                 self.noContentImage.hidden = YES;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController.tableView reloadData];
