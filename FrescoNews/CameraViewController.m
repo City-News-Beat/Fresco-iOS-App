@@ -715,8 +715,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    // Suspenders
     NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-    if ([date timeIntervalSinceDate:[NSDate date]] < -3600 * 6) {
+    if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
         // Six hours, per @im
         return NO;
     }
