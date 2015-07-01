@@ -366,7 +366,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     UILabel *message =
     [self auxiliaryLabelWithFont:[UIFont systemFontOfSize:18.0]
                            color:[UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1]
-                            text:[self noAssetsMessage]];
+                            text:@"Media older than six hours can't be verified for assignments. Open the camera to start shooting."];
     
     UIView *centerView = [self centerViewWithViews:@[title, message]];
     

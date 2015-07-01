@@ -49,6 +49,7 @@
         sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
         sharedInstance.maximumVideoLength = 60.0f;
+        sharedInstance.maximumAssetAge = -3600 * 6;
     });
     
     return sharedInstance;

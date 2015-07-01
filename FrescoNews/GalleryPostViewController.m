@@ -53,7 +53,7 @@
 {
     [super viewDidLoad];
     [self setupButtons];
-    self.title = @"Create a Gallery Post";
+    self.title = @"Create a Gallery";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
 

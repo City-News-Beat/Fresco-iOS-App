@@ -157,7 +157,7 @@
 
 - (void)updateCameraButton
 {
-    // All of camera, microphone, and camera roll authorizations must be granted for "Camera Enabled" status                 
+    // All of camera, microphone, and camera roll authorizations must be granted for "Camera Enabled" status
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized &&
                 // [AVAudioSession sharedInstance].recordPermission == AVAudioSessionRecordPermissionGranted && // on hold pending a good way to test

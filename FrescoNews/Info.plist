@@ -38,9 +38,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>See Info.plist &gt; NSLocationAlwaysUsageDescription</string>
+	<string>Fresco servers use location to notify you when there is an assignment nearby. This location data is secure and anonymous.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>See Info.plist &gt; NSLocationWhenInUseUsageDescription</string>
+	<string>Fresco uses location to automatically verify photos and videos before they are posted.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
