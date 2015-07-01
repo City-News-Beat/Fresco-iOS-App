@@ -427,6 +427,7 @@
     
     [params addEntriesFromDictionary:inputParams];
 
+    // sorry to keep this cruft around but let's do so until we verify API auth is in place
     /*
     // if we don't have an API token request one
     if (!self.frescoAPIToken) {
@@ -444,33 +445,29 @@
                 NSLog(@"Could not authenticate to the API");
             }
         }];
-    }
-    else {*/
+    }*/
     
     [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        
-        if(imageData != nil){
-        
+        if (imageData != nil) {
+            [params removeObjectForKey:@"avatar"];
             [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
-            
         }
-        
-        } success:^(NSURLSessionDataTask *task, id responseObject) {
+    }
+       success:^(NSURLSessionDataTask *task, id responseObject) {
            
            NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-            // synchronize the user
-            [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
-                if (responseBlock) responseBlock(user, nil);
-            }];
+           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+           // synchronize the user
+           [self syncFRSUser:user toParse:^(BOOL succeeded, NSError *error) {
+               if (responseBlock) responseBlock(user, nil);
+           }];
            
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
            NSLog(@"Error creating new user %@", error);
            if (responseBlock) responseBlock(nil, error);
-       
+           
        }];
     
-   // }
 }
 
 - (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
