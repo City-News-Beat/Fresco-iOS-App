@@ -251,12 +251,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)addNotificationObserver
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    
-    [center addObserver:self
-               selector:@selector(assetsLibraryChanged:)
-                   name:ALAssetsLibraryChangedNotification
-                 object:nil];
-    
     [center addObserver:self
                selector:@selector(selectedAssetsChanged:)
                    name:CTAssetsPickerSelectedAssetsChangedNotification
@@ -265,37 +259,37 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)removeNotificationObserver
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ALAssetsLibraryChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CTAssetsPickerSelectedAssetsChangedNotification object:nil];
 }
 
 #pragma mark - Assets Library Changed
 
-- (void)assetsLibraryChanged:(NSNotification *)notification
-{
-    // Reload all assets
-    if (notification.userInfo == nil)
-        [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
-    
-    // Reload effected assets groups
-    if (notification.userInfo.count > 0)
-        [self reloadAssetsGroupForUserInfo:notification.userInfo];
-}
-
-#pragma mark - Reload Assets Group
-
-- (void)reloadAssetsGroupForUserInfo:(NSDictionary *)userInfo
-{
-    NSSet *URLs = [userInfo objectForKey:ALAssetLibraryUpdatedAssetGroupsKey];
-    NSURL *URL  = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyURL];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF == %@", URL];
-    NSArray *matchedGroups = [URLs.allObjects filteredArrayUsingPredicate:predicate];
-    
-    // Reload assets if current assets group is updated
-    if (matchedGroups.count > 0)
-        [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
-}
+// Removed for now; had been called via ALAssetsLibraryChangedNotification
+//- (void)assetsLibraryChanged:(NSNotification *)notification
+//{
+//    // Reload all assets
+//    if (notification.userInfo == nil)
+//        [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
+//    
+//    // Reload effected assets groups
+//    if (notification.userInfo.count > 0)
+//        [self reloadAssetsGroupForUserInfo:notification.userInfo];
+//}
+//
+//#pragma mark - Reload Assets Group
+//
+//- (void)reloadAssetsGroupForUserInfo:(NSDictionary *)userInfo
+//{
+//    NSSet *URLs = [userInfo objectForKey:ALAssetLibraryUpdatedAssetGroupsKey];
+//    NSURL *URL  = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyURL];
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF == %@", URL];
+//    NSArray *matchedGroups = [URLs.allObjects filteredArrayUsingPredicate:predicate];
+//    
+//    // Reload assets if current assets group is updated
+//    if (matchedGroups.count > 0)
+//        [self performSelectorOnMainThread:@selector(reloadAssets) withObject:nil waitUntilDone:NO];
+//}
 
 #pragma mark - Selected Assets Changed
 
