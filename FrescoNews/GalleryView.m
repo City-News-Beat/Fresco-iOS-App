@@ -132,13 +132,20 @@
     
     self.sharedLayer.frame = postCell.imageView.bounds;
     
+    [self.sharedPlayer setMuted:NO];
+    
     [self.sharedPlayer play];
     
-    [self.sharedPlayer setMuted:NO];
+    self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
     [postCell bringSubviewToFront:postCell.playPause];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidReachEnd:)
+                                                 name:AVPlayerItemDidPlayToEndTimeNotification
+                                               object:[self.sharedPlayer currentItem]];
     
 }
 
@@ -291,6 +298,12 @@
         
     }
 
+}
+
+- (void)playerItemDidReachEnd:(NSNotification *)notification {
+    
+    [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
+    
 }
 
 @end

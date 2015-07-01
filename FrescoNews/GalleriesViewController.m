@@ -242,6 +242,8 @@
                     cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
 
                     [cell.galleryView.sharedPlayer setMuted:NO];
+                    
+                    cell.galleryView.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
                     cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
 
@@ -252,6 +254,11 @@
                     [cell.galleryView.sharedPlayer play];
 
                     [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                    
+                    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                             selector:@selector(playerItemDidReachEnd:)
+                                                                 name:AVPlayerItemDidPlayToEndTimeNotification
+                                                               object:[cell.galleryView.sharedPlayer currentItem]];
                 
                     
                 }
@@ -270,6 +277,12 @@
         [self disableVideo];
         
     }
+    
+}
+
+- (void)playerItemDidReachEnd:(NSNotification *)notification {
+    
+    [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
     
 }
 
