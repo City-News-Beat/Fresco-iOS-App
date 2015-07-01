@@ -35,6 +35,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
     [[AFNetworkActivityLogger sharedLogger] startLogging];
 
     // Prevent conflict between background music and camera
@@ -215,7 +216,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
     
     //Notification Types
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationType userNotificationTypes = UIUserNotificationTypeBadge |
+    UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
     
     //Notification Settings
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
