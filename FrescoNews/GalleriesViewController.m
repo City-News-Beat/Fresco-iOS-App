@@ -139,7 +139,6 @@
     
     [galleryViewController setGallery:gallery];
     
-    
     [self.navigationController pushViewController:galleryViewController animated:YES];
 
 }

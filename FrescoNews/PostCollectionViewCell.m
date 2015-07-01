@@ -23,6 +23,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 @end
 
 @implementation PostCollectionViewCell
+
 + (NSString *)identifier
 {
     return kCellIdentifier;
@@ -42,9 +43,9 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     __weak PostCollectionViewCell *weakSelf = self;
     
     if(self.post.isVideo) {
-    
-        self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(self.center.x, self.center.y, 132/2, 132/2)];
-        self.playPause.center = self.center;
+
+        self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
+        self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
         self.playPause.contentMode = UIViewContentModeScaleAspectFit;
         self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
         self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
