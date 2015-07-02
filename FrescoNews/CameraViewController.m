@@ -85,7 +85,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.photoButton.selected = YES; // TODO: Persist this and other camera state
+    self.videoButton.selected = YES; // TODO: Persist this and other camera state
+    [self updateCameraMode:CameraModeVideo];
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
