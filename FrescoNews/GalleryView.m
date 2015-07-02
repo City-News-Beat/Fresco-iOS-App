@@ -53,7 +53,12 @@
     self.pageControl.numberOfPages = 0;
 }
 
+- (void)setGallery:(FRSGallery *)gallery
+{
+    [self setGallery:gallery isInList:NO];
+}
 
+// "list" is e.g. a table view
 - (void)setGallery:(FRSGallery *)gallery isInList:(BOOL)inList
 {
     _gallery = gallery;
