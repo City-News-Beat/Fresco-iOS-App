@@ -32,7 +32,11 @@
     [self performNecessaryFetch:nil];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
-    
+
+    // https://trello.com/c/be8ayhq4/161-not-too-important-but-the-navigation-bar-in-highlights-should-slide-up-when-the-user-begins-scrolling-the-same-behavior-can-be-s
+    // Works, but introduces some weird UI that would need to fixed before uncommenting
+    // self.navigationController.hidesBarsOnSwipe = YES;
+
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         

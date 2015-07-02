@@ -85,7 +85,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.photoButton.selected = YES; // TODO: Persist this and other camera state
+    self.videoButton.selected = YES; // TODO: Persist this and other camera state
+    [self updateCameraMode:CameraModeVideo];
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -715,13 +716,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
-    // Suspenders
-    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-    if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
-        // Six hours, per @im
-        return NO;
-    }
-
     NSString *mimeType = [asset mimeType];
     if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
         return NO;
@@ -730,6 +724,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 #if TARGET_IPHONE_SIMULATOR
     return YES;
 #else
+    // Suspenders
+    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+    if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
+        // Six hours, per @im
+        return NO;
+    }
+
     if ([asset valueForProperty:ALAssetPropertyLocation]) {
         return YES;
     }
