@@ -39,8 +39,6 @@
     /*
     ** Conditionaing Variables
     */
-    @property (assign, nonatomic) BOOL centeredUserLocation;
-
     @property (assign, nonatomic) BOOL centeredAssignment;
 
     @property (assign, nonatomic) BOOL navigateTo;
@@ -236,7 +234,6 @@
             self.operatingLat = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.latitude];
             
             self.operatingLon = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.longitude];
-            
             
             if([radius integerValue] < 500){
 

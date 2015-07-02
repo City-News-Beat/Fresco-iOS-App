@@ -18,7 +18,6 @@
 @interface ProfileViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
-@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 @property (strong, nonatomic) UILabel *noContentLabel;
 @property (strong, nonatomic) UILabel *noContentLabelSmall;
 @property (strong, nonatomic) UIImageView *noContentImage;

@@ -9,10 +9,13 @@
 @import UIKit;
 @import Parse;
 #import "FRSBaseViewController.h"
+#import "GalleriesViewController.h"
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @interface HomeViewController : FRSBaseViewController
+
+@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
 
