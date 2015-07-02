@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) UIImageView *playPause;
 
+@property (nonatomic, strong) UIActivityIndicatorView *videoIndicatorView;
+
 @property (nonatomic, assign) BOOL processingVideo;
 
 + (NSString *)identifier;

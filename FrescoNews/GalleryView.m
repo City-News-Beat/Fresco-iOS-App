@@ -123,6 +123,12 @@
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
     
+    [postCell.videoIndicatorView startAnimating];
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        postCell.videoIndicatorView.alpha = 1.0f;
+    }];
+    
     [[self sharedPlayer] pause];
     
     [[self sharedLayer] removeFromSuperlayer];
@@ -146,6 +152,14 @@
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
     [postCell bringSubviewToFront:postCell.playPause];
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        postCell.videoIndicatorView.alpha = 0.0f;
+    } completion:^(BOOL finished){
+        
+        [postCell.videoIndicatorView stopAnimating];
+        
+    }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerItemDidReachEnd:)

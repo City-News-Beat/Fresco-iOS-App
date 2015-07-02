@@ -19,6 +19,7 @@
 #import "GalleryView.h"
 #import "GalleryViewController.h"
 #import "FRSPost.h"
+#import "PostCollectionViewCell.h"
 #import "UIView+Additions.h"
 
 @interface GalleriesViewController()
@@ -216,10 +217,18 @@
     
     GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:visibleIndexPath];
     
-    FRSPost *firstPost = cell.gallery.posts[0];
+    FRSPost *post = cell.gallery.posts[0];
     
     //Check if the cell is a video first!
-    if([firstPost isVideo]){
+    if([post isVideo]){
+        
+        PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        
+        [postCell.videoIndicatorView startAnimating];
+        
+        [UIView animateWithDuration:1.0 animations:^{
+            postCell.videoIndicatorView.alpha = 1.0f;
+        }];
         
         //If the video current playing isn't this one, or no video has played yet
         if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
@@ -241,7 +250,7 @@
                     self.playingIndex = visibleIndexPath;
                     
                     // TODO: Check for missing/corrupt media at firstPost.url
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:firstPost.video];
+                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:post.video];
 
                     [cell.galleryView.sharedPlayer setMuted:NO];
                     
@@ -252,10 +261,18 @@
                     cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 
                     cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
-
+                    
                     [cell.galleryView.sharedPlayer play];
-
-                    [[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].layer addSublayer:cell.galleryView.sharedLayer];
+                    
+                    [postCell.layer addSublayer:cell.galleryView.sharedLayer];
+                    
+                    [UIView animateWithDuration:1.0 animations:^{
+                        postCell.videoIndicatorView.alpha = 0.0f;
+                    } completion:^(BOOL finished){
+                        
+                        [postCell.videoIndicatorView stopAnimating];
+ 
+                    }];
                     
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(playerItemDidReachEnd:)

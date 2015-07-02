@@ -34,6 +34,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     [[self imageView] cancelImageRequestOperation];
     self.transcodeImage.hidden = YES;
     self.transcodeLabel.hidden = YES;
+    self.videoIndicatorView.hidden = YES;
 }
 
 - (void)setPost:(FRSPost *)post
@@ -44,6 +45,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     if(self.post.isVideo) {
 
+        //Set up for play/pause button
         self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
         self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
         self.playPause.contentMode = UIViewContentModeScaleAspectFit;
@@ -52,15 +54,24 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         self.playPause.layer.shadowOpacity = 1;
         self.playPause.layer.shadowRadius = 1.0;
         self.playPause.clipsToBounds = NO;
+        self.playPause.alpha = 0;
         self.playPause.image = [UIImage imageNamed:@"pause"];
         
+        //Set up for indicator view
+        self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(weakSelf.frame.size.width - 25, 15, 10, 10)];
+        self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
+        self.videoIndicatorView.alpha = 0;
+
+        //Add subviews and bring to the front so they don't get hidden
         [self addSubview:self.playPause];
+        [self addSubview:self.videoIndicatorView];
+        [self bringSubviewToFront:self.videoIndicatorView];
         [self bringSubviewToFront:self.playPause];
-        self.playPause.alpha = 0;
     
     }
 
     if (_post.postID) {
+        
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             self.transcodeImage.hidden = YES;
@@ -76,7 +87,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                 self.processingVideo = true;
             
                 self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
-
                 self.transcodeImage.image = [UIImage imageNamed:@"transcoding"];
                 self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
                 self.transcodeImage.center = self.center;
@@ -87,8 +97,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                 self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
                 self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
 
-                [weakSelf addSubview:self.transcodeImage];
-                [weakSelf addSubview:self.transcodeLabel];
+                [self addSubview:self.transcodeImage];
+                [self addSubview:self.transcodeLabel];
                 
             }
             
