@@ -106,6 +106,7 @@
     return viewController;
 }
 
+
 - (void)setupTabBarAppearances:(UITabBarController *)tabBarController
 {
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
@@ -145,5 +146,8 @@
 {
     return ![viewController isKindOfClass:[CameraViewController class]];
 }
+
+
+
 
 @end
