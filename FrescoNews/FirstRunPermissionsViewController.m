@@ -120,7 +120,7 @@
         [timer invalidate];
         timer = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.locationPermissionsImage.image = [UIImage imageNamed:@"notificationsOnIcon"];
+            self.notificationsPermissionsImage.image = [UIImage imageNamed:@"notificationsOnIcon"];
             [self.notificationsPermissionsLabel setTitle:@"Notifications Enabled" forState:UIControlStateNormal];
         });
     }
