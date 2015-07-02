@@ -167,10 +167,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     ALAssetsGroupEnumerationResultsBlock resultsBlock = ^(ALAsset *asset, NSUInteger index, BOOL *stop) {
         if (asset) {
             // Only show assets less than six hours old (see -shouldShowAsset:)
+#if !(TARGET_IPHONE_SIMULATOR)
             NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-            if ([date timeIntervalSinceDate:[NSDate date]] <  [VariableStore sharedInstance].maximumAssetAge) {
+            if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
                 *stop = YES;
             }
+#endif
 
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
                 [self.assets addObject:asset];
@@ -199,7 +201,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (UIBarButtonItem *)titleButtonItem
 {
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery Post"
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:@"Create a Gallery"
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(createGalleryPost:)];

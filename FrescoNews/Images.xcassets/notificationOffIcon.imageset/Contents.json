@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "micOnIcon.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "micOnIcon@2x.png"
+      "filename" : "notification-permissions-inactive@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "micOnIcon@3x.png"
+      "filename" : "notification-permissions-inactive@3x.png"
     }
   ],
   "info" : {

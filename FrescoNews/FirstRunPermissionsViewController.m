@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) NSTimer *timer;
 @end
 
 @implementation FirstRunPermissionsViewController
@@ -32,11 +33,16 @@
 {
     [super viewDidLoad];
     self.isSkipState = YES;
+    self.cameraPermissionsImage.alpha = 0.54;
+    self.locationPermissionsImage.alpha = 0.54;
+    self.notificationsPermissionsImage.alpha = 0.54;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.timer invalidate];
+    self.timer = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -102,6 +108,22 @@
     button.enabled = NO;
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate registerForPushNotifications];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.notificationsPermissionsLabel setTitle:@"Notifications Pending" forState:UIControlStateNormal];
+    });
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(confirmPushNotifications:) userInfo:nil repeats:YES];
+}
+
+- (void)confirmPushNotifications:(NSTimer *)timer
+{
+    if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+        [timer invalidate];
+        timer = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.notificationsPermissionsImage.image = [UIImage imageNamed:@"notificationsOnIcon"];
+            [self.notificationsPermissionsLabel setTitle:@"Notifications Enabled" forState:UIControlStateNormal];
+        });
+    }
 }
 
 - (IBAction)actionNext:(id)sender
