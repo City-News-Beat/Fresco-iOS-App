@@ -11,11 +11,8 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @import UIKit;
 
 #import "FRSBaseViewController.h"
-#import "GalleriesViewController.h"
 
 @interface ProfileViewController : FRSBaseViewController
-
-@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
 

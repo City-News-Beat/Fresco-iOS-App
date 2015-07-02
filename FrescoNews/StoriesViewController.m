@@ -21,6 +21,7 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *imageArrays;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 

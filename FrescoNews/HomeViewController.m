@@ -18,6 +18,7 @@
 @interface HomeViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
+@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 

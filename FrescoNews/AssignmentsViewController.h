@@ -19,10 +19,7 @@
 
 @property (nonatomic, strong) NSMutableArray *clusters;
 
-@property (assign, nonatomic) BOOL centeredUserLocation;
-
 - (void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate;
 
-- (void)zoomToCurrentLocation;
 
 @end

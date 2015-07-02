@@ -39,6 +39,8 @@
     /*
     ** Conditionaing Variables
     */
+    @property (assign, nonatomic) BOOL centeredUserLocation;
+
     @property (assign, nonatomic) BOOL centeredAssignment;
 
     @property (assign, nonatomic) BOOL navigateTo;
@@ -234,6 +236,7 @@
             self.operatingLat = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.latitude];
             
             self.operatingLon = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.longitude];
+            
             
             if([radius integerValue] < 500){
 
@@ -432,16 +435,15 @@
             if (!error) {
                 
                 //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count]){
-                    
-                    //Don't zoom to uer location
-                    runUserLocation = false;
+                if(responseObject != nil){
                     
                     float avgLat = 0;
                     
                     float avgLng = 0;
                     
                     self.assignments = responseObject;
+                    
+                    runUserLocation = false;
                     
                     //Add up lat/lng
                     for(FRSAssignment *assignment in self.assignments){
@@ -454,12 +456,12 @@
                     
                     // Zooming map after delay for effect
                     MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
-    
+                    
+                    
                     //Get Average location of all assignments and current location
                     CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
-                        (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
-                        (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
-                    );
+                                                                                (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
+                                                                                (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1));
         
    
                     MKCoordinateRegion region = {avgLoc, span};
@@ -475,19 +477,15 @@
         }];
         
         if(runUserLocation){
-            
-            if(self.assignmentsMap.userLocation.location != nil){
         
-                // Zooming map after delay for effect
-                MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-                
-                MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-                
-                MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                
-                [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                
-            }
+            // Zooming map after delay for effect
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+            
+            MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+            
+            MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+            
+            [self.assignmentsMap setRegion:regionThatFits animated:YES];
         
         }
         
