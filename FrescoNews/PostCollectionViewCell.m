@@ -74,11 +74,12 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
+            self.processingVideo = false;
+            
             self.transcodeImage.hidden = YES;
             self.transcodeLabel.hidden = YES;
             
             weakSelf.imageView.image = image;
-            
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
