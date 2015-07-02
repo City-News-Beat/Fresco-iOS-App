@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "cameraOffIcon.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "cameraOffIcon@2x.png"
+      "filename" : "camera-permissions-inactive@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "cameraOffIcon@3x.png"
+      "filename" : "camera-permissions-inactive@3x.png"
     }
   ],
   "info" : {
