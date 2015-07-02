@@ -10,7 +10,6 @@
 #import "StoriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
-#import "FRSTag.h"
 #import "StoryCellMosaic.h"
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"

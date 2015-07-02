@@ -19,7 +19,5 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @property (nonatomic, strong) NSMutableArray *stories;
 
-@property (nonatomic, strong) FRSTag *tag;
-
 @end
 

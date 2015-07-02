@@ -27,7 +27,7 @@
         HomeViewController *vc = (HomeViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
         
         [vc.galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-  
+        
         [tabBarController setSelectedIndex:0];
     
     }
@@ -43,14 +43,14 @@
     }
     else if ([item.title isEqualToString:@"Assignments"]) {
         
-        AssignmentsViewController *vc = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-        
-        vc.centeredUserLocation = NO;
-        
-        [vc zoomToCurrentLocation];
+//        AssignmentsViewController *vc = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+//        
+//        vc.centeredUserLocation = NO;
+//        
+//        [vc zoomToCurrentLocation];
+//        
+//        [tabBarController setSelectedIndex:3];
 
-        
-        
     }
     else if ([item.title isEqualToString:@"Profile"]) {
         
