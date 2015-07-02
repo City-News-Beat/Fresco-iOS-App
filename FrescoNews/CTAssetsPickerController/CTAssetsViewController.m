@@ -173,12 +173,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
                 *stop = YES;
             }
 #endif
-
             if ([self.picker.delegate assetsPickerController:self.picker shouldShowAsset:asset]) {
                 [self.assets addObject:asset];
-                // TODO: Look into optimizing this
-                if ([[[NSUserDefaults standardUserDefaults] arrayForKey:@"selectedAssets"] containsObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
-                {
+                // TODO: Look into optimizing this, if looping over lots of images
+                NSURL *assetURL = [asset valueForProperty:ALAssetPropertyAssetURL];
+                NSArray *array = [[NSUserDefaults standardUserDefaults] arrayForKey:@"selectedAssets"];
+                if ([array containsObject:[assetURL absoluteString]] || [self.picker.createdAssetURLs containsObject:assetURL]) {
                     if (![self.picker.selectedAssets containsObject:asset]) {
                         [self.picker.selectedAssets addObject:asset];
                     }

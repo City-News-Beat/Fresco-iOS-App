@@ -7,6 +7,7 @@
 //
 
 #import "TabBarController.h"
+@import AVFoundation;
 #import "CameraViewController.h"
 
 @implementation TabBarController
@@ -15,7 +16,9 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:@"previouslySelectedTab"];
     if ([item.title isEqualToString:@"Camera"]) {
-        [self presentCamera];
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied) {
+            [self presentCamera];
+        }
     }
 }
 
