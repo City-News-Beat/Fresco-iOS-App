@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -127,7 +127,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires in 10 min" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h3D-bu-Qca">
                                                 <rect key="frame" x="16" y="30.5" width="576" height="14.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
@@ -2729,7 +2729,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Permissions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kL-nm-V69">
                                 <rect key="frame" x="16" y="141" width="343" height="20.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sNX-O4-Vao">
@@ -3767,7 +3767,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Your media is visible not only to fresco users, but to verified news outlets who eyewitness reporting" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHT-U4-cBy">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Your media is visible not only to Fresco users, but to our news organization partners in need of visual coverage" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHT-U4-cBy">
                                 <rect key="frame" x="16" y="209" width="343" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nHT-U4-cBy" secondAttribute="height" multiplier="343:33" constant="-181.89393939393938" id="KxU-Yh-yt8"/>
@@ -3835,6 +3835,7 @@
                             <constraint firstAttribute="centerX" secondItem="ckF-2x-j98" secondAttribute="centerX" id="cjG-w8-RFZ"/>
                             <constraint firstItem="9s9-9w-ilI" firstAttribute="leading" secondItem="FGy-CL-QPR" secondAttribute="leading" id="doO-kk-OJ6"/>
                             <constraint firstItem="ckF-2x-j98" firstAttribute="leading" secondItem="nUD-Dx-zPx" secondAttribute="leadingMargin" constant="-53" id="eYR-kS-Wm5"/>
+                            <constraint firstItem="nHT-U4-cBy" firstAttribute="trailing" secondItem="nUD-Dx-zPx" secondAttribute="trailingMargin" id="gIE-8S-PeZ"/>
                             <constraint firstItem="9s9-9w-ilI" firstAttribute="trailing" secondItem="FGy-CL-QPR" secondAttribute="trailing" id="jdu-oT-Ra7"/>
                             <constraint firstItem="ckF-2x-j98" firstAttribute="top" secondItem="nHT-U4-cBy" secondAttribute="bottom" constant="34" id="lC0-9z-FGq"/>
                             <constraint firstItem="nHT-U4-cBy" firstAttribute="top" secondItem="hkV-m5-730" secondAttribute="bottom" constant="8" id="lKg-Ul-QJv"/>
@@ -3852,6 +3853,7 @@
                             <mask key="constraints">
                                 <exclude reference="9EH-rE-CJQ"/>
                                 <exclude reference="Hnr-Mo-jSX"/>
+                                <exclude reference="yaQ-aT-R1f"/>
                                 <exclude reference="EWe-cN-2pu"/>
                                 <exclude reference="VIF-sM-jCk"/>
                                 <exclude reference="cjG-w8-RFZ"/>

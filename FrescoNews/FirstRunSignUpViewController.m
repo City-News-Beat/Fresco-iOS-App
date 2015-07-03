@@ -179,7 +179,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSError *error = nil;
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                NSString *profileImageURL = result[@"profile_image_url_https"];
+
+                NSString *profileImageURL = [result[@"profile_image_url_https"] stringByReplacingOccurrencesOfString:@"_normal" withString:@""];
                 if (profileImageURL.length > 0) {
                     self.socialImageURL = [NSURL URLWithString:profileImageURL];
                     [self.addPhotoImageView setImageWithURL:self.socialImageURL];
