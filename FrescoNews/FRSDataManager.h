@@ -33,7 +33,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-- (BOOL)login;
+- (void)loginWithBlock:(PFBooleanResultBlock)block;
 - (void)logout;
 - (BOOL)currentUserValid;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
