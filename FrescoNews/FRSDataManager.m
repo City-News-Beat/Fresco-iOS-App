@@ -824,4 +824,21 @@
     [self getGalleriesAtURLString:[NSString stringWithFormat:@"user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
 
+- (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+
+    [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
+        if (![responseObject[@"data"] isEqual:[NSNull null]]) {
+            if(responseBlock) responseBlock(responseObject, nil);
+        }
+
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if (responseBlock) responseBlock(nil, error);
+    }];
+}
+
 @end
