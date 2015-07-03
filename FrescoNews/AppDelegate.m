@@ -48,7 +48,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [self configureParseWithLaunchOptions:launchOptions];
 
     // try to bootstrap the user
-    [[FRSDataManager sharedManager] login];
+    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+            NSLog(@"Error on login %@", error);
+        else
+            NSLog(@"successful log in on launch");
+    }];
 
     [self setupAppearances];
 
@@ -93,12 +98,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)loadInitialViewController
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    if ([[FRSDataManager sharedManager] login]) {
-        [rootViewController setRootViewControllerToTabBar];
-    }
-    else {
-        [rootViewController setRootViewControllerToFirstRun];
-    }
+    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            [rootViewController setRootViewControllerToTabBar];
+        }
+        else
+            [rootViewController setRootViewControllerToFirstRun];
+    }];
 }
 
 - (void)setRootViewControllerToTabBar
@@ -191,13 +197,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
-                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
+    [Parse setApplicationId:[VariableStore sharedInstance].parseAppId clientKey:[VariableStore sharedInstance].parseClientKey];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    [PFTwitterUtils initializeWithConsumerKey:@"o6y4zv5yq0AfCU4HKUHQYJMXE"
-                               consumerSecret:@"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz"];
+    [PFTwitterUtils initializeWithConsumerKey:[VariableStore sharedInstance].twitterConsumerKey
+                               consumerSecret:[VariableStore sharedInstance].twitterConsumerSecret];
 }
 
 - (void)registerForPushNotifications
