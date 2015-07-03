@@ -707,8 +707,8 @@
         <!--Profile Navigation-->
         <scene sceneID="LQ8-Hc-e4a">
             <objects>
-                <navigationController title="Profile" id="zRu-VI-cNm" userLabel="Profile Navigation" customClass="BaseNavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="tab-profile" id="dX3-lU-RwU"/>
+                <navigationController title="Me" id="zRu-VI-cNm" userLabel="Profile Navigation" customClass="BaseNavigationController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Me" image="tab-profile" id="dX3-lU-RwU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hsh-rZ-HIN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

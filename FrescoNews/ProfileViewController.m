@@ -75,7 +75,7 @@
 
     }];
     
-    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Profile"
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Me"
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:[self navigationController]
                                                                      action:@selector(popViewControllerAnimated:)];
