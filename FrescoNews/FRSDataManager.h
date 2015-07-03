@@ -88,4 +88,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
     
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+#pragma mark - Other
+
+- (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock;
+
 @end

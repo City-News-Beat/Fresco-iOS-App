@@ -92,4 +92,8 @@
                                                                  }];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [self save];
+}
+
 @end

@@ -68,6 +68,7 @@
 		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
+		32CA6FF51B45974F00242E1E /* FirstRunTOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CA6FF41B45974F00242E1E /* FirstRunTOSViewController.m */; };
 		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */; };
 		420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F51ADB875000157762 /* ALAsset+assetType.m */; };
@@ -283,6 +284,8 @@
 		1EDF047C1B0E902900B35858 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
 		32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileSettingsViewController.m; sourceTree = "<group>"; };
+		32CA6FF31B45974F00242E1E /* FirstRunTOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunTOSViewController.h; sourceTree = "<group>"; };
+		32CA6FF41B45974F00242E1E /* FirstRunTOSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunTOSViewController.m; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		420DC6F21ADB875000157762 /* ALAsset+accessibilityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+accessibilityLabel.h"; sourceTree = "<group>"; };
 		420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALAsset+accessibilityLabel.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -479,6 +482,8 @@
 				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
 				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
 				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
+				32CA6FF31B45974F00242E1E /* FirstRunTOSViewController.h */,
+				32CA6FF41B45974F00242E1E /* FirstRunTOSViewController.m */,
 			);
 			name = FirstRun;
 			sourceTree = "<group>";
@@ -1363,6 +1368,7 @@
 				E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */,
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
+				32CA6FF51B45974F00242E1E /* FirstRunTOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,

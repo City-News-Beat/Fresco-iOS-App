@@ -46,6 +46,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlViewWidthConstraint;
+@property (strong, nonatomic) NSMutableArray *createdAssetURLs;
 
 // Refactor
 @property (strong, nonatomic) CLLocation *location;
@@ -87,6 +88,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [super viewDidLoad];
     self.videoButton.selected = YES; // TODO: Persist this and other camera state
     [self updateCameraMode:CameraModeVideo];
+    self.createdAssetURLs = [NSMutableArray new];
 
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -308,8 +310,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)toggleMovieRecording
 {
     if ([[self movieFileOutput] isRecording]) {
-        [self showUIForCameraMode:CameraModeVideo];
-
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
                                                error:nil];
@@ -389,7 +389,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
                                                                     metadata:metadata
-                                                             completionBlock:nil];
+                                                             completionBlock:^(NSURL *assetURL, NSError *error) {
+                                                                 [self.createdAssetURLs addObject:assetURL];
+                                                             }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideUIForCameraMode:CameraModePhoto];
                     [self showUIForCameraMode:CameraModePhoto];
@@ -466,7 +468,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
     picker.title =  @"Choose Media";
-    picker.autoSubmit = sender ? NO : YES;
+    picker.autoSubmit = (sender ? NO : YES);
+    picker.createdAssetURLs = self.createdAssetURLs;
     self.view.hidden = YES;
     [self presentViewController:picker animated:(sender ? YES : NO) completion:nil];
 }
@@ -504,8 +507,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
+        [self showUIForCameraMode:CameraModeVideo];
         if (error) {
             NSLog(@"%@", error);
+        }
+        else {
+            [self.createdAssetURLs addObject:assetURL];
         }
 
         [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];

@@ -83,6 +83,7 @@
 @property (nonatomic, readonly, strong) BaseNavigationController *childNavigationController;
 
 @property (nonatomic) BOOL autoSubmit;
+@property (strong, nonatomic) NSArray *createdAssetURLs;
 
 /**
  *  @name Managing Selections

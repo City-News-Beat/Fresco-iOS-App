@@ -73,6 +73,11 @@ captureLocalizedScreenshot("9-signup-notifications");
 window.buttons()[0].tap();
 target.delay(2.5);
 
+captureLocalizedScreenshot("9-signup-tos");
+
+window.buttons()[0].tap();
+target.delay(2.5);
+
 window.tabBar().buttons()[4].tap();
 target.delay(2.5);
 
