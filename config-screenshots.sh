@@ -21,7 +21,7 @@ export languages="en-US"
 # Run `instruments -s devices` to get a list of all the possible string values.
 
 declare -xa simulators=(
-"iPhone 6 (8.3 Simulator)",
-"iPhone 6 Plus (8.3 Simulator)",
-"iPhone 5 (8.3 Simulator)",
+"iPhone 6 (8.4 Simulator)",
+"iPhone 6 Plus (8.4 Simulator)",
+"iPhone 5 (8.4 Simulator)",
 )

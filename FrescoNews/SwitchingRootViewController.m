@@ -7,10 +7,11 @@
 //
 
 #import "SwitchingRootViewController.h"
+@import AVFoundation;
 #import "TabBarController.h"
 #import "CameraViewController.h"
 
-@interface SwitchingRootViewController () <UITabBarControllerDelegate>
+@interface SwitchingRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
 @property (nonatomic) BOOL returnToGalleryPost;
 @end
@@ -141,10 +142,32 @@
 
 #pragma mark - UITabBarControllerDelegate methods
 
-// Probably no longer needed, but doesn't hurt
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    return ![viewController isKindOfClass:[CameraViewController class]];
+    if ([viewController isMemberOfClass:[UIViewController class]]) {
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
+                                                            message:@"Fresco needs permission to access the camera to continue."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Go to Settings", nil];
+            [alert show];
+        }
+
+        return NO;
+    }
+    else {
+        return YES;
+    }
+}
+
+#pragma mark - UIAlertViewDelegate methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 
