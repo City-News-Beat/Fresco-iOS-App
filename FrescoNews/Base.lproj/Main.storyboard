@@ -724,7 +724,7 @@
         <!--Camera-->
         <scene sceneID="8Xq-LW-j2N">
             <objects>
-                <viewController id="ZRN-7D-fGO" sceneMemberID="viewController">
+                <viewController id="ZRN-7D-fGO" customClass="TemplateCameraViewController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="are-vO-thx">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="30"/>

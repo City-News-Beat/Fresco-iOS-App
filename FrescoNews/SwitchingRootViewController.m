@@ -147,16 +147,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    UIViewController *vc = viewController.childViewControllers[0];
-    if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
-        [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-        return NO;
-    }
-    else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
-        [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
-        return NO;
-    }
-    else if ([viewController isMemberOfClass:[UIViewController class]]) {
+    if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
                                                             message:@"Fresco needs permission to access the camera to continue."
@@ -168,9 +159,20 @@
 
         return NO;
     }
-    else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
-        [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-        return NO;
+    else {
+        UIViewController *vc = [viewController.childViewControllers firstObject];
+        if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
+            [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
+        else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
+            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
+        else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
+            [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
     }
 
     return YES;
@@ -184,8 +186,5 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
 }
-
-
-
 
 @end

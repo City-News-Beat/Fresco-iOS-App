@@ -19,6 +19,10 @@
 #import "SwitchingRootViewController.h"
 #import "MKMapView+Additions.h"
 
+@implementation TemplateCameraViewController
+// Do not delete
+@end
+
 typedef enum : NSUInteger {
     CameraModePhoto,
     CameraModeVideo
