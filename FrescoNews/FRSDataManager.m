@@ -22,9 +22,7 @@
 }
 
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
-
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
-
 @end
 
 @implementation FRSDataManager
@@ -883,13 +881,31 @@
     [self getGalleriesAtURLString:[NSString stringWithFormat:@"user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
 
+- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+{
+    if (!self.currentUser.userID) {
+        // NSLog(@"Not logged in, could not call user/locate");
+        return;
+    }
+
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+    [params addEntriesFromDictionary:inputParams];
+
+    [self POST:@"user/locate" parameters:params constructingBodyWithBlock:nil
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           // NSLog(@"Successfully called user/locate: %@/%@ (returned values)", responseObject[@"data"][@"last_loc"][@"geo"][@"coordinates"][1], responseObject[@"data"][@"last_loc"][@"geo"][@"coordinates"][0]);
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           NSLog(@"Error: %@", error);
+       }];
+}
+
 - (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
     [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+        
         if (![responseObject[@"data"] isEqual:[NSNull null]]) {
             if(responseBlock) responseBlock(responseObject, nil);
         }

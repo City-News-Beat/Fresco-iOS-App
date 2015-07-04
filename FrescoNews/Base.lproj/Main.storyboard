@@ -2935,7 +2935,7 @@
                                     <constraint firstAttribute="width" secondItem="TBX-ma-HXY" secondAttribute="height" multiplier="25:3" id="L5J-Zl-urg"/>
                                     <constraint firstAttribute="height" constant="45" id="uqs-7P-UQN"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Next">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3301,7 +3301,7 @@
                                     <constraint firstAttribute="width" secondItem="TJ9-ww-Xu7" secondAttribute="height" multiplier="25:3" id="QoS-Cf-pmh"/>
                                     <constraint firstAttribute="height" constant="45" id="SgN-6G-fWe"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Next">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3458,8 +3458,8 @@
                                     <constraint firstAttribute="width" secondItem="ehd-1G-17k" secondAttribute="height" multiplier="25:3" id="ePl-fk-aQH"/>
                                     <constraint firstAttribute="height" constant="45" id="qUf-IO-tqR"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Done">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Next">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -4144,7 +4144,7 @@
                                     <constraint firstAttribute="width" secondItem="Nqd-Yj-xpu" secondAttribute="height" multiplier="25:3" id="pjY-2d-8qa"/>
                                     <constraint firstAttribute="height" constant="45" id="yC4-67-Gdg"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Agree">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

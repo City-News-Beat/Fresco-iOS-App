@@ -114,7 +114,7 @@
             // otherwise just go into the app
             else {
                 AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-                // TODO: Move location calls to -navigateToMainApp
+                // TODO: Move location setup calls to -navigateToMainApp or FRSDataManager
                 [appDelegate setupLocationManager];
                 [appDelegate setupLocationMonitoring];
                 [self.view endEditing:YES];

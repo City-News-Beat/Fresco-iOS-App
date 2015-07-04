@@ -21,6 +21,9 @@
 
 @implementation FirstRunRadiusViewController
 
+// Note: If user has declined to share location (either "when in use" or "always"), the following console warning will appear:
+// Trying to start MapKit location updates without prompting for location authorization. Must call -[CLLocationManager requestWhenInUseAuthorization] or -[CLLocationManager requestAlwaysAuthorization] first.
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
