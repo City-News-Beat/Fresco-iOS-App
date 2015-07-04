@@ -738,7 +738,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     // Suspenders
     NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
     if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
-        // Six hours, per @im
         return NO;
     }
 

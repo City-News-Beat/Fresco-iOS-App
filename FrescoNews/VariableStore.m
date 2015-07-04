@@ -60,8 +60,8 @@
         sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
 #endif
         
-        sharedInstance.maximumVideoLength = 60.0f;
-        sharedInstance.maximumAssetAge = -3600 * 6;
+        sharedInstance.maximumVideoLength = 60.0f; // Per @im
+        sharedInstance.maximumAssetAge = -3600 * 6; // Per @im
         sharedInstance.locationUpdateInterval = 30; // (While the app is running)
     });
     
