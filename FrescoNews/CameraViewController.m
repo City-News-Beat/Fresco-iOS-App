@@ -19,6 +19,10 @@
 #import "SwitchingRootViewController.h"
 #import "MKMapView+Additions.h"
 
+@implementation TemplateCameraViewController
+// Do not delete
+@end
+
 typedef enum : NSUInteger {
     CameraModePhoto,
     CameraModeVideo
@@ -734,7 +738,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     // Suspenders
     NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
     if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
-        // Six hours, per @im
         return NO;
     }
 

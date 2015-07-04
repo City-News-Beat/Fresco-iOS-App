@@ -48,7 +48,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [self configureParseWithLaunchOptions:launchOptions];
 
     // try to bootstrap the user
-    [[FRSDataManager sharedManager] login];
+    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+            NSLog(@"Error on login %@", error);
+        else
+            NSLog(@"successful log in on launch");
+    }];
 
     [self setupAppearances];
 
@@ -93,12 +98,13 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)loadInitialViewController
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    if ([[FRSDataManager sharedManager] login]) {
-        [rootViewController setRootViewControllerToTabBar];
-    }
-    else {
-        [rootViewController setRootViewControllerToFirstRun];
-    }
+    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError * error) {
+        if (succeeded) {
+            [rootViewController setRootViewControllerToTabBar];
+        }
+        else
+            [rootViewController setRootViewControllerToFirstRun];
+    }];
 }
 
 - (void)setRootViewControllerToTabBar
@@ -191,13 +197,12 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc"
-                  clientKey:@"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4"];
+    [Parse setApplicationId:[VariableStore sharedInstance].parseAppId clientKey:[VariableStore sharedInstance].parseClientKey];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    [PFTwitterUtils initializeWithConsumerKey:@"o6y4zv5yq0AfCU4HKUHQYJMXE"
-                               consumerSecret:@"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz"];
+    [PFTwitterUtils initializeWithConsumerKey:[VariableStore sharedInstance].twitterConsumerKey
+                               consumerSecret:[VariableStore sharedInstance].twitterConsumerSecret];
 }
 
 - (void)registerForPushNotifications
@@ -232,34 +237,28 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    if ([FRSDataManager sharedManager].currentUser.userID) {
-        if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
-            // NSLog(@"new location");
-            self.location = [locations lastObject];
-
-            AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
-            NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                         @"lat" : @(self.location.coordinate.latitude),
-                                         @"lon" : @(self.location.coordinate.longitude)};
-            [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
-                        parameters:parameters
-                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                               // NSLog(@"JSON: %@", responseObject);
-                               NSLog(@"called user/locate");
-                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                               NSLog(@"Error: %@", error);
-                           }];
-        }
-        else {
-            // NSLog(@"not a new location");
-        }
-
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
-    }
-    else {
+    if (![FRSDataManager sharedManager].currentUser.userID) {
         [self.locationManager stopMonitoringSignificantLocationChanges];
     }
 
+    if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
+        // NSLog(@"new location");
+        self.location = [locations lastObject];
+
+        NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
+                                 @"lon" : @(self.location.coordinate.longitude)};
+
+        [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
+    }
+    else {
+        // NSLog(@"not a new location");
+    }
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // NSLog(@"Starting timer...");
+        [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].locationUpdateInterval target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+    });
     [self.locationManager stopUpdatingLocation];
 }
 
@@ -271,8 +270,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)restartLocationUpdates
 {
-    [self.timer invalidate];
-    self.timer = nil;
     [self.locationManager startUpdatingLocation];
 }
 

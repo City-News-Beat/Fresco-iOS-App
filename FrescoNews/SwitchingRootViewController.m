@@ -9,7 +9,10 @@
 #import "SwitchingRootViewController.h"
 @import AVFoundation;
 #import "TabBarController.h"
+#import "HomeViewController.h"
+#import "StoriesViewController.h"
 #import "CameraViewController.h"
+#import "ProfileViewController.h"
 
 @interface SwitchingRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
@@ -144,7 +147,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    if ([viewController isMemberOfClass:[UIViewController class]]) {
+    if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
                                                             message:@"Fresco needs permission to access the camera to continue."
@@ -157,8 +160,22 @@
         return NO;
     }
     else {
-        return YES;
+        UIViewController *vc = [viewController.childViewControllers firstObject];
+        if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
+            [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
+        else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
+            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
+        else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
+            [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
     }
+
+    return YES;
 }
 
 #pragma mark - UIAlertViewDelegate methods
@@ -169,8 +186,5 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
 }
-
-
-
 
 @end

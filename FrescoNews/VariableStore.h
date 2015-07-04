@@ -13,6 +13,7 @@
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
     ErrorSignupCantCreateUser,
+    ErrorSignupCantGetUser,
     ErrorSignupNoUserOnServer,
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
@@ -47,8 +48,13 @@ enum FRSErrorCodes {
 @property NSString *basePath;
 @property NSString *cdnBaseURL;
 @property NSString *cdnFacebookBaseURL;
+@property NSString *parseAppId;
+@property NSString *parseClientKey;
+@property NSString *twitterConsumerKey;
+@property NSString *twitterConsumerSecret;
 
 @property CGFloat maximumVideoLength;
 @property NSInteger maximumAssetAge;
+@property NSInteger locationUpdateInterval;
 
 @end

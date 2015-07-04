@@ -21,19 +21,17 @@
 #import "FRSNotification.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
-
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 @interface FRSDataManager : AFHTTPSessionManager
 
 @property (nonatomic, strong) FRSUser *currentUser;
 @property (nonatomic, strong) NSString *frescoAPIToken;
-
 @property (nonatomic, assign) BOOL updatedNotifications;
 
 + (FRSDataManager *)sharedManager;
 
-- (BOOL)login;
+- (void)loginWithBlock:(PFBooleanResultBlock)block;
 - (void)logout;
 - (BOOL)currentUserValid;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
@@ -43,53 +41,35 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
 - (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 
-/*
-** Galleries
-*/
-
+#pragma mark - Galleries
 
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
-/*
-** Stories
-*/
+#pragma mark - Stories
 
 - (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-
-/*
-** Assignments
-*/
+#pragma mark - Assignments
 
 - (void)getAssignment:(NSString *)assignmentId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(CLLocationCoordinate2D)coordinate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-
 - (void)getClustersWithinLocation:(float)lat lon:(float)lon radius:(float)radius withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-
-/*
-** Notifications
-*/
+#pragma mark - Notifications
 
 - (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock;
-
 - (void)setNotificationSeen:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-    
+
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - Other
 
+- (void)updateUserLocation:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
 - (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock;
 
 @end
