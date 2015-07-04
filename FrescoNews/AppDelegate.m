@@ -254,7 +254,11 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         // NSLog(@"not a new location");
     }
 
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // NSLog(@"Starting timer...");
+        [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].locationUpdateInterval target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+    });
     [self.locationManager stopUpdatingLocation];
 }
 
@@ -266,8 +270,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)restartLocationUpdates
 {
-    [self.timer invalidate];
-    self.timer = nil;
     [self.locationManager startUpdatingLocation];
 }
 

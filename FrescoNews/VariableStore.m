@@ -62,6 +62,7 @@
         
         sharedInstance.maximumVideoLength = 60.0f;
         sharedInstance.maximumAssetAge = -3600 * 6;
+        sharedInstance.locationUpdateInterval = 30; // (While the app is running)
     });
     
     return sharedInstance;
