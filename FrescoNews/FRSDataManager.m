@@ -128,12 +128,13 @@
 #pragma mark - User State
 - (void)loginWithBlock:(PFBooleanResultBlock)block
 {
-    // synchronously fetch the current user from Parse
-    //[[PFUser currentUser] fetch];
     [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
 
         NSString *frescoUserId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
         if (frescoUserId) {
+            
+            [self tieUserToInstallation];
+            
             [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
                 if (!error) {
                     _currentUser = responseUser;
@@ -159,58 +160,6 @@
     }];
 }
 
-/*
-- (void)loginWithBlock:(PFBooleanResultBlock)block
-{
-    // get the user from Parse
-    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
-        if (!error) {
-            FRSUser *frsUser = [self FRSUserFromPFUser];
-            
-            if (frsUser) {
-                // set the "global" user variable
-                //_currentUser = frsUser;
-                
-                // pull the fresco API user
-                [self getFrescoUser:frsUser.userID withResponseBlock:^(FRSUser *responseUser, NSError *error) {
-                    if (!error) {
-                        _currentUser = responseUser;
-                        
-                        // and write the FRSUser portiong back to Parse
-                        [self syncFRSUser:_currentUser toParse:^(BOOL succeeded, NSError *error) {
-                            if (!error)
-                                // here, we're returning successfuly to the caller
-                                block(YES, nil);
-                            else
-                                block(NO, error);
-                        }];
-                    }
-                    else {
-                        block(NO, error);
-                    }
-                }];
-                
-                // Authenticate to the API
-                [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
-                    if (error)
-                        NSLog(@"Could not authenticate to the API");
-                }];
-                
-            }
-            else {
-                NSError *frsError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                                        code:ErrorSignupNoUserFromParseUser
-                                                    userInfo:@{@"error" : @"Couldn't extract user from PFUser"}];
-                block(NO, frsError);
-            }
-        }
-        else {
-            NSLog(@"Error fetching user from Parse: %@", error);
-            block(NO, error);
-        }
-    }];
-}
-*/
 - (void)getFrescoAPITokenWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     NSDictionary *params = @{@"parseSession" : [PFUser currentUser].sessionToken};
     
@@ -231,6 +180,21 @@
     }];
 }
 
+// this addresses the possibility that one installation (device) can
+// have several users on it
+- (void)tieUserToInstallation
+{
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    PFUser *user = [PFUser currentUser];
+    
+    if (user && currentInstallation.deviceToken) {
+        PFUser *installationOwner = [currentInstallation objectForKey:@"owner"];
+        if (![installationOwner.objectId isEqualToString:user.objectId]) {
+            [currentInstallation setObject:user forKey:@"owner"];
+            [currentInstallation saveInBackground];
+        }
+    }
+}
 - (void)logout
 {
     [PFUser logOut];
@@ -239,6 +203,8 @@
 
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block
 {
+    assert(block);
+    
     PFUser *user = [PFUser user];
     user.username = [username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     user.password = password;
@@ -248,14 +214,16 @@
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             // now that we're signed up with Parse create the Fresco user
             if (succeeded) {
+                [self tieUserToInstallation];
+                
                 [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
 
-                    // silently and asynchronously authenticate to the API
+                    // authenticate to the API
                     [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
                         if (error)
                             NSLog(@"Could not authenticate to the API");
-                        else
-                            block(self.currentUser ? YES : NO, error);
+                        
+                        block(self.currentUser ? YES : NO, error);
                     }];
                 }];
             }
@@ -263,6 +231,12 @@
             else
                 block(succeeded, error);
         }];
+    }
+    else {
+        NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                 code:ErrorSignupCantCreateUser
+                                             userInfo:@{@"error" : @"User has no email"}];
+        block(NO, error);
     }
 }
 
@@ -289,14 +263,18 @@
 
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block
 {
+    assert(block);
+    
     [PFUser logInWithUsernameInBackground:[username stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
                                  password:[password stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
                                     block:^(PFUser *user, NSError *error) {
                                         // upon success connect parse and frs login
-                                        if (user)
+                                        if (user) {
                                             [self loginWithBlock:^(BOOL succeeded, NSError *error) {
                                                 block(user, error);
                                             }];
+                                            [self tieUserToInstallation];
+                                        }
                                         else
                                             // call the block in any event
                                             block(nil, error);
@@ -304,87 +282,101 @@
      ];
 }
 
-/*
-- (void)loginViaFacebookWithBlock:(PFUserResultBlock)block
+- (void)socialLoginWithUser:(PFUser *)user error:(NSError *)error block:(PFUserResultBlock)block
 {
-    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ]
-                                                       block:^(PFUser *user, NSError *error) {
-                                                           // upon success connect parse and frs login
-                                                           if (user) {
-                                                               if ([self login])
-                                                                   block(user, nil);
-                                                               else {
-                                                                   [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
-                                                                       if (succeeded)
-                                                                           block(user, nil);
-                                                                       else
-                                                                           block (nil, error);
-                                                                   }];
-                                                               }
-                                                           }
-                                                           else
-                                                               block(nil, error);
-                                                       }];
+    // first successful login/signup
+    if (user.isNew) {
+        [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
+            
+            // authenticate to the API
+            [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
+                if (error)
+                    NSLog(@"Could not authenticate to the API");
+                
+                block(user, error);
+            }];
+        }];
+    }
+    // regular successful login
+    else if (user) {
+        [self loginWithBlock:^(BOOL succeeded, NSError *error) {
+            block(user, error);
+        }];
+    }
+    // failure
+    else
+        block(nil, error);
+    
+    // doesn't matter too much when this runs
+    if (user)
+        [self tieUserToInstallation];
 }
 
-- (void)loginViaTwitterWithBlock:(PFUserResultBlock)block
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)resultBlock
 {
+    assert(resultBlock);
+    
+    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ]
+                                                       block:^(PFUser *user, NSError *error) {
+                                                           [self socialLoginWithUser:user error:error block:resultBlock];
+                                                       }];
+     /*
+    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ]
+                                                       block:^(PFUser *user, NSError *error) {
+                                                           // first successful login/signup
+                                                           if (user.isNew) {
+                                                               [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
+                                                                   
+                                                                   // authenticate to the API
+                                                                   [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
+                                                                       if (error)
+                                                                           NSLog(@"Could not authenticate to the API");
+                                                                       
+                                                                       block(user, error);
+                                                                   }];
+                                                               }];
+                                                           }
+                                                           // regular successful login
+                                                           else if (user) {
+                                                               [self loginWithBlock:^(BOOL succeeded, NSError *error) {
+                                                                   block(user, error);
+                                                               }];
+                                                           }
+                                                           // failure
+                                                           else
+                                                               block(nil, error);
+                                                       }];*/
+}
+
+- (void)loginViaTwitterWithBlock:(PFUserResultBlock)resultBlock
+{
+    assert(resultBlock);
+    
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
-        // upon success connect parse and frs login
-        if (user) {
-            if ([self login])
-                block(user, nil);
-            else {
-                [self bindParseUserToFrescoUser:^(BOOL succeeded, NSError *error) {
-                    if (succeeded)
-                        block(user, nil);
-                    else
-                        block (nil, error);
-                }];
-            }
-        }
-        else
-            block(nil, error);
+        [self socialLoginWithUser:user error:error block:resultBlock];
     }];
 }
-*/
 
 // this should only happen once per user creation
 - (void)syncFRSUserId:(NSString *)frsUserId toParse:(PFBooleanResultBlock)block
 {
+    assert(block);
+    
     [[PFUser currentUser] setObject:frsUserId forKey:kFrescoUserIdKey];
-        
+    
     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
         if (success) {
             block(YES, nil);
         }
         else {
-            // if we're going to codify this it needs to be centralized -- this is arbitrary
-            NSError *saveError = [NSError errorWithDomain:@"com.fresconews" code:100 userInfo:@{@"error" : @"Couldn't save user"}];
-            block (NO, saveError);
+            NSError *saveError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                     code:ErrorSignupCantSaveUser
+                                                 userInfo:@{@"error" : @"Couldn't save user"}];
+            block(NO, saveError);
         }
     }];
 }
 
-// this extracts embedded FRSUser data within the PFUser which may or may not be sync'd to disk or the server
-/*
-- (FRSUser *)FRSUserFromPFUser
-{
-    FRSUser *frsUser;
-    NSString *serializedUserData = [[PFUser currentUser] objectForKey:kFrescoUserData];
-    
-    if ([serializedUserData length]) {
-        NSError *jsonError;
-        NSData *objectData = [serializedUserData dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:objectData
-                                                                 options:NSJSONReadingMutableContainers
-                                                                   error:&jsonError];
-        
-        frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:jsonDict error:nil];
-    }
-    return frsUser;
-}
-*/
 
 // pull fresco user information from Fresco's API
 // we could transition away from this when webhooks or other server solution is in place
@@ -487,8 +479,6 @@
         }];
     }
     
-    //[self POST:@"user/update" parameters:params constructingBodyWithBlock:nil
-
     [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         if (imageData != nil) {
             [params removeObjectForKey:@"avatar"];

@@ -13,6 +13,7 @@
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
     ErrorSignupCantCreateUser,
+    ErrorSignupCantSaveUser,
     ErrorSignupCantGetUser,
     ErrorSignupNoUserOnServer,
     ErrorSignupNoUserFromParseUser,
