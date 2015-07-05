@@ -5,61 +5,35 @@
 //  Created by Zachary Mayberry on 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
+
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
 @interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet UIImageView *addPhotoImageView;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLastName;
 @property (strong, nonatomic) UIImage *selectedImage;
 @property (nonatomic) NSURL *socialImageURL;
-
 @end
 
 @implementation FirstRunSignUpViewController
 
-- (void)viewDidLoad {
-    
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.];
-    
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     singleTap.numberOfTapsRequired = 1;
-
     [self.addPhotoImageView addGestureRecognizer:singleTap];
-    
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
-    self.addPhotoImageView.clipsToBounds = YES;
-
-    // this creates the circular mask around the image
-    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
-    self.addPhotoImageView.clipsToBounds = YES;
-
-}
-
-
--(void)tapDetected{
-
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.allowsEditing = YES;
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,12 +44,12 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    
+
     [self setTwitterInfo];
     [self setFacebookInfo];
 }
@@ -86,9 +60,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)tapDetected
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:^{
+        self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+        self.addPhotoImageView.clipsToBounds = YES;
+    }];
 }
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
@@ -100,40 +81,39 @@
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 height = -1 * [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             }
-                            
-                            self.topVerticalSpaceConstraint.constant = height;
+
+                            self.topVerticalSpaceConstraint.constant = height; // Constraint not connected?
                             self.bottomVerticalSpaceConstraint.constant = -1 * height;
                             [self.view layoutIfNeeded];
                         } completion:nil];
 }
 
-- (IBAction)actionNext:(id)sender {
-    
+- (IBAction)actionNext:(id)sender
+{
     // save this to allow backing to the VC
     self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     NSData *imageData = nil;
-    
-    if(self.selectedImage){
-        
+    if (self.selectedImage) {
         imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
     }
     
     // both fields must be populated
-    if (([self.firstName length] && [self.lastName length])) {
-        
+    if ((self.firstName.length && self.lastName.length)) {
         NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
-        
-        if (self.socialImageURL)
+
+        if (self.socialImageURL) {
             [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
-        
+        }
+
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
-            if (!error) {
+            if (error) {
+                NSLog(@"Error: %@", error);
+            }
+            else {
                 [self performSegueWithIdentifier:@"showPermissions" sender:self];
             }
-            else
-                NSLog(@"Error: %@", error);
         }];
     }
     else {
@@ -206,14 +186,12 @@
 
 - (void)setFacebookInfo
 {
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         return;
-    
-   NSDictionary *params = @{@"fields": @"first_name,last_name,id"};
-    
+    }
 
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
-                                                                   parameters:params
+                                                                   parameters:@{@"fields" : @"first_name, last_name, id"}
                                                                    HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,
@@ -237,35 +215,26 @@
     }];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     UITouch *touch = [[event allTouches] anyObject];
     if ([self.textfieldFirstName isFirstResponder] && [touch view] != self.textfieldFirstName) {
         [self.textfieldFirstName resignFirstResponder];
     }
-    
-    if ([self.textfieldLastName isFirstResponder] && [touch view] != self.textfieldLastName) {
+    else if ([self.textfieldLastName isFirstResponder] && [touch view] != self.textfieldLastName) {
         [self.textfieldLastName resignFirstResponder];
     }
-    [super touchesBegan:touches withEvent:event];
-}
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Make sure your segue name in storyboard is the same as this line
-    if ([[segue identifier] isEqualToString:@"showPermissions"]) {
-    }
-    
+    [super touchesBegan:touches withEvent:event];
 }
 
 #pragma mark - UIImagePickerController Delegate
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-    
+    self.selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
     self.addPhotoImageView.image = self.selectedImage;
-    
+
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -274,10 +243,9 @@
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated
 {
-    if ([navigationController isKindOfClass:[UIImagePickerController class]])
-    {
+    if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
         viewController.navigationItem.title = @"Choose a new avatar";
-        navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
+        navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54];
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }
 }
