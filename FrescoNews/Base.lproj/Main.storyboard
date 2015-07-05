@@ -1989,13 +1989,13 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDU-qx-Yyf" userLabel="Time and Place">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDU-qx-Yyf" userLabel="Time and Place">
                                                     <rect key="frame" x="8" y="10" width="81" height="15"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ri-Qm-YbO" userLabel="By Line">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ri-Qm-YbO">
                                                     <rect key="frame" x="561" y="10" width="31" height="15"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -2005,6 +2005,7 @@
                                             <constraints>
                                                 <constraint firstItem="cOX-LF-lGx" firstAttribute="leading" secondItem="Lsi-xJ-FAo" secondAttribute="leading" id="7Nl-Lt-tEM"/>
                                                 <constraint firstItem="qDU-qx-Yyf" firstAttribute="leading" secondItem="Lsi-xJ-FAo" secondAttribute="leadingMargin" id="PO3-ox-1JB"/>
+                                                <constraint firstItem="7ri-Qm-YbO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qDU-qx-Yyf" secondAttribute="trailing" constant="10" id="QjS-mC-AOA"/>
                                                 <constraint firstItem="cOX-LF-lGx" firstAttribute="top" secondItem="Lsi-xJ-FAo" secondAttribute="top" id="Zyz-g2-g6K"/>
                                                 <constraint firstItem="7ri-Qm-YbO" firstAttribute="trailing" secondItem="Lsi-xJ-FAo" secondAttribute="trailingMargin" id="eCP-zr-XHi"/>
                                                 <constraint firstItem="qDU-qx-Yyf" firstAttribute="top" secondItem="Lsi-xJ-FAo" secondAttribute="topMargin" constant="2" id="eyF-HR-331"/>
