@@ -56,5 +56,6 @@ enum FRSErrorCodes {
 
 @property CGFloat maximumVideoLength;
 @property NSInteger maximumAssetAge;
+@property NSInteger locationUpdateInterval;
 
 @end

@@ -237,34 +237,28 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    if ([FRSDataManager sharedManager].currentUser.userID) {
-        if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
-            // NSLog(@"new location");
-            self.location = [locations lastObject];
-
-            AFHTTPRequestOperationManager *operationManager = [AFHTTPRequestOperationManager manager];
-            NSDictionary *parameters = @{@"id" : [FRSDataManager sharedManager].currentUser.userID,
-                                         @"lat" : @(self.location.coordinate.latitude),
-                                         @"lon" : @(self.location.coordinate.longitude)};
-            [operationManager POST:[VariableStore endpointForPath:@"user/locate"]
-                        parameters:parameters
-                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                               // NSLog(@"JSON: %@", responseObject);
-                               NSLog(@"called user/locate");
-                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                               NSLog(@"Error: %@", error);
-                           }];
-        }
-        else {
-            // NSLog(@"not a new location");
-        }
-
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:NO];
-    }
-    else {
+    if (![FRSDataManager sharedManager].currentUser.userID) {
         [self.locationManager stopMonitoringSignificantLocationChanges];
     }
 
+    if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
+        // NSLog(@"new location");
+        self.location = [locations lastObject];
+
+        NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
+                                 @"lon" : @(self.location.coordinate.longitude)};
+
+        [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
+    }
+    else {
+        // NSLog(@"not a new location");
+    }
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // NSLog(@"Starting timer...");
+        [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].locationUpdateInterval target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+    });
     [self.locationManager stopUpdatingLocation];
 }
 
@@ -276,8 +270,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)restartLocationUpdates
 {
-    [self.timer invalidate];
-    self.timer = nil;
     [self.locationManager startUpdatingLocation];
 }
 

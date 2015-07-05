@@ -139,7 +139,7 @@
     if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
-                                                        message:@"Go to Profile to link your Fresco account to Twitter"
+                                                        message:@"Go to your profile to link your Fresco account to Twitter"
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
@@ -181,7 +181,7 @@
     if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         // TODO: Try not to dismiss keyboard
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
-                                                        message:@"Go to Profile to link your Fresco account to Facebook"
+                                                        message:@"Go to your profile to link your Fresco account to Facebook"
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];

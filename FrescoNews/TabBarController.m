@@ -10,13 +10,8 @@
 @import AVFoundation;
 #import "SwitchingRootViewController.h"
 #import "CameraViewController.h"
-#import "HomeViewController.h"
-#import "ProfileViewController.h"
-#import "AssignmentsViewController.h"
-#import "StoriesViewController.h"
 
 @implementation TabBarController
-
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
