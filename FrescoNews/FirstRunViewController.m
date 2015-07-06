@@ -100,26 +100,36 @@
 }
 
 - (IBAction)loginButtonAction:(id)sender {
+    
     self.loginButton.enabled = NO;
+    
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+        
         self.loginButton.enabled = YES;
+        
         if (user) {
+            
             FRSUser *frsUser = [FRSDataManager sharedManager].currentUser;
             
-            // make sure first and last name are set
-            // if not collect them
-            if (!([frsUser.first length] && [frsUser.last length])) {
-                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            if(frsUser != nil){
+            
+                // make sure first and last name are set
+                // if not collect them
+                if (!frsUser.first && !frsUser.last) {
+                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+                }
+                // otherwise just go into the app
+                else {
+                    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+                    // TODO: Move location setup calls to -navigateToMainApp or FRSDataManager
+                    [appDelegate setupLocationManager];
+                    [appDelegate setupLocationMonitoring];
+                    [self.view endEditing:YES];
+                    [self navigateToMainApp];
+                }
+                
             }
-            // otherwise just go into the app
-            else {
-                AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-                // TODO: Move location setup calls to -navigateToMainApp or FRSDataManager
-                [appDelegate setupLocationManager];
-                [appDelegate setupLocationMonitoring];
-                [self.view endEditing:YES];
-                [self navigateToMainApp];
-            }
+            
         }
         else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
@@ -127,7 +137,9 @@
             
             self.emailField.textColor = [UIColor redColor];
         }
+        
     }];
+    
 }
 
 - (IBAction)signUpButtonAction:(id)sender

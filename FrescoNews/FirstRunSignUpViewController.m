@@ -101,6 +101,7 @@
     
     // both fields must be populated
     if ((self.firstName.length && self.lastName.length)) {
+        
         NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
 
         if (self.socialImageURL) {
