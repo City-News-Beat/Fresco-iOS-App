@@ -17,9 +17,12 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
+@property (nonatomic) NSArray *stepperSteps;
 @end
 
 @implementation FirstRunRadiusViewController
+
+// 500 ft (.095), 2000 ft (0.38), 1, 2, 5, 10, 15, 20, 30, 40, 50
 
 // Note: If user has declined to share location (either "when in use" or "always"), the following console warning will appear:
 // Trying to start MapKit location updates without prompting for location authorization. Must call -[CLLocationManager requestWhenInUseAuthorization] or -[CLLocationManager requestAlwaysAuthorization] first.
@@ -31,7 +34,20 @@
     [appDelegate setupLocationManager];
     [appDelegate setupLocationMonitoring];
     
-    self.radiusStepper.value = 5;
+    // build a list of stepper values
+    self.stepperSteps = @[ @{@"display": @"Off", @"value" : @(0)},
+                           @{@"display": @"500 ft", @"value" : @(.095)},
+                           @{@"display": @"2000 ft", @"value" : @(0.38)},
+                            @{@"display": @"1 mi", @"value" : @(1)},
+                            @{@"display": @"2 mi", @"value" : @(2)},
+                            @{@"display": @"5 mi", @"value" : @(5)},
+                            @{@"display": @"10 mi", @"value" : @(10)},
+                            @{@"display": @"20 mi", @"value" : @(20)},
+                            @{@"display": @"30 mi", @"value" : @(30)},
+                            @{@"display": @"40 mi", @"value" : @(40)},
+                            @{@"display": @"50 mi", @"value" : @(50)} ];
+
+    self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:5] valueForKey:@"value"] floatValue];
     [self sliderValueChanged:self.radiusStepper];
 }
 
