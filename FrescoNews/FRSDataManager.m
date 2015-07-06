@@ -159,6 +159,7 @@
 }
 
 - (void)getFrescoAPITokenWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+    
     NSDictionary *params = @{@"parseSession" : [PFUser currentUser].sessionToken};
     
     [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
@@ -193,6 +194,7 @@
         }
     }
 }
+
 - (void)logout
 {
     [PFUser logOut];
@@ -388,9 +390,7 @@
         
         NSError *error;
         if (!frsUser.userID) {
-            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                        code:ErrorSignupCantGetUser
-                                    userInfo:@{@"error" : @"Can't find the user"}];
+            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"Can't find the user"}];
             frsUser = nil;
         }
         
