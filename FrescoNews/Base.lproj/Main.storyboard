@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -1989,13 +1989,13 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="36"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDU-qx-Yyf" userLabel="Time and Place">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDU-qx-Yyf" userLabel="Time and Place">
                                                     <rect key="frame" x="8" y="10" width="81" height="15"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ri-Qm-YbO" userLabel="By Line">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ri-Qm-YbO">
                                                     <rect key="frame" x="561" y="10" width="31" height="15"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -2005,6 +2005,7 @@
                                             <constraints>
                                                 <constraint firstItem="cOX-LF-lGx" firstAttribute="leading" secondItem="Lsi-xJ-FAo" secondAttribute="leading" id="7Nl-Lt-tEM"/>
                                                 <constraint firstItem="qDU-qx-Yyf" firstAttribute="leading" secondItem="Lsi-xJ-FAo" secondAttribute="leadingMargin" id="PO3-ox-1JB"/>
+                                                <constraint firstItem="7ri-Qm-YbO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qDU-qx-Yyf" secondAttribute="trailing" constant="10" id="QjS-mC-AOA"/>
                                                 <constraint firstItem="cOX-LF-lGx" firstAttribute="top" secondItem="Lsi-xJ-FAo" secondAttribute="top" id="Zyz-g2-g6K"/>
                                                 <constraint firstItem="7ri-Qm-YbO" firstAttribute="trailing" secondItem="Lsi-xJ-FAo" secondAttribute="trailingMargin" id="eCP-zr-XHi"/>
                                                 <constraint firstItem="qDU-qx-Yyf" firstAttribute="top" secondItem="Lsi-xJ-FAo" secondAttribute="topMargin" constant="2" id="eyF-HR-331"/>
@@ -3640,7 +3641,7 @@
                                     <constraint firstAttribute="width" secondItem="MYf-Uj-eIQ" secondAttribute="height" multiplier="25:3" id="Gw6-Js-nF2"/>
                                     <constraint firstAttribute="height" constant="45" id="i0t-23-FJM"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Next">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3815,7 +3816,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="FGy-CL-QPR" secondAttribute="height" multiplier="25:3" id="bwK-9t-nMS"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Next">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3915,7 +3916,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="skw-IJ-F6k" secondAttribute="height" multiplier="25:3" id="wmA-aj-4pz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Get Started">
                                     <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
