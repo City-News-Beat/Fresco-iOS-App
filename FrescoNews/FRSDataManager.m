@@ -429,6 +429,9 @@
                
                // now write our id back to parse
                [self syncFRSUserId:self.currentUser.userID toParse:^(BOOL succeeded, NSError *error) {
+                   if (!succeeded)
+                       [[PFUser currentUser] deleteInBackground];
+                   
                    if (responseBlock)
                        responseBlock(user, error);
                }];
@@ -449,6 +452,10 @@
            }
        } failure:^(NSURLSessionDataTask *task, NSError *error) {
            NSLog(@"Error creating new user %@", error);
+           
+           // delete on Parse
+           [[PFUser currentUser] deleteInBackground];
+           
            if (responseBlock) responseBlock(nil, error);
        }];
 }
