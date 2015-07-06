@@ -50,9 +50,12 @@
 
 - (NSURL *)cdnProfileImageURL
 {
-    return [self cdnAssetURLForURLString:[self.profileImageUrl absoluteString]
-                                withSize:(CGSize){150.0, 150.0}
-                    transformationString:@"c_fit"];
+    if(self.profileImageUrl)
+        return [self cdnAssetURLForURLString:[self.profileImageUrl absoluteString]
+                                    withSize:(CGSize){150.0, 150.0}
+                        transformationString:@"c_fit"];
+    else
+        return nil;
 }
 
 @end

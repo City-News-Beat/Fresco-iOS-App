@@ -129,6 +129,12 @@
                 }
                 
             }
+            else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                
+                self.emailField.textColor = [UIColor redColor];
+            }
             
         }
         else {
