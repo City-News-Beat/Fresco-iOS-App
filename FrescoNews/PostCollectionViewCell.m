@@ -76,7 +76,9 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
             self.processingVideo = false;
             
+            self.transcodeImage.alpha = 0;
             self.transcodeImage.hidden = YES;
+            self.transcodeLabel.alpha = 0;
             self.transcodeLabel.hidden = YES;
             
             weakSelf.imageView.image = image;

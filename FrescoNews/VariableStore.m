@@ -55,8 +55,8 @@
         sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
 //        #ifdef DEBUG
-//        sharedInstance.parseAppId = @"XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU";
-//        sharedInstance.parseClientKey = @"BttF0WEtSrKdLA2Xst2wfc9VQE8PUwP0OwheKEoY";
+//        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
+//        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
 //        sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
 //        #endif
         

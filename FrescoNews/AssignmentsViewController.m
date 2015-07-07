@@ -35,6 +35,7 @@
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
+    @property (strong, nonatomic) AssignmentAnnotation *currentAssignmentAnnotation;
 
     /*
     ** Conditionaing Variables
@@ -180,14 +181,16 @@
 
 -(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
     
-    self.currentAssignment = currentAssignment;
-    
-    self.centeredUserLocation = YES;
-    
-    if(navigate) self.navigateTo = YES;
-    
-    [self presentCurrentAssignment];
-    
+    if(([currentAssignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
+        
+        self.currentAssignment = currentAssignment;
+        
+        self.centeredUserLocation = YES;
+        
+        if(navigate) self.navigateTo = YES;
+        
+        [self presentCurrentAssignment];
+    }
 }
 
 -(void)presentCurrentAssignment{
@@ -205,6 +208,8 @@
     }];
     
     if(self.navigateTo) [self.navigationSheet showInView:self.view];
+    
+    self.navigateTo = false;
 
 }
 
@@ -617,7 +622,6 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
-
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
         [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO];
