@@ -41,6 +41,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UILabel *doneLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *apertureButton;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
@@ -292,6 +294,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     for (UIView *view in [self.controlsView subviews]) {
         view.hidden = NO;
     }
+    self.activityIndicator.hidden = YES;
 }
 
 - (void)hideUIForCameraMode:(CameraMode)cameraMode
@@ -314,6 +317,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)toggleMovieRecording
 {
     if ([[self movieFileOutput] isRecording]) {
+        [self showUIForCameraMode:CameraModeVideo];
+        [self.activityIndicator startAnimating];
+        self.doneLabel.hidden = YES;
+        self.doneButton.enabled = NO;
+
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
                                                error:nil];
@@ -511,7 +519,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
-        [self showUIForCameraMode:CameraModeVideo];
+        [self.activityIndicator stopAnimating];
+        self.doneLabel.hidden = NO;
+        self.doneButton.enabled = YES;
+
         if (error) {
             NSLog(@"%@", error);
         }
