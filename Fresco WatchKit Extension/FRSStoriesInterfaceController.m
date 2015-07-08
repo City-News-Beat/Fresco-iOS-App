@@ -9,8 +9,7 @@
 #import "FRSStoriesInterfaceController.h"
 #import "FRSStoryRowController.h"
 #import "FRSWKGalleryDetail.h"
-#import "MTLModel+Additions.h"
-#import "VariableStore.h"
+#import "NSRelativeDate.h"
 #import <AFNetworking/AFNetworking.h>
 
 @implementation FRSStoriesInterfaceController
@@ -59,9 +58,11 @@
         
         [row.storyLocation setText:self.stories[i][@"thumbnails"][0][@"location"][@"address"]];
         
-        #warning Set to relative date
-//        [row.storyTime setText:[NSRelativeDate relativeDateString:[MTLModel relativeDateStringFromDate:gallery.createTime]]];
-//        
+        NSDate *date = [[NSDate date]
+                        initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"thumbnails"][0][@"time_created"] integerValue] / 1000)];
+
+        [row.storyTime setText:[NSRelativeDate relativeDateString:date]];
+        
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
             //Background Thread
             if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 0)
