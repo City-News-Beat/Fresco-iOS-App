@@ -374,6 +374,7 @@
     } error:nil];
 
     [request setValue:[FRSDataManager sharedManager].frescoAPIToken forHTTPHeaderField:@"authtoken"];
+    
     NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request
                                                                        progress:&progress
                                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
