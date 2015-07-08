@@ -20,7 +20,7 @@
         [self setRightBarButtonItem:YES];
             
     }
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
 }
 
 - (void)setRightBarButtonItem:(BOOL)withBadge{
@@ -155,6 +155,9 @@
     
 }
 
-
-
+#pragma mark - NSNotificationCenter Notification handling
+- (void)handleAPIKeyAvailable:(NSNotification *)notification
+{
+    [self setRightBarButtonItem:YES];
+}
 @end

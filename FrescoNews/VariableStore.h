@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-//NSError *frsError = [NSError errorWithDomain:@"com.fresconews" code:101 userInfo:@{@"msg" : @"Couldn't get FRSUser from server"}];
+FOUNDATION_EXPORT NSString * const kNotificationAPIKeyAvailable;
 
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
@@ -57,5 +57,7 @@ enum FRSErrorCodes {
 @property CGFloat maximumVideoLength;
 @property NSInteger maximumAssetAge;
 @property NSInteger locationUpdateInterval;
+
+@property NSString * const kNotificationAPIKeyAvailable;
 
 @end
