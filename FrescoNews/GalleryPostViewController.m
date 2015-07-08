@@ -312,7 +312,7 @@
 
 - (void)submitGalleryPost:(id)sender
 {
-    if (![FRSDataManager sharedManager].currentUser) {
+    if (![[FRSDataManager sharedManager] isLoggedIn]) {
         [self navigateToFirstRun];
         return;
     }

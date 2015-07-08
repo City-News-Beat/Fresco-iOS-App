@@ -8,6 +8,8 @@
 
 #import "VariableStore.h"
 
+NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
+
 @implementation VariableStore
 
 + (VariableStore *)sharedInstance
