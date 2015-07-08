@@ -192,8 +192,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
         cell.secondButton.hidden = YES;
         
-        if(notification.meta[@"icon"] != nil){
-        
+        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]){
+            
             [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
         
         }
@@ -239,14 +239,35 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                if(responseObject != nil){
+                    
+                    FRSAssignment *assignment = (FRSAssignment *) responseObject;
+                    
+                    //Check if the assignment has expired
+                    if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
                 
-                AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                
-                [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
-                
-                [tabBarController setSelectedIndex:3];
-                
+                        UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                        
+                        AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                        
+                        [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
+                        
+                        [tabBarController setSelectedIndex:3];
+                        
+                    }
+                    else{
+                        
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Assignment Expired"
+                                                                        message:@"This assignment has expired already!"
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"Dismiss"
+                                                              otherButtonTitles:nil];
+                        [alert show];
+                    
+                    
+                    }
+                    
+                }
             }
             
         }];
@@ -277,7 +298,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     }
     
     [self exitNotificationView];
-    
 
 }
 

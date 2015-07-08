@@ -91,27 +91,29 @@
             [alert show];
         }
         else {
-            [[FRSDataManager sharedManager] signupUser:self.email
-                                                 email:self.email
-                                              password:self.password
-                                                 block:^(BOOL succeeded, NSError *error) {
-                                                     if (error) {
-                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                         message:[error.userInfo objectForKey:@"error"]
-                                                                                                        delegate: self
-                                                                                               cancelButtonTitle: @"Cancel"
-                                                                                               otherButtonTitles:nil, nil];
-                                                         [alert addButtonWithTitle:@"Try Again"];
-                                                         [alert show];
-                                                         
-                                                         self.emailField.textColor = [UIColor redColor];
-                                                     }
-                                                     else{
-                                                         
-                                                         [self performSegueWithIdentifier:@"showPersonalInfo" sender:self];
-                                                     }
-                                                     
-                                                 }];
+            [[FRSDataManager sharedManager]
+             signupUser:self.email
+             email:self.email
+             password:self.password
+             block:^(BOOL succeeded, NSError *error) {
+                
+                 if (error) {
+                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                     message:[error.userInfo objectForKey:@"error"]
+                                                                    delegate: self
+                                                           cancelButtonTitle: @"Cancel"
+                                                           otherButtonTitles:nil, nil];
+                     [alert addButtonWithTitle:@"Try Again"];
+                     [alert show];
+                     
+                     self.emailField.textColor = [UIColor redColor];
+                 }
+                 else{
+                     
+                     [self performSegueWithIdentifier:@"showPersonalInfo" sender:self];
+                 }
+                 
+             }];
         }
     }
 }

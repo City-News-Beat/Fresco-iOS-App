@@ -20,6 +20,7 @@
 #import "FRSDataManager.h"
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
+#import "HomeViewController.h"
 #import "SwitchingRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
@@ -304,6 +305,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)handlePush:(NSDictionary *)userInfo
 {
+
     [PFPush handlePush:userInfo];
     
     // Check the type of the notifications
@@ -311,15 +313,26 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     if ([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]) {
         //Check to make sure the payload has a gallery ID
         if (userInfo[@"gallery"]) {
+            
             [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
+                    
                     //Retreieve Gallery View Controller from storyboard
+                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    
+                    HomeViewController *homeVC = (HomeViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
+                    
+                    //Retreieve Notifications View Controller from storyboard
                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                    
                     GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    
                     [galleryView setGallery:responseObject];
-                    [self.window.rootViewController.navigationController pushViewController:galleryView animated:YES];
+                    
+                    [homeVC.navigationController pushViewController:galleryView animated:YES];
                 }
             }];
+            
         }
     }
 
@@ -343,7 +356,17 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    [self handlePush:userInfo];
+    
+    if(application.applicationState == UIApplicationStateInactive) {
+        
+        [self handlePush:userInfo];
+    
+        //Show the view with the content of the push
+
+        handler(UIBackgroundFetchResultNewData);
+        
+    }
+
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler

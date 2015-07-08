@@ -44,8 +44,8 @@
         sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
         
         // configuration that might change in debug
-        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
-        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
+        sharedInstance.parseAppId = @"XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU";
+        sharedInstance.parseClientKey = @"BttF0WEtSrKdLA2Xst2wfc9VQE8PUwP0OwheKEoY";
         sharedInstance.twitterConsumerKey = @"o6y4zv5yq0AfCU4HKUHQYJMXE";
         sharedInstance.twitterConsumerSecret = @"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz";
         
@@ -54,11 +54,11 @@
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
         sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
-#ifdef DEBUG
-        sharedInstance.parseAppId = @"XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU";
-        sharedInstance.parseClientKey = @"BttF0WEtSrKdLA2Xst2wfc9VQE8PUwP0OwheKEoY";
-        sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
-#endif
+//        #ifdef DEBUG
+//        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
+//        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
+//        sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
+//        #endif
         
         sharedInstance.maximumVideoLength = 60.0f; // Per @im
         sharedInstance.maximumAssetAge = -3600 * 6; // Per @im

@@ -42,7 +42,6 @@
         [self performNecessaryFetch:nil];
     }
 
- 
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         

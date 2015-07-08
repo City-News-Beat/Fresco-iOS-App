@@ -45,16 +45,16 @@
     
     if(withBadge && [FRSDataManager sharedManager].updatedNotifications == false){
       
-        [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView:false]];
+        [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
         
     }
 
 }
 
-- (BTBadgeView *)getBadgeView:(BOOL)setToNil
+- (BTBadgeView *)getBadgeView
 {
     
-    if([FRSDataManager sharedManager].currentUser != nil && !setToNil){
+    if([FRSDataManager sharedManager].currentUser != nil){
     
         BTBadgeView *badgeView = [[BTBadgeView alloc] initWithFrame:CGRectMake(4,-8, 30, 20)];
         
