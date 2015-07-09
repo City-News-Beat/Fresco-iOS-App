@@ -98,6 +98,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 // because the app might launch into First Run mode
 // or regular (tab interface) we need to dynamically swap
 // root view controllers
+/*
 - (void)loadInitialViewController
 {
     SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
@@ -108,7 +109,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         else
             [rootViewController setRootViewControllerToFirstRun];
     }];
-}
+}*/
 
 - (void)setRootViewControllerToTabBar
 {
@@ -240,7 +241,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    if (![FRSDataManager sharedManager].currentUser.userID) {
+    if (![[FRSDataManager sharedManager] isLoggedIn]) {
         // NSLog(@"User not logged in, calling -stopMonitoringSignificantLocationChanges");
         [self.locationManager stopMonitoringSignificantLocationChanges];
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -97,7 +97,8 @@
                                                         <exclude reference="xqW-hs-ve1"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=compact">
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="45" width="118" height="46"/>
                                                     <mask key="constraints">
                                                         <include reference="xqW-hs-ve1"/>
                                                     </mask>
@@ -109,6 +110,9 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qWc-aX-Cak" userLabel="Spacer View 1">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="210" width="118" height="119"/>
+                                                </variation>
                                             </view>
                                             <button opaque="NO" alpha="0.54000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="him-yf-QJK" userLabel="Flash/Torch On/Off Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -118,6 +122,9 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <state key="selected" title=" On" image="flash-on"/>
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="329" width="118" height="20"/>
+                                                </variation>
                                                 <connections>
                                                     <action selector="flashButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="oZB-hd-xGG"/>
                                                 </connections>
@@ -125,6 +132,9 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w2h-li-84S" userLabel="Spacer View 2">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="351" width="118" height="119"/>
+                                                </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95f-lc-6mD" userLabel="Done Button Background Blur">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -218,7 +228,8 @@
                                                         <exclude reference="DQg-j0-d5T"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=compact">
+                                                <variation key="heightClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="-3" y="89" width="121" height="121"/>
                                                     <mask key="constraints">
                                                         <include reference="1BO-gL-I6A"/>
                                                         <include reference="DQg-j0-d5T"/>
@@ -228,6 +239,9 @@
                                                     <action selector="apertureButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="ebG-K9-hD2"/>
                                                 </connections>
                                             </button>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
+                                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -250,6 +264,7 @@
                                             <constraint firstItem="him-yf-QJK" firstAttribute="top" secondItem="qWc-aX-Cak" secondAttribute="bottom" constant="2" id="Jbr-mK-FnD">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
+                                            <constraint firstItem="wlt-7O-mUX" firstAttribute="centerX" secondItem="XwU-A0-kYQ" secondAttribute="centerX" constant="0.5" id="KMi-u3-1fe"/>
                                             <constraint firstItem="him-yf-QJK" firstAttribute="leading" secondItem="U4D-IQ-UYa" secondAttribute="leading" id="KUG-8V-p1L"/>
                                             <constraint firstItem="95f-lc-6mD" firstAttribute="width" secondItem="U0E-i7-DeO" secondAttribute="width" id="Lqq-je-Wi7"/>
                                             <constraint firstItem="U0E-i7-DeO" firstAttribute="centerX" secondItem="XwU-A0-kYQ" secondAttribute="centerX" constant="-1" id="Mds-Xh-4vD">
@@ -259,6 +274,7 @@
                                             <constraint firstItem="U0E-i7-DeO" firstAttribute="centerY" secondItem="XwU-A0-kYQ" secondAttribute="centerY" constant="-17" id="Tkz-oo-khx">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
+                                            <constraint firstItem="U0E-i7-DeO" firstAttribute="leading" secondItem="wlt-7O-mUX" secondAttribute="trailing" constant="-47" id="Uee-X7-OCb"/>
                                             <constraint firstItem="qWc-aX-Cak" firstAttribute="height" secondItem="w2h-li-84S" secondAttribute="height" id="YgW-Me-ve6"/>
                                             <constraint firstItem="job-9J-IZj" firstAttribute="top" secondItem="U0E-i7-DeO" secondAttribute="bottom" constant="-33" id="apB-9k-J0r">
                                                 <variation key="heightClass=compact" constant="0.0"/>
@@ -288,10 +304,12 @@
                                             <constraint firstAttribute="trailing" secondItem="K9z-5e-5vf" secondAttribute="trailing" constant="41.5" id="sxm-90-gWL">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
+                                            <constraint firstItem="wlt-7O-mUX" firstAttribute="top" secondItem="U0E-i7-DeO" secondAttribute="bottom" constant="-49" id="t4m-eF-35F"/>
                                             <constraint firstItem="H43-Px-pxG" firstAttribute="leading" secondItem="U4D-IQ-UYa" secondAttribute="leading" constant="-3" id="uyM-p7-1kw"/>
                                             <constraint firstItem="U0E-i7-DeO" firstAttribute="top" secondItem="w2h-li-84S" secondAttribute="bottom" constant="-66" id="xgA-R4-uyl">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
+                                            <constraint firstItem="wlt-7O-mUX" firstAttribute="centerY" secondItem="XwU-A0-kYQ" secondAttribute="centerY" id="xhi-0e-Do8"/>
                                             <constraint firstItem="95f-lc-6mD" firstAttribute="leading" secondItem="U0E-i7-DeO" secondAttribute="leading" id="yxV-ca-HuI"/>
                                         </constraints>
                                         <variation key="default">
@@ -306,6 +324,7 @@
                                                 <exclude reference="XwU-A0-kYQ"/>
                                                 <exclude reference="job-9J-IZj"/>
                                                 <exclude reference="H43-Px-pxG"/>
+                                                <exclude reference="wlt-7O-mUX"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="bmI-Zu-5lR"/>
@@ -340,8 +359,12 @@
                                                 <exclude reference="57V-yw-Xpa"/>
                                                 <exclude reference="Mds-Xh-4vD"/>
                                                 <exclude reference="Tkz-oo-khx"/>
+                                                <exclude reference="Uee-X7-OCb"/>
                                                 <exclude reference="dEu-30-cEj"/>
                                                 <exclude reference="xgA-R4-uyl"/>
+                                                <exclude reference="KMi-u3-1fe"/>
+                                                <exclude reference="t4m-eF-35F"/>
+                                                <exclude reference="xhi-0e-Do8"/>
                                                 <exclude reference="3FP-u2-mFC"/>
                                                 <exclude reference="7zf-1P-si2"/>
                                                 <exclude reference="apB-9k-J0r"/>
@@ -362,6 +385,7 @@
                                                 <include reference="XwU-A0-kYQ"/>
                                                 <include reference="job-9J-IZj"/>
                                                 <include reference="H43-Px-pxG"/>
+                                                <include reference="wlt-7O-mUX"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="bmI-Zu-5lR"/>
@@ -392,8 +416,12 @@
                                                 <include reference="57V-yw-Xpa"/>
                                                 <include reference="Mds-Xh-4vD"/>
                                                 <include reference="Tkz-oo-khx"/>
+                                                <exclude reference="Uee-X7-OCb"/>
                                                 <include reference="dEu-30-cEj"/>
                                                 <include reference="xgA-R4-uyl"/>
+                                                <include reference="KMi-u3-1fe"/>
+                                                <exclude reference="t4m-eF-35F"/>
+                                                <include reference="xhi-0e-Do8"/>
                                                 <include reference="3FP-u2-mFC"/>
                                                 <include reference="7zf-1P-si2"/>
                                                 <include reference="apB-9k-J0r"/>
@@ -797,6 +825,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="wlt-7O-mUX" id="eEA-rc-9U9"/>
                         <outlet property="apertureButton" destination="H43-Px-pxG" id="Q24-oc-HVl"/>
                         <outlet property="assignmentLabel" destination="8mh-3t-wzF" id="QZs-oi-k9q"/>
                         <outlet property="broadcastLabel" destination="gho-P9-ZSg" id="wDT-db-8B8"/>
@@ -806,6 +835,7 @@
                         <outlet property="controlsView" destination="U4D-IQ-UYa" id="wVa-7w-OZA"/>
                         <outlet property="doneButton" destination="U0E-i7-DeO" id="1nZ-0Y-xHZ"/>
                         <outlet property="doneButtonBackground" destination="95f-lc-6mD" id="uE1-wB-2wT"/>
+                        <outlet property="doneLabel" destination="XwU-A0-kYQ" id="Xyx-Ex-tni"/>
                         <outlet property="photoButton" destination="FX7-nn-rD1" id="36P-OZ-9OW"/>
                         <outlet property="previewView" destination="A5I-FQ-wzG" id="sMD-jr-qnj"/>
                         <outlet property="videoButton" destination="K9z-5e-5vf" id="QhG-ap-2XL"/>

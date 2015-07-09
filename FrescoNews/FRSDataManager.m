@@ -127,10 +127,9 @@
 - (void)loginWithBlock:(PFBooleanResultBlock)block
 {
     [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
-
         NSString *frescoUserId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
         if (frescoUserId) {
-            
+            // this supports notifications, not login state
             [self tieUserToInstallation];
             
             [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
@@ -141,6 +140,8 @@
                     [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
                         if (error)
                             NSLog(@"Could not authenticate to the API");
+                        else
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
                         
                         block(!error, error);
                     }];
@@ -160,6 +161,14 @@
 
 - (void)getFrescoAPITokenWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
+    // check cache first and short circuit if it exists
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    if ([token length]) {
+        self.frescoAPIToken = token;
+        responseBlock(self.frescoAPIToken, nil);
+        return;
+    }
+    
     NSDictionary *params = @{@"parseSession" : [PFUser currentUser].sessionToken};
     
     [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
@@ -168,6 +177,9 @@
         if (token) {
             // this token will be used to authenticate data calls that require it
             self.frescoAPIToken = token;
+            
+            // cache the token
+            [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:@"frescoAPIToken"];
         }
         
         if (responseBlock)
@@ -199,6 +211,8 @@
 {
     [PFUser logOut];
     self.currentUser = nil;
+    self.frescoAPIToken = nil;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
 }
 
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block
@@ -222,6 +236,8 @@
                     [self getFrescoAPITokenWithResponseBlock:^(id responseObject, NSError *error) {
                         if (error)
                             NSLog(@"Could not authenticate to the API");
+                        else
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
                         
                         block(self.currentUser ? YES : NO, error);
                     }];
@@ -404,6 +420,12 @@
     }];
 }
 
+- (BOOL)isLoggedIn
+{
+    return (self.currentUser.userID && self.frescoAPIToken);
+}
+
+// this tests for completeness and should be more comprehensive
 - (BOOL)currentUserValid
 {
     if (self.currentUser.first && self.currentUser.last) {
@@ -438,6 +460,9 @@
            }
            else {
                self.currentUser = nil;
+               
+               [[PFUser currentUser] deleteInBackground];
+               
                NSError *error;
                if ([[responseObject objectForKey:@"err"] isEqualToString:@"EMAIL_IN_USE"])
                    error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
