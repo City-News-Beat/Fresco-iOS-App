@@ -56,11 +56,11 @@ NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
         sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
-//        #ifdef DEBUG
-//        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
-//        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
-//        sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
-//        #endif
+        #ifdef DEBUG
+        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
+        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
+        sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
+        #endif
         
         sharedInstance.maximumVideoLength = 60.0f; // Per @im
         sharedInstance.maximumAssetAge = -3600 * 6; // Per @im
