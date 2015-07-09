@@ -124,8 +124,6 @@
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
-		E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
-		E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
 /* End PBXBuildFile section */
@@ -390,8 +388,6 @@
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
-		E7AAC0A01B4DEBBB003EC8E3 /* NSRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSRelativeDate.h; sourceTree = "<group>"; };
-		E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSRelativeDate.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
 		E7BFA2E31B18CFB100B820C0 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
@@ -898,8 +894,6 @@
 				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
 				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
 				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
-				E7AAC0A01B4DEBBB003EC8E3 /* NSRelativeDate.h */,
-				E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */,
 				E71F0E701B0B99F100186BAD /* Stories */,
 				E71F0E6F1B0B99DD00186BAD /* Galleries */,
 				E71F0E3D1B0B936200186BAD /* Images.xcassets */,
@@ -1332,7 +1326,6 @@
 				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
 				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
-				E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */,
@@ -1397,7 +1390,6 @@
 			files = (
 				E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */,
 				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
-				E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */,
 				E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */,
 				E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */,
 				E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */,
