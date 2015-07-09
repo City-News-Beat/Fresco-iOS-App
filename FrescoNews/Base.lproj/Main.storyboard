@@ -1178,6 +1178,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="bottomVerticalSpaceConstraint" destination="yv7-PI-9Z8" id="v6A-kO-Ioj"/>
+                        <outlet property="dismissButton" destination="9OB-GS-ra8" id="aaR-jG-QMW"/>
                         <outlet property="emailField" destination="DrP-vM-boS" id="1UR-nv-YVJ"/>
                         <outlet property="facebookButton" destination="5ho-7Z-PBc" id="bgg-Ei-85s"/>
                         <outlet property="fieldsWrapper" destination="NxF-P7-Ydg" id="5qo-1G-H4n"/>
