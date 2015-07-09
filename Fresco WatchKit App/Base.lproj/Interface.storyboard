@@ -297,23 +297,6 @@
             </objects>
             <point key="canvasLocation" x="388" y="309"/>
         </scene>
-        <!--Interface Controller-->
-        <scene sceneID="szo-7F-Evp">
-            <objects>
-                <controller id="xfR-6h-WEI">
-                    <items>
-                        <table alignment="left" id="eHv-lz-ZkU">
-                            <items>
-                                <tableRow id="vRm-NA-PY4">
-                                    <group key="rootItem" width="1" alignment="left" id="uoN-sk-1Aw"/>
-                                </tableRow>
-                            </items>
-                        </table>
-                    </items>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="394" y="554"/>
-        </scene>
         <!--Notification Controller-->
         <scene sceneID="Gsw-eC-X1M">
             <objects>
