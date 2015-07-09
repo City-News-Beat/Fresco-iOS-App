@@ -1,5 +1,5 @@
 //
-//  FRSPostsInterfaceController.m
+//  FRSGalleriesInterfaceController.m
 //  Fresco
 //
 //  Created by Elmir Kouliev on 3/26/15.
@@ -9,11 +9,9 @@
 #import "FRSGalleriesInterfaceController.h"
 #import "FRSGalleryRowController.h"
 #import <AFNetworking/AFNetworking.h>
-
+#import "MTLModel+Additions.h"
 
 @implementation FRSGalleriesInterfaceController
-
-
 
 - (void)awakeWithContext:(id)context {
     
@@ -21,14 +19,16 @@
     
     if(context == nil){
         
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        NSURL *baseURL = [NSURL URLWithString:@"https://api.fresconews.com/v1/"];
+        
+        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
         
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         
-        [manager GET:@"http://52.6.231.245/v1/gallery/highlights?stories=true" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [manager GET:@"gallery/highlights" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
-            NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+            NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil][@"data"];
             
             self.galleries = galleries;
             
@@ -42,7 +42,7 @@
     else{
     
         // Configure interface objects here.
-        _galleries = context;
+        self.galleries = context;
         
         [self setTitle:@"Story"]; 
         
@@ -56,22 +56,25 @@
 -(void)populateGalleries{
 
     //Populate table
-    if(_galleries){
+    if(self.galleries){
         
-        [_postTable setNumberOfRows:[_galleries count] withRowType:@"postRow"];
+        [self.postTable setNumberOfRows:[self.galleries count] withRowType:@"postRow"];
         
         for (NSInteger i = 0; i < self.galleries.count; i++) {
             
             FRSGalleryRowController* row = [self.postTable rowControllerAtIndex:i];
             
-            #warning Set to relative
-            [row.galleryTime setText:self.galleries[i][@"timestamp"]];
+            NSArray *posts = self.galleries[i][@"posts"];
+            
+//            NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.galleries[i][@"time_created"] integerValue] / 1000)];
+//            
+//            NSString *test = [MTLModel relativeDateStringFromDate:date];
             
             [row.galleryLocation setText:self.galleries[i][@"caption"]];
             
             dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
                 //Background Thread
-                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.galleries[i][@"small_path"]]]];
+                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:posts[0][@"image"]]]];
                 
             });
 
@@ -84,9 +87,9 @@
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex{
     
-    NSDictionary *postData = [self.galleries objectAtIndex:rowIndex];
+    NSDictionary *galleryData = [self.galleries objectAtIndex:rowIndex];
     
-    [self pushControllerWithName:@"postDetail" context:postData];
+    [self pushControllerWithName:@"postDetail" context:galleryData];
     
 }
 
@@ -94,8 +97,6 @@
     
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
-
-
 
     
 }

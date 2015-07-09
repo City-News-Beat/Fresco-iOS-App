@@ -10,6 +10,7 @@
 #import "FRSStoryRowController.h"
 #import "FRSWKGalleryDetail.h"
 #import "MTLModel+Additions.h"
+#import "VariableStore.h"
 #import <AFNetworking/AFNetworking.h>
 
 @implementation FRSStoriesInterfaceController
@@ -20,18 +21,20 @@
     
     // Configure interface objects here.
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.fresconews.com/v1/"];
+    
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
     
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    [manager GET:@"http://52.6.231.245/v1/story/recent" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:@"story/recent?limit=4" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSArray *stories = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *stories = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil][@"data"];
         
-        _stories = stories;
+        self.stories = stories;
         
-        if(_stories != nil){
+        if(self.stories != nil){
             
             [self populateStories];
         
@@ -46,28 +49,28 @@
 
 - (void)populateStories{
 
-    [_storyTable setNumberOfRows:[_stories count] withRowType:@"storyRow"];
+    [self.storyTable setNumberOfRows:[_stories count] withRowType:@"storyRow"];
     
     for (NSInteger i = 0; i < _stories.count; i++) {
         
         FRSStoryRowController* row = [self.storyTable rowControllerAtIndex:i];
         
-        [row.storyTitle setText:_stories[i][@"identifier"]];
+        [row.storyTitle setText:self.stories[i][@"title"]];
         
-        [row.storyLocation setText:_stories[i][@"location"]];
+        [row.storyLocation setText:self.stories[i][@"thumbnails"][0][@"location"][@"address"]];
         
         #warning Set to relative date
 //        [row.storyTime setText:[NSRelativeDate relativeDateString:[MTLModel relativeDateStringFromDate:gallery.createTime]]];
 //        
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
             //Background Thread
-            if([((NSArray *)_stories[i][@"posts"]) count] > 0)
+            if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 0)
                 
-                [row.storyImage1 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_stories[i][@"posts"][0][@"small_path"]]]];
+                [row.storyImage1 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.stories[i][@"thumbnails"][0][@"image"]]]];
             
-            if([((NSArray *)_stories[i][@"posts"]) count] > 1)
+            if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 1)
                 
-                [row.storyImage2 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_stories[i][@"posts"][1][@"small_path"]]]];
+                [row.storyImage2 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_stories[i][@"thumbnails"][1][@"image"]]]];
             
         });
         
@@ -78,9 +81,9 @@
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex{
     
-    NSDictionary *posts = [_stories objectAtIndex:rowIndex][@"posts"];
+    NSDictionary *galleries = [_stories objectAtIndex:rowIndex][@"galleries"];
     
-    [self pushControllerWithName:@"posts" context:posts];
+    [self pushControllerWithName:@"galleries" context:galleries];
     
 }
 

@@ -889,7 +889,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		E71F0E301B0B936200186BAD /* ../Fresco WatchKit Extension */ = {
+		E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
 				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
@@ -905,6 +905,7 @@
 				E71F0E3D1B0B936200186BAD /* Images.xcassets */,
 				E71F0E311B0B936200186BAD /* Supporting Files */,
 			);
+			name = "Fresco WatchKit Extension";
 			path = "../Fresco WatchKit Extension";
 			sourceTree = "<group>";
 		};
@@ -996,7 +997,7 @@
 		E7AD777E1B2B2DF500C1A6EC /* Apple Watch */ = {
 			isa = PBXGroup;
 			children = (
-				E71F0E301B0B936200186BAD /* ../Fresco WatchKit Extension */,
+				E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */,
 				E71F0E451B0B936200186BAD /* Fresco WatchKit App */,
 			);
 			name = "Apple Watch";
@@ -1558,11 +1559,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1581,11 +1583,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FrescoNews/PrefixHeader.pch;
 				INFOPLIST_FILE = FrescoNews/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

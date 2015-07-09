@@ -12,20 +12,22 @@
 
 - (void)awakeWithContext:(id)context{
     
-    self.post = context;
+    self.gallery = context;
     
-    [self updateUserActivity:@"com.fresconews.postView" userInfo:@{@"postId" : [_post objectForKey:@"post_id"] }webpageURL:nil];
+    NSDictionary *post = self.gallery[@"posts"][0];
     
-    [self.galleryLocation setText:context[@"location"]];
+    [self updateUserActivity:@"com.fresconews.galleryView" userInfo:@{@"gallery" : [self.gallery objectForKey:@"_id"] }webpageURL:nil];
+    
+    [self.galleryLocation setText:post[@"location"][@"address"]];
     
 #warning Set to relative
     //[self.postTime setText:[NSRelativeDate relativeDateString:context[@"timestamp"]]];
 
     [self.galleryCaption setText:context[@"caption"]];
     
-    [self.galleryByline setText:context[@"byline"]];
+    [self.galleryByline setText:post[@"byline"]];
     
-    [self.galleryImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:context[@"small_path"]]]];
+    [self.galleryImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:post[@"image"]]]];
 
 }
 
