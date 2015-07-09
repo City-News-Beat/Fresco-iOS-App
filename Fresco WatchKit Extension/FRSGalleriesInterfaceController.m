@@ -9,7 +9,7 @@
 #import "FRSGalleriesInterfaceController.h"
 #import "FRSGalleryRowController.h"
 #import <AFNetworking/AFNetworking.h>
-#import "MTLModel+Additions.h"
+#import "NSRelativeDate.h"
 
 @implementation FRSGalleriesInterfaceController
 
@@ -66,9 +66,9 @@
             
             NSArray *posts = self.galleries[i][@"posts"];
             
-//            NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.galleries[i][@"time_created"] integerValue] / 1000)];
-//            
-//            NSString *test = [MTLModel relativeDateStringFromDate:date];
+            NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.galleries[i][@"time_created"] integerValue] / 1000)];
+            
+            [row.galleryTime setText:[NSRelativeDate relativeDateString:date]];
             
             [row.galleryLocation setText:self.galleries[i][@"caption"]];
             
