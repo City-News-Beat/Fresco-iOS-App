@@ -1,3 +1,4 @@
+#import <BTBadgeView.h>
 @import Foundation;
 
 @interface UIViewController (RelativeDate)

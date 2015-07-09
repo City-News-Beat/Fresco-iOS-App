@@ -21,7 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet WKInterfaceImage *galleryImage;
 
-@property (strong, nonatomic) NSDictionary *gallery;
+@property (strong, nonatomic) NSDictionary *post;
 
 
 @end
