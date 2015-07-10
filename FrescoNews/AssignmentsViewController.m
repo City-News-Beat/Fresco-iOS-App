@@ -36,6 +36,7 @@
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
     @property (strong, nonatomic) AssignmentAnnotation *currentAssignmentAnnotation;
+    @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
     /*
     ** Conditionaing Variables
@@ -96,6 +97,16 @@
         [self presentCurrentAssignment];
     }
 
+    // Add map overlay
+    UIView *overlayAView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
+    UIView *overlayBView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
+    
+    overlayAView.backgroundColor = [UIColor colorWithHex:@"#0077ff" alpha:0.26];
+    overlayBView.backgroundColor = [UIColor colorWithHex:@"#ffffff" alpha:0.54];
+    
+    
+    [self.mapView addSubview:overlayAView];
+    [self.mapView addSubview:overlayBView];
     
 }
 

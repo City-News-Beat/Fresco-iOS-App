@@ -233,6 +233,7 @@
                         <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
                         <outlet property="assignmentsMap" destination="4Ij-9p-8ce" id="WXX-E7-WVF"/>
                         <outlet property="detailViewWrapper" destination="ure-nI-UMR" id="Skc-cL-tBA"/>
+                        <outlet property="mapView" destination="4Ij-9p-8ce" id="7Pn-Tc-Q0n"/>
                         <outlet property="scrollView" destination="Sp5-6N-XZe" id="RZc-lq-zR7"/>
                         <outlet property="storyBreaksView" destination="an2-MI-GTV" id="4sa-nA-lex"/>
                     </connections>
@@ -1971,6 +1972,7 @@
                     <connections>
                         <outlet property="connectFacebookButton" destination="bbh-OR-5Lb" id="BNX-La-u9e"/>
                         <outlet property="connectTwitterButton" destination="UCq-t6-lmB" id="eF5-W9-fTU"/>
+                        <outlet property="mapView" destination="mpg-Nr-jZG" id="5wY-HA-Xao"/>
                         <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
                         <outlet property="profileImageView" destination="zlq-SA-Ipu" id="Ecy-r8-lw7"/>
                         <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
@@ -3633,6 +3635,7 @@
                     <navigationItem key="navigationItem" id="VMV-t7-Jqf"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="mapView" destination="Kpl-tF-KOl" id="Xgt-K9-mnN"/>
                         <outlet property="mapviewRadius" destination="Kpl-tF-KOl" id="Y8H-IV-NHy"/>
                         <outlet property="radiusStepper" destination="oZ3-Qq-mIR" id="sfc-cg-Erz"/>
                         <outlet property="radiusStepperLabel" destination="knO-Du-1YV" id="rgB-bk-Geq"/>
