@@ -80,7 +80,7 @@
                                             </button>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9z-5e-5vf" userLabel="Video Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <color key="backgroundColor" red="0.56078431370000004" green="0.87450980389999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.28627450980392155" green="0.83137254901960789" blue="0.95686274509803926" alpha="0.5" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="K9z-5e-5vf" secondAttribute="height" multiplier="238:92" id="xqW-hs-ve1"/>
                                                 </constraints>
@@ -211,9 +211,12 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H43-Px-pxG" userLabel="Aperture Button">
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
+                                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                            </activityIndicatorView>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H43-Px-pxG" userLabel="Aperture Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <color key="backgroundColor" red="0.94901960784313721" green="0.66274509803921566" blue="0.11372549019607843" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="1" green="0.74117647058823533" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="1BO-gL-I6A"/>
                                                     <constraint firstAttribute="width" secondItem="H43-Px-pxG" secondAttribute="height" multiplier="1:1" id="DQg-j0-d5T"/>
@@ -239,9 +242,6 @@
                                                     <action selector="apertureButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="ebG-K9-hD2"/>
                                                 </connections>
                                             </button>
-                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
-                                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
-                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -323,8 +323,8 @@
                                                 <exclude reference="U0E-i7-DeO"/>
                                                 <exclude reference="XwU-A0-kYQ"/>
                                                 <exclude reference="job-9J-IZj"/>
-                                                <exclude reference="H43-Px-pxG"/>
                                                 <exclude reference="wlt-7O-mUX"/>
+                                                <exclude reference="H43-Px-pxG"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="bmI-Zu-5lR"/>
@@ -384,8 +384,8 @@
                                                 <include reference="U0E-i7-DeO"/>
                                                 <include reference="XwU-A0-kYQ"/>
                                                 <include reference="job-9J-IZj"/>
-                                                <include reference="H43-Px-pxG"/>
                                                 <include reference="wlt-7O-mUX"/>
+                                                <include reference="H43-Px-pxG"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="bmI-Zu-5lR"/>
@@ -1170,7 +1170,7 @@
     </scenes>
     <resources>
         <image name="backCaret" width="25" height="41"/>
-        <image name="camera-aperture-icon" width="121" height="121"/>
+        <image name="camera-aperture-icon" width="118" height="118"/>
         <image name="delete-small-white" width="14" height="14"/>
         <image name="facebookButtonIcon" width="20" height="20"/>
         <image name="flash-off" width="10" height="20"/>
