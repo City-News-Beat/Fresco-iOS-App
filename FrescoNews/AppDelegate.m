@@ -49,6 +49,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     //Check if user is logged in
     [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
+        
         if (error) {
             NSLog(@"Error on login %@", error);
         }
@@ -72,9 +73,11 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                 [self.locationManager startMonitoringSignificantLocationChanges];
             }
         }
+        
     }];
 
     if (!launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        
         [self setupAppearances];
 
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
@@ -91,6 +94,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         }
 
         [self setupLocationMonitoring];
+        
     }
 
     return YES;
