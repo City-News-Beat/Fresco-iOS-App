@@ -163,7 +163,18 @@
 
         }failure:^(NSURLSessionDataTask *task, NSError *error) {
             
-            if(responseBlock) responseBlock(nil, error);
+            [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+                
+                if(!error){
+                    
+                    if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                    
+                }
+                else{
+                    if(responseBlock) responseBlock(nil, error);
+                }
+                
+            }];
             
         }];
     
@@ -575,7 +586,41 @@
             // on success we call ourselves again
             if (!error) {
 
-                [self updateFrescoUserWithParams:inputParams withImageData:imageData block:responseBlock];
+                [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                
+                    if (imageData != nil) {
+                        [params removeObjectForKey:@"avatar"];
+                        [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+                    }
+                
+                }success:^(NSURLSessionDataTask *task, id responseObject) {
+                    
+                    NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
+                    
+                    FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+                    
+                    NSError *error;
+                    
+                    if ([user isKindOfClass:[FRSUser class]]) {
+                        
+                        self.currentUser = user;
+                    }
+                    else {
+                        error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                    code:ErrorSignupCantGetUser
+                                                userInfo:@{@"error" : @"Couldn't get user"}];
+                        user = nil;
+                    }
+                    
+                    if (responseBlock) responseBlock(user, error);
+                    
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                    NSLog(@"Error creating new user %@", error);
+                    
+                    if (responseBlock) responseBlock(nil, error);
+                    
+                }];
                 
             }
             else {
@@ -584,65 +629,9 @@
             
         }];
         
-        [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            if (imageData != nil) {
-                [params removeObjectForKey:@"avatar"];
-                [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
-            }
-        }success:^(NSURLSessionDataTask *task, id responseObject) {
-           
-           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-           NSError *error;
-           if ([user isKindOfClass:[FRSUser class]]) {
-               self.currentUser = user;
-           }
-           else {
-               error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                           code:ErrorSignupCantGetUser
-                                       userInfo:@{@"error" : @"Couldn't get user"}];
-               user = nil;
-           }
-           if (responseBlock)
-               responseBlock(user, error);
-               
-       } failure:^(NSURLSessionDataTask *task, NSError *error) {
-           NSLog(@"Error creating new user %@", error);
-           if (responseBlock) responseBlock(nil, error);
-           
-       }];
-    
+
     }
 
-}
-
-- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
-    [params addEntriesFromDictionary:inputParams];
-    
-    [self POST:@"user/settings" parameters:params constructingBodyWithBlock:nil
-       success:^(NSURLSessionDataTask *task, id responseObject) {
-           NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-           FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
-           
-           NSError *error;
-           if ([user isKindOfClass:[FRSUser class]]) {
-               self.currentUser = user;
-           }
-           else {
-               error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                           code:ErrorSignupCantGetUser
-                                       userInfo:@{@"error" : @"Couldn't get user"}];
-               user = nil;
-           }
-           if (responseBlock)
-               responseBlock(user, error);
-           
-       } failure:^(NSURLSessionDataTask *task, NSError *error) {
-           NSLog(@"Error creating new user %@", error);
-           if (responseBlock) responseBlock(nil, error);
-       }];
 }
 
 #pragma mark - Stories

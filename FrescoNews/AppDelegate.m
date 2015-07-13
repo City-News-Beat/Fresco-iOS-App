@@ -101,21 +101,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 }
 
 #pragma mark - Root View Controllers
-// because the app might launch into First Run mode
-// or regular (tab interface) we need to dynamically swap
-// root view controllers
-/*
-- (void)loadInitialViewController
-{
-    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError * error) {
-        if (succeeded) {
-            [rootViewController setRootViewControllerToTabBar];
-        }
-        else
-            [rootViewController setRootViewControllerToFirstRun];
-    }];
-}*/
+
 
 - (void)setRootViewControllerToTabBar
 {

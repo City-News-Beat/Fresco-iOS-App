@@ -209,6 +209,8 @@
     if ([self.textfieldEmail.text length])
         [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
     
+    [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
+    
     NSData *imageData = nil;
     
     if(self.selectedImage){
@@ -217,19 +219,16 @@
     }
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
-        NSString *title;
-        NSString *message;
+
         if (error) {
-            title = @"Error";
-            message = @"Could not save Profile settings";
-            
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
+
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Could not save Profile settings"
                                                            delegate:nil
                                                   cancelButtonTitle:@"Dismiss"
                                                   otherButtonTitles:nil];
             [alert show];
+            
         }
         // on success just dismiss
         else {
@@ -240,23 +239,6 @@
     
     // send a second post to save the radius -- ignore success
     [updateParams removeAllObjects];
-    [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
-    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
-                                                                 block:^(id responseObject, NSError *error) {
-                                                                     NSString *title;
-                                                                     NSString *message;
-                                                                     if (error) {
-                                                                         title = @"Error";
-                                                                         message = @"Could not save notification radius";
-                                                                         
-                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                                                                                         message:message
-                                                                                                                        delegate:nil
-                                                                                                               cancelButtonTitle:@"Dismiss"
-                                                                                                               otherButtonTitles:nil];
-                                                                         [alert show];
-                                                                     }
-                                                                 }];
     
     // password change is trickier
     if ([self.textfieldNewPassword.text length]) {

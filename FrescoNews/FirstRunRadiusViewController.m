@@ -90,6 +90,7 @@
 }
 
 #pragma mark - MKMapViewDelegate
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
@@ -101,26 +102,29 @@
 }
 
 #pragma mark - Utility methods
+
 - (void)save
 {
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
+    
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"Could not save notification radius"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        // on success just dismiss
+        else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+    }];
 
-    [[FRSDataManager sharedManager] updateFrescoUserSettingsWithParams:updateParams
-                                                                 block:^(id responseObject, NSError *error) {
-                                                                     NSString *title;
-                                                                     NSString *message;
-                                                                     if (error) {
-                                                                         title = @"Error";
-                                                                         message = @"Could not save notification radius";
-                                                                         
-                                                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                                                                                         message:message
-                                                                                                                        delegate:nil
-                                                                                                               cancelButtonTitle:@"Dismiss"
-                                                                                                               otherButtonTitles:nil];
-                                                                         [alert show];
-                                                                     }
-                                                                 }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

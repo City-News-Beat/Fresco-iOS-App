@@ -156,8 +156,10 @@
 }
 
 #pragma mark - NSNotificationCenter Notification handling
+
 - (void)handleAPIKeyAvailable:(NSNotification *)notification
 {
     [self setRightBarButtonItem:YES];
 }
+
 @end
