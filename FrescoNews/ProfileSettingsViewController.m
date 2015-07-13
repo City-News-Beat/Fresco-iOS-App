@@ -31,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) UIImage *selectedImage;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterIconCenterXConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *facebookIconCenterXConstraint;
 @end
 
 @implementation ProfileSettingsViewController
@@ -86,6 +88,12 @@
 
     // update the slider label
     [self sliderValueChanged:self.radiusStepper];
+    
+    self.connectTwitterButton.layer.cornerRadius = 4;
+    self.connectTwitterButton.clipsToBounds = YES;
+    
+    self.connectFacebookButton.layer.cornerRadius = 4;
+    self.connectFacebookButton.clipsToBounds = YES;
 
 }
 
@@ -99,23 +107,28 @@
         [self.connectFacebookButton setHidden:NO];
     
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitterDisconnectButton"] forState:UIControlStateNormal];
+            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            self.twitterIconCenterXConstraint.constant = 45;
         } else {
-            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitterConnectButton"] forState:UIControlStateNormal];
+            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+            self.twitterIconCenterXConstraint.constant = 35;
         }
     
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebookDisconnectButton"] forState:UIControlStateNormal];
+            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            self.facebookIconCenterXConstraint.constant = 45;
         } else {
-            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebookConnectButton"] forState:UIControlStateNormal];
+            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+            self.facebookIconCenterXConstraint.constant = 35;
         }
     }
+    
 }
 
 - (IBAction)connectFacebook:(id)sender
 {
     [self.connectFacebookButton setTitle:@"" forState:UIControlStateNormal];
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectFacebookButton addSubview:spinner];
@@ -152,7 +165,7 @@
 - (IBAction)connectTwitter:(id)sender
 {
     [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width - 40), 7)];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width), 7)];
     spinner.color = [UIColor whiteColor];
     [spinner startAnimating];
     [self.connectTwitterButton addSubview:spinner];
