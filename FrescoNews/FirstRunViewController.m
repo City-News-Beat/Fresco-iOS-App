@@ -193,8 +193,11 @@
 }
 
 - (IBAction)twitterLogin:(id)sender {
+    
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
+        
         if (user) {
+            
             if (user.isNew)
                 [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
             else {
@@ -245,7 +248,9 @@
 }
 
 - (IBAction)forgotPassword:(id)sender {
+    
     NSString *email = self.emailField.text;
+    
     if (![email length])
         email = [FRSDataManager sharedManager].currentUser.email;
     
