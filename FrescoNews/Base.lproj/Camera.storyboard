@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D2134" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -80,7 +80,7 @@
                                             </button>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9z-5e-5vf" userLabel="Video Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <color key="backgroundColor" red="0.56078431370000004" green="0.87450980389999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.28627450980392155" green="0.83137254901960789" blue="0.95686274509803926" alpha="0.5" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="K9z-5e-5vf" secondAttribute="height" multiplier="238:92" id="xqW-hs-ve1"/>
                                                 </constraints>
@@ -211,9 +211,12 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H43-Px-pxG" userLabel="Aperture Button">
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
+                                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                            </activityIndicatorView>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H43-Px-pxG" userLabel="Aperture Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <color key="backgroundColor" red="0.94901960784313721" green="0.66274509803921566" blue="0.11372549019607843" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="1" green="0.74117647058823533" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="1BO-gL-I6A"/>
                                                     <constraint firstAttribute="width" secondItem="H43-Px-pxG" secondAttribute="height" multiplier="1:1" id="DQg-j0-d5T"/>
@@ -239,9 +242,6 @@
                                                     <action selector="apertureButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="ebG-K9-hD2"/>
                                                 </connections>
                                             </button>
-                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
-                                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
-                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -323,54 +323,54 @@
                                                 <exclude reference="U0E-i7-DeO"/>
                                                 <exclude reference="XwU-A0-kYQ"/>
                                                 <exclude reference="job-9J-IZj"/>
-                                                <exclude reference="H43-Px-pxG"/>
                                                 <exclude reference="wlt-7O-mUX"/>
+                                                <exclude reference="H43-Px-pxG"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="bmI-Zu-5lR"/>
+                                                <exclude reference="KMi-u3-1fe"/>
+                                                <exclude reference="t4m-eF-35F"/>
+                                                <exclude reference="xhi-0e-Do8"/>
                                                 <exclude reference="9My-ic-cv3"/>
                                                 <exclude reference="E3b-bi-XkH"/>
                                                 <exclude reference="HKf-9U-F1U"/>
-                                                <exclude reference="C4s-mr-w95"/>
-                                                <exclude reference="hZu-Em-ven"/>
-                                                <exclude reference="sxm-90-gWL"/>
                                                 <exclude reference="6Kq-Mc-TEe"/>
                                                 <exclude reference="BE8-lF-Hez"/>
                                                 <exclude reference="bUN-IP-EJL"/>
                                                 <exclude reference="dPc-sJ-bHK"/>
                                                 <exclude reference="lsI-UW-gG1"/>
                                                 <exclude reference="uyM-p7-1kw"/>
-                                                <exclude reference="2BB-G9-5Jv"/>
-                                                <exclude reference="YgW-Me-ve6"/>
-                                                <exclude reference="d8H-sv-h6K"/>
-                                                <exclude reference="sie-ve-ZfF"/>
-                                                <exclude reference="Jbr-mK-FnD"/>
-                                                <exclude reference="KUG-8V-p1L"/>
-                                                <exclude reference="gSN-61-f4d"/>
-                                                <exclude reference="cq0-UP-ESi"/>
-                                                <exclude reference="oLJ-RM-J5P"/>
-                                                <exclude reference="pU0-ZJ-iVf"/>
-                                                <exclude reference="0Xp-1z-odY"/>
-                                                <exclude reference="7RH-mw-G2A"/>
-                                                <exclude reference="Lqq-je-Wi7"/>
-                                                <exclude reference="Sbf-j4-Jh1"/>
-                                                <exclude reference="fSC-SM-0Wu"/>
-                                                <exclude reference="yxV-ca-HuI"/>
+                                                <exclude reference="C4s-mr-w95"/>
+                                                <exclude reference="hZu-Em-ven"/>
+                                                <exclude reference="sxm-90-gWL"/>
                                                 <exclude reference="57V-yw-Xpa"/>
                                                 <exclude reference="Mds-Xh-4vD"/>
                                                 <exclude reference="Tkz-oo-khx"/>
                                                 <exclude reference="Uee-X7-OCb"/>
                                                 <exclude reference="dEu-30-cEj"/>
                                                 <exclude reference="xgA-R4-uyl"/>
-                                                <exclude reference="KMi-u3-1fe"/>
-                                                <exclude reference="t4m-eF-35F"/>
-                                                <exclude reference="xhi-0e-Do8"/>
+                                                <exclude reference="Jbr-mK-FnD"/>
+                                                <exclude reference="KUG-8V-p1L"/>
+                                                <exclude reference="gSN-61-f4d"/>
+                                                <exclude reference="0Xp-1z-odY"/>
+                                                <exclude reference="7RH-mw-G2A"/>
+                                                <exclude reference="Lqq-je-Wi7"/>
+                                                <exclude reference="Sbf-j4-Jh1"/>
+                                                <exclude reference="fSC-SM-0Wu"/>
+                                                <exclude reference="yxV-ca-HuI"/>
                                                 <exclude reference="3FP-u2-mFC"/>
                                                 <exclude reference="7zf-1P-si2"/>
                                                 <exclude reference="apB-9k-J0r"/>
                                                 <exclude reference="gI0-JD-KcV"/>
                                                 <exclude reference="rV0-GR-Ig0"/>
                                                 <exclude reference="rui-6n-hex"/>
+                                                <exclude reference="2BB-G9-5Jv"/>
+                                                <exclude reference="YgW-Me-ve6"/>
+                                                <exclude reference="d8H-sv-h6K"/>
+                                                <exclude reference="sie-ve-ZfF"/>
+                                                <exclude reference="cq0-UP-ESi"/>
+                                                <exclude reference="oLJ-RM-J5P"/>
+                                                <exclude reference="pU0-ZJ-iVf"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
@@ -384,50 +384,50 @@
                                                 <include reference="U0E-i7-DeO"/>
                                                 <include reference="XwU-A0-kYQ"/>
                                                 <include reference="job-9J-IZj"/>
-                                                <include reference="H43-Px-pxG"/>
                                                 <include reference="wlt-7O-mUX"/>
+                                                <include reference="H43-Px-pxG"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="bmI-Zu-5lR"/>
+                                                <include reference="KMi-u3-1fe"/>
+                                                <exclude reference="t4m-eF-35F"/>
+                                                <include reference="xhi-0e-Do8"/>
                                                 <include reference="9My-ic-cv3"/>
                                                 <include reference="E3b-bi-XkH"/>
                                                 <include reference="HKf-9U-F1U"/>
-                                                <include reference="C4s-mr-w95"/>
-                                                <include reference="hZu-Em-ven"/>
-                                                <include reference="sxm-90-gWL"/>
                                                 <include reference="BE8-lF-Hez"/>
                                                 <include reference="dPc-sJ-bHK"/>
                                                 <include reference="lsI-UW-gG1"/>
-                                                <include reference="2BB-G9-5Jv"/>
-                                                <include reference="d8H-sv-h6K"/>
-                                                <include reference="sie-ve-ZfF"/>
-                                                <include reference="Jbr-mK-FnD"/>
-                                                <include reference="KUG-8V-p1L"/>
-                                                <include reference="gSN-61-f4d"/>
-                                                <include reference="cq0-UP-ESi"/>
-                                                <include reference="oLJ-RM-J5P"/>
-                                                <include reference="pU0-ZJ-iVf"/>
-                                                <include reference="0Xp-1z-odY"/>
-                                                <include reference="7RH-mw-G2A"/>
-                                                <include reference="Lqq-je-Wi7"/>
-                                                <include reference="Sbf-j4-Jh1"/>
-                                                <include reference="fSC-SM-0Wu"/>
-                                                <include reference="yxV-ca-HuI"/>
+                                                <include reference="C4s-mr-w95"/>
+                                                <include reference="hZu-Em-ven"/>
+                                                <include reference="sxm-90-gWL"/>
                                                 <include reference="57V-yw-Xpa"/>
                                                 <include reference="Mds-Xh-4vD"/>
                                                 <include reference="Tkz-oo-khx"/>
                                                 <exclude reference="Uee-X7-OCb"/>
                                                 <include reference="dEu-30-cEj"/>
                                                 <include reference="xgA-R4-uyl"/>
-                                                <include reference="KMi-u3-1fe"/>
-                                                <exclude reference="t4m-eF-35F"/>
-                                                <include reference="xhi-0e-Do8"/>
+                                                <include reference="Jbr-mK-FnD"/>
+                                                <include reference="KUG-8V-p1L"/>
+                                                <include reference="gSN-61-f4d"/>
+                                                <include reference="0Xp-1z-odY"/>
+                                                <include reference="7RH-mw-G2A"/>
+                                                <include reference="Lqq-je-Wi7"/>
+                                                <include reference="Sbf-j4-Jh1"/>
+                                                <include reference="fSC-SM-0Wu"/>
+                                                <include reference="yxV-ca-HuI"/>
                                                 <include reference="3FP-u2-mFC"/>
                                                 <include reference="7zf-1P-si2"/>
                                                 <include reference="apB-9k-J0r"/>
                                                 <include reference="gI0-JD-KcV"/>
                                                 <include reference="rV0-GR-Ig0"/>
                                                 <include reference="rui-6n-hex"/>
+                                                <include reference="2BB-G9-5Jv"/>
+                                                <include reference="d8H-sv-h6K"/>
+                                                <include reference="sie-ve-ZfF"/>
+                                                <include reference="cq0-UP-ESi"/>
+                                                <include reference="oLJ-RM-J5P"/>
+                                                <include reference="pU0-ZJ-iVf"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact-widthClass=regular">
@@ -437,9 +437,9 @@
                                                 <include reference="bUN-IP-EJL"/>
                                                 <exclude reference="lsI-UW-gG1"/>
                                                 <exclude reference="uyM-p7-1kw"/>
-                                                <include reference="YgW-Me-ve6"/>
                                                 <exclude reference="7zf-1P-si2"/>
                                                 <exclude reference="rui-6n-hex"/>
+                                                <include reference="YgW-Me-ve6"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -865,6 +865,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FHD-iC-fKo" userLabel="Enclosing View">
                                 <rect key="frame" x="0.0" y="64" width="600" height="892"/>
                                 <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="Q60-io-4Rt" userLabel="Caption Text View">
+                                        <rect key="frame" x="15" y="451" width="585" height="401"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                    </textView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VgT-z6-Ir7" customClass="GalleryView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="450"/>
                                         <subviews>
@@ -881,7 +888,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">
@@ -957,13 +964,6 @@
                                             <constraint firstAttribute="trailing" secondItem="1pe-Up-bZs" secondAttribute="trailing" constant="10" id="gqc-Rz-VxD"/>
                                         </constraints>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="Q60-io-4Rt" userLabel="Caption Text View">
-                                        <rect key="frame" x="15" y="451" width="585" height="401"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
-                                    </textView>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
                                         <rect key="frame" x="0.0" y="860" width="600" height="3"/>
                                     </progressView>
@@ -973,8 +973,9 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="O4K-1a-aIo"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="Twitter">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -986,8 +987,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="CrossPostButton">
                                         <rect key="frame" x="300" y="862" width="300" height="30"/>
                                         <color key="backgroundColor" red="0.57254901960000004" green="0.63921568630000003" blue="0.75686274509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="Facebook">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1014,6 +1016,47 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="inverted-triangle" translatesAutoresizingMaskIntoConstraints="NO" id="nVh-Vj-T7V">
                                         <rect key="frame" x="280" y="836" width="40" height="19"/>
                                     </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitterButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="H7x-EQ-qhC">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="2rL-RL-Td8"/>
+                                            <constraint firstAttribute="width" secondItem="H7x-EQ-qhC" secondAttribute="height" multiplier="1:1" id="VG0-gr-sGJ"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="2rL-RL-Td8"/>
+                                                <exclude reference="VG0-gr-sGJ"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <exclude reference="2rL-RL-Td8"/>
+                                                <include reference="VG0-gr-sGJ"/>
+                                            </mask>
+                                        </variation>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebookButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="mlZ-6Z-a9A">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="mlZ-6Z-a9A" secondAttribute="height" multiplier="1:1" id="dM9-PV-6j0"/>
+                                            <constraint firstAttribute="width" secondItem="mlZ-6Z-a9A" secondAttribute="height" multiplier="1:1" id="wsD-wI-pAd"/>
+                                            <constraint firstAttribute="height" constant="20" id="x7r-1T-SFa"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="dM9-PV-6j0"/>
+                                                <exclude reference="wsD-wI-pAd"/>
+                                                <exclude reference="x7r-1T-SFa"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <exclude reference="dM9-PV-6j0"/>
+                                                <include reference="wsD-wI-pAd"/>
+                                                <exclude reference="x7r-1T-SFa"/>
+                                            </mask>
+                                        </variation>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1035,8 +1078,16 @@
                                     <constraint firstItem="2SC-mV-bkV" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" constant="30" id="Khf-31-ymA"/>
                                     <constraint firstAttribute="centerX" secondItem="2SC-mV-bkV" secondAttribute="centerX" id="Lq1-ih-Lkl"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="-2" id="Lst-7X-cnN"/>
+                                    <constraint firstItem="mlZ-6Z-a9A" firstAttribute="width" secondItem="mlZ-6Z-a9A" secondAttribute="height" multiplier="1:1" id="MXH-pw-eFS"/>
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
+                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="centerX" secondItem="mlZ-6Z-a9A" secondAttribute="centerX" constant="58" id="Tpd-Qr-zfU">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="39"/>
+                                    </constraint>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="H7x-EQ-qhC" secondAttribute="height" constant="25" id="Z5L-4V-bLr"/>
+                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="height" secondItem="mlZ-6Z-a9A" secondAttribute="height" constant="25" id="ZTZ-CW-L2s"/>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="centerY" secondItem="H7x-EQ-qhC" secondAttribute="centerY" id="a9Z-8B-akS"/>
+                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="centerY" secondItem="mlZ-6Z-a9A" secondAttribute="centerY" id="cpM-wU-3h4"/>
                                     <constraint firstAttribute="trailing" secondItem="q6D-z2-Jzy" secondAttribute="trailing" id="eb2-Ut-99h"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="2SC-mV-bkV" secondAttribute="bottom" constant="26" id="fbe-bh-kL0"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" id="hYI-l2-WPS"/>
@@ -1048,8 +1099,37 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                     </constraint>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" id="qOm-qu-iOS"/>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="centerX" secondItem="H7x-EQ-qhC" secondAttribute="centerX" constant="27" id="tBA-U8-pK8"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="tVP-Ki-GOJ"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="H7x-EQ-qhC"/>
+                                        <exclude reference="mlZ-6Z-a9A"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="MXH-pw-eFS"/>
+                                        <exclude reference="Z5L-4V-bLr"/>
+                                        <exclude reference="a9Z-8B-akS"/>
+                                        <exclude reference="Tpd-Qr-zfU"/>
+                                        <exclude reference="ZTZ-CW-L2s"/>
+                                        <exclude reference="cpM-wU-3h4"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="H7x-EQ-qhC"/>
+                                        <include reference="mlZ-6Z-a9A"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="MXH-pw-eFS"/>
+                                        <include reference="Z5L-4V-bLr"/>
+                                        <include reference="a9Z-8B-akS"/>
+                                        <include reference="Tpd-Qr-zfU"/>
+                                        <include reference="ZTZ-CW-L2s"/>
+                                        <include reference="cpM-wU-3h4"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1090,8 +1170,9 @@
     </scenes>
     <resources>
         <image name="backCaret" width="25" height="41"/>
-        <image name="camera-aperture-icon" width="121" height="121"/>
+        <image name="camera-aperture-icon" width="118" height="118"/>
         <image name="delete-small-white" width="14" height="14"/>
+        <image name="facebookButtonIcon" width="20" height="20"/>
         <image name="flash-off" width="10" height="20"/>
         <image name="flash-on" width="10" height="20"/>
         <image name="inverted-triangle" width="40" height="19"/>
@@ -1099,5 +1180,6 @@
         <image name="overlay" width="140" height="232"/>
         <image name="picker" width="178" height="178"/>
         <image name="tab-camera" width="60" height="49"/>
+        <image name="twitterButtonIcon" width="20" height="20"/>
     </resources>
 </document>

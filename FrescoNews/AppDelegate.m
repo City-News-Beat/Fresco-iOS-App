@@ -66,28 +66,30 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                  6b. Also you may be able to debug background launches using scheme launch option "Wait for executable to be launched"
                  */
                 // NSLog(@"Background launch via UIApplicationLaunchOptionsLocationKey");
+                [self setupLocationManager];
+                [self setupLocationMonitoring];
                 self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
                 [self.locationManager startMonitoringSignificantLocationChanges];
             }
         }
     }];
 
-    [self setupAppearances];
+    if (!launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        [self setupAppearances];
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
-        [self setupLocationManager];
-        [self registerForPushNotifications];
-        [self setRootViewControllerToTabBar];
-    }
-    else {
-        [self setRootViewControllerToOnboard];
-    }
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+            [self setupLocationManager];
+            [self registerForPushNotifications];
+            [self setRootViewControllerToTabBar];
+        }
+        else {
+            [self setRootViewControllerToOnboard];
+        }
 
-    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-    }
-    else if (!launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-        // Ordinary app launch
+        if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+            [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        }
+
         [self setupLocationMonitoring];
     }
 

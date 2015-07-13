@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "record.png"
+      "filename" : "video-recording-icon.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "record@2x.png"
+      "filename" : "video-recording-icon@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "record@3x.png"
+      "filename" : "video-recording-icon@3x.png"
     }
   ],
   "info" : {

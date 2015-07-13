@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *dismissButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 @end
@@ -81,6 +82,11 @@
     
     self.signUpButton.layer.cornerRadius = 4;
     self.signUpButton.clipsToBounds = YES;
+    
+    // Add shadow above Dismiss Button
+    UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
+    shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
+    [self.dismissButton addSubview:shadowView];
 }
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
