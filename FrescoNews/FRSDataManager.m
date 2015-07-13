@@ -595,9 +595,7 @@
                 
                 }success:^(NSURLSessionDataTask *task, id responseObject) {
                     
-                    NSDictionary *data = [NSDictionary dictionaryWithDictionary:[responseObject objectForKey:@"data"]];
-                    
-                    FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:data error:NULL];
+                    FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
                     
                     NSError *error;
                     
@@ -616,7 +614,7 @@
                     
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
-                    NSLog(@"Error creating new user %@", error);
+                    NSLog(@"Error updating user %@", error);
                     
                     if (responseBlock) responseBlock(nil, error);
                     
@@ -628,10 +626,7 @@
             }
             
         }];
-        
-
     }
-
 }
 
 #pragma mark - Stories
