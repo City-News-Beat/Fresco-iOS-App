@@ -1780,10 +1780,12 @@
                                                     <action selector="saveChanges:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Uor-kQ-v8b"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UCq-t6-lmB">
-                                                <rect key="frame" x="191" y="28" width="204" height="46"/>
+                                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UCq-t6-lmB">
+                                                <rect key="frame" x="136" y="28" width="259" height="46"/>
+                                                <color key="backgroundColor" red="0.27450980392156865" green="0.60392156862745094" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="UCq-t6-lmB" secondAttribute="height" multiplier="102:23" id="3pl-Mi-n8L"/>
+                                                    <constraint firstAttribute="height" constant="46" id="4PC-W2-fNB"/>
                                                     <constraint firstAttribute="width" secondItem="UCq-t6-lmB" secondAttribute="height" multiplier="102:23" id="4ih-NH-QWg"/>
                                                     <constraint firstAttribute="width" secondItem="UCq-t6-lmB" secondAttribute="height" multiplier="102:23" id="Aer-0K-MAA"/>
                                                     <constraint firstAttribute="width" constant="204" id="SmN-Ww-oD0"/>
@@ -1793,12 +1795,15 @@
                                                     <constraint firstAttribute="height" constant="46" id="ufc-OT-6XU"/>
                                                     <constraint firstAttribute="width" secondItem="UCq-t6-lmB" secondAttribute="height" multiplier="102:23" id="une-nN-lOe"/>
                                                 </constraints>
-                                                <state key="normal" image="twitterConnectButton">
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                                <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Connect">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <variation key="default">
                                                     <mask key="constraints">
+                                                        <exclude reference="3pl-Mi-n8L"/>
                                                         <exclude reference="4ih-NH-QWg"/>
                                                         <exclude reference="Aer-0K-MAA"/>
                                                         <exclude reference="SmN-Ww-oD0"/>
@@ -1813,10 +1818,39 @@
                                                     <action selector="connectTwitter:" destination="fkO-PC-iRn" eventType="touchUpInside" id="HkT-IO-nMc"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bbh-OR-5Lb">
-                                                <rect key="frame" x="191" y="78" width="204" height="46"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitterButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="gIG-ls-6Ze">
+                                                <rect key="frame" x="220" y="41" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="128" id="AAi-KA-0ki"/>
+                                                    <constraint firstAttribute="height" constant="20" id="Pm2-ve-IUP"/>
+                                                    <constraint firstAttribute="height" constant="20" id="SJs-3E-FF2"/>
+                                                    <constraint firstAttribute="width" secondItem="gIG-ls-6Ze" secondAttribute="height" multiplier="1:1" id="ZC2-a5-cRF"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="AAi-KA-0ki"/>
+                                                        <exclude reference="Pm2-ve-IUP"/>
+                                                        <exclude reference="ZC2-a5-cRF"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=compact-widthClass=regular">
+                                                    <mask key="constraints">
+                                                        <include reference="AAi-KA-0ki"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=compact">
+                                                    <mask key="constraints">
+                                                        <exclude reference="Pm2-ve-IUP"/>
+                                                        <include reference="ZC2-a5-cRF"/>
+                                                    </mask>
+                                                </variation>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bbh-OR-5Lb">
+                                                <rect key="frame" x="136" y="78" width="259" height="46"/>
+                                                <color key="backgroundColor" red="0.17647058823529413" green="0.26666666666666666" blue="0.52549019607843139" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="bbh-OR-5Lb" secondAttribute="height" multiplier="102:23" id="LhX-Tt-y0f"/>
+                                                    <constraint firstAttribute="height" constant="46" id="PIc-ah-sTD"/>
                                                     <constraint firstAttribute="width" secondItem="bbh-OR-5Lb" secondAttribute="height" multiplier="102:23" id="QfX-5O-lDX"/>
                                                     <constraint firstAttribute="height" constant="46" id="VXD-QW-XlP"/>
                                                     <constraint firstAttribute="width" secondItem="bbh-OR-5Lb" secondAttribute="height" multiplier="102:23" id="Vv6-lK-JKq"/>
@@ -1826,7 +1860,9 @@
                                                     <constraint firstAttribute="width" constant="204" id="vp3-tU-nuK"/>
                                                     <constraint firstAttribute="width" secondItem="bbh-OR-5Lb" secondAttribute="height" multiplier="102:23" id="zZP-SS-cme"/>
                                                 </constraints>
-                                                <state key="normal" image="facebookConnectButton">
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                                <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Connect">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -1837,6 +1873,7 @@
                                                         <exclude reference="VXD-QW-XlP"/>
                                                         <exclude reference="Vv6-lK-JKq"/>
                                                         <exclude reference="gcy-53-aAx"/>
+                                                        <exclude reference="lfs-IR-eaK"/>
                                                         <exclude reference="mQt-AP-7rk"/>
                                                         <exclude reference="vp3-tU-nuK"/>
                                                         <exclude reference="zZP-SS-cme"/>
@@ -1846,6 +1883,35 @@
                                                     <action selector="connectFacebook:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Du4-vN-AZ0"/>
                                                 </connections>
                                             </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebookButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="eyo-rN-S9N">
+                                                <rect key="frame" x="219.5" y="91" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="20" id="4FR-Ck-lKz"/>
+                                                    <constraint firstAttribute="width" secondItem="eyo-rN-S9N" secondAttribute="height" multiplier="1:1" id="La6-TI-IZh"/>
+                                                    <constraint firstAttribute="height" constant="128" id="XIQ-AH-7Mj"/>
+                                                    <constraint firstAttribute="height" constant="20" id="p0N-24-ipE"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="sgz-RM-BhA"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="La6-TI-IZh"/>
+                                                        <exclude reference="XIQ-AH-7Mj"/>
+                                                        <exclude reference="p0N-24-ipE"/>
+                                                        <exclude reference="sgz-RM-BhA"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=compact-widthClass=regular">
+                                                    <mask key="constraints">
+                                                        <include reference="XIQ-AH-7Mj"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=compact">
+                                                    <mask key="constraints">
+                                                        <include reference="La6-TI-IZh"/>
+                                                        <exclude reference="p0N-24-ipE"/>
+                                                    </mask>
+                                                </variation>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -1902,20 +1968,23 @@
                                             <constraint firstItem="doJ-jB-8QL" firstAttribute="bottom" secondItem="i7n-YU-zCT" secondAttribute="bottom" constant="-1" id="jrT-61-Rqh"/>
                                             <constraint firstItem="uA6-wt-D8J" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" constant="14" id="k7e-E7-2B6"/>
                                             <constraint firstItem="doJ-jB-8QL" firstAttribute="top" secondItem="3o8-0B-iNE" secondAttribute="bottom" constant="8" id="mOc-8T-MpD"/>
-                                            <constraint firstItem="UCq-t6-lmB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zlq-SA-Ipu" secondAttribute="trailing" constant="25" id="o9k-lP-ZRX"/>
+                                            <constraint firstItem="UCq-t6-lmB" firstAttribute="leading" secondItem="zlq-SA-Ipu" secondAttribute="trailing" constant="15" id="o9k-lP-ZRX"/>
                                             <constraint firstItem="3o8-0B-iNE" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" constant="16" id="oGv-fS-31x"/>
                                             <constraint firstItem="uPo-C5-rMv" firstAttribute="top" secondItem="bbh-OR-5Lb" secondAttribute="bottom" constant="73" id="oaf-5h-bOM"/>
                                             <constraint firstItem="zlq-SA-Ipu" firstAttribute="top" secondItem="UCq-t6-lmB" secondAttribute="top" id="ofI-Do-eJD"/>
                                             <constraint firstItem="bbh-OR-5Lb" firstAttribute="leading" secondItem="UCq-t6-lmB" secondAttribute="leading" id="onC-kO-vAS"/>
                                             <constraint firstAttribute="trailing" secondItem="doJ-jB-8QL" secondAttribute="trailing" id="p8i-ty-U72"/>
+                                            <constraint firstItem="gIG-ls-6Ze" firstAttribute="centerY" secondItem="UCq-t6-lmB" secondAttribute="centerY" id="q0m-Z9-oFj"/>
                                             <constraint firstItem="bbh-OR-5Lb" firstAttribute="width" secondItem="UCq-t6-lmB" secondAttribute="width" id="qSU-1d-DNc"/>
+                                            <constraint firstItem="bbh-OR-5Lb" firstAttribute="centerX" secondItem="eyo-rN-S9N" secondAttribute="centerX" constant="36" id="sSj-C5-okO"/>
                                             <constraint firstItem="d4m-tG-TCs" firstAttribute="top" secondItem="LU0-z9-8vq" secondAttribute="bottom" constant="15" id="tPg-6Z-odr"/>
                                             <constraint firstItem="Huw-4h-tIp" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" constant="17" id="tyH-pd-c6a"/>
                                             <constraint firstItem="doJ-jB-8QL" firstAttribute="leading" secondItem="nqH-iM-sZZ" secondAttribute="leading" id="ufl-8R-uxc"/>
+                                            <constraint firstItem="bbh-OR-5Lb" firstAttribute="centerY" secondItem="eyo-rN-S9N" secondAttribute="centerY" id="vQd-PD-vZ2"/>
+                                            <constraint firstItem="UCq-t6-lmB" firstAttribute="centerX" secondItem="gIG-ls-6Ze" secondAttribute="centerX" constant="36" id="zMb-Q9-7IY"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="oaf-5h-bOM"/>
                                                 <exclude reference="89F-UE-rSi"/>
                                                 <exclude reference="EPm-fR-X4x"/>
                                                 <exclude reference="POe-Z8-VCq"/>
@@ -1935,6 +2004,7 @@
                                                 <exclude reference="iQv-qk-0aW"/>
                                                 <exclude reference="onC-kO-vAS"/>
                                                 <exclude reference="qSU-1d-DNc"/>
+                                                <exclude reference="oaf-5h-bOM"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
@@ -1973,6 +2043,7 @@
                     <connections>
                         <outlet property="connectFacebookButton" destination="bbh-OR-5Lb" id="BNX-La-u9e"/>
                         <outlet property="connectTwitterButton" destination="UCq-t6-lmB" id="eF5-W9-fTU"/>
+                        <outlet property="facebookIconCenterXConstraint" destination="sSj-C5-okO" id="g2E-KA-rp8"/>
                         <outlet property="mapView" destination="mpg-Nr-jZG" id="5wY-HA-Xao"/>
                         <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
                         <outlet property="profileImageView" destination="zlq-SA-Ipu" id="Ecy-r8-lw7"/>
@@ -1985,6 +2056,7 @@
                         <outlet property="textfieldFirst" destination="crc-X1-iUD" id="1TT-g3-2Wv"/>
                         <outlet property="textfieldLast" destination="L36-Rz-Ank" id="Kmt-2l-uLZ"/>
                         <outlet property="textfieldNewPassword" destination="67E-q7-Q6W" id="Ii3-eE-mIs"/>
+                        <outlet property="twitterIconCenterXConstraint" destination="zMb-Q9-7IY" id="BdC-bs-9Rl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J84-lZ-k57" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4238,8 +4310,8 @@
         <image name="assignmentWarningIcon" width="20" height="20"/>
         <image name="cameraOffIcon" width="48" height="48"/>
         <image name="facebook" width="40" height="40"/>
+        <image name="facebookButtonIcon" width="20" height="20"/>
         <image name="facebookButtonSmall" width="167" height="46"/>
-        <image name="facebookConnectButton" width="204" height="46"/>
         <image name="largeLogo" width="204" height="71"/>
         <image name="lewisCarolPlaceholder" width="192" height="192"/>
         <image name="locationOffIcon" width="48" height="48"/>
@@ -4263,8 +4335,8 @@
         <image name="tab-profile" width="22" height="22"/>
         <image name="tab-stories" width="26" height="23"/>
         <image name="twitter" width="40" height="40"/>
+        <image name="twitterButtonIcon" width="20" height="20"/>
         <image name="twitterButtonSmall" width="167" height="46"/>
-        <image name="twitterConnectButton" width="204" height="46"/>
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
