@@ -47,8 +47,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     [self configureParseWithLaunchOptions:launchOptions];
 
-    // try to bootstrap the user
-    [[FRSDataManager sharedManager] loginWithBlock:^(BOOL succeeded, NSError *error) {
+    //Check if user is logged in
+    [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
         if (error) {
             NSLog(@"Error on login %@", error);
         }
@@ -312,6 +312,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [self setRootViewControllerToTabBar];
     
     // Check the type of the notifications
+    
     //Breaking News
     if ([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]) {
         //Check to make sure the payload has a gallery ID
@@ -362,10 +363,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     if(application.applicationState == UIApplicationStateInactive) {
         
+        //Handle the push notification
         [self handlePush:userInfo];
     
-        //Show the view with the content of the push
-
         handler(UIBackgroundFetchResultNewData);
         
     }
@@ -375,6 +375,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler
 {
     // Check the identifier for the type of notification
+    
     //Assignment Action
     if ([identifier isEqualToString: navigateIdentifier]) {
         // Check to make sure the payload has an assignment ID
