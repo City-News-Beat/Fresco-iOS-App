@@ -266,18 +266,26 @@
                     
                     [postCell.layer addSublayer:cell.galleryView.sharedLayer];
                     
-                    [UIView animateWithDuration:1.0 animations:^{
-                        postCell.videoIndicatorView.alpha = 0.0f;
-                    } completion:^(BOOL finished){
+
+                    if (cell.galleryView.sharedPlayer.rate > 5 && !cell.galleryView.sharedPlayer.error) {
                         
-                        [postCell.videoIndicatorView stopAnimating];
- 
-                    }];
+                        // player is playing
+                        [UIView animateWithDuration:1.0 animations:^{
+                            postCell.videoIndicatorView.alpha = 0.0f;
+                        } completion:^(BOOL finished){
+                            
+                            [postCell.videoIndicatorView stopAnimating];
+                            
+                        }];
+                        
+                    }
                     
+
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(playerItemDidReachEnd:)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                                object:[cell.galleryView.sharedPlayer currentItem]];
+
                 
                     
                 }
@@ -304,6 +312,7 @@
     [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
     
 }
+
 
 
 #pragma mark - Gallery Table View Cell Delegate

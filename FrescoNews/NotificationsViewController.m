@@ -51,7 +51,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
-
     
     [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
         if (!error) {
@@ -246,6 +245,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     //Check if the assignment has expired
                     if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
                 
+                        [self exitNotificationView];
+                        
                         UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                         
                         AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
@@ -253,6 +254,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                         [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
                         
                         [tabBarController setSelectedIndex:3];
+                        
                         
                     }
                     else{
@@ -279,14 +281,28 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                //Retreieve Gallery View Controller from storyboard
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                if(((FRSGallery *)responseObject).galleryID != nil){
                 
-                GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    //Retreieve Gallery View Controller from storyboard
+                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+                    
+                    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
+                    
+                    [galleryView setGallery:responseObject];
+           
+                    [self.navigationController pushViewController:galleryView animated:YES];
+                        
+                }
+                else{
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Gallery Unavailable"
+                                                                    message:@"We couldn't find this gallery!"
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"Dismiss"
+                                                          otherButtonTitles:nil];
+                    [alert show];
                 
-                [galleryView setGallery:responseObject];
-       
-                [self.navigationController pushViewController:galleryView animated:YES];
+                }
                 
             }
             
@@ -296,8 +312,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     else if([notification.type isEqualToString:@"social"]){
         
     }
-    
-    [self exitNotificationView];
 
 }
 
@@ -330,8 +344,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
 
-                
-                
             }
             
         }];

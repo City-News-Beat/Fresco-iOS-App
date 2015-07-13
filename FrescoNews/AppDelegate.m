@@ -84,7 +84,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] fetchCompletionHandler:nil];
+        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     else if (!launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         // Ordinary app launch
@@ -308,6 +308,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
 
     [PFPush handlePush:userInfo];
+    
+    [self setRootViewControllerToTabBar];
     
     // Check the type of the notifications
     //Breaking News
