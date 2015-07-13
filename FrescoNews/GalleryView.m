@@ -120,6 +120,10 @@
     
 }
 
+/*
+** Set up video player in passed PostCollectionViewCell
+*/
+
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
     

@@ -56,8 +56,28 @@
 + (NSValueTransformer *)imageJSONTransformer
 {
     return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
+        
         FRSImage *image = [[FRSImage alloc] init];
-        image.URL = [NSURL URLWithString:imageURL];
+        
+        if ([imageURL rangeOfString:@"cloudfront"].location == NSNotFound){
+            image.URL = [NSURL URLWithString:imageURL];
+        }
+        else{
+            
+            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
+            
+            NSRange range = [mu rangeOfString:@"/images/"];
+            
+            if (!(range.location == NSNotFound)) {
+                
+                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+                
+                image.URL = [NSURL URLWithString:mu];
+                
+            }
+
+        }
+    
         return image;
     }];
 }
@@ -67,10 +87,11 @@
     return self.video ? YES : NO;
 }
 
+
+
 - (NSURL *)largeImageURL
 {
     return [self.image cdnAssetInListURL];
-    //return [self.largeImage cdnAssetInListURL];
 }
 
 @end

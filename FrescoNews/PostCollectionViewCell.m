@@ -34,6 +34,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     [[self imageView] cancelImageRequestOperation];
     self.transcodeImage.hidden = YES;
     self.transcodeLabel.hidden = YES;
+    self.videoIndicatorView.alpha = 0;
     self.videoIndicatorView.hidden = YES;
 }
 
@@ -72,7 +73,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
         
-        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[_post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             self.processingVideo = false;
             
