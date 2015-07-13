@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) UIImage *selectedImage;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @end
 
 @implementation ProfileSettingsViewController
@@ -54,6 +55,17 @@
     self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
+    
+    // Add map overlay
+    UIView *overlayAView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
+    UIView *overlayBView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
+    
+    overlayAView.backgroundColor = [UIColor colorWithHex:@"#0077ff" alpha:0.26];
+    overlayBView.backgroundColor = [UIColor colorWithHex:@"#ffffff" alpha:0.54];
+    
+    
+    [self.mapView addSubview:overlayAView];
+    [self.mapView addSubview:overlayBView];
 
 }
 
