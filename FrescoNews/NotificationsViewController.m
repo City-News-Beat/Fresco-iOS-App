@@ -75,7 +75,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
             }
             else{
                 
-                self.notifications = responseObject;
+                self.notifications = [NSMutableArray arrayWithArray:responseObject];
                 
                 [[self tableView] reloadData];
                 
@@ -228,9 +228,35 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //add code here for when you hit delete
+        
+        FRSNotification *notification = [self.notifications objectAtIndex:[indexPath item]];
+
+        [[FRSDataManager sharedManager] deleteNotification:notification.notificaitonId withResponseBlock:^(id responseObject, NSError *error) {
+            
+            if(!error){
+                
+                [self.notifications removeObjectAtIndex:[indexPath item]];
+                
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            }
+            
+        }];
+
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UITableViewCell *tableViewCellHeader = [[UITableViewCell alloc] init];
+    
+    return tableViewCellHeader;
 }
 
 /*
@@ -400,17 +426,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
     }
     
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0;
-}
-
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-     UITableViewCell *tableViewCellHeader = [[UITableViewCell alloc] init];
-    
-    return tableViewCellHeader;
 }
 
 

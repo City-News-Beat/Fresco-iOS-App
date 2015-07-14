@@ -24,33 +24,27 @@
     return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:nil];
 }
 
-
-- (NSURL *)cdnAssetURL
-{
-    // TODO: Use local asset, if available?
-    if ([[self.URL absoluteString] containsString:@"/videos/"]) {
-        return self.URL;
-    }
-
-    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:CGSizeMake([self.width floatValue], [self.height floatValue]) transformationString:nil];
-}
-
 - (NSURL *)cdnAssetInListURL
 {
-    if ([[self.URL absoluteString] containsString:@"/videos/"]) {
+
+    if(self.width && self.height){
+
+        CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
+        NSString *transformString;
+        
+        // we don't want portrait aspect so square off
+        if ([self.height floatValue] > [self.width floatValue]) {
+            size.height = size.width;
+            transformString = @"c_fill,g_faces";
+        }
+        
+        return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
+            
+    }
+    else{
+        
         return self.URL;
     }
-
-    CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
-    NSString *transformString;
-    
-    // we don't want portrait aspect so square off
-    if ([self.height floatValue] > [self.width floatValue]) {
-        size.height = size.width;
-        transformString = @"c_fill,g_faces";
-    }
-    
-    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
 }
 
 - (NSString *)description

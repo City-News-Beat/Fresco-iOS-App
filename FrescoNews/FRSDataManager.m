@@ -1013,16 +1013,12 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
-    [self POST:@"notifications/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self POST:@"notification/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        if(![responseObject[@"data"] isEqual:[NSNull null]]){
-            
-            if(responseBlock) responseBlock(responseObject, nil);
-            
-        }
-        
+        if(responseBlock) responseBlock(responseObject, nil);
+    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
