@@ -23,6 +23,7 @@
              @"mediaWidth" : @"meta.width",
              @"mediaHeight" : @"meta.height",
              @"image" : @"image",
+             @"imageUrl" : @"image",
              @"video" : @"video",
              @"date" : @"time_created",
              @"byline" : @"byline",
@@ -53,44 +54,56 @@
     return [MTLModel URLJSONTransformer];
 }
 
-+ (NSValueTransformer *)imageJSONTransformer
++ (NSValueTransformer *)imageUrlJSONTransformer
 {
-    return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
-        
-        FRSImage *image = [[FRSImage alloc] init];
-        
-        if ([imageURL rangeOfString:@"cloudfront"].location == NSNotFound){
-            image.URL = [NSURL URLWithString:imageURL];
-        }
-        else{
-            
-            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
-            
-            NSRange range = [mu rangeOfString:@"/images/"];
-            
-            if (!(range.location == NSNotFound)) {
-                
-                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
-                
-                image.URL = [NSURL URLWithString:mu];
-                
-            }
-
-        }
-    
-        return image;
-    }];
+    return [MTLModel URLJSONTransformer];
 }
+
 
 - (BOOL)isVideo
 {
     return self.video ? YES : NO;
 }
 
++ (NSValueTransformer *)imageJSONTransformer{
+    
+    return [MTLValueTransformer transformerWithBlock:^FRSImage *(NSString *imageURL) {
+        
+        FRSImage *image = [[FRSImage alloc] init];
+        
+//        if (!([imageURL rangeOfString:@"cloudfront"].location == NSNotFound)){
+//            
+//            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
+//            
+//            NSRange range = [mu rangeOfString:@"/images/"];
+//            
+//            if (!(range.location == NSNotFound)) {
+//                
+//                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+//                
+//                image.URL = [NSURL URLWithString:mu];
+//                
+//            }
+//            
+//        }
+//        else{
+        
+            image.URL = [NSURL URLWithString:imageURL];
+            
+//        }
+        
+        return image;
+        
+    }];
 
+}
 
 - (NSURL *)largeImageURL
 {
+    if(self.isVideo){
+        self.image.URL = self.imageUrl;
+    }
+    
     return [self.image cdnAssetInListURL];
 }
 

@@ -1,4 +1,4 @@
-//
+ //
 //  ProfileSettingsViewController.m
 //  FrescoNews
 //
@@ -14,25 +14,50 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
+
+//In order of presentation
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-@property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
-@property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
+/*
+** Social Connect Buttons
+*/
+
+@property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
+@property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
+
+/*
+** Profile Picture
+*/
+
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (strong, nonatomic) UIImage *selectedImage;
+
+/*
+** Text Fields
+*/
+
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
-@property (weak, nonatomic) IBOutlet UITextField *textfieldCurrentPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldNewPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldConfirmPassword;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
+
+/*
+** Radius Setting
+*/
+
+@property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
+@property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
-@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
-@property (strong, nonatomic) UIImage *selectedImage;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
+/*
+** UI Constraints
+*/
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterIconCenterXConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *facebookIconCenterXConstraint;
+
 @end
 
 @implementation ProfileSettingsViewController
@@ -58,14 +83,15 @@
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
 
-
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self updateLinkingStatus];
+    
     self.frsUser = [FRSDataManager sharedManager].currentUser;
 
     // Radius slider values
@@ -74,6 +100,7 @@
     self.textfieldFirst.text = self.frsUser.first;
     self.textfieldLast.text = self.frsUser.last;
     self.textfieldEmail.text = self.frsUser.email;
+    self.textfieldEmail.userInteractionEnabled = NO;
     self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
 
     // update the slider label
@@ -188,6 +215,8 @@
 
 - (IBAction)saveChanges:(id)sender
 {
+    
+    
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
   
     if ([self.textfieldFirst.text length])
@@ -196,9 +225,7 @@
     if ([self.textfieldLast.text length])
         [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
  
-    if ([self.textfieldEmail.text length])
-        [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
-    
+
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
     NSData *imageData = nil;
@@ -220,9 +247,34 @@
             [alert show];
             
         }
-        // on success just dismiss
+        // On success, run password check
         else {
-            [self.navigationController popViewControllerAnimated:YES];
+            
+            if ([self.textfieldNewPassword.text length]) {
+                
+                if([self.textfieldNewPassword.text isEqualToString:self.textfieldConfirmPassword.text]){
+                    
+                    [PFUser currentUser].password = self.textfieldNewPassword.text;
+                    [[PFUser currentUser]  saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
+                        
+                        if(success) [self.navigationController popViewControllerAnimated:YES];
+                    
+                    }];
+                    
+                }
+                else{
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Passwords do not match"
+                                                                    message:@"Please make sure your new passwords are equal"
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"Dismiss"
+                                                          otherButtonTitles:nil];
+                    [alert show];
+                    
+                }
+            }
+            else [self.navigationController popViewControllerAnimated:YES];
+
         }
 
     }];
@@ -230,17 +282,6 @@
     // send a second post to save the radius -- ignore success
     [updateParams removeAllObjects];
     
-    // password change is trickier
-    if ([self.textfieldNewPassword.text length]) {
-        if (!([self.textfieldCurrentPassword.text length] && [self.textfieldConfirmPassword.text length])) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"If updating password, all ACCOUNT fields are required"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Dismiss"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-    }
 }
 
 - (IBAction)changePassword:(UIButton *)sender

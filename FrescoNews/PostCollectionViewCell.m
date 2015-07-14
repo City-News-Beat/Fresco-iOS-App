@@ -86,23 +86,45 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            if(response.statusCode == 403 && self.post.isVideo){
+            if(self.post.isVideo){
                 
-                self.processingVideo = true;
-            
-                self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
-                self.transcodeImage.image = [UIImage imageNamed:@"transcoding"];
-                self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
-                self.transcodeImage.center = self.center;
-            
-                self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
-                self.transcodeLabel.text = @"We’re still processing this video!";
-                self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
-                self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
-                self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+                if(response.statusCode == 404){
+                    
+                    self.processingVideo = true;
 
-                [self addSubview:self.transcodeImage];
-                [self addSubview:self.transcodeLabel];
+                    self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
+
+                    self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
+                    self.transcodeImage.center = self.center;
+                    
+                    self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
+                    self.transcodeLabel.text = @"We can't find this image!";
+                    self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                    self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
+                    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+                    
+                    [self addSubview:self.transcodeImage];
+                    [self addSubview:self.transcodeLabel];
+                    
+                }
+                else if(response.statusCode == 403){
+                    
+                    self.processingVideo = true;
+                    
+                    self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
+                    self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
+                    self.transcodeImage.center = self.center;
+                
+                    self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
+                    self.transcodeLabel.text = @"We’re still processing this video!";
+                    self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                    self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
+                    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+                    
+                    [self addSubview:self.transcodeImage];
+                    [self addSubview:self.transcodeLabel];
+                    
+                }
                 
             }
             

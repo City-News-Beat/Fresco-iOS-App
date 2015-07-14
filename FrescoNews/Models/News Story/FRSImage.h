@@ -22,7 +22,6 @@
 @property (strong, nonatomic) NSNumber *longitude;
 
 - (NSURL *)cdnAssetURLWithSize:(CGSize)size;
-- (NSURL *)cdnAssetURL;
 - (NSURL *)cdnAssetInListURL;
 
 @end

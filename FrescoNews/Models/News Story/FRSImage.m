@@ -24,12 +24,7 @@
     return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:nil];
 }
 
-/*
-- (NSURL *)cdnAssetURL
-{
-    return [self cdnAssetURLWithSize:CGSizeMake([self.width floatValue], [self.height floatValue])];
-}
-*/
+
 - (NSURL *)cdnAssetURL
 {
     // TODO: Use local asset, if available?

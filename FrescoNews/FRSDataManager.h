@@ -31,10 +31,14 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
+
+#pragma mark - Users
+
 - (void)refreshUser:(PFBooleanResultBlock)block;
 - (void)logout;
 - (BOOL)isLoggedIn;
 - (BOOL)currentUserValid;
+- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
 - (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;

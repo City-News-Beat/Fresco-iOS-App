@@ -118,10 +118,7 @@
                                                   otherButtonTitles:nil];
             [alert show];
         }
-        // on success just dismiss
-        else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
+
         
     }];
 

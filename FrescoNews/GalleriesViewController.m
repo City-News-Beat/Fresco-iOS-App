@@ -266,16 +266,15 @@
                     
                     [postCell.layer addSublayer:cell.galleryView.sharedLayer];
                     
-
+                    postCell.processingVideo = false;
+                    
                     if (cell.galleryView.sharedPlayer.rate > 5 && !cell.galleryView.sharedPlayer.error) {
                         
                         // player is playing
                         [UIView animateWithDuration:1.0 animations:^{
                             postCell.videoIndicatorView.alpha = 0.0f;
                         } completion:^(BOOL finished){
-                            
                             [postCell.videoIndicatorView stopAnimating];
-                            
                         }];
                         
                     }

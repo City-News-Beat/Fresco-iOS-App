@@ -15,11 +15,13 @@
 
 @interface FRSPost : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy, readonly) NSString *postID;
 @property (nonatomic, strong) FRSUser *user;
+
+@property (nonatomic, copy, readonly) NSString *postID;
 @property (nonatomic, copy, readonly) NSString *source;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, strong) FRSImage *image;
+@property (nonatomic, strong) NSURL *imageUrl;
 @property (nonatomic, copy) NSURL *video;
 @property (nonatomic, copy, readonly) NSNumber *mediaWidth;
 @property (nonatomic, copy, readonly) NSNumber *mediaHeight;

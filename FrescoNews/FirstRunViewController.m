@@ -198,8 +198,9 @@
         
         if (user) {
             
-            if (user.isNew)
+            if (user.isNew){
                 [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+            }
             else {
                 // check to see if the user finished signup
                 if ([[FRSDataManager sharedManager] currentUserValid])
@@ -210,6 +211,14 @@
             }
         }
         else {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error"
+                                                            message:@"We ran into an error signing you in with Twitter"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Dismiss"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
             NSLog(@"Twitter login error: %@", error);
         }
     }];

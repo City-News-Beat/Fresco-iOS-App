@@ -52,6 +52,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.estimatedRowHeight = 119;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
+    
     [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
         if (!error) {
             
@@ -217,6 +218,25 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 #pragma mark - UITableViewDelegate and Actions
 
+// Override to support conditional editing of the table view.
+// This only needs to be implemented if you are going to be returning NO
+// for some items. By default, all items are editable.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
+    return YES;
+}
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+    }
+}
+
+/*
+** Action for second buttons on notification cells i.e. view assignmnet, view gallery
+*/
+
 - (IBAction)firstButton:(id)sender {
     
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
@@ -315,6 +335,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 }
 
+/*
+** Action for second buttons on notification cells i.e. navigate, outlet
+*/
+
 - (IBAction)secondButton:(id)sender {
     
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
@@ -336,13 +360,33 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         [[FRSDataManager sharedManager] getAssignment:notification.meta[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                FRSAssignment *assignment = (FRSAssignment *) responseObject;
                 
-                AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                //Check if the assignment has expired
+                if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
+                    
+                    [self exitNotificationView];
+                    
+                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    
+                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
+                    
+                    [tabBarController setSelectedIndex:3];
+                    
+                    [assignmentVC setCurrentAssignment:assignment navigateTo:YES];
                 
-                [tabBarController setSelectedIndex:3];
                 
-                [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
+                }
+                else{
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Assignment Expired"
+                                                                    message:@"This assignment has expired already!"
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"Dismiss"
+                                                          otherButtonTitles:nil];
+                    [alert show];
+                    
+                }
 
             }
             
@@ -355,10 +399,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     else if([notification.type isEqualToString:@"social"]){
         
     }
-    
-    
-    [self exitNotificationView];
-
     
 }
 
