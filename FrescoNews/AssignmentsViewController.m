@@ -84,14 +84,10 @@
     
     self.operatingLon = 0;
     
-    
-    if(self.currentAssignment == nil){
+    if(self.currentAssignment == nil)
         [self updateAssignments];
-        
-    }
-    else{
+    else
         [self presentCurrentAssignment];
-    }
     
 }
 
@@ -105,9 +101,7 @@
     
     [super viewDidAppear:animated];
     
-    static BOOL firstTime = YES;
-    
-    if([FRSDataManager sharedManager].currentUser != nil){
+    if([[FRSDataManager sharedManager] isLoggedIn]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
             self.storyBreaksView.hidden = YES;
         }
@@ -118,13 +112,6 @@
     if(self.currentAssignment == nil){
         [self updateAssignments];
     }
-
-    if (firstTime) {
-        // move the legal link in order to tuck the map behind nicely
-        [self.assignmentsMap offsetLegalLabel:CGSizeMake(0, -kSCROLL_VIEW_INSET)];
-    }
-    
-    firstTime = NO;
     
 }
 

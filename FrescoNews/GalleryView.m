@@ -157,7 +157,7 @@
     
     [postCell bringSubviewToFront:postCell.playPause];
     
-    if (self.sharedPlayer.rate > 5 && !self.sharedPlayer.error) {
+    if (self.sharedPlayer.rate > 0 && !self.sharedPlayer.error) {
         
         // player is playing
         [UIView animateWithDuration:1.0 animations:^{

@@ -78,20 +78,23 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
 
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.alertBody = [self.location description];
-    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
-    
     if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
-         NSLog(@"Found a new location");
+
         self.currentLocation = [locations lastObject];
         
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
         
         [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
+        
+//        //Uncomment for local notifications while testing
+//        UILocalNotification *notification = [[UILocalNotification alloc] init];
+//        notification.alertBody = [self.location description];
+//        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+//        notification.timeZone = [NSTimeZone defaultTimeZone];
+//        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+        
+        NSLog(@"Successfully updated location");
         
     }
     else {

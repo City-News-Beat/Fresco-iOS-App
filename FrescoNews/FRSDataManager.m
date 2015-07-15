@@ -122,138 +122,6 @@
 
 #pragma mark - User Methods
 
-
-/*
-** Grab API token for User from server
-*/
-
-- (void)validateAPIToken:(FRSAPIResponseBlock)responseBlock {
-    
-    //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
-    
-    if ([token length]) {
-    
-        [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
-        
-        //Make sure token is still valid
-        [self GET:@"user/me" parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
-            
-            //If token is valid
-            if([responseObject valueForKeyPath:@"data"]){
-            
-                self.frescoAPIToken = token;
-                
-                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-
-            }
-            //If token is invalid, get a new one
-            else{
-                
-                [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
-                    
-                    if(!error){
-                    
-                        if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-                        
-                    }
-                    
-                }];
-                
-            }
-
-        }failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-            [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
-                
-                if(!error){
-                    
-                    if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-                    
-                }
-                else{
-                    if(responseBlock) responseBlock(nil, error);
-                }
-                
-            }];
-            
-        }];
-    
-    }
-    //If token is not set, get a new one
-    else{
-        
-        [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
-            
-            if(!error){
-                
-                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-                
-            }
-            
-        }];
-    
-    }
-
-}
-
-/*
-** Request Auth Token from API with Session String
-*/
-
-- (void)requestNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPIResponseBlock)responseBlock{
-
-    NSDictionary *params = @{@"parseSession" : sessionToken};
-    
-    [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
-        
-        NSString *token = [responseObject valueForKeyPath:@"data.token"];
-        
-        if (token) {
-            
-            //This token will be used to authenticate data calls that require it
-            self.frescoAPIToken = token;
-            
-            // cache the token
-            [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:@"frescoAPIToken"];
-            
-            responseBlock(responseObject, nil);
-
-        }
-        
-    } failure:nil];
-}
-
-/*
-** Addresses the possibility that one installation (device) can have several users on it
-*/
-
-- (void)tieUserToInstallation
-{
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    PFUser *user = [PFUser currentUser];
-    
-    if (user && currentInstallation.deviceToken) {
-        PFUser *installationOwner = [currentInstallation objectForKey:@"owner"];
-        if (![installationOwner.objectId isEqualToString:user.objectId]) {
-            [currentInstallation setObject:user forKey:@"owner"];
-            [currentInstallation saveInBackground];
-        }
-    }
-}
-
-/*
-** Master Logout
-*/
-
-- (void)logout
-{
-    [PFUser logOut];
-    self.currentUser = nil;
-    self.frescoAPIToken = nil;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
-}
-
 /*
 ** Initiate Parse Sign Up, then run to API sign up
 */
@@ -302,10 +170,7 @@
 {
     
     //Construct params to create user
-    NSDictionary *params = @{
-                             @"email" : [PFUser currentUser].email ?: [NSNull null],
-                             @"parse_id" : [PFUser currentUser].objectId
-                            };
+    NSDictionary *params = @{@"email" : [PFUser currentUser].email ?: [NSNull null], @"parse_id" : [PFUser currentUser].objectId};
     
     //Run the API call to create the user on the database side
     [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -360,7 +225,6 @@
             
             [[PFUser currentUser] deleteInBackground];
             
-            
             if(responseBlock){
                 
                 NSError *error;
@@ -370,7 +234,7 @@
                 else
                     error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"Couldn't create the user"}];
                 
-                responseBlock(nil, error);
+                if (responseBlock) responseBlock(nil, error);
                 
             }
             
@@ -388,6 +252,36 @@
         if (responseBlock) responseBlock(nil, error);
         
     }];
+}
+
+/*
+ ** Addresses the possibility that one installation (device) can have several users on it
+ */
+
+- (void)tieUserToInstallation
+{
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    PFUser *user = [PFUser currentUser];
+    
+    if (user && currentInstallation.deviceToken) {
+        PFUser *installationOwner = [currentInstallation objectForKey:@"owner"];
+        if (![installationOwner.objectId isEqualToString:user.objectId]) {
+            [currentInstallation setObject:user forKey:@"owner"];
+            [currentInstallation saveInBackground];
+        }
+    }
+}
+
+/*
+** Master Logout
+*/
+
+- (void)logout
+{
+    [PFUser logOut];
+    self.currentUser = nil;
+    self.frescoAPIToken = nil;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
 }
 
 /*
@@ -573,6 +467,111 @@
         }];
     
     }
+}
+
+/*
+ ** Check and validate existing token, otherwise grab a new one
+ */
+
+- (void)validateAPIToken:(FRSAPIResponseBlock)responseBlock {
+    
+    //Check cache first and short circuit if it exists
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    
+    if ([token length]) {
+        
+        [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+        
+        //Make sure token is still valid
+        [self GET:@"user/me" parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+            
+            //If token is valid
+            if([responseObject valueForKeyPath:@"data"]){
+                
+                self.frescoAPIToken = token;
+                
+                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                
+            }
+            //If token is invalid, get a new one
+            else{
+                
+                [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+                    
+                    if(!error){
+                        
+                        if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                        
+                    }
+                    
+                }];
+                
+            }
+            
+        }failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+                
+                if(!error){
+                    
+                    if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                    
+                }
+                else{
+                    if(responseBlock) responseBlock(nil, error);
+                }
+                
+            }];
+            
+        }];
+        
+    }
+    //If token is not set, get a new one
+    else{
+        
+        [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+            
+            if(!error){
+                
+                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                
+            }
+            
+        }];
+        
+    }
+    
+}
+
+/*
+ ** Request Auth Token from API with Session String
+ */
+
+- (void)requestNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    NSDictionary *params = @{@"parseSession" : sessionToken};
+    
+    [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+        
+        NSString *token = [responseObject valueForKeyPath:@"data.token"];
+        
+        if (token) {
+            
+            //This token will be used to authenticate data calls that require it
+            self.frescoAPIToken = token;
+            
+            // cache the token
+            [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:@"frescoAPIToken"];
+            
+            if(responseBlock) responseBlock(responseObject, nil);
+            
+        }
+        else{
+            
+            
+        }
+        
+    } failure:nil];
 }
 
 /*

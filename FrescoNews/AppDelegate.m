@@ -36,7 +36,8 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
 
     // Prevent conflict between background music and camera
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
@@ -54,40 +55,28 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
             
             NSLog(@"successful login on launch");
             
-            if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-                
-                [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                
-            }
-        }
-        else {
-            
-           if(error) NSLog(@"Error on login %@", error);
-        
-        }
-        
-    }];
-
-    if (!launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-        
-        [self setupAppearances];
-
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
             [[FRSLocationManager sharedManager] setupLocationMonitoring];
-            [self registerForPushNotifications];
-            [self setRootViewControllerToTabBar];
+            
         }
         else {
-            [self setRootViewControllerToOnboard];
+           if(error) NSLog(@"Error on login %@", error);
         }
+    }];
+    
+    [self setupAppearances];
 
-        if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-        }
-
-        [self setupLocationMonitoring];
-        
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [self registerForPushNotifications];
+        [self setRootViewControllerToTabBar];
     }
+    else {
+        [self setRootViewControllerToOnboard];
+    }
+
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+    }
+        
 
     return YES;
 }
@@ -157,19 +146,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 }
 
 #pragma mark - Miscellaneous Configuration
-
-
-
-- (void)setupLocationMonitoring
-{
-    [self.locationManager requestAlwaysAuthorization];
-    [self.locationManager requestWhenInUseAuthorization];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-
-    // TODO: Stop monitoring significant location changes on logout
-    [self.locationManager startUpdatingLocation];
-    [self.locationManager startMonitoringSignificantLocationChanges];
-}
 
 - (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
 {
