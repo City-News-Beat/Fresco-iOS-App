@@ -30,12 +30,18 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 }
 
 -(void)prepareForReuse{
+    
     [[self imageView] setImage:nil];
+    
     [[self imageView] cancelImageRequestOperation];
-    self.transcodeImage.hidden = YES;
-    self.transcodeLabel.hidden = YES;
+
     self.videoIndicatorView.alpha = 0;
     self.videoIndicatorView.hidden = YES;
+    
+    if([self.post isVideo]){
+        [self removeTranscodePlaceHolder];
+    }
+
 }
 
 - (void)setPost:(FRSPost *)post
@@ -62,6 +68,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(weakSelf.frame.size.width - 25, 15, 10, 10)];
         self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
         self.videoIndicatorView.alpha = 0;
+        self.videoIndicatorView.hidden = YES;
 
         //Add subviews and bring to the front so they don't get hidden
         [self addSubview:self.playPause];
@@ -77,38 +84,14 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
             self.processingVideo = false;
             
-            self.transcodeImage.alpha = 0;
-            self.transcodeImage.hidden = YES;
-            self.transcodeLabel.alpha = 0;
-            self.transcodeLabel.hidden = YES;
-            
             weakSelf.imageView.image = image;
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
-            if(self.post.isVideo){
+            if([self.post isVideo]){
                 
-                if(response.statusCode == 404){
-                    
-                    self.processingVideo = true;
-
-                    self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
-
-                    self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
-                    self.transcodeImage.center = self.center;
-                    
-                    self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
-                    self.transcodeLabel.text = @"We can't find this image!";
-                    self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
-                    self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
-                    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
-                    
-                    [self addSubview:self.transcodeImage];
-                    [self addSubview:self.transcodeLabel];
-                    
-                }
-                else if(response.statusCode == 403){
-                    
+                if(response != nil){
+                
                     self.processingVideo = true;
                     
                     self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
@@ -133,8 +116,20 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     else {
         // local
         self.imageView.image = [UIImage imageFromAsset:post.image.asset];
-   
     }
+}
+
+- (void)removeTranscodePlaceHolder{
+    
+    self.transcodeLabel.hidden = YES;
+    self.transcodeImage.hidden = YES;
+    
+    self.transcodeLabel.alpha = 0;
+    self.transcodeImage.alpha = 0;
+    
+    [self.transcodeImage removeFromSuperview];
+    [self.transcodeLabel removeFromSuperview];
+
 }
 
 @end

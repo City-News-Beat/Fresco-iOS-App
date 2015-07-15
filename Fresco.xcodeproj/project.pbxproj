@@ -43,7 +43,6 @@
 		1EA6F2E41ABB52D000E74E68 /* CustomCellDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E31ABB52D000E74E68 /* CustomCellDividerView.m */; };
 		1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */; };
 		1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */; };
-		1EA6F2F01ABB830C00E74E68 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */; };
 		1EAD00031B1E1124000C821D /* FRSReplaceSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAD00021B1E1124000C821D /* FRSReplaceSegue.m */; };
 		1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */; };
 		1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */; };
@@ -106,6 +105,7 @@
 		E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */; };
 		E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
+		E706DFC41B56B024001A6DD0 /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */; };
 		E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E3D1B0B936200186BAD /* Images.xcassets */; };
 		E71F0E421B0B936200186BAD /* Fresco WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */; };
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
@@ -234,8 +234,6 @@
 		1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryView.m; sourceTree = "<group>"; };
 		1EA6F2EB1ABB80AA00E74E68 /* StoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryViewController.h; sourceTree = "<group>"; };
 		1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
-		1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
-		1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		1EAD00011B1E1124000C821D /* FRSReplaceSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReplaceSegue.h; sourceTree = "<group>"; };
 		1EAD00021B1E1124000C821D /* FRSReplaceSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSReplaceSegue.m; sourceTree = "<group>"; };
 		1EBC7FCF1AD6DED000DE5301 /* ProfileHeaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileHeaderViewController.h; sourceTree = "<group>"; };
@@ -357,6 +355,8 @@
 		E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		E6B8124C1AD488C200FD9936 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
+		E706DFC21B56B024001A6DD0 /* FRSLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocationManager.h; sourceTree = "<group>"; };
+		E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocationManager.m; sourceTree = "<group>"; };
 		E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E71F0E321B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -702,6 +702,8 @@
 			children = (
 				1EDA45141AA500EE0082E08D /* FRSDataManager.h */,
 				1EDA45151AA500EE0082E08D /* FRSDataManager.m */,
+				E706DFC21B56B024001A6DD0 /* FRSLocationManager.h */,
+				E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -772,8 +774,6 @@
 				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
 				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
 				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
-				1EA6F2EE1ABB830C00E74E68 /* UIView+Additions.h */,
-				1EA6F2EF1ABB830C00E74E68 /* UIView+Additions.m */,
 				1EA27AA61AF147C4003137CE /* MKMapView+Additions.h */,
 				1EA27AA71AF147C4003137CE /* MKMapView+Additions.m */,
 				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
@@ -1325,6 +1325,7 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1E1AE0631B30814B000C4FF2 /* UIViewController+FirstRun.m in Sources */,
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
+				E706DFC41B56B024001A6DD0 /* FRSLocationManager.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
@@ -1368,7 +1369,6 @@
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
-				1EA6F2F01ABB830C00E74E68 /* UIView+Additions.m in Sources */,
 				420DC7371ADB875000157762 /* CTAssetsSupplementaryView.m in Sources */,
 				420DC7391ADB875000157762 /* CTAssetsViewController.m in Sources */,
 				420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */,
@@ -1550,7 +1550,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1563,7 +1563,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ead20633-8b7b-47bb-9c84-14189535c0e3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1574,7 +1574,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1587,7 +1587,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ead20633-8b7b-47bb-9c84-14189535c0e3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1638,7 +1638,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1651,7 +1651,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "05dd50b6-2d8e-4178-af16-ca457070ede8";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1660,7 +1660,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1670,7 +1670,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "05dd50b6-2d8e-4178-af16-ca457070ede8";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -1679,7 +1679,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1692,7 +1692,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "326197fa-d5da-4088-9c09-250e9e524562";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -1703,7 +1703,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fresco News Inc (Z7R96S8K3N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1713,7 +1713,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "326197fa-d5da-4088-9c09-250e9e524562";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";

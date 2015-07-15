@@ -31,7 +31,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 + (FRSDataManager *)sharedManager;
 
-
 #pragma mark - Users
 
 - (void)refreshUser:(PFBooleanResultBlock)block;
@@ -40,7 +39,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (BOOL)currentUserValid;
 - (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
-- (void)updateFrescoUserSettingsWithParams:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;

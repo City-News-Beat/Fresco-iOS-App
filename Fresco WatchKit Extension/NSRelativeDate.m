@@ -51,7 +51,7 @@
         
         int diff = round(ti / 60 / 60 / 24 / 4 / 12);
         
-        return  [NSString stringWithFormat:@"%d m", diff];
+        return  [NSString stringWithFormat:@"%d mo", diff];
         
         
     }

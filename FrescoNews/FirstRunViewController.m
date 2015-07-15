@@ -13,6 +13,7 @@
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
+#import "FRSLocationManager.h"
 #import "AppDelegate.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
@@ -126,10 +127,7 @@
                 }
                 // otherwise just go into the app
                 else {
-                    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-                    // TODO: Move location setup calls to -navigateToMainApp or FRSDataManager
-                    [appDelegate setupLocationManager];
-                    [appDelegate setupLocationMonitoring];
+                    [[FRSLocationManager sharedManager] setupLocationMonitoring];
                     [self.view endEditing:YES];
                     [self navigateToMainApp];
                 }

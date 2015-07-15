@@ -12,12 +12,12 @@
 @import Parse;
 @import AVFoundation;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <AFNetworking.h>
 #import "AppDelegate.h"
 #import "AFNetworkActivityLogger.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
-#import <AFNetworking.h>
-#import "FRSDataManager.h"
+#import "FRSLocationManager.h"
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "HomeViewController.h"
@@ -36,7 +36,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
+//    [[AFNetworkActivityLogger sharedLogger] startLogging];
 
     // Prevent conflict between background music and camera
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
@@ -47,31 +47,23 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     [self configureParseWithLaunchOptions:launchOptions];
 
-    //Check if user is logged in
+    //Refresh the existing user, if exists, then run location monitoring
     [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
         
-        if (error) {
-            NSLog(@"Error on login %@", error);
+        if (succeeded) {
+            
+            NSLog(@"successful login on launch");
+            
+            if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+                
+                [[FRSLocationManager sharedManager] setupLocationMonitoring];
+                
+            }
         }
         else {
-            NSLog(@"successful login on launch");
-            if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-                /* How to debug background location updates, in the simulator
-                 1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
-                 2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
-                 2b. Better: Edit Scheme > Run > Options > Core Location > Default Location > Set to "None"
-                 3. Simulate location via iOS Simulator > Debug > Location > Freeway Drive
-                 4. Unpause
-                 5. Terminate the app
-                 6. Monitor background launches via iOS Simulator > Debug > Open System Log...
-                 6b. Also you may be able to debug background launches using scheme launch option "Wait for executable to be launched"
-                 */
-                // NSLog(@"Background launch via UIApplicationLaunchOptionsLocationKey");
-                [self setupLocationManager];
-                [self setupLocationMonitoring];
-                self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-                [self.locationManager startMonitoringSignificantLocationChanges];
-            }
+            
+           if(error) NSLog(@"Error on login %@", error);
+        
         }
         
     }];
@@ -81,7 +73,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         [self setupAppearances];
 
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
-            [self setupLocationManager];
+            [[FRSLocationManager sharedManager] setupLocationMonitoring];
             [self registerForPushNotifications];
             [self setRootViewControllerToTabBar];
         }
@@ -166,19 +158,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 #pragma mark - Miscellaneous Configuration
 
-- (void)setupLocationManager
-{
-    if (![CLLocationManager locationServicesEnabled]) {
-        // User has disabled location services on this device
-        return;
-    }
 
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.delegate = self;
-    });
-}
 
 - (void)setupLocationMonitoring
 {
@@ -229,56 +209,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 }
 
-#pragma mark - Location Delegate Methods
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    if (![[FRSDataManager sharedManager] isLoggedIn]) {
-        // NSLog(@"User not logged in, calling -stopMonitoringSignificantLocationChanges");
-        [self.locationManager stopMonitoringSignificantLocationChanges];
-    }
-
-    if (!self.location || [self.location distanceFromLocation:[locations lastObject]] > 0) {
-        // NSLog(@"Found a new location");
-        self.location = [locations lastObject];
-
-        NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
-                                 @"lon" : @(self.location.coordinate.longitude)};
-
-        [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
-    }
-    else {
-        // NSLog(@"not a new location");
-    }
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        // NSLog(@"Starting timer...");
-        [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].locationUpdateInterval target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
-    });
-    [self.locationManager stopUpdatingLocation];
-
-    // Set to YES to test monitoring of significant location changes even when the app is not running
-    if (/* DISABLES CODE */ (NO)) {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = [self.location description];
-        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-        notification.timeZone = [NSTimeZone defaultTimeZone];
-        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    // NSLog(@"-locationManager:didFailWithError:");
-    [self.locationManager stopMonitoringSignificantLocationChanges];
-    [self.locationManager stopUpdatingLocation];
-}
-
-- (void)restartLocationUpdates
-{
-    [self.locationManager startUpdatingLocation];
-}
 
 #pragma mark - Notification Delegate Methods
 

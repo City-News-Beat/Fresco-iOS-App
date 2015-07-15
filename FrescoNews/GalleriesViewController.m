@@ -20,7 +20,6 @@
 #import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "PostCollectionViewCell.h"
-#import "UIView+Additions.h"
 
 @interface GalleriesViewController()
 
@@ -224,18 +223,18 @@
         
         PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         
-        [postCell.videoIndicatorView startAnimating];
-        
-        [UIView animateWithDuration:1.0 animations:^{
-            postCell.videoIndicatorView.alpha = 1.0f;
-        }];
-        
         //If the video current playing isn't this one, or no video has played yet
         if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
             
             [self disableVideo];
 
             self.dispatchIndex = visibleIndexPath;
+            
+            [postCell.videoIndicatorView startAnimating];
+            
+            [UIView animateWithDuration:1.0 animations:^{
+                postCell.videoIndicatorView.alpha = 1.0f;
+            }];
             
             //Dispatch event to make sure the condition is true for more than one second
             double delayInSeconds = 1;
@@ -268,18 +267,18 @@
                     
                     postCell.processingVideo = false;
                     
-                    if (cell.galleryView.sharedPlayer.rate > 5 && !cell.galleryView.sharedPlayer.error) {
+                    if (cell.galleryView.sharedPlayer.rate > 0 && !cell.galleryView.sharedPlayer.error) {
                         
                         // player is playing
                         [UIView animateWithDuration:1.0 animations:^{
                             postCell.videoIndicatorView.alpha = 0.0f;
                         } completion:^(BOOL finished){
+                            postCell.videoIndicatorView.hidden = YES;
                             [postCell.videoIndicatorView stopAnimating];
                         }];
                         
                     }
                     
-
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(playerItemDidReachEnd:)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification

@@ -45,7 +45,8 @@ enum FRSErrorCodes {
 @property CGFloat opacityInnerListDividers;
 @property CGFloat opacityUnreadNotificationHighlights;
 
-@property NSString *baseURL;
+@property NSString *baseUrl;
+@property NSString *baseAPI;
 @property NSString *basePath;
 @property NSString *cdnBaseURL;
 @property NSString *cdnFacebookBaseURL;

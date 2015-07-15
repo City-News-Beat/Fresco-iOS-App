@@ -57,10 +57,9 @@
         [row.storyTitle setText:self.stories[i][@"title"]];
         
         [row.storyLocation setText:self.stories[i][@"thumbnails"][0][@"location"][@"address"]];
+                
+        NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"thumbnails"][0][@"time_created"] integerValue])];
         
-        NSDate *date = [[NSDate date]
-                        initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"thumbnails"][0][@"time_created"] integerValue] / 1000)];
-
         [row.storyTime setText:[NSRelativeDate relativeDateString:date]];
         
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){

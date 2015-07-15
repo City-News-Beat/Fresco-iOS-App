@@ -31,9 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate setupLocationManager];
-    [appDelegate setupLocationMonitoring];
     
     // build a list of stepper values
     self.stepperSteps = @[ @{@"display": @"Off", @"value" : @(0)},

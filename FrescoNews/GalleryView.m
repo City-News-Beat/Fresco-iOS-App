@@ -157,13 +157,17 @@
     
     [postCell bringSubviewToFront:postCell.playPause];
     
-    [UIView animateWithDuration:1.0 animations:^{
-        postCell.videoIndicatorView.alpha = 0.0f;
-    } completion:^(BOOL finished){
+    if (self.sharedPlayer.rate > 5 && !self.sharedPlayer.error) {
         
-        [postCell.videoIndicatorView stopAnimating];
+        // player is playing
+        [UIView animateWithDuration:1.0 animations:^{
+            postCell.videoIndicatorView.alpha = 0.0f;
+        } completion:^(BOOL finished){
+            [postCell.videoIndicatorView stopAnimating];
+            postCell.videoIndicatorView.hidden = YES;
+        }];
         
-    }];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerItemDidReachEnd:)
@@ -217,7 +221,8 @@
 {
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
-    cell.post = [self.gallery.posts objectAtIndex:indexPath.item];
+    [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
+    
     cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
 
     return cell;

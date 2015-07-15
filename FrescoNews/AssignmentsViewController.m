@@ -63,10 +63,6 @@
     
     [super viewDidLoad];
     
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate setupLocationManager];
-    [appDelegate setupLocationMonitoring];
-    
     [self setFrescoNavigationBar];
     
     [self tweakUI];

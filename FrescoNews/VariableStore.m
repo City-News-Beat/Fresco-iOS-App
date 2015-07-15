@@ -51,20 +51,22 @@ NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
         sharedInstance.twitterConsumerKey = @"o6y4zv5yq0AfCU4HKUHQYJMXE";
         sharedInstance.twitterConsumerSecret = @"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz";
         
-        sharedInstance.baseURL = @"https://api.fresconews.com/v1/";
+        sharedInstance.baseUrl = @"https://beta.fresconews.com";
+        sharedInstance.baseAPI = @"https://api.fresconews.com/v1/";
         sharedInstance.basePath = @"";
         sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
         sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
 
-//        #ifdef DEBUG
-//                sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
-//                sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
-//                sharedInstance.baseURL = @"http://staging.fresconews.com/v1/";
-//        #endif
+        #ifdef DEBUG
+        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
+        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
+        sharedInstance.baseUrl = @"https://staging.webm.fresconews.com";
+        sharedInstance.baseAPI = @"http://staging.fresconews.com/v1/";
+        #endif
 
         sharedInstance.maximumVideoLength = 60.0f; // Per @im
         sharedInstance.maximumAssetAge = -3600 * 6; // Per @im
-        sharedInstance.locationUpdateInterval = 30; // (While the app is running)
+        sharedInstance.locationUpdateInterval = 10; // (While the app is running)
     });
     
     return sharedInstance;
@@ -73,7 +75,7 @@ NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
 + (NSString *)endpointForPath:(NSString *)endpoint
 {
     return [NSString stringWithFormat:@"%@%@%@",
-            [NSURL URLWithString:[VariableStore sharedInstance].baseURL],
+            [NSURL URLWithString:[VariableStore sharedInstance].baseAPI],
             [NSURL URLWithString:[VariableStore sharedInstance].basePath],
             endpoint];
 }

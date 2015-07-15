@@ -19,8 +19,19 @@
 #import "GalleryTableViewCell.h"
 
 @interface GalleryViewController ()  <UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+/*
+** View for posts
+*/
+
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+
+/*
+** Gallery Outlets, in order of appearance
+*/
+
 @property (weak, nonatomic) IBOutlet UILabel *timeAndPlace;
 @property (weak, nonatomic) IBOutlet UILabel *byline;
 @property (weak, nonatomic) IBOutlet UILabel *caption;
@@ -30,10 +41,17 @@
 @property (weak, nonatomic) IBOutlet UITableView *storiesTable;
 @property (weak, nonatomic) IBOutlet UILabel *articlesTitle;
 @property (weak, nonatomic) IBOutlet UITableView *articlesTable;
+
+/*
+** Constraints
+*/
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintArticleTableHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesTableHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintStoriesDiff;
+
 @property (nonatomic, assign) BOOL bordersLaidOut;
+
 @end
 
 @implementation GalleryViewController
@@ -41,10 +59,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     UIBarButtonItem *shareIcon = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareGallery:)];
+    
     [self.navigationItem setRightBarButtonItem:shareIcon];
+    
+    [self setUpGalleryInView];
 
-    [self setUpGallery];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -104,20 +125,78 @@
     self.bordersLaidOut = YES;
 }
 
-- (void)disableVideo
-{
-    
-    if(self.galleryView.sharedPlayer != nil){
-        [self.galleryView.sharedPlayer pause];
-        self.galleryView.sharedPlayer = nil;
-        [self.galleryView.sharedLayer removeFromSuperlayer];
-    }
+/*
+** Constructs view from the Gallery object
+*/
 
+- (void)setUpGalleryInView{
+
+    self.articlesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.galleryView setGallery:self.gallery isInList:NO];
+    
+    self.caption.text = self.gallery.caption;
+    
+    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
+    
+    self.byline.text = post.byline;
+    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
+    
+    if([post.address isKindOfClass:[NSString class]]){
+        self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
+    }
+    
+    if (self.gallery.articles.count == 0) {
+        
+        self.articlesView.hidden = YES;
+        
+        [self.view addConstraints:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[articlesView(0)]"
+                                                 options:0
+                                                 metrics:nil
+                                                   views: @{@"articlesView":self.articlesView}]];
+        
+    }
+    
+    if (self.gallery.relatedStories.count == 0) {
+        
+        self.storiesView.hidden = YES;
+        
+        self.constraintStoriesDiff.constant = 0;
+        
+        [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views: @{@"storiesView":self.storiesView}]];
+        
+        [self.storiesView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
+                                                                                  options:0
+                                                                                  metrics:nil
+                                                                                    views: @{@"storiesView":self.storiesTable}]];
+    }
+    
 }
+
+/*
+** Opens Gallery View, with a passed gallery id
+*/
+
+- (void)openGalleryWithId:(NSString *)galleryId
+{
+    [[FRSDataManager sharedManager] getGallery:galleryId WithResponseBlock:^(id responseObject, NSError *error) {
+        if (!error) {
+            [self setGallery:responseObject];
+        }
+    }];
+}
+
+/*
+** Initaites Activity Controller to share Gallery URL
+*/
 
 - (void)shareGallery:(id)sender
 {
-    NSString *string = [NSString stringWithFormat:@"http://fresconews.com/gallery/%@", self.gallery.galleryID];
+    NSString *string = [NSString stringWithFormat:@"https://fresconews.com/gallery/%@", self.gallery.galleryID];
     NSURL *URL = [NSURL URLWithString:string];
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
@@ -129,57 +208,19 @@
                                           }];
 }
 
-- (void)setUpGallery
+/*
+** Disables currently playing video, check in viewDidDisappear
+*/
+
+- (void)disableVideo
 {
-    self.articlesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.galleryView setGallery:self.gallery isInList:NO];
     
-    self.caption.text = self.gallery.caption;
+    if(self.galleryView.sharedPlayer != nil){
+        [self.galleryView.sharedPlayer pause];
+        self.galleryView.sharedPlayer = nil;
+        [self.galleryView.sharedLayer removeFromSuperlayer];
+    }
     
-    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
-    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
-
-    if([post.address isKindOfClass:[NSString class]]){
-        self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
-    }
-
-
-    self.byline.text = post.byline;
-
-    if (self.gallery.articles.count == 0) {
-        self.articlesView.hidden = YES;
-        [self.view addConstraints:
-        [NSLayoutConstraint constraintsWithVisualFormat:@"V:[articlesView(0)]"
-                                                 options:0
-                                                 metrics:nil
-                                                   views: @{@"articlesView":self.articlesView}]];
-
-    }
-
-    if (self.gallery.relatedStories.count == 0) {
-        self.storiesView.hidden = YES;
-        self.constraintStoriesDiff.constant = 0;
-        [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
-                                                                           options:0
-                                                                           metrics:nil
-                                                                             views: @{@"storiesView":self.storiesView}]];
-
-        [self.storiesView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[storiesView(0)]"
-                                                                                  options:0
-                                                                                  metrics:nil
-                                                                                    views: @{@"storiesView":self.storiesTable}]];
-    }
-}
-
-- (void)openGalleryWithId:(NSString *)galleryId
-{
-    [[FRSDataManager sharedManager] getGallery:galleryId WithResponseBlock:^(id responseObject, NSError *error) {
-        if (!error) {
-            [self setGallery:responseObject];
-            [self setUpGallery];
-        }
-    }];
 }
 
 #pragma mark - UITableViewDataSource

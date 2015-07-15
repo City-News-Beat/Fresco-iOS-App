@@ -49,7 +49,7 @@
 
 - (id)init
 {
-    NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseURL];
+    NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseAPI];
 
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         
@@ -527,7 +527,7 @@
 - (void)refreshUser:(PFBooleanResultBlock)block
 {
     
-    //Check to make sure we already have the fresco user id in the PFUser
+    //Check to make sure we already have the fresco user id in the PFUser, if not, get the fresco id from parse
     if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
     
         [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
@@ -547,7 +547,7 @@
                     
                     if(!error){
                         
-                        block(YES, nil);
+                        if(block) block(YES, nil);
                         
                     }
                     
@@ -557,6 +557,7 @@
             
         }];
     }
+    //The fresco user id exists
     else{
         
         NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
@@ -575,7 +576,7 @@
 }
 
 /*
-** Runs a check on the curren userId to make sure everything is valid
+** Runs a check on the curren userId to make sure everything is valid, otherwise cleans up and removes it
 */
 
 - (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPIResponseBlock)responseBlock

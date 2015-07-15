@@ -73,8 +73,27 @@
             [row.galleryLocation setText:self.galleries[i][@"caption"]];
             
             dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                
+                NSString *image = posts[0][@"image"];
+                
+                if (!([image rangeOfString:@"cloudfront"].location == NSNotFound)){
+        
+                    NSMutableString *mu = [NSMutableString stringWithString:image];
+        
+                    NSRange range = [mu rangeOfString:@"/images/"];
+        
+                    if (!(range.location == NSNotFound)) {
+        
+                        [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+        
+                        image = mu;
+                        
+                    }
+                    
+                }
+                
                 //Background Thread
-                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:posts[0][@"image"]]]];
+                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image]]];
                 
             });
 
