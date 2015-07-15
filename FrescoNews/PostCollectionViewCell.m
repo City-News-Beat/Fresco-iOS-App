@@ -35,7 +35,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     [[self imageView] cancelImageRequestOperation];
 
-    self.videoIndicatorView.alpha = 0;
+    self.imageView.alpha = 1.0f;
+    self.videoIndicatorView.alpha = 0.0f;
     self.videoIndicatorView.hidden = YES;
     
     if([self.post isVideo]){
@@ -49,42 +50,44 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     _post = post;
     
     __weak PostCollectionViewCell *weakSelf = self;
-    
-    if(self.post.isVideo) {
-
-        //Set up for play/pause button
-        self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
-        self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
-        self.playPause.contentMode = UIViewContentModeScaleAspectFit;
-        self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
-        self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
-        self.playPause.layer.shadowOpacity = 1;
-        self.playPause.layer.shadowRadius = 1.0;
-        self.playPause.clipsToBounds = NO;
-        self.playPause.alpha = 0;
-        self.playPause.image = [UIImage imageNamed:@"pause"];
-        
-        //Set up for indicator view
-        self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(weakSelf.frame.size.width - 25, 15, 10, 10)];
-        self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
-        self.videoIndicatorView.alpha = 0;
-        self.videoIndicatorView.hidden = YES;
-
-        //Add subviews and bring to the front so they don't get hidden
-        [self addSubview:self.playPause];
-        [self addSubview:self.videoIndicatorView];
-        [self bringSubviewToFront:self.videoIndicatorView];
-        [self bringSubviewToFront:self.playPause];
-    
-    }
 
     if (_post.postID) {
+        
+        if(self.post.isVideo) {
+            
+            //Set up for play/pause button
+            self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
+            self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
+            self.playPause.contentMode = UIViewContentModeScaleAspectFit;
+            self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
+            self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
+            self.playPause.layer.shadowOpacity = 1;
+            self.playPause.layer.shadowRadius = 1.0;
+            self.playPause.clipsToBounds = NO;
+            self.playPause.alpha = 0;
+            self.playPause.image = [UIImage imageNamed:@"pause"];
+            
+            //Set up for indicator view
+            self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(weakSelf.frame.size.width - 25, 15, 10, 10)];
+            self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
+            self.videoIndicatorView.alpha = 0;
+            self.videoIndicatorView.hidden = YES;
+            
+            //Add subviews and bring to the front so they don't get hidden
+            [self addSubview:self.playPause];
+            [self addSubview:self.videoIndicatorView];
+            [self bringSubviewToFront:self.videoIndicatorView];
+            [self bringSubviewToFront:self.playPause];
+            
+        }
         
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             self.processingVideo = false;
             
             weakSelf.imageView.image = image;
+            
+            weakSelf.imageView.alpha = 1.0f;
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             

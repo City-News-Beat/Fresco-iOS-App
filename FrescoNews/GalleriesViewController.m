@@ -118,9 +118,9 @@
     for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
         //If the player is actually playing
         if(cell.galleryView.sharedPlayer != nil){
+            [cell.galleryView.sharedLayer removeFromSuperlayer];
             [cell.galleryView.sharedPlayer pause];
             cell.galleryView.sharedPlayer = nil;
-            [cell.galleryView.sharedLayer removeFromSuperlayer];
         }
     }
     
@@ -263,21 +263,24 @@
                     
                     [cell.galleryView.sharedPlayer play];
                     
-                    [postCell.layer addSublayer:cell.galleryView.sharedLayer];
-                    
                     postCell.processingVideo = false;
                     
-                    if (cell.galleryView.sharedPlayer.rate > 0 && !cell.galleryView.sharedPlayer.error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                         
-                        // player is playing
-                        [UIView animateWithDuration:1.0 animations:^{
-                            postCell.videoIndicatorView.alpha = 0.0f;
-                        } completion:^(BOOL finished){
-                            postCell.videoIndicatorView.hidden = YES;
-                            [postCell.videoIndicatorView stopAnimating];
-                        }];
+                        if (cell.galleryView.sharedPlayer.rate > 0 && !cell.galleryView.sharedPlayer.error) {
+                            
+                            // player is playing
+                            [UIView animateWithDuration:0.7f animations:^{
+                                postCell.videoIndicatorView.alpha = 0.0f;
+                            } completion:^(BOOL finished){
+                                [postCell.layer addSublayer:cell.galleryView.sharedLayer];
+                                postCell.videoIndicatorView.hidden = YES;
+                                [postCell.videoIndicatorView stopAnimating];
+                            }];
+                            
+                        }
                         
-                    }
+                    });
                     
                     [[NSNotificationCenter defaultCenter] addObserver:self
                                                              selector:@selector(playerItemDidReachEnd:)
@@ -293,7 +296,6 @@
         }
 
     }
-    
     //If the cell doesn't have a video
     else{
         
