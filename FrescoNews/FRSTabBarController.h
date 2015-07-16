@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface TabBarController : UITabBarController <UITabBarDelegate>
+@interface FRSTabBarController : UITabBarController  <UITabBarDelegate, UITabBarControllerDelegate>
 
 - (void)returnToGalleryPost;
 

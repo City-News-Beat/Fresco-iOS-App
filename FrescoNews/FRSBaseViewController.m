@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import "FRSRootViewController.h"
 #import "FRSBaseViewController.h"
 #import "FRSGallery.h"
 #import "GalleryHeader.h"

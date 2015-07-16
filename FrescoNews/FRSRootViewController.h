@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class TabBarController;
+@class FRSTabBarController;
 
-@interface SwitchingRootViewController : UIViewController
+@interface FRSRootViewController : UIViewController
 
-@property (strong, nonatomic) TabBarController *tbc;
+@property (strong, nonatomic) FRSTabBarController *tbc;
 
 @property (weak, nonatomic) UIViewController *viewController;
 

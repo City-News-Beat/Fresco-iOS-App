@@ -21,15 +21,17 @@
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "HomeViewController.h"
-#import "SwitchingRootViewController.h"
+#import "FRSRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
 @interface AppDelegate () <CLLocationManagerDelegate>
-@property (strong, nonatomic) CLLocationManager *locationManager; // TODO: -> Singleton
-@property (strong, nonatomic) CLLocation *location;
+
+@property (strong, nonatomic) FRSRootViewController *frsRootViewController;
+
 @property (strong, nonatomic) NSTimer *timer;
+
 @end
 
 @implementation AppDelegate
@@ -64,13 +66,17 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     }];
     
     [self setupAppearances];
+    
+    self.frsRootViewController = [[FRSRootViewController alloc] init];
+    
+    self.window.rootViewController = self.frsRootViewController;
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
         [self registerForPushNotifications];
-        [self setRootViewControllerToTabBar];
+        [self.frsRootViewController setRootViewControllerToTabBar];
     }
     else {
-        [self setRootViewControllerToOnboard];
+        [self.frsRootViewController setRootViewControllerToOnboard];
     }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -81,26 +87,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     return YES;
 }
 
-#pragma mark - Root View Controllers
-
-
-- (void)setRootViewControllerToTabBar
-{
-    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    [rootViewController setRootViewControllerToTabBar];
-}
-
-- (void)setRootViewControllerToOnboard
-{
-    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    [rootViewController setRootViewControllerToOnboard];
-}
-
-- (void)setRootViewControllerToFirstRun
-{
-    SwitchingRootViewController *rootViewController = (SwitchingRootViewController *)self.window.rootViewController;
-    [rootViewController setRootViewControllerToFirstRun];
-}
 
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
@@ -116,6 +102,18 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [FBSDKAppEvents activateApp];
+}
+
+#pragma mark - Navigational Methods
+
+- (void)setRootViewControllerToTabBar{
+    [self.frsRootViewController setRootViewControllerToTabBar];
+}
+
+- (void)setRootViewControllerToFirstRun{
+
+    [self.frsRootViewController setRootViewControllerToFirstRun];
+
 }
 
 #pragma mark - Apperance Delegate Methods
@@ -207,7 +205,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
     [PFPush handlePush:userInfo];
     
-    [self setRootViewControllerToTabBar];
+    [self.frsRootViewController setRootViewControllerToTabBar];
     
     // Check the type of the notifications
     
@@ -220,7 +218,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                 if (!error) {
                     
                     //Retreieve Gallery View Controller from storyboard
-                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     
                     HomeViewController *homeVC = (HomeViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
                     
@@ -244,7 +242,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         if (userInfo[@"assignment"]) {
             [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     [tabBarController setSelectedIndex:3];
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
@@ -280,7 +278,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         if (notification[@"assignment"]) {
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
                     [assignmentVC setCurrentAssignment:responseObject navigateTo:YES];
                     [tabBarController setSelectedIndex:3];

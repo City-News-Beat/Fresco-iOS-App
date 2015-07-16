@@ -653,7 +653,7 @@
         <!--Root-->
         <scene sceneID="alC-Hj-Y8g">
             <objects>
-                <viewController id="Fw0-52-MVd" userLabel="Root" customClass="SwitchingRootViewController" sceneMemberID="viewController">
+                <viewController id="Fw0-52-MVd" userLabel="Root" customClass="FRSRootViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="DZH-Ag-Onr"/>
                         <viewControllerLayoutGuide type="bottom" id="Xv2-NW-Otu"/>
@@ -685,7 +685,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController storyboardIdentifier="tabBarController" id="49e-Tb-3d3" customClass="TabBarController" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBarController" id="49e-Tb-3d3" customClass="FRSTabBarController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="t0L-i0-DVx"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">

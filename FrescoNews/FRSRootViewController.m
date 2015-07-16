@@ -6,31 +6,33 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "SwitchingRootViewController.h"
 @import AVFoundation;
-#import "TabBarController.h"
-#import "HomeViewController.h"
-#import "StoriesViewController.h"
-#import "CameraViewController.h"
-#import "ProfileViewController.h"
 
-@interface SwitchingRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
+#import "FRSRootViewController.h"
+#import "FRSTabBarController.h"
+#import "CameraViewController.h"
+#import "FRSOnboardViewController.h"
+
+@interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
+
 @property (nonatomic) BOOL returnToGalleryPost;
+
 @end
 
-@implementation SwitchingRootViewController
+@implementation FRSRootViewController
 
 #pragma mark - View Controller swapping
 
 - (void)setRootViewControllerToTabBar
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor: before instantiating?
+    
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
 
-    self.tbc = (TabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    [self setupTabBarAppearances:self.tbc];
-
+    self.tbc = (FRSTabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    
     if (self.returnToGalleryPost) {
         self.returnToGalleryPost = NO;
         [self.tbc returnToGalleryPost];
@@ -49,8 +51,9 @@
 
 - (void)setRootViewControllerToOnboard{
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    [self setRootViewControllerWithIdentifier:@"initialOnboard" underNavigationController:YES];
-
+    
+    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+    
 }
 
 - (UIViewController *)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
@@ -111,71 +114,10 @@
 }
 
 
-- (void)setupTabBarAppearances:(UITabBarController *)tabBarController
-{
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
-                                     @"tab-stories-highlighted",
-                                     @"tab-camera-highlighted",
-                                     @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
-    
-    tabBarController.delegate = self;
-    
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    
-    for (UITabBarItem *item in tabBar.items) {
-        if (i == 2) {
-            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
-        }
-        else {
-            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
-        }
-        ++i;
-    }
-}
 
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
-}
-
-#pragma mark - UITabBarControllerDelegate methods
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
-{
-    if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
-                                                            message:@"Fresco needs permission to access the camera to continue."
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Cancel"
-                                                  otherButtonTitles:@"Go to Settings", nil];
-            [alert show];
-        }
-
-        return NO;
-    }
-    else {
-        UIViewController *vc = [viewController.childViewControllers firstObject];
-        if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
-            [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-            return NO;
-        }
-        else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
-            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
-            return NO;
-        }
-        else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
-            [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-            return NO;
-        }
-    }
-
-    return YES;
 }
 
 #pragma mark - UIAlertViewDelegate methods

@@ -430,7 +430,7 @@
     
                 NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"No user signed in"}];
                 
-                if(block) block(nil, error);
+                if(block) block(NO, error);
                 
             }
             else{

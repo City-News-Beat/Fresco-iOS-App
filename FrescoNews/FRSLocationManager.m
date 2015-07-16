@@ -113,15 +113,14 @@
     //Stop updating location, will be turned back on `restartLocationUpdates` on the interval
     [self stopUpdatingLocation];
     
-
     
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // NSLog(@"-locationManager:didFailWithError:");
-    [self stopMonitoringSignificantLocationChanges];
-    [self stopUpdatingLocation];
+     NSLog(error);
+//    [self stopMonitoringSignificantLocationChanges];
+//    [self stopUpdatingLocation];
 }
 
 - (void)restartLocationUpdates

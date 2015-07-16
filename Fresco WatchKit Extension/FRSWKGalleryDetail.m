@@ -7,6 +7,7 @@
 //
 
 #import "FRSWKGalleryDetail.h"
+#import "NSRelativeDate.h"
 
 @implementation FRSWKGalleryDetail
 
@@ -20,8 +21,9 @@
     
     [self.galleryLocation setText:post[@"location"][@"address"]];
     
-#warning Set to relative
-    //[self.postTime setText:[NSRelativeDate relativeDateString:context[@"timestamp"]]];
+    NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.gallery[@"time_created"] integerValue] / 1000)];
+    
+    [self.galleryTime setText:[NSRelativeDate relativeDateString:date]];
 
     [self.galleryCaption setText:context[@"caption"]];
     

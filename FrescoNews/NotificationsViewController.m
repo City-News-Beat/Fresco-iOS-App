@@ -16,7 +16,7 @@
 #import "FRSUser.h"
 #import "GalleryViewController.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "SwitchingRootViewController.h"
+#import "FRSRootViewController.h"
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
 
@@ -293,7 +293,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                         [self exitNotificationView];
                         
-                        UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                        UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                         
                         AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                         
@@ -393,7 +393,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     
                     [self exitNotificationView];
                     
-                    UITabBarController *tabBarController = ((UITabBarController *)((SwitchingRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     

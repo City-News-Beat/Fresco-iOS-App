@@ -89,7 +89,7 @@
                     }
                     
                     if(count > 0)
-                        badgeView.value =[NSString stringWithFormat:@"%li",  count];
+                        badgeView.value =[NSString stringWithFormat:@"%li",  (long)count];
                     
                 }
             }
