@@ -11,7 +11,7 @@
 #import "FRSRootViewController.h"
 #import "FRSTabBarController.h"
 #import "CameraViewController.h"
-#import "FRSOnboardViewController.h"
+#import "FRSOnboardPageViewController.h"
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 
@@ -31,7 +31,9 @@
     
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
 
-    self.tbc = (FRSTabBarController *)[self setRootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    
+    [self switchRootViewController:self.tbc];
     
     if (self.returnToGalleryPost) {
         self.returnToGalleryPost = NO;
@@ -50,32 +52,25 @@
 - (void)setRootViewControllerToFirstRun
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+    
+    [self switchRootViewController:[self rootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES]];
 }
 
 - (void)setRootViewControllerToOnboard{
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
-    [self setRootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES];
+    FRSOnboardPageViewController *onboardController = [[FRSOnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    
+    [self switchRootViewController:onboardController];
     
 }
 
-- (UIViewController *)setRootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
-{
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
-    
-    UIViewController *viewController;
-    if (underNavigationController) {
-        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
-        vc.navigationController.navigationBar.hidden = YES;
-    }
-    else
-        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
+- (void)switchRootViewController:(UIViewController *)controller{
     
     // swap the view controllers
     UIViewController *source = self.viewController;
-    UIViewController *destination = viewController;
+    UIViewController *destination = controller;
     UIViewController *container = self;
     
     [container addChildViewController:destination];
@@ -84,15 +79,7 @@
     destination.view.frame = self.view.bounds;
     
     NSTimeInterval duration = 0.0;
-
-    // Kind of gross
-    if ([self.presentedViewController isKindOfClass:[CameraViewController class]]) {
-        [[self.presentedViewController presentedViewController] dismissViewControllerAnimated:NO completion:^{
-            [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
-        }];
-        self.returnToGalleryPost = YES;
-    }
-
+    
     if (source) {
         [source willMoveToParentViewController:nil];
         [container transitionFromViewController:source
@@ -112,11 +99,27 @@
     }
     
     // store the new view controller
-    self.viewController = viewController;
+    self.viewController = controller;
+    
+}
+
+
+- (UIViewController *)rootViewControllerWithIdentifier:(NSString *)identifier underNavigationController:(BOOL)underNavigationController
+{
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
+    
+    UIViewController *viewController;
+    if (underNavigationController) {
+        UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        vc.navigationController.navigationBar.hidden = YES;
+    }
+    else
+        viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
     
     return viewController;
 }
-
 
 
 - (NSUInteger)supportedInterfaceOrientations

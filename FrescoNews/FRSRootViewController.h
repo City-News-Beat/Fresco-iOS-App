@@ -17,8 +17,11 @@
 @property (weak, nonatomic) UIViewController *viewController;
 
 - (void)setRootViewControllerToTabBar;
+
 - (void)setRootViewControllerToFirstRun;
+
 - (void)setRootViewControllerToOnboard;
+
 - (void)setRootViewControllerToCamera;
 
 @end

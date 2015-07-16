@@ -123,6 +123,7 @@
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
+		E77F6AC41B583839009AFF8D /* FRSOnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */; };
 		E78428121B57F4010090DFCC /* FRSOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* FRSOnboardViewController.m */; };
 		E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
@@ -389,6 +390,8 @@
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
+		E77F6AC21B583839009AFF8D /* FRSOnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardPageViewController.h; sourceTree = "<group>"; };
+		E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardPageViewController.m; sourceTree = "<group>"; };
 		E784280F1B57F4010090DFCC /* FRSOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewController.h; sourceTree = "<group>"; };
 		E78428101B57F4010090DFCC /* FRSOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewController.m; sourceTree = "<group>"; };
 		E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewController.xib; sourceTree = "<group>"; };
@@ -1000,6 +1003,8 @@
 		E784280E1B57F3E30090DFCC /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
+				E77F6AC21B583839009AFF8D /* FRSOnboardPageViewController.h */,
+				E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */,
 				E784280F1B57F4010090DFCC /* FRSOnboardViewController.h */,
 				E78428101B57F4010090DFCC /* FRSOnboardViewController.m */,
 				E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */,
@@ -1340,6 +1345,7 @@
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
+				E77F6AC41B583839009AFF8D /* FRSOnboardPageViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
 				E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */,
 				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,

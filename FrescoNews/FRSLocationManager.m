@@ -118,7 +118,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-     NSLog(error);
 //    [self stopMonitoringSignificantLocationChanges];
 //    [self stopUpdatingLocation];
 }
