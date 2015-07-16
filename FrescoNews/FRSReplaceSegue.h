@@ -2,7 +2,7 @@
 //  FRSReplaceSegue.h
 //  FrescoNews
 //
-//  Created by Jason Gresh on 6/2/15.
+//  Created by Fresco News on 6/2/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 

@@ -3,7 +3,7 @@
 //  Fresco
 //
 //  Created by Team Fresco on 1/16/14.
-//  Copyright (c) 2014 Nick Lee. All rights reserved.
+//  Copyright (c) 2014 Fresco News. All rights reserved.
 //
 
 #import "NSFileManager+Additions.h"

@@ -2,7 +2,7 @@
 //  FRSStory.m
 //  Fresco
 //
-//  Created by Jason Gresh on 3/11/2015.
+//  Created by Fresco News on 3/11/2015.
 //  Copyright (c) 2015 TapMedia LLC. All rights reserved.
 //
 
