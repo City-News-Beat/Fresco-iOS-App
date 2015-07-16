@@ -43,6 +43,10 @@
     }
 }
 
+- (void)setRootViewControllerToCamera{
+    [self.tbc presentCamera];
+}
+
 - (void)setRootViewControllerToFirstRun
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;

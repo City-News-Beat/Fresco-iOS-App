@@ -19,5 +19,6 @@
 - (void)setRootViewControllerToTabBar;
 - (void)setRootViewControllerToFirstRun;
 - (void)setRootViewControllerToOnboard;
+- (void)setRootViewControllerToCamera;
 
 @end

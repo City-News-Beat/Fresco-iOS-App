@@ -9,8 +9,18 @@
 @import UIKit;
 
 @interface FRSBaseViewController : UIViewController
+
 @property (strong, nonatomic) NSMutableArray *galleries;
 
+
+/*
+** Navigation Methods
+*/
+
 - (void)navigateToMainApp;
+
 - (void)navigateToFirstRun;
+
+- (void)navigateToCamera;
+
 @end

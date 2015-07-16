@@ -34,14 +34,19 @@
 // good for wholesale resetting of the app
 - (void)navigateToMainApp
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate setRootViewControllerToTabBar];
+    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    [rvc setRootViewControllerToTabBar];
+}
+
+- (void)navigateToCamera{
+    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    [rvc setRootViewControllerToCamera];
 }
 
 - (void)navigateToFirstRun
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate setRootViewControllerToFirstRun];
+    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    [rvc setRootViewControllerToFirstRun];
 }
 
 @end

@@ -111,9 +111,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 }
 
 - (void)setRootViewControllerToFirstRun{
-
     [self.frsRootViewController setRootViewControllerToFirstRun];
-
 }
 
 #pragma mark - Apperance Delegate Methods

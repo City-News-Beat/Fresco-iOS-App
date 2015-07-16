@@ -77,8 +77,6 @@
         [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                [FRSDataManager sharedManager].updatedNotifications = true;
-                
                 if(responseObject != nil){
                     
                     NSInteger count = 0;

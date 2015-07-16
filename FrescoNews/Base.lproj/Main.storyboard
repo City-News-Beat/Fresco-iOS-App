@@ -116,7 +116,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="81.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="106"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
                                                 <rect key="frame" x="15" y="8" width="577" height="20.5"/>
@@ -125,7 +125,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires in 10 min" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h3D-bu-Qca">
-                                                <rect key="frame" x="16" y="30.5" width="576" height="14.5"/>
+                                                <rect key="frame" x="16" y="30" width="576" height="14.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -144,6 +144,16 @@
                                                     </mask>
                                                 </variation>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VH3-QK-zXN">
+                                                <rect key="frame" x="15" y="74" width="110" height="30"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                <state key="normal" title="Open in Camera">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="openInCamera:" destination="nxd-7K-xdP" eventType="touchUpInside" id="Noe-m1-EGE"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -153,6 +163,8 @@
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="JGy-Lr-B8k"/>
                                             <constraint firstItem="h3D-bu-Qca" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="0.5" id="L2f-zG-wTS"/>
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="h3D-bu-Qca" secondAttribute="leading" id="NAk-Ho-7GI"/>
+                                            <constraint firstItem="VH3-QK-zXN" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="15" id="OVN-cY-3rg"/>
+                                            <constraint firstItem="VH3-QK-zXN" firstAttribute="top" secondItem="7y8-HL-DmS" secondAttribute="bottom" constant="2" id="Ovs-Wv-FZP"/>
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="trailing" secondItem="h3D-bu-Qca" secondAttribute="trailing" id="P0n-pf-LL7"/>
                                             <constraint firstItem="7y8-HL-DmS" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="16" id="RMz-sH-SgT"/>
                                             <constraint firstAttribute="width" constant="600" placeholder="YES" id="RjB-Kz-riC"/>
@@ -166,9 +178,10 @@
                                             <constraint firstAttribute="bottom" secondItem="7y8-HL-DmS" secondAttribute="bottom" constant="8" id="fOA-kf-nZJ"/>
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="top" secondItem="ure-nI-UMR" secondAttribute="top" constant="8" id="gbd-x4-GLh"/>
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="h3D-bu-Qca" secondAttribute="leading" id="jXO-rI-v2g"/>
-                                            <constraint firstAttribute="bottom" secondItem="7y8-HL-DmS" secondAttribute="bottom" constant="9" id="kfs-Z3-YpN"/>
+                                            <constraint firstAttribute="bottom" secondItem="7y8-HL-DmS" secondAttribute="bottom" constant="30" id="kfs-Z3-YpN"/>
                                             <constraint firstItem="KZO-a3-yF6" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="15" id="mJd-Uf-yIu"/>
                                             <constraint firstItem="h3D-bu-Qca" firstAttribute="top" secondItem="KZO-a3-yF6" secondAttribute="bottom" constant="0.5" id="mYh-gR-JcY"/>
+                                            <constraint firstAttribute="bottom" secondItem="VH3-QK-zXN" secondAttribute="bottom" constant="2" id="pG6-f9-awt"/>
                                             <constraint firstAttribute="trailing" secondItem="7y8-HL-DmS" secondAttribute="trailing" constant="16" id="q8q-aZ-RRm"/>
                                             <constraint firstItem="7y8-HL-DmS" firstAttribute="leading" secondItem="ure-nI-UMR" secondAttribute="leading" constant="16" id="tzv-Wd-O5Q"/>
                                             <constraint firstItem="7y8-HL-DmS" firstAttribute="top" secondItem="h3D-bu-Qca" secondAttribute="bottom" constant="8" id="vsx-hS-yEW"/>
@@ -192,6 +205,7 @@
                                                 <exclude reference="cX7-GZ-CS8"/>
                                                 <exclude reference="fE3-av-SAL"/>
                                                 <exclude reference="fOA-kf-nZJ"/>
+                                                <exclude reference="kfs-Z3-YpN"/>
                                                 <exclude reference="q8q-aZ-RRm"/>
                                                 <exclude reference="tzv-Wd-O5Q"/>
                                                 <exclude reference="zSa-r2-EJ4"/>

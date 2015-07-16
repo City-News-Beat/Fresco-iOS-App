@@ -84,6 +84,8 @@
     
     self.operatingLon = 0;
     
+    self.storyBreaksView.hidden = YES;
+    
     if(self.currentAssignment == nil)
         [self updateAssignments];
     else
@@ -102,12 +104,10 @@
     [super viewDidAppear:animated];
     
     if([[FRSDataManager sharedManager] isLoggedIn]){
-        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
-            self.storyBreaksView.hidden = YES;
+        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
+            self.storyBreaksView.hidden = NO;
         }
     }
-    else
-        self.storyBreaksView.hidden = YES;
     
     if(self.currentAssignment == nil){
         [self updateAssignments];
@@ -159,6 +159,11 @@
     ProfileSettingsViewController *profileSettings = [storyboard instantiateViewControllerWithIdentifier:@"ProfileSettingsViewController"];
     
     [self.navigationController pushViewController:profileSettings animated:YES];
+    
+}
+- (IBAction)openInCamera:(id)sender {
+    
+    [self navigateToCamera];
     
 }
 

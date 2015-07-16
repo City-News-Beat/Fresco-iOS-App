@@ -22,7 +22,9 @@
 }
 
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
+
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
+
 @end
 
 @implementation FRSDataManager
@@ -954,6 +956,8 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(![responseObject[@"data"] isEqual:[NSNull null]]){
+            
+            self.updatedNotifications = true;
             
             NSArray *notifications = [[responseObject objectForKey:@"data"] map:^id(id obj) {
                 return [MTLJSONAdapter modelOfClass:[FRSNotification class] fromJSONDictionary:obj error:NULL];
