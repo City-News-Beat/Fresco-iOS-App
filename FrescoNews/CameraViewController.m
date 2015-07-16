@@ -1,7 +1,7 @@
 //
 //  CameraViewController.m
 //  
-//  Created by Joshua C. Lerner on 3/13/15.
+//  Created by Fresco News on 3/13/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -9,14 +9,14 @@
 @import AVFoundation;
 @import AssetsLibrary;
 @import ImageIO;
-#import "TabBarController.h"
+#import "FRSTabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
 #import "AppDelegate.h"
 #import "CLLocation+EXIFGPS.h"
 #import "ALAsset+assetType.h"
 #import "FRSDataManager.h"
-#import "SwitchingRootViewController.h"
+#import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 
 @implementation TemplateCameraViewController
@@ -95,7 +95,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.videoButton.selected = YES; // TODO: Persist this and other camera state
     [self updateCameraMode:CameraModeVideo];
     self.createdAssetURLs = [NSMutableArray new];
-
+    
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [self setSession:session];
@@ -174,6 +174,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     self.view.hidden = NO;
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
 
@@ -201,11 +204,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.locationManager startUpdatingLocation];
 
     [self updateRecentPhotoView];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
 
@@ -446,10 +453,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
     [VariableStore resetDraftGalleryPost];
-    TabBarController *vc = ((SwitchingRootViewController *)self.presentingViewController).tbc;
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:^{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    FRSTabBarController *vc = ((FRSRootViewController *)self.presentingViewController).tbc;
+    vc.tabBar.hidden = NO;
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        
         vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
-        vc.tabBar.hidden = NO;
     }];
 }
 
