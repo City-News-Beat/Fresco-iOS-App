@@ -138,7 +138,7 @@
     double ti = [date timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970];
     
     if(ti < 60){
-        return @"just now";
+        return @"in a few seconds";
     }
     else if(ti < 3600){
         

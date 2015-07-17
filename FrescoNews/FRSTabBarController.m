@@ -9,12 +9,13 @@
 @import AVFoundation;
 
 #import "FRSTabBarController.h"
-#import "FRSRootViewController.h"
+#import "UIViewController+Additions.h"
 #import "CameraViewController.h"
 #import "HomeViewController.h"
 #import "AssignmentsViewController.h"
 #import "ProfileViewController.h"
 #import "StoriesViewController.h"
+#import "NotificationsViewController.h"
 
 @implementation FRSTabBarController
 
@@ -67,9 +68,7 @@
     
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
-    [self presentViewController:vc animated:YES completion:^{
-       
-    }];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)returnToGalleryPost
@@ -112,6 +111,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
+    
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
@@ -132,6 +132,12 @@
         }
         else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
             [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            return NO;
+        }
+        else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
+            //Zoom to location
+            [((AssignmentsViewController *)vc) setCenteredUserLocation:NO];
+            [((AssignmentsViewController *)vc) zoomToCurrentLocation];
             return NO;
         }
         else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {

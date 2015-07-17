@@ -29,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *subHeader;
 @property (weak, nonatomic) IBOutlet UIImageView *onboardImage;
 @property (weak, nonatomic) IBOutlet UIImageView *progressImage;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
 @end
 
@@ -78,8 +77,6 @@
     self.onboardImage.image = [UIImage imageNamed:[self.images objectAtIndex:self.index]];
     
     self.progressImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"progress-3-%li", (long)(self.index +1)]];
-    
-    self.pageControl.currentPage = self.index;
     
     //Show "Done" on the last view
     if(self.index == 2){

@@ -175,7 +175,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
     self.view.hidden = NO;
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
@@ -211,7 +211,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
@@ -452,10 +452,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
     [VariableStore resetDraftGalleryPost];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
     FRSTabBarController *vc = ((FRSRootViewController *)self.presentingViewController).tbc;
     vc.tabBar.hidden = NO;
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         
         vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;

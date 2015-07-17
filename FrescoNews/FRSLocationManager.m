@@ -63,6 +63,8 @@
      */
     // NSLog(@"Background launch via UIApplicationLaunchOptionsLocationKey");
     self.delegate = self;
+    
+    self.pausesLocationUpdatesAutomatically = YES;
 
     [self requestAlwaysAuthorization];
     [self requestWhenInUseAuthorization];

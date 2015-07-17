@@ -13,12 +13,6 @@
 
 @interface FRSOnboardPageViewController()
 
-/*
-** Master Page Control for Page View Controller
-*/
-
-@property (nonatomic, strong) UIPageControl *pageControl;
-
 @property (nonatomic, assign) BOOL runningNextPage;
 
 @end

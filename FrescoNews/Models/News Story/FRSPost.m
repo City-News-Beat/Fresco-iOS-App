@@ -71,32 +71,33 @@
         
         FRSImage *image = [[FRSImage alloc] init];
         
-//        if (!([imageURL rangeOfString:@"cloudfront"].location == NSNotFound)){
-//            
-//            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
-//            
-//            NSRange range = [mu rangeOfString:@"/images/"];
-//            
-//            if (!(range.location == NSNotFound)) {
-//                
-//                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
-//                
-//                image.URL = [NSURL URLWithString:mu];
-//                
-//            }
-//            
-//        }
-//        else{
+        if (!([imageURL rangeOfString:@"cloudfront"].location == NSNotFound)){
+            
+            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
+            
+            NSRange range = [mu rangeOfString:@"/images/"];
+            
+            if (!(range.location == NSNotFound)) {
+                
+                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+                
+                image.URL = [NSURL URLWithString:mu];
+                
+            }
+            
+        }
+        else{
         
             image.URL = [NSURL URLWithString:imageURL];
             
-//        }
+        }
         
         return image;
         
     }];
 
 }
+
 
 - (NSURL *)largeImageURL
 {

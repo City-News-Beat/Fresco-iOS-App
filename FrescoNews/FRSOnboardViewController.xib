@@ -11,7 +11,6 @@
                 <outlet property="mainHeader" destination="Ium-KU-UjR" id="Hak-z5-3yP"/>
                 <outlet property="nextButton" destination="5yh-Zw-0gh" id="ba1-4P-Yfw"/>
                 <outlet property="onboardImage" destination="i6r-VV-ZeP" id="H9x-7V-b37"/>
-                <outlet property="pageControl" destination="0Cb-hf-Mb9" id="VFL-NU-cQV"/>
                 <outlet property="progressImage" destination="HzQ-GT-Lxg" id="5WD-nw-VGV"/>
                 <outlet property="subHeader" destination="R4G-pC-xgT" id="fKX-mp-pe3"/>
                 <outlet property="view" destination="UBw-4J-zX1" id="zlD-Vv-f5x"/>
@@ -29,7 +28,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Find breaking news around you" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ium-KU-UjR">
-                    <rect key="frame" x="177" y="156" width="246.5" height="71.5"/>
+                    <rect key="frame" x="177" y="156" width="246.5" height="28.5"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="FH4-Vj-HWN"/>
                         <constraint firstAttribute="width" secondItem="Ium-KU-UjR" secondAttribute="height" multiplier="343:29" id="Qz0-X2-wzx"/>
@@ -43,26 +42,6 @@
                             <exclude reference="FH4-Vj-HWN"/>
                             <exclude reference="Qz0-X2-wzx"/>
                             <exclude reference="nRD-xP-RvR"/>
-                        </mask>
-                    </variation>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4G-pC-xgT">
-                    <rect key="frame" x="16" y="235.5" width="568" height="17"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="R4G-pC-xgT" secondAttribute="height" multiplier="15:2" id="4yt-Gm-FQB"/>
-                        <constraint firstAttribute="width" secondItem="R4G-pC-xgT" secondAttribute="height" multiplier="125:11" constant="-193.18181818181813" id="KzO-tZ-UPS"/>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="68" id="toM-QW-YOF"/>
-                        <constraint firstAttribute="height" constant="34" id="ukQ-ql-cYH"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.46000000000000002" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="4yt-Gm-FQB"/>
-                            <exclude reference="KzO-tZ-UPS"/>
-                            <exclude reference="toM-QW-YOF"/>
-                            <exclude reference="ukQ-ql-cYH"/>
                         </mask>
                     </variation>
                 </label>
@@ -110,11 +89,26 @@
                         <constraint firstAttribute="height" constant="35" id="TEp-RF-fIy"/>
                     </constraints>
                 </imageView>
-                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="0Cb-hf-Mb9">
-                    <rect key="frame" x="281" y="488" width="39" height="37"/>
-                    <color key="pageIndicatorTintColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="currentPageIndicatorTintColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                </pageControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4G-pC-xgT">
+                    <rect key="frame" x="16" y="202" width="568" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="R4G-pC-xgT" secondAttribute="height" multiplier="15:2" id="4yt-Gm-FQB"/>
+                        <constraint firstAttribute="width" secondItem="R4G-pC-xgT" secondAttribute="height" multiplier="125:11" constant="-193.18181818181813" id="KzO-tZ-UPS"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="68" id="toM-QW-YOF"/>
+                        <constraint firstAttribute="height" constant="34" id="ukQ-ql-cYH"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.46000000000000002" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="4yt-Gm-FQB"/>
+                            <exclude reference="KzO-tZ-UPS"/>
+                            <exclude reference="toM-QW-YOF"/>
+                            <exclude reference="ukQ-ql-cYH"/>
+                        </mask>
+                    </variation>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -132,11 +126,11 @@
                 <constraint firstAttribute="trailing" secondItem="Ium-KU-UjR" secondAttribute="trailing" constant="176.5" id="PTF-sL-qOu"/>
                 <constraint firstItem="i6r-VV-ZeP" firstAttribute="top" secondItem="R4G-pC-xgT" secondAttribute="bottom" constant="31.5" id="QdE-xS-x3d"/>
                 <constraint firstAttribute="bottom" secondItem="i6r-VV-ZeP" secondAttribute="bottom" constant="130" id="Ql8-kg-P5w"/>
+                <constraint firstItem="i6r-VV-ZeP" firstAttribute="top" secondItem="R4G-pC-xgT" secondAttribute="bottom" constant="65" id="RGe-iu-2gg"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leadingMargin" constant="-21" id="Rnd-T3-zjQ"/>
                 <constraint firstItem="ZD8-3C-M9w" firstAttribute="top" secondItem="UBw-4J-zX1" secondAttribute="top" constant="53" id="Sfb-xy-NKL"/>
                 <constraint firstItem="R4G-pC-xgT" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" constant="16" id="UmM-d7-ADh"/>
                 <constraint firstItem="R4G-pC-xgT" firstAttribute="width" secondItem="R4G-pC-xgT" secondAttribute="height" multiplier="15:2" id="Vg8-hX-gkS"/>
-                <constraint firstItem="5yh-Zw-0gh" firstAttribute="top" secondItem="0Cb-hf-Mb9" secondAttribute="bottom" constant="27" id="Y20-gs-R9y"/>
                 <constraint firstAttribute="width" secondItem="5yh-Zw-0gh" secondAttribute="width" id="aCc-ns-EfJ"/>
                 <constraint firstAttribute="trailingMargin" secondItem="5yh-Zw-0gh" secondAttribute="trailing" constant="-11" id="beH-3z-a2I"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" id="cuv-6v-SI4"/>
@@ -144,28 +138,29 @@
                 <constraint firstItem="Ium-KU-UjR" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" constant="177" id="eHd-Hg-9xD"/>
                 <constraint firstAttribute="trailing" secondItem="i6r-VV-ZeP" secondAttribute="trailing" constant="80" id="fhD-hu-isf"/>
                 <constraint firstAttribute="trailing" secondItem="5yh-Zw-0gh" secondAttribute="trailing" id="g6s-vh-Brj"/>
-                <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="8" id="iBH-Ul-ew9"/>
+                <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="10" id="iBH-Ul-ew9"/>
                 <constraint firstItem="Ium-KU-UjR" firstAttribute="top" secondItem="ZD8-3C-M9w" secondAttribute="bottom" constant="32" id="iic-L5-vQb"/>
-                <constraint firstAttribute="bottom" secondItem="0Cb-hf-Mb9" secondAttribute="bottom" constant="83" id="jSH-FZ-jA5"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leadingMargin" constant="-16" id="jxs-q3-DDq"/>
                 <constraint firstAttribute="centerY" secondItem="ZD8-3C-M9w" secondAttribute="centerY" constant="208" id="lM5-h4-uNB"/>
+                <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="17.5" id="lro-ah-YbS"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="top" secondItem="HzQ-GT-Lxg" secondAttribute="bottom" constant="-16" id="m2j-Tb-iVI"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="leading" secondItem="HzQ-GT-Lxg" secondAttribute="leading" id="onx-uR-Yq8"/>
-                <constraint firstAttribute="centerX" secondItem="0Cb-hf-Mb9" secondAttribute="centerX" constant="-0.5" id="rJe-95-cuz"/>
                 <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="8" id="tyv-CM-MIM"/>
                 <constraint firstAttribute="bottom" secondItem="5yh-Zw-0gh" secondAttribute="bottom" id="xqc-aw-DXz"/>
             </constraints>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="lM5-h4-uNB"/>
-                    <exclude reference="DnX-vA-qIF"/>
-                    <exclude reference="PTF-sL-qOu"/>
-                    <exclude reference="eHd-Hg-9xD"/>
                     <exclude reference="O1b-IR-5aP"/>
                     <exclude reference="Vg8-hX-gkS"/>
                     <exclude reference="dC3-eT-Jy4"/>
+                    <exclude reference="iBH-Ul-ew9"/>
                     <exclude reference="tyv-CM-MIM"/>
+                    <exclude reference="DnX-vA-qIF"/>
+                    <exclude reference="PTF-sL-qOu"/>
+                    <exclude reference="eHd-Hg-9xD"/>
                     <exclude reference="Jck-I2-dtH"/>
+                    <exclude reference="QdE-xS-x3d"/>
                     <exclude reference="4Fg-FH-HvM"/>
                     <exclude reference="615-pi-GUC"/>
                     <exclude reference="Mxg-Lj-K47"/>
@@ -173,10 +168,9 @@
                     <exclude reference="aCc-ns-EfJ"/>
                     <exclude reference="beH-3z-a2I"/>
                     <exclude reference="jxs-q3-DDq"/>
-                    <exclude reference="jSH-FZ-jA5"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="924" y="-96"/>
+            <point key="canvasLocation" x="964" y="-96"/>
         </view>
     </objects>
     <resources>

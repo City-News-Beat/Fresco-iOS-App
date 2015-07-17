@@ -13,11 +13,27 @@
 
 @interface AssignmentsViewController : FRSBaseViewController
 
+/*
+** Represents the current assignment being viewed
+*/
+
 @property (nonatomic, strong) FRSAssignment *currentAssignment;
+
+/*
+** Persistent array of assignments
+*/
 
 @property (nonatomic, strong) NSMutableArray *assignments;
 
+/*
+** Persistent array of clusters i.e. clusters repreresent a group of assignments
+*/
+
 @property (nonatomic, strong) NSMutableArray *clusters;
+
+/*
+** Tells us if the user is already centered
+*/
 
 @property (assign, nonatomic) BOOL centeredUserLocation;
 

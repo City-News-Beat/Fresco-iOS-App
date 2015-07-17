@@ -89,9 +89,6 @@
     if (![FRSDataManager sharedManager].currentUser) {
         [self navigateToFirstRun];
     }
-    else {
-         [self performNecessaryFetch:nil];
-    }
 }
 
 #pragma mark - Data Loading
@@ -155,7 +152,6 @@
                 self.noContentImage.hidden = YES;
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
                 [self.galleriesViewController.tableView reloadData];
-            
             
             }
         

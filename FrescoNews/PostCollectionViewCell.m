@@ -35,7 +35,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     [[self imageView] cancelImageRequestOperation];
 
-    self.imageView.alpha = 1.0f;
     self.videoIndicatorView.alpha = 0.0f;
     self.videoIndicatorView.hidden = YES;
     

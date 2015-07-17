@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
-		1E1AE0631B30814B000C4FF2 /* UIViewController+FirstRun.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AE0621B30814B000C4FF2 /* UIViewController+FirstRun.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */; };
 		1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592891AC3329900F60348 /* PostCollectionViewCell.m */; };
@@ -184,8 +183,6 @@
 /* Begin PBXFileReference section */
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
-		1E1AE0611B30814B000C4FF2 /* UIViewController+FirstRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+FirstRun.h"; sourceTree = "<group>"; };
-		1E1AE0621B30814B000C4FF2 /* UIViewController+FirstRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+FirstRun.m"; sourceTree = "<group>"; };
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
 		1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleriesViewController.m; sourceTree = "<group>"; };
 		1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GalleryTableViewCell.h; path = ListView/GalleryTableViewCell.h; sourceTree = "<group>"; };
@@ -788,8 +785,6 @@
 				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
 				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
 				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
-				1E1AE0611B30814B000C4FF2 /* UIViewController+FirstRun.h */,
-				1E1AE0621B30814B000C4FF2 /* UIViewController+FirstRun.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1355,7 +1350,6 @@
 				420DC7341ADB875000157762 /* CTAssetsGroupViewController.m in Sources */,
 				1ED9A3251AA9FAB9009BD7A3 /* VariableStore.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
-				1E1AE0631B30814B000C4FF2 /* UIViewController+FirstRun.m in Sources */,
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				E706DFC41B56B024001A6DD0 /* FRSLocationManager.m in Sources */,
 				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,

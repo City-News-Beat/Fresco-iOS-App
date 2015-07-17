@@ -58,6 +58,7 @@
     self.tableView.estimatedRowHeight = 400.0f;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
+    
     self.refreshControl.alpha = .54;
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
