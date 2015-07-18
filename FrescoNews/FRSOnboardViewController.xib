@@ -110,7 +110,7 @@
                     </variation>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="width" secondItem="5yh-Zw-0gh" secondAttribute="height" multiplier="25:3" id="4Fg-FH-HvM"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" id="615-pi-GUC"/>

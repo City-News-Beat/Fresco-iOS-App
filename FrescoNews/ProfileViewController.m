@@ -41,6 +41,8 @@
     else {
         [self performNecessaryFetch:nil];
     }
+    
+    self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
@@ -170,7 +172,6 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
-        self.galleriesViewController.frsUser = [FRSDataManager sharedManager].currentUser;
     }
 }
 @end

@@ -64,6 +64,7 @@
     _gallery = gallery;
     
     self.labelCaption.text = self.gallery.caption;
+    self.labelCaption.numberOfLines = 6;
     
     if([self.gallery.posts count] == 1)
         self.pageControl.hidden = YES;
@@ -119,6 +120,40 @@
     [self setAspectRatio];
     
 }
+
+- (void)setAspectRatio
+{
+    if ([self.gallery.posts count]) {
+        
+        FRSPost *post = [self.gallery.posts firstObject];
+        
+        CGFloat aspectRatio;
+        if (post.image) {
+            aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
+            if (aspectRatio < 1.0f || !post.image.height /* shouldn't happen... */) {
+                aspectRatio = 1.0f;
+            }
+        }
+        else {
+            aspectRatio = 600/800;
+        }
+        
+        if (self.collectionPosts.constraints)
+            [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
+        
+        // make the aspect ratio 4:3
+        [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
+                                                                         attribute:NSLayoutAttributeWidth
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self.collectionPosts
+                                                                         attribute:NSLayoutAttributeHeight
+                                                                        multiplier:aspectRatio
+                                                                          constant:0]];
+        [self updateConstraints];
+    }
+}
+
+#pragma mark - AVPlayer
 
 /*
 ** Set up video player in passed PostCollectionViewCell
@@ -176,39 +211,11 @@
     
 }
 
-
-- (void)setAspectRatio
-{
-    if ([self.gallery.posts count]) {
-        
-        FRSPost *post = [self.gallery.posts firstObject];
-        
-        CGFloat aspectRatio;
-        if (post.image) {
-            aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
-            if (aspectRatio < 1.0f || !post.image.height /* shouldn't happen... */) {
-                aspectRatio = 1.0f;
-            }
-        }
-        else {
-            aspectRatio = 600/800;
-        }
-        
-        if (self.collectionPosts.constraints)
-            [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
-        
-        // make the aspect ratio 4:3
-        [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
-                                                                         attribute:NSLayoutAttributeWidth
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self.collectionPosts
-                                                                         attribute:NSLayoutAttributeHeight
-                                                                        multiplier:aspectRatio
-                                                                          constant:0]];
-        [self updateConstraints];
-    }
+- (void)playerItemDidReachEnd:(NSNotification *)notification {
+    
+    [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
+    
 }
-
 
 #pragma mark - UICollectionViewDataSource
 
@@ -287,51 +294,6 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0.0f;
-}
-
-#pragma mark - ScrollViewDelegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSIndexPath *index = [[self.collectionPosts indexPathsForVisibleItems] lastObject];
-    
-    self.pageControl.currentPage = index.item;
-    
-    CGRect visibleRect = (CGRect){.origin = self.collectionPosts.contentOffset, .size = self.collectionPosts.bounds.size};
-    
-    CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
-    
-    NSIndexPath *visibleIndexPath = [self.collectionPosts indexPathForItemAtPoint:visiblePoint];
-    
-    PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
-    
-    //If the cell has a video
-    if([postCell.post isVideo]){
-    
-        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
-    }
-    //If the cell doesn't have a video
-    else{
-        
-        //If the Player is actually playing
-        if([self sharedPlayer] != nil){
-            
-            //Stop the player
-            
-            [[self sharedPlayer] pause];
-            
-            [[self sharedLayer] removeFromSuperlayer];
-            
-        }
-        
-    }
-
-}
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    
-    [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
-    
 }
 
 @end

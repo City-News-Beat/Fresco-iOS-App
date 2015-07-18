@@ -133,6 +133,7 @@
 
     self.articlesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.storiesTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     [self.galleryView setGallery:self.gallery isInList:NO];
     
     self.caption.text = self.gallery.caption;
@@ -245,11 +246,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.storiesTable) {
+        
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"relatedStoryCell"];
-        UILabel *storyTitle = (UILabel *)[cell viewWithTag:100];
         
-        [storyTitle setText:[[[self gallery] relatedStories] objectAtIndex:indexPath.row][@"title"]];
+        [((UILabel *)[cell viewWithTag:100]) setText:[[[self gallery] relatedStories] objectAtIndex:indexPath.row][@"title"]];
         
+        //Check if it's not the last cell, then add a separator
         if (indexPath.row != self.gallery.relatedStories.count -1) {
             UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)];/// change size as you need.
             separatorLineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12];// you can also put image here
@@ -259,14 +261,18 @@
         return cell;
     }
     else if (tableView == self.articlesTable) {
+        
         FRSArticle *article = [[[self gallery] articles] objectAtIndex:indexPath.row];
+        
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
-        UILabel *articleTitle = (UILabel *)[cell viewWithTag:100];
-        UIImageView *articleImage = (UIImageView *)[cell viewWithTag:200];
-        articleTitle.text = article.title;
-        [articleImage setImageWithURL:article.URL];
+        
+        ((UILabel *)[cell viewWithTag:100]).text = article.title;
+        
+        [((UIImageView *)[cell viewWithTag:200]) setImageWithURL:article.URL];
+        
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
+        //Check if it's not the last cell, then add a separator
         if (indexPath.row != self.gallery.articles.count -1) {
             UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 43, 320, 1)]; /// change size as you need.
             separatorLineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12]; // you can also put image here

@@ -9,6 +9,7 @@
 #import "GalleryHeader.h"
 #import "FRSPost.h"
 #import "FRSGallery.h"
+#import <FXBlurView.h>
 
 @interface GalleryHeader ()
 @property (weak, nonatomic) IBOutlet UILabel *labelTimeAndPlace;
@@ -35,6 +36,14 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
     }
     
     self.labelByLine.text = post.byline;
+    
+    UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
+    [viewWithBlurredBackground setFrame:self.frame];
+    
+    [self addSubview:viewWithBlurredBackground];
+    [self sendSubviewToBack:viewWithBlurredBackground];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 @end

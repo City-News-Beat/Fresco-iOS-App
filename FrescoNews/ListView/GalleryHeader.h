@@ -10,6 +10,9 @@
 @class FRSGallery;
 
 @interface GalleryHeader : UITableViewCell
+
 + (NSString *)identifier;
+
 - (void)setGallery:(FRSGallery *)gallery;
+
 @end

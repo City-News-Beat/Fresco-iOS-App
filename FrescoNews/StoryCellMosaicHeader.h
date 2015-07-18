@@ -9,8 +9,11 @@
 @import UIKit;
 
 @class FRSStory;
+
 @interface StoryCellMosaicHeader : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+
 + (NSString *)identifier;
+
 - (void)populateViewWithStory:(FRSStory *)story;
+
 @end

@@ -8,11 +8,21 @@
 
 #import "StoryCellMosaicHeader.h"
 #import "FRSStory.h"
-#import <AFNetworking/UIImageView+AFNetworking.h>
+#import "FRSPost.h"
+#import "MTLModel+Additions.h"
 
 static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
 
+@interface StoryCellMosaicHeader()
+
+@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+
+@property (weak, nonatomic) IBOutlet UILabel *labelTimestamp;
+
+@end
+
 @implementation StoryCellMosaicHeader
+
 + (NSString *)identifier
 {
     return kCellIdentifier;
@@ -21,5 +31,19 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
 - (void)populateViewWithStory:(FRSStory *)story
 {
     self.labelTitle.text = story.title;
+    
+    if([story.thumbnails count]){
+        
+        self.labelTimestamp.text = [MTLModel relativeDateStringFromDate:((FRSPost *)story.thumbnails[0]).date];
+    }
+    
+    UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
+    [viewWithBlurredBackground setFrame:self.frame];
+    
+    [self addSubview:viewWithBlurredBackground];
+    [self sendSubviewToBack:viewWithBlurredBackground];
+    self.backgroundColor = [UIColor clearColor];
+    
 }
 @end

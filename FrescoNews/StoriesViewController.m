@@ -21,7 +21,10 @@ static CGFloat const kInterImageGap = 1.0f;
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
+
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+
+
 
 @end
 
@@ -81,6 +84,7 @@ static CGFloat const kInterImageGap = 1.0f;
                 
                 [self reloadData];
                 
+
                 [self.tableView.infiniteScrollingView stopAnimating];
                 
             }
@@ -114,7 +118,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)refresh
 {
-
     [self performNecessaryFetch:nil];
     
     [self.refreshControl endRefreshing];
@@ -127,23 +130,6 @@ static CGFloat const kInterImageGap = 1.0f;
     [self.tableView reloadData];
 }
 
-#pragma mark - loading view
-
-- (void)setActivityIndicatorVisible:(BOOL)visible{
-    /*
-     [_loadingView removeFromSuperview];
-     
-     [self setLoadingView:nil];
-     
-     if (visible) {
-     UIActivityIndicatorView *actIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-     CGPoint viewCenter = [[self view] center];
-     [actIndicator setCenter:viewCenter];
-     [[self listCollectionView] addSubview:actIndicator];
-     [actIndicator startAnimating];
-     [self setLoadingView:actIndicator];
-     }*/
-}
 
 #pragma mark - UITableViewDataSource
 
@@ -176,6 +162,7 @@ static CGFloat const kInterImageGap = 1.0f;
 }
 
 #pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -214,6 +201,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     // remember, one story per section
     FRSStory *cellStory = [self.stories objectAtIndex:section];
+    
     [storyCellHeader populateViewWithStory:cellStory];
     
     return storyCellHeader;

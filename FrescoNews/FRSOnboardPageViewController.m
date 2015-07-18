@@ -7,6 +7,7 @@
 //
 
 #import "FRSOnboardPageViewController.h"
+#import "VariableStore.h"
 #import "FRSOnboardViewController.h"
 #import "FRSRootViewController.h"
 #import "AppDelegate.h"
@@ -25,6 +26,8 @@
     
         // Create page view controller
         self.dataSource = self;
+        
+        self.view.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
     
         FRSOnboardViewController *viewController = [self viewControllerAtIndex:0];
         

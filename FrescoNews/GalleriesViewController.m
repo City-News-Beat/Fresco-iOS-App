@@ -36,12 +36,6 @@
 ** Check if the navigation is in the detail
 */
 
-@property (nonatomic, assign) BOOL inDetail;
-
-/*
-** Check if the navigation is in the detail
-*/
-
 @property (nonatomic, assign) NSIndexPath *dispatchIndex;
 
 @end
@@ -74,8 +68,6 @@
     [super viewWillAppear:NO];
     
     self.tableView.delegate = self;
-    
-    self.inDetail = NO;
     
     self.playingIndex = nil;
     
@@ -130,8 +122,6 @@
 - (void)openDetailWithGallery:(FRSGallery *)gallery{
     
     [self disableVideo];
-    
-    self.inDetail = true;
     
     //Retreieve Notifications View Controller from storyboard
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -191,14 +181,6 @@
     return galleryHeader;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
-    
-    [self openDetailWithGallery:cell.gallery];
-
-}
-
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -207,7 +189,11 @@
     ** Video Conditioning
     */
     
-    if(self.inDetail) return;
+    //Make sure we're in the parent view controller, not the detail view
+    if(![[self.navigationController visibleViewController] isKindOfClass:[HomeViewController class]] &&
+       ![[self.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+        return;
+    }
     
     CGRect visibleRect = (CGRect){.origin = self.tableView.contentOffset, .size = self.tableView.bounds.size};
     
@@ -352,7 +338,6 @@
         }
         else {
             ProfileHeaderViewController *phvc = [segue destinationViewController];
-            phvc.frsUser = self.frsUser;
             self.tableView.tableHeaderView.frame = phvc.view.bounds;
         }
     }

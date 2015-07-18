@@ -289,7 +289,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     FRSAssignment *assignment = (FRSAssignment *) responseObject;
                     
                     //Check if the assignment has expired
-                    if(YES || ([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
+                    if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
                 
                         [self exitNotificationView];
                         

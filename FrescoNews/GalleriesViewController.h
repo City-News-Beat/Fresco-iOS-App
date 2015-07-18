@@ -17,9 +17,11 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @interface GalleriesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, GalleryTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (strong, nonatomic) NSMutableArray *galleries;
-@property (strong, nonatomic) FRSUser *frsUser;
+
 @property (weak, nonatomic) UIViewController *containingViewController;
+
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 
 /*

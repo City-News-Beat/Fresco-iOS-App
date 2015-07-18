@@ -20,17 +20,6 @@
     // Do any additional setup after loading the view.
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    GalleryHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
-    
-    // remember, one story per section
-    FRSGallery *gallery = [self.galleries objectAtIndex:section];
-    [storyCellHeader setGallery:gallery];
-    
-    return storyCellHeader;
-}
-
 // good for wholesale resetting of the app
 - (void)navigateToMainApp
 {

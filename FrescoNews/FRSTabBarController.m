@@ -127,11 +127,26 @@
     else {
         UIViewController *vc = [viewController.childViewControllers firstObject];
         if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
-            [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            
+            if([[vc.navigationController visibleViewController] isKindOfClass:[HomeViewController class]]){
+                [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            }
+            else{
+                [vc.navigationController popViewControllerAnimated:YES];
+            }
+
             return NO;
         }
         else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
             [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            
+            if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
+                [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            }
+            else{
+                [vc.navigationController popViewControllerAnimated:YES];
+            }
+            
             return NO;
         }
         else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
@@ -141,12 +156,30 @@
             return NO;
         }
         else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
-            [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            
+            if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            }
+            else{
+                [vc.navigationController popViewControllerAnimated:YES];
+            }
+            
             return NO;
         }
     }
     
     return YES;
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == [alertView cancelButtonIndex]){
+        //cancel clicked ...do your action
+    }else{
+        //reset clicked
+    }
 }
 
 @end
