@@ -108,10 +108,17 @@
 
 - (void)toggleNotifications:(UIBarButtonItem*)sender{
     
-    if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
+    if([self.childViewControllers count] > 1){
         
-        [self hideNotifications];
-        
+        if([[self.childViewControllers objectAtIndex:1] isKindOfClass:[NotificationsViewController class]]){
+     
+            [self hideNotifications:nil];
+            
+        }
+        else{
+            [self showNotifications];
+
+        }
     }
     else{
         
@@ -123,17 +130,27 @@
 
 - (void)hideNotifications:(NSNotification *)notification{
     
-    if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
-
-        CATransition* transition = [CATransition animation];
-        transition.duration = 0.4f;
-        transition.type = kCATransitionReveal;
-        transition.subtype = kCATransitionFromTop;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        [self.navigationController.view.layer addAnimation:transition
-                                                    forKey:kCATransition];
+    if([self.childViewControllers count] > 1){
+    
+        if([[self.childViewControllers objectAtIndex:1] isKindOfClass:[NotificationsViewController class]]){
+            
+            NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:1];
+            
+            CATransition* transition = [CATransition animation];
+            transition.duration = 0.4f;
+            transition.type = kCATransitionReveal;
+            transition.subtype = kCATransitionFromTop;
+            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            
+            [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+            
+            [notificationsController.view.layer addAnimation:transition
+                                                        forKey:kCATransition];
+            
+            [notificationsController removeFromParentViewController];
         
-        [self.navigationController popViewControllerAnimated:NO];
+            
+        }
         
     }
 
@@ -151,8 +168,10 @@
         
         NotificationsViewController *notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
         
-        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+        [self addChildViewController:notificationsController];
         
+        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+
         CATransition* transition = [CATransition animation];
         transition.duration = 0.75;
         transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
@@ -161,11 +180,11 @@
         
         [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
         
-        [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-        [self.navigationController pushViewController:notificationsController animated:NO];
+        notificationsController.view.frame = self.view.bounds;
+        [self.view addSubview:notificationsController.view];
+        [notificationsController didMoveToParentViewController:self];
         
-        self.navigationItem.leftBarButtonItem = nil;
-        [self.navigationItem setHidesBackButton:YES];
+        [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
         
     }
 }

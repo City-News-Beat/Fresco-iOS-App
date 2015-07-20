@@ -10,10 +10,18 @@
 
 @class FRSStory;
 
+@protocol StoryHeaderViewTapHandler
+
+- (void)tappedStoryHeader:(FRSStory *)story;
+
+@end
+
 @interface StoryCellMosaicHeader : UITableViewCell
 
 + (NSString *)identifier;
 
-- (void)populateViewWithStory:(FRSStory *)story;
+@property (strong, nonatomic) FRSStory *story;
+
+@property (strong, nonatomic) id <StoryHeaderViewTapHandler> tapHandler;
 
 @end

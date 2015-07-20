@@ -21,6 +21,7 @@ static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
 @implementation StoryCellMosaic
+
 + (NSString *)identifier
 {
     return kCellIdentifier;
@@ -29,6 +30,18 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)awakeFromNib
 {
     self.contentView.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)prepareForReuse
+{
+    // get rid of all the image views
+    // we might optimize this for reuse if need be
+    for (UIView *v in [self.contentView subviews]) {
+        if ([v isKindOfClass:[StoryThumbnailView class]])
+            [((StoryThumbnailView *) v) cancelImageRequestOperation];
+        [v removeFromSuperview];
+    }
+    self.imageArray = nil;
 }
 
 - (void)configureImages
@@ -46,7 +59,9 @@ static CGFloat const kInterImageGap = 1.0f;
     int rows = 1;
     
     int i = 0;
+    
     for (FRSImage *image in self.imageArray) {
+        
         // we don't want more than two rows of images
         if (rows > 2)
             break;
@@ -65,8 +80,8 @@ static CGFloat const kInterImageGap = 1.0f;
 
         [self.contentView addSubview:thumbnailView];
         
-        thumbnailView.story_id = [self.story.storyID integerValue];
         thumbnailView.thumbSequence = i;
+        
         [self setupTapHandlingForThumbnail:thumbnailView];
         
         // calculate offsets for the next iteration
@@ -99,20 +114,10 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)handleTapGesture:(id)sender
 {
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *) sender;
+    
     StoryThumbnailView *storyThumbnail = (StoryThumbnailView *) gesture.view;
     
-    [self.tapHandler story:self.story tappedAtGalleryIndex:storyThumbnail.thumbSequence];
+    [self.tapHandler tappedStoryThumbnail:self.story atIndex:storyThumbnail.thumbSequence];
 }
 
-- (void)prepareForReuse
-{
-    // get rid of all the image views
-    // we might optimize this for reuse if need be
-    for (UIView *v in [self.contentView subviews]) {
-        if ([v isKindOfClass:[StoryThumbnailView class]])
-            [((StoryThumbnailView *) v) cancelImageRequestOperation];
-            [v removeFromSuperview];
-    }
-    self.imageArray = nil;
-}
 @end

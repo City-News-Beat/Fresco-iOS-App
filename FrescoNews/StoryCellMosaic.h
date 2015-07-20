@@ -11,15 +11,21 @@
 @class FRSStory;
 
 @protocol StoryThumbnailViewTapHandler
-- (void)story:(FRSStory *)story tappedAtGalleryIndex:(NSInteger)index;
+
+- (void)tappedStoryThumbnail:(FRSStory *)story atIndex:(NSInteger)index;
+
 @end
 
 @interface StoryCellMosaic : UITableViewCell
+
 @property (strong, nonatomic) FRSStory *story;
+
 @property (strong, nonatomic) id <StoryThumbnailViewTapHandler> tapHandler;
+
 @property (strong, nonatomic) NSArray *imageArray;
 
 + (NSString *)identifier;
+
 - (void)configureImages;
 
 @end

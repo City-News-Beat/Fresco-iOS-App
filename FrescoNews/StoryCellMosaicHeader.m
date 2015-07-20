@@ -28,14 +28,20 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
     return kCellIdentifier;
 }
 
-- (void)populateViewWithStory:(FRSStory *)story
-{
-    self.labelTitle.text = story.title;
+-(void)setStory:(FRSStory *)story{
+
+    _story = story;
     
     if([story.thumbnails count]){
         
-        self.labelTimestamp.text = [MTLModel relativeDateStringFromDate:((FRSPost *)story.thumbnails[0]).date];
+        self.labelTimestamp.text = [MTLModel relativeDateStringFromDate:((FRSPost *)_story.thumbnails[0]).date];
     }
+    
+    self.labelTitle.text = _story.title;
+    
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    gesture.numberOfTapsRequired = 1;
+    [self addGestureRecognizer:gesture];
     
     UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
@@ -44,6 +50,17 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
     [self addSubview:viewWithBlurredBackground];
     [self sendSubviewToBack:viewWithBlurredBackground];
     self.backgroundColor = [UIColor clearColor];
+
+}
+
+#pragma mark - UITapGestureRecognizer Selector
+
+- (void)handleTapGesture:(id)sender{
+    
+    [self.tapHandler tappedStoryHeader:self.story];
     
 }
+    
+
+
 @end

@@ -18,7 +18,7 @@
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
-@interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler>
+@interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler, StoryHeaderViewTapHandler>
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
 
@@ -161,12 +161,22 @@ static CGFloat const kInterImageGap = 1.0f;
     return storyCell;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    StoryCellMosaicHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaicHeader identifier]];
+    
+    // remember, one story per section
+    FRSStory *cellStory = [self.stories objectAtIndex:section];
+    
+    [storyCellHeader setStory:cellStory];
+    storyCellHeader.tapHandler = self;
+    
+    
+    return storyCellHeader;
+}
+
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -175,7 +185,9 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSUInteger index = indexPath.section;
+    
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
 
     CGFloat width;
@@ -196,28 +208,28 @@ static CGFloat const kInterImageGap = 1.0f;
     return 96.0;
 }
 
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    StoryCellMosaicHeader *storyCellHeader = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaicHeader identifier]];
-    
-    // remember, one story per section
-    FRSStory *cellStory = [self.stories objectAtIndex:section];
-    
-    [storyCellHeader populateViewWithStory:cellStory];
-    
-    return storyCellHeader;
-}
 
-#pragma mark - StoryThumbnailViewTapHandler
+#pragma mark - Tap Gesture Delegate Handlers
 
-- (void)story:(FRSStory *)story tappedAtGalleryIndex:(NSInteger)index
+- (void)tappedStoryThumbnail:(FRSStory *)story atIndex:(NSInteger)index
 {
     StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
+    
     svc.story = story;
+
+    svc.selectedThumbnail = index;
+    
     [self.navigationController pushViewController:svc animated:YES];
+    
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+-(void)tappedStoryHeader:(FRSStory *)story{
+    
+    StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
+    
+    svc.story = story;
+    
+    [self.navigationController pushViewController:svc animated:YES];
 
 }
 
@@ -236,22 +248,8 @@ static CGFloat const kInterImageGap = 1.0f;
         }
     }
 
-    return [self shuffle:array];
+    return array;
 }
 
-- (NSArray *)shuffle:(NSMutableArray *)array
-{
-    // seeding the random number generator with a constant
-    // will make the images come out the same every time which is an optimization
-    srand(42);
-    NSUInteger count = [array count];
-    for (NSUInteger i = 0; i < count; ++i) {
-        NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + (rand() % remainingCount);
-        [array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
-    }
-
-    return [array copy];
-}
 
 @end

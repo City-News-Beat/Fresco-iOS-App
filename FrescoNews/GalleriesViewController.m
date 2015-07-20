@@ -58,15 +58,19 @@
                   forControlEvents:UIControlEventValueChanged];
     [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
     [self.tableView addSubview:self.refreshControl];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     
-    [super viewWillAppear:NO];
-    
+    [super viewWillAppear:animated];
+
     self.tableView.delegate = self;
     
     self.playingIndex = nil;
@@ -75,7 +79,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     
-    [super viewWillDisappear:NO];
+    [super viewWillDisappear:animated];
     
     self.tableView.delegate = nil;
     
@@ -184,6 +188,13 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    
+    /*
+    ** Navigation Bar Conditioning
+    */
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     /*
     ** Video Conditioning

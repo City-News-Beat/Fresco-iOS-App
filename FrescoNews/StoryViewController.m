@@ -17,30 +17,15 @@
 
 @property (strong, nonatomic) NSNumber *offset;
 
-@property (weak, nonatomic) IBOutlet UIView *galleriesView;
-
-@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
-
 @end
 
 @implementation StoryViewController
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
-    }
-    return self;
-}
+-(void)viewDidAppear:(BOOL)animated{
 
--(void) setup{}
+    [super viewDidAppear:animated];
+
+}
 
 - (void)viewDidLoad
 {
@@ -123,13 +108,18 @@
         if (!error) {
             
             if ([responseObject count]) {
+                
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 [self.galleriesViewController.tableView reloadData];
+                
+                if(self.selectedThumbnail){
+                    
+                    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:self.selectedThumbnail];
+                    
+                    [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    
+                }
             }
-        }
-        else{
-            
-            
         }
     }];
 }

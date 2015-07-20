@@ -8,6 +8,7 @@
 
 @import UIKit;
 #import "FRSBaseViewController.h"
+#import "GalleriesViewController.h"
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
@@ -16,6 +17,10 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 @interface StoryViewController : FRSBaseViewController
 
 @property (nonatomic) FRSStory *story;
+
+@property (weak, nonatomic) GalleriesViewController *galleriesViewController;
+
+@property (nonatomic, assign) NSInteger selectedThumbnail;
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
 

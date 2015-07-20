@@ -18,22 +18,4 @@
     return self;
 }
 
-/*
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%s", __FUNCTION__);
-    UITouch *touch = [touches anyObject];
-    
-    if ([touch tapCount] == 2) {
-        self.image = nil;
-        return;
-    }
-}*/
 @end
