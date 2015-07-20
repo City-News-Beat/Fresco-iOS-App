@@ -112,6 +112,8 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationViewDismiss object:nil];
+    
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
@@ -125,7 +127,9 @@
         return NO;
     }
     else {
+        
         UIViewController *vc = [viewController.childViewControllers firstObject];
+        
         if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
             
             if([[vc.navigationController visibleViewController] isKindOfClass:[HomeViewController class]]){
@@ -138,6 +142,7 @@
             return NO;
         }
         else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
+            
             [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
             
             if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){

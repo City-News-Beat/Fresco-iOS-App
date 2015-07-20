@@ -10,6 +10,8 @@
 
 FOUNDATION_EXPORT NSString * const kNotificationAPIKeyAvailable;
 
+FOUNDATION_EXPORT NSString * const kNotificationViewDismiss;
+
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
     ErrorSignupCantCreateUser,
@@ -20,14 +22,20 @@ enum FRSErrorCodes {
 } frsErrorCodes;
 
 @interface VariableStore : NSObject
+
 + (VariableStore *)sharedInstance;
+
 + (NSString *)endpointForPath:(NSString *)endpoint;
+
 + (void)resetDraftGalleryPost;
 
 // errors
 @property NSString *errorDomain;
 
-// colors
+/*
+** Colors
+*/
+
 @property NSString *colorBrandDark;
 @property NSString *colorBrandPrimary;
 @property NSString *colorBrandLight;
@@ -45,6 +53,10 @@ enum FRSErrorCodes {
 @property CGFloat opacityInnerListDividers;
 @property CGFloat opacityUnreadNotificationHighlights;
 
+/*
+** API
+*/
+
 @property NSString *baseUrl;
 @property NSString *baseAPI;
 @property NSString *basePath;
@@ -60,5 +72,7 @@ enum FRSErrorCodes {
 @property NSInteger locationUpdateInterval;
 
 @property NSString * const kNotificationAPIKeyAvailable;
+
+@property NSString * const kNotificationViewDismiss;
 
 @end

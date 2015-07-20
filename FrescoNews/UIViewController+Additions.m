@@ -20,7 +20,10 @@
         [self setRightBarButtonItem:YES];
             
     }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:kNotificationViewDismiss object:nil];
 }
 
 - (void)setRightBarButtonItem:(BOOL)withBadge{
@@ -37,12 +40,13 @@
     
     [button setImage:bell forState:UIControlStateNormal];
     
-    [button addTarget:self action:@selector(goToNotifications:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(toggleNotifications:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *notificationIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
     
     [self.navigationItem setRightBarButtonItem:notificationIcon];
     
+    //Set the badge on the notification bell
     if(withBadge && [FRSDataManager sharedManager].updatedNotifications == false){
       
         [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
@@ -102,55 +106,68 @@
     
 }
 
-
--(void)goToNotifications:(UIBarButtonItem *)sender
-{
+- (void)toggleNotifications:(UIBarButtonItem*)sender{
     
-    if([FRSDataManager sharedManager].currentUser != nil){
-    
-        NotificationsViewController *notificationsController;
+    if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
         
-        if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
-            
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.4f;
-            transition.type = kCATransitionReveal;
-            transition.subtype = kCATransitionFromTop;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            [self.navigationController.view.layer addAnimation:transition
-                                                        forKey:kCATransition];
-            [self.navigationController popViewControllerAnimated:NO];
-     
-        }
-        else{
-            
-            [self setRightBarButtonItem:NO];
-
-            //Retreieve Notifications View Controller from storyboard
-            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-            
-            notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
-            
-            [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-            
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.75;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromBottom;
-            
-            [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-            
-            [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-            [self.navigationController pushViewController:notificationsController animated:NO];
-            
-            self.navigationItem.leftBarButtonItem = nil;
-            [self.navigationItem setHidesBackButton:YES];
-            
-        }
-
+        [self hideNotifications];
+        
     }
+    else{
+        
+        [self showNotifications];
+    }
+
+}
+
+
+- (void)hideNotifications:(NSNotification *)notification{
     
+    if([self.navigationController.topViewController isKindOfClass:[NotificationsViewController class]]){
+
+        CATransition* transition = [CATransition animation];
+        transition.duration = 0.4f;
+        transition.type = kCATransitionReveal;
+        transition.subtype = kCATransitionFromTop;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        [self.navigationController.view.layer addAnimation:transition
+                                                    forKey:kCATransition];
+        
+        [self.navigationController popViewControllerAnimated:NO];
+        
+    }
+
+}
+
+
+- (void)showNotifications{
+    
+    if([[FRSDataManager sharedManager] isLoggedIn]){
+        
+        [self setRightBarButtonItem:NO];
+        
+        //Retreieve Notifications View Controller from storyboard
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        
+        NotificationsViewController *notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
+        
+        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+        
+        CATransition* transition = [CATransition animation];
+        transition.duration = 0.75;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = kCATransitionMoveIn;
+        transition.subtype = kCATransitionFromBottom;
+        
+        [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+        
+        [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+        [self.navigationController pushViewController:notificationsController animated:NO];
+        
+        self.navigationItem.leftBarButtonItem = nil;
+        [self.navigationItem setHidesBackButton:YES];
+        
+    }
 }
 
 #pragma mark - NSNotificationCenter Notification handling
