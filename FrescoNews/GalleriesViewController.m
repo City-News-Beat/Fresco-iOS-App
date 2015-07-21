@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import "FRSRootViewController.h"
 #import "GalleriesViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
@@ -38,6 +39,20 @@
 
 @property (nonatomic, assign) NSIndexPath *dispatchIndex;
 
+/*
+** Scroll View's Last Content Offset, for nav bar conditioning
+*/
+
+@property (nonatomic, assign) CGFloat lastContentOffset;
+
+/*
+** Background on the status bar
+*/
+
+@property (nonatomic, strong) UIView  *statusBarBackground;
+
+@property (nonatomic, assign) BOOL currentlyHidden;
+
 @end
 
 @implementation GalleriesViewController
@@ -64,26 +79,37 @@
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
     
+    
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    
+    self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
+    self.statusBarBackground.backgroundColor = [UIColor colorWithHex:@"ffc100"];
+    self.statusBarBackground.alpha = 0.0f;
+    
+    [self.view addSubview:self.statusBarBackground];
 
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
 
-    self.tableView.delegate = self;
+-(void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:animated];
     
     self.playingIndex = nil;
     
+    self.tableView.delegate = self;
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     
+    [self resetNavigationandTabBar];
+    
     [super viewWillDisappear:animated];
+
+    [self disableVideo];
     
     self.tableView.delegate = nil;
-    
-    [self disableVideo];
 
 }
 
@@ -110,6 +136,7 @@
 {
     
     self.playingIndex = nil;
+    
     self.dispatchIndex = nil;
     
     for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
@@ -176,10 +203,12 @@
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
     GalleryHeader *galleryHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
     
     // remember, one story per section
     FRSGallery *gallery = [self.galleries objectAtIndex:section];
+    
     galleryHeader.gallery = gallery;
     
     return galleryHeader;
@@ -189,13 +218,46 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    
     /*
     ** Navigation Bar Conditioning
     */
     
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 300) || scrollView.contentOffset.y <=0)){
+        
+        //SHOW
+        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
+            
+            //Resets elements back to normal state
+            [self resetNavigationandTabBar];
+            
+        }
+        
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+
+    }
+    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
+        
+        //HIDE
+        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
+
+            self.currentlyHidden = YES;
+            
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 1.0f;
+            }];
+
+            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) hideTabBar];
+
+        }
+        
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+    }
     
+
     /*
     ** Video Conditioning
     */
@@ -305,12 +367,28 @@
     
 }
 
+-(void)resetNavigationandTabBar{
+    
+    self.currentlyHidden = NO;
+
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [UIView animateWithDuration:.1 animations:^{
+        self.statusBarBackground.alpha = 0.0f;
+    }];
+    
+    [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
+
+    
+}
+
+#pragma mark - Video Notifier
+
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     
     [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
     
 }
-
 
 
 #pragma mark - Gallery Table View Cell Delegate

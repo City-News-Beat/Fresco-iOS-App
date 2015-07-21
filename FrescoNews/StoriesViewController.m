@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import "FRSRootViewController.h"
 #import <UIScrollView+SVInfiniteScrolling.h>
 #import "StoriesViewController.h"
 #import "UIViewController+Additions.h"
@@ -24,7 +25,19 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
+/*
+** Scroll View's Last Content Offset, for nav bar conditioning
+*/
 
+@property (nonatomic, assign) CGFloat lastContentOffset;
+
+/*
+** Background on the status bar
+*/
+
+@property (nonatomic, strong) UIView  *statusBarBackground;
+
+@property (nonatomic, assign) BOOL hideRan;
 
 @end
 
@@ -208,6 +221,56 @@ static CGFloat const kInterImageGap = 1.0f;
     return 96.0;
 }
 
+#pragma mark - Scroll View Delegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+    /*
+    ** Navigation Bar Conditioning
+    */
+    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 300) || scrollView.contentOffset.y <=0)){
+        
+        //SHOW
+        if(self.navigationController.navigationBar.hidden == YES){
+            
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 0.0f;
+            }];
+            
+            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
+            
+            self.hideRan = NO;
+            
+        }
+        
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+        
+    }
+    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
+        
+        //HIDE
+        if(self.navigationController.navigationBar.hidden == NO && !self.hideRan){
+            
+            self.hideRan = YES;
+            
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 1.0f;
+            }];
+            
+            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) hideTabBar];
+            
+        }
+        
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+    }
+
+}
 
 #pragma mark - Tap Gesture Delegate Handlers
 

@@ -51,6 +51,25 @@
     }
 }
 
+- (void)hideTabBar{
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        self.tbc.tabBar.frame = CGRectOffset(self.tbc.tabBar.frame, 0, 80);
+    }];
+    
+}
+
+- (void)showTabBar{
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        
+        float y = [UIScreen mainScreen].bounds.size.height - self.tbc.tabBar.frame.size.height ;
+        
+        self.tbc.tabBar.frame = CGRectMake(self.tbc.tabBar.frame.origin.x, y, self.tbc.tabBar.frame.size.width, self.tbc.tabBar.frame.size.height);
+        
+    }];}
+
+
 - (void)setRootViewControllerToCamera{
     [self.tbc presentCamera];
 }

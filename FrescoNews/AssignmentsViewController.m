@@ -161,6 +161,7 @@
     [self.navigationController pushViewController:profileSettings animated:YES];
     
 }
+
 - (IBAction)openInCamera:(id)sender {
     
     [self navigateToCamera];
@@ -191,7 +192,7 @@
     
     [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
     
-    [UIView animateWithDuration:1 animations:^(void) {
+    [UIView animateWithDuration:.4 animations:^(void) {
         [self.scrollView setAlpha:1];
     }];
     
@@ -633,7 +634,7 @@
     
     self.currentAssignment = nil;
     
-    [UIView animateWithDuration:1 animations:^(void) {
+    [UIView animateWithDuration:.4 animations:^(void) {
         self.scrollView.alpha = 0.0f;
         self.centeredAssignment = NO;
     }];

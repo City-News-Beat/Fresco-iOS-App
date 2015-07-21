@@ -69,6 +69,7 @@
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
     [self presentViewController:vc animated:YES completion:nil];
+    
 }
 
 - (void)returnToGalleryPost

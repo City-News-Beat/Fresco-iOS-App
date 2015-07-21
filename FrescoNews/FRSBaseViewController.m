@@ -27,6 +27,7 @@
     [rvc setRootViewControllerToTabBar];
 }
 
+
 - (void)navigateToCamera{
     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
     [rvc setRootViewControllerToCamera];

@@ -116,7 +116,11 @@
                     
                     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:self.selectedThumbnail];
                     
-                    [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    if([self.galleries count] >= self.selectedThumbnail){
+                    
+                        [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
+                    }
                     
                 }
             }

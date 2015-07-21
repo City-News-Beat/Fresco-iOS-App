@@ -15,6 +15,7 @@
 @implementation BaseNavigationController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
 
     [self.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];

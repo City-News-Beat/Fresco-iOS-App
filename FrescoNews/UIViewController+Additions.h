@@ -6,6 +6,6 @@
 
 -(void)goToNotifications:(UIBarButtonItem *)sender;
 
--(void)hideNotifications;
+- (void)hideNotifications:(NSNotification *)notification;
 
 @end

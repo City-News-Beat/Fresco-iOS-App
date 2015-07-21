@@ -709,7 +709,7 @@
     
     offset = offset ?: [NSNumber numberWithInteger:0];
     
-    NSDictionary *params = @{@"limit" : @"8", @"notags" : @"true", @"offset" : offset};
+    NSDictionary *params = @{@"limit" : @"8", @"notags" : @"true", @"offset" : offset, @"min" : @"6"};
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

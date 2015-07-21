@@ -108,50 +108,54 @@
 
 - (void)toggleNotifications:(UIBarButtonItem*)sender{
     
-    if([self.childViewControllers count] > 1){
-        
-        if([[self.childViewControllers objectAtIndex:1] isKindOfClass:[NotificationsViewController class]]){
-     
-            [self hideNotifications:nil];
-            
-        }
-        else{
-            [self showNotifications];
-
+    BOOL exists = false;
+    
+    for (UIViewController *vc in self.childViewControllers) {
+        if ([vc isKindOfClass:[NotificationsViewController class]]) {
+            exists = true;
         }
     }
-    else{
-        
+    
+    if(exists)
+        [self hideNotifications:nil];
+    else
         [self showNotifications];
-    }
+        
 
 }
 
 
 - (void)hideNotifications:(NSNotification *)notification{
     
-    if([self.childViewControllers count] > 1){
+    BOOL exists = NO;
     
-        if([[self.childViewControllers objectAtIndex:1] isKindOfClass:[NotificationsViewController class]]){
-            
-            NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:1];
-            
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.4f;
-            transition.type = kCATransitionReveal;
-            transition.subtype = kCATransitionFromTop;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            
-            [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-            
-            [notificationsController.view.layer addAnimation:transition
-                                                        forKey:kCATransition];
-            
-            [notificationsController removeFromParentViewController];
-        
-            
+    NSUInteger count = 0;
+    
+    for (UIViewController *vc in self.childViewControllers) {
+        if ([vc isKindOfClass:[NotificationsViewController class]]) {
+            exists = YES;
+            break;
         }
+        count ++;
+    }
+    
+    if(exists){
+    
+        NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:count];
         
+        CATransition* transition = [CATransition animation];
+        transition.duration = 0.3f;
+        transition.type = kCATransitionReveal;
+        transition.subtype = kCATransitionFromTop;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        
+        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+        
+        [notificationsController.view.layer addAnimation:transition
+                                                    forKey:kCATransition];
+        
+        [notificationsController removeFromParentViewController];
+
     }
 
 }
@@ -173,7 +177,7 @@
         [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
 
         CATransition* transition = [CATransition animation];
-        transition.duration = 0.75;
+        transition.duration = 0.5;
         transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         transition.type = kCATransitionMoveIn;
         transition.subtype = kCATransitionFromBottom;

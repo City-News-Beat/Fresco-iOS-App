@@ -24,4 +24,8 @@
 
 - (void)setRootViewControllerToCamera;
 
+- (void)hideTabBar;
+
+- (void)showTabBar;
+
 @end
