@@ -21,7 +21,15 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler, StoryHeaderViewTapHandler>
 
+/*
+** Sets of images for each story
+*/
+
 @property (strong, nonatomic) NSMutableArray *imageArrays;
+
+/*
+** Refresh control for table view
+*/
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
@@ -254,7 +262,7 @@ static CGFloat const kInterImageGap = 1.0f;
     ** Navigation Bar Conditioning
     */
 
-    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 300) || scrollView.contentOffset.y <=0)){
+    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
         
         //SHOW
         if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
@@ -265,7 +273,6 @@ static CGFloat const kInterImageGap = 1.0f;
         }
         
         self.lastContentOffset = scrollView.contentOffset.y;
-        
         
     }
     else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
@@ -281,6 +288,8 @@ static CGFloat const kInterImageGap = 1.0f;
                 self.statusBarBackground.alpha = 1.0f;
             }];
             
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+
             [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) hideTabBar];
             
         }
@@ -296,6 +305,8 @@ static CGFloat const kInterImageGap = 1.0f;
     self.currentlyHidden = NO;
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    self.tableView.contentInset = UIEdgeInsetsZero;
     
     [UIView animateWithDuration:.1 animations:^{
         self.statusBarBackground.alpha = 0.0f;

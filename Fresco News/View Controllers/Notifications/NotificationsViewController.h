@@ -10,4 +10,6 @@
 
 @interface NotificationsViewController : FRSBaseViewController
 
+- (void)setAllNotificaitonsSeen;
+
 @end

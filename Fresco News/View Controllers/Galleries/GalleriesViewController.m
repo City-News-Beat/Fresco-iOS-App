@@ -61,11 +61,13 @@
 {
     [super viewDidLoad];
     
+    /* Table View Setup */
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     
+    /* Refresh Control Setup */
     self.refreshControl = [[UIRefreshControl alloc] init];
     
     self.refreshControl.alpha = .54;
@@ -74,12 +76,10 @@
     [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
     [self.tableView addSubview:self.refreshControl];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
     
-    
+    /* Set up status bar background for nav/tab slide away */
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     
     self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
@@ -95,8 +95,10 @@
 
     [super viewDidAppear:animated];
     
+    //Reset playing index for a fresh load
     self.playingIndex = nil;
     
+    //Set delegate, reset in `viewWillDisappear`
     self.tableView.delegate = self;
 
 }
@@ -105,10 +107,13 @@
     
     [super viewWillDisappear:animated];
     
+    //Slide back up
     [self resetNavigationandTabBar];
 
+    //Turn off any video
     [self disableVideo];
     
+    //Disable delegate, turned back on in `viewDidAppear`
     self.tableView.delegate = nil;
 
 }
@@ -132,8 +137,11 @@
     [self.tableView reloadData];
 }
 
-- (void)disableVideo
-{
+/*
+** Disable any playing video
+*/
+
+- (void)disableVideo{
     
     self.playingIndex = nil;
     
@@ -149,6 +157,10 @@
     }
     
 }
+
+/*
+** Open gallery detail view
+*/
 
 - (void)openDetailWithGallery:(FRSGallery *)gallery{
     
@@ -221,8 +233,8 @@
     /*
     ** Navigation Bar Conditioning
     */
-    
-    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 300) || scrollView.contentOffset.y <=0)){
+   
+    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
         
         //SHOW
         if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){

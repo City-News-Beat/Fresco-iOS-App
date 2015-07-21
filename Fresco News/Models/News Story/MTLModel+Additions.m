@@ -59,7 +59,7 @@
 + (NSValueTransformer *)dateJSONTransformer
 {
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^NSDate *(NSNumber *UNIXTimestamp) {
-       return [NSDate dateWithTimeIntervalSince1970:[UNIXTimestamp integerValue] / 1000];
+       return [NSDate dateWithTimeIntervalSince1970:([UNIXTimestamp floatValue] / 1000)];
 
     } reverseBlock:^NSNumber *(NSDate *date) {
         return [NSNumber numberWithInteger:[date timeIntervalSince1970]];

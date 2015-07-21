@@ -78,7 +78,7 @@
         
         badgeView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
         
-        [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 if(responseObject != nil){
@@ -124,7 +124,6 @@
 
 }
 
-
 - (void)hideNotifications:(NSNotification *)notification{
     
     BOOL exists = NO;
@@ -143,6 +142,8 @@
     
         NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:count];
         
+        [notificationsController setAllNotificaitonsSeen];
+        
         CATransition* transition = [CATransition animation];
         transition.duration = 0.3f;
         transition.type = kCATransitionReveal;
@@ -153,6 +154,8 @@
         
         [notificationsController.view.layer addAnimation:transition
                                                     forKey:kCATransition];
+        
+        [notificationsController willMoveToParentViewController:self];
         
         [notificationsController removeFromParentViewController];
 

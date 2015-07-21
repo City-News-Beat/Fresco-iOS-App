@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "NotificationsViewController.h"
+#import <UIScrollView+SVInfiniteScrolling.h>
 #import "NotificationCell.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -15,7 +17,6 @@
 #import "AssignmentsViewController.h"
 #import "FRSUser.h"
 #import "GalleryViewController.h"
-#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FRSRootViewController.h"
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
@@ -27,6 +28,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 @property (nonatomic, strong) NSMutableArray *notifications;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAssignmentDescription;
+
+@property (nonatomic, assign) BOOL disableEndlessScroll;
 
 @end
 
@@ -50,10 +53,42 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
-    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
+    //Endless scroll handler
+    [self.tableView addInfiniteScrollingWithActionHandler:^{
+        
+        if(!self.disableEndlessScroll){
+        
+            // append data to data source, insert new cells at the end of table view
+            NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
+            
+            //Make request for more posts, append to galleries array
+            [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
+                    
+                    if ([responseObject count]) {
+                        
+                        [self.notifications addObjectsFromArray:responseObject];
+                        
+                        [self.tableView reloadData];
+                        
+                    }
+                    else{
+                        self.disableEndlessScroll = YES;
+                    }
+                    
+                    [self.tableView.infiniteScrollingView stopAnimating];
+                    
+                }
+            }];
+            
+        }
+        
+    }];
+    
+    [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
+        
         if (!error) {
             
             if(responseObject == nil || [responseObject count] == 0){
@@ -88,38 +123,23 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
+- (void)setAllNotificaitonsSeen{
+    
+    for(FRSNotification *notification in self.notifications){
+        
+        if (!notification.seen) {
+            
+            [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
+            
+        }
+    }
+}
 
 - (void)exitNotificationView{
 
     [self.navigationController hideNotifications:nil];
-
-}
-
-#pragma mark - Notification API
-
-/*
-** Grab notifications for user and populate
-*/
-
-- (void)updateNotifications{
     
-    
-    [[FRSDataManager sharedManager] getNotificationsForUser:^(id responseObject, NSError *error) {
-        if (!error) {
-            
-            self.notifications = responseObject;
-            
-            [[self tableView] reloadData];
-            
-        }
-        
-    }];
-
 }
 
 
@@ -210,33 +230,31 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 }
 
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        FRSNotification *notification = [self.notifications objectAtIndex:[indexPath item]];
-
-        [[FRSDataManager sharedManager] deleteNotification:notification.notificaitonId withResponseBlock:^(id responseObject, NSError *error) {
-            
-            if(!error){
-                
-                [self.notifications removeObjectAtIndex:[indexPath item]];
-                
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
-            }
-            
-        }];
-
-    }
-}
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        
+//        FRSNotification *notification = [self.notifications objectAtIndex:[indexPath item]];
+//
+//        [[FRSDataManager sharedManager] deleteNotification:notification.notificaitonId withResponseBlock:^(id responseObject, NSError *error) {
+//            
+//            if(!error){
+//                
+//                [self.notifications removeObjectAtIndex:[indexPath item]];
+//                
+//                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//            
+//            }
+//            
+//        }];
+//
+//    }
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0;
 }
-
-
 
 /*
 ** Action for second buttons on notification cells i.e. view assignmnet, view gallery
@@ -249,12 +267,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     
     FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
-    
-    if(notification.seen == false){
-        
-        [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
-        
-    }
     
     //Check the notificaiton type
     if([notification.type isEqualToString:@"assignment"] && notification.meta[@"assignment"] != nil){
@@ -351,12 +363,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     
     FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
-    
-    if(notification.seen == false){
-        
-        [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
-        
-    }
     
     //Check the notificaiton type
     if([notification.type isEqualToString:@"assignment"] && notification.meta[@"assignment"] != nil){

@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "FRSAssignment.h"
 @import CoreLocation;
+
+#import "FRSAssignment.h"
 #import "MTLModel+Additions.h"
 
 @implementation FRSAssignment
@@ -58,7 +59,6 @@
 {
     return [MTLModel dateJSONTransformer];
 }
-
 
 - (CLLocation *)locationObject
 {

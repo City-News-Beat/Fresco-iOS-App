@@ -945,11 +945,16 @@
 ** Get notifications for the user
 */
 
-- (void)getNotificationsForUser:(FRSAPIResponseBlock)responseBlock{
+- (void)getNotificationsForUser:(NSNumber*)offset withResponseBlock:(FRSAPIResponseBlock)responseBlock{
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"id" : [FRSDataManager sharedManager].currentUser.userID};
+    NSDictionary *params = @{@"id" : [FRSDataManager sharedManager].currentUser.userID, @"limit" : @"8", @"offset" : offset ?: @"0"};
+    
+    //Check cache first and short circuit if it exists
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     
     [self GET:@"notification/list" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
@@ -986,6 +991,12 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
+    //Check cache first and short circuit if it exists
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    
     [self POST:@"notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -1017,6 +1028,11 @@
     
     NSDictionary *params = @{@"id" : notificationId};
     
+    //Check cache first and short circuit if it exists
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
     [self POST:@"notification/delete" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -1038,6 +1054,7 @@
 
 - (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
 {
+    
     if (self.currentUser.userID) {
         
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];

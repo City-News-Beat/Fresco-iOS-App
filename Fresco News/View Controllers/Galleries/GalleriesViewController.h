@@ -9,6 +9,7 @@
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @import UIKit;
+
 #import "FRSBaseViewController.h"
 #import "GalleryTableViewCell.h"
 

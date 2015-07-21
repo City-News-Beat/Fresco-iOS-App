@@ -457,6 +457,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [VariableStore resetDraftGalleryPost];
     
     FRSTabBarController *vc = ((FRSRootViewController *)self.presentingViewController).tbc;
+    
     vc.tabBar.hidden = NO;
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
