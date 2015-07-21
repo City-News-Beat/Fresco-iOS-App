@@ -64,6 +64,7 @@
 }
 
 #pragma mark - Map utility methods
+
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;

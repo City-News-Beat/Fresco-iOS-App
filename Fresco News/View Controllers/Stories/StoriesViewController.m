@@ -37,7 +37,7 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
-@property (nonatomic, assign) BOOL hideRan;
+@property (nonatomic, assign) BOOL currentlyHidden;
 
 @end
 
@@ -112,7 +112,32 @@ static CGFloat const kInterImageGap = 1.0f;
                                                                      action:@selector(popViewControllerAnimated:)];
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     
+    self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
+    self.statusBarBackground.backgroundColor = [UIColor colorWithHex:@"ffc100"];
+    self.statusBarBackground.alpha = 0.0f;
+    
+    [self.view addSubview:self.statusBarBackground];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+    [super viewDidAppear:animated];
+    
+    self.tableView.delegate = self;
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+
+    [super viewWillDisappear:animated];
+    
+    [self resetNavigationandTabBar];
+    
+    self.tableView.delegate = nil;
+
 }
 
 #pragma mark - Data Loading
@@ -228,20 +253,14 @@ static CGFloat const kInterImageGap = 1.0f;
     /*
     ** Navigation Bar Conditioning
     */
+
     if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 300) || scrollView.contentOffset.y <=0)){
         
         //SHOW
-        if(self.navigationController.navigationBar.hidden == YES){
+        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
             
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-            
-            [UIView animateWithDuration:.1 animations:^{
-                self.statusBarBackground.alpha = 0.0f;
-            }];
-            
-            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
-            
-            self.hideRan = NO;
+            //Resets elements back to normal state
+            [self resetNavigationandTabBar];
             
         }
         
@@ -252,9 +271,9 @@ static CGFloat const kInterImageGap = 1.0f;
     else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
         
         //HIDE
-        if(self.navigationController.navigationBar.hidden == NO && !self.hideRan){
+        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
             
-            self.hideRan = YES;
+            self.currentlyHidden = YES;
             
             [self.navigationController setNavigationBarHidden:YES animated:YES];
             
@@ -270,6 +289,20 @@ static CGFloat const kInterImageGap = 1.0f;
         
     }
 
+}
+
+-(void)resetNavigationandTabBar{
+    
+    self.currentlyHidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [UIView animateWithDuration:.1 animations:^{
+        self.statusBarBackground.alpha = 0.0f;
+    }];
+    
+    [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
+    
 }
 
 #pragma mark - Tap Gesture Delegate Handlers

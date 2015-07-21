@@ -103,9 +103,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     
-    [self resetNavigationandTabBar];
-    
     [super viewWillDisappear:animated];
+    
+    [self resetNavigationandTabBar];
 
     [self disableVideo];
     
