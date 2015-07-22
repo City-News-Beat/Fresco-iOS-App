@@ -256,6 +256,29 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     return cell;
 }
 
+
+
+#pragma mark - UICollectionViewDelegate
+
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return collectionView.bounds.size;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0f;
+}
+
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0f;
+}
+
+#pragma mark - UITapGesture Functions
+
 - (void)processSingleTap:(UITapGestureRecognizer *)sender {
    
     PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
@@ -382,24 +405,13 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     }];
 }
 
+#pragma mark - Scroll View Delegate
 
-#pragma mark - UICollectionViewDelegate
-
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    return collectionView.bounds.size;
+    CGFloat pageWidth = self.collectionPosts.frame.size.width;
+    self.pageControl.currentPage = self.collectionPosts.contentOffset.x / pageWidth;
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.0f;
-}
-
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.0f;
-}
 
 @end
