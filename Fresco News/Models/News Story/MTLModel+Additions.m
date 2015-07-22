@@ -76,37 +76,37 @@
 + (NSString *)relativeDateStringFromDate:(NSDate *)date
 {
     
-    double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
+    int ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
 
     if(ti < 60){
-        return @"just now";
+        return [NSString stringWithFormat:@"%ds", ti];
     }
     else if(ti < 3600){
         
         int diff = round(ti / 60);
         
-        return diff == 1 ? [NSString stringWithFormat:@"%d minute ago", diff] : [NSString stringWithFormat:@"%d minutes ago", diff];
+        return [NSString stringWithFormat:@"%dm", diff];
         
     }
     else if(ti<86400){
         
         int diff = round(ti / 60 / 60);
         
-        return diff == 1 ?[NSString stringWithFormat:@"%d hour ago", diff] : [NSString stringWithFormat:@"%d hours ago", diff];
+        return [NSString stringWithFormat:@"%dh", diff];
         
     }
     else if(ti < 604800){
         
         int diff = round(ti / 60 / 60 / 24);
         
-        return diff == 1 ? [NSString stringWithFormat:@"%d day ago", diff] : [NSString stringWithFormat:@"%d days ago", diff];
+        return [NSString stringWithFormat:@"%d do", diff];
         
     }
     else if(ti < 2629740){
         
         int diff = round(ti / 60 / 60 / 24 / 4);
         
-        return diff == 1 ? [NSString stringWithFormat:@"%d weeks ago", diff] : [NSString stringWithFormat:@"%d weeks ago", diff];
+        return [NSString stringWithFormat:@"%dw", diff];
         
         
     }
@@ -114,7 +114,7 @@
         
         int diff = round(ti / 60 / 60 / 24 / 4 / 12);
         
-        return diff == 1 ? [NSString stringWithFormat:@"%d month ago", diff] : [NSString stringWithFormat:@"%d months ago", diff];
+        return [NSString stringWithFormat:@"%dmo", diff];
         
         
     }
@@ -122,7 +122,7 @@
         
         int diff = round(ti / 60 / 60 / 24 / 30 / 52);
         
-        return diff == 1 ? [NSString stringWithFormat:@"%d year ago", diff] : [NSString stringWithFormat:@"%d years ago", diff];
+        return [NSString stringWithFormat:@"%dy", diff];
         
     }
     else

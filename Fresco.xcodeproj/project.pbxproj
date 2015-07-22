@@ -562,10 +562,10 @@
 		1EA6F2E51ABB6C5000E74E68 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
-				1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */,
-				1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */,
 				1E3592841AC30E7300F60348 /* GalleryTableViewCell.h */,
 				1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */,
+				1EA6F2DF1AB8DE3000E74E68 /* GalleryHeader.h */,
+				1EA6F2E01AB8DE3000E74E68 /* GalleryHeader.m */,
 				1EA6F2E61ABB6CAE00E74E68 /* GalleryView.h */,
 				1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */,
 			);

@@ -13,7 +13,6 @@
 #import "PostCollectionViewCell.h"
 #import "FRSPhotoBrowserView.h"
 
-static CGFloat const kDefaultScaleAmt = 0.5f;
 static CGFloat const kImageInitialScaleAmt = 0.9f;
 static CGFloat const kImageFinalScaleAmt = 0.98f;
 static CGFloat const kImageInitialYTranslation = 10.f;
@@ -407,11 +406,44 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - Scroll View Delegate
 
+#pragma mark - ScrollViewDelegate
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     CGFloat pageWidth = self.collectionPosts.frame.size.width;
     self.pageControl.currentPage = self.collectionPosts.contentOffset.x / pageWidth;
+    
+    CGRect visibleRect = (CGRect){.origin = self.collectionPosts.contentOffset, .size = self.collectionPosts.bounds.size};
+    
+    CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
+    
+    NSIndexPath *visibleIndexPath = [self.collectionPosts indexPathForItemAtPoint:visiblePoint];
+    
+    PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
+    
+    //If the cell has a video
+    if([postCell.post isVideo]){
+        
+        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+    }
+    //If the cell doesn't have a video
+    else{
+        
+        //If the Player is actually playing
+        if([self sharedPlayer] != nil){
+            
+            //Stop the player
+            
+            [[self sharedPlayer] pause];
+            
+            [[self sharedLayer] removeFromSuperlayer];
+            
+        }
+        
+    }
+    
 }
+
 
 
 @end

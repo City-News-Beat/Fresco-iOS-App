@@ -46,6 +46,7 @@
                             @{@"display": @"50 mi", @"value" : @(50)} ];
 
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:5] valueForKey:@"value"] floatValue];
+    
     [self sliderValueChanged:self.radiusStepper];
     
     // Add map overlay
@@ -71,13 +72,22 @@
     // CGFloat roundedValue = [self roundedValueForSlider:slider];
     CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
-    NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
-    
-    NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
-    
-    // only update changes
-    if (![self.radiusStepperLabel.text isEqualToString:newValue])
-        self.radiusStepperLabel.text = newValue;
+    if(roundedValue > 0){
+        
+        NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+        
+        NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
+        
+        // only update changes
+        if (![self.radiusStepperLabel.text isEqualToString:newValue])
+            self.radiusStepperLabel.text = newValue;
+        
+    }
+    else{
+        
+        self.radiusStepperLabel.text = @"Off";
+        
+    }
 }
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
