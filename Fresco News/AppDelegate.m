@@ -63,6 +63,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         else {
            if(error) NSLog(@"Error on login %@", error);
         }
+        
     }];
     
     [self setupAppearances];

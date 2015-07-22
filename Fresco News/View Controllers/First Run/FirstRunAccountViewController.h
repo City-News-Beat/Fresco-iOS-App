@@ -9,6 +9,9 @@
 #import "FRSBaseViewController.h"
 
 @interface FirstRunAccountViewController : FRSBaseViewController
+
 @property (nonatomic) NSString *email;
+
 @property (nonatomic) NSString *password;
+
 @end

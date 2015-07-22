@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
+
 @end
 
 @implementation FirstRunViewController
@@ -44,6 +45,9 @@
     // this allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
+    
+    self.emailField.returnKeyType = UIReturnKeyNext;
+    self.passwordField.returnKeyType = UIReturnKeyDone;
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
@@ -78,6 +82,7 @@
 }
 
 - (void)styleButtons {
+    
     self.loginButton.layer.cornerRadius = 4;
     self.loginButton.clipsToBounds = YES;
     
@@ -89,6 +94,18 @@
     shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
     [self.dismissButton addSubview:shadowView];
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField == self.emailField) {
+        [self.passwordField becomeFirstResponder];
+    } else if (textField == self.passwordField) {
+        [textField resignFirstResponder];
+    }
+    
+    return NO;
+}
+
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
@@ -157,17 +174,6 @@
     [self performSegueWithIdentifier:@"showAccountInfo" sender:self];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    if (textField == self.emailField) {
-        [self.passwordField becomeFirstResponder];
-    } else if (textField == self.passwordField) {
-        //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        //[self.loginButtonAction:sender];
-        [self.passwordField resignFirstResponder];
-    }
-    return YES;
-}
 
 - (IBAction)facebookLogin:(id)sender
 {
@@ -244,6 +250,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch = [[event allTouches] anyObject];
+    
     if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
         [self.emailField resignFirstResponder];
     }
@@ -251,6 +258,7 @@
     if ([self.passwordField isFirstResponder] && [touch view] != self.passwordField) {
         [self.passwordField resignFirstResponder];
     }
+    
     [super touchesBegan:touches withEvent:event];
 }
 

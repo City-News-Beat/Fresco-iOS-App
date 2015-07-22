@@ -9,6 +9,8 @@
 #import "FRSBaseViewController.h"
 
 @interface FirstRunSignUpViewController : FRSBaseViewController
+
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
+
 @end

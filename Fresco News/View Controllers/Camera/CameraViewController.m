@@ -92,6 +92,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    
     self.videoButton.selected = YES; // TODO: Persist this and other camera state
     [self updateCameraMode:CameraModeVideo];
     self.createdAssetURLs = [NSMutableArray new];
@@ -175,8 +178,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    
     self.view.hidden = NO;
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
 
@@ -206,6 +207,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self updateRecentPhotoView];
     
 }
+
+
 
 - (void)viewDidDisappear:(BOOL)animated
 {

@@ -27,6 +27,7 @@ PODS:
   - Cloudinary (1.0.12)
   - Functional.m (1.0.0)
   - FXBlurView (1.6.3)
+  - GRKGradientView (1.0.2)
   - Mantle (1.5.1):
     - Mantle/extobjc (= 1.5.1)
   - Mantle/extobjc (1.5.1)
@@ -41,6 +42,7 @@ DEPENDENCIES:
   - Cloudinary
   - Functional.m (~> 1.0)
   - FXBlurView
+  - GRKGradientView
   - Mantle (~> 1.3)
   - STKWebKitViewController
   - SVPullToRefresh
@@ -53,6 +55,7 @@ SPEC CHECKSUMS:
   Cloudinary: 1f3859b17f1c111671a1acf1f0e2648c34d3a207
   Functional.m: e01ad5fc30324b63273af1f37284ac609192caa4
   FXBlurView: abe1046285813c4f6e9008abbc324fc5ab32af90
+  GRKGradientView: 678cb40f60c95424d6cd78c6e6b15833ef6a861d
   Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
   STKWebKitViewController: 30f6640db11822af3365c2875c9988c4bda43ddc
   SVPullToRefresh: d5161ebc833a38b465364412e5e307ca80bbb190

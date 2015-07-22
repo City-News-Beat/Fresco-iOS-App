@@ -126,6 +126,11 @@
 		E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
+		E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A941B5FFF5900A08B51 /* CRMotionView.m */; };
+		E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A961B5FFF5900A08B51 /* FRSMotionView.m */; };
+		E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */; };
+		E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */; };
+		E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -389,6 +394,16 @@
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
 		E7BFA2E31B18CFB100B820C0 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
 		E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
+		E7D27A931B5FFF5900A08B51 /* CRMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMotionView.h; sourceTree = "<group>"; };
+		E7D27A941B5FFF5900A08B51 /* CRMotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMotionView.m; sourceTree = "<group>"; };
+		E7D27A951B5FFF5900A08B51 /* FRSMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMotionView.h; sourceTree = "<group>"; };
+		E7D27A961B5FFF5900A08B51 /* FRSMotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMotionView.m; sourceTree = "<group>"; };
+		E7D27A971B5FFF5900A08B51 /* FRSPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPhotoBrowserView.h; sourceTree = "<group>"; };
+		E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoBrowserView.m; sourceTree = "<group>"; };
+		E7D27A991B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPhotoMotionCollectionViewCell.h; sourceTree = "<group>"; };
+		E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoMotionCollectionViewCell.m; sourceTree = "<group>"; };
+		E7D27A9B1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+CRScrollIndicator.h"; sourceTree = "<group>"; };
+		E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRScrollIndicator.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -471,12 +486,12 @@
 			children = (
 				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
 				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
-				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
-				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
 				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
 				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
+				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
+				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
 				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
 				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
 				32CA6FF31B45974F00242E1E /* FirstRunTOSViewController.h */,
@@ -651,6 +666,7 @@
 				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
 				425790E51B1910C600C9C49C /* CrossPostButton.h */,
 				425790E61B1910C600C9C49C /* CrossPostButton.m */,
+				E7D27AA21B5FFF5D00A08B51 /* Photo Browser */,
 				E784280C1B57F3A60090DFCC /* Notifications */,
 				1EA27AA21AF14256003137CE /* Assignments */,
 				1E3592871AC3327000F60348 /* Post */,
@@ -1021,6 +1037,23 @@
 			path = Galleries;
 			sourceTree = "<group>";
 		};
+		E7D27AA21B5FFF5D00A08B51 /* Photo Browser */ = {
+			isa = PBXGroup;
+			children = (
+				E7D27A931B5FFF5900A08B51 /* CRMotionView.h */,
+				E7D27A941B5FFF5900A08B51 /* CRMotionView.m */,
+				E7D27A951B5FFF5900A08B51 /* FRSMotionView.h */,
+				E7D27A961B5FFF5900A08B51 /* FRSMotionView.m */,
+				E7D27A971B5FFF5900A08B51 /* FRSPhotoBrowserView.h */,
+				E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */,
+				E7D27A991B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.h */,
+				E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */,
+				E7D27A9B1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.h */,
+				E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */,
+			);
+			name = "Photo Browser";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1301,7 +1334,9 @@
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
+				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
+				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				E77F6AC41B583839009AFF8D /* FRSOnboardPageViewController.m in Sources */,
@@ -1322,7 +1357,9 @@
 				1EA27AA81AF147C4003137CE /* MKMapView+Additions.m in Sources */,
 				E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */,
 				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
+				E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
+				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
@@ -1365,6 +1402,7 @@
 				32CA6FF51B45974F00242E1E /* FirstRunTOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
+				E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1536,7 +1574,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1560,7 +1598,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1624,7 +1662,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1646,7 +1684,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1665,7 +1703,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1689,7 +1727,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Elmir Kouliev (UTJ482XB5N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

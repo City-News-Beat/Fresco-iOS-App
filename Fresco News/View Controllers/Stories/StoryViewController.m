@@ -110,7 +110,7 @@
                     
                     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:self.selectedThumbnail];
                     
-                    if([self.galleries count] >= self.selectedThumbnail){
+                    if([self.galleries count] < self.selectedThumbnail){
                     
                         [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                         

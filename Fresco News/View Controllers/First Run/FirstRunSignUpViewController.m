@@ -13,7 +13,8 @@
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
@@ -22,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLastName;
 @property (strong, nonatomic) UIImage *selectedImage;
 @property (nonatomic) NSURL *socialImageURL;
+
 @end
 
 @implementation FirstRunSignUpViewController
@@ -29,9 +31,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.textfieldFirstName.delegate = self;
+    self.textfieldLastName.delegate = self;
+
+    self.textfieldFirstName.returnKeyType = UIReturnKeyNext;
+    self.textfieldLastName.returnKeyType = UIReturnKeyDone;
+
+    
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    
     singleTap.numberOfTapsRequired = 1;
+    
     [self.addPhotoImageView addGestureRecognizer:singleTap];
+    
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
 }
@@ -60,16 +73,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)tapDetected
-{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.allowsEditing = YES;
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self presentViewController:picker animated:YES completion:^{
-        self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
-        self.addPhotoImageView.clipsToBounds = YES;
-    }];
+
+#pragma mark - Text Field Delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField == self.textfieldFirstName) {
+        [self.textfieldLastName becomeFirstResponder];
+    }else if (textField == self.textfieldLastName) {
+        [self.textfieldLastName resignFirstResponder];
+    }
+    
+    return NO;
 }
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
@@ -130,6 +145,10 @@
 
 #pragma mark - Social data
 
+/*
+** Grab info from twitter, and set to respective fields
+*/
+
 - (void)setTwitterInfo
 {
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
@@ -186,6 +205,10 @@
     }];
 }
 
+/*
+** Grab info from facebook, and set to respective fields
+*/
+
 - (void)setFacebookInfo
 {
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
@@ -214,6 +237,21 @@
                 }
             });
         }
+    }];
+}
+
+#pragma mark - Touch Events
+
+- (void)tapDetected
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:^{
+        self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
+        self.addPhotoImageView.clipsToBounds = YES;
     }];
 }
 

@@ -9,16 +9,18 @@
 #import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
 
-@interface FirstRunAccountViewController ()
+@interface FirstRunAccountViewController () <UITextFieldDelegate>
+
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+
 @end
 
 @implementation FirstRunAccountViewController
@@ -40,6 +42,14 @@
     if (self.password)
         self.passwordField.text = self.password;
     
+    self.emailField.delegate = self;
+    self.passwordField.delegate = self;
+    self.confirmPasswordField.delegate = self;
+
+    self.emailField.returnKeyType = UIReturnKeyNext;
+    self.passwordField.returnKeyType = UIReturnKeyNext;
+    self.confirmPasswordField.returnKeyType = UIReturnKeyDone;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillShowNotification
@@ -55,6 +65,20 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField == self.emailField) {
+        [self.passwordField becomeFirstResponder];
+    } else if (textField == self.passwordField) {
+        [self.confirmPasswordField becomeFirstResponder];
+    }else if (textField == self.confirmPasswordField) {
+        [self.confirmPasswordField resignFirstResponder];
+    }
+    
+    return NO;
 }
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification

@@ -20,6 +20,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 @property (nonatomic, strong) UILabel *transcodeLabel;
 
+
 @end
 
 @implementation PostCollectionViewCell
