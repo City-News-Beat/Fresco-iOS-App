@@ -23,33 +23,12 @@
 
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
 
-@property (nonatomic) BOOL returnToGalleryPost;
-
 @end
 
 @implementation FRSRootViewController
 
 #pragma mark - View Controller swapping
 
-- (void)setRootViewControllerToTabBar
-{
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
-
-    self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
-    
-    [self switchRootViewController:self.tbc];
-    
-    if (self.returnToGalleryPost) {
-        self.returnToGalleryPost = NO;
-        [self.tbc returnToGalleryPost];
-    }
-    else {
-        NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
-        self.tbc.selectedIndex = (index == 4 ? 0 : index);
-    }
-}
 
 - (void)hideTabBar{
     
@@ -70,7 +49,31 @@
     }];}
 
 
+- (void)setRootViewControllerToTabBar
+{
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
+    
+    self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    
+    [self switchRootViewController:self.tbc];
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"returnToCamera"]){
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"returnToCamera"];
+        
+        [self.tbc returnToGalleryPost];
+        
+    }
+    else {
+        NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"];
+        self.tbc.selectedIndex = (index == 4 ? 0 : index);
+    }
+}
+
 - (void)setRootViewControllerToCamera{
+    
     [self.tbc presentCamera];
 }
 
@@ -135,6 +138,7 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"] bundle:[NSBundle mainBundle]];
     
     UIViewController *viewController;
+    
     if (underNavigationController) {
         UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
         viewController = [[UINavigationController alloc] initWithRootViewController:vc];

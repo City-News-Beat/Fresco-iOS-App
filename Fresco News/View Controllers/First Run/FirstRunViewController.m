@@ -137,14 +137,14 @@
             
             if(frsUser != nil){
             
+                [[FRSLocationManager sharedManager] setupLocationMonitoring];
+                
                 // make sure first and last name are set
                 // if not collect them
                 if (!frsUser.first && !frsUser.last) {
                     [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
                 }
-                // otherwise just go into the app
                 else {
-                    [[FRSLocationManager sharedManager] setupLocationMonitoring];
                     [self.view endEditing:YES];
                     [self navigateToMainApp];
                 }

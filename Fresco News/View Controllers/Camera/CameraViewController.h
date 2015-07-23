@@ -10,8 +10,8 @@
 
 @interface CameraViewController : UIViewController <UINavigationControllerDelegate>
 
-- (void)cancel;
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab;
+
 - (IBAction)doneButtonTapped:(id)sender;
 
 @end

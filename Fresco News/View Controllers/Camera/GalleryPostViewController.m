@@ -2,9 +2,13 @@
 //  GalleryPostViewController.m
 //  FrescoNews
 //
-//  Created by Joshua Lerner on 4/19/15.
+//  Created by Fresco News on 4/19/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
+
+@import Parse;
+@import FBSDKCoreKit;
+@import AssetsLibrary;
 
 #import "GalleryPostViewController.h"
 #import "GalleryView.h"
@@ -12,19 +16,18 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "CameraViewController.h"
-@import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-@import FBSDKCoreKit;
 #import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
-@import AssetsLibrary;
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "MKMapView+Additions.h"
+#import "UIViewController+Additions.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
+
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -52,7 +55,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setFrescoNavigationBar];
     [self setupButtons];
+    
     self.title = @"Create a Gallery";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
@@ -79,7 +85,7 @@
         self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
         self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
-        BOOL hideCrosspostingHelp = [[NSUserDefaults standardUserDefaults] boolForKey:@"galleryPreviouslyPosted"];
+        BOOL hideCrosspostingHelp = [defaults boolForKey:@"galleryPreviouslyPosted"];
         self.pressBelowLabel.hidden = hideCrosspostingHelp;
         self.invertedTriangleImageView.hidden = hideCrosspostingHelp;
     }
@@ -131,7 +137,8 @@
 
 - (void)returnToCamera:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)twitterButtonTapped:(CrossPostButton *)button
@@ -314,6 +321,8 @@
 {
     if (![[FRSDataManager sharedManager] isLoggedIn]) {
         [self navigateToFirstRun];
+        [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"returnToCamera"];
         return;
     }
 
@@ -325,6 +334,7 @@
     NSError *error;
 
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
+    
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
 
@@ -379,44 +389,57 @@
                                                                        progress:&progress
                                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
         if (uploadError) {
+            
             NSLog(@"Error posting to Fresco: %@", uploadError);
+            
             dispatch_async(dispatch_get_main_queue(), ^{
+            
                 [self configureControlsForUpload:NO];
+                
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed"
                                                                              message:@"Please try again later"
                                                                       preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:@"OK"
                                                            style:UIAlertActionStyleDefault
                                                          handler:nil]];
+                
                 [self presentViewController:alert animated:YES completion:nil];
+                
             });
         }
         else {
+            
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
 
             // TODO: Handle error conditions
             NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
+            
             [self crossPostToTwitter:crossPostString];
+            
             [self crossPostToFacebook:crossPostString];
 
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setBool:YES forKey:@"galleryPreviouslyPosted"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
+            
             [VariableStore resetDraftGalleryPost];
+            
+            [self returnToTabBar];
 
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
-                                                                           message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction *action) {
-                                                        [self returnToTabBar];
-                                                    }]];
-            [self presentViewController:alert animated:YES completion:nil];
+//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
+//                                                                           message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
+//                                                                    preferredStyle:UIAlertControllerStyleAlert];
+//
+//            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+//                                                      style:UIAlertActionStyleDefault
+//                                                    handler:^(UIAlertAction *action) {
+//                                                        [self returnToTabBar];
+//                                                    }]];
+//            
+//            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
 
     [uploadTask resume];
+    
     [progress addObserver:self
                forKeyPath:@"fractionCompleted"
                   options:NSKeyValueObservingOptionNew

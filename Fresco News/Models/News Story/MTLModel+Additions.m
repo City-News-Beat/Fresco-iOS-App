@@ -78,7 +78,10 @@
     
     int ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
 
-    if(ti < 60){
+    if(ti <= 0){
+        return [NSString stringWithFormat:@"just now"];
+    }
+    else if(ti < 60){
         return [NSString stringWithFormat:@"%ds", ti];
     }
     else if(ti < 3600){
@@ -99,7 +102,7 @@
         
         int diff = round(ti / 60 / 60 / 24);
         
-        return [NSString stringWithFormat:@"%d do", diff];
+        return [NSString stringWithFormat:@"%dd", diff];
         
     }
     else if(ti < 2629740){
@@ -118,15 +121,13 @@
         
         
     }
-    else if(ti < 3155690000){
+    else{
         
         int diff = round(ti / 60 / 60 / 24 / 30 / 52);
         
         return [NSString stringWithFormat:@"%dy", diff];
         
     }
-    else
-        return @"Never";
     
     return 0;
     

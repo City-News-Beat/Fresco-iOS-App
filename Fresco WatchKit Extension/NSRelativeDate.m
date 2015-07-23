@@ -12,7 +12,6 @@
 
 + (NSString *)relativeDateString:(NSDate*)date {
     
-
     double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
     
     if(ti < 60){

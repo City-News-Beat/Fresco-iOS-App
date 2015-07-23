@@ -406,8 +406,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - Scroll View Delegate
 
-#pragma mark - ScrollViewDelegate
-
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     CGFloat pageWidth = self.collectionPosts.frame.size.width;

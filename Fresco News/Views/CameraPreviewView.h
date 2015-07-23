@@ -12,6 +12,8 @@
 
 @interface CameraPreviewView : UIView
 
-@property (nonatomic) AVCaptureSession *session;
+@property (nonatomic, strong) AVCaptureSession *session;
+
+@property (nonatomic, assign) CGRect savedBounds;
 
 @end

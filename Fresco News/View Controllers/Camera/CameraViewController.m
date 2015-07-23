@@ -93,19 +93,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidLoad];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    
-    self.videoButton.selected = YES; // TODO: Persist this and other camera state
-    [self updateCameraMode:CameraModeVideo];
+//    self.videoButton.selected = YES; // TODO: Persist this and other camera state
+//    [self updateCameraMode:CameraModeVideo];
     self.createdAssetURLs = [NSMutableArray new];
     
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
-    [self setSession:session];
 
     // Prevent conflict between background music and camera
     session.automaticallyConfiguresApplicationAudioSession = NO;
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
+    [self updateCameraMode:CameraModePhoto];
+    
+    [self setSession:session];
 
     // Setup the preview view
     [[self previewView] setSession:session];
@@ -118,9 +119,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     // -[AVCaptureSession startRunning] is a blocking call which can take a long time. We dispatch session setup to the sessionQueue so that the main queue isn't blocked (which keeps the UI responsive).
 
     dispatch_queue_t sessionQueue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL);
+    
     [self setSessionQueue:sessionQueue];
 
     dispatch_async(sessionQueue, ^{
+        
         [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
 
         NSError *error = nil;
@@ -133,7 +136,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
 
         if ([session canAddInput:videoDeviceInput]) {
+            
             [session addInput:videoDeviceInput];
+            
             [self setVideoDeviceInput:videoDeviceInput];
 
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -178,24 +183,32 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    
     self.view.hidden = NO;
+    
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
 
     dispatch_async([self sessionQueue], ^{
+        
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
         [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
 
         __weak CameraViewController *weakSelf = self;
+        
         [self setRuntimeErrorHandlingObserver:[[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureSessionRuntimeErrorNotification object:[self session] queue:nil usingBlock:^(NSNotification *note) {
             CameraViewController *strongSelf = weakSelf;
             dispatch_async([strongSelf sessionQueue], ^{
                 // Manually restarting the session since it must have been stopped due to an error.
                 [[strongSelf session] startRunning];
             });
+        
         }]];
+        
         [[self session] startRunning];
+        
     });
 
     // TODO: Confirm permissions
@@ -204,7 +217,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
 
-    [self updateRecentPhotoView];
+    [self updateRecentPhotoView:nil];
     
 }
 
@@ -311,12 +324,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // Hide most of the UI
     self.controlsView.backgroundColor = [UIColor clearColor];
+    
     for (UIView *view in [self.controlsView subviews]) {
         view.hidden = YES;
     }
 
     self.apertureButton.hidden = NO;
     self.flashButton.hidden = NO;
+   
     if (cameraMode == CameraModeVideo) {
         [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
     }
@@ -327,6 +342,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)toggleMovieRecording
 {
     if ([[self movieFileOutput] isRecording]) {
+        
         [self showUIForCameraMode:CameraModeVideo];
         [self.activityIndicator startAnimating];
         self.doneLabel.hidden = YES;
@@ -386,10 +402,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)snapStillImage
 {
     dispatch_async([self sessionQueue], ^{
+        
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+            
             if (imageDataSampleBuffer) {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
@@ -433,12 +451,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)cancelButtonTapped:(id)sender
 {
-    [self cancel];
+    [self cancelAndReturnToPreviousTab:YES];
 }
 
 - (IBAction)flashButtonTapped:(UIButton *)button
 {
     button.selected = !button.selected;
+    
     [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
 
     dispatch_async([self sessionQueue], ^{
@@ -448,24 +467,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-- (void)cancel
-{
-    [self cancelAndReturnToPreviousTab:YES];
-}
-
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
     [VariableStore resetDraftGalleryPost];
     
-    FRSTabBarController *vc = ((FRSRootViewController *)self.presentingViewController).tbc;
+    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
     
-    vc.tabBar.hidden = NO;
+    tabBarController.tabBar.hidden = NO;
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         
-        vc.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
+        tabBarController.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     }];
 }
 
@@ -478,6 +492,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (IBAction)modeButtonTapped:(UIButton *)button
 {
     if (!button.selected) {
+        
         button.selected = YES;
 
         if (button.tag) {
@@ -663,22 +678,65 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)updateCameraMode:(CameraMode)cameraMode
 {
     if (cameraMode == CameraModePhoto) {
-        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"camera-aperture-icon"] forState:UIControlStateNormal];
-        [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
-        [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
-        // self.broadcastStatus.hidden = YES;
+
+        [UIView animateWithDuration:.2f animations:^{
+            
+            self.previewView.alpha = .0f;
+            self.controlsView.alpha = 1;
+            
+            //Reset the preview view to its original frame
+            if(self.previewView.savedBounds.size.width != 0) self.previewView.frame = self.previewView.savedBounds;
+            
+        } completion:^(BOOL finished){
+            
+            //Change the preset to display properly
+            [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"camera-aperture-icon"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
+            self.videoButton.selected = NO;
+            
+            if(!self.photoButton.selected) self.photoButton.selected = YES;
+            
+            [UIView animateWithDuration:.2f animations:^{
+                
+                self.previewView.alpha = 1;
+            
+            }];
+            
+        }];
+    
     }
     else {
-        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
-        [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
-        [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
-        // self.broadcastStatus.hidden = NO;
+        
+        //Save the bounds, so we can reset back to it later
+        self.previewView.savedBounds = self.previewView.frame;
+        
+        [UIView animateWithDuration:.3f animations:^{
+            
+            self.previewView.alpha = .0f;
+            self.controlsView.alpha = .7;
+            
+            //Scale the preview view to the whole screen
+            self.previewView.frame = self.view.bounds;
+            
+        } completion:^(BOOL finished){
+            
+            //Change the preset to display properly
+            [self.session setSessionPreset:AVCaptureSessionPreset1920x1080];
+            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
+            self.photoButton.selected = NO;
+            
+            [UIView animateWithDuration:.2f
+                             animations:^{
+                                 self.previewView.alpha = 1;
+                             }];
+            
+        }];
+        
     }
-}
-
-- (void)updateRecentPhotoView
-{
-    [self updateRecentPhotoView:nil];
 }
 
 - (void)updateRecentPhotoView:(UIImage *)image
@@ -740,10 +798,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
 
-- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
-{
-    [self cancel];
-}
+//- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
+//{
+////    [self cancelAndReturnToPreviousTab:YES];
+//}
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets {} // required by protocol
 
@@ -754,14 +812,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
+    
     NSString *mimeType = [asset mimeType];
+    
     if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
         return NO;
     }
 
-#if TARGET_IPHONE_SIMULATOR
-    return YES;
-#else
+    #if TARGET_IPHONE_SIMULATOR
+        return YES;
+    #else
+    
     // Suspenders
     NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
     if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
@@ -773,7 +834,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     return NO;
-#endif
+    
+    #endif
+    
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldEnableAsset:(ALAsset *)asset
@@ -829,7 +892,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)findNearbyAssignments
 {
-    // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         self.defaultAssignment = [responseObject firstObject];
     }];
