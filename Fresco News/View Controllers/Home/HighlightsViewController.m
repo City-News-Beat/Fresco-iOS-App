@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "HomeViewController.h"
+#import "HighlightsViewController.h"
 #import "GalleriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -15,13 +15,13 @@
 #import "AssignmentsViewController.h"
 #import <UIScrollView+SVInfiniteScrolling.h>
 
-@interface HomeViewController ()
+@interface HighlightsViewController ()
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
 @end
 
-@implementation HomeViewController
+@implementation HighlightsViewController
 
 - (void)viewDidLoad
 {

@@ -13,7 +13,7 @@
 
 typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
-@interface HomeViewController : FRSBaseViewController
+@interface HighlightsViewController : FRSBaseViewController
 
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 

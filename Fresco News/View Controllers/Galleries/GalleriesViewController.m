@@ -8,7 +8,7 @@
 
 #import "FRSRootViewController.h"
 #import "GalleriesViewController.h"
-#import "HomeViewController.h"
+#import "HighlightsViewController.h"
 #import "ProfileViewController.h"
 #import "StoryViewController.h"
 #import "ProfileHeaderViewController.h"
@@ -121,9 +121,9 @@
 - (void)refresh
 {
     
-    if([self.parentViewController isKindOfClass:[HomeViewController class]]){
+    if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
     
-        [((HomeViewController *) self.parentViewController) performNecessaryFetch:nil];
+        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil];
         
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
@@ -275,7 +275,7 @@
     */
     
     //Make sure we're in the parent view controller, not the detail view
-    if(![[self.navigationController visibleViewController] isKindOfClass:[HomeViewController class]] &&
+    if(![[self.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]] &&
        ![[self.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
         return;
     }
@@ -432,7 +432,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
-        if ([self.containingViewController isKindOfClass:[HomeViewController class]] ||
+        if ([self.containingViewController isKindOfClass:[HighlightsViewController class]] ||
             [self.containingViewController isKindOfClass:[StoryViewController class]] ) {
             [self.viewProfileHeader removeFromSuperview];
             self.tableView.tableHeaderView = nil;

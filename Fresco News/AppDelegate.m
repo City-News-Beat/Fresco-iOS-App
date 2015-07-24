@@ -20,7 +20,7 @@
 #import "FRSLocationManager.h"
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
-#import "HomeViewController.h"
+#import "HighlightsViewController.h"
 #import "FRSRootViewController.h"
 
 static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
@@ -219,7 +219,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                     //Retreieve Gallery View Controller from storyboard
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     
-                    HomeViewController *homeVC = (HomeViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
+                    HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
                     
                     //Retreieve Notifications View Controller from storyboard
                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];

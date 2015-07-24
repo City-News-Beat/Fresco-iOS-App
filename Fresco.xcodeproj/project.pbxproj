@@ -49,7 +49,7 @@
 		1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */; };
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B81AA4CCC70082E08D /* AppDelegate.m */; };
-		1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */; };
+		1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BB1AA4CCC70082E08D /* HighlightsViewController.m */; };
 		1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */; };
 		1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C01AA4CCC70082E08D /* Main.storyboard */; };
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
@@ -252,8 +252,8 @@
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44B71AA4CCC70082E08D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1EDA44B81AA4CCC70082E08D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
-		1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		1EDA44BA1AA4CCC70082E08D /* HighlightsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HighlightsViewController.h; sourceTree = "<group>"; };
+		1EDA44BB1AA4CCC70082E08D /* HighlightsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HighlightsViewController.m; sourceTree = "<group>"; };
 		1EDA44BD1AA4CCC70082E08D /* StoriesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StoriesViewController.h; sourceTree = "<group>"; };
 		1EDA44BE1AA4CCC70082E08D /* StoriesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoriesViewController.m; sourceTree = "<group>"; };
 		1EDA44C11AA4CCC70082E08D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -960,8 +960,8 @@
 		E73E100A1B0F958D00763240 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				1EDA44BA1AA4CCC70082E08D /* HomeViewController.h */,
-				1EDA44BB1AA4CCC70082E08D /* HomeViewController.m */,
+				1EDA44BA1AA4CCC70082E08D /* HighlightsViewController.h */,
+				1EDA44BB1AA4CCC70082E08D /* HighlightsViewController.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1373,7 +1373,7 @@
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */,
-				1EDA44BC1AA4CCC70082E08D /* HomeViewController.m in Sources */,
+				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,

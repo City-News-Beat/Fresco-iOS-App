@@ -11,7 +11,7 @@
 #import "FRSTabBarController.h"
 #import "UIViewController+Additions.h"
 #import "CameraViewController.h"
-#import "HomeViewController.h"
+#import "HighlightsViewController.h"
 #import "AssignmentsViewController.h"
 #import "ProfileViewController.h"
 #import "StoriesViewController.h"
@@ -132,10 +132,10 @@
         
         UIViewController *vc = [viewController.childViewControllers firstObject];
         
-        if ([vc isMemberOfClass:[HomeViewController class]] && tabBarController.selectedIndex == 0) {
+        if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
             
-            if([[vc.navigationController visibleViewController] isKindOfClass:[HomeViewController class]]){
-                [((HomeViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
+                [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
             }
             else{
                 [vc.navigationController popViewControllerAnimated:YES];
