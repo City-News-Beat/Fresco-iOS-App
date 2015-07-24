@@ -646,6 +646,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     AVCaptureDevice *device = [[self videoDeviceInput] device];
+    
     if ([device isTorchModeSupported:torchMode] && [device torchMode] != torchMode) {
         NSError *error;
         if ([device lockForConfiguration:&error]) {
