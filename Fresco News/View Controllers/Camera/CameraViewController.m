@@ -704,6 +704,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
+/*
+** Toggles camera mode between photo/camera, * performs animation and changes preset *
+*/
+
 - (void)updateCameraMode:(CameraMode)cameraMode
 {
     if (cameraMode == CameraModePhoto) {
