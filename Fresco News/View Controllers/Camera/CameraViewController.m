@@ -93,18 +93,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidLoad];
     
-//    self.videoButton.selected = YES; // TODO: Persist this and other camera state
-//    [self updateCameraMode:CameraModeVideo];
     self.createdAssetURLs = [NSMutableArray new];
     
-    // Create the AVCaptureSession
+    // Create the AVCaptureSession an set to photo
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
 
     // Prevent conflict between background music and camera
     session.automaticallyConfiguresApplicationAudioSession = NO;
+    session.sessionPreset = AVCaptureSessionPresetPhoto;
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
-    [self updateCameraMode:CameraModePhoto];
+    if(!self.photoButton.selected) self.photoButton.selected = YES;
     
     [self setSession:session];
 
@@ -145,7 +144,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 // Why are we dispatching this to the main queue?
                 // Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView can only be manipulated on main thread.
                 // Note: As an exception to the above rule, it is not necessary to serialize video orientation changes on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
-
+//
                 [[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] setVideoOrientation:(AVCaptureVideoOrientation)[self interfaceOrientation]];
             });
         }
@@ -298,17 +297,49 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (IBAction)apertureButtonTapped:(id)sender
 {
     if (self.photoButton.selected) {
+        
         [self snapStillImage];
+        
+        [UIView animateWithDuration:.2f animations:^{
+            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
+        }];
+        
     }
     else {
         [self toggleMovieRecording];
+        
+        [UIView animateWithDuration:.2f animations:^{
+            self.apertureButton.backgroundColor = [UIColor clearColor];
+        }];
+    }
+
+}
+- (IBAction)apertureButtonHeld:(id)sender {
+    
+    if (![[self movieFileOutput] isRecording]) {
+        
+        [UIView animateWithDuration:.2f animations:^{
+            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
+        }];
+        
+    }
+    
+}
+- (IBAction)apertureButtonReleased:(id)sender {
+    
+    if (![[self movieFileOutput] isRecording]) {
+    
+        [UIView animateWithDuration:.2f animations:^{
+            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
+        }];
+        
     }
 }
 
 - (void)showUIForCameraMode:(CameraMode)cameraMode
 {
     self.controlsView.backgroundColor = [UIColor whiteColor];
-    self.apertureButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
+    self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
 
     if (cameraMode == CameraModeVideo) {
         [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
@@ -496,11 +527,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         button.selected = YES;
 
         if (button.tag) {
-            self.photoButton.selected = NO;
             [self updateCameraMode:CameraModeVideo];
         }
         else {
-            self.videoButton.selected = NO;
             [self updateCameraMode:CameraModePhoto];
         }
     }
@@ -707,7 +736,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }];
     
     }
-    else {
+    else if(cameraMode == CameraModeVideo) {
         
         //Save the bounds, so we can reset back to it later
         self.previewView.savedBounds = self.previewView.frame;

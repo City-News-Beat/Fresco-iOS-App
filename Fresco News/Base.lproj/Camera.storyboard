@@ -357,6 +357,8 @@
                                                     </mask>
                                                 </variation>
                                                 <connections>
+                                                    <action selector="apertureButtonHeld:" destination="mwP-m8-Afk" eventType="touchDown" id="qPM-au-Y5O"/>
+                                                    <action selector="apertureButtonReleased:" destination="mwP-m8-Afk" eventType="touchUpOutside" id="aHB-WH-89j"/>
                                                     <action selector="apertureButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="ebG-K9-hD2"/>
                                                 </connections>
                                             </button>
