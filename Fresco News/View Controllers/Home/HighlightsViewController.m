@@ -71,7 +71,7 @@
     [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:nil responseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             if ([responseObject count]) {
-                self.galleries = responseObject;
+
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 [self.galleriesViewController.tableView reloadData];
                 //                self.galleriesViewController.galleries = self.galleries;
@@ -88,7 +88,6 @@
     if ([[segue identifier] isEqualToString:@"embedGalleries"]) {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 }

@@ -688,7 +688,7 @@
 				E784280E1B57F3E30090DFCC /* Onboard */,
 				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
 				E7BFA2E21B18CF8100B820C0 /* Galleries */,
-				E73E100A1B0F958D00763240 /* Home */,
+				E73E100A1B0F958D00763240 /* Highlights */,
 				1EFD22921B2B1C220049B940 /* Stories */,
 				1EFD22941B2B1C5E0049B940 /* Camera */,
 				E73E10091B0F957B00763240 /* Assignments */,
@@ -957,12 +957,13 @@
 			path = Assignments;
 			sourceTree = "<group>";
 		};
-		E73E100A1B0F958D00763240 /* Home */ = {
+		E73E100A1B0F958D00763240 /* Highlights */ = {
 			isa = PBXGroup;
 			children = (
 				1EDA44BA1AA4CCC70082E08D /* HighlightsViewController.h */,
 				1EDA44BB1AA4CCC70082E08D /* HighlightsViewController.m */,
 			);
+			name = Highlights;
 			path = Home;
 			sourceTree = "<group>";
 		};
