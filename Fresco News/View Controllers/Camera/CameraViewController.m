@@ -646,6 +646,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 
     AVCaptureDevice *device = [[self videoDeviceInput] device];
+    
     if ([device isTorchModeSupported:torchMode] && [device torchMode] != torchMode) {
         NSError *error;
         if ([device lockForConfiguration:&error]) {
@@ -703,6 +704,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
     }];
 }
+
+/*
+** Toggles camera mode between photo/camera, * performs animation and changes preset *
+*/
 
 - (void)updateCameraMode:(CameraMode)cameraMode
 {

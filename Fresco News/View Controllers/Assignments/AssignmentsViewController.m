@@ -27,6 +27,7 @@
     /*
     ** UI Elements
     */
+
     @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
     @property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
     @property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
@@ -39,7 +40,7 @@
     @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
     /*
-    ** Conditionaing Variables
+    ** Conditioning Variables
     */
     @property (assign, nonatomic) BOOL centeredAssignment;
 
@@ -78,6 +79,7 @@
     //Navigation Sheet Tag
     self.navigationSheet.tag = 100;
 
+    //Set all values to 0 to reset controller
     self.operatingRadius = 0;
     
     self.operatingLat = 0;
@@ -92,6 +94,10 @@
         [self presentCurrentAssignment];
     
 }
+
+/*
+** Prevents scroll and map delegates from being called outside controller
+*/
 
 - (void)dealloc
 {
@@ -118,6 +124,10 @@
 - (void)viewDidLayoutSubviews{
     self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
 }
+
+/*
+** Perform neccessary tweaks on views, called on viewDidLoad
+*/
 
 - (void)tweakUI {
    
@@ -151,6 +161,10 @@
 
 }
 
+/*
+** Action for clicking radius banner
+*/
+
 - (IBAction)clickedRadiusNotificationButton:(id)sender {
     
     //Retreieve Notifications View Controller from storyboard
@@ -162,11 +176,19 @@
     
 }
 
+/*
+** Action to open camera from signle assignment view
+*/
+
 - (IBAction)openInCamera:(id)sender {
     
     [self navigateToCamera];
     
 }
+
+/*
+** Sets current assignment of view controller, with conditioning variables and checks for expiration
+*/
 
 -(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
     
@@ -181,6 +203,10 @@
         [self presentCurrentAssignment];
     }
 }
+
+/*
+** Presents current assignmet of view controller, fades in view
+*/
 
 -(void)presentCurrentAssignment{
     
@@ -492,7 +518,6 @@
     }
     
 }
-
 
 #pragma mark - ScrollViewDelegate
 
