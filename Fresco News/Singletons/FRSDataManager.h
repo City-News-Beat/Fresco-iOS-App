@@ -21,6 +21,7 @@
 #import "FRSNotification.h"
 
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
+typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 @interface FRSDataManager : AFHTTPSessionManager
@@ -41,6 +42,12 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 @property (nonatomic, assign) BOOL loggingIn;
 
+/*
+** Tells us if login is in process
+*/
+
+@property (nonatomic, assign) BOOL tokenValidatedForSession;
+
 + (FRSDataManager *)sharedManager;
 
 #pragma mark - Users
@@ -49,7 +56,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)logout;
 - (BOOL)isLoggedIn;
 - (BOOL)currentUserValid;
-- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock;
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;

@@ -32,8 +32,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setFrescoNavigationBar];
     
+    [self setFrescoNavigationBar];
 
     if ([FRSDataManager sharedManager].currentUser == nil) {
         [self navigateToFirstRun];

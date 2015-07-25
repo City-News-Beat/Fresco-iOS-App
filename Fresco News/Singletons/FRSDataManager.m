@@ -192,12 +192,12 @@
                 if (success){
                     
                     // authenticate to the API
-                    [self validateAPIToken:^(id responseObject, NSError *error) {
+                    [self validateAPIToken:^(BOOL success, NSError *error) {
                         
-                        if (error)
-                            NSLog(@"Could not authenticate to the API");
-                        else
+                        if (success)
                             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
+                        else
+                            NSLog(@"Could not authenticate to the API");
                         
                     }];
                     
@@ -392,7 +392,7 @@
         
         NSError *error;
         
-        //Check if the user exists
+        //Check if the user's user id is not set
         if (!frsUser.userID) {
 
             frsUser = nil;
@@ -439,9 +439,9 @@
                 
                 NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
                 
-                [self validateCurrentUser:userId withResponseBlock:^(id responseObject, NSError *error) {
+                [self validateCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
                     
-                    if(!error){
+                    if(success){
                         
                         if(block) block(YES, nil);
                         
@@ -458,9 +458,9 @@
         
         NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
         
-        [self validateCurrentUser:userId withResponseBlock:^(id responseObject, NSError *error) {
+        [self validateCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
         
-            if(!error){
+            if(success){
                 
                 block(YES, nil);
             
@@ -472,10 +472,70 @@
 }
 
 /*
- ** Check and validate existing token, otherwise grab a new one
- */
+** Runs a check on the curren userId to make sure everything is valid, otherwise cleans up and removes it
+*/
 
-- (void)validateAPIToken:(FRSAPIResponseBlock)responseBlock {
+- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock
+{
+    
+    if (frescoUserId) {
+        
+        [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
+            
+            if (!error) {
+                
+                // this supports notifications, not login state
+                [self tieUserToInstallation];
+                
+                self.currentUser = responseUser;
+                
+                // authenticate to the API
+                [self validateAPIToken:^(BOOL success, NSError *error) {
+                    
+                    if (success){
+                        responseBlock(YES, error);
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
+                    }
+                    else{
+                        responseBlock(NO, error);
+                        NSLog(@"Could not authenticate to the API");
+                    }
+                    
+                }];
+                
+            }
+            else {
+                
+                self.frescoAPIToken = nil;
+                
+                responseBlock(NO, error);
+                
+                NSLog(@"Error getting fresco user %@", error);
+                
+            }
+            
+        }];
+        
+    }
+    //Invalid User Profile
+    else {
+        
+        [[PFUser currentUser] deleteInBackground];
+        
+    }
+    
+}
+
+/*
+** Check and validate existing token, otherwise grab a new one
+*/
+
+- (void)validateAPIToken:(FRSAPISuccessBlock)successBlock {
+    
+    if(self.tokenValidatedForSession){
+        successBlock(YES, nil);
+        return;
+    }
     
     //Check cache first and short circuit if it exists
     NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
@@ -492,17 +552,21 @@
                 
                 self.frescoAPIToken = token;
                 
-                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                successBlock(YES, nil);
+                
+                self.tokenValidatedForSession = YES;
                 
             }
             //If token is invalid, get a new one
             else{
                 
-                [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+                [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
                     
                     if(!error){
                         
-                        if(responseBlock) responseBlock(self.frescoAPIToken, nil);
+                        successBlock(YES, nil);
+                        
+                        _tokenValidatedForSession = YES;
                         
                     }
                     
@@ -512,16 +576,13 @@
             
         }failure:^(NSURLSessionDataTask *task, NSError *error) {
             
-            [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+            [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
                 
-                if(!error){
-                    
-                    if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-                    
-                }
-                else{
-                    if(responseBlock) responseBlock(nil, error);
-                }
+                if(!error)
+                    successBlock(YES, nil);
+                else
+                    successBlock(NO, error);
+                
                 
             }];
             
@@ -531,14 +592,10 @@
     //If token is not set, get a new one
     else{
         
-        [self requestNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
+        [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
             
-            if(!error){
-                
-                if(responseBlock) responseBlock(self.frescoAPIToken, nil);
-                
-            }
-            
+            if(success)
+                successBlock(YES, nil);
         }];
         
     }
@@ -546,10 +603,10 @@
 }
 
 /*
- ** Request Auth Token from API with Session String
- */
+** Request Auth Token from API with Session String
+*/
 
-- (void)requestNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPIResponseBlock)responseBlock{
+- (void)setNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPISuccessBlock)responseBlock{
     
     NSDictionary *params = @{@"parseSession" : sessionToken};
     
@@ -565,68 +622,15 @@
             // cache the token
             [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:@"frescoAPIToken"];
             
-            if(responseBlock) responseBlock(responseObject, nil);
+            if(responseBlock) responseBlock(YES, nil);
             
         }
         else{
-            
-            
+            if(responseBlock) responseBlock(NO, nil);
         }
         
+
     } failure:nil];
-}
-
-/*
-** Runs a check on the curren userId to make sure everything is valid, otherwise cleans up and removes it
-*/
-
-- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPIResponseBlock)responseBlock
-{
-
-    if (frescoUserId) {
-        
-        [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
-            
-            if (!error) {
-                
-                // this supports notifications, not login state
-                [self tieUserToInstallation];
-                
-                self.currentUser = responseUser;
-                
-                // authenticate to the API
-                [self validateAPIToken:^(id responseObject, NSError *error) {
-                    
-                    if (error)
-                        NSLog(@"Could not authenticate to the API");
-                    else
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
-                    
-                    if(responseBlock) responseBlock(nil, error);
-                    
-                }];
-                
-            }
-            else {
-                
-                self.frescoAPIToken = nil;
-                
-                if(responseBlock) responseBlock(nil, error);
-                
-                NSLog(@"Error getting fresco user %@", error);
-                
-            }
-            
-        }];
-        
-    }
-    //Invalid User Profile
-    else {
-        
-        [[PFUser currentUser] deleteInBackground];
-        
-    }
-
 }
 
 - (BOOL)isLoggedIn
@@ -652,11 +656,10 @@
     
     if(self.currentUser.userID){
     
-        [self validateAPIToken:^(id responseObject, NSError *error) {
+        [self validateAPIToken:^(BOOL success, NSError *error) {
             
             // on success we call ourselves again
-            if (!error) {
-                
+            if (success) {
 
                 [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                 

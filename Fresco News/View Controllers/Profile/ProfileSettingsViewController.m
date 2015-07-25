@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <MapKit/MapKit.h>
 #import "ProfileSettingsViewController.h"
-#import "MKMapView+Additions.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
+#import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import <MapKit/MapKit.h>
 
 @interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
@@ -44,6 +44,12 @@
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 
 /*
+** Buttons
+*/
+
+@property (weak, nonatomic) IBOutlet UIButton *logoutButton;
+
+/*
 ** Radius Setting
 */
 
@@ -68,10 +74,14 @@
 
     [super viewDidLoad];
     
+    self.frsUser = [FRSDataManager sharedManager].currentUser;
+    
+    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     singleTap.numberOfTapsRequired = 1;
     
-    if([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]){
+    //Checks if the user's primary login is through social
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && self.frsUser.email == nil){
         
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;
@@ -85,8 +95,6 @@
         self.textfieldConfirmPassword.userInteractionEnabled = NO;
 
     }
-    
-    self.frsUser = [FRSDataManager sharedManager].currentUser;
 
     if (self.frsUser.cdnProfileImageURL) {
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
@@ -169,7 +177,9 @@
     
     [self.connectFacebookButton addSubview:spinner];
 
+    //Conect the user
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        
         [PFFacebookUtils linkUserInBackground:[PFUser currentUser]
                        withPublishPermissions:@[@"publish_actions"]
                                         block:^(BOOL succeeded, NSError *error) {
@@ -183,17 +193,25 @@
                                             [self updateLinkingStatus];
                                         }];
     }
-    else {  
-        [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"The user is no longer associated with their Facebook account.");
-            }
-            else {
-                NSLog(@"%@", error);
-            }
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        }];
+    //Disconnect the user
+    else {
+        
+        //Make sure the social account isn't their primary connector
+        if([FRSDataManager sharedManager].currentUser.email != nil){
+            
+            [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"The user is no longer associated with their Facebook account.");
+                }
+                else {
+                    NSLog(@"%@", error);
+                }
+                [spinner removeFromSuperview];
+                [self updateLinkingStatus];
+            }];
+            
+        }
+    
     }
 
 }
@@ -206,7 +224,9 @@
     [spinner startAnimating];
     [self.connectTwitterButton addSubview:spinner];
 
+    //Connect the user
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
             if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
                 NSLog(@"Woohoo, user logged in with Twitter!");
@@ -218,27 +238,36 @@
             [self updateLinkingStatus];
         }];
     }
+    //Disconnect the user
     else {
-        [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            if (!error && succeeded) {
-                NSLog(@"The user is no longer associated with their Twitter account.");
-            }
-            else {
-                NSLog(@"%@", error);
-            }
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        }];
+        
+        //Make sure the social account isn't their primary connector
+        if([FRSDataManager sharedManager].currentUser.email != nil){
+            
+            [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                if (!error && succeeded) {
+                    NSLog(@"The user is no longer associated with their Twitter account.");
+                }
+                else {
+                    NSLog(@"%@", error);
+                }
+                [spinner removeFromSuperview];
+                [self updateLinkingStatus];
+            }];
+            
+        }
+        else{
+        
+        }
+        
     }
 }
 
 - (IBAction)saveChanges:(id)sender
 {
     
-    
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
   
-    
     if ([self.textfieldEmail.text length])
         [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
         
@@ -273,6 +302,11 @@
         // On success, run password check
         else {
             
+            
+            //Tells the ProfileHeaderViewController to update it's view
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"updateProfileHeader"];
+            
+            //If they are set, reset them via parse
             if ([self.textfieldNewPassword.text length]) {
                 
                 if([self.textfieldNewPassword.text isEqualToString:self.textfieldConfirmPassword.text]){
@@ -297,6 +331,7 @@
                     
                 }
             }
+            //If passwords are not reset, just go back
             else [self.navigationController popViewControllerAnimated:YES];
 
         }

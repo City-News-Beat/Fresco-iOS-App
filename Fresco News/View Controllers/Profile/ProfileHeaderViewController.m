@@ -22,24 +22,52 @@
 @property (weak, nonatomic) IBOutlet UIImageView *twitterIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
-@property (weak, nonatomic) IBOutlet UIView *clearButtonView;
+@property (weak, nonatomic) IBOutlet UIView *settingsButtonView;
 @end
 
 @implementation ProfileHeaderViewController
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    // this will have to change for displaying other users
+- (void)viewDidLoad{
+
+    [super viewDidLoad];
+    
     self.frsUser = [FRSDataManager sharedManager].currentUser;
     
-    [super viewWillAppear:animated];
-    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
+    [self updateUserInfo];
 
-    UITapGestureRecognizer *settingsTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(handleSingleTap)];
-    [self.clearButtonView addGestureRecognizer:settingsTap];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:YES];
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"updateProfileHeader"]){
+        
+        self.frsUser = [FRSDataManager sharedManager].currentUser;
+    
+        [self updateUserInfo];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"updateProfileHeader"];
+    
+    }
+    
+}
+
+/*
+** Updates the profile header info with the latest data
+*/
+
+-(void)updateUserInfo{
+
+    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
+    
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
+    
+    [self.settingsButtonView addGestureRecognizer:settingsTap];
+    
     if (self.frsUser.profileImageUrl) {
+        
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -50,18 +78,20 @@
                                                   // Do something...
                                               }];
     }
-    else {
-        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-        self.profileImageView.clipsToBounds = YES;
-    }
-
+    
     [self setTwitterInfo];
     [self setFacebookInfo];
+
 }
+
+/*
+** Sends us to the settings screen
+*/
 
 -(void)handleSingleTap {
     [self performSegueWithIdentifier:@"settingsSegue" sender:self];
 }
+
 - (void)setTwitterInfo
 {
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
