@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *twitterIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet UIView *clearButtonView;
 @end
 
 @implementation ProfileHeaderViewController
@@ -34,6 +35,10 @@
     [super viewWillAppear:animated];
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
 
+    UITapGestureRecognizer *settingsTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap)];
+    [self.clearButtonView addGestureRecognizer:settingsTap];
     if (self.frsUser.profileImageUrl) {
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
@@ -54,6 +59,9 @@
     [self setFacebookInfo];
 }
 
+-(void)handleSingleTap {
+    [self performSegueWithIdentifier:@"settingsSegue" sender:self];
+}
 - (void)setTwitterInfo
 {
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {

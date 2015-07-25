@@ -40,7 +40,7 @@
     MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / (30.0 * kMetersInAMile)), ([radius floatValue] / (30.0 * kMetersInAMile)));
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     MKCoordinateRegion regionThatFits = [self regionThatFits:region];
-    [self setRegion:regionThatFits animated:YES];
+    [self setRegion:regionThatFits animated:NO];
 }
 
 // Zooms to user location

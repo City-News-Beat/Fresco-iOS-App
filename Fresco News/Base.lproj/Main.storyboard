@@ -1374,10 +1374,11 @@
                                         <state key="normal" image="settings">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <connections>
-                                            <segue destination="fkO-PC-iRn" kind="show" id="ISX-Ok-0ig"/>
-                                        </connections>
                                     </button>
+                                    <view alpha="0.050000000000000003" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hzt-8B-GnP" userLabel="clearButtonView">
+                                        <rect key="frame" x="519" y="-14" width="108" height="72"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1387,6 +1388,7 @@
                                     <constraint firstItem="Otx-OC-9lU" firstAttribute="top" secondItem="TqC-2K-fJV" secondAttribute="bottom" constant="2" id="7YR-N3-xCQ"/>
                                     <constraint firstItem="DtB-kZ-kwp" firstAttribute="leading" secondItem="cxT-KN-GHC" secondAttribute="trailing" constant="10" id="9d1-WH-JIP"/>
                                     <constraint firstItem="c2g-1T-GNw" firstAttribute="top" secondItem="zuI-Ja-5FX" secondAttribute="top" constant="6" id="F5N-h6-daq"/>
+                                    <constraint firstItem="hzt-8B-GnP" firstAttribute="width" secondItem="c2g-1T-GNw" secondAttribute="width" constant="90" id="Fxf-aa-xYa"/>
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="top" secondItem="zuI-Ja-5FX" secondAttribute="top" constant="15" id="L4D-VZ-W7d"/>
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="leading" secondItem="zuI-Ja-5FX" secondAttribute="leading" constant="15" id="LkD-q4-FRD"/>
                                     <constraint firstItem="DtB-kZ-kwp" firstAttribute="top" secondItem="VNa-TL-dW3" secondAttribute="bottom" constant="4" id="MAN-Du-5JB"/>
@@ -1401,9 +1403,12 @@
                                     <constraint firstItem="VNa-TL-dW3" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="trailing" constant="10" id="dD0-sd-b8t"/>
                                     <constraint firstItem="TqC-2K-fJV" firstAttribute="leading" secondItem="whK-Iz-Wt2" secondAttribute="trailing" constant="15" id="hth-dy-pq8"/>
                                     <constraint firstItem="DtB-kZ-kwp" firstAttribute="centerY" secondItem="cxT-KN-GHC" secondAttribute="centerY" id="kEu-AV-H08"/>
+                                    <constraint firstItem="hzt-8B-GnP" firstAttribute="centerY" secondItem="c2g-1T-GNw" secondAttribute="centerY" id="mxr-Hd-cmc"/>
                                     <constraint firstItem="VNa-TL-dW3" firstAttribute="top" secondItem="Otx-OC-9lU" secondAttribute="bottom" constant="10" id="oXh-gv-xgu"/>
                                     <constraint firstItem="Otx-OC-9lU" firstAttribute="leading" secondItem="whK-Iz-Wt2" secondAttribute="trailing" constant="15" id="tfo-db-OPb"/>
+                                    <constraint firstItem="hzt-8B-GnP" firstAttribute="centerX" secondItem="c2g-1T-GNw" secondAttribute="centerX" id="yRT-Pa-EKW"/>
                                     <constraint firstItem="oft-It-HI7" firstAttribute="leading" secondItem="Otx-OC-9lU" secondAttribute="trailing" constant="10" id="ydJ-K1-3Fu"/>
+                                    <constraint firstItem="hzt-8B-GnP" firstAttribute="height" secondItem="c2g-1T-GNw" secondAttribute="height" constant="40" id="zUg-1h-wiK"/>
                                     <constraint firstItem="c2g-1T-GNw" firstAttribute="centerY" secondItem="TqC-2K-fJV" secondAttribute="centerY" id="zlc-ZY-GUd"/>
                                 </constraints>
                                 <variation key="default">
@@ -1431,17 +1436,19 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="130"/>
                     <connections>
+                        <outlet property="clearButtonView" destination="hzt-8B-GnP" id="bgn-lT-vFj"/>
                         <outlet property="facebookIcon" destination="cxT-KN-GHC" id="Trq-Ip-Iti"/>
                         <outlet property="facebookLabel" destination="DtB-kZ-kwp" id="f4o-bE-C4N"/>
                         <outlet property="labelDisplayName" destination="TqC-2K-fJV" id="DX3-nr-c14"/>
                         <outlet property="profileImageView" destination="whK-Iz-Wt2" id="V4s-AH-WSZ"/>
                         <outlet property="twitterIcon" destination="Xh1-Dl-chr" id="1YS-Rm-4ob"/>
                         <outlet property="twitterLabel" destination="VNa-TL-dW3" id="qNl-iB-ySx"/>
+                        <segue destination="fkO-PC-iRn" kind="show" identifier="settingsSegue" id="onJ-rL-IGE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVc-qX-Ra0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3287" y="2469"/>
+            <point key="canvasLocation" x="3287" y="2485"/>
         </scene>
         <!--Settings-->
         <scene sceneID="F4V-xt-Y26">
@@ -1452,7 +1459,7 @@
                         <viewControllerLayoutGuide type="bottom" id="dgS-nd-hEW"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="GEb-Qh-DIJ">
-                        <rect key="frame" x="0.0" y="44" width="420" height="982"/>
+                        <rect key="frame" x="0.0" y="64" width="420" height="982"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="xHX-Av-OJh">
