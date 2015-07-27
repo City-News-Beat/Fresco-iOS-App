@@ -37,8 +37,13 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[FRSDataManager alloc] init];
+
     });
     return manager;
+}
+
+- (BOOL)connected {
+    return [AFNetworkReachabilityManager sharedManager].reachable;
 }
 
 + (NSURLSessionConfiguration *)frescoSessionConfiguration
@@ -56,6 +61,27 @@
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         
         [[self responseSerializer] setAcceptableContentTypes:nil];
+        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        
+        [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            
+            if(status && self.currentUser == nil){
+                
+                static dispatch_once_t onceToken;
+                
+                dispatch_once(&onceToken, ^{
+                
+                    [self refreshUser:^(BOOL succeeded, NSError *error) {}];
+            
+                });
+            
+            }
+            
+            NSLog(@"Reachability: %@", AFStringFromNetworkReachabilityStatus(status));
+            
+        }];
+        
     }
     return self;
 }
@@ -281,9 +307,15 @@
 - (void)logout
 {
     [PFUser logOut];
+    
     self.currentUser = nil;
+    
     self.frescoAPIToken = nil;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
+
 }
 
 /*
@@ -390,21 +422,7 @@
         
         FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
         
-        NSError *error;
-        
-        //Check if the user's user id is not set
-        if (!frsUser.userID) {
-
-            frsUser = nil;
-            
-            //Delete user from Parse if it doesn't exist in the DB
-            [[PFUser currentUser] deleteInBackground];
-            
-            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"Can't find the user"}];
-            
-        }
-        
-        if(responseBlock) responseBlock(frsUser, error);
+        if(responseBlock) responseBlock(frsUser, nil);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -439,15 +457,24 @@
                 
                 NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
                 
-                [self validateCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
-                    
-                    if(success){
+                //User exists
+                if(userId != nil){
+                
+                    [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
                         
-                        if(block) block(YES, nil);
+                        if(success){
+                            
+                            if(block) block(YES, nil);
+                            
+                        }
                         
-                    }
+                    }];
                     
-                }];
+                }
+                //Does not exist, delete from Parse
+                else{
+                    [[PFUser currentUser] deleteInBackground];
+                }
             
             }
             
@@ -458,7 +485,7 @@
         
         NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
         
-        [self validateCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
+        [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
         
             if(success){
                 
@@ -472,22 +499,36 @@
 }
 
 /*
-** Runs a check on the curren userId to make sure everything is valid, otherwise cleans up and removes it
+** Runs a check on the current userId to make sure everything is valid, otherwise cleans up and removes it
 */
 
-- (void)validateCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock
+- (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock
 {
     
-    if (frescoUserId) {
+    [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
         
-        [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
+        if (!error) {
             
-            if (!error) {
+            //Check if the user's user id is not set
+            if (!responseUser.userID) {
                 
+                //Delete user from Parse if it doesn't exist in the DB
+                [[PFUser currentUser] deleteInBackground];
+                
+                error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"Can't find the user"}];
+                
+            }
+            //User is valid, continue to set
+            else{
+
                 // this supports notifications, not login state
                 [self tieUserToInstallation];
                 
                 self.currentUser = responseUser;
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
                 
                 // authenticate to the API
                 [self validateAPIToken:^(BOOL success, NSError *error) {
@@ -504,25 +545,19 @@
                 }];
                 
             }
-            else {
-                
-                self.frescoAPIToken = nil;
-                
-                responseBlock(NO, error);
-                
-                NSLog(@"Error getting fresco user %@", error);
-                
-            }
             
-        }];
+        }
+        else {
+            
+            self.frescoAPIToken = nil;
+            
+            responseBlock(NO, error);
+            
+            NSLog(@"Error getting fresco user %@", error);
+            
+        }
         
-    }
-    //Invalid User Profile
-    else {
-        
-        [[PFUser currentUser] deleteInBackground];
-        
-    }
+    }];
     
 }
 

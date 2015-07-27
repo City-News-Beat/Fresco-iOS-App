@@ -16,6 +16,7 @@
 #import "FRSDataManager.h"
 
 @interface ProfileHeaderViewController ()
+
 @property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
 @property (weak, nonatomic) IBOutlet UILabel *twitterLabel;
 @property (weak, nonatomic) IBOutlet UILabel *facebookLabel;
@@ -23,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UIView *settingsButtonView;
+
 @end
 
 @implementation ProfileHeaderViewController
@@ -30,8 +32,6 @@
 - (void)viewDidLoad{
 
     [super viewDidLoad];
-    
-    self.frsUser = [FRSDataManager sharedManager].currentUser;
     
     [self updateUserInfo];
 
@@ -43,8 +43,6 @@
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"updateProfileHeader"]){
         
-        self.frsUser = [FRSDataManager sharedManager].currentUser;
-    
         [self updateUserInfo];
         
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"updateProfileHeader"];
@@ -58,29 +56,40 @@
 */
 
 -(void)updateUserInfo{
+    
+    if([FRSDataManager sharedManager].currentUser != nil){
 
-    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", self.frsUser.first, self.frsUser.last];
-    
-    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-    UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
-    
-    [self.settingsButtonView addGestureRecognizer:settingsTap];
-    
-    if (self.frsUser.profileImageUrl) {
+        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", [FRSDataManager sharedManager].currentUser.first, [FRSDataManager sharedManager].currentUser.last];
         
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
+        //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+        UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
+        
+        [self.settingsButtonView addGestureRecognizer:settingsTap];
+        
+        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                                   self.profileImageView.image = image;
-                                                  self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
                                                   self.profileImageView.clipsToBounds = YES;
                                               } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                                   // Do something...
                                               }];
+    
+        
+        
+    }
+    else{
+    
+        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  [[NSUserDefaults standardUserDefaults] stringForKey:@"firstname"]  ,  [[NSUserDefaults standardUserDefaults] stringForKey:@"lastname"]];
+        
+    
     }
     
     [self setTwitterInfo];
     [self setFacebookInfo];
+    
+    //Update the corner radius on the user image
+    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
 
 }
 
@@ -89,7 +98,13 @@
 */
 
 -(void)handleSingleTap {
-    [self performSegueWithIdentifier:@"settingsSegue" sender:self];
+    
+    //Make sure we're connected first
+    if([[FRSDataManager sharedManager] connected]){
+    
+        [self performSegueWithIdentifier:@"settingsSegue" sender:self];
+        
+    }
 }
 
 - (void)setTwitterInfo
@@ -108,8 +123,12 @@
                                          returningResponse:&response
                                                      error:nil];
     
-    NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-    self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
+    if(data){
+    
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
+        
+    }
 }
 
 - (void)setFacebookInfo

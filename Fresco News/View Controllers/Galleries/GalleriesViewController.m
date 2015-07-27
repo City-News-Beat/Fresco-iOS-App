@@ -130,6 +130,8 @@
  
         [((ProfileViewController *) self.parentViewController) performNecessaryFetch:nil];
         
+        [self.profileHeaderViewController updateUserInfo];
+        
     }
     
     [self.refreshControl endRefreshing];
@@ -439,6 +441,7 @@
         }
         else {
             ProfileHeaderViewController *phvc = [segue destinationViewController];
+            self.profileHeaderViewController = phvc;
             self.tableView.tableHeaderView.frame = phvc.view.bounds;
         }
     }

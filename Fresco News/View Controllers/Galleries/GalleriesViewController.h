@@ -12,6 +12,7 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 #import "FRSBaseViewController.h"
 #import "GalleryTableViewCell.h"
+#import "ProfileHeaderViewController.h"
 
 @class FRSUser;
 
@@ -22,6 +23,8 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 @property (strong, nonatomic) NSMutableArray *galleries;
 
 @property (weak, nonatomic) UIViewController *containingViewController;
+
+@property (weak, nonatomic) ProfileHeaderViewController *profileHeaderViewController;
 
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 

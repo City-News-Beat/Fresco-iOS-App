@@ -9,6 +9,9 @@
 @import UIKit;
 
 @class FRSUser;
+
 @interface ProfileHeaderViewController : UIViewController
-@property (nonatomic, strong) FRSUser *frsUser;
+
+-(void)updateUserInfo;
+
 @end

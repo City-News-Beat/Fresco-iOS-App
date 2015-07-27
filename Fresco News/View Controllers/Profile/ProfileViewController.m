@@ -35,12 +35,14 @@
     
     [self setFrescoNavigationBar];
 
-    if ([FRSDataManager sharedManager].currentUser == nil) {
+    if([PFUser currentUser] == nil){
         [self navigateToFirstRun];
     }
-    else {
-        [self performNecessaryFetch:nil];
+    else if([FRSDataManager sharedManager].currentUser != nil){
+        [self populateProfile];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
@@ -84,13 +86,20 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
+
+#pragma mark - NSNotificationCenter Notification handling
+
+- (void)handleAPIKeyAvailable:(NSNotification *)notification
 {
-    [super viewWillAppear:animated];
+    [self populateProfile];
+}
+
+- (void)populateProfile{
+
+    [self performNecessaryFetch:nil];
     
-    if (![FRSDataManager sharedManager].currentUser) {
-        [self navigateToFirstRun];
-    }
+    [self.galleriesViewController.profileHeaderViewController updateUserInfo];
+
 }
 
 #pragma mark - Data Loading
