@@ -1153,7 +1153,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="Z7B-bO-g93" secondAttribute="trailing" constant="1" id="wTA-GL-14n"/>
                             <constraint firstItem="40z-9f-bIc" firstAttribute="leading" secondItem="ybl-WV-MEC" secondAttribute="leadingMargin" id="xZf-DZ-3XC"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="width" secondItem="5ho-7Z-PBc" secondAttribute="width" id="yeE-qk-8tO"/>
-                            <constraint firstItem="Igs-6C-ri3" firstAttribute="top" secondItem="9OB-GS-ra8" secondAttribute="bottom" constant="-49" id="yv7-PI-9Z8"/>
+                            <constraint firstItem="Igs-6C-ri3" firstAttribute="top" secondItem="9OB-GS-ra8" secondAttribute="bottom" id="yv7-PI-9Z8"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
