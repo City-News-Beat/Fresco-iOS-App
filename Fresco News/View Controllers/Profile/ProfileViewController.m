@@ -109,7 +109,7 @@
     [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 WithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
-            if(responseObject == nil || [responseObject count] == 0){
+            if(YES){
             
                 if(self.noContentLabel == nil && self.noContentImage == nil){
                     
@@ -128,19 +128,24 @@
                                        value:style
                                        range:NSMakeRange(0, attrString.length)];
         
-                    self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+                    self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
                     self.noContentLabel.numberOfLines = 1;
                     self.noContentLabel.attributedText = attrString;
-                    self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0f];
+                    self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Regular" size:16.0f];
                     self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
                     self.noContentLabel.alpha = .87f;
                     
-                    self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+                    self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
                     self.noContentLabelSmall.numberOfLines = 1;
                     self.noContentLabelSmall.attributedText = attrStringSmall;
                     self.noContentLabelSmall.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0f];
                     self.noContentLabelSmall.center = CGPointMake(self.view.center.x, self.view.center.y + 30);
                     self.noContentLabelSmall.alpha = .54f;
+                    
+                    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
+                    tapGestureRecognizer.numberOfTapsRequired = 1;
+                    [self.noContentLabelSmall addGestureRecognizer:tapGestureRecognizer];
+                    self.noContentLabelSmall.userInteractionEnabled = YES;
                     
                     self.noContentImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
                     self.noContentImage.frame = CGRectMake(0, 0, 100, 100);
@@ -168,6 +173,14 @@
         
         }
     }];
+}
+
+#pragma mark - UITapGestureRecognizer
+
+- (void)labelTapped:(UITapGestureRecognizer *)sender {
+
+    [self navigateToCamera];
+
 }
 
 
