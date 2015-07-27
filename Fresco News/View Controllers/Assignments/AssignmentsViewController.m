@@ -537,27 +537,46 @@
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     static NSString *userIdentifier = @"currentLocation";
 
+    //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
+        //Check if the user has a profile image
         if ([FRSDataManager sharedManager].currentUser.cdnProfileImageURL) {
             
             MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
 
             if (!pinView) {
+                
                 pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-
+                
                 UIImageView *profileImageView = [[UIImageView alloc] init];
-                profileImageView.frame = CGRectMake(0, 0, 22, 22);
-                profileImageView.layer.masksToBounds = YES;
-                profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
-    
                 [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]];
-                [pinView addSubview:profileImageView];
+                profileImageView.frame = CGRectMake(0,0, 22, 22);
+                profileImageView.layer.masksToBounds = YES;
+                profileImageView.layer.cornerRadius =profileImageView.frame.size.width / 2;
+                
+                //Add a shadow by wrapping the avatar into a container
+                UIView * container = [[UIView alloc] initWithFrame:profileImageView.frame];
+
+                // setup shadow layer and corner
+                container.layer.shadowColor = [UIColor blackColor].CGColor;
+                container.layer.shadowOffset = CGSizeMake(0, 1);
+                container.layer.shadowOpacity = .52;
+                container.layer.shadowRadius = 2;
+                container.layer.cornerRadius = profileImageView.frame.size.width / 2;
+                container.clipsToBounds = NO;
+                
+                [container addSubview:profileImageView];
+                
+                [pinView addSubview:container];
+
             }
 
             return pinView;
         }
+        //Use the pulsing annotation instead
         else {
+            
             SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
             if (!pulsingView) {
                 pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
@@ -567,6 +586,7 @@
             return pulsingView;
         }
     }
+    //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:assignmentIdentifier];
@@ -597,6 +617,7 @@
         return annotationView;
     
     }
+    //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
         
         MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:clusterIdentifier];
