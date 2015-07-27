@@ -639,6 +639,10 @@
                                         <exclude reference="kmC-fp-t1W"/>
                                         <exclude reference="Hrw-Ps-5cv"/>
                                         <exclude reference="tYn-JT-C9b"/>
+                                        <exclude reference="DJB-hk-aKI"/>
+                                        <exclude reference="NPH-5g-wQu"/>
+                                        <exclude reference="Xuq-Cp-E3W"/>
+                                        <exclude reference="mra-DT-e6S"/>
                                         <exclude reference="Gbc-F6-GGc"/>
                                         <exclude reference="NtL-TM-BJf"/>
                                         <exclude reference="abK-2s-JCi"/>
@@ -655,10 +659,6 @@
                                         <exclude reference="iBN-B6-GOc"/>
                                         <exclude reference="qQc-qp-Nrk"/>
                                         <exclude reference="v61-aU-iYr"/>
-                                        <exclude reference="DJB-hk-aKI"/>
-                                        <exclude reference="NPH-5g-wQu"/>
-                                        <exclude reference="Xuq-Cp-E3W"/>
-                                        <exclude reference="mra-DT-e6S"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
@@ -696,14 +696,14 @@
                                         <include reference="zrn-Gh-eja"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="LWz-4W-ehD"/>
-                                        <include reference="UpF-25-t5f"/>
-                                        <include reference="e7g-RB-gib"/>
-                                        <include reference="v61-aU-iYr"/>
                                         <include reference="DJB-hk-aKI"/>
                                         <include reference="NPH-5g-wQu"/>
                                         <include reference="Xuq-Cp-E3W"/>
                                         <include reference="mra-DT-e6S"/>
+                                        <include reference="LWz-4W-ehD"/>
+                                        <include reference="UpF-25-t5f"/>
+                                        <include reference="e7g-RB-gib"/>
+                                        <include reference="v61-aU-iYr"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -827,7 +827,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">

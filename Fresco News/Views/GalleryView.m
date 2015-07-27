@@ -240,12 +240,14 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
     
     UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processDoubleTap:)];
+    doubleTapGesture.delaysTouchesBegan = NO;
     [doubleTapGesture setNumberOfTapsRequired:2];
     [doubleTapGesture setNumberOfTouchesRequired:1];
     
     [cell addGestureRecognizer:doubleTapGesture];
     
     UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processSingleTap:)];
+    singleTapGesture.delaysTouchesBegan = NO;
     [singleTapGesture setNumberOfTapsRequired:1];
     [singleTapGesture setNumberOfTouchesRequired:1];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
@@ -325,64 +327,68 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
     
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if(!cell.post.isVideo){
     
-    FRSPhotoBrowserView *browserView = [[FRSPhotoBrowserView alloc] initWithFrame:[window bounds]];
-    [self setPhotoBrowserView:browserView];
-    
-    [[self photoBrowserView] setImages:@[cell.post.largeImageURL] withInitialIndex:0];
-    
-    [window addSubview:[self photoBrowserView]];
-    [[self photoBrowserView] setAlpha:0.f];
-    
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"messageSeen"]){
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"messageSeen"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         
-        UILabel *textLabelView = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, window.bounds.size.width * 0.8, 100)];
-        textLabelView.backgroundColor = [UIColor blackColor];
-        textLabelView.alpha = .7f;
-        textLabelView.layer.cornerRadius = 7;
-        textLabelView.layer.masksToBounds = YES;
+        FRSPhotoBrowserView *browserView = [[FRSPhotoBrowserView alloc] initWithFrame:[window bounds]];
+        [self setPhotoBrowserView:browserView];
         
-        textLabelView.text = @"Try tilting your device to reveal more of the photo in full resolution";
-        textLabelView.textColor = [UIColor whiteColor];
-        textLabelView.textAlignment = NSTextAlignmentCenter;
-        textLabelView.numberOfLines = 0;
+        [[self photoBrowserView] setImages:@[cell.post.largeImageURL] withInitialIndex:0];
         
-        textLabelView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+        [window addSubview:[self photoBrowserView]];
+        [[self photoBrowserView] setAlpha:0.f];
         
-        double delayInSeconds = 3.0; // number of seconds to wait
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [UIView animateWithDuration:0.5
-                                  delay:1.0
-                                options:UIViewAnimationOptionCurveEaseInOut
-                             animations:^{
-                                 textLabelView.alpha = 0;
-                             } completion:nil];
-        });
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"messageSeen"]){
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"messageSeen"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            UILabel *textLabelView = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, window.bounds.size.width * 0.8, 100)];
+            textLabelView.backgroundColor = [UIColor blackColor];
+            textLabelView.alpha = .7f;
+            textLabelView.layer.cornerRadius = 7;
+            textLabelView.layer.masksToBounds = YES;
+            
+            textLabelView.text = @"Try tilting your device to reveal more of the photo in full resolution";
+            textLabelView.textColor = [UIColor whiteColor];
+            textLabelView.textAlignment = NSTextAlignmentCenter;
+            textLabelView.numberOfLines = 0;
+            
+            textLabelView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+            
+            double delayInSeconds = 3.0; // number of seconds to wait
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [UIView animateWithDuration:0.5
+                                      delay:1.0
+                                    options:UIViewAnimationOptionCurveEaseInOut
+                                 animations:^{
+                                     textLabelView.alpha = 0;
+                                 } completion:nil];
+            });
+            
+            [[self photoBrowserView] addSubview:textLabelView];
+        }
         
-        [[self photoBrowserView] addSubview:textLabelView];
+        CGAffineTransform transformation = CGAffineTransformMakeTranslation(0.f, kImageInitialYTranslation);
+        transformation = CGAffineTransformScale(transformation, kImageInitialScaleAmt, kImageInitialScaleAmt);
+        [[self photoBrowserView] setTransform:transformation];
+        
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewShouldDismiss:)];
+        [[self photoBrowserView] addGestureRecognizer:tapRecognizer];
+        
+        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewShouldDismiss:)];
+        [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
+        [[self photoBrowserView] addGestureRecognizer:swipeRecognizer];
+        
+        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [[self photoBrowserView] setAlpha:1.f];
+            [[self photoBrowserView] setTransform:CGAffineTransformIdentity];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+            
+        } completion:nil];
+        
     }
-    
-    CGAffineTransform transformation = CGAffineTransformMakeTranslation(0.f, kImageInitialYTranslation);
-    transformation = CGAffineTransformScale(transformation, kImageInitialScaleAmt, kImageInitialScaleAmt);
-    [[self photoBrowserView] setTransform:transformation];
-    
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewShouldDismiss:)];
-    [[self photoBrowserView] addGestureRecognizer:tapRecognizer];
-    
-    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewShouldDismiss:)];
-    [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
-    [[self photoBrowserView] addGestureRecognizer:swipeRecognizer];
-    
-    [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        [[self photoBrowserView] setAlpha:1.f];
-        [[self photoBrowserView] setTransform:CGAffineTransformIdentity];
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        
-    } completion:nil];
     
 }
 

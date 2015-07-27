@@ -122,7 +122,6 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:twitterRequest
                                          returningResponse:&response
                                                      error:nil];
-    
     if(data){
     
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];

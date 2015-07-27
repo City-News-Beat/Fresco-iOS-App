@@ -211,6 +211,20 @@
             }];
             
         }
+        else{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                           message:@"It seems like you logged in through Facebook. If you disconnect it, this would disable your account entirely!"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
+        }
     
     }
 
@@ -257,6 +271,19 @@
             
         }
         else{
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                           message:@"It seems like you logged in through Twitter. If you disconnect it, this would disable your account entirely!"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
         
         }
         
