@@ -114,7 +114,6 @@
                         
                         [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                         
-                        self.galleriesViewController.currentlyHidden = NO;
                         
                     }
                     
@@ -131,7 +130,6 @@
         
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.currentlyHidden = YES;
         self.galleriesViewController.containingViewController = self;
         
     }

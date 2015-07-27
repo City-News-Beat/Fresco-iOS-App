@@ -109,7 +109,7 @@
     [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 WithResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
-            if(YES){
+            if(responseObject == nil || [responseObject count] == 0){
             
                 if(self.noContentLabel == nil && self.noContentImage == nil){
                     
