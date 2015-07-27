@@ -51,7 +51,6 @@
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
-@property (nonatomic, assign) BOOL currentlyHidden;
 
 @end
 
@@ -263,8 +262,6 @@
                 self.statusBarBackground.alpha = 1.0f;
             }];
 
-            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) hideTabBar];
-
         }
         
         self.lastContentOffset = scrollView.contentOffset.y;
@@ -390,10 +387,7 @@
     [UIView animateWithDuration:.1 animations:^{
         self.statusBarBackground.alpha = 0.0f;
     }];
-    
-    [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
 
-    
 }
 
 #pragma mark - Video Notifier
