@@ -289,8 +289,6 @@ static CGFloat const kInterImageGap = 1.0f;
             }];
             
             self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-
-            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) hideTabBar];
             
         }
         
@@ -311,9 +309,6 @@ static CGFloat const kInterImageGap = 1.0f;
     [UIView animateWithDuration:.1 animations:^{
         self.statusBarBackground.alpha = 0.0f;
     }];
-    
-    [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) showTabBar];
-    
 }
 
 #pragma mark - Tap Gesture Delegate Handlers
