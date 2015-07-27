@@ -34,7 +34,10 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
     
     if([story.thumbnails count]){
         
-        self.labelTimestamp.text = [MTLModel relativeDateStringFromDate:((FRSPost *)_story.thumbnails[0]).date];
+        if(((FRSPost *)_story.thumbnails[0]).date != nil)
+            self.labelTimestamp.text = [MTLModel relativeDateStringFromDate:((FRSPost *)_story.thumbnails[0]).date];
+        else
+            self.labelTimestamp.text = @"";
     }
     
     self.labelTitle.text = _story.title;

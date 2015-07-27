@@ -14,6 +14,7 @@
 #import "FRSStory.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
+#define kFrescoTokenKey @"frescoAPIToken"
 
 @interface FRSDataManager () {
     @protected
@@ -317,6 +318,8 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
 
 }
 
@@ -575,7 +578,7 @@
     }
     
     //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
     
     if ([token length]) {
         
@@ -657,7 +660,7 @@
             self.frescoAPIToken = token;
             
             // cache the token
-            [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:@"frescoAPIToken"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:kFrescoTokenKey];
             
             if(responseBlock) responseBlock(YES, nil);
             
@@ -876,17 +879,13 @@
         if(responseBlock) responseBlock(galleries, nil);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);
         
     }];
     
-}
-
-
-- (void)getGalleriesWithResponseBlock:(FRSAPIResponseBlock)responseBlock {
-    [self getGalleriesAtURLString:[NSString stringWithFormat:@"user/galleries?id=%@", [FRSDataManager sharedManager].currentUser.userID] WithResponseBlock:responseBlock];
 }
 
 - (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
@@ -992,7 +991,7 @@
     NSDictionary *params = @{@"id" : [FRSDataManager sharedManager].currentUser.userID, @"limit" : @"8", @"offset" : offset ?: @"0"};
     
     //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
     
     [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     
@@ -1069,7 +1068,7 @@
     NSDictionary *params = @{@"id" : notificationId};
     
     //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
     
     [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     
