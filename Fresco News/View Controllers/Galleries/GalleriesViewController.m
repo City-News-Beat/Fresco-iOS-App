@@ -51,7 +51,6 @@
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
-@property (nonatomic, assign) BOOL currentlyHidden;
 
 @end
 

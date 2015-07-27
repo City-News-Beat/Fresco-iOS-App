@@ -96,8 +96,8 @@ static CGFloat const kInterImageGap = 1.0f;
             // we almost always want to redo this image on the next row
             // but check the edge case where the image is wider than the
             // whole frame which would cause an endless loop
-            if (imageWidth + kInterImageGap < self.frame.size.width)
-                --i;
+//            if (imageWidth + kInterImageGap < self.frame.size.width)
+//                --i;
         }
         
         ++i;

@@ -12,6 +12,7 @@
 #import "FRSStory.h"
 #import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
+#import "StoriesViewController.h"
 
 @interface StoryViewController ()
 
@@ -27,6 +28,8 @@
     [super viewDidLoad];
     
     self.title = self.story.title;
+    
+    [((StoriesViewController *)self.presentingViewController) resetNavigationandTabBar];
     
     [self performNecessaryFetch:nil];
     
@@ -78,7 +81,6 @@
 
 #pragma mark - Data Loading
 
-
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
     
@@ -110,9 +112,11 @@
                     
                     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:self.selectedThumbnail];
                     
-                    if([self.galleries count] < self.selectedThumbnail){
-                    
+                    if(self.selectedThumbnail  < [responseObject count]){
+                        
                         [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
+                        self.galleriesViewController.currentlyHidden = NO;
                         
                     }
                     
@@ -129,6 +133,7 @@
         
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
+        self.galleriesViewController.currentlyHidden = YES;
         self.galleriesViewController.containingViewController = self;
         
     }

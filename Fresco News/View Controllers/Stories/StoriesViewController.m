@@ -138,15 +138,17 @@ static CGFloat const kInterImageGap = 1.0f;
     
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+
+- (void)viewWillDisappear:(BOOL)animated{
 
     [super viewWillDisappear:animated];
     
     [self resetNavigationandTabBar];
     
     self.tableView.delegate = nil;
-
+    
 }
+
 
 #pragma mark - Data Loading
 
@@ -236,7 +238,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
 
-    CGFloat width;
+    CGFloat width = 0;
     BOOL flag = NO;
     for (FRSImage *image in self.imageArrays[index]) {
         if (flag) {
