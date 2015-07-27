@@ -312,6 +312,8 @@
     
     self.frescoAPIToken = nil;
     
+    self.tokenValidatedForSession = false;
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
