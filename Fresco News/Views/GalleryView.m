@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+
+#import "ALAsset+isEqual.h"
 #import "GalleryView.h"
 #import "FRSGallery.h"
 #import "FRSPost.h"
@@ -55,6 +57,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 - (void)awakeFromNib
 {
     self.collectionPosts.scrollsToTop = NO;
+    self.collectionPosts.backgroundColor = [UIColor whiteColor];
     self.collectionPosts.dataSource = self;
     self.collectionPosts.delegate = self;
     self.pageControl.numberOfPages = 0;
@@ -96,7 +99,14 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                     //If the cell has a video
                     if([postCell.post isVideo]){
                 
-                        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+                        if(!postCell.post.video){
+  
+    
+                            [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
+                            
+                        }
+                        else
+                            [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
                 
                     }
                 
@@ -327,7 +337,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
     
-    if(!cell.post.isVideo){
+    if(!cell.post.isVideo && cell.post.largeImageURL != nil){
     
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         
@@ -335,7 +345,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         [self setPhotoBrowserView:browserView];
         
         [[self photoBrowserView] setImages:@[cell.post.largeImageURL] withInitialIndex:0];
-        
+
         [window addSubview:[self photoBrowserView]];
         [[self photoBrowserView] setAlpha:0.f];
         
@@ -427,8 +437,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     //If the cell has a video
     if([postCell.post isVideo]){
-        
-        [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+        if(!postCell.post.video){
+            [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
+        }
+        else
+            [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
     }
     //If the cell doesn't have a video
     else{

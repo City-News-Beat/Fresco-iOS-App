@@ -508,9 +508,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     tabBarController.tabBar.hidden = NO;
     
+    tabBarController.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         
-        tabBarController.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     }];
 }
 

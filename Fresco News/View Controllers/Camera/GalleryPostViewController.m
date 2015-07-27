@@ -319,6 +319,23 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    
+    if([self.captionTextView.text isEqualToString:@"What's happening?"] || [self.captionTextView.text  isEqual: @""]){
+    
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:@"Please enter a caption for your gallery!"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:nil]];
+
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+        
+    }
+    
     if (![[FRSDataManager sharedManager] isLoggedIn]) {
         [self navigateToFirstRun];
         [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -358,7 +375,8 @@
                                                                                              parameters:parameters
                                                                               constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
-        for (FRSPost *post in self.gallery.posts) {
+        
+      for (FRSPost *post in self.gallery.posts) {
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSData *data;
             NSString *mimeType;
@@ -424,17 +442,6 @@
             
             [self returnToTabBar];
 
-//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success"
-//                                                                           message:@"But please wait a moment before attempting to view this just-uploaded gallery in the Profile tab! We need time to process the images and/or videos."
-//                                                                    preferredStyle:UIAlertControllerStyleAlert];
-//
-//            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-//                                                      style:UIAlertActionStyleDefault
-//                                                    handler:^(UIAlertAction *action) {
-//                                                        [self returnToTabBar];
-//                                                    }]];
-//            
-//            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
 

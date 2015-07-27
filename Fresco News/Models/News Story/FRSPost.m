@@ -62,7 +62,7 @@
 
 - (BOOL)isVideo
 {
-    return self.video ? YES : NO;
+    return self.video || [self.type isEqualToString:@"video"] ? YES : NO;
 }
 
 + (NSValueTransformer *)imageJSONTransformer{
