@@ -29,8 +29,6 @@
     
     self.title = self.story.title;
     
-    [((StoriesViewController *)self.presentingViewController) resetNavigationandTabBar];
-    
     [self performNecessaryFetch:nil];
     
     //Endless scroll handler
