@@ -87,12 +87,17 @@
         [self.view viewWithTag:101].hidden = YES;
         [self.view viewWithTag:102].hidden = YES;
 
-        self.constraintAccountVerticalTop.constant = 0;
+        CGFloat y = -self.view.frame.size.height/5;
+        self.constraintAccountVerticalTop.constant = y;
         self.constraintAccountVerticalBottom.constant = 0;
         
         self.textfieldEmail.userInteractionEnabled = NO;
         self.textfieldNewPassword.userInteractionEnabled = NO;
         self.textfieldConfirmPassword.userInteractionEnabled = NO;
+
+    } else {
+        self.constraintAccountVerticalTop.constant = [self.view viewWithTag:100].frame.size.height;
+        self.constraintAccountVerticalBottom.constant = 0;
 
     }
 
