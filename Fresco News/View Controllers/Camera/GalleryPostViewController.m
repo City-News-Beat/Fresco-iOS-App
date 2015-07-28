@@ -438,6 +438,8 @@
 
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
             
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"runUpdateOnProfile"];
+            
             [VariableStore resetDraftGalleryPost];
             
             [self returnToTabBar];
