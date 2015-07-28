@@ -27,6 +27,9 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
 {
     _gallery = gallery;
     [self.galleryView setGallery:gallery isInList:YES];
+    UITapGestureRecognizer *shareTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareGallery:)];
+    
+    [self.shareButtonView addGestureRecognizer:shareTap];
 }
 
 #pragma mark - UIButtons Actions

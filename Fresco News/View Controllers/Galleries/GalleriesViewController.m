@@ -77,7 +77,7 @@
     
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
-    
+
     /* Set up status bar background for nav/tab slide away */
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     
@@ -202,7 +202,6 @@
     GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
     
     galleryTableViewCell.galleryTableViewCellDelegate = self;
-    
     galleryTableViewCell.gallery = gallery;
     
     return galleryTableViewCell;
@@ -388,9 +387,10 @@
     self.currentlyHidden = NO;
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
+
     [UIView animateWithDuration:.1 animations:^{
         self.statusBarBackground.alpha = 0.0f;
+
     }];
     
 }

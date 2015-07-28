@@ -12,6 +12,9 @@
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
+#import "MapViewOverlayBottom.h"
+#import "MapOverlayTop.h"
+
 
 @interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
@@ -56,6 +59,9 @@
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
+
+@property (weak, nonatomic) IBOutlet MapOverlayTop *topMapOverlay;
+@property (weak, nonatomic) IBOutlet MapViewOverlayBottom *bottomMapOverlay;
 
 /*
 ** UI Constraints
@@ -112,9 +118,7 @@
     self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
-
 }
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
