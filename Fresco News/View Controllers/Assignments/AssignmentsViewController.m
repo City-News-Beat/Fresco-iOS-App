@@ -536,8 +536,8 @@
     static NSString *assignmentIdentifier = @"AssignmentAnnotation";
     static NSString *clusterIdentifier = @"ClusterAnnotation";
     static NSString *userIdentifier = @"currentLocation";
-
-    //If the annotiation is for the user location
+//
+//    //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
         //Check if the user has a profile image
@@ -551,7 +551,7 @@
                 
                 UIImageView *profileImageView = [[UIImageView alloc] init];
                 [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]];
-                profileImageView.frame = CGRectMake(0,0, 22, 22);
+                profileImageView.frame = CGRectMake(-5,-5, 22, 22);
                 profileImageView.layer.masksToBounds = YES;
                 profileImageView.layer.cornerRadius =profileImageView.frame.size.width / 2;
                 

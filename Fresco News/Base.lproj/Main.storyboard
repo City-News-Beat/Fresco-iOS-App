@@ -1951,7 +1951,7 @@
                                                     <action selector="saveChanges:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Uor-kQ-v8b"/>
                                                 </connections>
                                             </button>
-                                            <view opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BiN-ze-6Qn" userLabel="Map View Overlay Bottom" customClass="MapViewOverlayBottom">
+                                            <view hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BiN-ze-6Qn" userLabel="Map View Overlay Bottom" customClass="MapViewOverlayBottom">
                                                 <rect key="frame" x="0.0" y="325" width="420" height="241"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
