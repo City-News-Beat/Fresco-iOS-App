@@ -263,32 +263,23 @@
 
             self.currentlyHidden = YES;
             
+            //Bring in status bar
+            self.statusBarBackground.alpha = 1;
+            
             [UIView animateWithDuration:.3 animations:^{
-                
-                //Save frames for later use to reset
-                self.navigationBarFrame = self.navigationController.navigationBar.frame;
-                self.tableViewFrame = self.tableView.frame;
-                
-                //Bring in status bar
-                self.statusBarBackground.alpha = 1;
-                
+            
                 [self.navigationController.navigationBar setFrame:CGRectOffset(self.navigationController.navigationBar.frame, 0, -44)];
+                
+                
+                self.navigationController.navigationBar.alpha = 0;
                 
                 [self.tableView setFrame:CGRectOffset(self.tableView.frame, 0, -44)];
 
                 //Set the frame to -66, after navbar and table are offset higher up
                 self.statusBarBackground.frame = CGRectMake(0, -66, self.view.frame.size.width, 22);
                 
-            
-            } completion:^(BOOL finished){
-                
-                [UIView animateWithDuration:.2 animations:^{
-                    self.navigationController.navigationBar.alpha = 0;
-                    
-                }];
-
             }];
-
+            
         }
         
         self.lastContentOffset = scrollView.contentOffset.y;
@@ -415,10 +406,10 @@
         
         self.statusBarBackground.alpha = 0;
         
-        [self.navigationController.navigationBar setFrame:self.navigationBarFrame];
-        
-        [self.tableView setFrame:self.tableViewFrame];
-        
+        [self.navigationController.navigationBar setFrame:CGRectMake(0, 20, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
+         
+        [self.tableView setFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.frame.size.height)];
+         
     }];
 
 }
