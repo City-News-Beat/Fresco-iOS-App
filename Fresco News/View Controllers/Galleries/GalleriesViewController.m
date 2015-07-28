@@ -112,17 +112,20 @@
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    //Slide back up
-    [self resetNavigationandTabBar];
 
     //Turn off any video
     [self disableVideo];
     
     //Disable delegate, turned back on in `viewDidAppear`
     self.tableView.delegate = nil;
+    
+    if(self.currentlyHidden){
+        //Slide back up
+        [self resetNavigationandTabBar:NO];
+    }
 
 }
+
 
 - (void)refresh
 {
@@ -241,6 +244,8 @@
     /*
     ** Navigation Bar Conditioning
     */
+    
+    NSLog(@"%f", self.lastContentOffset);
    
     if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
         
@@ -248,12 +253,12 @@
         if(self.currentlyHidden){
             
             //Resets elements back to normal state
-            [self resetNavigationandTabBar];
+            [self resetNavigationandTabBar:YES];
             
         }
         
-        self.lastContentOffset = scrollView.contentOffset.y;
-        
+        //Add the height of the nav bar also
+        self.lastContentOffset = scrollView.contentOffset.y + 44;
 
     }
     else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
@@ -261,23 +266,33 @@
         //HIDE
         if(!self.currentlyHidden){
 
+            NSLog(@"HIDE");
+            
             self.currentlyHidden = YES;
-            
-            //Bring in status bar
-            self.statusBarBackground.alpha = 1;
-            
+
             [UIView animateWithDuration:.3 animations:^{
-            
-                [self.navigationController.navigationBar setFrame:CGRectOffset(self.navigationController.navigationBar.frame, 0, -44)];
                 
+                self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0, -120);
                 
                 self.navigationController.navigationBar.alpha = 0;
                 
-                [self.tableView setFrame:CGRectOffset(self.tableView.frame, 0, -44)];
-
-                //Set the frame to -66, after navbar and table are offset higher up
-                self.statusBarBackground.frame = CGRectMake(0, -66, self.view.frame.size.width, 22);
+                self.tableView.frame = CGRectOffset(self.tableView.frame, 0, -44);
                 
+
+            } completion:^(BOOL finished){
+            
+                if(finished){
+                    
+                    self.navigationController.navigationBar.frame = CGRectZero;
+                    
+                    [UIView animateWithDuration:.3 animations:^{
+                        //Bring in status bar
+                        self.statusBarBackground.alpha = 1;
+
+                    }];
+                    
+                }
+            
             }];
             
         }
@@ -285,6 +300,7 @@
         self.lastContentOffset = scrollView.contentOffset.y;
         
     }
+    
     
 
     /*
@@ -396,21 +412,38 @@
     
 }
 
--(void)resetNavigationandTabBar{
+-(void)resetNavigationandTabBar:(BOOL)animated{
     
     self.currentlyHidden = NO;
     
-    self.navigationController.navigationBar.alpha = 1;
-    
-    [UIView animateWithDuration:.3 animations:^{
+    if(animated){
+        
+        self.navigationController.navigationBar.frame = CGRectMake(0,-44, 375, 0);
         
         self.statusBarBackground.alpha = 0;
         
-        [self.navigationController.navigationBar setFrame:CGRectMake(0, 20, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
-         
-        [self.tableView setFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.frame.size.height)];
-         
-    }];
+        [UIView animateWithDuration:.3 animations:^{
+            
+            self.navigationController.navigationBar.alpha = 1;
+            
+            self.navigationController.navigationBar.frame = CGRectMake(0,20, 375, 44);
+            
+            self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
+            
+        }];
+    
+    }
+    else{
+        
+        self.statusBarBackground.alpha = 0;
+        
+        self.navigationController.navigationBar.alpha = 1;
+        
+        self.navigationController.navigationBar.frame = CGRectMake(0,20, 375, 44);
+        
+        self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
+    
+    }
 
 }
 
