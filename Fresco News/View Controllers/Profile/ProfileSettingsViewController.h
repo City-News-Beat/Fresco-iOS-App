@@ -16,6 +16,8 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @class FRSUser;
+
 @interface ProfileSettingsViewController : FRSBaseViewController
-@property (nonatomic, strong) FRSUser *frsUser;
+
+
 @end

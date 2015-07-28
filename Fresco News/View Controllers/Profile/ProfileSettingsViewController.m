@@ -80,14 +80,8 @@
 
     [super viewDidLoad];
     
-    self.frsUser = [FRSDataManager sharedManager].currentUser;
-    
-    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
-    singleTap.numberOfTapsRequired = 1;
-    
     //Checks if the user's primary login is through social
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && self.frsUser.email == nil){
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser == nil){
         
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;
@@ -106,47 +100,53 @@
         self.constraintAccountVerticalBottom.constant = 0;
 
     }
-
-    if (self.frsUser.cdnProfileImageURL) {
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.frsUser cdnProfileImageURL]]
+    
+    //Update the profile image
+    if ([[FRSDataManager sharedManager].currentUser cdnProfileImageURL]) {
+        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
                                               success:nil failure:nil];
     }
 
+    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    singleTap.numberOfTapsRequired = 1;
+    
+    //Make the profile image interactive
     [self.profileImageView setUserInteractionEnabled:YES];
     [self.profileImageView addGestureRecognizer:singleTap];
     self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     
-    [self updateLinkingStatus];
-    
-    self.frsUser = [FRSDataManager sharedManager].currentUser;
-
-    // Radius slider values
-    self.scrollView.alwaysBounceHorizontal = NO;
-
-    self.textfieldFirst.text = self.frsUser.first;
-    self.textfieldLast.text = self.frsUser.last;
-    self.textfieldEmail.text = self.frsUser.email;
-
-    self.radiusStepper.value = [self.frsUser.notificationRadius floatValue];
-
-    // update the slider label
-    [self sliderValueChanged:self.radiusStepper];
     
     self.connectTwitterButton.layer.cornerRadius = 4;
     self.connectTwitterButton.clipsToBounds = YES;
     
     self.connectFacebookButton.layer.cornerRadius = 4;
     self.connectFacebookButton.clipsToBounds = YES;
+    
+    [self updateLinkingStatus];
 
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // Radius slider values
+    self.scrollView.alwaysBounceHorizontal = NO;
+
+    self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
+    self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
+    self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
+
+    self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
+
+    // update the slider label
+    [self sliderValueChanged:self.radiusStepper];
+}
+
 
 - (void)updateLinkingStatus {
     
@@ -195,18 +195,23 @@
     //Conect the user
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         
-        [PFFacebookUtils linkUserInBackground:[PFUser currentUser]
-                       withPublishPermissions:@[@"publish_actions"]
-                                        block:^(BOOL succeeded, NSError *error) {
-                                            if (succeeded) {
-                                                NSLog(@"Woohoo, user is linked with Facebook!");
-                                            }
-                                            else {
-                                                NSLog(@"%@", error);
-                                            }
-                                            [spinner removeFromSuperview];
-                                            [self updateLinkingStatus];
-                                        }];
+        [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withPublishPermissions:@[@"publish_actions"] block:^(BOOL succeeded, NSError *error) {
+            
+            //If fails, alert user
+            if (!succeeded) {
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Error"
+                                             message:@"It seems you already have an account linked with Facebook."
+                                             action:nil]
+                                   animated:YES
+                                 completion:nil];
+            }
+            
+            [self updateLinkingStatus];
+            [spinner removeFromSuperview];
+            
+        }];
     }
     //Disconnect the user
     else {
@@ -215,8 +220,16 @@
         if([FRSDataManager sharedManager].currentUser.email != nil){
             
             [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                
                 if (succeeded) {
-                    NSLog(@"The user is no longer associated with their Facebook account.");
+                    
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Success"
+                                                 message:@"You've been disconnected from Facebook."
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
+
                 }
                 else {
                     
@@ -227,6 +240,9 @@
                                        animated:YES
                                      completion:nil];
                 }
+                
+                [self updateLinkingStatus];
+                [spinner removeFromSuperview];
            
             }];
             
@@ -240,10 +256,10 @@
              animated:YES
              completion:nil];
             
+            [self updateLinkingStatus];
+            [spinner removeFromSuperview];
+            
         }
-        
-        [spinner removeFromSuperview];
-        [self updateLinkingStatus];
     
     }
 
@@ -264,13 +280,8 @@
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            
-            [spinner removeFromSuperview];
-            
-            if(succeeded){
-                [self updateLinkingStatus];
-            }
-            else{
+
+            if(!succeeded){
             
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:@"Error"
@@ -281,7 +292,11 @@
             
             }
             
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
+            
         }];
+        
     }
     //Disconnect the user
     else {
@@ -292,7 +307,12 @@
             [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
                 
                 if (!error && succeeded) {
-                    NSLog(@"The user is no longer associated with their Twitter account.");
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Success"
+                                                 message:@"You've been disconnected from Twitter."
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
                 }
                 else {
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
@@ -302,6 +322,9 @@
                                        animated:YES
                                      completion:nil];
                 }
+                
+                [spinner removeFromSuperview];
+                [self updateLinkingStatus];
 
             }];
             
@@ -310,15 +333,15 @@
             
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:@"Error"
-                                         message:@"It seems like you signed up through Twitter. If you disconnect it, this would disable your account entirely!."
+                                         message:@"It seems like you signed up through Twitter. If you disconnect it, this would disable your account entirely!"
                                          action:nil]
                                animated:YES
                              completion:nil];
             
+            [spinner removeFromSuperview];
+            [self updateLinkingStatus];
+            
         }
-        
-        [spinner removeFromSuperview];
-        [self updateLinkingStatus];
         
     }
 }
@@ -350,18 +373,17 @@
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
 
         if (error) {
-
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Could not save Profile settings"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Dismiss"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Error"
+                                         message:@"Could not save Profile settings"
+                                         action:@"Dismiss"]
+                               animated:YES
+                             completion:nil];
             
         }
         // On success, run password check
         else {
-            
             
             //Tells the ProfileHeaderViewController to update it's view
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"updateProfileHeader"];
@@ -382,13 +404,12 @@
                 }
                 else{
                     
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Passwords do not match"
-                                                                    message:@"Please make sure your new passwords are equal"
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"Dismiss"
-                                                          otherButtonTitles:nil];
-                    [alert show];
-                    
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Passwords do not match"
+                                                 message:@"Please make sure your new passwords are equals"
+                                                 action:@"Dismiss"]
+                                       animated:YES
+                                     completion:nil];
                 }
             }
             //If passwords are not reset, just go back
@@ -438,9 +459,11 @@
 
 - (IBAction)logOut:(id)sender
 {
-    [[FRSDataManager sharedManager] logout];
     [self navigateToMainApp];
+    [[FRSDataManager sharedManager] logout];
 }
+
+#pragma mark - UISilder Delegate and Actions
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {

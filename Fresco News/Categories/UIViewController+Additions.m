@@ -15,12 +15,6 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
     
-    if([FRSDataManager sharedManager].currentUser != nil){
-    
-        [self setRightBarButtonItem:YES];
-            
-    }
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:kNotificationViewDismiss object:nil];

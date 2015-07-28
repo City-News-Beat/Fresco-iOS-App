@@ -148,9 +148,9 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     
-    //Taplytics Setup
-    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
-    
+//    //Taplytics Setup
+//    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
+//    
     [Parse setApplicationId:[VariableStore sharedInstance].parseAppId clientKey:[VariableStore sharedInstance].parseClientKey];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 

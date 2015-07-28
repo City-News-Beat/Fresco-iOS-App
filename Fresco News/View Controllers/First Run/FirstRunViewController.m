@@ -14,7 +14,6 @@
 #import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
-#import "AppDelegate.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
@@ -39,19 +38,33 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    [self styleButtons];
     
-    // this allows us to NEXT to fields
+    // Do any additional setup after loading the view.
+    
+    //Round buttons
+    self.loginButton.layer.cornerRadius = 4;
+    self.loginButton.clipsToBounds = YES;
+    
+    self.signUpButton.layer.cornerRadius = 4;
+    self.signUpButton.clipsToBounds = YES;
+    
+    // Add shadow above Dismiss Button
+    UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
+    shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
+    [self.dismissButton addSubview:shadowView];
+    
+    //This allows us to NEXT to fields
     self.emailField.delegate = self;
     self.passwordField.delegate = self;
     
+    //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyDone;
     
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+    //Set hasLaunchedBefore to prevent onboard from ocurring again
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
-    }
+
     
 }
 
@@ -76,24 +89,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)styleButtons {
-    
-    self.loginButton.layer.cornerRadius = 4;
-    self.loginButton.clipsToBounds = YES;
-    
-    self.signUpButton.layer.cornerRadius = 4;
-    self.signUpButton.clipsToBounds = YES;
-    
-    // Add shadow above Dismiss Button
-    UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
-    shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
-    [self.dismissButton addSubview:shadowView];
-}
+#pragma mark - Text Field and Keyboard Delegates
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -105,7 +101,6 @@
     
     return NO;
 }
-
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
@@ -123,44 +118,32 @@
                         } completion:nil];
 }
 
+#pragma mark - IBAction Listeners
+
 - (IBAction)loginButtonAction:(id)sender {
     
-    self.loginButton.enabled = NO;
+    self.view.userInteractionEnabled = NO;
     
     [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
         
-        self.loginButton.enabled = YES;
+        self.view.userInteractionEnabled = YES;
         
         if (user) {
             
-            FRSUser *frsUser = [FRSDataManager sharedManager].currentUser;
+            if([[FRSDataManager sharedManager] isLoggedIn]){
             
-            if(frsUser != nil){
-            
-                [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                
-                // make sure first and last name are set
-                // if not collect them
-                if (!frsUser.first && !frsUser.last) {
-                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
-                }
-                else {
-                    [self.view endEditing:YES];
-                    [self navigateToMainApp];
-                }
+                [self transferUser];
                 
             }
             else {
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Error" message:@"Login Failed" action:nil]
-                 animated:YES
-                 completion:nil];
+                error = [NSError errorWithDomain:@"fail" code:1 userInfo:nil];
                 
-                self.emailField.textColor = [UIColor redColor];
             }
             
         }
-        else {
+        
+        if(error){
             
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:@"Error"
@@ -168,6 +151,7 @@
                                animated:YES completion:nil];
             
             self.emailField.textColor = [UIColor redColor];
+        
         }
         
     }];
@@ -182,75 +166,74 @@
 
 - (IBAction)facebookLogin:(id)sender
 {
+    self.view.userInteractionEnabled = NO;
+    
     [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
+        
+        self.view.userInteractionEnabled = YES;
+        
         if (user) {
-            if (user.isNew)
-                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
-            else {
-                // check to see if the user finished signup
-                if ([[FRSDataManager sharedManager] currentUserValid])
-                    [self navigateToMainApp];
-                // user didn't complete a prior signup flow
-                else
-                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
-            }
+            
+            [self transferUser];
+            
         }
         else {
-            NSLog(@"Facebook login error: %@", error);
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Login Error"
+                                         message:@"We ran into an error signing you in with Twitter"
+                                         action:@"Dismiss"]
+                               animated:YES
+                             completion:nil];
         }
+        
     }];
 }
 
 - (IBAction)twitterLogin:(id)sender {
     
+    self.view.userInteractionEnabled = NO;
+
     [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
+        
+        self.view.userInteractionEnabled = YES;
         
         if (user) {
             
-            if (user.isNew){
-                [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
-            }
-            else {
-                // check to see if the user finished signup
-                if ([[FRSDataManager sharedManager] currentUserValid])
-                    [self navigateToMainApp];
-                // user didn't complete a prior signup flow
-                else
-                    [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
-            }
+            [self transferUser];
+            
         }
         else {
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error"
-                                                            message:@"We ran into an error signing you in with Twitter"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Dismiss"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Login Error"
+                                         message:@"We ran into an error signing you in with Twitter"
+                                         action:@"Dismiss"]
+                               animated:YES
+                             completion:nil];
 
-            NSLog(@"Twitter login error: %@", error);
+            NSLog(@"%@", error);
+            
         }
     }];
 }
 
+
 - (IBAction)buttonWontLogin:(UIButton *)sender {
+
     [self navigateToMainApp];
+
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // normal push segue for Fresco signup
-    if ([[segue identifier] isEqualToString:@"showAccountInfo"]) {
-        FirstRunAccountViewController *fracvc = [segue destinationViewController];
-        fracvc.email = self.emailField.text;
-        fracvc.password = self.passwordField.text;
-    }
+- (void)transferUser{
     
-    // custom replace segue for social signup
-    else if ([[segue identifier] isEqualToString:@"replaceWithSignUp"]) {
-        
+    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
+        [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
     }
+    else
+        [self navigateToMainApp];
 }
+
+#pragma mark - Touch Handler
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
@@ -267,42 +250,15 @@
     [super touchesBegan:touches withEvent:event];
 }
 
-- (IBAction)forgotPassword:(id)sender {
-    
-    NSString *email = self.emailField.text;
-    
-    if (![email length])
-        email = [FRSDataManager sharedManager].currentUser.email;
-    
-    if ([email length]) {
-        [PFUser requestPasswordResetForEmailInBackground:email
-                                                   block:^(BOOL succeeded, NSError *error) {
-                                                       if (!error) {
-                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
-                                                                                                           message:@"Email sent. Follow the instructions in the email to change your password."
-                                                                                                          delegate:nil
-                                                                                                 cancelButtonTitle:@"Dismiss"
-                                                                                                 otherButtonTitles:nil];
-                                                           [alert show];
-                                                       }
-                                                       else {
-                                                           NSLog(@"Error: %@", error);
-                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
-                                                                                                           message:@"This email has not been registered."
-                                                                                                          delegate:nil
-                                                                                                 cancelButtonTitle:@"Dismiss"
-                                                                                                 otherButtonTitles:nil];
-                                                           [alert show];
-                                                       }
-                                                   }];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Please enter an email address"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
+#pragma mark - Segues
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // normal push segue for Fresco signup
+    if ([[segue identifier] isEqualToString:@"showAccountInfo"]) {
+        FirstRunAccountViewController *fracvc = [segue destinationViewController];
+        fracvc.email = self.emailField.text;
+        fracvc.password = self.passwordField.text;
     }
 }
 

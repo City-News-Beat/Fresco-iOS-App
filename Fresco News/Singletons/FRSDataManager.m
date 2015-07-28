@@ -10,6 +10,7 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <NSArray+F.h>
 #import "FRSDataManager.h"
+#import "FRSLocationManager.h"
 #import "NSFileManager+Additions.h"
 #import "FRSStory.h"
 
@@ -197,12 +198,15 @@
 
 - (void)createFrescoUserWithResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     //Construct params to create user
     NSDictionary *params = @{@"email" : [PFUser currentUser].email ?: [NSNull null], @"parse_id" : [PFUser currentUser].objectId};
     
     //Run the API call to create the user on the database side
     [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
         
@@ -307,6 +311,7 @@
 
 - (void)logout
 {
+    
     [PFUser logOut];
     
     self.currentUser = nil;
@@ -453,6 +458,8 @@
             
             if(error){
     
+                [self logout];
+                
                 NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"No user signed in"}];
                 
                 if(block) block(NO, error);
@@ -467,8 +474,11 @@
                 
                     [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
                         
+                        //Successful refresh
                         if(success){
                             
+                            [[FRSLocationManager sharedManager] setupLocationMonitoring];
+                
                             if(block) block(YES, nil);
                             
                         }
@@ -492,7 +502,10 @@
         
         [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
         
+            //Successful refresh
             if(success){
+                
+                [[FRSLocationManager sharedManager] setupLocationMonitoring];
                 
                 block(YES, nil);
             
@@ -582,10 +595,14 @@
     
     if ([token length]) {
         
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
         [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
         
         //Make sure token is still valid
         [self GET:@"user/me" parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
             //If token is valid
             if([responseObject valueForKeyPath:@"data"]){
@@ -650,8 +667,12 @@
     
     NSDictionary *params = @{@"parseSession" : sessionToken};
     
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
         NSString *token = [responseObject valueForKeyPath:@"data.token"];
         
         if (token) {
@@ -670,7 +691,11 @@
         }
         
 
-    } failure:nil];
+    } failure:^(NSURLSessionDataTask *task, NSError *error){
+    
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    }];
 }
 
 - (BOOL)isLoggedIn
@@ -700,6 +725,8 @@
             
             // on success we call ourselves again
             if (success) {
+                
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
                 [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                 
@@ -709,6 +736,8 @@
                     }
                 
                 }success:^(NSURLSessionDataTask *task, id responseObject) {
+                    
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                     
                     FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
                     
@@ -733,6 +762,8 @@
                     if (responseBlock) responseBlock(user, error);
                     
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                     
                     NSLog(@"Error updating user %@", error);
                     
@@ -770,6 +801,7 @@
         if(responseBlock)
             responseBlock(stories, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock)
@@ -793,6 +825,7 @@
         if(responseBlock) responseBlock(story, nil);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);

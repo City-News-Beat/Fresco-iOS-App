@@ -3982,7 +3982,7 @@
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SWl-Ux-T2G"/>
         <segue reference="BrQ-Qn-DKp"/>
+        <segue reference="SWl-Ux-T2G"/>
     </inferredMetricsTieBreakers>
 </document>

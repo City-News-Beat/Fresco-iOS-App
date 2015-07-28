@@ -135,15 +135,15 @@
 
 - (void)setFacebookInfo
 {
+    
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         self.facebookLabel.hidden = YES;
         self.facebookIcon.hidden = YES;
         return;
     }
 
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
-                                                                   parameters:nil
-                                                                   HTTPMethod:@"GET"];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil HTTPMethod:@"GET"];
+    
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,
                                           NSError *error) {
