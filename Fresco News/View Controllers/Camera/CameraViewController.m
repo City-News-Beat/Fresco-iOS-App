@@ -510,9 +510,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     tabBarController.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:@"previouslySelectedTab"] : 4 /* profile tab */;
     
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification

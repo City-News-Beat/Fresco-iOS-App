@@ -149,18 +149,24 @@
     if (![PFUser currentUser]) {
         [self.connectTwitterButton setHidden:YES];
         [self.connectFacebookButton setHidden:YES];
-    } else {
+    }
+    else {
+        
         [self.connectTwitterButton setHidden:NO];
+        
         [self.connectFacebookButton setHidden:NO];
     
+        //Twitter
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
             self.twitterIconCenterXConstraint.constant = 45;
-        } else {
+        }
+        else {
             [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
             self.twitterIconCenterXConstraint.constant = 35;
         }
     
+        //Facebook
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
             self.facebookIconCenterXConstraint.constant = 45;
@@ -247,14 +253,11 @@
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-                NSLog(@"Woohoo, user logged in with Twitter!");
-            }
-            else {
-                NSLog(@"%@", error);
-            }
+            
             [spinner removeFromSuperview];
-            [self updateLinkingStatus];
+            
+            if(succeeded) [self updateLinkingStatus];
+            
         }];
     }
     //Disconnect the user

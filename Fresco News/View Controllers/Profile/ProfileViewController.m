@@ -86,6 +86,19 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"runUpdateOnProfile"]){
+        
+        [self performNecessaryFetch:nil];
+    
+        //Ensures that update is ran on profile view controller
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"runUpdateOnProfile"];
+    
+    }
+
+}
+
 
 #pragma mark - NSNotificationCenter Notification handling
 

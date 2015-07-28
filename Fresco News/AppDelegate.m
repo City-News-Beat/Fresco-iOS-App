@@ -7,14 +7,14 @@
 //
 
 @import CoreLocation;
-@import FBSDKCoreKit;
 @import FBSDKLoginKit;
+@import FBSDKCoreKit;
 @import Parse;
 @import AVFoundation;
+@import Taplytics;
+#import <AFNetworkActivityLogger.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <AFNetworking.h>
 #import "AppDelegate.h"
-#import "AFNetworkActivityLogger.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
@@ -39,8 +39,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
-
     // Prevent conflict between background music and camera
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                      withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -48,7 +46,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [[AVAudioSession sharedInstance] setActive:YES
                                          error:nil];
 
-    [self configureParseWithLaunchOptions:launchOptions];
+    [self configureAppWithLaunchOptions:launchOptions];
 
     //Refresh the existing user, if exists, then run location monitoring
     [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
@@ -97,6 +95,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                                           openURL:url
                                                 sourceApplication:sourceApplication
                                                        annotation:annotation];
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -144,8 +143,14 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 #pragma mark - Miscellaneous Configuration
 
-- (void)configureParseWithLaunchOptions:(NSDictionary *)launchOptions
+- (void)configureAppWithLaunchOptions:(NSDictionary *)launchOptions
 {
+    
+    //    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    
+    //Taplytics Setup
+    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
+    
     [Parse setApplicationId:[VariableStore sharedInstance].parseAppId clientKey:[VariableStore sharedInstance].parseClientKey];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 

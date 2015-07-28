@@ -28,9 +28,19 @@
 				<string>fb267157383448416</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.taplytics</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tl-e94f4bb3</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>51</string>
+	<string>52</string>
 	<key>FacebookAppID</key>
 	<string>267157383448416</string>
 	<key>FacebookDisplayName</key>
