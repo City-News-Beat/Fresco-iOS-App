@@ -107,12 +107,12 @@
         NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
         if (![self.password isEqualToString:confirmPassword]) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Passwords do not match"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
+            [self
+             presentViewController:[[FRSAlertViewManager sharedManager]
+                                    alertControllerWithTitle:@"Error"
+                                    message:@"It seems like you logged in through Facebook. If you disconnect it, this would disable your account entirely!" action:@"Dismiss"]
+             animated:YES
+             completion:nil];
         }
         else {
             [[FRSDataManager sharedManager]

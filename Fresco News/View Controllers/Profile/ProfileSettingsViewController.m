@@ -215,27 +215,31 @@
                     NSLog(@"The user is no longer associated with their Facebook account.");
                 }
                 else {
-                    NSLog(@"%@", error);
+                    
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Error"
+                                                 message:@"It seems you already have an account linked with Facebook."
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
                 }
-                [spinner removeFromSuperview];
-                [self updateLinkingStatus];
+           
             }];
             
         }
         else{
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                           message:@"It seems like you logged in through Facebook. If you disconnect it, this would disable your account entirely!"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
 
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:nil]];
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Error"
+                                         message:@"It seems like you signed up through Facebook. If you disconnect it, this would disable your account entirely!"
+                                         action:nil]
+             animated:YES
+             completion:nil];
             
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
         }
+        
+        [spinner removeFromSuperview];
+        [self updateLinkingStatus];
     
     }
 
@@ -244,9 +248,12 @@
 - (IBAction)connectTwitter:(id)sender
 {
     [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
+    
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width), 7)];
     spinner.color = [UIColor whiteColor];
+    
     [spinner startAnimating];
+    
     [self.connectTwitterButton addSubview:spinner];
 
     //Connect the user
@@ -256,7 +263,19 @@
             
             [spinner removeFromSuperview];
             
-            if(succeeded) [self updateLinkingStatus];
+            if(succeeded){
+                [self updateLinkingStatus];
+            }
+            else{
+            
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Error"
+                                             message:@"It seems you already have an account linked with Twitter."
+                                             action:nil]
+                                   animated:YES
+                                 completion:nil];
+            
+            }
             
         }];
     }
@@ -267,33 +286,35 @@
         if([FRSDataManager sharedManager].currentUser.email != nil){
             
             [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                
                 if (!error && succeeded) {
                     NSLog(@"The user is no longer associated with their Twitter account.");
                 }
                 else {
-                    NSLog(@"%@", error);
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Error"
+                                                 message:@"It seems you already have an account linked with Twitter."
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
                 }
-                [spinner removeFromSuperview];
-                [self updateLinkingStatus];
+
             }];
             
         }
         else{
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                           message:@"It seems like you logged in through Twitter. If you disconnect it, this would disable your account entirely!"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Error"
+                                         message:@"It seems like you signed up through Twitter. If you disconnect it, this would disable your account entirely!."
+                                         action:nil]
+                               animated:YES
+                             completion:nil];
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:nil]];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-            
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-        
         }
+        
+        [spinner removeFromSuperview];
+        [self updateLinkingStatus];
         
     }
 }

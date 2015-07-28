@@ -151,16 +151,21 @@
                 
             }
             else {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
-                [alert show];
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Error" message:@"Login Failed" action:nil]
+                 animated:YES
+                 completion:nil];
                 
                 self.emailField.textColor = [UIColor redColor];
             }
             
         }
         else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Login failed" delegate:self cancelButtonTitle: @"OK" otherButtonTitles:nil, nil];
-            [alert show];
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Error"
+                                         message:@"Login Failed" action:nil]
+                               animated:YES completion:nil];
             
             self.emailField.textColor = [UIColor redColor];
         }

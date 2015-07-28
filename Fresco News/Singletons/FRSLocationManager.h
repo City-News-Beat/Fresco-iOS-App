@@ -10,7 +10,6 @@
 
 @interface FRSLocationManager : CLLocationManager <CLLocationManagerDelegate>
 
-
 + (FRSLocationManager *)sharedManager;
 
 /*

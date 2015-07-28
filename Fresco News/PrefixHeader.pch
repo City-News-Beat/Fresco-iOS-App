@@ -11,5 +11,6 @@
 
 #import "UIColor+Additions.h"
 #import "VariableStore.h"
+#import "FRSAlertViewManager.h"
 
 #endif
