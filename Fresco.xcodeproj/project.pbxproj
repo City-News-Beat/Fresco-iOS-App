@@ -92,6 +92,8 @@
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
+		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
+		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
 		E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
@@ -334,6 +336,10 @@
 		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ISO.m"; path = "Categories/NSDate+ISO.m"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
+		BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewOverlayBottom.m; sourceTree = "<group>"; };
+		BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOverlayTop.h; sourceTree = "<group>"; };
+		BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapOverlayTop.m; sourceTree = "<group>"; };
 		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
 		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
 		E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunPermissionsViewController.h; sourceTree = "<group>"; };
@@ -558,6 +564,10 @@
 				E73E100C1B0F963800763240 /* AssignmentAnnotation.m */,
 				E76515B21B17581200AFDE1E /* ClusterAnnotation.h */,
 				E76515B31B17581200AFDE1E /* ClusterAnnotation.m */,
+				BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */,
+				BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */,
+				BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */,
+				BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -1367,6 +1377,7 @@
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */,
+				BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
@@ -1387,6 +1398,7 @@
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
+				BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,

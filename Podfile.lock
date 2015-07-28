@@ -34,6 +34,7 @@ PODS:
   - STKWebKitViewController (0.1.9)
   - SVPullToRefresh (0.4.1)
   - SVPulsingAnnotationView (0.3.0)
+  - Taplytics (2.3.22)
 
 DEPENDENCIES:
   - AFNetworkActivityLogger
@@ -47,6 +48,7 @@ DEPENDENCIES:
   - STKWebKitViewController
   - SVPullToRefresh
   - SVPulsingAnnotationView
+  - Taplytics
 
 SPEC CHECKSUMS:
   AFNetworkActivityLogger: e82c9ba285b37042d86729bff5b14036c4312cd7
@@ -60,5 +62,6 @@ SPEC CHECKSUMS:
   STKWebKitViewController: 679e9f6ceff88572eb5596f0662b992e9ebb55e3
   SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
   SVPulsingAnnotationView: f1a8dc7a57ebb5fa231d0ef8b0da59a250005511
+  Taplytics: 68069034873028f09a2d121f4af87a8a83326789
 
 COCOAPODS: 0.35.0

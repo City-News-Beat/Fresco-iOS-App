@@ -64,6 +64,7 @@
     
     [self.navigationItem setRightBarButtonItem:shareIcon];
     
+    
     [self setUpGalleryInView];
 
 }

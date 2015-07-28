@@ -25,6 +25,7 @@
 @property (strong, nonatomic) id<GalleryTableViewCellDelegate> galleryTableViewCellDelegate;
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet UIView *shareButtonView;
 
 + (NSString *)identifier;
 
