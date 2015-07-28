@@ -72,7 +72,7 @@
     
     [super viewWillAppear:animated];
     
-    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

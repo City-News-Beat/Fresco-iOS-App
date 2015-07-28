@@ -22,35 +22,28 @@ static CGFloat const kInterImageGap = 1.0f;
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler, StoryHeaderViewTapHandler>
 
 /*
-** Sets of images for each story
-*/
+ ** Sets of images for each story
+ */
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
 
 /*
-** Refresh control for table view
-*/
+ ** Refresh control for table view
+ */
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 /*
-** Scroll View's Last Content Offset, for nav bar conditioning
-*/
+ ** Scroll View's Last Content Offset, for nav bar conditioning
+ */
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
 /*
-** Background on the status bar
-*/
+ ** Background on the status bar
+ */
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
-
-/*
-** Frame for tableView and navigationbar
-*/
-
-@property (nonatomic) CGRect tableViewFrame;
-@property (nonatomic) CGRect navigationBarFrame;
 
 @property (nonatomic, assign) BOOL currentlyHidden;
 
@@ -112,11 +105,11 @@ static CGFloat const kInterImageGap = 1.0f;
                 
                 [self reloadData];
                 
-
+                
                 [self.tableView.infiniteScrollingView stopAnimating];
                 
             }
-
+            
         }];
         
     }];
@@ -143,11 +136,12 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.tableView.delegate = self;
     
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    
 }
 
-
-- (void)viewWillDisappear:(BOOL)animated{
-
+-(void)viewWillDisappear:(BOOL)animated{
+    
     [super viewWillDisappear:animated];
     
     [self resetNavigationandTabBar];
@@ -155,7 +149,6 @@ static CGFloat const kInterImageGap = 1.0f;
     self.tableView.delegate = nil;
     
 }
-
 
 #pragma mark - Data Loading
 
@@ -168,7 +161,7 @@ static CGFloat const kInterImageGap = 1.0f;
         }
         [self reloadData];
     }];
-
+    
 }
 
 - (void)refresh
@@ -212,7 +205,7 @@ static CGFloat const kInterImageGap = 1.0f;
     storyCell.tapHandler = self;
     storyCell.imageArray = self.imageArrays[index];
     [storyCell configureImages];
-
+    
     return storyCell;
 }
 
@@ -244,14 +237,14 @@ static CGFloat const kInterImageGap = 1.0f;
     NSUInteger index = indexPath.section;
     
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
-
-    CGFloat width = 0;
+    
+    CGFloat width;
     BOOL flag = NO;
     for (FRSImage *image in self.imageArrays[index]) {
         if (flag) {
             return 96.0 * 2;
         }
-
+        
         CGFloat scale = kImageHeight / [image.height floatValue];
         CGFloat imageWidth = [image.width floatValue] * scale;
         width += imageWidth + kInterImageGap;
@@ -259,14 +252,14 @@ static CGFloat const kInterImageGap = 1.0f;
             flag = YES; // Return 192.0 on next iteration, if there is one
         }
     }
-
+    
     return 96.0;
 }
 
 #pragma mark - Scroll View Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-
+    
     /*
      ** Navigation Bar Conditioning
      */
@@ -274,7 +267,7 @@ static CGFloat const kInterImageGap = 1.0f;
     if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
         
         //SHOW
-        if(self.currentlyHidden){
+        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
             
             //Resets elements back to normal state
             [self resetNavigationandTabBar];
@@ -283,56 +276,43 @@ static CGFloat const kInterImageGap = 1.0f;
         
         self.lastContentOffset = scrollView.contentOffset.y;
         
-        
     }
     else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
         
         //HIDE
-        if(!self.currentlyHidden){
+        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
             
             self.currentlyHidden = YES;
             
-            //Bring in status bar
-            self.statusBarBackground.alpha = 1;
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
             
-            [UIView animateWithDuration:.3 animations:^{
-                
-                [self.navigationController.navigationBar setFrame:CGRectOffset(self.navigationController.navigationBar.frame, 0, -44)];
-                
-                
-                self.navigationController.navigationBar.alpha = 0;
-                
-                [self.tableView setFrame:CGRectOffset(self.tableView.frame, 0, -44)];
-                
-                //Set the frame to -66, after navbar and table are offset higher up
-                self.statusBarBackground.frame = CGRectMake(0, -66, self.view.frame.size.width, 22);
-                
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 1.0f;
             }];
+            
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+            
         }
         
         self.lastContentOffset = scrollView.contentOffset.y;
         
     }
+    
 }
 
 -(void)resetNavigationandTabBar{
     
     self.currentlyHidden = NO;
     
-    self.navigationController.navigationBar.alpha = 1;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
-    [UIView animateWithDuration:.3 animations:^{
-        
-        self.statusBarBackground.alpha = 0;
-        
-        [self.navigationController.navigationBar setFrame:CGRectMake(0, 20, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
-        
-        [self.tableView setFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.frame.size.height)];
-        
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    
+    [UIView animateWithDuration:.1 animations:^{
+        self.statusBarBackground.alpha = 0.0f;
     }];
     
 }
-
 
 #pragma mark - Tap Gesture Delegate Handlers
 
@@ -341,7 +321,7 @@ static CGFloat const kInterImageGap = 1.0f;
     StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
     
     svc.story = story;
-
+    
     svc.selectedThumbnail = index;
     
     [self.navigationController pushViewController:svc animated:YES];
@@ -355,7 +335,7 @@ static CGFloat const kInterImageGap = 1.0f;
     svc.story = story;
     
     [self.navigationController pushViewController:svc animated:YES];
-
+    
 }
 
 #pragma mark - Image shuffling
@@ -363,7 +343,7 @@ static CGFloat const kInterImageGap = 1.0f;
 - (NSArray *)imageArrayForStory:(FRSStory *)story
 {
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
-
+    
     for (FRSPost *post in story.thumbnails) {
         if (post.image.height && post.image.width && post.image.URL) {
             [array addObject:post.image];
@@ -372,7 +352,7 @@ static CGFloat const kInterImageGap = 1.0f;
             NSLog(@"Post ID missing image, height, and/or width: %@", post.postID);
         }
     }
-
+    
     return array;
 }
 

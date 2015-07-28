@@ -27,36 +27,29 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 /*
-** Index of cell that is currently playing a video
-*/
+ ** Index of cell that is currently playing a video
+ */
 
 @property (nonatomic, assign) NSIndexPath *playingIndex;
 
 
 /*
-** Check if the navigation is in the detail
-*/
+ ** Check if the navigation is in the detail
+ */
 
 @property (nonatomic, assign) NSIndexPath *dispatchIndex;
 
 /*
-** Scroll View's Last Content Offset, for nav bar conditioning
-*/
+ ** Scroll View's Last Content Offset, for nav bar conditioning
+ */
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
 /*
-** Background on the status bar
-*/
+ ** Background on the status bar
+ */
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
-
-/*
-** Frame for tableView and navigationbar
-*/
-
-@property (nonatomic) CGRect tableViewFrame;
-@property (nonatomic) CGRect navigationBarFrame;
 
 
 @end
@@ -93,12 +86,12 @@
     self.statusBarBackground.alpha = 0.0f;
     
     [self.view addSubview:self.statusBarBackground];
-
+    
 }
 
 
 -(void)viewDidAppear:(BOOL)animated{
-
+    
     [super viewDidAppear:animated];
     
     //Reset playing index for a fresh load
@@ -106,37 +99,34 @@
     
     //Set delegate, reset in `viewWillDisappear`
     self.tableView.delegate = self;
-
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-
+    
+    //Slide back up
+    [self resetNavigationandTabBar];
+    
     //Turn off any video
     [self disableVideo];
     
     //Disable delegate, turned back on in `viewDidAppear`
     self.tableView.delegate = nil;
     
-    if(self.currentlyHidden){
-        //Slide back up
-        [self resetNavigationandTabBar:NO];
-    }
-
 }
-
 
 - (void)refresh
 {
     
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
-    
+        
         [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil];
         
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
- 
+        
         [((ProfileViewController *) self.parentViewController) performNecessaryFetch:nil];
         
         [self.profileHeaderViewController updateUserInfo];
@@ -149,8 +139,8 @@
 }
 
 /*
-** Disable any playing video
-*/
+ ** Disable any playing video
+ */
 
 - (void)disableVideo{
     
@@ -170,8 +160,8 @@
 }
 
 /*
-** Open gallery detail view
-*/
+ ** Open gallery detail view
+ */
 
 - (void)openDetailWithGallery:(FRSGallery *)gallery{
     
@@ -185,7 +175,7 @@
     [galleryViewController setGallery:gallery];
     
     [self.navigationController pushViewController:galleryViewController animated:YES];
-
+    
 }
 
 #pragma mark - UITableViewDataSource
@@ -240,59 +230,41 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
+
     /*
     ** Navigation Bar Conditioning
     */
-    
-    NSLog(@"%f", self.lastContentOffset);
-   
+
     if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
         
         //SHOW
-        if(self.currentlyHidden){
+        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
             
-            //Resets elements back to normal state
-            [self resetNavigationandTabBar:YES];
+            self.currentlyHidden = NO;
+            
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 0.0f;
+            }];
             
         }
         
-        //Add the height of the nav bar also
-        self.lastContentOffset = scrollView.contentOffset.y + 44;
-
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+        
     }
     else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
         
         //HIDE
-        if(!self.currentlyHidden){
-
-            NSLog(@"HIDE");
+        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
             
             self.currentlyHidden = YES;
-
-            [UIView animateWithDuration:.3 animations:^{
-                
-                self.navigationController.navigationBar.frame = CGRectOffset(self.navigationController.navigationBar.frame, 0, -120);
-                
-                self.navigationController.navigationBar.alpha = 0;
-                
-                self.tableView.frame = CGRectOffset(self.tableView.frame, 0, -44);
-                
-
-            } completion:^(BOOL finished){
             
-                if(finished){
-                    
-                    self.navigationController.navigationBar.frame = CGRectZero;
-                    
-                    [UIView animateWithDuration:.3 animations:^{
-                        //Bring in status bar
-                        self.statusBarBackground.alpha = 1;
-
-                    }];
-                    
-                }
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
             
+            [UIView animateWithDuration:.1 animations:^{
+                self.statusBarBackground.alpha = 1.0f;
             }];
             
         }
@@ -302,7 +274,6 @@
     }
     
     
-
     /*
     ** Video Conditioning
     */
@@ -332,7 +303,7 @@
         if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
             
             [self disableVideo];
-
+            
             self.dispatchIndex = visibleIndexPath;
             
             [postCell.videoIndicatorView startAnimating];
@@ -348,22 +319,22 @@
                 
                 //If the video current playing isn't this one, or no video has played yet
                 if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.dispatchIndex == visibleIndexPath){
-                        
+                    
                     [self disableVideo];
                     
                     self.playingIndex = visibleIndexPath;
                     
                     // TODO: Check for missing/corrupt media at firstPost.url
                     cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:post.video];
-
+                    
                     [cell.galleryView.sharedPlayer setMuted:NO];
                     
                     cell.galleryView.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-
+                    
                     cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
-
+                    
                     cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-
+                    
                     cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
                     
                     [cell.galleryView.sharedPlayer play];
@@ -391,15 +362,15 @@
                                                              selector:@selector(playerItemDidReachEnd:)
                                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                                object:[cell.galleryView.sharedPlayer currentItem]];
-
-                
+                    
+                    
                     
                 }
-            
+                
             });
             
         }
-
+        
     }
     //If the cell doesn't have a video
     else{
@@ -412,39 +383,16 @@
     
 }
 
--(void)resetNavigationandTabBar:(BOOL)animated{
+-(void)resetNavigationandTabBar{
     
     self.currentlyHidden = NO;
     
-    if(animated){
-        
-        self.navigationController.navigationBar.frame = CGRectMake(0,-44, 375, 0);
-        
-        self.statusBarBackground.alpha = 0;
-        
-        [UIView animateWithDuration:.3 animations:^{
-            
-            self.navigationController.navigationBar.alpha = 1;
-            
-            self.navigationController.navigationBar.frame = CGRectMake(0,20, 375, 44);
-            
-            self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
-            
-        }];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    }
-    else{
-        
-        self.statusBarBackground.alpha = 0;
-        
-        self.navigationController.navigationBar.alpha = 1;
-        
-        self.navigationController.navigationBar.frame = CGRectMake(0,20, 375, 44);
-        
-        self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
+    [UIView animateWithDuration:.1 animations:^{
+        self.statusBarBackground.alpha = 0.0f;
+    }];
     
-    }
-
 }
 
 #pragma mark - Video Notifier
@@ -459,9 +407,9 @@
 #pragma mark - Gallery Table View Cell Delegate
 
 - (void)readMoreTapped:(FRSGallery *)gallery{
-
+    
     [self openDetailWithGallery:gallery];
-
+    
 }
 
 - (void)shareTapped:(FRSGallery *)gallery{
@@ -477,7 +425,7 @@
                                           completion:^{
                                               // ...
                                           }];
-
+    
 }
 
 #pragma mark - Segues
