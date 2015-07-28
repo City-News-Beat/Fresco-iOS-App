@@ -125,7 +125,10 @@
     if(data){
     
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
+        
+        if(!results[@"errors"])
+        
+            self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
         
     }
 }

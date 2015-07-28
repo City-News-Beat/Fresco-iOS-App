@@ -25,16 +25,16 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb468404689990350</string>
+				<string>fb267157383448416</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>51</string>
 	<key>FacebookAppID</key>
-	<string>468404689990350</string>
+	<string>267157383448416</string>
 	<key>FacebookDisplayName</key>
-	<string>Fresco2.0</string>
+	<string>Fresco</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>

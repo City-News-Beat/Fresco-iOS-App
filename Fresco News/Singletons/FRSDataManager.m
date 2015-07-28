@@ -717,6 +717,11 @@
                     if ([user isKindOfClass:[FRSUser class]]) {
                         
                         self.currentUser = user;
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
+                        
                     }
                     else {
                         error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
