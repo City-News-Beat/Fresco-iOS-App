@@ -99,7 +99,7 @@
     static NSString *userIdentifier = @"currentLocation";
     //Check if the user has a profile image
     
-    if ([FRSDataManager sharedManager].currentUser.avatarUrl) {
+    if ([FRSDataManager sharedManager].currentUser.avatar) {
         
         MKAnnotationView *pinnedView = annotationView;
         

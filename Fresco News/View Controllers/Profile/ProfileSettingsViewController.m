@@ -103,9 +103,8 @@
     }
     
     //Update the profile image
-    if ([[FRSDataManager sharedManager].currentUser avatarUrl]) {
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
-                                     placeholderImage:[UIImage imageNamed:@"user"]
+    if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]] placeholderImage:[UIImage imageNamed:@"user"]
                                               success:nil failure:nil];
     }
 

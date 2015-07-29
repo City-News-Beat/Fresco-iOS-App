@@ -66,14 +66,18 @@
         
         [self.settingsButtonView addGestureRecognizer:settingsTap];
         
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
-                                     placeholderImage:[UIImage imageNamed:@"user"]
-                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                  self.profileImageView.image = image;
-                                                  self.profileImageView.clipsToBounds = YES;
-                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                  // Do something...
-                                              }];
+        if([FRSDataManager sharedManager].currentUser.avatar != nil){
+        
+            [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
+                                         placeholderImage:[UIImage imageNamed:@"user"]
+                                                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                      self.profileImageView.image = image;
+
+                                                  } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                      // Do something...
+                                                  }];
+            
+        }
     
         
         
@@ -89,6 +93,7 @@
     [self setFacebookInfo];
     
     //Update the corner radius on the user image
+    self.profileImageView.clipsToBounds = YES;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
 
 }

@@ -43,7 +43,7 @@
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         
-        if(!self.disableEndlessScroll){
+        if(self.disableEndlessScroll){
         
             // append data to data source, insert new cells at the end of table view
             NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
