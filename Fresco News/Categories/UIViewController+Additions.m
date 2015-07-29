@@ -9,9 +9,10 @@
 
 #pragma mark - Utility methods
 
-  /*
-  ** sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
-  */
+/*
+** Sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
+*/
+
 - (void)setFrescoNavigationBar
 {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbar-frescoimage"]];
@@ -29,9 +30,9 @@
     }
 }
 
-  /*
-  ** sets up UI of notification bar button and clears NSUserDefaults
-  */
+/*
+** Sets up UI of notification bar button and clears NSUserDefaults
+*/
 
 - (void)setRightBarButtonItemWithBadge:(BOOL)badge {
     
@@ -67,9 +68,9 @@
 }
 
 
-  /*
-  ** sets up badgeView based on count of response object
-  */
+/*
+** Sets up badgeView based on count of response object
+*/
 
 - (BTBadgeView *)getBadgeView {
     
@@ -134,9 +135,9 @@
 }
 
 
-  /*
-  ** toggles notification view
-  */
+/*
+** Toggles notification view
+*/
 
 - (void)toggleNotifications:(UIBarButtonItem*)sender{
     
@@ -154,9 +155,9 @@
         [self showNotifications];
 }
 
-  /*
-  ** hides notifications
-  */
+/*
+** Hides notifications
+*/
 
 - (void)hideNotifications:(NSNotification *)notification{
     
@@ -199,9 +200,9 @@
 
 }
 
-   /*
-   ** shows notifications and posts notification for badge reset
-   */
+/*
+** Shows notifications and posts notification for badge reset
+*/
 
 - (void)showNotifications {
     
@@ -239,16 +240,19 @@
 }
 
 #pragma mark - NSNotificationCenter Notification handling
-  /*
-  ** adds badge
-  */
+
+/*
+** Adds badge
+*/
+
 - (void)handleAPIKeyAvailable:(NSNotification *)notification{
     [self setRightBarButtonItemWithBadge:YES];
 }
 
-  /*
-  ** selector for notification that removes badge
-  */
+/*
+** Selector for notification that removes badge
+*/
+
 - (void)resetNotificationBadge:(NSNotification *)notification{
     [self setRightBarButtonItemWithBadge:NO];
 }
