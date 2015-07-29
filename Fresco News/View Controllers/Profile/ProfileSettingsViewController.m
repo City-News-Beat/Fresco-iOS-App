@@ -512,52 +512,13 @@
     //If the annotiation is for the user location
     
     if (annotation == mapView.userLocation) {
+      
+        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
         
-        //Check if the user has a profile image
-        if ([FRSDataManager sharedManager].currentUser.avatar) {
-            
-            MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
-            
-            if (!pinView) {
-                
-                pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-                
-                UIImageView *profileImageView = [[UIImageView alloc] init];
-                [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
-                
-                profileImageView.frame = CGRectMake(-5,-5, 22, 22);
-                profileImageView.layer.masksToBounds = YES;
-                profileImageView.layer.cornerRadius =profileImageView.frame.size.width / 2;
-                
-                //Add a shadow by wrapping the avatar into a container
-                UIView * container = [[UIView alloc] initWithFrame:profileImageView.frame];
-                
-                // setup shadow layer and corner
-                container.layer.shadowColor = [UIColor blackColor].CGColor;
-                container.layer.shadowOffset = CGSizeMake(0, 1);
-                container.layer.shadowOpacity = .52;
-                container.layer.shadowRadius = 0;
-                container.layer.cornerRadius = profileImageView.frame.size.width / 2;
-                container.clipsToBounds = NO;
-                
-                [container addSubview:profileImageView];
-                
-                [pinView addSubview:container];
-                
-            }
-            
-            return pinView;
-        }
-        //Use the pulsing annotation instead
-        else {
-            
-            SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)[self.mapviewRadius dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
-            if (!pulsingView) {
-                pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-                pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
-            }
-            
-            return pulsingView;
+        if(!pinView){
+        
+            return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
+
         }
     }
     

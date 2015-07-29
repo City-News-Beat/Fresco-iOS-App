@@ -25,6 +25,7 @@ typedef enum {
 - (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius;
 - (void)zoomToCurrentLocation;
 + (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
++ (MKAnnotationView *)setupPinForAnnotation:(id <MKAnnotation>)annotation withAnnotationView:(MKAnnotationView *)annotationView;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
 
 // not a MapView method but a buddy in our interface sometimes

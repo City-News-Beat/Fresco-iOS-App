@@ -11,7 +11,6 @@
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
-
 @implementation MKMapView (Additions)
 
 #pragma mark - Legal Label
@@ -94,5 +93,62 @@
     circleView.alpha = .26;
     return circleView;
 }
+
++ (MKAnnotationView *)setupPinForAnnotation:(id <MKAnnotation>)annotation withAnnotationView:(MKAnnotationView *)annotationView {
+    
+    static NSString *userIdentifier = @"currentLocation";
+    //Check if the user has a profile image
+    
+    if ([FRSDataManager sharedManager].currentUser.avatarUrl) {
+        
+        MKAnnotationView *pinnedView = annotationView;
+        
+        if (!pinnedView) {
+            
+            pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
+            
+            UIImageView *profileImageView = [[UIImageView alloc] init];
+            
+            [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
+            
+            profileImageView.frame = CGRectMake(-5,-5, 22, 22);
+            profileImageView.layer.masksToBounds = YES;
+            profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
+            
+            //Add a shadow by wrapping the avatar into a container
+            UIView *container = [[UIView alloc] initWithFrame:profileImageView.frame];
+            
+            // setup shadow layer and corner
+            container.layer.shadowColor = [UIColor blackColor].CGColor;
+            container.layer.shadowOffset = CGSizeMake(0, 1);
+            container.layer.shadowOpacity = .52;
+            container.layer.shadowRadius = 0;
+            container.layer.cornerRadius = profileImageView.frame.size.width / 2;
+            container.clipsToBounds = NO;
+            
+            [container addSubview:profileImageView];
+            
+            [pinnedView addSubview:container];
+            
+        }
+        
+        return pinnedView;
+        
+    }
+    //Use the pulsing annotation instead
+    else {
+        
+        SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)annotationView;
+        
+        if (!pulsingView) {
+            pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
+            pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
+        }
+        
+        return pulsingView;
+    }
+   
+ 
+ }
 
 @end
