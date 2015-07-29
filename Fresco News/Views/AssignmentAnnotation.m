@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+#import "FRSAssignment.h"
 #import "AssignmentAnnotation.h"
 @import AddressBook;
 
@@ -19,17 +20,22 @@
 
 @implementation AssignmentAnnotation
 
-- (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate {
+- (id)initWithAssignment:(FRSAssignment*)assignment andIndex:(NSInteger)index{
+    
     if (self = [super init]) {
-        if ([name isKindOfClass:[NSString class]]) {
-            self.name = name;
-        } else {
+        
+        if ([assignment.title isKindOfClass:[NSString class]])
+            self.name = assignment.title;
+        else
             self.name = @"Unknown Assignment";
-        }
-        self.assignmentIndex = assignmentIndex;
-        self.address = address;
-        self.theCoordinate = coordinate;
+
+        self.assignmentIndex = index;
+        self.assignmentId = assignment.assignmentId;
+        self.address = assignment.location[@"address"];
+        self.theCoordinate = CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]);
+        
     }
+    
     return self;
 }
 

@@ -122,7 +122,7 @@
             container.layer.shadowColor = [UIColor blackColor].CGColor;
             container.layer.shadowOffset = CGSizeMake(0, 1);
             container.layer.shadowOpacity = .52;
-            container.layer.shadowRadius = 0;
+            container.layer.shadowRadius = 2;
             container.layer.cornerRadius = profileImageView.frame.size.width / 2;
             container.clipsToBounds = NO;
             

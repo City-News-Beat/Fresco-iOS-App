@@ -11,8 +11,9 @@
 
 @interface AssignmentAnnotation : NSObject <MKAnnotation>
 
-- (id)initWithName:(NSString*)name address:(NSString*)address assignmentIndex:(NSInteger)assignmentIndex coordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithAssignment:(FRSAssignment*)assignment andIndex:(NSInteger)index;
 
 @property (nonatomic) NSInteger assignmentIndex;
+@property (nonatomic) NSString *assignmentId;
 
 @end
