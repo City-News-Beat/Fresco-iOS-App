@@ -24,6 +24,8 @@
 
 - (void)setRootViewControllerToCamera;
 
+- (void)setRootViewControllerToHighlights;
+
 - (void)hideTabBar;
 
 - (void)showTabBar;

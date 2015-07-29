@@ -9,6 +9,7 @@
 #import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
+#import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
@@ -81,7 +82,7 @@
     [super viewDidLoad];
     
     //Checks if the user's primary login is through social
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser == nil){
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser.email == nil){
         
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;
@@ -459,8 +460,12 @@
 
 - (IBAction)logOut:(id)sender
 {
-    [self navigateToMainApp];
     [[FRSDataManager sharedManager] logout];
+    
+    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    
+    [rvc setRootViewControllerToHighlights];
+    
 }
 
 #pragma mark - UISilder Delegate and Actions

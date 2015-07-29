@@ -20,6 +20,10 @@
 
 #define kSCROLL_VIEW_INSET 100
 
+static NSString *assignmentIdentifier = @"AssignmentAnnotation";
+static NSString *clusterIdentifier = @"ClusterAnnotation";
+static NSString *userIdentifier = @"currentLocation";
+
 @class FRSAssignment;
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
@@ -115,10 +119,11 @@
         }
     }
     
-    if(self.currentAssignment == nil){
+    if(self.currentAssignment == nil)
         [self updateAssignments];
-    }
-    
+    else
+        [self presentCurrentAssignment];
+
 }
 
 - (void)viewDidLayoutSubviews{
@@ -186,11 +191,14 @@
     
 }
 
+
+#pragma mark - Assignment Management
+
 /*
 ** Sets current assignment of view controller, with conditioning variables and checks for expiration
 */
 
--(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate{
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present{
     
     if(([currentAssignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
         
@@ -200,12 +208,13 @@
         
         if(navigate) self.navigateTo = YES;
         
-        [self presentCurrentAssignment];
+        if(present) [self presentCurrentAssignment];
+    
     }
 }
 
 /*
-** Presents current assignmet of view controller, fades in view
+** Presents current assignment of view controller, fades in view
 */
 
 -(void)presentCurrentAssignment{
@@ -225,7 +234,24 @@
     if(self.navigateTo) [self.navigationSheet showInView:self.view];
     
     self.navigateTo = false;
+    
+    [self selectCurrentAssignmentAnnotation];
 
+}
+
+- (void)selectCurrentAssignmentAnnotation{
+
+    //Loop assignments
+    for (id<MKAnnotation> annotation in self.mapView.annotations){
+        //Check if it's an AssignmentAnnotation
+        if([annotation isKindOfClass:[AssignmentAnnotation class]]){
+            //Check if it's the right one by Assignment Id
+            if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
+                //Select id
+                [self.mapView selectAnnotation:annotation animated:YES];
+            }
+        }
+    }
 }
 
 /*
@@ -313,9 +339,11 @@
             }
             
         }
-        
     }
+    
 }
+
+#pragma mark - MapView Annotations
 
 /*
 ** Runs through controller's assignments, and adds them to the map
@@ -382,9 +410,19 @@
             [self addAssignmentAnnotation:assignment index:count];
             count++;
         }
+        
+        /*
+        ** Run this after populating map with assignments, this ensures we have the annotation to select
+        */
+
+        if(self.currentAssignment){
+            
+            [self selectCurrentAssignmentAnnotation];
+            
+        }
     
     }
-    
+
 }
 
 /*
@@ -393,7 +431,7 @@
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
-    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithName:assignment.title address:(assignment.location[@"address"] ?: @"Get Directions") assignmentIndex:index coordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue])];
+    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
     
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
     
@@ -415,110 +453,6 @@
     
 }
 
-
-/*
-** Zoom to specified coordinates
-*/
-
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius{
-
-    //Span uses degrees, 1 degree = 69 miles
-    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
-    
-    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-    
-    self.operatingRadius = 0;
-
-}
-
-
-/*
-** Zooms to user location
-*/
-
-- (void)zoomToCurrentLocation {
-    
-    //center on the current location
-    if (!self.centeredUserLocation){
-        
-        __block BOOL runUserLocation = true;
-        
-        //Find nearby assignments in a 20 mile radius
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                
-                //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count]){
-                    
-                    //Don't zoom to uer location
-                    runUserLocation = false;
-                    
-                    float avgLat = 0;
-                    
-                    float avgLng = 0;
-                    
-                    self.assignments = responseObject;
-                    
-                    //Add up lat/lng
-                    for(FRSAssignment *assignment in self.assignments){
-                        
-                        avgLat += [assignment.lat floatValue];
-                        
-                        avgLng += [assignment.lon floatValue];
-                    
-                    }
-                    
-                    // Zooming map after delay for effect
-                    MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
-    
-                    //Get Average location of all assignments and current location
-                    CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
-                        (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
-                        (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
-                    );
-        
-   
-                    MKCoordinateRegion region = {avgLoc, span};
-                    
-                    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                    
-                    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                    
-                }
-                
-            }
-
-        }];
-        
-        if(runUserLocation){
-            
-            if(self.assignmentsMap.userLocation.location != nil){
-        
-                // Zooming map after delay for effect
-                MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-                
-                MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-                
-                MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                
-                [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                
-            }
-        
-        }
-        
-        self.centeredUserLocation = YES;
-        
-        self.operatingRadius = 0;
-
-    }
-    
-}
-
 #pragma mark - ScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -533,19 +467,15 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    static NSString *assignmentIdentifier = @"AssignmentAnnotation";
-    static NSString *clusterIdentifier = @"ClusterAnnotation";
-    static NSString *userIdentifier = @"currentLocation";
-//
-//    //If the annotiation is for the user location
+
+    //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
+        
         MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
         
-        if(!pinView){
+        //Check to see if the annotation is dequeued and set already, if not, make one
+        if(!pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
             
-            return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
-            
-        }
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
@@ -558,18 +488,22 @@
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
-            UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            
-            [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
-            
-            caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
-            
-            caret.contentMode = UIViewContentModeScaleAspectFit;
-            
-            annotationView.rightCalloutAccessoryView = caret;
-            
             annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
-       
+        
+            /* Callout */
+            
+                UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            
+                [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
+                
+                caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
+                
+                caret.contentMode = UIViewContentModeScaleAspectFit;
+                
+                annotationView.rightCalloutAccessoryView = caret;
+                
+            /* End Callout */
+            
         }
         else {
             annotationView.annotation = annotation;
@@ -620,7 +554,7 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO];
+        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES];
         
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
@@ -628,11 +562,11 @@
         FRSCluster *cluster = [self.clusters objectAtIndex:((ClusterAnnotation *) view.annotation).clusterIndex];
         
         [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
-    
+        
     }
     
     [mapView selectAnnotation:view.annotation animated:YES];
-
+    
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
@@ -674,6 +608,111 @@
     if(self.currentAssignment == nil) {
         [self zoomToCurrentLocation];
     }
+}
+
+#pragma mark - Location Zoom/View Methods
+
+/*
+ ** Zoom to specified coordinates
+ */
+
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius{
+    
+    //Span uses degrees, 1 degree = 69 miles
+    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
+    
+    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
+    
+    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+    
+    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    
+    self.operatingRadius = 0;
+    
+}
+
+
+/*
+ ** Zooms to user location
+ */
+
+- (void)zoomToCurrentLocation {
+    
+    //center on the current location
+    if (!self.centeredUserLocation){
+        
+        __block BOOL runUserLocation = true;
+        
+        //Find nearby assignments in a 20 mile radius
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                //If the assignments exists, navigate to the avg location respective to the current location
+                if([responseObject count]){
+                    
+                    //Don't zoom to uer location
+                    runUserLocation = false;
+                    
+                    float avgLat = 0;
+                    
+                    float avgLng = 0;
+                    
+                    self.assignments = responseObject;
+                    
+                    //Add up lat/lng
+                    for(FRSAssignment *assignment in self.assignments){
+                        
+                        avgLat += [assignment.lat floatValue];
+                        
+                        avgLng += [assignment.lon floatValue];
+                        
+                    }
+                    
+                    // Zooming map after delay for effect
+                    MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
+                    
+                    //Get Average location of all assignments and current location
+                    CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
+                                                                                (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
+                                                                                (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
+                                                                                );
+                    
+                    
+                    MKCoordinateRegion region = {avgLoc, span};
+                    
+                    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+                    
+                    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+                    
+                }
+                
+            }
+            
+        }];
+        
+        if(runUserLocation){
+            
+            if(self.assignmentsMap.userLocation.location != nil){
+                
+                // Zooming map after delay for effect
+                MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+                
+                MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+                
+                MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+                
+                [self.assignmentsMap setRegion:regionThatFits animated:YES];
+                
+            }
+            
+        }
+        
+        self.centeredUserLocation = YES;
+        
+        self.operatingRadius = 0;
+        
+    }
+    
 }
 
 #pragma mark - Action Sheet Delegate

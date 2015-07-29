@@ -16,6 +16,8 @@
 #import "ProfileViewController.h"
 #import "StoriesViewController.h"
 #import "NotificationsViewController.h"
+#import "FRSDataManager.h"
+#import "FRSRootViewController.h"
 
 @implementation FRSTabBarController
 
@@ -35,10 +37,26 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    //Camera
     if ([item.title isEqualToString:@"Camera"]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied) {
             [self presentCamera];
         }
+    }
+    //Profile
+    else if([item.title isEqualToString:@"Me"]){
+    
+        //Check if the user is not logged in
+        if(![[FRSDataManager sharedManager] isLoggedIn]){
+            FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+            [rvc setRootViewControllerToFirstRun];
+        }
+        else{
+            
+            [self setSelectedIndex:4];
+        
+        }
+    
     }
 }
 
@@ -163,7 +181,7 @@
             return NO;
         }
         else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
-            
+        
             if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
                 [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
             }

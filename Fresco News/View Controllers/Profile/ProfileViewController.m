@@ -34,14 +34,8 @@
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
-
-    if([PFUser currentUser] == nil){
-        [self navigateToFirstRun];
-    }
-    else if([FRSDataManager sharedManager].currentUser != nil){
-        [self populateProfile];
-    }
     
+    //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
@@ -49,14 +43,15 @@
     //Endless scroll handler
     [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
         
-        if(self.disableEndlessScroll){
+        if(!self.disableEndlessScroll){
         
             // append data to data source, insert new cells at the end of table view
             NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
             
             [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num WithResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
-                    if ([responseObject count]) {
+                    
+                    if ([responseObject count] > 0) {
                         
                         [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                         
@@ -78,11 +73,16 @@
 
     }];
     
+    //Set up bar button item to show contextual "Me"
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Me"
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:[self navigationController]
                                                                      action:@selector(popViewControllerAnimated:)];
     [[self navigationItem] setBackBarButtonItem:newBackButton];
+    
+    
+    //Run populate on header and galleries
+    [self populateProfile];
     
 }
 

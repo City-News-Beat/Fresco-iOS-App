@@ -6,18 +6,19 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "NotificationsViewController.h"
+#import "FRSRootViewController.h"
+#import "FRSAlertViewManager.h"
+#import "FRSDataManager.h"
+#import "FRSUser.h"
+#import "FRSNotification.h"
+#import "AssignmentsViewController.h"
+#import "GalleryViewController.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import <UIScrollView+SVInfiniteScrolling.h>
 #import "NotificationCell.h"
 #import "UIViewController+Additions.h"
-#import "FRSDataManager.h"
 #import "MTLModel+Additions.h"
-#import "FRSNotification.h"
-#import "AssignmentsViewController.h"
-#import "FRSUser.h"
-#import "GalleryViewController.h"
-#import "FRSRootViewController.h"
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
 
@@ -288,7 +289,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                         
                         AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                         
-                        [assignmentVC setCurrentAssignment:responseObject navigateTo:NO];
+                        [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:NO];
                         
                         [tabBarController setSelectedIndex:3];
                         
@@ -384,7 +385,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     
                     [tabBarController setSelectedIndex:3];
                     
-                    [assignmentVC setCurrentAssignment:assignment navigateTo:YES];
+                    [assignmentVC setCurrentAssignment:assignment navigateTo:YES present:NO];
                 
                 
                 }
