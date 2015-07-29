@@ -9,6 +9,9 @@
 
 #pragma mark - Utility methods
 
+  /*
+  ** sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
+  */
 - (void)setFrescoNavigationBar
 {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbar-frescoimage"]];
@@ -18,9 +21,19 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:kNotificationViewDismiss object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:kNotificationBadgeReset object:nil];
+    
+    if ([[FRSDataManager sharedManager] isLoggedIn]) {
+        [self setRightBarButtonItemWithBadge:YES];
+    }
 }
 
-- (void)setRightBarButtonItem:(BOOL)withBadge{
+  /*
+  ** sets up UI of notification bar button and clears NSUserDefaults
+  */
+
+- (void)setRightBarButtonItemWithBadge:(BOOL)badge {
     
     UIImage *bell = [UIImage imageNamed:@"notifications"];
     
@@ -41,18 +54,26 @@
     [self.navigationItem setRightBarButtonItem:notificationIcon];
     
     //Set the badge on the notification bell
-    if(withBadge && [FRSDataManager sharedManager].updatedNotifications == false){
-      
+    if(badge) {
         [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
         
+    } else {
+        
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"] > 0) {
+            [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"notificationsCount"];
+        }
     }
 
 }
 
-- (BTBadgeView *)getBadgeView
-{
+
+  /*
+  ** sets up badgeView based on count of response object
+  */
+
+- (BTBadgeView *)getBadgeView {
     
-    if([FRSDataManager sharedManager].currentUser != nil){
+    if([[FRSDataManager sharedManager] isLoggedIn]){
     
         BTBadgeView *badgeView = [[BTBadgeView alloc] initWithFrame:CGRectMake(4,-8, 30, 20)];
         
@@ -72,25 +93,37 @@
         
         badgeView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
         
-        [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
-            if (!error) {
-                
-                if(responseObject != nil){
+        __block NSInteger badgeCount = 0;
+        
+        //If the notifications haven't been updated yet, then retrieve them and store the count
+        if(![FRSDataManager sharedManager].updatedNotifications) {
+            
+            [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
+                if (!error) {
                     
-                    NSInteger count = 0;
-                    
-                    for(FRSNotification *notif in responseObject){
-                        
-                        if(!notif.seen) count ++;
-                    }
-                    
-                    if(count > 0)
-                        badgeView.value =[NSString stringWithFormat:@"%li",  (long)count];
-                    
-                }
-            }
+                    if ([responseObject count] > 0) {
 
-        }];
+                        for(FRSNotification *notif in responseObject){
+                            
+                            if(!notif.seen) badgeCount ++;
+                        }
+                        
+                        [[NSUserDefaults standardUserDefaults]setInteger:badgeCount forKey:@"notificationsCount"];
+                        NSLog(@"%ld", (long)badgeCount);
+                    }
+                }
+            }];
+        }
+        //The notifications have been updated, and use the stored count
+        else{
+            
+            badgeCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"];
+
+        }
+        
+        //Make sure the notification count is actually greater than 0, before we set it
+        if(badgeCount > 0)
+            badgeView.value =[NSString stringWithFormat:@"%li",  (long)badgeCount];
         
         return  badgeView;
         
@@ -99,6 +132,11 @@
     return nil;
     
 }
+
+
+  /*
+  ** toggles notification view
+  */
 
 - (void)toggleNotifications:(UIBarButtonItem*)sender{
     
@@ -114,9 +152,11 @@
         [self hideNotifications:nil];
     else
         [self showNotifications];
-        
-
 }
+
+  /*
+  ** hides notifications
+  */
 
 - (void)hideNotifications:(NSNotification *)notification{
     
@@ -132,22 +172,24 @@
         count ++;
     }
     
-    if(exists){
+    if (exists) {
     
         NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:count];
         
+        //Data call to set the notification status as 'seen'
         [notificationsController setAllNotificaitonsSeen];
         
-        CATransition* transition = [CATransition animation];
-        transition.duration = 0.3f;
-        transition.type = kCATransitionReveal;
-        transition.subtype = kCATransitionFromTop;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        
-        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-        
-        [notificationsController.view.layer addAnimation:transition
-                                                    forKey:kCATransition];
+        /* Animation Setup */
+            CATransition* transition = [CATransition animation];
+            transition.duration = 0.3f;
+            transition.type = kCATransitionReveal;
+            transition.subtype = kCATransitionFromTop;
+            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            
+            [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+            
+            [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
+        /* End */
         
         [notificationsController willMoveToParentViewController:self];
         
@@ -157,12 +199,15 @@
 
 }
 
+   /*
+   ** shows notifications and posts notification for badge reset
+   */
 
-- (void)showNotifications{
+- (void)showNotifications {
     
     if([[FRSDataManager sharedManager] isLoggedIn]){
         
-        [self setRightBarButtonItem:NO];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationBadgeReset object:self];
         
         //Retreieve Notifications View Controller from storyboard
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -173,28 +218,39 @@
         
         [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
 
-        CATransition* transition = [CATransition animation];
-        transition.duration = 0.5;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        transition.type = kCATransitionMoveIn;
-        transition.subtype = kCATransitionFromBottom;
+        /* Setup Animation */
+            CATransition* transition = [CATransition animation];
+            transition.duration = 0.5;
+            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            transition.type = kCATransitionMoveIn;
+            transition.subtype = kCATransitionFromBottom;
+            
+            [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+            
+            notificationsController.view.frame = self.view.bounds;
+            [self.view addSubview:notificationsController.view];
+            [notificationsController didMoveToParentViewController:self];
         
-        [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-        
-        notificationsController.view.frame = self.view.bounds;
-        [self.view addSubview:notificationsController.view];
-        [notificationsController didMoveToParentViewController:self];
-        
-        [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
+            //Commit animation by adding
+            [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
+        /* End */
         
     }
 }
 
 #pragma mark - NSNotificationCenter Notification handling
+  /*
+  ** adds badge
+  */
+- (void)handleAPIKeyAvailable:(NSNotification *)notification{
+    [self setRightBarButtonItemWithBadge:YES];
+}
 
-- (void)handleAPIKeyAvailable:(NSNotification *)notification
-{
-    [self setRightBarButtonItem:YES];
+  /*
+  ** selector for notification that removes badge
+  */
+- (void)resetNotificationBadge:(NSNotification *)notification{
+    [self setRightBarButtonItemWithBadge:NO];
 }
 
 @end

@@ -64,6 +64,7 @@
     //Set hasLaunchedBefore to prevent onboard from ocurring again
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+    
 
     
 }

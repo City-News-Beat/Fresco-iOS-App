@@ -12,6 +12,8 @@ NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
 
 NSString * const kNotificationViewDismiss = @"DismissNotificationsView";
 
+NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
+
 @implementation VariableStore
 
 + (VariableStore *)sharedInstance

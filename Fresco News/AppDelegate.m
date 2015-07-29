@@ -104,6 +104,10 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     [FBSDKAppEvents activateApp];
 }
 
+-(void)applicationDidEnterBackground:(UIApplication *)application {
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 #pragma mark - Navigational Methods
 
 - (void)setRootViewControllerToTabBar{

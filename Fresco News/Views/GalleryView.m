@@ -351,7 +351,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         
         if(![[NSUserDefaults standardUserDefaults] boolForKey:@"messageSeen"]){
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"messageSeen"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
             
             UILabel *textLabelView = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, window.bounds.size.width * 0.8, 100)];
             textLabelView.backgroundColor = [UIColor blackColor];

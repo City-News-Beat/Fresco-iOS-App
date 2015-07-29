@@ -8,4 +8,5 @@
 
 - (void)hideNotifications:(NSNotification *)notification;
 
+- (void)setRightBarButtonItemWithBadge:(BOOL)badge;
 @end
