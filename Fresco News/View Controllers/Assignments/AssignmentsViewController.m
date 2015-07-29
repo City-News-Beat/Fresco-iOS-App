@@ -20,6 +20,10 @@
 
 #define kSCROLL_VIEW_INSET 100
 
+static NSString *assignmentIdentifier = @"AssignmentAnnotation";
+static NSString *clusterIdentifier = @"ClusterAnnotation";
+static NSString *userIdentifier = @"currentLocation";
+
 @class FRSAssignment;
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
@@ -463,12 +467,10 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    static NSString *assignmentIdentifier = @"AssignmentAnnotation";
-    static NSString *clusterIdentifier = @"ClusterAnnotation";
-    static NSString *userIdentifier = @"currentLocation";
 
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
+        
         MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
