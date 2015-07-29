@@ -46,11 +46,6 @@
     return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
 }
 
-+ (NSValueTransformer *)profileImageUrlJSONTransformer
-{
-    return [MTLModel URLJSONTransformer];
-}
-
 + (NSValueTransformer *)userJSONTransformer
 {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[FRSUser class]];

@@ -19,32 +19,99 @@
     return @{ @"URL": @"file" };
 }
 
-- (NSURL *)cdnAssetURLWithSize:(CGSize)size
-{
-    return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:nil];
+/*
+** Retrieves URL for image, with specified size, used in thumbnails
+*/
+
+- (NSURL *)cdnAssetURLWithSize:(CGSize)size{
+    return [self cdnAssetURLForURLString:[[self smallImageUrl] absoluteString] withSize:size transformationString:nil];
 }
 
-- (NSURL *)cdnAssetInListURL
-{
+/*
+** Retrieves small version of image
+*/
 
-    if(self.width && self.height){
-
-        CGSize size = CGSizeMake([self.width floatValue], [self.height floatValue]);
-        NSString *transformString;
+- (NSURL *)smallImageUrl{
+    
+    NSString *urlString = [self.URL absoluteString];
+    
+    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
         
-        // we don't want portrait aspect so square off
-        if ([self.height floatValue] > [self.width floatValue]) {
-            size.height = size.width;
-            transformString = @"c_fill,g_faces";
+        NSMutableString *mu = [NSMutableString stringWithString:urlString];
+        
+        NSRange range = [mu rangeOfString:@"/images/"];
+        
+        if (!(range.location == NSNotFound)) {
+            
+            [mu insertString:@"small/" atIndex:(range.location + range.length)];
+            
+            return [NSURL URLWithString:mu];
+            
         }
         
-        return [self cdnAssetURLForURLString:[self.URL absoluteString] withSize:size transformationString:transformString];
-            
     }
-    else{
+    else return self.URL;
+    
+    return nil;
+
+}
+
+/*
+** Retrieves medium version of image
+*/
+
+- (NSURL *)mediumImageUrl{
+    
+    NSString *urlString = [self.URL absoluteString];
+
+    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
         
-        return self.URL;
+        NSMutableString *mu = [NSMutableString stringWithString:urlString];
+        
+        NSRange range = [mu rangeOfString:@"/images/"];
+        
+        if (!(range.location == NSNotFound)) {
+            
+            [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+            
+            return [NSURL URLWithString:mu];
+            
+        }
+        
     }
+    else return self.URL;
+    
+    return nil;
+
+}
+
+/*
+** Retrieves large version of image
+*/
+
+- (NSURL *)largeImageUrl{
+    
+    NSString *urlString = [self.URL absoluteString];
+    
+    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
+        
+        NSMutableString *mu = [NSMutableString stringWithString:urlString];
+        
+        NSRange range = [mu rangeOfString:@"/images/"];
+        
+        if (!(range.location == NSNotFound)) {
+            
+            [mu insertString:@"large/" atIndex:(range.location + range.length)];
+            
+            return [NSURL URLWithString:mu];
+            
+        }
+        
+    }
+    else return self.URL;
+        
+    return nil;
+    
 }
 
 - (NSString *)description

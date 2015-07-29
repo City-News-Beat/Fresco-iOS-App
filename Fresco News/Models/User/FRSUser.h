@@ -14,11 +14,11 @@
 @property (nonatomic, copy) NSString *first;
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
-@property (nonatomic, copy) NSURL *profileImageUrl;
+@property (nonatomic, copy) NSString *avatar;
 @property (nonatomic, copy) NSNumber *notificationRadius;
 
 - (NSString *)displayName;
 - (NSString *)asJSONString;
-- (NSURL *)cdnProfileImageURL;
+- (NSURL *)avatarUrl;
 
 @end

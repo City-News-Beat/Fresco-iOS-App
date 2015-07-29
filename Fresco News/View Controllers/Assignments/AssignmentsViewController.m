@@ -541,7 +541,7 @@
     if (annotation == mapView.userLocation) {
         
         //Check if the user has a profile image
-        if ([FRSDataManager sharedManager].currentUser.cdnProfileImageURL) {
+        if ([FRSDataManager sharedManager].currentUser.avatar) {
             
             MKAnnotationView *pinView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
 
@@ -550,7 +550,7 @@
                 pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
                 
                 UIImageView *profileImageView = [[UIImageView alloc] init];
-                [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]];
+                [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
                 profileImageView.frame = CGRectMake(-5,-5, 22, 22);
                 profileImageView.layer.masksToBounds = YES;
                 profileImageView.layer.cornerRadius =profileImageView.frame.size.width / 2;

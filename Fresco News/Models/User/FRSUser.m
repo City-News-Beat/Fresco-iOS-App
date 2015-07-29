@@ -20,7 +20,7 @@
              @"email" : @"email",
              @"notificationRadius" : @"settings.radius",
              @"userID" : @"_id",
-             @"profileImageUrl" : @"avatar"
+             @"avatar" : @"avatar"
              };
 }
 
@@ -48,14 +48,31 @@
     return jsonString;
 }
 
-- (NSURL *)cdnProfileImageURL
+- (NSURL *)avatarUrl
 {
-    if(self.profileImageUrl)
-        return [self cdnAssetURLForURLString:[self.profileImageUrl absoluteString]
-                                    withSize:(CGSize){150.0, 150.0}
-                        transformationString:@"c_fit"];
+    NSString *urlString = self.avatar;
+    
+    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
+        
+        NSMutableString *mu = [NSMutableString stringWithString:urlString];
+        
+        NSRange range = [mu rangeOfString:@"/images/"];
+        
+        if (!(range.location == NSNotFound)) {
+            
+            [mu insertString:@"" atIndex:(range.location + range.length)];
+            
+            return [NSURL URLWithString:mu];
+            
+        }
+        else
+            return [NSURL URLWithString:self.avatar];
+        
+    }
     else
-        return nil;
+        return [NSURL URLWithString:self.avatar];
+    
+    return nil;
 }
 
 @end

@@ -25,4 +25,5 @@
 + (NSString *)futureDateStringFromDate:(NSDate *)date;
 
 - (NSURL *)cdnAssetURLForURLString:(NSString *)url withSize:(CGSize)size transformationString:(NSString *)transformationString;
+
 @end

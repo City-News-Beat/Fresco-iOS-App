@@ -66,7 +66,7 @@
         
         [self.settingsButtonView addGestureRecognizer:settingsTap];
         
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser cdnProfileImageURL]]
+        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
                                      placeholderImage:[UIImage imageNamed:@"user"]
                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                                   self.profileImageView.image = image;

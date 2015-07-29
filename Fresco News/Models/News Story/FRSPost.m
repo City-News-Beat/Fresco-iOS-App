@@ -22,7 +22,6 @@
              @"source" : @"source",
              @"mediaWidth" : @"meta.width",
              @"mediaHeight" : @"meta.height",
-             @"image" : @"image",
              @"imageUrl" : @"image",
              @"video" : @"video",
              @"date" : @"time_created",
@@ -33,6 +32,7 @@
 }
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError **)error {
+    
     self = [super initWithDictionary:dictionaryValue error:error];
     
     if (self) {
@@ -59,7 +59,6 @@
     return [MTLModel URLJSONTransformer];
 }
 
-
 - (BOOL)isVideo
 {
     return self.video || [self.type isEqualToString:@"video"] ? YES : NO;
@@ -71,41 +70,17 @@
         
         FRSImage *image = [[FRSImage alloc] init];
         
-        if (!([imageURL rangeOfString:@"cloudfront"].location == NSNotFound)){
-            
-            NSMutableString *mu = [NSMutableString stringWithString:imageURL];
-            
-            NSRange range = [mu rangeOfString:@"/images/"];
-            
-            if (!(range.location == NSNotFound)) {
-                
-                [mu insertString:@"medium/" atIndex:(range.location + range.length)];
-                
-                image.URL = [NSURL URLWithString:mu];
-                
-            }
-            
-        }
-        else{
-        
-            image.URL = [NSURL URLWithString:imageURL];
-            
-        }
-        
+        image.URL = [NSURL URLWithString:imageURL];
+
         return image;
         
     }];
 
 }
 
-
 - (NSURL *)largeImageURL
 {
-    if(self.isVideo){
-        self.image.URL = self.imageUrl;
-    }
-    
-    return [self.image cdnAssetInListURL];
+    return [self.image largeImageUrl];
 }
 
 @end

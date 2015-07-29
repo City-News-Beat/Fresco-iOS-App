@@ -337,7 +337,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
     
-    if(!cell.post.isVideo && cell.post.largeImageURL != nil){
+    if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
     
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         
