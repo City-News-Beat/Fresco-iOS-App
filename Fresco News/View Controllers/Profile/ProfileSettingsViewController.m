@@ -9,6 +9,7 @@
 #import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
 #import "FRSDataManager.h"
+#import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
@@ -459,8 +460,12 @@
 
 - (IBAction)logOut:(id)sender
 {
-    [self navigateToMainApp];
     [[FRSDataManager sharedManager] logout];
+    
+    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    
+    [rvc setRootViewControllerToHighlights];
+    
 }
 
 #pragma mark - UISilder Delegate and Actions

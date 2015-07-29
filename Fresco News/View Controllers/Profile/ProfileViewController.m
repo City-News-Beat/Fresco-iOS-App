@@ -34,13 +34,8 @@
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
-
-    if([PFUser currentUser] == nil){
-        [self navigateToFirstRun];
-    }
-    else if([FRSDataManager sharedManager].currentUser != nil){
-        [self populateProfile];
-    }
+    
+    [self populateProfile];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
     

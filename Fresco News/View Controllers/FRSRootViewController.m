@@ -55,7 +55,8 @@
     
     [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
     
-    self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    if(!self.tbc)
+        self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
     
     [self switchRootViewController:self.tbc];
     
@@ -75,6 +76,11 @@
 - (void)setRootViewControllerToCamera{
     
     [self.tbc presentCamera];
+}
+
+- (void)setRootViewControllerToHighlights{
+    
+    [self.tbc setSelectedIndex:0];
 }
 
 - (void)setRootViewControllerToFirstRun
