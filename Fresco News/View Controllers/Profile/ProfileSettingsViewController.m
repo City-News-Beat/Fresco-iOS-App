@@ -82,7 +82,7 @@
     [super viewDidLoad];
     
     //Checks if the user's primary login is through social
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser == nil){
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser.email == nil){
         
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;

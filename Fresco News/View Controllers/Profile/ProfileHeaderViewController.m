@@ -59,7 +59,7 @@
     
     if([FRSDataManager sharedManager].currentUser != nil){
 
-        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@", [FRSDataManager sharedManager].currentUser.first, [FRSDataManager sharedManager].currentUser.last];
+        self.labelDisplayName.text = [FRSDataManager sharedManager].currentUser.displayName;
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
