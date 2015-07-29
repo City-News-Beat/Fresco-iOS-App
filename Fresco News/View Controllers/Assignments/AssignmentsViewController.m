@@ -486,32 +486,8 @@
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
-            /* Assignment Dot and Shadow */
-            
-                UIImageView *assignmentView = [[UIImageView alloc] init];
-                
-                assignmentView.image =[UIImage imageNamed:@"assignment-dot"];
-                assignmentView.frame = CGRectMake(-5,-5, 22, 22);
-                assignmentView.layer.masksToBounds = YES;
-                assignmentView.layer.cornerRadius = assignmentView.frame.size.width / 2;
-                
-                //Add a shadow by wrapping the avatar into a container
-                UIView *container = [[UIView alloc] initWithFrame:assignmentView.frame];
-                
-                // setup shadow layer and corner
-                container.layer.shadowColor = [UIColor blackColor].CGColor;
-                container.layer.shadowOffset = CGSizeMake(0, 1);
-                container.layer.shadowOpacity = .52;
-                container.layer.shadowRadius = 2;
-                container.layer.cornerRadius = assignmentView.frame.size.width / 2;
-                container.clipsToBounds = NO;
-                
-                [container addSubview:assignmentView];
-                
-                [annotationView addSubview:container];
-            
-            /* End */
-            
+            annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
+        
             /* Callout */
             
                 UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
@@ -525,7 +501,6 @@
                 annotationView.rightCalloutAccessoryView = caret;
                 
             /* End Callout */
-            
             
         }
         else {
