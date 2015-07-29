@@ -153,7 +153,13 @@
         if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
             
             if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
-                [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                
+                //If nav bar is hidden,
+                if(((HighlightsViewController *)vc).galleriesViewController.currentlyHidden)
+                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -20) animated:YES];
+                else
+                    [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                
             }
             else{
                 [vc.navigationController popViewControllerAnimated:YES];
@@ -162,8 +168,6 @@
             return NO;
         }
         else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
-            
-            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
             
             if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
                 [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
@@ -183,7 +187,12 @@
         else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
         
             if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
-                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                
+                if(((ProfileViewController *)vc).galleriesViewController.currentlyHidden)
+                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -20) animated:YES];
+                else
+                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                
             }
             else{
                 [vc.navigationController popViewControllerAnimated:YES];

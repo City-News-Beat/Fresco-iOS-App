@@ -68,7 +68,7 @@
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             
-            if(status && self.currentUser == nil){
+            if(self.reachabilityManager.reachable && self.currentUser == nil && !self.loggingIn){
                 
                 static dispatch_once_t onceToken;
                 
@@ -450,6 +450,7 @@
 
 - (void)refreshUser:(PFBooleanResultBlock)block
 {
+    self.loggingIn = YES;
     
     //Check to make sure we already have the fresco user id in the PFUser, if not, get the fresco id from parse
     if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
@@ -463,6 +464,8 @@
                 NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"No user signed in"}];
                 
                 if(block) block(NO, error);
+                
+                _loggingIn = NO;
                 
             }
             else{
@@ -482,6 +485,8 @@
                             if(block) block(YES, nil);
                             
                         }
+                        
+                        _loggingIn = NO;
                         
                     }];
                     
@@ -508,12 +513,15 @@
                 [[FRSLocationManager sharedManager] setupLocationMonitoring];
                 
                 block(YES, nil);
-            
+                
             }
+            
+            _loggingIn = NO;
         
         }];
     
     }
+    
 }
 
 /*

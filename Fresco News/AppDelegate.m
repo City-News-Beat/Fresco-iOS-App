@@ -47,6 +47,20 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
                                          error:nil];
 
     [self configureAppWithLaunchOptions:launchOptions];
+    
+    [self setupAppearances];
+    
+    self.frsRootViewController = [[FRSRootViewController alloc] init];
+    
+    self.window.rootViewController = self.frsRootViewController;
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+        [self registerForPushNotifications];
+        [self.frsRootViewController setRootViewControllerToTabBar];
+    }
+    else {
+        [self.frsRootViewController setRootViewControllerToOnboard];
+    }
 
     //Refresh the existing user, if exists, then run location monitoring
     [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
@@ -63,20 +77,6 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
         }
         
     }];
-    
-    [self setupAppearances];
-    
-    self.frsRootViewController = [[FRSRootViewController alloc] init];
-    
-    self.window.rootViewController = self.frsRootViewController;
-
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
-        [self registerForPushNotifications];
-        [self.frsRootViewController setRootViewControllerToTabBar];
-    }
-    else {
-        [self.frsRootViewController setRootViewControllerToOnboard];
-    }
 
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];

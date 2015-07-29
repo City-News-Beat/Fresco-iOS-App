@@ -36,4 +36,6 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 - (void)refresh;
 
+-(void)resetNavigationBar:(BOOL)animated;
+
 @end

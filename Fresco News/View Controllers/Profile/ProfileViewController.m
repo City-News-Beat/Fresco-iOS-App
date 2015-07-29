@@ -21,7 +21,7 @@
 @property (strong, nonatomic) UILabel *noContentLabel;
 @property (strong, nonatomic) UILabel *noContentLabelSmall;
 @property (strong, nonatomic) UIImageView *noContentImage;
-@property (nonatomic, assign) BOOL loginChecked;
+@property (nonatomic, assign) BOOL initialUpdate;
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
@@ -34,6 +34,8 @@
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
+    
+    self.initialUpdate = NO;
     
     //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
@@ -81,12 +83,12 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
-    //Run populate on header and galleries
-    [self populateProfile];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
+    if(!self.initialUpdate)
+       [self populateProfile];
 
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"runUpdateOnProfile"]){
         
@@ -175,11 +177,10 @@
             }
             else{
             
-                self.galleries = responseObject;
                 self.noContentLabel.hidden = YES;
                 self.noContentLabelSmall.hidden = YES;
                 self.noContentImage.hidden = YES;
-                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
+                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 [self.galleriesViewController.tableView reloadData];
             
             }

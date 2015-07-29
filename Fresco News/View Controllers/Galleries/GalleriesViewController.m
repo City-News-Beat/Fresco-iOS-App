@@ -107,7 +107,7 @@
     [super viewWillDisappear:animated];
     
     //Slide back up
-    [self resetNavigationandTabBar];
+    [self resetNavigationBar:NO];
     
     //Turn off any video
     [self disableVideo];
@@ -239,14 +239,8 @@
         //SHOW
         if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
             
-            self.currentlyHidden = NO;
-            
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-            
-            [UIView animateWithDuration:.1 animations:^{
-                self.statusBarBackground.alpha = 0.0f;
-            }];
-            
+            [self resetNavigationBar:YES];
+
         }
         
         self.lastContentOffset = scrollView.contentOffset.y;
@@ -260,6 +254,8 @@
             
             self.currentlyHidden = YES;
             
+            self.statusBarBackground.frame = [[UIApplication sharedApplication] statusBarFrame];
+            
             [self.navigationController setNavigationBarHidden:YES animated:YES];
             
             [UIView animateWithDuration:.1 animations:^{
@@ -271,7 +267,6 @@
         self.lastContentOffset = scrollView.contentOffset.y;
         
     }
-    
     
     /*
     ** Video Conditioning
@@ -382,17 +377,18 @@
     
 }
 
--(void)resetNavigationandTabBar{
+/*
+** Resets navigation bar to normal state
+*/
+
+-(void)resetNavigationBar:(BOOL)animated{
     
     self.currentlyHidden = NO;
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 
-    [UIView animateWithDuration:.1 animations:^{
-        self.statusBarBackground.alpha = 0.0f;
+    self.statusBarBackground.alpha = 0.0f;
 
-    }];
-    
 }
 
 #pragma mark - Video Notifier
