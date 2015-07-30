@@ -17,6 +17,17 @@
 #import "MapOverlayTop.h"
 #import <SVPulsingAnnotationView.h>
 
+typedef enum : NSUInteger {
+    SocialNetworkFacebook,
+    SocialNetworkTwitter
+} SocialNetwork;
+
+typedef enum : NSUInteger {
+    SocialExists,
+    SocialDisable,
+    SocialUnlinked
+} SocialError;
+
 @interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate>
 
 /***** In order of presentation *****/
@@ -77,6 +88,10 @@
 /* Action Sheet */
 
 @property (strong, nonatomic) UIActionSheet *disableAccountSheet;
+
+/* Spinner */
+
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 
 @end
 
@@ -200,174 +215,156 @@
     
 }
 
-- (IBAction)connectFacebook:(id)sender
-{
-    [self.connectFacebookButton setTitle:@"" forState:UIControlStateNormal];
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width), 7)];
-    spinner.color = [UIColor whiteColor];
-    [spinner startAnimating];
-    
-    [self.connectFacebookButton addSubview:spinner];
+#pragma mark - Controller Methods
 
-    //Conect the user
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+/*
+** Runs Parse social connect based on SocialNetwork param
+*/
+
+- (void)socialConnect:(SocialNetwork)network networkButton:(UIButton*)button{
+
+    [button setTitle:@"" forState:UIControlStateNormal];
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width), 7)];
+    self.spinner.color = [UIColor whiteColor];
+    [self.spinner startAnimating];
+    
+    [button addSubview:self.spinner];
+
+    if(network == SocialNetworkFacebook){
         
-        [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withPublishPermissions:@[@"publish_actions"] block:^(BOOL succeeded, NSError *error) {
+        //Connect the user
+        if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
             
-            //If fails, alert user
-            if (!succeeded) {
+            [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withPublishPermissions:@[@"publish_actions"] block:^(BOOL succeeded, NSError *error) {
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Error"
-                                             message:@"It seems you already have an account linked with Facebook."
-                                             action:nil]
-                                   animated:YES
-                                 completion:nil];
+                //If fails, alert user
+                if (!succeeded) [self triggerSocialResponse:SocialExists network:@"Facebook"];
+                
+                
+            }];
+        }
+        //Disconnect the user
+        else {
+            
+            //Make sure the social account isn't their primary connector
+            if([FRSDataManager sharedManager].currentUser.email != nil){
+                
+                [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                    
+                    if (succeeded)
+                        [self triggerSocialResponse:SocialExists network:@"Facebook"];
+                    else
+                        [self triggerSocialResponse:SocialUnlinked network:@"Facebook"];
+
+                }];
+                
             }
-            
-            [self updateLinkingStatus];
-            [spinner removeFromSuperview];
-            
-        }];
-    }
-    //Disconnect the user
-    else {
-        
-        //Make sure the social account isn't their primary connector
-        if([FRSDataManager sharedManager].currentUser.email != nil){
-            
-            [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-                
-                if (succeeded) {
-                    
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Success"
-                                                 message:@"You've been disconnected from Facebook."
-                                                 action:nil]
-                                       animated:YES
-                                     completion:nil];
+            else
+                [self triggerSocialResponse:SocialDisable network:@"Facebook"];
 
-                }
-                else {
-                    
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Error"
-                                                 message:@"It seems you already have an account linked with Facebook."
-                                                 action:nil]
-                                       animated:YES
-                                     completion:nil];
-                }
+        }
+    
+    }
+    else if(network == SocialNetworkTwitter){
+        
+        //Connect the user
+        if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+            
+            [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
                 
-                [self updateLinkingStatus];
-                [spinner removeFromSuperview];
-           
+                if(!succeeded)
+                    [self triggerSocialResponse:SocialExists network:@"Twitter"];
+                    
+                
             }];
             
         }
-        else{
-
-            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                           alertControllerWithTitle:@"Warning"
-                                           message:@"It looks like you signed up with Facebook! Would you like to disable your account?"
-                                           action:@"Cancel" handler:nil];
+        //Disconnect the user
+        else {
             
-            [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
-                [self.disableAccountSheet showInView:self.view];
-            }]];
-            
-            [self updateLinkingStatus];
-            [spinner removeFromSuperview];
+            //Make sure the social account isn't their primary connector
+            if([FRSDataManager sharedManager].currentUser.email != nil){
+                
+                [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                    
+                    if (!error && succeeded)
+                        [self triggerSocialResponse:SocialUnlinked network:@"Twitter"];
+                    else
+                        [self triggerSocialResponse:SocialExists network:@"Twitter"];
+                    
+                }];
+                
+            }
+            else{
+                
+                [self triggerSocialResponse:SocialDisable network:@"Twitter"];
+                
+            }
             
         }
+        
+    }
+
+}
+
+/*
+** Triggers a response based on the passed Error
+*/
+
+- (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
+
+    NSString *message = @"";
+    
+    if(error == SocialDisable){
+    
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Warning"
+                                       message:[NSString stringWithFormat:@"It looks like you signed up with %@! Would you like to disable your account?", network]
+                                       action:@"Cancel" handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+            [self.disableAccountSheet showInView:self.view];
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
+    }
+    else{
+        
+        if(error == SocialExists)
+            message = [NSString stringWithFormat:@"It seems you already have an account linked with %@.", network];
+        else if(error == SocialUnlinked)
+            message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Error"
+                                     message:message
+                                     action:nil]
+                           animated:YES
+                         completion:nil];
     
     }
+    
+    [self updateLinkingStatus];
+    [self.spinner removeFromSuperview];
+    
+}
+
+#pragma mark - IBActions
+
+- (IBAction)connectFacebook:(id)sender
+{
+    
+    [self socialConnect:SocialNetworkFacebook networkButton:self.connectFacebookButton];
 
 }
 
 - (IBAction)connectTwitter:(id)sender
 {
-    [self.connectTwitterButton setTitle:@"" forState:UIControlStateNormal];
     
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectTwitterButton.frame.size.width), 7)];
-    spinner.color = [UIColor whiteColor];
+    [self socialConnect:SocialNetworkTwitter networkButton:self.connectTwitterButton];
     
-    [spinner startAnimating];
-    
-    [self.connectTwitterButton addSubview:spinner];
-
-    //Connect the user
-    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-        
-        [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-
-            if(!succeeded){
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Error"
-                                             message:@"It seems you already have an account linked with Twitter."
-                                             action:nil]
-                                   animated:YES
-                                 completion:nil];
-            
-            }
-            
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-            
-        }];
-        
-    }
-    //Disconnect the user
-    else {
-        
-        //Make sure the social account isn't their primary connector
-        if([FRSDataManager sharedManager].currentUser.email != nil){
-            
-            [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
-                
-                if (!error && succeeded) {
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Success"
-                                                 message:@"You've been disconnected from Twitter."
-                                                 action:nil]
-                                       animated:YES
-                                     completion:nil];
-                }
-                else {
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Error"
-                                                 message:@"It seems you already have an account linked with Twitter."
-                                                 action:nil]
-                                       animated:YES
-                                     completion:nil];
-                }
-                
-                [spinner removeFromSuperview];
-                [self updateLinkingStatus];
-
-            }];
-            
-        }
-        else{
-            
-            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                           alertControllerWithTitle:@"Warning"
-                                           message:@"It looks like you signed up with Twitter! Would you like to disable your account?"
-                                           action:@"Cancel" handler:nil];
-            
-            [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
-                [self.disableAccountSheet showInView:self.view];
-            }]];
-            
-            [self presentViewController:alertCon animated:YES completion:nil];
-            
-            [spinner removeFromSuperview];
-            [self updateLinkingStatus];
-            
-        }
-        
-    }
 }
 
 - (IBAction)saveChanges:(id)sender
