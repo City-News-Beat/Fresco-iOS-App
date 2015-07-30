@@ -16,7 +16,7 @@
 
 @implementation AssignmentOnboardView
 
--(instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     
     if (self) {
@@ -47,7 +47,9 @@
         [_onboard3Label setText:@"If a photo or video in your gallery is\nused, we’ll tell you who used it and\nhow to get paid!"];
     
         [_letsGoButton setBackgroundColor:[UIColor colorWithHex:@"0077FF"]];
+        
         _letsGoButton.layer.cornerRadius = 4;
+        
         _intrinsicContentSize = self.bounds.size;
     }
     return self;
@@ -57,10 +59,32 @@
     return _intrinsicContentSize;
 }
 
+//- (void)updateConstraints {
+//    
+//  self.onboard1Label.translatesAutoresizingMaskIntoConstraints = NO;
+//  self.onboard1ImageView.translatesAutoresizingMaskIntoConstraints = NO;
+//
+//  NSDictionary *metrics = @{ @"height" : @30.0 };
+//
+//  NSDictionary *views = @{
+//    @"onboard1ImageView" : self.onboard1ImageView,
+//    @"onboard1Label" : self.onboard1Label
+//  };
+//  [self.view addConstraints:
+//                 [NSLayoutConstraint
+//                     constraintsWithVisualFormat:
+//                         @"|-[onboard1Imageview]-[onboard1Label]-|"
+//                                         options:NSLayoutFormatAlignAllCenterX
+//                                         metrics:metrics
+//                                           views:views]];
+//}
+
 - (IBAction)letsGoButtonTapped:(id)sender {
+    
     [UIView animateWithDuration:0.3 animations:^{
         self.alpha = 0;
     }];
+    
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"letsGo"];
 }
 
