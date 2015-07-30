@@ -17,6 +17,7 @@
 #import "ProfileSettingsViewController.h"
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "AssignmentOnboardView.h"
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -69,8 +70,15 @@ static NSString *userIdentifier = @"currentLocation";
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
-  
+    
     [self tweakUI];
+    
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"letsGo"]) {
+        
+        AssignmentOnboardView *view = [[AssignmentOnboardView alloc] init];
+        [self.view addSubview:view];
+        view.frame = self.view.frame;
+    }
     
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:@"Navigate to the assignment"
