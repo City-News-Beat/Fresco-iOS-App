@@ -47,7 +47,7 @@
         [_onboard3Label setText:@"If a photo or video in your gallery is\nused, we’ll tell you who used it and\nhow to get paid!"];
     
         [_letsGoButton setBackgroundColor:[UIColor colorWithHex:@"0077FF"]];
-        
+        _letsGoButton.layer.cornerRadius = 4;
         _intrinsicContentSize = self.bounds.size;
     }
     return self;
