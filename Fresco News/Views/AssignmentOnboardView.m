@@ -84,8 +84,11 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.alpha = 0;
     }];
+
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"letsGo"];
+
+
 }
 
 @end

@@ -92,8 +92,7 @@
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
-		BC75CDCC1B695EA70002C32C /* AssignmentOnboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC75CDCB1B695EA70002C32C /* AssignmentOnboardView.m */; };
-		BC75CDCE1B695EBC0002C32C /* AssignmentOnboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC75CDCD1B695EBC0002C32C /* AssignmentOnboardView.xib */; };
+		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
 		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
@@ -338,9 +337,8 @@
 		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ISO.m"; path = "Categories/NSDate+ISO.m"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		BC75CDCA1B695EA70002C32C /* AssignmentOnboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardView.h; sourceTree = "<group>"; };
-		BC75CDCB1B695EA70002C32C /* AssignmentOnboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardView.m; sourceTree = "<group>"; };
-		BC75CDCD1B695EBC0002C32C /* AssignmentOnboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssignmentOnboardView.xib; sourceTree = "<group>"; };
+		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
+		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
 		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
 		BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewOverlayBottom.m; sourceTree = "<group>"; };
 		BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOverlayTop.h; sourceTree = "<group>"; };
@@ -573,9 +571,6 @@
 				BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */,
 				BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */,
 				BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */,
-				BC75CDCA1B695EA70002C32C /* AssignmentOnboardView.h */,
-				BC75CDCB1B695EA70002C32C /* AssignmentOnboardView.m */,
-				BC75CDCD1B695EBC0002C32C /* AssignmentOnboardView.xib */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -976,6 +971,8 @@
 			children = (
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
 				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
+				BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */,
+				BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */,
 			);
 			path = Assignments;
 			sourceTree = "<group>";
@@ -1232,7 +1229,6 @@
 			files = (
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
-				BC75CDCE1B695EBC0002C32C /* AssignmentOnboardView.xib in Resources */,
 				E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
@@ -1352,6 +1348,7 @@
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
+				BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */,
 				E78428121B57F4010090DFCC /* FRSOnboardViewController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
@@ -1412,7 +1409,6 @@
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
-				BC75CDCC1B695EA70002C32C /* AssignmentOnboardView.m in Sources */,
 				1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,

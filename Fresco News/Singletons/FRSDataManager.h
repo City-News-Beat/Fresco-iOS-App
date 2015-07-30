@@ -63,11 +63,12 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (BOOL)isLoggedIn;
 - (BOOL)currentUserValid;
 - (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock;
-- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock;
+- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPISuccessBlock)responseBlock;
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
 - (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
+- (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock;
 
 #pragma mark - Galleries
 

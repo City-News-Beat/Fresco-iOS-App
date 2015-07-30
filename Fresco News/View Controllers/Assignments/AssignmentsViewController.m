@@ -17,7 +17,7 @@
 #import "ProfileSettingsViewController.h"
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "AssignmentOnboardView.h"
+#import "AssignmentOnboardViewController.h"
 
 #define kSCROLL_VIEW_INSET 100
 
@@ -40,9 +40,8 @@ static NSString *userIdentifier = @"currentLocation";
     @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
-    @property (strong, nonatomic) AssignmentAnnotation *currentAssignmentAnnotation;
-    @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
     /*
     ** Conditioning Variables
@@ -60,6 +59,7 @@ static NSString *userIdentifier = @"currentLocation";
     @property (strong, nonatomic) NSNumber *operatingLat;
 
     @property (strong, nonatomic) NSNumber *operatingLon;
+@property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
 
 @end
 
@@ -73,12 +73,12 @@ static NSString *userIdentifier = @"currentLocation";
     
     [self tweakUI];
     
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"letsGo"]) {
-        
-        AssignmentOnboardView *view = [[AssignmentOnboardView alloc] init];
-        [self.view addSubview:view];
-        view.frame = self.view.frame;
-    }
+
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"assignmentsOnboarding"])
+       [self.onboardContainerView removeFromSuperview];
+
+    
     
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:@"Navigate to the assignment"
@@ -250,13 +250,13 @@ static NSString *userIdentifier = @"currentLocation";
 - (void)selectCurrentAssignmentAnnotation{
 
     //Loop assignments
-    for (id<MKAnnotation> annotation in self.mapView.annotations){
+    for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
         //Check if it's an AssignmentAnnotation
         if([annotation isKindOfClass:[AssignmentAnnotation class]]){
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
-                [self.mapView selectAnnotation:annotation animated:YES];
+                [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
     }

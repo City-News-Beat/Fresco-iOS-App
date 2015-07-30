@@ -87,8 +87,10 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     
-    if(!self.initialUpdate)
+    if(!self.initialUpdate){
        [self populateProfile];
+        self.initialUpdate = YES;
+    }
 
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"runUpdateOnProfile"]){
         

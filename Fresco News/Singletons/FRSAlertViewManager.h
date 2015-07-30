@@ -13,4 +13,7 @@
 + (FRSAlertViewManager *)sharedManager;
 
 - (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action;
+    
+- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *action))handler;
+
 @end
