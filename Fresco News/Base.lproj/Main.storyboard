@@ -248,7 +248,6 @@
                         <outlet property="assignmentTitle" destination="KZO-a3-yF6" id="pIO-lC-47h"/>
                         <outlet property="assignmentsMap" destination="4Ij-9p-8ce" id="WXX-E7-WVF"/>
                         <outlet property="detailViewWrapper" destination="ure-nI-UMR" id="Skc-cL-tBA"/>
-                        <outlet property="mapView" destination="4Ij-9p-8ce" id="7Pn-Tc-Q0n"/>
                         <outlet property="scrollView" destination="Sp5-6N-XZe" id="RZc-lq-zR7"/>
                         <outlet property="storyBreaksView" destination="an2-MI-GTV" id="4sa-nA-lex"/>
                     </connections>
@@ -969,7 +968,6 @@
                                     <rect key="frame" x="0.0" y="877" width="374" height="47"/>
                                 </variation>
                                 <connections>
-                                    <action selector="changePassword:" destination="fkO-PC-iRn" eventType="touchUpInside" id="nom-Ff-TeD"/>
                                     <action selector="forgotPassword:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Ipk-38-Wsg"/>
                                 </connections>
                             </button>
@@ -1924,7 +1922,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="logOut:" destination="fkO-PC-iRn" eventType="touchUpInside" id="8Oe-lr-dMa"/>
+                                                    <action selector="disableAccount:" destination="fkO-PC-iRn" eventType="touchUpInside" id="3rQ-O6-vce"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4m-tG-TCs" userLabel="Save">

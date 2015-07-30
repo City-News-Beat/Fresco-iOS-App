@@ -68,6 +68,7 @@
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             
+            //Check if the network is reachable, there's no current user, and there's no login in process
             if(self.reachabilityManager.reachable && self.currentUser == nil && !self.loggingIn){
                 
                 static dispatch_once_t onceToken;
@@ -720,10 +721,9 @@
     return NO;
 }
 
-- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPIResponseBlock)responseBlock
-{
+- (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPISuccessBlock)responseBlock{
     
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : _currentUser.userID}];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
     
     [params addEntriesFromDictionary:inputParams];
     
@@ -766,7 +766,7 @@
                         user = nil;
                     }
                     
-                    if (responseBlock) responseBlock(user, error);
+                    if (responseBlock) responseBlock(YES, error);
                     
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
@@ -774,7 +774,7 @@
                     
                     NSLog(@"Error updating user %@", error);
                     
-                    if (responseBlock) responseBlock(nil, error);
+                    if (responseBlock) responseBlock(NO, error);
                     
                 }];
                 
@@ -785,6 +785,39 @@
             
         }];
     }
+}
+
+- (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock{
+
+    //Make sure we have a user signe din
+    if(self.currentUser.userID){
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+        
+        //Run the disable request
+        [self POST:@"user/disable" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+            if (responseObject[@"success"]) {
+                
+                if(responseBlock) responseBlock(YES, nil);
+                
+            }
+            else{
+                if(responseBlock) responseBlock(NO, nil);
+            }
+            
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error){
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            if(responseBlock) responseBlock(NO, nil);
+            
+        }];
+    }
+
 }
 
 #pragma mark - Stories
@@ -987,7 +1020,9 @@
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         if(responseBlock) responseBlock(nil, error);
+        
     }];
 }
 
@@ -1002,6 +1037,7 @@
     NSDictionary *params = @{@"lat" :@(lat), @"lon" : @(lon), @"radius" : @(radius), @"active" : @"true"};
     
     [self GET:@"assignment/findclustered" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(![responseObject[@"data"] isEqual:[NSNull null]]){
@@ -1080,7 +1116,6 @@
     
     [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     
-    
     [self POST:@"notification/see" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -1138,6 +1173,7 @@
 
 - (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     if (self.currentUser.userID) {
         
@@ -1145,14 +1181,15 @@
         
         [params addEntriesFromDictionary:inputParams];
         
-        [self POST:@"user/locate" parameters:params constructingBodyWithBlock:nil
-            success:^(NSURLSessionDataTask *task, id responseObject) {
-               // NSLog(@"Successfully called user/locate: %@/%@ (returned values)", responseObject[@"data"][@"last_loc"][@"geo"][@"coordinates"][1], responseObject[@"data"][@"last_loc"][@"geo"][@"coordinates"][0]);
+        [self POST:@"user/locate" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+                
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+              
             }failure:^(NSURLSessionDataTask *task, NSError *error) {
-               NSLog(@"Error: %@", error);
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                NSLog(@"Error: %@", error);
             }];
     }
-
 }
 
 #pragma mark - TOS
@@ -1162,6 +1199,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
     [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if (![responseObject[@"data"] isEqual:[NSNull null]]) {

@@ -17,7 +17,7 @@
 #import "MapOverlayTop.h"
 #import <SVPulsingAnnotationView.h>
 
-@interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate>
 
 /***** In order of presentation *****/
 
@@ -73,6 +73,11 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalTop;
+
+/* Action Sheet */
+
+@property (strong, nonatomic) UIActionSheet *disableAccountSheet;
+
 @end
 
 @implementation ProfileSettingsViewController
@@ -81,8 +86,9 @@
 
     [super viewDidLoad];
     
-    //Checks if the user's primary login is through social
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) && [FRSDataManager sharedManager].currentUser.email == nil){
+    //Checks if the user's primary login is through social, then disable the email and password fields
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+       && [FRSDataManager sharedManager].currentUser.email == nil){
         
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;
@@ -99,7 +105,6 @@
     } else {
         self.constraintAccountVerticalTop.constant = [self.view viewWithTag:100].frame.size.height;
         self.constraintAccountVerticalBottom.constant = 0;
-
     }
     
     //Update the profile image
@@ -120,13 +125,26 @@
     self.profileImageView.clipsToBounds = YES;
     
     
+    //Round the buttons
     self.connectTwitterButton.layer.cornerRadius = 4;
     self.connectTwitterButton.clipsToBounds = YES;
     
     self.connectFacebookButton.layer.cornerRadius = 4;
     self.connectFacebookButton.clipsToBounds = YES;
     
+    //Update social connect buttons
     [self updateLinkingStatus];
+    
+    //Initialize Disable Account UIActionSheet
+    self.disableAccountSheet = [[UIActionSheet alloc]
+                            initWithTitle:@"Are you sure? You can recover your account up to one year from today."
+                            delegate:self
+                            cancelButtonTitle:@"Cancel"
+                            destructiveButtonTitle:@"Disable"
+                            otherButtonTitles:nil];
+    
+    //Disable Account Sheet Tag
+    self.disableAccountSheet.tag = 100;
 
 }
 
@@ -249,12 +267,14 @@
         }
         else{
 
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Error"
-                                         message:@"It seems like you signed up through Facebook. If you disconnect it, this would disable your account entirely!"
-                                         action:nil]
-             animated:YES
-             completion:nil];
+            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                           alertControllerWithTitle:@"Warning"
+                                           message:@"It looks like you signed up with Facebook! Would you like to disable your account?"
+                                           action:@"Cancel" handler:nil];
+            
+            [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+                [self.disableAccountSheet showInView:self.view];
+            }]];
             
             [self updateLinkingStatus];
             [spinner removeFromSuperview];
@@ -282,7 +302,7 @@
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
 
             if(!succeeded){
-            
+                
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:@"Error"
                                              message:@"It seems you already have an account linked with Twitter."
@@ -331,12 +351,16 @@
         }
         else{
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Error"
-                                         message:@"It seems like you signed up through Twitter. If you disconnect it, this would disable your account entirely!"
-                                         action:nil]
-                               animated:YES
-                             completion:nil];
+            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                           alertControllerWithTitle:@"Warning"
+                                           message:@"It looks like you signed up with Twitter! Would you like to disable your account?"
+                                           action:@"Cancel" handler:nil];
+            
+            [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+                [self.disableAccountSheet showInView:self.view];
+            }]];
+            
+            [self presentViewController:alertCon animated:YES completion:nil];
             
             [spinner removeFromSuperview];
             [self updateLinkingStatus];
@@ -370,14 +394,18 @@
         imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
     }
     
-    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
 
-        if (error) {
+        if (!success) {
             
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:@"Error"
                                          message:@"Could not save Profile settings"
-                                         action:@"Dismiss"]
+                                         action:@"Dismiss" handler:^(UIAlertAction *handler){
+                                             
+                                             NSLog(@"ok");
+                                             
+                                         }]
                                animated:YES
                              completion:nil];
             
@@ -424,39 +452,6 @@
     
 }
 
-- (IBAction)changePassword:(UIButton *)sender
-{
-    NSString *email = self.textfieldEmail.text;
-    if (![email length])
-        email = [FRSDataManager sharedManager].currentUser.email;
-    
-    if ([email length]) {
-        
-        [PFUser requestPasswordResetForEmailInBackground:email
-                                                   block:^(BOOL succeeded, NSError *error) {
-                                                       if (!error) {
-                                                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notification"
-                                                                                                           message:@"Email sent. Follow the instructions in the email to change your password."
-                                                                                                          delegate:nil
-                                                                                                 cancelButtonTitle:@"Dismiss"
-                                                                                                 otherButtonTitles:nil];
-                                                           [alert show];
-                                                       }
-                                                       else {
-                                                           NSLog(@"Error: %@", error);
-                                                       }
-                                                   }];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Please enter an email address"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-}
-
 - (IBAction)logOut:(id)sender
 {
     [[FRSDataManager sharedManager] logout];
@@ -464,6 +459,12 @@
     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
     
     [rvc setRootViewControllerToHighlights];
+    
+}
+
+- (IBAction)disableAccount:(id)sender {
+    
+    [self.disableAccountSheet showInView:self.view];
     
 }
 
@@ -528,6 +529,49 @@
     
     return nil;
 }
+
+#pragma mark - Action Sheet Delegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (actionSheet.tag == 100) {
+        
+        //Disable clicked
+        if(buttonIndex == 0){
+            
+            [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
+            
+                if(success){
+                    
+                    [[FRSDataManager sharedManager] logout];
+                    
+                    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+                    
+                    [rvc setRootViewControllerToHighlights];
+                    
+                }
+                else{
+                    
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Error"
+                                                 message:@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help."
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
+                
+                }
+                
+            }];
+
+        }
+        //Cancel clicked
+        else if(buttonIndex == 1){
+            
+
+        }
+    }
+}
+
 
 #pragma mark - UIImagePickerController Delegate
 

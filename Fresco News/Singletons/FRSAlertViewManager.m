@@ -27,13 +27,21 @@
 
 - (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action{
 
+    return [self alertControllerWithTitle:title message:message action:action handler:nil];
+    
+}
+
+- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *))handler{
+    
+  
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
-                                                                   message:message
-                                                            preferredStyle:UIAlertControllerStyleAlert];
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    
     
     [alert addAction:[UIAlertAction actionWithTitle:(action == nil ? @"Ok" : action)
                                               style:UIAlertActionStyleDefault
-                                            handler:nil]];
+                                            handler:handler]];
     
     return alert;
 

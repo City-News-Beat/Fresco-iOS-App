@@ -124,8 +124,8 @@
             [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
         }
 
-        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(id responseObject, NSError *error) {
-            if (error) {
+        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
+            if (!success) {
                 NSLog(@"Error: %@", error);
             }
             else {

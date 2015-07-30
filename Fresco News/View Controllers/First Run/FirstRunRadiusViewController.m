@@ -114,9 +114,9 @@
 {
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
     
-    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(BOOL success, NSError *error) {
         
-        if (error) {
+        if (!success) {
             
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                             message:@"Could not save notification radius"

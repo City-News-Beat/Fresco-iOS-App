@@ -40,9 +40,8 @@ static NSString *userIdentifier = @"currentLocation";
     @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
-    @property (strong, nonatomic) AssignmentAnnotation *currentAssignmentAnnotation;
-    @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
     /*
     ** Conditioning Variables
@@ -250,13 +249,13 @@ static NSString *userIdentifier = @"currentLocation";
 - (void)selectCurrentAssignmentAnnotation{
 
     //Loop assignments
-    for (id<MKAnnotation> annotation in self.mapView.annotations){
+    for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
         //Check if it's an AssignmentAnnotation
         if([annotation isKindOfClass:[AssignmentAnnotation class]]){
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
-                [self.mapView selectAnnotation:annotation animated:YES];
+                [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
     }
