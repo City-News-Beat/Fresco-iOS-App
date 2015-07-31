@@ -127,6 +127,7 @@
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
+		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
 		E7C112031B681C7F009C637C /* FRSAlertViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C112021B681C7F009C637C /* FRSAlertViewManager.m */; };
@@ -135,7 +136,6 @@
 		E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */; };
 		E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */; };
 		E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */; };
-		E7F9EA9D1B6B129200637288 /* ShutterFrames.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -401,6 +401,7 @@
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E7AAC0A01B4DEBBB003EC8E3 /* NSRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSRelativeDate.m; sourceTree = "<group>"; };
+		E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterImages.xcassets; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
 		E7BFA2E31B18CFB100B820C0 /* GalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryViewController.h; sourceTree = "<group>"; };
@@ -417,7 +418,6 @@
 		E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoMotionCollectionViewCell.m; sourceTree = "<group>"; };
 		E7D27A9B1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+CRScrollIndicator.h"; sourceTree = "<group>"; };
 		E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRScrollIndicator.m"; sourceTree = "<group>"; };
-		E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterFrames.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -883,7 +883,7 @@
 			children = (
 				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
 				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
-				E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */,
+				E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1233,10 +1233,10 @@
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */,
+				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
-				E7F9EA9D1B6B129200637288 /* ShutterFrames.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

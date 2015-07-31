@@ -345,7 +345,7 @@
                                                     <constraint firstAttribute="height" constant="121" id="1BO-gL-I6A"/>
                                                     <constraint firstAttribute="width" secondItem="H43-Px-pxG" secondAttribute="height" multiplier="1:1" id="DQg-j0-d5T"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="camera-aperture-icon">
+                                                <state key="normal" image="shutter-1">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -409,6 +409,7 @@
                                             <constraint firstAttribute="trailing" secondItem="U0E-i7-DeO" secondAttribute="trailing" constant="20" id="dEu-30-cEj"/>
                                             <constraint firstItem="H43-Px-pxG" firstAttribute="top" secondItem="K9z-5e-5vf" secondAttribute="bottom" constant="-1" id="dPc-sJ-bHK">
                                                 <variation key="heightClass=compact" constant="-2"/>
+                                                <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
                                             </constraint>
                                             <constraint firstItem="95f-lc-6mD" firstAttribute="bottom" secondItem="U0E-i7-DeO" secondAttribute="bottom" id="fSC-SM-0Wu"/>
                                             <constraint firstAttribute="bottom" secondItem="job-9J-IZj" secondAttribute="bottom" constant="9" id="gI0-JD-KcV">
@@ -1129,7 +1130,6 @@
     </scenes>
     <resources>
         <image name="backCaret" width="25" height="41"/>
-        <image name="camera-aperture-icon" width="118" height="118"/>
         <image name="delete-small-white" width="14" height="14"/>
         <image name="facebookButtonIcon" width="20" height="20"/>
         <image name="flash-off" width="10" height="20"/>
@@ -1137,6 +1137,7 @@
         <image name="inverted-triangle" width="40" height="19"/>
         <image name="overlay" width="140" height="232"/>
         <image name="picker" width="178" height="178"/>
+        <image name="shutter-1" width="118" height="118"/>
         <image name="tab-camera" width="60" height="49"/>
         <image name="twitterButtonIcon" width="20" height="20"/>
     </resources>

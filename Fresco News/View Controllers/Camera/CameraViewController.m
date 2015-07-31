@@ -318,6 +318,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     //if(self.controlsView.backgroundColor == [UIColor clearColor]){
     if ([[self movieFileOutput] isRecording]) {
         
+        //Clear the timer so it doesn't re-run
+        [self.videoTimer invalidate];
+        
+        self.videoTimer = nil;
+        
+        //Represent UI for video
         [self showUIForCameraMode:CameraModeVideo];
         
         [self.activityIndicator startAnimating];
@@ -392,6 +398,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             
             if (imageDataSampleBuffer) {
+                
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
@@ -423,7 +430,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-// TODO: Ask if we want to keep this or not
 - (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
 {
     CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
@@ -661,6 +667,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     if(cameraMode == CameraModeVideo){
 
+        [self runVideoRecordAnimation];
+        
         [UIView animateWithDuration:.2 animations:^{
 
             // Hide most of the UI
@@ -674,32 +682,34 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 }
             }
 
-        } completion:^(BOOL finished){
-
-            [self runVideoRecordAnimation];
-        
         }];
     
     }
     
 }
+
 - (void)runStillImageCaptureAnimation
 {
     
-    // Load images
-    NSArray *imageNames = @[@"win_1.png", @"win_2.png", @"win_3.png", @"win_4.png",
-                            @"win_5.png", @"win_6.png", @"win_7.png", @"win_8.png",
-                            @"win_9.png", @"win_10.png", @"win_11.png", @"win_12.png",
-                            @"win_13.png", @"win_14.png", @"win_15.png", @"win_16.png"];
-
+    NSMutableArray *images = [[NSMutableArray alloc] init];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[[self previewView] layer] setOpacity:0.0];
-        [UIView animateWithDuration:.25 animations:^{
-            NSLog(@"trying to animate... (broken for some reason?)");
-            [[[self previewView] layer] setOpacity:1.0];
-        }];
-    });
+    //24 is the number of frames in the animation
+    for (NSInteger i = 2; i < 25; i++) {
+        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+    }
+    
+    for (NSInteger i = 24; i > 0; i--) {
+        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+    }
+
+    [self.apertureButton.imageView setAnimationImages:[images copy]];
+    
+    [self.apertureButton.imageView setAnimationDuration:.2];
+    
+    [self.apertureButton.imageView setAnimationRepeatCount:1];
+    
+    [self.apertureButton.imageView startAnimating];
+
 }
 
 - (void)runVideoRecordAnimation{
@@ -777,7 +787,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             //Change the preset to display properly
             [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
-            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"camera-aperture-icon"] forState:UIControlStateNormal];
+            [self.apertureButton setImage:[UIImage imageNamed:@"shutter-1"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
             self.videoButton.selected = NO;
@@ -810,7 +820,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             //Change the preset to display properly
             [self.session setSessionPreset:AVCaptureSessionPreset1920x1080];
-            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
+            [self.apertureButton setImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
             self.photoButton.selected = NO;
@@ -887,13 +897,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)videoEnded:(NSTimer *)timer{
     
-    [self.videoTimer invalidate];
-    
-    self.videoTimer = nil;
-    
     //End movie recording
     [self toggleMovieRecording];
-    
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
