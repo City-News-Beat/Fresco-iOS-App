@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "twitterConnectButton.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "twitterConnectButton@2x.png"
+      "filename" : "twitter-b@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "twitterConnectButton@3x.png"
+      "filename" : "twitter-b@3x.png"
     }
   ],
   "info" : {

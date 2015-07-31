@@ -35,13 +35,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 /*
-** Social Connect Buttons
-*/
-
-@property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
-
-/*
 ** Profile Picture
 */
 
@@ -62,6 +55,8 @@ typedef enum : NSUInteger {
 ** Buttons
 */
 
+@property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
+@property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
 /*

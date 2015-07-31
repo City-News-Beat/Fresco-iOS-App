@@ -15,21 +15,40 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 
+typedef enum : NSUInteger {
+    LoginFresco,
+    LoginFacebook,
+    LoginTwitter
+} LoginType;
+
 @interface FirstRunViewController () <UITextFieldDelegate>
+
+@property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
 
 @property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
+
 
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *signUpButton;
+
+/* Spinner */
+
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+
+/*
+** Constraints
+*/
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
 @end
 
@@ -42,11 +61,11 @@
     // Do any additional setup after loading the view.
     
     //Round buttons
-    self.loginButton.layer.cornerRadius = 4;
-    self.loginButton.clipsToBounds = YES;
-    
-    self.signUpButton.layer.cornerRadius = 4;
-    self.signUpButton.clipsToBounds = YES;
+    for (UIButton *button in self.buttons) {
+        button.layer.cornerRadius = 4;
+        button.clipsToBounds = YES;
+    }
+
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
@@ -119,105 +138,177 @@
                         } completion:nil];
 }
 
-#pragma mark - IBAction Listeners
+#pragma mark - Controller Functions
 
-- (IBAction)loginButtonAction:(id)sender {
+/*
+** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
+*/
+
+- (void)performLogin:(LoginType)login button:(UIButton *)button{
     
     self.view.userInteractionEnabled = NO;
     
-    [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+    [button setTitle:@"" forState:UIControlStateNormal];
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame: CGRectMake(button.frame.size.width  / 2 - 7, 13,20, 20)];
+    
+    self.spinner.color = [UIColor whiteColor];
+    [self.spinner startAnimating];
+    
+    [button addSubview:self.spinner];
+    
+    [UIView animateWithDuration:.3 animations:^{
         
-        self.view.userInteractionEnabled = YES;
+        for (UIView *view in [self.view subviews]) {
+            if(view != button)
+                view.alpha = .26f;
+        }
         
-        if (user) {
+    }];
+    
+    if(login == LoginFresco){
+        
+        [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
             
-            if([[FRSDataManager sharedManager] isLoggedIn]){
+            self.view.userInteractionEnabled = YES;
             
+            if (user && [[FRSDataManager sharedManager] isLoggedIn]) {
+                
+      
+                [self transferUser];
+                
+            }
+            else{
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Login Error"
+                                             message:@"Invalid Credentials" action:nil]
+                                   animated:YES completion:nil];
+                
+                
+                [button setTitle:@"Login" forState:UIControlStateNormal];
+                
+                [self revertScreenToNormal];
+                
+            }
+            
+        }];
+    
+    }
+    else if(login == LoginFacebook){
+        
+        [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
+            
+            self.view.userInteractionEnabled = YES;
+            
+            if (user) {
+                
+                [self transferUser];
+                
+            }
+            else {
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Login Error"
+                                             message:@"We ran into an error signing you in with Twitter"
+                                             action:@"Dismiss"]
+                                   animated:YES
+                                 completion:nil];
+                
+                [button setTitle:@"Facebook" forState:UIControlStateNormal];
+                
+                [self revertScreenToNormal];
+            }
+            
+        }];
+        
+    }
+    else if(login == LoginTwitter){
+        
+        
+        [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
+            
+            self.view.userInteractionEnabled = YES;
+            
+            if (user) {
+                
                 [self transferUser];
                 
             }
             else {
                 
-                error = [NSError errorWithDomain:@"fail" code:1 userInfo:nil];
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Login Error"
+                                             message:@"We ran into an error signing you in with Twitter"
+                                             action:@"Dismiss"]
+                                   animated:YES
+                                 completion:nil];
+                
+                [self revertScreenToNormal];
+                
+                [button setTitle:@"Twitter" forState:UIControlStateNormal];
+                
+                NSLog(@"%@", error);
                 
             }
-            
-        }
+        }];
         
-        if(error){
-            
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Error"
-                                         message:@"Login Failed" action:nil]
-                               animated:YES completion:nil];
-            
-            self.emailField.textColor = [UIColor redColor];
+    }
+}
+
+- (void)revertScreenToNormal{
+    
+    self.view.userInteractionEnabled = YES;
+
+    [UIView animateWithDuration:.3 animations:^{
         
-        }
+        self.spinner.alpha = 0;
+        
+        for (UIView *view in [self.view subviews]) view.alpha = 1;
         
     }];
-    
+
 }
+
+#pragma mark - IBAction Listeners
+
+/*
+** Login
+*/
+
+- (IBAction)loginButtonAction:(id)sender {
+    
+    //Check fields first
+    if(self.emailField.text && self.emailField.text.length > 0
+       && self.passwordField.text && self.passwordField.text.length > 0){
+    
+        [self performLogin:LoginFresco button:self.loginButton];
+    
+    }
+    else{
+        
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Login Error"
+                                     message:@"Please enter an Email & Password to Login" action:nil]
+                           animated:YES completion:nil];
+    
+    }
+
+
+}
+
+- (IBAction)facebookLogin:(id)sender{ [self performLogin:LoginFacebook button:self.facebookButton]; }
+
+- (IBAction)twitterLogin:(id)sender { [self performLogin:LoginTwitter button:self.twitterButton]; }
+
+/*
+** Signup
+*/
 
 - (IBAction)signUpButtonAction:(id)sender
 {
     [self performSegueWithIdentifier:@"showAccountInfo" sender:self];
 }
-
-
-- (IBAction)facebookLogin:(id)sender
-{
-    self.view.userInteractionEnabled = NO;
-    
-    [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
-        
-        self.view.userInteractionEnabled = YES;
-        
-        if (user) {
-            
-            [self transferUser];
-            
-        }
-        else {
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Login Error"
-                                         message:@"We ran into an error signing you in with Twitter"
-                                         action:@"Dismiss"]
-                               animated:YES
-                             completion:nil];
-        }
-        
-    }];
-}
-
-- (IBAction)twitterLogin:(id)sender {
-    
-    self.view.userInteractionEnabled = NO;
-
-    [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
-        
-        self.view.userInteractionEnabled = YES;
-        
-        if (user) {
-            
-            [self transferUser];
-            
-        }
-        else {
-            
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Login Error"
-                                         message:@"We ran into an error signing you in with Twitter"
-                                         action:@"Dismiss"]
-                               animated:YES
-                             completion:nil];
-
-            NSLog(@"%@", error);
-            
-        }
-    }];
-}
-
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {
 

@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "facebookDisconnectButton.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "facebookDisconnectButton@2x.png"
+      "filename" : "facebook-b@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "facebookDisconnectButton@3x.png"
+      "filename" : "facebook-b@3x.png"
     }
   ],
   "info" : {

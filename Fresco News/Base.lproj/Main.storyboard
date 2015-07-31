@@ -296,9 +296,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="pXV-wP-nof"/>
-                    <connections>
-                        <segue destination="3S1-xO-1aC" kind="show" identifier="firstRunPush" id="Yet-yq-6JA"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kEC-6m-A2Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -985,10 +982,13 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ho-7Z-PBc" userLabel="Facebook">
                                 <rect key="frame" x="193" y="294.5" width="166" height="46"/>
+                                <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="5ho-7Z-PBc" secondAttribute="height" multiplier="83:23" id="DY9-Pb-Zjn"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="facebookButtonSmall">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <inset key="contentEdgeInsets" minX="17" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1024,13 +1024,16 @@
                             </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5E-sx-gRe" userLabel="Twitter">
                                 <rect key="frame" x="16" y="294" width="166" height="46"/>
+                                <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="s5E-sx-gRe" secondAttribute="height" multiplier="79:21" id="RRU-MQ-Iot"/>
                                     <constraint firstAttribute="width" secondItem="s5E-sx-gRe" secondAttribute="height" multiplier="79:21" id="b3M-Gz-srV"/>
                                     <constraint firstAttribute="width" secondItem="s5E-sx-gRe" secondAttribute="height" multiplier="167:45" id="rdA-93-QFW"/>
                                     <constraint firstAttribute="width" secondItem="s5E-sx-gRe" secondAttribute="height" multiplier="83:23" id="zkj-d9-s0R"/>
                                 </constraints>
-                                <state key="normal" image="twitterButtonSmall">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Twitter">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1045,6 +1048,12 @@
                                     <action selector="twitterLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Re9-g3-97C"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="XDc-uf-Ztr">
+                                <rect key="frame" x="51" y="307" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="4CE-A8-tal"/>
+                                </constraints>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="xPK-lO-eau">
                                 <rect key="frame" x="85" y="60" width="204" height="131"/>
                                 <constraints>
@@ -1071,6 +1080,12 @@
                                     <action selector="signUpButtonAction:" destination="3S1-xO-1aC" eventType="touchUpInside" id="1Xx-x0-Zxg"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="jcZ-bp-K0k">
+                                <rect key="frame" x="217" y="307.5" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="i1f-Vs-xnb"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1099,6 +1114,7 @@
                             <constraint firstItem="5ho-7Z-PBc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="s5E-sx-gRe" secondAttribute="trailing" constant="11" id="DYj-r3-gq4"/>
                             <constraint firstItem="ScJ-Uh-16B" firstAttribute="width" secondItem="40z-9f-bIc" secondAttribute="width" id="EEb-AE-pyp"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="width" secondItem="5ho-7Z-PBc" secondAttribute="width" id="Eg5-zA-6Sa"/>
+                            <constraint firstItem="s5E-sx-gRe" firstAttribute="width" secondItem="5ho-7Z-PBc" secondAttribute="width" id="Ehu-W1-lhf"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="top" secondItem="5ho-7Z-PBc" secondAttribute="top" constant="-0.5" id="FYE-AF-ufj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9OB-GS-ra8" secondAttribute="trailing" constant="-16" id="HjJ-VF-qel"/>
                             <constraint firstAttribute="centerY" secondItem="aQd-PX-Tma" secondAttribute="centerY" constant="-265.5" id="Hwv-qh-vTq"/>
@@ -1112,6 +1128,7 @@
                             <constraint firstItem="ScJ-Uh-16B" firstAttribute="height" secondItem="5ho-7Z-PBc" secondAttribute="height" id="N1A-vl-TCB"/>
                             <constraint firstItem="9KE-yI-BvU" firstAttribute="leading" secondItem="ybl-WV-MEC" secondAttribute="leadingMargin" id="Nby-QM-S3L"/>
                             <constraint firstItem="NxF-P7-Ydg" firstAttribute="leading" secondItem="ybl-WV-MEC" secondAttribute="leading" id="OPh-la-0KR"/>
+                            <constraint firstItem="jcZ-bp-K0k" firstAttribute="centerY" secondItem="5ho-7Z-PBc" secondAttribute="centerY" id="Ong-OU-lWM"/>
                             <constraint firstItem="9KE-yI-BvU" firstAttribute="top" secondItem="xPK-lO-eau" secondAttribute="bottom" constant="30" id="Pfm-Ug-b7z"/>
                             <constraint firstItem="9OB-GS-ra8" firstAttribute="leading" secondItem="Igs-6C-ri3" secondAttribute="trailing" constant="-375" id="Rta-U0-Cnx"/>
                             <constraint firstItem="NxF-P7-Ydg" firstAttribute="leading" secondItem="5XA-ae-eE4" secondAttribute="leading" id="S0M-tZ-gp8"/>
@@ -1132,6 +1149,7 @@
                             <constraint firstItem="ScJ-Uh-16B" firstAttribute="height" secondItem="40z-9f-bIc" secondAttribute="height" id="d9d-l4-AIX"/>
                             <constraint firstItem="9KE-yI-BvU" firstAttribute="trailing" secondItem="ybl-WV-MEC" secondAttribute="trailingMargin" id="db4-OF-OxZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aQd-PX-Tma" secondAttribute="trailing" id="dmq-eX-LwL"/>
+                            <constraint firstItem="jcZ-bp-K0k" firstAttribute="centerX" secondItem="5ho-7Z-PBc" secondAttribute="centerX" constant="-49" id="dpG-lT-dlF"/>
                             <constraint firstItem="0Zh-FZ-B4a" firstAttribute="leading" secondItem="ybl-WV-MEC" secondAttribute="leadingMargin" id="fEV-27-5rH"/>
                             <constraint firstItem="9OB-GS-ra8" firstAttribute="top" secondItem="40z-9f-bIc" secondAttribute="bottom" constant="45" id="fhi-fZ-Ctx"/>
                             <constraint firstAttribute="centerX" secondItem="9KE-yI-BvU" secondAttribute="centerX" constant="-0.5" id="fnI-mT-x7W"/>
@@ -1143,18 +1161,22 @@
                             <constraint firstItem="Z7B-bO-g93" firstAttribute="bottom" secondItem="D4d-vE-jMc" secondAttribute="bottom" constant="-8" id="i0S-3q-bOY"/>
                             <constraint firstItem="40z-9f-bIc" firstAttribute="top" secondItem="NxF-P7-Ydg" secondAttribute="bottom" constant="19" id="ibP-0f-MxD"/>
                             <constraint firstAttribute="trailing" secondItem="9OB-GS-ra8" secondAttribute="trailing" id="iye-bS-v4V"/>
+                            <constraint firstItem="s5E-sx-gRe" firstAttribute="leading" secondItem="XDc-uf-Ztr" secondAttribute="trailing" constant="-46" id="jpO-pd-BeG"/>
                             <constraint firstItem="9OB-GS-ra8" firstAttribute="top" secondItem="xPK-lO-eau" secondAttribute="bottom" constant="426" id="kDr-85-5w2"/>
                             <constraint firstAttribute="centerX" secondItem="D4d-vE-jMc" secondAttribute="centerX" constant="-0.5" id="lNu-0t-ST8"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="top" secondItem="0Zh-FZ-B4a" secondAttribute="bottom" constant="18" id="lxP-R6-yVq"/>
                             <constraint firstItem="aQd-PX-Tma" firstAttribute="top" secondItem="ScJ-Uh-16B" secondAttribute="bottom" constant="14" id="n0F-Om-Vqp"/>
+                            <constraint firstItem="s5E-sx-gRe" firstAttribute="centerY" secondItem="XDc-uf-Ztr" secondAttribute="centerY" id="nMM-TK-hRZ"/>
                             <constraint firstAttribute="centerX" secondItem="xPK-lO-eau" secondAttribute="centerX" id="nQg-rg-3gH"/>
                             <constraint firstItem="9KE-yI-BvU" firstAttribute="top" secondItem="xPK-lO-eau" secondAttribute="bottom" constant="30" id="ncQ-Xs-wI8"/>
+                            <constraint firstItem="s5E-sx-gRe" firstAttribute="height" secondItem="5ho-7Z-PBc" secondAttribute="height" id="oyh-Hn-0x0"/>
                             <constraint firstItem="xPK-lO-eau" firstAttribute="top" relation="lessThanOrEqual" secondItem="sO3-hb-Koo" secondAttribute="bottom" constant="40" id="p3n-MF-l5o"/>
                             <constraint firstItem="0Zh-FZ-B4a" firstAttribute="top" secondItem="9KE-yI-BvU" secondAttribute="bottom" constant="9" id="pUG-kC-Rse"/>
                             <constraint firstItem="5ho-7Z-PBc" firstAttribute="trailing" secondItem="ybl-WV-MEC" secondAttribute="trailingMargin" id="pzK-uj-vhA"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="height" secondItem="40z-9f-bIc" secondAttribute="height" id="q6M-rv-2nf"/>
                             <constraint firstItem="9KE-yI-BvU" firstAttribute="top" secondItem="xPK-lO-eau" secondAttribute="bottom" constant="6" id="rFC-8u-JPb"/>
                             <constraint firstItem="9OB-GS-ra8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="aQd-PX-Tma" secondAttribute="bottom" constant="19" id="rKX-L8-8FP"/>
+                            <constraint firstItem="s5E-sx-gRe" firstAttribute="centerX" secondItem="XDc-uf-Ztr" secondAttribute="centerX" constant="38" id="sPa-pZ-1hp"/>
                             <constraint firstItem="40z-9f-bIc" firstAttribute="top" secondItem="5XA-ae-eE4" secondAttribute="bottom" constant="18" id="sne-D3-nfk"/>
                             <constraint firstItem="40z-9f-bIc" firstAttribute="baseline" secondItem="ScJ-Uh-16B" secondAttribute="baseline" id="tLA-f6-0MY"/>
                             <constraint firstItem="s5E-sx-gRe" firstAttribute="width" secondItem="5ho-7Z-PBc" secondAttribute="width" id="veL-2w-WHN"/>
@@ -1182,6 +1204,9 @@
                                 <exclude reference="gs0-Le-XXN"/>
                                 <exclude reference="5dD-ju-s10"/>
                                 <exclude reference="7gP-4d-sId"/>
+                                <exclude reference="Eg5-zA-6Sa"/>
+                                <exclude reference="c1A-1p-hPh"/>
+                                <exclude reference="jpO-pd-BeG"/>
                                 <exclude reference="veL-2w-WHN"/>
                                 <exclude reference="yeE-qk-8tO"/>
                                 <exclude reference="15j-H1-shU"/>
@@ -1196,6 +1221,7 @@
                                 <exclude reference="ibP-0f-MxD"/>
                                 <exclude reference="tLA-f6-0MY"/>
                                 <exclude reference="0pa-uQ-rVC"/>
+                                <exclude reference="CjJ-Ms-jh3"/>
                                 <exclude reference="EEb-AE-pyp"/>
                                 <exclude reference="d9d-l4-AIX"/>
                                 <exclude reference="Hwv-qh-vTq"/>
@@ -1228,6 +1254,10 @@
                         <outlet property="signUpButton" destination="ScJ-Uh-16B" id="YKV-VC-0nm"/>
                         <outlet property="topVerticalSpaceConstraint" destination="JFt-9q-Qe9" id="F9j-cf-uwW"/>
                         <outlet property="twitterButton" destination="s5E-sx-gRe" id="1of-ca-aqu"/>
+                        <outletCollection property="buttons" destination="s5E-sx-gRe" id="FUy-ey-rLN"/>
+                        <outletCollection property="buttons" destination="5ho-7Z-PBc" id="D1J-LK-IUt"/>
+                        <outletCollection property="buttons" destination="40z-9f-bIc" id="6TF-HW-tSg"/>
+                        <outletCollection property="buttons" destination="ScJ-Uh-16B" id="qis-PJ-Mgc"/>
                         <segue destination="APe-K0-XGS" kind="show" identifier="showAccountInfo" id="Kob-nW-Qdu"/>
                         <segue destination="pdb-B6-s7T" kind="show" identifier="replaceWithSignUp" id="BrQ-Qn-DKp"/>
                     </connections>
@@ -1318,39 +1348,8 @@
                                             <rect key="frame" x="183" y="79" width="37" height="12"/>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Facebook" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DtB-kZ-kwp">
-                                        <rect key="frame" x="164" y="83" width="76" height="20"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <variation key="heightClass=compact" misplaced="YES">
-                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
-                                        </variation>
-                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
-                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
-                                        </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
-                                        </variation>
-                                    </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-Dl-chr">
-                                        <rect key="frame" x="134" y="59" width="20" height="20"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="GBS-jm-5ME"/>
-                                            <constraint firstAttribute="width" constant="20" id="P0i-Wz-2Rq"/>
-                                        </constraints>
-                                        <variation key="heightClass=compact" misplaced="YES">
-                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
-                                        </variation>
-                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
-                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
-                                        </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
-                                        </variation>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="cxT-KN-GHC">
-                                        <rect key="frame" x="134" y="83" width="20" height="20"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook-b" translatesAutoresizingMaskIntoConstraints="NO" id="cxT-KN-GHC">
+                                        <rect key="frame" x="134" y="99" width="20" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="20" id="h3m-Co-7xF"/>
                                             <constraint firstAttribute="height" constant="20" id="xb5-cy-YHJ"/>
@@ -1365,8 +1364,23 @@
                                             <rect key="frame" x="134" y="136" width="20" height="20"/>
                                         </variation>
                                     </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Facebook" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DtB-kZ-kwp">
+                                        <rect key="frame" x="164" y="99" width="76" height="20"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="heightClass=compact" misplaced="YES">
+                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
+                                        </variation>
+                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
+                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="164" y="136" width="71" height="20"/>
+                                        </variation>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Twitter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNa-TL-dW3">
-                                        <rect key="frame" x="164" y="59" width="50.5" height="20"/>
+                                        <rect key="frame" x="164" y="73" width="50.5" height="20"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1381,31 +1395,56 @@
                                         </variation>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c2g-1T-GNw">
-                                        <rect key="frame" x="564" y="6" width="18" height="32"/>
+                                        <rect key="frame" x="564" y="54" width="18" height="22"/>
                                         <state key="normal" image="settings">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hzt-8B-GnP" userLabel="clearButtonView">
-                                        <rect key="frame" x="519" y="-14" width="108" height="72"/>
+                                        <rect key="frame" x="519" y="34" width="108" height="62"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter-b" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-Dl-chr">
+                                        <rect key="frame" x="134" y="73" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="GBS-jm-5ME"/>
+                                            <constraint firstAttribute="width" constant="20" id="P0i-Wz-2Rq"/>
+                                        </constraints>
+                                        <variation key="heightClass=compact" misplaced="YES">
+                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
+                                        </variation>
+                                        <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
+                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="134" y="112" width="20" height="20"/>
+                                        </variation>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="leading" id="04j-U0-h8E"/>
                                     <constraint firstAttribute="height" constant="130" id="15x-OD-hLF"/>
+                                    <constraint firstItem="DtB-kZ-kwp" firstAttribute="leading" secondItem="cxT-KN-GHC" secondAttribute="trailing" constant="10" id="1x9-Ee-AQA"/>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="leading" secondItem="Otx-OC-9lU" secondAttribute="leading" id="5UF-4b-etu"/>
                                     <constraint firstItem="Otx-OC-9lU" firstAttribute="top" secondItem="TqC-2K-fJV" secondAttribute="bottom" constant="2" id="7YR-N3-xCQ"/>
+                                    <constraint firstItem="whK-Iz-Wt2" firstAttribute="bottom" secondItem="cxT-KN-GHC" secondAttribute="bottom" id="8IN-mp-Svq"/>
                                     <constraint firstItem="DtB-kZ-kwp" firstAttribute="leading" secondItem="cxT-KN-GHC" secondAttribute="trailing" constant="10" id="9d1-WH-JIP"/>
+                                    <constraint firstItem="cxT-KN-GHC" firstAttribute="centerY" secondItem="DtB-kZ-kwp" secondAttribute="centerY" id="Aeb-EW-SK1"/>
                                     <constraint firstItem="c2g-1T-GNw" firstAttribute="top" secondItem="zuI-Ja-5FX" secondAttribute="top" constant="6" id="F5N-h6-daq"/>
                                     <constraint firstItem="hzt-8B-GnP" firstAttribute="width" secondItem="c2g-1T-GNw" secondAttribute="width" constant="90" id="Fxf-aa-xYa"/>
+                                    <constraint firstItem="VNa-TL-dW3" firstAttribute="centerY" secondItem="Xh1-Dl-chr" secondAttribute="centerY" id="Ihs-6Y-CDQ"/>
+                                    <constraint firstItem="DtB-kZ-kwp" firstAttribute="top" secondItem="VNa-TL-dW3" secondAttribute="bottom" constant="6" id="Jrf-8a-N1Z"/>
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="top" secondItem="zuI-Ja-5FX" secondAttribute="top" constant="15" id="L4D-VZ-W7d"/>
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="leading" secondItem="zuI-Ja-5FX" secondAttribute="leading" constant="15" id="LkD-q4-FRD"/>
-                                    <constraint firstItem="DtB-kZ-kwp" firstAttribute="top" secondItem="VNa-TL-dW3" secondAttribute="bottom" constant="4" id="MAN-Du-5JB"/>
+                                    <constraint firstItem="DtB-kZ-kwp" firstAttribute="top" secondItem="VNa-TL-dW3" secondAttribute="bottom" constant="8" symbolic="YES" id="MAN-Du-5JB"/>
+                                    <constraint firstItem="Xh1-Dl-chr" firstAttribute="top" secondItem="Otx-OC-9lU" secondAttribute="bottom" constant="24" id="NNY-ef-Pd1"/>
                                     <constraint firstItem="ltV-M2-0Cr" firstAttribute="baseline" secondItem="Otx-OC-9lU" secondAttribute="baseline" id="ON2-oq-Wqe"/>
                                     <constraint firstItem="oft-It-HI7" firstAttribute="baseline" secondItem="Otx-OC-9lU" secondAttribute="baseline" id="OaU-T6-zKB"/>
                                     <constraint firstItem="cxT-KN-GHC" firstAttribute="trailing" secondItem="Xh1-Dl-chr" secondAttribute="trailing" id="OlP-XG-ybQ"/>
+                                    <constraint firstItem="Xh1-Dl-chr" firstAttribute="leading" secondItem="Otx-OC-9lU" secondAttribute="leading" id="PId-qt-Luw"/>
+                                    <constraint firstItem="VNa-TL-dW3" firstAttribute="top" secondItem="Otx-OC-9lU" secondAttribute="bottom" constant="24" id="TrC-CS-7Q6"/>
+                                    <constraint firstAttribute="centerY" secondItem="c2g-1T-GNw" secondAttribute="centerY" id="Ue9-PS-CSj"/>
                                     <constraint firstAttribute="trailing" secondItem="c2g-1T-GNw" secondAttribute="trailing" constant="18" id="V2u-Ag-dNh"/>
                                     <constraint firstItem="Xh1-Dl-chr" firstAttribute="centerY" secondItem="VNa-TL-dW3" secondAttribute="centerY" id="VYW-oq-ugc"/>
                                     <constraint firstItem="c2g-1T-GNw" firstAttribute="baseline" secondItem="TqC-2K-fJV" secondAttribute="baseline" id="a3V-W1-93k"/>
@@ -1413,9 +1452,11 @@
                                     <constraint firstItem="whK-Iz-Wt2" firstAttribute="top" secondItem="TqC-2K-fJV" secondAttribute="top" id="cJH-7f-T7N"/>
                                     <constraint firstItem="VNa-TL-dW3" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="trailing" constant="10" id="dD0-sd-b8t"/>
                                     <constraint firstItem="TqC-2K-fJV" firstAttribute="leading" secondItem="whK-Iz-Wt2" secondAttribute="trailing" constant="15" id="hth-dy-pq8"/>
+                                    <constraint firstItem="cxT-KN-GHC" firstAttribute="top" secondItem="Xh1-Dl-chr" secondAttribute="bottom" constant="6" id="jBv-4l-z0n"/>
                                     <constraint firstItem="DtB-kZ-kwp" firstAttribute="centerY" secondItem="cxT-KN-GHC" secondAttribute="centerY" id="kEu-AV-H08"/>
                                     <constraint firstItem="hzt-8B-GnP" firstAttribute="centerY" secondItem="c2g-1T-GNw" secondAttribute="centerY" id="mxr-Hd-cmc"/>
                                     <constraint firstItem="VNa-TL-dW3" firstAttribute="top" secondItem="Otx-OC-9lU" secondAttribute="bottom" constant="10" id="oXh-gv-xgu"/>
+                                    <constraint firstItem="VNa-TL-dW3" firstAttribute="leading" secondItem="Xh1-Dl-chr" secondAttribute="trailing" constant="10" id="ocV-cu-TnR"/>
                                     <constraint firstItem="Otx-OC-9lU" firstAttribute="leading" secondItem="whK-Iz-Wt2" secondAttribute="trailing" constant="15" id="tfo-db-OPb"/>
                                     <constraint firstItem="hzt-8B-GnP" firstAttribute="centerX" secondItem="c2g-1T-GNw" secondAttribute="centerX" id="yRT-Pa-EKW"/>
                                     <constraint firstItem="oft-It-HI7" firstAttribute="leading" secondItem="Otx-OC-9lU" secondAttribute="trailing" constant="10" id="ydJ-K1-3Fu"/>
@@ -1424,6 +1465,18 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="VYW-oq-ugc"/>
+                                        <exclude reference="04j-U0-h8E"/>
+                                        <exclude reference="OlP-XG-ybQ"/>
+                                        <exclude reference="TrC-CS-7Q6"/>
+                                        <exclude reference="dD0-sd-b8t"/>
+                                        <exclude reference="oXh-gv-xgu"/>
+                                        <exclude reference="9d1-WH-JIP"/>
+                                        <exclude reference="Jrf-8a-N1Z"/>
+                                        <exclude reference="MAN-Du-5JB"/>
+                                        <exclude reference="kEu-AV-H08"/>
+                                        <exclude reference="F5N-h6-daq"/>
+                                        <exclude reference="a3V-W1-93k"/>
                                         <exclude reference="zlc-ZY-GUd"/>
                                     </mask>
                                 </variation>
@@ -1517,8 +1570,9 @@
                                                     <action selector="connectTwitter:" destination="fkO-PC-iRn" eventType="touchUpInside" id="HkT-IO-nMc"/>
                                                 </connections>
                                             </button>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitterButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="gIG-ls-6Ze">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="gIG-ls-6Ze">
                                                 <rect key="frame" x="220" y="41" width="20" height="20"/>
+                                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="128" id="AAi-KA-0ki"/>
                                                     <constraint firstAttribute="height" constant="20" id="Pm2-ve-IUP"/>
@@ -1582,7 +1636,7 @@
                                                     <action selector="connectFacebook:" destination="fkO-PC-iRn" eventType="touchUpInside" id="Du4-vN-AZ0"/>
                                                 </connections>
                                             </button>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebookButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="eyo-rN-S9N">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="eyo-rN-S9N">
                                                 <rect key="frame" x="219" y="91" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="4FR-Ck-lKz"/>
@@ -3282,17 +3336,22 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5LN-oI-tKY">
                                 <rect key="frame" x="193" y="315" width="166" height="46"/>
+                                <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="5LN-oI-tKY" secondAttribute="height" multiplier="79:23" constant="8" id="THC-cQ-nu2"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="facebookButtonSmall">
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0UT-Oh-D80">
                                 <rect key="frame" x="16" y="315" width="166" height="46"/>
-                                <state key="normal" backgroundImage="twitterButtonSmall">
+                                <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Twitter">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -4085,9 +4144,8 @@
     <resources>
         <image name="assignmentWarningIcon" width="20" height="20"/>
         <image name="cameraOffIcon" width="48" height="48"/>
-        <image name="facebook" width="40" height="40"/>
-        <image name="facebookButtonIcon" width="20" height="20"/>
-        <image name="facebookButtonSmall" width="167" height="46"/>
+        <image name="facebook" width="20" height="20"/>
+        <image name="facebook-b" width="20" height="20"/>
         <image name="largeLogo" width="204" height="71"/>
         <image name="lewisCarolPlaceholder" width="192" height="192"/>
         <image name="locationOffIcon" width="48" height="48"/>
@@ -4107,13 +4165,12 @@
         <image name="tab-home" width="25" height="24"/>
         <image name="tab-profile" width="22" height="22"/>
         <image name="tab-stories" width="26" height="23"/>
-        <image name="twitter" width="40" height="40"/>
-        <image name="twitterButtonIcon" width="20" height="20"/>
-        <image name="twitterButtonSmall" width="167" height="46"/>
+        <image name="twitter" width="20" height="20"/>
+        <image name="twitter-b" width="20" height="20"/>
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="SWl-Ux-T2G"/>
-        <segue reference="6TG-Ef-MS9"/>
+        <segue reference="BrQ-Qn-DKp"/>
     </inferredMetricsTieBreakers>
 </document>
