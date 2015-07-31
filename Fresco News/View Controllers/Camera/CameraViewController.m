@@ -528,15 +528,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
+        
         [self.activityIndicator stopAnimating];
         self.doneLabel.hidden = NO;
         self.doneButton.enabled = YES;
 
-        if (error) {
-            NSLog(@"%@", error);
-        }
-        else {
+        if(assetURL != nil){
             [self.createdAssetURLs addObject:assetURL];
+        }
+        else{
+            NSLog(@"%@", error);
         }
 
         [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
@@ -675,7 +676,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
         } completion:^(BOOL finished){
 
-//            [self runVideoRecordAnimation];
+            [self runVideoRecordAnimation];
         
         }];
     

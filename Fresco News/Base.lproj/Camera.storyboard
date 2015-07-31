@@ -362,8 +362,6 @@
                                                     </mask>
                                                 </variation>
                                                 <connections>
-                                                    <action selector="apertureButtonHeld:" destination="mwP-m8-Afk" eventType="touchDown" id="qPM-au-Y5O"/>
-                                                    <action selector="apertureButtonReleased:" destination="mwP-m8-Afk" eventType="touchUpOutside" id="aHB-WH-89j"/>
                                                     <action selector="apertureButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="ebG-K9-hD2"/>
                                                 </connections>
                                             </button>
@@ -685,6 +683,7 @@
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=regular">
                                     <mask key="constraints">
+                                        <exclude reference="NtL-TM-BJf"/>
                                         <include reference="vYW-QU-MAp"/>
                                         <include reference="At0-4X-6Kp"/>
                                         <include reference="XSQ-1l-NxX"/>
