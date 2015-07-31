@@ -395,7 +395,8 @@
 {
     assert(resultBlock);
     
-    [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[ @"publish_actions" ] block:^(PFUser *user, NSError *error) {
+    
+    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile" ] block:^(PFUser *user, NSError *error) {
     
         [self socialLoginWithUser:user error:error block:resultBlock];
     

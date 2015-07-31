@@ -24,6 +24,7 @@
     return manager;
 }
 
+#pragma mark - UIAlertcController Object Methods
 
 - (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action{
 
@@ -39,12 +40,13 @@
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     
     
-    [alert addAction:[UIAlertAction actionWithTitle:(action == nil ? @"Ok" : action)
+    [alert addAction:[UIAlertAction actionWithTitle:(action == nil ? @"Dismiss" : action)
                                               style:UIAlertActionStyleDefault
                                             handler:handler]];
     
     return alert;
 
 }
+
 
 @end
