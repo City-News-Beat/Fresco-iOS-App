@@ -315,7 +315,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="164" sectionHeaderHeight="42" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="0Xi-lz-kA9">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.97647058819999999" green="0.98039215690000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="119" id="090-ao-CzZ" customClass="NotificationCell">
                                         <rect key="frame" x="0.0" y="42" width="600" height="119"/>
@@ -328,7 +328,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="118"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Notification Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GM2-t7-q02" userLabel="Notification Title">
-                                                            <rect key="frame" x="55" y="8" width="125" height="20"/>
+                                                            <rect key="frame" x="50" y="8" width="124.5" height="20"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="gAh-ok-DKm"/>
                                                                 <constraint firstAttribute="height" constant="36" id="voF-lK-1T7"/>
@@ -344,7 +344,7 @@
                                                             </variation>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Event Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxa-uO-2L4">
-                                                            <rect key="frame" x="55" y="29" width="537" height="18"/>
+                                                            <rect key="frame" x="50" y="29" width="542" height="18"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="GaH-wP-P7Q"/>
                                                                 <constraint firstAttribute="height" constant="36" id="hIE-fG-8HT"/>
@@ -360,7 +360,7 @@
                                                             </variation>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Assignment body content" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzj-wV-KbU" userLabel="Notification Description">
-                                                            <rect key="frame" x="55" y="53" width="537" height="18"/>
+                                                            <rect key="frame" x="50" y="53" width="542" height="18"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="18O-BR-spY"/>
                                                                 <constraint firstAttribute="width" secondItem="Xzj-wV-KbU" secondAttribute="height" multiplier="179:6" id="aA3-hN-jem"/>
@@ -393,7 +393,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9o-vw-ME1">
-                                                            <rect key="frame" x="55" y="79" width="143" height="30"/>
+                                                            <rect key="frame" x="50" y="79" width="148" height="30"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                             <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
@@ -424,6 +424,7 @@
                                                             </connections>
                                                         </button>
                                                     </subviews>
+                                                    <color key="backgroundColor" red="0.97647058823529409" green="0.98039215686274506" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="Isw-ZN-cA3" secondAttribute="leading" constant="55" id="0Oj-ae-sSP"/>
                                                         <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="mxa-uO-2L4" secondAttribute="leading" id="0Sb-Ub-6Kp"/>
@@ -457,7 +458,8 @@
                                                         <constraint firstAttribute="trailing" secondItem="Xzj-wV-KbU" secondAttribute="trailing" constant="8" id="eav-kE-zo1"/>
                                                         <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="J9o-vw-ME1" secondAttribute="leading" id="epQ-DE-u6y"/>
                                                         <constraint firstItem="XH7-Om-VZ8" firstAttribute="baseline" secondItem="GM2-t7-q02" secondAttribute="baseline" id="hja-7q-xVf"/>
-                                                        <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="KM8-Sr-35t" secondAttribute="trailing" constant="20" id="jYa-L3-UAz"/>
+                                                        <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="KM8-Sr-35t" secondAttribute="trailing" constant="15" id="jYa-L3-UAz"/>
+                                                        <constraint firstItem="KM8-Sr-35t" firstAttribute="leading" secondItem="Isw-ZN-cA3" secondAttribute="leading" constant="15" id="jfB-Vn-2PR"/>
                                                         <constraint firstItem="GM2-t7-q02" firstAttribute="leading" secondItem="Isw-ZN-cA3" secondAttribute="leading" constant="55" id="k6p-FI-aU4"/>
                                                         <constraint firstItem="GM2-t7-q02" firstAttribute="top" secondItem="Isw-ZN-cA3" secondAttribute="top" constant="8" id="kfd-UK-PZ8"/>
                                                         <constraint firstAttribute="trailing" secondItem="GM2-t7-q02" secondAttribute="trailing" constant="8" id="kkR-6u-okw"/>
@@ -497,7 +499,7 @@
                                                     </variation>
                                                 </view>
                                             </subviews>
-                                            <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" red="0.97647058823529409" green="0.98039215686274506" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="Isw-ZN-cA3" firstAttribute="top" secondItem="NtE-mR-l68" secondAttribute="top" id="Cgg-UD-kGb"/>
                                                 <constraint firstAttribute="bottom" secondItem="Isw-ZN-cA3" secondAttribute="bottom" id="XfJ-2q-x7c"/>
@@ -523,7 +525,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.97647058819999999" green="0.98039215690000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="0Xi-lz-kA9" firstAttribute="leading" secondItem="ZPq-RN-D5o" secondAttribute="leading" id="2Bw-3A-P4a"/>
                             <constraint firstItem="0Xi-lz-kA9" firstAttribute="top" secondItem="ZPq-RN-D5o" secondAttribute="topMargin" id="Jk3-sE-P0H"/>
