@@ -35,6 +35,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 // TODO: Upgrade to PHPhotoLibrary in app version 2.1
 @interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, CTAssetsPickerControllerDelegate, CLLocationManagerDelegate>
 
+@property (strong, nonatomic) CAShapeLayer *circleLayer;
+
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
@@ -74,6 +76,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
+@property (nonatomic) NSTimer *videoTimer;
 
 @end
 
@@ -299,86 +302,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (self.photoButton.selected) {
         
         [self snapStillImage];
-        
-        [UIView animateWithDuration:.2f animations:^{
-            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
-        }];
-        
+
     }
     else {
+        
         [self toggleMovieRecording];
-        
-        [UIView animateWithDuration:.2f animations:^{
-            self.apertureButton.backgroundColor = [UIColor clearColor];
-        }];
+
     }
 
-}
-- (IBAction)apertureButtonHeld:(id)sender {
-    
-    if (![[self movieFileOutput] isRecording]) {
-        
-        [UIView animateWithDuration:.2f animations:^{
-            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"E6BE2E"];
-        }];
-        
-    }
-    
-}
-- (IBAction)apertureButtonReleased:(id)sender {
-    
-    if (![[self movieFileOutput] isRecording]) {
-    
-        [UIView animateWithDuration:.2f animations:^{
-            self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
-        }];
-        
-    }
-}
-
-- (void)showUIForCameraMode:(CameraMode)cameraMode
-{
-    self.controlsView.backgroundColor = [UIColor whiteColor];
-    self.apertureButton.backgroundColor = [UIColor colorWithHex:@"FFBD00"];
-
-    if (cameraMode == CameraModeVideo) {
-        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
-    }
-
-    for (UIView *view in [self.controlsView subviews]) {
-        view.hidden = NO;
-    }
-    self.activityIndicator.hidden = YES;
-}
-
-- (void)hideUIForCameraMode:(CameraMode)cameraMode
-{
-    // Hide most of the UI
-    self.controlsView.backgroundColor = [UIColor clearColor];
-    
-    for (UIView *view in [self.controlsView subviews]) {
-        view.hidden = YES;
-    }
-
-    self.apertureButton.hidden = NO;
-    self.flashButton.hidden = NO;
-   
-    if (cameraMode == CameraModeVideo) {
-        [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
-    }
-
-    self.apertureButton.backgroundColor = [UIColor clearColor];
 }
 
 - (void)toggleMovieRecording
 {
+    //Add for testing
+    //if(self.controlsView.backgroundColor == [UIColor clearColor]){
     if ([[self movieFileOutput] isRecording]) {
         
         [self showUIForCameraMode:CameraModeVideo];
+        
         [self.activityIndicator startAnimating];
         self.doneLabel.hidden = YES;
         self.doneButton.enabled = NO;
-
+    
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
                                                error:nil];
@@ -386,16 +331,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                              error: nil];
     }
     else {
+        
         [self hideUIForCameraMode:CameraModeVideo];
 
+        //Set up timer to disable video after maximumVideoLength seconds
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].maximumVideoLength target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        
         // Stops background audio
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
-        [[AVAudioSession sharedInstance] setActive:YES
-                                             error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
     }
 
     dispatch_async([self sessionQueue], ^{
+        
         if (![[self movieFileOutput] isRecording]) {
+            
             [self setLockInterfaceRotation:YES];
 
             AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
@@ -422,11 +372,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             }
 
             [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+            
         }
         else {
             [[self movieFileOutput] stopRecording];
             [self setTorchMode:AVCaptureTorchModeOff];
         }
+        
     });
 }
 
@@ -464,8 +416,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                                                  [self.createdAssetURLs addObject:assetURL];
                                                              }];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self hideUIForCameraMode:CameraModePhoto];
-                    [self showUIForCameraMode:CameraModePhoto];
                     [self updateRecentPhotoView:image];
                 });
             }
@@ -675,8 +625,73 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - UI
 
+- (void)showUIForCameraMode:(CameraMode)cameraMode
+{
+    
+    if(cameraMode == CameraModeVideo){
+        
+        [UIView animateWithDuration:.2 animations:^{
+            
+            // Hide most of the UI
+            [self.circleLayer setOpacity:0];
+            self.controlsView.backgroundColor = [UIColor whiteColor];
+            [self.apertureButton setBackgroundColor:[UIColor colorWithHex:@"FFBD00"]];
+            
+            for (UIView *view in [self.controlsView subviews]) {
+                if(view != self.apertureButton){
+                    view.alpha = 1;
+                    view.userInteractionEnabled = YES;
+                }
+            }
+            
+        } completion:^(BOOL finished){
+        
+            [self.circleLayer removeFromSuperlayer];
+        
+        }];
+            
+    }
+    
+    self.activityIndicator.hidden = YES;
+}
+
+- (void)hideUIForCameraMode:(CameraMode)cameraMode
+{
+    
+    if(cameraMode == CameraModeVideo){
+
+        [UIView animateWithDuration:.2 animations:^{
+
+            // Hide most of the UI
+            self.controlsView.backgroundColor = [UIColor clearColor];
+            self.apertureButton.backgroundColor = [UIColor clearColor];
+
+            for (UIView *view in [self.controlsView subviews]) {
+                if(view != self.apertureButton){
+                    view.alpha = 0;
+                    view.userInteractionEnabled = NO;
+                }
+            }
+
+        } completion:^(BOOL finished){
+
+//            [self runVideoRecordAnimation];
+        
+        }];
+    
+    }
+    
+}
 - (void)runStillImageCaptureAnimation
 {
+    
+    // Load images
+    NSArray *imageNames = @[@"win_1.png", @"win_2.png", @"win_3.png", @"win_4.png",
+                            @"win_5.png", @"win_6.png", @"win_7.png", @"win_8.png",
+                            @"win_9.png", @"win_10.png", @"win_11.png", @"win_12.png",
+                            @"win_13.png", @"win_14.png", @"win_15.png", @"win_16.png"];
+
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [[[self previewView] layer] setOpacity:0.0];
         [UIView animateWithDuration:.25 animations:^{
@@ -684,6 +699,43 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [[[self previewView] layer] setOpacity:1.0];
         }];
     });
+}
+
+- (void)runVideoRecordAnimation{
+
+    // Set up the shape of the circle
+    int radius = 38;
+    self.circleLayer = [CAShapeLayer layer];
+    // Make a circular shape
+    self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                             cornerRadius:radius].CGPath;
+    // Center the shape in self.view
+    self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius - 3,
+                                  CGRectGetMidY(self.apertureButton.frame)-radius - 1);
+    
+    // Configure the apperence of the circle
+    self.circleLayer.fillColor = [UIColor clearColor].CGColor;
+    self.circleLayer.strokeColor = [UIColor colorWithHex:@"b50218"].CGColor;
+    self.circleLayer.lineWidth = 4;
+    
+    // Add to parent layer
+    [self.view.layer addSublayer:self.circleLayer];
+    
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration            = [[VariableStore sharedInstance] maximumVideoLength]; //Animate ove max vid length
+    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+    
+    // Animate from no part of the stroke being drawn to the entire stroke being drawn
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+    
+    // Experiment with timing to get the appearence to look the way you want
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    
+    // Add the animation to the circle
+    [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    
 }
 
 - (void)checkDeviceAuthorizationStatus
@@ -751,21 +803,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             self.controlsView.alpha = .7;
             
             //Scale the preview view to the whole screen
-            self.previewView.frame = self.view.bounds;
+            self.previewView.frame = self.view.frame;
             
         } completion:^(BOOL finished){
             
             //Change the preset to display properly
             [self.session setSessionPreset:AVCaptureSessionPreset1920x1080];
-            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-shutter-icon"] forState:UIControlStateNormal];
+            [self.apertureButton setBackgroundImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
             self.photoButton.selected = NO;
             
-            [UIView animateWithDuration:.2f
-                             animations:^{
-                                 self.previewView.alpha = 1;
-                             }];
+            [UIView animateWithDuration:.2f animations:^{
+                 self.previewView.alpha = 1;
+             }];
             
         }];
         
@@ -827,6 +878,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             self.assignmentLabel.hidden = YES;
         }
     }];
+    
+}
+
+
+#pragma mark - NSTimer Delegate and Selectors
+
+- (void)videoEnded:(NSTimer *)timer{
+    
+    [self.videoTimer invalidate];
+    
+    self.videoTimer = nil;
+    
+    //End movie recording
+    [self toggleMovieRecording];
+    
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
@@ -846,15 +912,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
 {
     
+    #if TARGET_IPHONE_SIMULATOR
+        return YES;
+    #else
+    
     NSString *mimeType = [asset mimeType];
     
     if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
         return NO;
     }
-
-    #if TARGET_IPHONE_SIMULATOR
-        return YES;
-    #else
     
     // Suspenders
     NSDate *date = [asset valueForProperty:ALAssetPropertyDate];

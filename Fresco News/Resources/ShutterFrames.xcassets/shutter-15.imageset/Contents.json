@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "video-shutter-icon.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "video-shutter-icon@2x.png"
+      "filename" : "shutter-15@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "video-shutter-icon@3x.png"
+      "filename" : "shutter-15@3x.png"
     }
   ],
   "info" : {

@@ -203,7 +203,10 @@ static CGFloat const kInterImageGap = 1.0f;
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     storyCell.story = story;
     storyCell.tapHandler = self;
-    storyCell.imageArray = self.imageArrays[index];
+    
+    if(index < [self.imageArrays count])
+        storyCell.imageArray = self.imageArrays[index];
+    
     [storyCell configureImages];
     
     return storyCell;

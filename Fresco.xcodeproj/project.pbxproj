@@ -136,6 +136,7 @@
 		E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */; };
 		E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */; };
 		E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */; };
+		E7F9EA9D1B6B129200637288 /* ShutterFrames.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -418,6 +419,7 @@
 		E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoMotionCollectionViewCell.m; sourceTree = "<group>"; };
 		E7D27A9B1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+CRScrollIndicator.h"; sourceTree = "<group>"; };
 		E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRScrollIndicator.m"; sourceTree = "<group>"; };
+		E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterFrames.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -886,6 +888,7 @@
 			children = (
 				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
 				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
+				E7F9EA9C1B6B129200637288 /* ShutterFrames.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1237,6 +1240,7 @@
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
+				E7F9EA9D1B6B129200637288 /* ShutterFrames.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1618,7 +1622,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3e5ea906-403f-44c5-8372-190c91dd3822";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1642,7 +1646,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fresconews.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3e5ea906-403f-44c5-8372-190c91dd3822";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1706,7 +1710,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "05dd50b6-2d8e-4178-af16-ca457070ede8";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1725,7 +1729,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "05dd50b6-2d8e-4178-af16-ca457070ede8";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
