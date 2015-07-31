@@ -715,14 +715,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)runVideoRecordAnimation{
 
     // Set up the shape of the circle
-    int radius = 38;
+    int radius = 39;
     self.circleLayer = [CAShapeLayer layer];
     // Make a circular shape
     self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                              cornerRadius:radius].CGPath;
     // Center the shape in self.view
     self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius - 3,
-                                  CGRectGetMidY(self.apertureButton.frame)-radius - 1);
+                                  CGRectGetMidY(self.apertureButton.frame)-radius);
     
     // Configure the apperence of the circle
     self.circleLayer.fillColor = [UIColor clearColor].CGColor;
@@ -742,7 +742,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
     
     // Experiment with timing to get the appearence to look the way you want
-    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     
     // Add the animation to the circle
     [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
