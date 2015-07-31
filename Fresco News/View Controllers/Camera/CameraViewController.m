@@ -691,6 +691,22 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)runStillImageCaptureAnimation
 {
     
+    //fade in
+    [UIView animateWithDuration:.1f animations:^{
+        
+        [self.previewView setAlpha:0.0f];
+        
+    } completion:^(BOOL finished) {
+        
+        //fade out
+        [UIView animateWithDuration:.1f animations:^{
+            
+            [self.previewView setAlpha:1.0f];
+            
+        } completion:nil];
+        
+    }];
+
     NSMutableArray *images = [[NSMutableArray alloc] init];
     
     //24 is the number of frames in the animation

@@ -115,6 +115,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - UI Setup
 - (void)setupButtons
 {
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
@@ -128,7 +129,10 @@
     self.view.userInteractionEnabled = !upload;
     self.navigationController.navigationBar.userInteractionEnabled = !upload;
     self.navigationController.toolbar.userInteractionEnabled = !upload;
+    self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
 }
+
+#pragma mark - Navigational Methods
 
 - (void)returnToTabBar
 {
@@ -137,33 +141,122 @@
 
 - (void)returnToCamera:(id)sender
 {
-    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - Outlet Actions
 
 - (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
     if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-        // TODO: Try not to dismiss keyboard
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Twitter"
-                                                        message:@"Go to your profile to link your Fresco account to Twitter"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Whoops"
+                                       message:@"It seems like you're not connected to facebook, click \"Connect\" if you'd like to connect Fresco with Twitter"
+                                       action:@"Cancel" handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            //Run Twitter link
+            [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+                
+                if(error){
+                    
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Error"
+                                                 message:@"We were unable to link your Twitter account!"
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
+                    
+                }
+                
+                
+            }];
+        }]];
+        
+        //Bring up alert view
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
+    }
+    else{
+        
+        
+        [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
+    
     }
 
     button.selected = !button.isSelected;
-    [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
+
 }
+
+- (IBAction)facebookButtonTapped:(CrossPostButton *)button
+{
+    
+    if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Whoops"
+                                       message:@"It seems like you're not connected to Facebook, click \"Connect\" if you'd like to connect Fresco with Facebook"
+                                       action:@"Cancel" handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            //Run Facebook link
+            [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withPublishPermissions:@[@"publish_actions"] block:^(BOOL succeeded, NSError *error) {
+                
+                if(error){
+                
+                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:@"Error"
+                                                 message:@"We were unable to link your Facebook account!"
+                                                 action:nil]
+                                       animated:YES
+                                     completion:nil];
+                
+                }
+
+            }];
+            
+        }]];
+        
+        //Bring up alert view
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
+    }
+    else{
+    
+        [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
+    
+    }
+
+    button.selected = !button.isSelected;
+
+}
+
+- (IBAction)linkAssignmentButtonTapped:(id)sender
+{
+    if (self.defaultAssignment) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
+                                                        message:@"Are you sure you want remove this assignment?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Remove", nil];
+        
+        [alert show];
+    }
+    else {
+        [self showAssignment:NO];
+    }
+}
+
 
 - (void)crossPostToTwitter:(NSString *)string
 {
     if (!self.twitterButton.selected) {
         return;
     }
-
+    
     string = [NSString stringWithFormat:@"status=%@", string];
     NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
     NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
@@ -171,7 +264,7 @@
     tweetRequest.HTTPMethod = @"POST";
     tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
     [[PFTwitterUtils twitter] signRequest:tweetRequest];
-
+    
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
             // TODO: Notify the user
@@ -181,23 +274,6 @@
             NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
     }];
-}
-
-- (IBAction)facebookButtonTapped:(CrossPostButton *)button
-{
-    if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        // TODO: Try not to dismiss keyboard
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Linked to Facebook"
-                                                        message:@"Go to your profile to link your Fresco account to Facebook"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-
-    button.selected = !button.isSelected;
-    [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 }
 
 - (void)crossPostToFacebook:(NSString *)string
@@ -218,22 +294,6 @@
                 NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
             }
         }];
-    }
-}
-
-- (IBAction)linkAssignmentButtonTapped:(id)sender
-{
-    if (self.defaultAssignment) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
-                                                        message:@"Are you sure you want remove this assignment?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Remove", nil];
-                        
-        [alert show];
-    }
-    else {
-        [self showAssignment:NO];
     }
 }
 
@@ -298,7 +358,7 @@
 {
     // TODO: Capture all UIToolbar touches
     return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
-                                            style:UIBarButtonItemStylePlain
+                                            style:UIBarButtonItemStyleDone
                                            target:self
                                            action:@selector(submitGalleryPost:)];
 }

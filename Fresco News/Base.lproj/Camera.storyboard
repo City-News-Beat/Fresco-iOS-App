@@ -830,11 +830,8 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">
                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                                    <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                                    </variation>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -908,7 +905,7 @@
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="CrossPostButton">
                                         <rect key="frame" x="0.0" y="862" width="300" height="30"/>
-                                        <color key="backgroundColor" red="0.32549019610000002" green="0.68235294120000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="O4K-1a-aIo"/>
                                         </constraints>
@@ -925,7 +922,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="CrossPostButton">
                                         <rect key="frame" x="300" y="862" width="300" height="30"/>
-                                        <color key="backgroundColor" red="0.57254901960000004" green="0.63921568630000003" blue="0.75686274509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -955,7 +952,7 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="inverted-triangle" translatesAutoresizingMaskIntoConstraints="NO" id="nVh-Vj-T7V">
                                         <rect key="frame" x="280" y="836" width="40" height="19"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="twitterButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="H7x-EQ-qhC">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="H7x-EQ-qhC">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="2rL-RL-Td8"/>
@@ -981,7 +978,7 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="facebookButtonIcon" translatesAutoresizingMaskIntoConstraints="NO" id="mlZ-6Z-a9A">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="mlZ-6Z-a9A">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="mlZ-6Z-a9A" secondAttribute="height" multiplier="1:1" id="dM9-PV-6j0"/>
@@ -1131,7 +1128,7 @@
     <resources>
         <image name="backCaret" width="25" height="41"/>
         <image name="delete-small-white" width="14" height="14"/>
-        <image name="facebookButtonIcon" width="20" height="20"/>
+        <image name="facebook" width="20" height="20"/>
         <image name="flash-off" width="10" height="20"/>
         <image name="flash-on" width="10" height="20"/>
         <image name="inverted-triangle" width="40" height="19"/>
@@ -1139,6 +1136,6 @@
         <image name="picker" width="178" height="178"/>
         <image name="shutter-1" width="118" height="118"/>
         <image name="tab-camera" width="60" height="49"/>
-        <image name="twitterButtonIcon" width="20" height="20"/>
+        <image name="twitter" width="20" height="20"/>
     </resources>
 </document>

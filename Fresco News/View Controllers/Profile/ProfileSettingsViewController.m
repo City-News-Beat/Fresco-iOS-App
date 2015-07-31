@@ -231,7 +231,7 @@ typedef enum : NSUInteger {
         //Connect the user
         if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
             
-            [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withPublishPermissions:@[@"publish_actions"] block:^(BOOL succeeded, NSError *error) {
+            [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withReadPermissions:@[@"public_profile"] block:^(BOOL succeeded, NSError *error) {
                 
                 //If fails, alert user
                 if (!succeeded) [self triggerSocialResponse:SocialExists network:@"Facebook"];
