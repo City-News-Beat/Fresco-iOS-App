@@ -72,8 +72,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 #pragma mark - Galleries
 
-- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleries:(NSDictionary *)params withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 

@@ -50,7 +50,7 @@
             // append data to data source, insert new cells at the end of table view
             NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
             
-            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num WithResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     if ([responseObject count] > 0) {
@@ -123,7 +123,7 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 WithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 withResponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
             if(responseObject == nil || [responseObject count] == 0){

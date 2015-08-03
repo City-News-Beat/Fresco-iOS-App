@@ -122,7 +122,7 @@
     
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
         
-        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil];
+        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil withRefresh:YES];
         
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
