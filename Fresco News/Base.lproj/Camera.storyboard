@@ -274,7 +274,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="U0E-i7-DeO" secondAttribute="height" multiplier="1:1" id="tsd-MY-bsx"/>
                                                 </constraints>
-                                                <state key="normal" image="picker"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <integer key="value" value="4"/>
@@ -1133,7 +1132,6 @@
         <image name="flash-on" width="10" height="20"/>
         <image name="inverted-triangle" width="40" height="19"/>
         <image name="overlay" width="140" height="232"/>
-        <image name="picker" width="178" height="178"/>
         <image name="shutter-1" width="118" height="118"/>
         <image name="tab-camera" width="60" height="49"/>
         <image name="twitter" width="20" height="20"/>
