@@ -46,13 +46,14 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
     gesture.numberOfTapsRequired = 1;
     [self addGestureRecognizer:gesture];
     
-    UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
-    [viewWithBlurredBackground setFrame:self.frame];
-    
-    [self addSubview:viewWithBlurredBackground];
-    [self sendSubviewToBack:viewWithBlurredBackground];
-    self.backgroundColor = [UIColor clearColor];
+    //Disabled blur effects
+//    UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    [viewWithBlurredBackground setFrame:self.frame];
+//    
+//    [self addSubview:viewWithBlurredBackground];
+//    [self sendSubviewToBack:viewWithBlurredBackground];
+//    self.backgroundColor = [UIColor clearColor];
 
 }
 

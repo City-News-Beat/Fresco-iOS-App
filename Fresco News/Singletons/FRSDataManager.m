@@ -877,7 +877,7 @@
 
 #pragma mark - Galleries
 
-- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset withResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -902,22 +902,20 @@
     }];
 }
 
-- (void)getGalleriesAtURLString:(NSString *)urlString WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getGalleries:(NSDictionary *)params withResponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"gallery/highlights" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
         }];
-        if(responseBlock)
-            responseBlock(galleries, nil);
+        if(responseBlock) responseBlock(galleries, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        if(responseBlock)
-            responseBlock(nil, error);
+        if(responseBlock) responseBlock(nil, error);
     }];
 }
 
@@ -965,17 +963,6 @@
         
     }];
     
-}
-
-- (void)getHomeDataWithResponseBlock:(NSNumber*)offset responseBlock:(FRSAPIResponseBlock)responseBlock{
-    
-    if (offset != nil) {
-        
-        [self getGalleriesAtURLString:[NSString stringWithFormat:@"gallery/highlights?offset=%@&stories=true", offset] WithResponseBlock:responseBlock];
-    }
-    else{
-        [self getGalleriesAtURLString:@"gallery/highlights?stories=true" WithResponseBlock:responseBlock];
-    }
 }
 
 #pragma mark - Assignments

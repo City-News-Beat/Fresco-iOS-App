@@ -20,6 +20,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 @property (nonatomic, strong) UILabel *transcodeLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintImageViewAspectRatio;
 
 @end
 
@@ -36,7 +37,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     [[self imageView] cancelImageRequestOperation];
 
-    self.videoIndicatorView.alpha = 0.0f;
     self.videoIndicatorView.hidden = YES;
     
     if([self.post isVideo]){

@@ -71,13 +71,16 @@
 + (NSString *)relativeDateStringFromDate:(NSDate *)date
 {
     
-    int ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
+    double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
 
     if(ti <= 0){
         return [NSString stringWithFormat:@"just now"];
     }
     else if(ti < 60){
-        return [NSString stringWithFormat:@"%ds", ti];
+        
+        int diff = round(ti);
+        
+        return [NSString stringWithFormat:@"%ds", diff];
     }
     else if(ti < 3600){
         

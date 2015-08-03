@@ -59,7 +59,8 @@ static NSString *userIdentifier = @"currentLocation";
     @property (strong, nonatomic) NSNumber *operatingLat;
 
     @property (strong, nonatomic) NSNumber *operatingLon;
-@property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
+
+    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
 
 @end
 
@@ -73,13 +74,9 @@ static NSString *userIdentifier = @"currentLocation";
     
     [self tweakUI];
     
-
-    
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"assignmentsOnboarding"])
        [self.onboardContainerView removeFromSuperview];
 
-    
-    
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:@"Navigate to the assignment"
                             delegate:self

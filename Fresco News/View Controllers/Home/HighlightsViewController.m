@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     [self setFrescoNavigationBar];
-    [self performNecessaryFetch:nil];
+    [self performNecessaryFetch:nil withRefresh:NO];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
@@ -37,8 +37,10 @@
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
+        NSDictionary *params = @{@"offset" : num, @"invalidate" : @"false"};
+        
         //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:num responseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 if ([responseObject count]) {
                     
@@ -66,12 +68,20 @@
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
+- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock withRefresh:(BOOL)refresh
 {
-    [[FRSDataManager sharedManager] getHomeDataWithResponseBlock:nil responseBlock:^(id responseObject, NSError *error) {
+    NSDictionary *params;
+    
+    if(refresh)
+        params = @{@"offset" : @0, @"invalidate" : @"1"};
+    else
+        params = @{@"offset" : @0, @"invalidate" : @"0"};
+        
+    [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error){
+    
         if (!error) {
             if ([responseObject count]) {
-
+                
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 [self.galleriesViewController.tableView reloadData];
                 //                self.galleriesViewController.galleries = self.galleries;
@@ -79,6 +89,7 @@
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
             }
         }
+    
     }];
 }
 

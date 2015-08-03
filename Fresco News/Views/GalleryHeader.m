@@ -37,13 +37,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
     
     self.labelByLine.text = post.byline;
     
-    UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    UIVisualEffectView * viewWithBlurredBackground = [[UIVisualEffectView alloc] initWithEffect:effect];
-    [viewWithBlurredBackground setFrame:self.frame];
-    
-    [self addSubview:viewWithBlurredBackground];
-    [self sendSubviewToBack:viewWithBlurredBackground];
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor whiteColor];
 }
 
 @end

@@ -122,7 +122,7 @@
     
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
         
-        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil];
+        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:nil withRefresh:YES];
         
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
@@ -217,11 +217,8 @@
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     GalleryHeader *galleryHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
-    
-    // remember, one story per section
-    FRSGallery *gallery = [self.galleries objectAtIndex:section];
-    
-    galleryHeader.gallery = gallery;
+
+    galleryHeader.gallery = [self.galleries objectAtIndex:section];
     
     return galleryHeader;
 }
@@ -321,7 +318,7 @@
                     // TODO: Check for missing/corrupt media at firstPost.url
                     cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:post.video];
                     
-                    [cell.galleryView.sharedPlayer setMuted:NO];
+                    cell.galleryView.sharedPlayer.muted = NO;
                     
                     cell.galleryView.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
                     

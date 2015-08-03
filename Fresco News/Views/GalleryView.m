@@ -33,33 +33,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 @implementation GalleryView
 
-+ (AVPlayer *)sharedPlayer
-{
-    static AVPlayer *player = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        player = [[AVPlayer alloc] init];
-    });
-    return player;
-}
-
-+ (AVPlayerLayer *)sharedLayer
-{
-    static AVPlayerLayer *layer = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        layer = [[AVPlayerLayer alloc] init];
-    });
-    return layer;
-}
-
-
 - (void)awakeFromNib
 {
     self.collectionPosts.scrollsToTop = NO;
-    self.collectionPosts.backgroundColor = [UIColor whiteColor];
-    self.collectionPosts.dataSource = self;
-    self.collectionPosts.delegate = self;
     self.pageControl.numberOfPages = 0;
 }
 
@@ -74,18 +50,14 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     _gallery = gallery;
     
     self.labelCaption.text = self.gallery.caption;
-    self.labelCaption.numberOfLines = 6;
     
     if([self.gallery.posts count] == 1)
         self.pageControl.hidden = YES;
     else
         self.pageControl.numberOfPages = [self.gallery.posts count];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionPosts reloadData];
-        [self.collectionPosts layoutIfNeeded];
-    });
-    
+    [self.collectionPosts reloadData];
+
     if(!inList){
     
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -134,7 +106,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
     }
     
-    [self setAspectRatio];
+    //Temp disabled
+//    [self setAspectRatio];
     
 }
 
@@ -158,6 +131,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         if (self.collectionPosts.constraints)
             [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
         
+//        [self.collectionPosts setTranslatesAutoresizingMaskIntoConstraints:NO];
+        
+        
         // make the aspect ratio 4:3
         [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
                                                                          attribute:NSLayoutAttributeWidth
@@ -166,7 +142,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                                          attribute:NSLayoutAttributeHeight
                                                                         multiplier:aspectRatio
                                                                           constant:0]];
-        [self updateConstraints];
+        [self.collectionPosts updateConstraints];
     }
 }
 
@@ -185,9 +161,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         postCell.videoIndicatorView.alpha = 1.0f;
     }];
     
-    [[self sharedPlayer] pause];
+    [self.sharedPlayer pause];
     
-    [[self sharedLayer] removeFromSuperlayer];
+    [self.sharedLayer removeFromSuperlayer];
     
     self.sharedPlayer = [AVPlayer playerWithURL:url];
     
@@ -245,9 +221,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
+
     [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
-    
-    cell.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
     
     UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processDoubleTap:)];
     doubleTapGesture.delaysTouchesBegan = NO;
@@ -263,7 +238,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
     [cell addGestureRecognizer:singleTapGesture];
-
+        
     return cell;
 }
 
@@ -450,9 +425,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
             //Stop the player
             
-            [[self sharedPlayer] pause];
+            [self.sharedPlayer pause];
             
-            [[self sharedLayer] removeFromSuperlayer];
+            [self.sharedLayer removeFromSuperlayer];
             
         }
         
