@@ -133,9 +133,8 @@
         
     }
     
-    [self.refreshControl endRefreshing];
-    
     [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 /*

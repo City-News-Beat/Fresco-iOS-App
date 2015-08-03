@@ -103,7 +103,7 @@ static CGFloat const kInterImageGap = 1.0f;
                 
                 [self.stories addObjectsFromArray:responseObject];
                 
-                [self reloadData];
+                [self.tableView reloadData];
                 
                 
                 [self.tableView.infiniteScrollingView stopAnimating];
@@ -157,25 +157,32 @@ static CGFloat const kInterImageGap = 1.0f;
     
     [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil withReponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
-            [self.stories setArray:responseObject];
+            
+            if([self.stories count] == 0 || ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID]){
+            
+                [self.stories setArray:responseObject];
+                [self.tableView reloadData];
+            
+            }
         }
-        [self reloadData];
+        
     }];
     
+    [self.refreshControl endRefreshing];
+    
 }
+
+/*
+** Selector for refresh control
+*/
 
 - (void)refresh
 {
     [self performNecessaryFetch:nil];
     
-    [self.refreshControl endRefreshing];
+    [self.tableView reloadData];
     
-    [self.tableView reloadData];
-}
-
-- (void)reloadData
-{
-    [self.tableView reloadData];
+    [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.5];
 }
 
 

@@ -80,13 +80,19 @@
     [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error){
     
         if (!error) {
+            
             if ([responseObject count]) {
                 
-                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                [self.galleriesViewController.tableView reloadData];
+                //Check to make sure the first gallery and the response object's first gallery are different
+                if([self.galleriesViewController.galleries count] == 0 || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
+                
+                    self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
+                    [self.galleriesViewController.tableView reloadData];
                 //                self.galleriesViewController.galleries = self.galleries;
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
                 //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
+                    
+                }
             }
         }
     
