@@ -15,7 +15,7 @@
 #define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
 #define NOTIFICATION_BADGE_RESET            @"ResetNotificationBadge"
 
-#define ERROR_DOMAIN                        @"com.fresconews";
+#define ERROR_DOMAIN                        @"com.fresconews"
 
 
 #pragma mark - Keys Plist
@@ -39,7 +39,7 @@
 
 #define PRODUCTION_BASE_URL            @"https://beta.fresconews.com"
 #define PRODUCTION_BASE_API            @"https://api.fresconews.com/v1/"
-#define BASE_PATH                      @"";
+#define BASE_PATH                      @""
 
 
 #pragma mark - Staging - Base URL/API
