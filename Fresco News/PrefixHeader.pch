@@ -9,8 +9,6 @@
 #ifndef FrescoNews_PrefixHeader_pch
 #define FrescoNews_PrefixHeader_pch
 
-#import "UIColor+Additions.h"
-#import "VariableStore.h"
-#import "FRSAlertViewManager.h"
+#import "FRSAppConstants.h"
 
 #endif

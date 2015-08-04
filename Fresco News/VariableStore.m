@@ -8,11 +8,13 @@
 
 #import "VariableStore.h"
 
-NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
+//NSString * const kNotificationAPIKeyAvailable = @"NotificationAPIKeyAvailable";
 
-NSString * const kNotificationViewDismiss = @"DismissNotificationsView";
+//NSString * const kNotificationViewDismiss = @"DismissNotificationsView";
 
-NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
+//NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
+
+NSString * const kNotificationImageSet = @"UserImageSet";
 
 @implementation VariableStore
 
@@ -30,48 +32,34 @@ NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
         sharedInstance = [[VariableStore alloc] init];
         
         // errors
-        sharedInstance.errorDomain = @"com.fresconews";
+        sharedInstance.errorDomain = ERROR_DOMAIN;
         
         // colors
-        sharedInstance.colorBrandDark = @"FFB814";
-        sharedInstance.colorBrandPrimary = @"FFC53D";
-        sharedInstance.colorBrandLight = @"FFD675";
-        
-        sharedInstance.colorAssignment = @"FF4ABE";
-        sharedInstance.colorAlertRed = @"D0021B";
-        sharedInstance.colorPhotoUse = @"5C85F5";
-        sharedInstance.colorBackground = @"FAFAFA";
-        
-        sharedInstance.colorStoryBreaksBackground = @"5C85F5";
-        
-        sharedInstance.opacityDarkText = 0.87f;
-        sharedInstance.opacityLightText = 0.54f;
-        sharedInstance.opacityOuterListDividers = 0.26f;
-        sharedInstance.opacityInnerListDividers = 0.08f;
-        sharedInstance.opacityUnreadNotificationHighlights = 0.08f;
-        
+        sharedInstance.brandDarkColor = [UIColor brandDarkColor];
+        sharedInstance.backgroundColor = [UIColor whiteBackgroundColor];
+
         // configuration that might change in debug
-        sharedInstance.parseAppId = @"XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU";
-        sharedInstance.parseClientKey = @"BttF0WEtSrKdLA2Xst2wfc9VQE8PUwP0OwheKEoY";
-        sharedInstance.twitterConsumerKey = @"o6y4zv5yq0AfCU4HKUHQYJMXE";
-        sharedInstance.twitterConsumerSecret = @"PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz";
+        sharedInstance.parseAppId = PRODUCTION_PARSE_APP_ID;
+        sharedInstance.parseClientKey = PRODUCTION_PARSE_CLIENT_KEY;
+        sharedInstance.twitterConsumerKey = TWITTER_CONSUMER_KEY;
+        sharedInstance.twitterConsumerSecret = TWITTER_CONSUMER_SECRET;
         
-        sharedInstance.baseUrl = @"https://beta.fresconews.com";
-        sharedInstance.baseAPI = @"https://api.fresconews.com/v1/";
-        sharedInstance.basePath = @"";
-        sharedInstance.cdnBaseURL = @"http://res.cloudinary.com/fresco-news/image/fetch";
-        sharedInstance.cdnFacebookBaseURL = @"http://res.cloudinary.com/fresco-news/image/facebook";
+        sharedInstance.baseUrl = PRODUCTION_BASE_URL;
+        sharedInstance.baseAPI = PRODUCTION_BASE_API;
+        sharedInstance.basePath = BASE_PATH;
+        sharedInstance.cdnBaseURL = CDN_BASE_URL;
+        sharedInstance.cdnFacebookBaseURL = CDN_FACEBOOK_URL;
 
         #ifdef DEBUG
-        sharedInstance.parseAppId = @"ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc";
-        sharedInstance.parseClientKey = @"KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4";
-        sharedInstance.baseUrl = @"https://staging.webm.fresconews.com";
-        sharedInstance.baseAPI = @"http://staging.fresconews.com/v1/";
+        sharedInstance.parseAppId = STAGING_PARSE_APP_ID;
+        sharedInstance.parseClientKey = STAGING_PARSE_CLIENT_KEY;
+        sharedInstance.baseUrl = STAGING_BASE_URL;
+        sharedInstance.baseAPI = STAGING_BASE_API;
         #endif
 
-        sharedInstance.maximumVideoLength = 60.0f; // Per @im
-        sharedInstance.maximumAssetAge = -3600 * 6; // Per @im
-        sharedInstance.locationUpdateInterval = 60; // (While the app is running)
+        sharedInstance.maximumVideoLength = MAX_VIDEO_LENGTH; // Per @im
+        sharedInstance.maximumAssetAge = MAX_ASSET_AGE; // Per @im
+        sharedInstance.locationUpdateInterval = LOCATION_UPDATE_INTERVAL; // (While the app is running)
     });
     
     return sharedInstance;
@@ -88,9 +76,9 @@ NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
 + (void)resetDraftGalleryPost
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:nil forKey:@"captionStringInProgress"];
-    [defaults setObject:nil forKey:@"defaultAssignmentID"];
-    [defaults setObject:nil forKey:@"selectedAssets"];
+    [defaults setObject:nil forKey:UD_CAPTION_STRING_IN_PROGRESS];
+    [defaults setObject:nil forKey:UD_DEFAULT_ASSIGNMENT_ID];
+    [defaults setObject:nil forKey:UD_SELECTED_ASSETS];
 }
 
 @end

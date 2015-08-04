@@ -8,11 +8,13 @@
 
 @import Foundation;
 
-FOUNDATION_EXPORT NSString * const kNotificationAPIKeyAvailable;
+//FOUNDATION_EXPORT NSString * const kNotificationAPIKeyAvailable;
 
-FOUNDATION_EXPORT NSString * const kNotificationViewDismiss;
+//FOUNDATION_EXPORT NSString * const kNotificationViewDismiss;
 
-FOUNDATION_EXPORT NSString * const kNotificationBadgeReset;
+//FOUNDATION_EXPORT NSString * const kNotificationBadgeReset;
+
+FOUNDATION_EXPORT NSString * const kNotificationImageSet;
 
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
@@ -38,22 +40,8 @@ enum FRSErrorCodes {
 ** Colors
 */
 
-@property NSString *colorBrandDark;
-@property NSString *colorBrandPrimary;
-@property NSString *colorBrandLight;
-
-@property NSString *colorAssignment;
-@property NSString *colorAlertRed;
-@property NSString *colorPhotoUse;
-@property NSString *colorBackground;
-
-@property NSString *colorStoryBreaksBackground;
-
-@property CGFloat opacityDarkText;
-@property CGFloat opacityLightText;
-@property CGFloat opacityOuterListDividers;
-@property CGFloat opacityInnerListDividers;
-@property CGFloat opacityUnreadNotificationHighlights;
+@property UIColor *brandDarkColor;
+@property UIColor *backgroundColor;
 
 /*
 ** API
@@ -73,8 +61,8 @@ enum FRSErrorCodes {
 @property NSInteger maximumAssetAge;
 @property NSInteger locationUpdateInterval;
 
-@property NSString * const kNotificationAPIKeyAvailable;
+//@property NSString * const kNotificationAPIKeyAvailable;
 
-@property NSString * const kNotificationViewDismiss;
+//@property NSString * const kNotificationViewDismiss;
 
 @end

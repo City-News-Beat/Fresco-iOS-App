@@ -105,7 +105,7 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
+    return [MKMapView circleRenderWithColor:[UIColor frescoBlueColor] forOverlay:overlay];
 }
 
 #pragma mark - Utility methods

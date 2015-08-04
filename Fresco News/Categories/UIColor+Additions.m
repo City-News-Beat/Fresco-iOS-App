@@ -10,98 +10,54 @@
 
 @implementation UIColor (Additions)
 
-+ (instancetype)colorWithHex:(NSString *)hex {
-    return [self colorWithHex:hex alpha:1.0f];
++ (UIColor *)greenToolbarColor {
+//  39D673
+    return [UIColor colorWithRed:0.22 green:0.84 blue:0.45 alpha:1.00];
 }
 
-+ (instancetype)colorWithHex:(NSString *)hex alpha:(float)alpha {
-	
-    hex = [hex stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
-	
-    uint hexInt;
-    if ([[NSScanner scannerWithString:hex] scanHexInt:&hexInt]) {
-        return [self colorWithRed:(float)((hexInt & 0xFF0000) >> 16) / 255.0f
-                            green:(float)((hexInt & 0x00FF00) >>  8) / 255.0f
-                             blue:(float)((hexInt & 0x0000FF)      ) / 255.0f
-                            alpha:alpha];
-    }
-    else {
-        return [self blackColor];
-    }
-	
++ (UIColor *)darkGoldBarButtonColor {
+//  76541E
+    return [UIColor colorWithRed:0.46 green:0.33 blue:0.12 alpha:1.00];
 }
 
-#define FBBHexRed(hex)		FBBHexColor(((hex) & 0xff0000) >> 16)
-#define FBBHexGreen(hex)	FBBHexColor(((hex) & 0x00ff00) >>  8)
-#define FBBHexBlue(hex)		FBBHexColor(((hex) & 0x0000ff) >>  0)
-
-+(instancetype)colorWithHexInteger:(uint32_t)hex {
-	return [self colorWithRed:FBBHexRed(hex) green:FBBHexGreen(hex) blue:FBBHexBlue(hex) alpha:1.0];
++ (UIColor *)frescoBlueColor {
+//  0077FF
+    return [UIColor colorWithRed:0.00 green:0.47 blue:1.00 alpha:1.00];
 }
 
-+(instancetype)userTeamNameTextColor {
-	return [self colorWithHexInteger:0xCC0000];
++ (UIColor *)radiusGoldColor {
+//  ffc600
+    return [UIColor colorWithRed:1.00 green:0.78 blue:0.00 alpha:1.00];
 }
 
-+(instancetype)otherTeamNameTextColor {
-	return [self colorWithHexInteger:0x1A4D81];
++ (UIColor *)goldApertureColor {
+//  FFBD00
+    return [UIColor colorWithRed:1.00 green:0.74 blue:0.00 alpha:1.00];
 }
 
-+(UIColor *)lighterColorForColor:(UIColor *)c byDegree:(float)degree
-{
-    CGFloat r, g, b, a;
-    if ([c getRed:&r green:&g blue:&b alpha:&a])
-        return [UIColor colorWithRed:MIN(r + degree, 1.0)
-                               green:MIN(g + degree, 1.0)
-                                blue:MIN(b + degree, 1.0)
-                               alpha:a];
-    return nil;
++ (UIColor *)redCircleStrokeColor {
+//  b50218
+    return [UIColor colorWithRed:0.71 green:0.01 blue:0.09 alpha:1.00];
 }
 
-+(UIColor *)darkerColorForColor:(UIColor *)c byDegree:(float)degree
-{
-    CGFloat r, g, b, a;
-    if ([c getRed:&r green:&g blue:&b alpha:&a])
-        return [UIColor colorWithRed:MAX(r - degree, 0.0)
-                               green:MAX(g - degree, 0.0)
-                                blue:MAX(b - degree, 0.0)
-                               alpha:a];
-    return nil;
++ (UIColor *)goldStatusBarColor {
+//  ffc100
+    return [UIColor colorWithRed:1.00 green:0.76 blue:0.00 alpha:1.00];
 }
 
-#pragma mark - Custom Named Colors
-+(UIColor *)gdlColorDarkGray
-{
-    return [UIColor colorWithHex:@"4D4D4D"];
++ (UIColor *)lightGoldCellColor {
+//  faf4e5
+    return [UIColor colorWithRed:0.98 green:0.96 blue:0.90 alpha:1.00];
 }
 
-+(UIColor *)tileBorderColor
-{
-    return [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
++ (UIColor *)brandDarkColor {
+//  FFB814
+    return [UIColor colorWithRed:1.00 green:0.72 blue:0.08 alpha:1.00];
 }
 
-+(UIColor *)tileBorderColorLive
-{
-    return [UIColor redColor];
++ (UIColor *)whiteBackgroundColor {
+//  FAFAFA
+    return [UIColor colorWithRed:0.98 green:0.98 blue:0.98 alpha:1.00];
 }
 
-+ (CGFloat)componentFromColorString:(NSString *)colorString colorName:(NSString *)colorName
-{
-    unsigned int colorInt;
-    NSScanner *scanner = [NSScanner scannerWithString:colorString];
-    [scanner scanHexInt:&colorInt];
-    CGFloat color;
-    int bitShift = 0;
-    
-    if ([colorName isEqualToString:@"red"])
-        bitShift = 16;
-    else if ([colorName isEqualToString:@"green"])
-        bitShift = 8;
-    if ([colorName isEqualToString:@"blue"])
-        bitShift = 0;
-    
-    // shift the mask left and the result back
-    color = (colorInt & (0xFF << bitShift)) >> bitShift;
-    return  (CGFloat)color/255.0;
-}
 @end

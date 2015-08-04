@@ -28,8 +28,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 @property (nonatomic, strong) NSMutableArray *notifications;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAssignmentDescription;
-
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
 @end
@@ -59,7 +57,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
         
-        if(!self.disableEndlessScroll){
+        if(!self.disableEndlessScroll) {
         
             // append data to data source, insert new cells at the end of table view
             NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
@@ -74,10 +72,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                         
                         [self.tableView reloadData];
                         
-                    }
-                    else{
+                    } else
                         self.disableEndlessScroll = YES;
-                    }
                     
                     [self.tableView.infiniteScrollingView stopAnimating];
                     
@@ -98,7 +94,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 label.text = @"No Notifications";
                 
-                label.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
+                label.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:20.0f];
                 
                 [label sizeToFit];
                 
@@ -108,13 +104,11 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 self.tableView.hidden = YES;
                 
-            }
-            else{
+            } else {
                 
                 self.notifications = [NSMutableArray arrayWithArray:responseObject];
                 
                 [[self tableView] reloadData];
-                
             }
             
         }
@@ -125,15 +119,13 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 }
 
 
-- (void)setAllNotificaitonsSeen{
+- (void)setAllNotificaitonsSeen {
     
-    for(FRSNotification *notification in self.notifications){
+    for(FRSNotification *notification in self.notifications) {
         
-        if (!notification.seen) {
-            
+        if (!notification.seen)
             [[FRSDataManager sharedManager] setNotificationSeen:notification.notificaitonId withResponseBlock:nil];
-            
-        }
+        
     }
 }
 
@@ -175,44 +167,83 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     cell.notificationDescription.text = notification.body;
     cell.timeElapsed.text = [MTLModel relativeDateStringFromDate:notification.date];
     
+    CGFloat timeTrailingConstant = 17.0;
+    
+    if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+         timeTrailingConstant = 16.5;
+    
+    
+    if (IS_STANDARD_IPHONE_6_PLUS)
+        timeTrailingConstant = 20.0;
+    
+    cell.constraintTimeElapsedTrailing.constant = timeTrailingConstant;
+    
     if(notification.seen == false){
-        cell.contentView.backgroundColor = [UIColor colorWithHex:@"faf4e5"];
+        cell.contentView.backgroundColor = [UIColor lightGoldCellColor];
     }
     
-    //Check if assignment, then check if the assignment has expired
-    if([notification.type isEqualToString:@"assignment"]){
+//    //Check if assignment, then check if the assignment has expired
+    if([notification.type isEqualToString:@"assignment"]) {
         
-        [cell.firstButton setTitle:@"View Assignment" forState:UIControlStateNormal];
+        CGFloat button1Width = 146.0;
+        NSString *button1Title = @"View Assignment";
         
-        [cell.secondButton setTitle:@"Navigate" forState:UIControlStateNormal];
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6) {
+            button1Width = 119.5;
+            button1Title = @"View";
+        }
+        
+        if (IS_STANDARD_IPHONE_6_PLUS)
+            button1Width = 165.0;
+        
+        cell.constraintButton1Width.constant = button1Width;
+        
+        [cell.firstButton setTitle:button1Title forState:UIControlStateNormal];
+        
+        [cell.secondButton setTitle:@"Open in Maps" forState:UIControlStateNormal];
         
         //25 from the storyboard constraint constant
         cell.constraintNotificationDescription.constant = 25.0f;
+      
         
-    }
-    else if([notification.type isEqualToString:@"use"]){
+    } else if ([notification.type isEqualToString:@"use"]) {
 
         cell.constraintNotificationDescription.constant = 3.0f;
         
         cell.secondButton.hidden = YES;
         
-        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]){
-            
-            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+        CGFloat multiplier = 1.22;
         
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+            multiplier = 1.263;
+        
+        if (IS_STANDARD_IPHONE_6_PLUS)
+            multiplier = 1.20;
+        
+        cell.constraintButton1Width.constant = self.view.frame.size.width / multiplier;
+        
+        if (!notification.meta[@"icon"]) {
+            [cell.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+        }
+        
+        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]) {
+            //FIXME: change string of imageNamed and change ifkindofclass to whether or not it's set
+            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
         }
     
     }
     
     //UI Styling
-    cell.firstButton.layer.cornerRadius = 3;
-    cell.secondButton.layer.cornerRadius = 3;
+    cell.firstButton.layer.cornerRadius = 4;
+    cell.secondButton.layer.cornerRadius = 4;
     
     cell.firstButton.clipsToBounds = YES;
     cell.secondButton.clipsToBounds = YES;
 
     cell.firstButton.layer.borderWidth = 1.0;
+    cell.firstButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
     cell.secondButton.layer.borderWidth = 1.0;
+    cell.secondButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
     
     cell.firstButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
     cell.secondButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];

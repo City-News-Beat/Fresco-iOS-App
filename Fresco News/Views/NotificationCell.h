@@ -18,5 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *secondButton;
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintNotificationDescription;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButton1Width;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTimeElapsedTrailing;
 
 @end

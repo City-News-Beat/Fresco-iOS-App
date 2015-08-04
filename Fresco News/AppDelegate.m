@@ -23,8 +23,8 @@
 #import "HighlightsViewController.h"
 #import "FRSRootViewController.h"
 
-static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
-static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
+//static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
+//static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
 
 @interface AppDelegate () <CLLocationManagerDelegate>
 
@@ -135,14 +135,14 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 
 - (void)setupToolbarAppearance
 {
-    NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
+    NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [UIToolbar appearance].barTintColor = [UIColor colorWithHex:@"39D673"];
+    [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
 - (void)setupBarButtonItemAppearance
 {
-    [UIBarButtonItem appearance].tintColor = [UIColor colorWithHex:@"76541E"];
+    [UIBarButtonItem appearance].tintColor = [UIColor darkGoldBarButtonColor];
 }
 
 #pragma mark - Delegate Setup
@@ -167,15 +167,16 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
 {
     //Navigate Action
     UIMutableUserNotificationAction *navigateAction = [[UIMutableUserNotificationAction alloc] init]; // Set up action for navigate
-    navigateAction.identifier = navigateIdentifier; // Define an ID string to be passed back to your app when you handle the action
-    navigateAction.title = @"Navigate";
+    navigateAction.identifier = NAVIGATE_IDENTIFIER; // Define an ID string to be passed back to your app when you handle the action
+   
+    navigateAction.title = NAVIGATE_STR;
     navigateAction.activationMode = UIUserNotificationActivationModeBackground; // If you need to show UI, choose foreground
     navigateAction.destructive = NO; // Destructive actions display in red
     navigateAction.authenticationRequired = NO;
 
     //Assignments Actions Category
     UIMutableUserNotificationCategory *assignmentCategory = [[UIMutableUserNotificationCategory alloc] init];
-    assignmentCategory.identifier = assignmentIdentifier; // Identifier to include in your push payload and local notification
+    assignmentCategory.identifier = ASSIGNMENT_CATEGORY; // Identifier to include in your push payload and local notification
     [assignmentCategory setActions:@[navigateAction] forContext:UIUserNotificationActionContextDefault];
     
     //Notification Types
@@ -281,7 +282,7 @@ static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Ac
     // Check the identifier for the type of notification
     
     //Assignment Action
-    if ([identifier isEqualToString: navigateIdentifier]) {
+    if ([identifier isEqualToString: NAVIGATE_IDENTIFIER]) {
         // Check to make sure the payload has an assignment ID
         if (notification[@"assignment"]) {
             [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {

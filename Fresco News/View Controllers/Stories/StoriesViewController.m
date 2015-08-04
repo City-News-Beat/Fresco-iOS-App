@@ -123,7 +123,7 @@ static CGFloat const kInterImageGap = 1.0f;
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
     
     self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
-    self.statusBarBackground.backgroundColor = [UIColor colorWithHex:@"ffc100"];
+    self.statusBarBackground.backgroundColor = [UIColor goldStatusBarColor];
     self.statusBarBackground.alpha = 0.0f;
     
     [self.view addSubview:self.statusBarBackground];

@@ -21,9 +21,9 @@
 
 #define kSCROLL_VIEW_INSET 100
 
-static NSString *assignmentIdentifier = @"AssignmentAnnotation";
-static NSString *clusterIdentifier = @"ClusterAnnotation";
-static NSString *userIdentifier = @"currentLocation";
+//static NSString *assignmentIdentifier = @"AssignmentAnnotation";
+//static NSString *clusterIdentifier = @"ClusterAnnotation";
+//static NSString *userIdentifier = @"currentLocation";
 
 @class FRSAssignment;
 
@@ -40,7 +40,7 @@ static NSString *userIdentifier = @"currentLocation";
     @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
+    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
 
     /*
@@ -54,13 +54,13 @@ static NSString *userIdentifier = @"currentLocation";
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
+//    @property (assign, nonatomic) BOOL isLoggedInWithAvatar;
+
     @property (strong, nonatomic) NSNumber *operatingRadius;
 
     @property (strong, nonatomic) NSNumber *operatingLat;
 
     @property (strong, nonatomic) NSNumber *operatingLon;
-
-    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
 
 @end
 
@@ -101,7 +101,8 @@ static NSString *userIdentifier = @"currentLocation";
         [self updateAssignments];
     else
         [self presentCurrentAssignment];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:kNotificationImageSet object:nil];
 }
 
 /*
@@ -187,15 +188,28 @@ static NSString *userIdentifier = @"currentLocation";
 }
 
 /*
-** Action to open camera from signle assignment view
+** Action to open camera from single assignment view
 */
 
 - (IBAction)openInCamera:(id)sender {
     
     [self navigateToCamera];
-    
 }
 
+
+/*
+** Listener checking if user has set or changed profile picture
+*/
+
+- (void)loadUserAvatar: (NSNotification *)notification {
+    
+    //TODO: uncomment conditional
+    
+//    if ([FRSDataManager sharedManager].currentUser.avatar) {
+    [self.assignmentsMap removeAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
+//    }
+    
+}
 
 #pragma mark - Assignment Management
 
@@ -476,7 +490,7 @@ static NSString *userIdentifier = @"currentLocation";
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
-        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
+        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
         if(!pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
@@ -485,11 +499,11 @@ static NSString *userIdentifier = @"currentLocation";
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:assignmentIdentifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:ASSIGNMENT_IDENTIFIER];
     
         if (annotationView == nil) {
           
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:assignmentIdentifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
@@ -520,11 +534,11 @@ static NSString *userIdentifier = @"currentLocation";
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
         
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:clusterIdentifier];
+        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:CLUSTER_IDENTIFIER];
         
         if (annotationView == nil) {
             
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:clusterIdentifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
             annotationView.enabled = YES;
             
             annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
@@ -547,7 +561,7 @@ static NSString *userIdentifier = @"currentLocation";
     
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
-    [circleView setFillColor:[UIColor colorWithHex:@"#ffc600"]];
+    [circleView setFillColor:[UIColor radiusGoldColor]];
     
     circleView.alpha = .26;
     

@@ -22,3 +22,4 @@ DerivedData
 *.xcuserstate
 Pods/
 Podfile.lock
+Keys.plist

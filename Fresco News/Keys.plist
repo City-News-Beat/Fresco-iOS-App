@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ProductionParseAppID</key>
+	<string>XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU</string>
+	<key>ProductionParseClientKey</key>
+	<string>BttF0WEtSrKdLA2Xst2wfc9VQE8PUwP0OwheKEoY</string>
+	<key>TwitterConsumerKey</key>
+	<string>o6y4zv5yq0AfCU4HKUHQYJMXE</string>
+	<key>TwitterConsumerSecret</key>
+	<string>PqPWPJRAp37ZE3vLn6Uxu29BGXAaMvi0ooaiqsPQxAn0PSG0Vz</string>
+	<key>StagingParseAppID</key>
+	<string>ttJBFHzdOoPrnwp8IjrZ8cD9d1kog01jiSDAK8Fc</string>
+	<key>StagingParseClientKey</key>
+	<string>KyUgpyFKxNWg2WmdUOhasAtttr33jPLpgRc63uc4</string>
+</dict>
+</plist>

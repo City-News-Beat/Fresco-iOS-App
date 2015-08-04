@@ -27,7 +27,7 @@
         // Create page view controller
         self.dataSource = self;
         
-        self.view.backgroundColor = [UIColor colorWithHex:[VariableStore sharedInstance].colorBackground];
+        self.view.backgroundColor = [UIColor whiteBackgroundColor];
     
         FRSOnboardViewController *viewController = [self viewControllerAtIndex:0];
         

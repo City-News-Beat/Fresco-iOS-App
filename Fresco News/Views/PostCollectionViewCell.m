@@ -103,7 +103,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                 
                     self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
                     self.transcodeLabel.text = @"We’re still processing this video!";
-                    self.transcodeLabel.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0f];
+                    self.transcodeLabel.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:18.0f];
                     self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
                     self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
                     

@@ -338,7 +338,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             textLabelView.textAlignment = NSTextAlignmentCenter;
             textLabelView.numberOfLines = 0;
             
-            textLabelView.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18];
+            textLabelView.font = [UIFont fontWithName:HELVETICA_NEUE_THIN size:18];
             
             double delayInSeconds = 3.0; // number of seconds to wait
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);

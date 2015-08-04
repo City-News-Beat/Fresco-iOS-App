@@ -96,7 +96,7 @@
 
 + (MKAnnotationView *)setupPinForAnnotation:(id <MKAnnotation>)annotation withAnnotationView:(MKAnnotationView *)annotationView {
     
-    static NSString *userIdentifier = @"currentLocation";
+//    static NSString *userIdentifier = @"currentLocation";
     //Check if the user has a profile image
     
     if ([FRSDataManager sharedManager].currentUser.avatar) {
@@ -105,7 +105,7 @@
         
         if (!pinnedView) {
             
-            pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
+            pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
             
             UIImageView *profileImageView = [[UIImageView alloc] init];
             
@@ -141,8 +141,8 @@
         SVPulsingAnnotationView *pulsingView = (SVPulsingAnnotationView *)annotationView;
         
         if (!pulsingView) {
-            pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:userIdentifier];
-            pulsingView.annotationColor = [UIColor colorWithHex:@"0077ff"];
+            pulsingView = [[SVPulsingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
+            pulsingView.annotationColor = [UIColor frescoBlueColor];
         }
         
         return pulsingView;
