@@ -37,6 +37,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     self.collectionPosts.scrollsToTop = NO;
     self.pageControl.numberOfPages = 0;
+    self.collectionPosts.dataSource = self;
+    self.collectionPosts.delegate = self;
 }
 
 - (void)setGallery:(FRSGallery *)gallery
@@ -107,7 +109,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     }
     
     //Temp disabled
-//    [self setAspectRatio];
+    [self setAspectRatio];
     
 }
 
@@ -134,7 +136,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 //        [self.collectionPosts setTranslatesAutoresizingMaskIntoConstraints:NO];
         
         
-        // make the aspect ratio 4:3
+//         make the aspect ratio 4:3
         [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
                                                                          attribute:NSLayoutAttributeWidth
                                                                          relatedBy:NSLayoutRelationEqual
