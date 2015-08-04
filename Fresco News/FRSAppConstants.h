@@ -204,30 +204,3 @@
 #define IS_STANDARD_IPHONE_6_PLUS           (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0)
 
 #define IS_ZOOMED_IPHONE_6_PLUS             (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0 && IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale < [UIScreen mainScreen].scale)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
