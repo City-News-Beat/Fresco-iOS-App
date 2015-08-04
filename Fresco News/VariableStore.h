@@ -14,6 +14,8 @@
 
 //FOUNDATION_EXPORT NSString * const kNotificationBadgeReset;
 
+FOUNDATION_EXPORT NSString * const kNotificationImageSet;
+
 enum FRSErrorCodes {
     ErrorSignupDuplicateEmail = 101,
     ErrorSignupCantCreateUser,

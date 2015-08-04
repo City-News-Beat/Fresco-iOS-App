@@ -28,8 +28,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 @property (nonatomic, strong) NSMutableArray *notifications;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAssignmentDescription;
-
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
 @end
@@ -169,14 +167,38 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     cell.notificationDescription.text = notification.body;
     cell.timeElapsed.text = [MTLModel relativeDateStringFromDate:notification.date];
     
+    CGFloat timeTrailingConstant = 17.0;
+    
+    if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+         timeTrailingConstant = 16.5;
+    
+    
+    if (IS_STANDARD_IPHONE_6_PLUS)
+        timeTrailingConstant = 20.0;
+    
+    cell.constraintTimeElapsedTrailing.constant = timeTrailingConstant;
+    
     if(notification.seen == false){
         cell.contentView.backgroundColor = [UIColor lightGoldCellColor];
     }
     
-    //Check if assignment, then check if the assignment has expired
-    if([notification.type isEqualToString:@"assignment"]){
+//    //Check if assignment, then check if the assignment has expired
+    if([notification.type isEqualToString:@"assignment"]) {
         
-        [cell.firstButton setTitle:@"View Assignment" forState:UIControlStateNormal];
+        CGFloat button1Width = 146.0;
+        NSString *button1Title = @"View Assignment";
+        
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6) {
+            button1Width = 119.5;
+            button1Title = @"View";
+        }
+        
+        if (IS_STANDARD_IPHONE_6_PLUS)
+            button1Width = 165.0;
+        
+        cell.constraintButton1Width.constant = button1Width;
+        
+        [cell.firstButton setTitle:button1Title forState:UIControlStateNormal];
         
         [cell.secondButton setTitle:@"Open in Maps" forState:UIControlStateNormal];
         
@@ -190,10 +212,23 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
         cell.secondButton.hidden = YES;
         
-        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]) {
-            
-            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+        CGFloat multiplier = 1.22;
         
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+            multiplier = 1.263;
+        
+        if (IS_STANDARD_IPHONE_6_PLUS)
+            multiplier = 1.20;
+        
+        cell.constraintButton1Width.constant = self.view.frame.size.width / multiplier;
+        
+        if (!notification.meta[@"icon"]) {
+            [cell.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+        }
+        
+        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]) {
+            //FIXME: change string of imageNamed and change ifkindofclass to whether or not it's set
+            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
         }
     
     }
@@ -206,7 +241,9 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     cell.secondButton.clipsToBounds = YES;
 
     cell.firstButton.layer.borderWidth = 1.0;
+    cell.firstButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
     cell.secondButton.layer.borderWidth = 1.0;
+    cell.secondButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
     
     cell.firstButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
     cell.secondButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];

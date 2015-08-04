@@ -14,6 +14,8 @@
 
 //NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
 
+NSString * const kNotificationImageSet = @"UserImageSet";
+
 @implementation VariableStore
 
 + (VariableStore *)sharedInstance

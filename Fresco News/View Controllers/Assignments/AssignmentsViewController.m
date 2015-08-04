@@ -40,7 +40,7 @@
     @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
     @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
+    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
 
     /*
@@ -54,13 +54,13 @@
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
+//    @property (assign, nonatomic) BOOL isLoggedInWithAvatar;
+
     @property (strong, nonatomic) NSNumber *operatingRadius;
 
     @property (strong, nonatomic) NSNumber *operatingLat;
 
     @property (strong, nonatomic) NSNumber *operatingLon;
-
-    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
 
 @end
 
@@ -101,7 +101,8 @@
         [self updateAssignments];
     else
         [self presentCurrentAssignment];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:kNotificationImageSet object:nil];
 }
 
 /*
@@ -187,15 +188,28 @@
 }
 
 /*
-** Action to open camera from signle assignment view
+** Action to open camera from single assignment view
 */
 
 - (IBAction)openInCamera:(id)sender {
     
     [self navigateToCamera];
-    
 }
 
+
+/*
+** Listener checking if user has set or changed profile picture
+*/
+
+- (void)loadUserAvatar: (NSNotification *)notification {
+    
+    //TODO: uncomment conditional
+    
+//    if ([FRSDataManager sharedManager].currentUser.avatar) {
+    [self.assignmentsMap removeAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
+//    }
+    
+}
 
 #pragma mark - Assignment Management
 
