@@ -53,7 +53,7 @@
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [[UITabBar appearance] setTintColor:[UIColor colorWithHex:[VariableStore sharedInstance].colorBrandDark]]; // setTintColor:
+    [[UITabBar appearance] setTintColor:[UIColor brandDarkColor]]; // setTintColor:
     
     if(!self.tbc)
         self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];

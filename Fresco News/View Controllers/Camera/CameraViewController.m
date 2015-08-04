@@ -642,7 +642,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             // Hide most of the UI
             [self.circleLayer setOpacity:0];
             self.controlsView.backgroundColor = [UIColor whiteColor];
-            [self.apertureButton setBackgroundColor:[UIColor colorWithHex:@"FFBD00"]];
+            [self.apertureButton setBackgroundColor:[UIColor goldApertureColor]];
             
             for (UIView *view in [self.controlsView subviews]) {
                 if(view != self.apertureButton){
@@ -742,7 +742,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     // Configure the apperence of the circle
     self.circleLayer.fillColor = [UIColor clearColor].CGColor;
-    self.circleLayer.strokeColor = [UIColor colorWithHex:@"b50218"].CGColor;
+    self.circleLayer.strokeColor = [UIColor redCircleStrokeColor].CGColor;
     self.circleLayer.lineWidth = 4;
     
     // Add to parent layer

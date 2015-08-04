@@ -19,11 +19,11 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:kNotificationAPIKeyAvailable object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIFICATION_API_KEY_AVAILABLE object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:kNotificationViewDismiss object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:NOTIFICATION_VIEW_DISMISS object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:kNotificationBadgeReset object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:NOTIFICATION_BADGE_RESET object:nil];
     
     if ([[FRSDataManager sharedManager] isLoggedIn]) {
         [self setRightBarButtonItemWithBadge:YES];
@@ -92,7 +92,7 @@
         
         badgeView.strokeWidth = 0;
         
-        badgeView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
+        badgeView.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12.0];
         
         __block NSInteger badgeCount = 0;
         
@@ -109,7 +109,7 @@
                             if(!notif.seen) badgeCount ++;
                         }
                         
-                        [[NSUserDefaults standardUserDefaults]setInteger:badgeCount forKey:@"notificationsCount"];
+                        [[NSUserDefaults standardUserDefaults]setInteger:badgeCount forKey:UD_NOTIFICATIONS_COUNT];
                         NSLog(@"%ld", (long)badgeCount);
                     }
                 }
@@ -118,7 +118,7 @@
         //The notifications have been updated, and use the stored count
         else{
             
-            badgeCount = [[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"];
+            badgeCount = [[NSUserDefaults standardUserDefaults] integerForKey:UD_NOTIFICATIONS_COUNT];
 
         }
         
@@ -208,7 +208,7 @@
     
     if([[FRSDataManager sharedManager] isLoggedIn]){
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationBadgeReset object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
         
         //Retreieve Notifications View Controller from storyboard
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];

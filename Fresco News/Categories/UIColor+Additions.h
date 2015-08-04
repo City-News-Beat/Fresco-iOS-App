@@ -7,24 +7,27 @@
 //
 
 @import UIKit;
-#define FBBHexColor(component) (((CGFloat)(component)) / (CGFloat)0xff)
 
 @interface UIColor (Additions)
-+ (instancetype)colorWithHex:(NSString *)hex;
-+ (instancetype)colorWithHex:(NSString *)hex alpha:(float)alpha;
 
-+(instancetype)colorWithHexInteger:(uint32_t)hex;
++ (UIColor *)greenToolbarColor;
 
-+(instancetype)userTeamNameTextColor;
-+(instancetype)otherTeamNameTextColor;
++ (UIColor *)darkGoldBarButtonColor;
 
-+(UIColor *)lighterColorForColor:(UIColor *)c byDegree:(float)degree;
-+(UIColor *)darkerColorForColor:(UIColor *)c byDegree:(float)degree;
++ (UIColor *)frescoBlueColor;
 
-+(UIColor *)gdlColorDarkGray;
-+(UIColor *)tileBorderColor;
-+(UIColor *)tileBorderColorLive;
++ (UIColor *)radiusGoldColor;
 
-+ (CGFloat)componentFromColorString:(NSString *)colorString colorName:(NSString *)colorName;
++ (UIColor *)goldApertureColor;
+
++ (UIColor *)redCircleStrokeColor;
+
++ (UIColor *)goldStatusBarColor;
+
++ (UIColor *)lightGoldCellColor;
+
++ (UIColor *)brandDarkColor;
+
++ (UIColor *)whiteBackgroundColor;
 
 @end

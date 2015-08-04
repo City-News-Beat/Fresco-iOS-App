@@ -39,7 +39,7 @@
     
     [self.onboard3Label setText:@"If a photo or video in your gallery is\nused, we’ll tell you who used it and\nhow to get paid!"];
     
-    [self.letsGoButton setBackgroundColor:[UIColor colorWithHex:@"0077FF"]];
+    [self.letsGoButton setBackgroundColor:[UIColor frescoBlueColor]];
     self.letsGoButton.layer.cornerRadius = 4;
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     
@@ -49,7 +49,7 @@
         if (screenSize.height < 667.0f) {
             
             for (UILabel *label in @[self.onboard1Label, self.onboard2Label, self.onboard3Label]) {
-                [label setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:13]];
+                [label setFont:[UIFont fontWithName:HELVETICA_NEUE_LIGHT size:13]];
             }
         }
     }

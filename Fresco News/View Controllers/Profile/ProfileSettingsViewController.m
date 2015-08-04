@@ -499,18 +499,18 @@ typedef enum : NSUInteger {
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView circleRenderWithColor:[UIColor colorWithHex:@"#0077ff"] forOverlay:overlay];
+    return [MKMapView circleRenderWithColor:[UIColor frescoBlueColor] forOverlay:overlay];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    static NSString *userIdentifier = @"currentLocation";
+//    static NSString *userIdentifier = @"currentLocation";
     
     //If the annotiation is for the user location
     
     if (annotation == mapView.userLocation) {
       
-        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:userIdentifier];
+        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
         
         if(!pinView){
         

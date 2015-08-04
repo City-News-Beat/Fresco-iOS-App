@@ -96,7 +96,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 
                 label.text = @"No Notifications";
                 
-                label.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
+                label.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:20.0f];
                 
                 [label sizeToFit];
                 
@@ -170,7 +170,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     cell.timeElapsed.text = [MTLModel relativeDateStringFromDate:notification.date];
     
     if(notification.seen == false){
-        cell.contentView.backgroundColor = [UIColor colorWithHex:@"faf4e5"];
+        cell.contentView.backgroundColor = [UIColor lightGoldCellColor];
     }
     
     //Check if assignment, then check if the assignment has expired

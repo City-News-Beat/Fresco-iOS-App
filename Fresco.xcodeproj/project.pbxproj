@@ -92,6 +92,7 @@
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
+		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
 		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
@@ -339,6 +340,8 @@
 		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ISO.m"; path = "Categories/NSDate+ISO.m"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		BC419B671B6FED2700122B87 /* FRSAppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppConstants.h; sourceTree = "<group>"; };
+		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
 		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
@@ -632,6 +635,9 @@
 		1EDA44B21AA4CCC70082E08D /* Fresco News */ = {
 			isa = PBXGroup;
 			children = (
+				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
+				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
+				1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */,
 				1EDA44B71AA4CCC70082E08D /* AppDelegate.h */,
 				1EDA44B81AA4CCC70082E08D /* AppDelegate.m */,
 				1E408B771AA7A40A0057AC16 /* Base Classes */,
@@ -646,8 +652,6 @@
 				42C926751B18AB1200774A37 /* Camera.storyboard */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
-				1ED9A3231AA9FAB9009BD7A3 /* VariableStore.h */,
-				1ED9A3241AA9FAB9009BD7A3 /* VariableStore.m */,
 			);
 			path = "Fresco News";
 			sourceTree = "<group>";
@@ -659,6 +663,7 @@
 				1EDA44B41AA4CCC70082E08D /* Info.plist */,
 				1EDA44B51AA4CCC70082E08D /* main.m */,
 				E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */,
+				BC419B6D1B70052500122B87 /* Keys.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1239,6 +1244,7 @@
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				E7562BB81B6FDEAA00C8F969 /* Default-568h@2x.png in Resources */,
+				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
 			);

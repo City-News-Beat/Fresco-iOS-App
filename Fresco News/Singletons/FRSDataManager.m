@@ -227,7 +227,7 @@
                     [self validateAPIToken:^(BOOL success, NSError *error) {
                         
                         if (success)
-                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
                         else
                             NSLog(@"Could not authenticate to the API");
                         
@@ -563,7 +563,7 @@
                     
                     if (success){
                         responseBlock(YES, error);
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationAPIKeyAvailable object:nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
                     }
                     else{
                         responseBlock(NO, error);

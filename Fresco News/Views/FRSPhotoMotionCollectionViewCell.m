@@ -86,7 +86,7 @@ static CGFloat kLabelBottomPadding = 35.f;
     [_captionLabel setLineBreakMode:NSLineBreakByWordWrapping];
     [_captionLabel setNumberOfLines:0];
     [_captionLabel setTextColor:[UIColor whiteColor]];
-    [_captionLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17.f]];
+    [_captionLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17.f]];
     [[self contentView] addSubview:_captionLabel];
 
     [self setupMotionView];

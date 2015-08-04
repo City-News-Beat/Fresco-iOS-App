@@ -132,7 +132,7 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationViewDismiss object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_VIEW_DISMISS object:nil];
     
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
