@@ -42,7 +42,7 @@
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
     @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
-
+    @property (nonatomic) MKAnnotationView *pinView;
     /*
     ** Conditioning Variables
     */
@@ -203,13 +203,19 @@
 
 - (void)loadUserAvatar: (NSNotification *)notification {
     
-    //TODO: uncomment conditional
-    
-//    if ([FRSDataManager sharedManager].currentUser.avatar) {
-    [self.assignmentsMap removeAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
-//    }
-    
+//    //TODO: uncomment conditional
+//    
+////    if ([FRSDataManager sharedManager].currentUser.avatar) {
+//    [self.assignmentsMap removeAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
+//    [self.assignmentsMap addAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
+////    }
+
+    self.pinView.annotation = nil;
+    self.pinView = nil;
 }
+
+//create function
+
 
 #pragma mark - Assignment Management
 
@@ -490,10 +496,10 @@
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
-        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+        self.pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
-        if(!pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
+        if(!self.pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:self.pinView];
             
     }
     //If the annotation is for an assignment
