@@ -129,15 +129,15 @@
                 NSLog(@"Error: %@", error);
             }
             else {
-                [self performSegueWithIdentifier:@"showPermissions" sender:self];
+                [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
             }
         }];
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Please enter both first and last name"
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
+                                                        message:NAME_PROMPT
                                                        delegate:self
-                                              cancelButtonTitle:@"OK"
+                                              cancelButtonTitle:OK
                                               otherButtonTitles:nil, nil];
         [alert show];
     }
@@ -158,7 +158,7 @@
     NSString *twitterUserID = [PFTwitterUtils twitter].userId;
     NSString *twitterScreenName = [PFTwitterUtils twitter].screenName;
 
-    NSString *urlString = @"https://api.twitter.com/1.1/users/show.json?";
+    NSString *urlString = TWITTER_USERS_SHOW_URL;
     if (twitterUserID.length > 0) {
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"user_id=%@", twitterUserID]];
     }
@@ -284,7 +284,7 @@
                     animated:(BOOL)animated
 {
     if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
-        viewController.navigationItem.title = @"Choose a new avatar";
+        viewController.navigationItem.title = AVATAR_PROMPT;
         navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54];
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }

@@ -60,14 +60,14 @@
 
 - (void)loadAsSkipScreen
 {
-    [[self actionButton] setTitle:@"Done" forState:UIControlStateNormal];
+    [[self actionButton] setTitle:DONE forState:UIControlStateNormal];
     self.progressBarImage.hidden = YES;
     self.skipFeatureButton.hidden = NO;
 }
 
 - (void)loadAsPermissionsScreen
 {
-    [[self actionButton] setTitle:@"Next" forState:UIControlStateNormal];
+    [[self actionButton] setTitle:NEXT forState:UIControlStateNormal];
     self.progressBarImage.hidden = NO;
     self.skipFeatureButton.hidden = YES;
 }
@@ -95,10 +95,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
             self.locationPermissionsImage.image = [UIImage imageNamed:@"locationOnIcon"];
-            [self.locationPermissionsLabel setTitle:@"Location Enabled" forState:UIControlStateNormal];
+            [self.locationPermissionsLabel setTitle:LOC_ENABLED forState:UIControlStateNormal];
         }
         else {
-            [self.locationPermissionsLabel setTitle:@"Location Disabled" forState:UIControlStateNormal];
+            [self.locationPermissionsLabel setTitle:LOC_DISABLED forState:UIControlStateNormal];
         }
     });
 }
@@ -109,7 +109,7 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate registerForPushNotifications];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.notificationsPermissionsLabel setTitle:@"Notifications Pending" forState:UIControlStateNormal];
+        [self.notificationsPermissionsLabel setTitle:NOTIF_PENDING forState:UIControlStateNormal];
     });
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(confirmPushNotifications:) userInfo:nil repeats:YES];
 }
@@ -121,19 +121,19 @@
         timer = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.notificationsPermissionsImage.image = [UIImage imageNamed:@"notificationOnIcon"];
-            [self.notificationsPermissionsLabel setTitle:@"Notifications Enabled" forState:UIControlStateNormal];
+            [self.notificationsPermissionsLabel setTitle:NOTIF_ENABLED forState:UIControlStateNormal];
         });
     }
 }
 
 - (IBAction)actionNext:(id)sender
 {
-    [self performSegueWithIdentifier:@"showRadius" sender:self];
+    [self performSegueWithIdentifier:SEG_SHOW_RADIUS sender:self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showRadius"]) {}
+    if ([[segue identifier] isEqualToString:SEG_SHOW_RADIUS]) {}
 }
 
 #pragma mark - Request authorization methods
@@ -186,10 +186,10 @@
                 [ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized)
         {
             self.cameraPermissionsImage.image = [UIImage imageNamed:@"cameraOnIcon"];
-            [self.cameraPermissionsLabel setTitle:@"Camera Enabled" forState:UIControlStateNormal];
+            [self.cameraPermissionsLabel setTitle:CAMERA_ENABLED forState:UIControlStateNormal];
         }
         else {
-            [self.cameraPermissionsLabel setTitle:@"Camera Disabled" forState:UIControlStateNormal];
+            [self.cameraPermissionsLabel setTitle:CAMERA_DISABLED forState:UIControlStateNormal];
         }
     });
 }

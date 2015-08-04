@@ -61,6 +61,6 @@
         self.view.alpha = 0;
     }];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"assignmentsOnboarding"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
 }
 @end

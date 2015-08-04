@@ -109,8 +109,8 @@
         if (![self.password isEqualToString:confirmPassword]) {
             [self
              presentViewController:[[FRSAlertViewManager sharedManager]
-                                    alertControllerWithTitle:@"Error"
-                                    message:@"It seems like you logged in through Facebook. If you disconnect it, this would disable your account entirely!" action:@"Dismiss"]
+                                    alertControllerWithTitle:ERROR
+                                    message:FB_LOGOUT_PROMPT action:DISMISS]
              animated:YES
              completion:nil];
         }
@@ -122,19 +122,19 @@
              block:^(BOOL succeeded, NSError *error) {
                 
                  if (error) {
-                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
                                                                      message:[error.userInfo objectForKey:@"error"]
                                                                     delegate: self
-                                                           cancelButtonTitle: @"Cancel"
+                                                           cancelButtonTitle: CANCEL
                                                            otherButtonTitles:nil, nil];
-                     [alert addButtonWithTitle:@"Try Again"];
+                     [alert addButtonWithTitle:STR_TRY_AGAIN];
                      [alert show];
                      
                      self.emailField.textColor = [UIColor redColor];
                  }
                  else{
                      
-                     [self performSegueWithIdentifier:@"showPersonalInfo" sender:self];
+                     [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
                  }
                  
              }];

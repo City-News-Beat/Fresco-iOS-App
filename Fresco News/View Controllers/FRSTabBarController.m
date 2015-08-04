@@ -83,7 +83,7 @@
 {
     self.tabBar.hidden = YES;
     
-    [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:@"previouslySelectedTab"];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
@@ -134,13 +134,15 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_VIEW_DISMISS object:nil];
     
+    NSString *alertMessage = [NSString stringWithFormat:@"%@ %@", FRESCO, ENABLE_CAMERA_MSG];
+    
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enable Camera"
-                                                            message:@"Fresco needs permission to access the camera to continue."
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ENABLE_CAMERA_TITLE
+                                                            message:alertMessage
                                                            delegate:self
-                                                  cancelButtonTitle:@"Cancel"
-                                                  otherButtonTitles:@"Go to Settings", nil];
+                                                  cancelButtonTitle:CANCEL
+                                                  otherButtonTitles:GO_TO_SETTINGS, nil];
             [alert show];
         }
         

@@ -54,7 +54,7 @@
     
     self.window.rootViewController = self.frsRootViewController;
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE]) {
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
     }

@@ -80,9 +80,9 @@ typedef enum : NSUInteger {
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyDone;
     
-    //Set hasLaunchedBefore to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+    //Set has Launched Before to prevent onboard from ocurring again
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
 
     
@@ -181,12 +181,12 @@ typedef enum : NSUInteger {
             else{
                 
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Login Error"
-                                             message:@"Invalid Credentials" action:nil]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:INVALID_CREDENTIALS action:nil]
                                    animated:YES completion:nil];
                 
                 
-                [button setTitle:@"Login" forState:UIControlStateNormal];
+                [button setTitle:LOGIN forState:UIControlStateNormal];
                 
                 [self revertScreenToNormal];
                 
@@ -207,14 +207,15 @@ typedef enum : NSUInteger {
                 
             }
             else {
+                //TODO: check if these are the strings we want
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Login Error"
-                                             message:@"We ran into an error signing you in with Twitter"
-                                             action:@"Dismiss"]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:TWITTER_ERROR
+                                             action:DISMISS]
                                    animated:YES
                                  completion:nil];
                 
-                [button setTitle:@"Facebook" forState:UIControlStateNormal];
+                [button setTitle:FACEBOOK forState:UIControlStateNormal];
                 
                 [self revertScreenToNormal];
             }
@@ -237,15 +238,15 @@ typedef enum : NSUInteger {
             else {
                 
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Login Error"
-                                             message:@"We ran into an error signing you in with Twitter"
-                                             action:@"Dismiss"]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:TWITTER_ERROR
+                                             action:DISMISS]
                                    animated:YES
                                  completion:nil];
                 
                 [self revertScreenToNormal];
                 
-                [button setTitle:@"Twitter" forState:UIControlStateNormal];
+                [button setTitle:TWITTER forState:UIControlStateNormal];
                 
                 NSLog(@"%@", error);
                 
@@ -288,8 +289,8 @@ typedef enum : NSUInteger {
         
         
         [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:@"Login Error"
-                                     message:@"Please enter an Email & Password to Login" action:nil]
+                                     alertControllerWithTitle:LOGIN_ERROR
+                                     message:LOGIN_PROMPT action:nil]
                            animated:YES completion:nil];
     
     }
@@ -307,7 +308,7 @@ typedef enum : NSUInteger {
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:@"showAccountInfo" sender:self];
+    [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
 }
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {
@@ -319,7 +320,7 @@ typedef enum : NSUInteger {
 - (void)transferUser{
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        [self performSegueWithIdentifier:@"replaceWithSignUp" sender:self];
+        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
     }
     else
         [self navigateToMainApp];
@@ -347,7 +348,7 @@ typedef enum : NSUInteger {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // normal push segue for Fresco signup
-    if ([[segue identifier] isEqualToString:@"showAccountInfo"]) {
+    if ([[segue identifier] isEqualToString:SEG_SHOW_ACCT_INFO]) {
         FirstRunAccountViewController *fracvc = [segue destinationViewController];
         fracvc.email = self.emailField.text;
         fracvc.password = self.passwordField.text;

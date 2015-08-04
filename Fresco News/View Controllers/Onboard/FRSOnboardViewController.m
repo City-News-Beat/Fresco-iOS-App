@@ -40,15 +40,15 @@
         
         // Create the data model
         self.mainHeaders = @[
-                             @"Find breaking news around you",
-                             @"Submit your photos and videos",
-                             @"See your work in the news"
+                             MAIN_HEADER_1,
+                             MAIN_HEADER_2,
+                             MAIN_HEADER_3
                              ];
         
         self.subHeaders = @[
-                            @"Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets",
-                            @"Your media is visible not only to Fresco users, but to our news organization partners in need of visual coverage",
-                            @"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment"
+                            SUB_HEADER_1,
+                            SUB_HEADER_2,
+                            SUB_HEADER_3
                             ];
         
         self.images = @[

@@ -41,11 +41,11 @@
 
     [super viewDidAppear:YES];
     
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"updateProfileHeader"]){
+    if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_PROFILE_HEADER]){
         
         [self updateUserInfo];
         
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"updateProfileHeader"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_PROFILE_HEADER];
     
     }
     
@@ -107,7 +107,7 @@
     //Make sure we're connected first
     if([[FRSDataManager sharedManager] connected]){
     
-        [self performSegueWithIdentifier:@"settingsSegue" sender:self];
+        [self performSegueWithIdentifier:SEG_SETTINGS sender:self];
         
     }
 }
@@ -120,7 +120,7 @@
         return;
     }
 
-    NSURL *verify = [NSURL URLWithString:@"https://api.twitter.com/1.1/account/verify_credentials.json"];
+    NSURL *verify = [NSURL URLWithString:TWITTER_VERIFY_URL];
     NSMutableURLRequest *twitterRequest = [NSMutableURLRequest requestWithURL:verify];
     [[PFTwitterUtils twitter] signRequest:twitterRequest];
     NSURLResponse *response = nil;

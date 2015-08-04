@@ -147,10 +147,10 @@ typedef enum : NSUInteger {
     
     //Initialize Disable Account UIActionSheet
     self.disableAccountSheet = [[UIActionSheet alloc]
-                            initWithTitle:@"Are you sure? You can recover your account up to one year from today."
+                            initWithTitle:DISABLE_ACCT_TITLE
                             delegate:self
-                            cancelButtonTitle:@"Cancel"
-                            destructiveButtonTitle:@"Disable"
+                            cancelButtonTitle:CANCEL
+                            destructiveButtonTitle:DISABLE
                             otherButtonTitles:nil];
     
     //Disable Account Sheet Tag
@@ -314,11 +314,11 @@ typedef enum : NSUInteger {
     if(error == SocialDisable){
     
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                       alertControllerWithTitle:@"Warning"
+                                       alertControllerWithTitle:WARNING
                                        message:[NSString stringWithFormat:@"It looks like you signed up with %@! Would you like to disable your account?", network]
-                                       action:@"Cancel" handler:nil];
+                                       action:CANCEL handler:nil];
         
-        [alertCon addAction:[UIAlertAction actionWithTitle:@"Disable" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+        [alertCon addAction:[UIAlertAction actionWithTitle:DISABLE style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
             [self.disableAccountSheet showInView:self.view];
         }]];
         
@@ -333,7 +333,7 @@ typedef enum : NSUInteger {
             message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
         
         [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:@"Error"
+                                     alertControllerWithTitle:ERROR
                                      message:message
                                      action:nil]
                            animated:YES
@@ -391,9 +391,9 @@ typedef enum : NSUInteger {
         if (!success) {
             
             [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:@"Error"
-                                         message:@"Could not save Profile settings"
-                                         action:@"Dismiss" handler:^(UIAlertAction *handler){
+                                         alertControllerWithTitle:ERROR
+                                         message:PROFILE_SAVE_ERROR
+                                         action:DISMISS handler:^(UIAlertAction *handler){
                                              
                                              NSLog(@"ok");
                                              
@@ -410,7 +410,7 @@ typedef enum : NSUInteger {
             }
             
             //Tells the ProfileHeaderViewController to update it's view
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"updateProfileHeader"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
             //If they are set, reset them via parse
             if ([self.textfieldNewPassword.text length]) {
@@ -429,9 +429,9 @@ typedef enum : NSUInteger {
                 else{
                     
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Passwords do not match"
-                                                 message:@"Please make sure your new passwords are equals"
-                                                 action:@"Dismiss"]
+                                                 alertControllerWithTitle:PASSWORD_ERROR_TITLE
+                                                 message:PASSWORD_ERROR_MESSAGE
+                                                 action:DISMISS]
                                        animated:YES
                                      completion:nil];
                 }
@@ -483,7 +483,7 @@ typedef enum : NSUInteger {
     }
     else{
         
-        self.radiusStepperLabel.text = @"Off";
+        self.radiusStepperLabel.text = OFF;
         
     }
 }
@@ -549,8 +549,8 @@ typedef enum : NSUInteger {
                 else{
                     
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Error"
-                                                 message:@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help."
+                                                 alertControllerWithTitle:ERROR
+                                                 message:DISABLE_ACCT_ERROR
                                                  action:nil]
                                        animated:YES
                                      completion:nil];
@@ -588,7 +588,7 @@ typedef enum : NSUInteger {
 {
     if ([navigationController isKindOfClass:[UIImagePickerController class]])
     {
-        viewController.navigationItem.title = @"Choose a new avatar";
+        viewController.navigationItem.title = AVATAR_PROMPT;
         navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }

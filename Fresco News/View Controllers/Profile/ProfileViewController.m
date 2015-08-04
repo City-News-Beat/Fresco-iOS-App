@@ -130,8 +130,8 @@
                 
                 if(self.noContentLabel == nil && self.noContentImage == nil){
                     
-                    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString: @"Nothing here yet!"];
-                    NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: @"Open your camera to get started"];
+                    NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:NOTHING_HERE_YET];
+                    NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: OPEN_CAMERA];
                     
                     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
                     
@@ -216,8 +216,8 @@
     
         if(self.noContentLabel == nil && self.noContentImage == nil){
             
-            NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString: @"Nothing here yet!"];
-            NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: @"Open your camera to get started"];
+            NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:NOTHING_HERE_YET];
+            NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: OPEN_CAMERA];
             
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             
@@ -234,14 +234,14 @@
             self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
             self.noContentLabel.numberOfLines = 1;
             self.noContentLabel.attributedText = attrString;
-            self.noContentLabel.font= [UIFont fontWithName:@"HelveticaNeue-Regular" size:16.0f];
+            self.noContentLabel.font= [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:16.0f];
             self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
             self.noContentLabel.alpha = .87f;
             
             self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
             self.noContentLabelSmall.numberOfLines = 1;
             self.noContentLabelSmall.attributedText = attrStringSmall;
-            self.noContentLabelSmall.font= [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0f];
+            self.noContentLabelSmall.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:13.0f];
             self.noContentLabelSmall.center = CGPointMake(self.view.center.x, self.view.center.y + 30);
             self.noContentLabelSmall.alpha = .54f;
             

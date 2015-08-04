@@ -57,7 +57,7 @@
         
     }];
     
-    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Highlights"
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:HIGHLIGHTS
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:[self navigationController]
                                                                      action:@selector(popViewControllerAnimated:)];

@@ -74,15 +74,15 @@
     
     [self tweakUI];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"assignmentsOnboarding"])
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_ASSIGNMENTS_ONBOARDING])
        [self.onboardContainerView removeFromSuperview];
 
     self.navigationSheet = [[UIActionSheet alloc]
-                            initWithTitle:@"Navigate to the assignment"
+                            initWithTitle:NAVIGATE_TO_ASSIGNMENT
                             delegate:self
-                            cancelButtonTitle:@"Cancel"
+                            cancelButtonTitle:CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:@"Open in Google Maps", @"Open in Maps", nil];
+                            otherButtonTitles:OPEN_IN_GOOG_MAPS, OPEN_IN_MAPS, nil];
     
     
     //Navigation Sheet Tag

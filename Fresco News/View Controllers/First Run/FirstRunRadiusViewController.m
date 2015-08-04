@@ -85,7 +85,7 @@
     }
     else{
         
-        self.radiusStepperLabel.text = @"Off";
+        self.radiusStepperLabel.text = OFF;
         
     }
 }
@@ -118,10 +118,10 @@
         
         if (!success) {
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"Could not save notification radius"
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
+                                                            message:NOTIF_RADIUS_ERROR_MSG
                                                            delegate:nil
-                                                  cancelButtonTitle:@"Dismiss"
+                                                  cancelButtonTitle:DISMISS
                                                   otherButtonTitles:nil];
             [alert show];
         }

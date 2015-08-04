@@ -29,7 +29,7 @@
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
-                self.tosTextView.text = @"Terms of Service not available";
+                self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
                 // self.monitorScrolling = YES; // for now
             }
             else {

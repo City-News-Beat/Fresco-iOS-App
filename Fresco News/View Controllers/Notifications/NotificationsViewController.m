@@ -186,11 +186,11 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     if([notification.type isEqualToString:@"assignment"]) {
         
         CGFloat button1Width = 146.0;
-        NSString *button1Title = @"View Assignment";
+        NSString *button1Title = VIEW_ASSIGNMENT;
         
         if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6) {
             button1Width = 119.5;
-            button1Title = @"View";
+            button1Title = VIEW;
         }
         
         if (IS_STANDARD_IPHONE_6_PLUS)
@@ -200,7 +200,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
         [cell.firstButton setTitle:button1Title forState:UIControlStateNormal];
         
-        [cell.secondButton setTitle:@"Open in Maps" forState:UIControlStateNormal];
+        [cell.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
         
         //25 from the storyboard constraint constant
         cell.constraintNotificationDescription.constant = 25.0f;
@@ -328,10 +328,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     }
                     else{
                         
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Assignment Expired"
-                                                                        message:@"This assignment has expired already!"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ASSIGNMENT_EXPIRED_TITLE
+                                                                        message:ASSIGNMENT_EXPIRED_MSG
                                                                        delegate:nil
-                                                              cancelButtonTitle:@"Dismiss"
+                                                              cancelButtonTitle:DISMISS
                                                               otherButtonTitles:nil];
                         [alert show];
                     
@@ -364,10 +364,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 }
                 else{
                     
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Gallery Unavailable"
-                                                                    message:@"We couldn't find this gallery!"
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:GALLERY_UNAVAILABLE_TITLE
+                                                                    message:GALLERY_UNAVAILABLE_MSG
                                                                    delegate:nil
-                                                          cancelButtonTitle:@"Dismiss"
+                                                          cancelButtonTitle:DISMISS
                                                           otherButtonTitles:nil];
                     [alert show];
                 
@@ -422,10 +422,10 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 }
                 else{
                     
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Assignment Expired"
-                                                                    message:@"This assignment has expired already!"
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ASSIGNMENT_EXPIRED_TITLE
+                                                                    message:ASSIGNMENT_EXPIRED_MSG
                                                                    delegate:nil
-                                                          cancelButtonTitle:@"Dismiss"
+                                                          cancelButtonTitle:DISMISS
                                                           otherButtonTitles:nil];
                     [alert show];
                     
