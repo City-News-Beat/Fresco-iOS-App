@@ -78,9 +78,7 @@
     } else if (textField == self.passwordField) {
         [self.confirmPasswordField becomeFirstResponder];
     }else if (textField == self.confirmPasswordField) {
-//        [self hitNext];
-        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
-        
+        [self hitNext];  
     }
     
     return NO;
