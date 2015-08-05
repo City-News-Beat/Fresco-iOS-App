@@ -73,9 +73,9 @@
     NSDictionary *params;
     
     if(refresh)
-        params = @{@"offset" : @0, @"invalidate" : @"1"};
+        params = @{@"offset" : @0, @"invalidate" : @"1", @"stories" : @"true"};
     else
-        params = @{@"offset" : @0, @"invalidate" : @"0"};
+        params = @{@"offset" : @0, @"invalidate" : @"0", @"stories" : @"true"};
         
     [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error){
     
