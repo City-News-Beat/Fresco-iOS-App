@@ -22,6 +22,7 @@
 #import "AssignmentsViewController.h"
 #import "HighlightsViewController.h"
 #import "FRSRootViewController.h"
+#import "UIColor+Additions.h"
 
 //static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 //static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
@@ -122,6 +123,7 @@
 
 - (void)setupAppearances
 {
+    [[UITextField appearance] setTextColor:[UIColor textInputBlackColor]];
     [self setupNavigationBarAppearance];
     [self setupToolbarAppearance];
     [self setupBarButtonItemAppearance];

@@ -30,4 +30,6 @@
 
 + (UIColor *)whiteBackgroundColor;
 
++ (UIColor *)textInputBlackColor;
+
 @end

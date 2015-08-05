@@ -60,4 +60,8 @@
     return [UIColor colorWithRed:0.98 green:0.98 blue:0.98 alpha:1.00];
 }
 
++ (UIColor *)textInputBlackColor {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.87];
+}
+
 @end
