@@ -22,7 +22,8 @@
 
 - (BOOL)isValidPassword {
     
-    return ([self length] > 0) ? YES : NO;
+//    return ([self length] > 0) ? YES : NO;
+    return YES;
 }
 
 @end
