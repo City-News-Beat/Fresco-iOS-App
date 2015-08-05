@@ -90,13 +90,12 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0
+                          delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             CGFloat height = 0;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -1 * [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                height = -7 * self.textfieldLastName.frame.size.height;
                             }
-
                             self.topVerticalSpaceConstraint.constant = height; // Constraint not connected?
                             self.bottomVerticalSpaceConstraint.constant = -1 * height;
                             [self.view layoutIfNeeded];

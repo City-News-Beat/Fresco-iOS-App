@@ -102,7 +102,7 @@
     else
         [self presentCurrentAssignment];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:kNotificationImageSet object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:NOTIFICATION_IMAGE_SET object:nil];
 }
 
 /*

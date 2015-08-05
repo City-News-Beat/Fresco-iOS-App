@@ -14,6 +14,7 @@
 #import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
+#import "NSString+Validation.h"
 
 typedef enum : NSUInteger {
     LoginFresco,
@@ -58,8 +59,6 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
-    
     //Round buttons
     for (UIButton *button in self.buttons) {
         button.layer.cornerRadius = 4;
@@ -78,7 +77,7 @@ typedef enum : NSUInteger {
     
     //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
-    self.passwordField.returnKeyType = UIReturnKeyDone;
+    self.passwordField.returnKeyType = UIReturnKeyGo;
     
     //Set has Launched Before to prevent onboard from ocurring again
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
@@ -115,8 +114,26 @@ typedef enum : NSUInteger {
     
     if (textField == self.emailField) {
         [self.passwordField becomeFirstResponder];
+        
     } else if (textField == self.passwordField) {
-        [textField resignFirstResponder];
+        
+        if ([self.emailField.text length] == 0 && [self.passwordField.text length] == 0) {
+            
+            [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
+            
+        } else if ([self.emailField.text isValidEmail] &&
+                   [self.passwordField.text isValidPassword] &&
+                   [FRSDataManager sharedManager].currentUser)
+        {
+            [self loginButtonAction:self];
+            
+        } else {
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:LOGIN_ERROR
+                                         message:LOGIN_PROMPT action:nil]
+                               animated:YES completion:nil];
+        }
     }
     
     return NO;
@@ -125,11 +142,11 @@ typedef enum : NSUInteger {
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0
+                          delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             CGFloat height = 0;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -1 * [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                height = -6.8 * self.emailField.frame.size.height;
                             }
                             
                             self.topVerticalSpaceConstraint.constant = height;
@@ -279,19 +296,17 @@ typedef enum : NSUInteger {
 - (IBAction)loginButtonAction:(id)sender {
     
     //Check fields first
-    if(self.emailField.text && self.emailField.text.length > 0
-       && self.passwordField.text && self.passwordField.text.length > 0){
+    if([self.emailField.text isValidEmail]
+       && [self.passwordField.text isValidPassword]){
     
         [self performLogin:LoginFresco button:self.loginButton];
     
-    }
-    else{
-        
+    } else {
         
         [self presentViewController:[[FRSAlertViewManager sharedManager]
                                      alertControllerWithTitle:LOGIN_ERROR
                                      message:LOGIN_PROMPT action:nil]
-                           animated:YES completion:nil];
+                                       animated:YES completion:nil];
     
     }
 
@@ -308,7 +323,11 @@ typedef enum : NSUInteger {
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
+    
+    
+        [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
+        
+
 }
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {

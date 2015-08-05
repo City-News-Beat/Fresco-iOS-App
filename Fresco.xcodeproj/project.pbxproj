@@ -94,6 +94,7 @@
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
+		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
 		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
@@ -343,6 +344,8 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
+		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
+		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
 		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
 		BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewOverlayBottom.m; sourceTree = "<group>"; };
 		BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOverlayTop.h; sourceTree = "<group>"; };
@@ -806,6 +809,8 @@
 				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
 				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
 				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
+				BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */,
+				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1404,6 +1409,7 @@
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
+				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,

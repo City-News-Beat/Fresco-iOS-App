@@ -406,7 +406,7 @@ typedef enum : NSUInteger {
         else {
             
             if (self.selectedImage) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationImageSet object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IMAGE_SET object:nil];
             }
             
             //Tells the ProfileHeaderViewController to update it's view
