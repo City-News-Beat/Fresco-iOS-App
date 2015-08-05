@@ -141,18 +141,18 @@ typedef enum : NSUInteger {
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
-//    [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-//                          delay:0
-//                        options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
+    [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          delay:0.3
+                        options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             CGFloat height = 0;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -3 * self.emailField.frame.size.height;
+                                height = -6.8 * self.emailField.frame.size.height;
                             }
                             
                             self.topVerticalSpaceConstraint.constant = height;
                             self.bottomVerticalSpaceConstraint.constant = -1 * height;
                             [self.view layoutIfNeeded];
-//                        } completion:nil];
+                        } completion:nil];
 }
 
 #pragma mark - Controller Functions

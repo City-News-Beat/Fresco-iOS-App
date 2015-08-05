@@ -8,6 +8,7 @@
 
 #import "FirstRunAccountViewController.h"
 #import "FRSDataManager.h"
+#import "NSString+Validation.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate>
 
@@ -29,6 +30,8 @@
 {
     [super viewDidLoad];
     //[(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
+    self.facebookButton.layer.cornerRadius = 4;
+    self.twitterButton.layer.cornerRadius = 4;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -48,7 +51,7 @@
 
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyNext;
-    self.confirmPasswordField.returnKeyType = UIReturnKeyDone;
+    self.confirmPasswordField.returnKeyType = UIReturnKeyGo;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -75,7 +78,9 @@
     } else if (textField == self.passwordField) {
         [self.confirmPasswordField becomeFirstResponder];
     }else if (textField == self.confirmPasswordField) {
-        [self.confirmPasswordField resignFirstResponder];
+//        [self hitNext];
+        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
+        
     }
     
     return NO;
@@ -84,11 +89,11 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0
+                          delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             CGFloat height = 0;
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -1 * [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                height = -5.8 * self.confirmPasswordField.frame.size.height;
                             }
                             
                             self.topVerticalSpaceConstraint.constant = height;
@@ -99,13 +104,18 @@
 
 - (IBAction)clickedNext:(id)sender {
 
-    if ([self.emailField.text length] && [self.passwordField.text length]) {
+    [self hitNext];
+}
+
+- (void)hitNext {
+    if ([self.emailField.text isValidEmail] &&
+        [self.passwordField.text isValidPassword]) {
         
         // save this to allow backing to the VC
         self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
+        
         if (![self.password isEqualToString:confirmPassword]) {
             [self
              presentViewController:[[FRSAlertViewManager sharedManager]
@@ -120,7 +130,7 @@
              email:self.email
              password:self.password
              block:^(BOOL succeeded, NSError *error) {
-                
+                 
                  if (error) {
                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
                                                                      message:[error.userInfo objectForKey:@"error"]
@@ -140,7 +150,6 @@
         }
     }
 }
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
