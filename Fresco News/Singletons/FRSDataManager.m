@@ -883,7 +883,7 @@
     
     offset = offset ?: 0;
     
-    [self GET:[NSString stringWithFormat:@"user/galleries?id=%@&offset=%@", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:[NSString stringWithFormat:@"user/galleries?id=%@&offset=%@&stories=true", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         

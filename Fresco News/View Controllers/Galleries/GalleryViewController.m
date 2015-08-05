@@ -276,7 +276,10 @@
         
         ((UILabel *)[cell viewWithTag:100]).text = article.title;
         
-        [((UIImageView *)[cell viewWithTag:200]) setImageWithURL:article.URL];
+        [cell.imageView setImageWithURL:article.URL];
+
+        [cell.imageView.layer setCornerRadius:4];
+        [cell.imageView.layer setMasksToBounds:YES];
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
