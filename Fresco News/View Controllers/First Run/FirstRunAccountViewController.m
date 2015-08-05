@@ -131,8 +131,7 @@
                      [alert show];
                      
                      self.emailField.textColor = [UIColor redColor];
-                 }
-                 else{
+                 } else {
                      
                      [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
                  }

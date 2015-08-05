@@ -14,6 +14,7 @@
 #define NOTIFICATION_API_KEY_AVAILABLE      @"NotificationAPIKeyAvailable"
 #define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
 #define NOTIFICATION_BADGE_RESET            @"ResetNotificationBadge"
+#define NOTIFICATION_IMAGE_SET              @"UserImageSet"
 
 #define ERROR_DOMAIN                        @"com.fresconews"
 
@@ -130,7 +131,7 @@
 
 #define LOGIN                               NSLocalizedString(@"Login", nil)
 #define LOGIN_ERROR                         NSLocalizedString(@"Login Error", nil)
-#define LOGIN_PROMPT                        NSLocalizedString(@"Please enter an Email & Password to Login", nil)
+#define LOGIN_PROMPT                        NSLocalizedString(@"Please enter a valid email and password", nil)
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 #define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)

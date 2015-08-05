@@ -14,7 +14,7 @@
 
 //NSString * const kNotificationBadgeReset = @"ResetNotificationBadge";
 
-NSString * const kNotificationImageSet = @"UserImageSet";
+//NSString * const kNotificationImageSet = @"UserImageSet";
 
 @implementation VariableStore
 
