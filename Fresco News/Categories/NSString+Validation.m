@@ -22,7 +22,7 @@
 
 - (BOOL)isValidPassword {
     
-    return ([self length] >= 6) ? YES : NO;
+    return ([self length] > 0) ? YES : NO;
 }
 
 @end
