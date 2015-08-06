@@ -57,10 +57,12 @@
 
 
 - (IBAction)letsGoButtonTapped:(id)sender {
-    [UIView animateWithDuration:0.3 animations:^{
-        self.view.alpha = 0;
-    }];
+//    [UIView animateWithDuration:0.3 animations:^{
+//        self.view.alpha = 0;
+//    }];
+//    [self.view removeFromSuperview];
+
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"onboard" object:nil];
 }
 @end

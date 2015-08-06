@@ -74,6 +74,8 @@
     
     [self tweakUI];
     
+    [self.view bringSubviewToFront:self.onboardContainerView];
+    
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_ASSIGNMENTS_ONBOARDING])
        [self.onboardContainerView removeFromSuperview];
 
@@ -103,6 +105,8 @@
         [self presentCurrentAssignment];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:NOTIFICATION_IMAGE_SET object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:@"onboard" object:nil];
 }
 
 /*
@@ -772,4 +776,12 @@
 }
 
 
+- (void)hideOnboarding: (NSNotification *)notification {
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.onboardContainerView.alpha = 0;
+    }];
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+}
 @end
