@@ -167,7 +167,9 @@ typedef enum : NSUInteger {
     
     [button setTitle:@"" forState:UIControlStateNormal];
     
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame: CGRectMake(button.frame.size.width  / 2 - 7, 13,20, 20)];
+    CGRect spinnerFrame = (IS_IPHONE_5) ? CGRectMake(button.frame.size.width/2.2, button.frame.size.height/4, 20, 20) : CGRectMake(button.frame.size.width  / 2 - 7, 13, 20, 20);
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
     
     self.spinner.color = [UIColor whiteColor];
     [self.spinner startAnimating];
