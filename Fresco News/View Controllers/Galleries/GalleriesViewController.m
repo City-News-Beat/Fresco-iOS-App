@@ -422,19 +422,27 @@
 
 #pragma mark - Segues
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+
+    if ([identifier isEqualToString:@"embedProfileHeader"]) {
+        if ([self.containingViewController isKindOfClass:[HighlightsViewController class]] ||
+            [self.containingViewController isKindOfClass:[StoryViewController class]] ) {
+            self.tableView.tableHeaderView = nil;
+            [self.viewProfileHeader removeFromSuperview];
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
-        if ([self.containingViewController isKindOfClass:[HighlightsViewController class]] ||
-            [self.containingViewController isKindOfClass:[StoryViewController class]] ) {
-            [self.viewProfileHeader removeFromSuperview];
-            self.tableView.tableHeaderView = nil;
-        }
-        else {
+
             ProfileHeaderViewController *phvc = [segue destinationViewController];
             self.profileHeaderViewController = phvc;
             self.tableView.tableHeaderView.frame = phvc.view.bounds;
-        }
     }
 }
 

@@ -32,4 +32,6 @@
 
 + (UIColor *)textInputBlackColor;
 
++ (UIColor *)textHeaderBlackColor;
+
 @end

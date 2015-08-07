@@ -64,4 +64,8 @@
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.87];
 }
 
++ (UIColor *)textHeaderBlackColor {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.52];
+}
+
 @end

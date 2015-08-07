@@ -46,7 +46,7 @@
 #pragma mark - Staging - Base URL/API
 
 
-#define STAGING_BASE_URL                    @"https://staging.webm.fresconews.com"
+#define STAGING_BASE_URL                    @"https://staging.web.fresconews.com"
 #define STAGING_BASE_API                    @"http://staging.fresconews.com/v1/"
 
 
