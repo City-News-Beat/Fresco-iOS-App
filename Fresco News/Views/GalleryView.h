@@ -36,4 +36,6 @@
 @property (nonatomic, strong) AVPlayerLayer *sharedLayer;
 
 
+- (void)setAspectRatio;
+
 @end

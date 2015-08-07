@@ -108,7 +108,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
     }
     
-    //Temp disabled
     [self setAspectRatio];
     
 }
@@ -119,32 +118,31 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         
         FRSPost *post = [self.gallery.posts firstObject];
         
-        CGFloat aspectRatio;
-        if (post.image) {
-            aspectRatio = [post.image.width floatValue] / [post.image.height floatValue];
-            if (aspectRatio < 1.0f || !post.image.height /* shouldn't happen... */) {
-                aspectRatio = 1.0f;
-            }
+        
+        //370 / height ---- post.image.width / post.image.height
+        
+        CGFloat height = 0;
+
+        if (post.image.height > 0 && post.image.width > 0) {
+            
+            //Calculate the aspect ratio from the image height / width, using proportions
+            height = ([[UIScreen mainScreen] bounds].size.width * [post.image.height floatValue]) /  [post.image.width floatValue];
+
         }
-        else {
-            aspectRatio = 600/800;
+        
+        if(height > 0){
+        
+            if (self.collectionPosts.constraints)
+                [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
+            
+            [self addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[posts(%f)]", height]
+                                                                               options:0
+                                                                               metrics:nil
+                                                                                 views: @{@"posts":self.collectionPosts}]];
+
+            
+            [self.collectionPosts updateConstraints];
         }
-        
-        if (self.collectionPosts.constraints)
-            [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
-        
-//        [self.collectionPosts setTranslatesAutoresizingMaskIntoConstraints:NO];
-        
-        
-//         make the aspect ratio 4:3
-        [self.collectionPosts addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionPosts
-                                                                         attribute:NSLayoutAttributeWidth
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self.collectionPosts
-                                                                         attribute:NSLayoutAttributeHeight
-                                                                        multiplier:aspectRatio
-                                                                          constant:0]];
-        [self.collectionPosts updateConstraints];
     }
 }
 
