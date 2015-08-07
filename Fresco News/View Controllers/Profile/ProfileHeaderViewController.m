@@ -34,6 +34,11 @@
     [super viewDidLoad];
     
     [self updateUserInfo];
+    
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
+    
+    [self.settingsButtonView addGestureRecognizer:settingsTap];
 
 }
 
@@ -60,11 +65,6 @@
     if([FRSDataManager sharedManager].currentUser != nil){
 
         self.labelDisplayName.text = [FRSDataManager sharedManager].currentUser.displayName;
-        
-        //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-        UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
-        
-        [self.settingsButtonView addGestureRecognizer:settingsTap];
         
         if([FRSDataManager sharedManager].currentUser.avatar != nil){
         

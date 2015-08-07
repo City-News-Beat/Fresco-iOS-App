@@ -93,7 +93,7 @@
     
     NSString *urlString = [self.URL absoluteString];
     
-    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
+    if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound) && urlString != nil){
         
         NSMutableString *mu = [NSMutableString stringWithString:urlString];
         

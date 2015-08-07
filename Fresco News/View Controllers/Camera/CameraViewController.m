@@ -41,6 +41,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIView *cancelButtonTapView;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *doneLabel;
@@ -51,6 +52,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *rotateImageView;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseDisableLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *controlViewWidthConstraint;
@@ -69,6 +71,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+@property (nonatomic) BOOL inCorrentOrientation;
 
 // Utilities
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
@@ -92,9 +95,24 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return [NSSet setWithObjects:@"session.running", @"deviceAuthorized", nil];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
+    
     [super viewDidLoad];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)];
+    
+    [self.cancelButtonTapView addGestureRecognizer:settingsTap];
+    
+    [self deviceOrientationDidChange:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(deviceOrientationDidChange:)
+     name:UIDeviceOrientationDidChangeNotification
+     object:nil];
     
     self.createdAssetURLs = [NSMutableArray new];
     
@@ -185,8 +203,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    
     self.view.hidden = NO;
     
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
@@ -223,6 +239,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:animated];
+    
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+
+}
 
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -245,20 +268,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.locationManager stopUpdatingLocation];
 }
 
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
 }
 
-- (BOOL)shouldAutorotate
-{
-    // Disable autorotation when no access to camera or when recording is in progress
-    return self.isDeviceAuthorized && ![self lockInterfaceRotation];
-}
-
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return self.isDeviceAuthorized ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskLandscapeRight;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -299,17 +321,40 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)apertureButtonTapped:(id)sender
 {
-    if (self.photoButton.selected) {
+    if(self.inCorrentOrientation){
         
-        [self snapStillImage];
+        if (self.photoButton.selected) {
+            
+            [self snapStillImage];
 
-    }
-    else {
+        }
+        else {
+            
+            [self toggleMovieRecording];
+
+        }
         
-        [self toggleMovieRecording];
-
     }
-
+    else{
+        
+        [UIView animateWithDuration:.2 animations:^{
+        
+            float degrees = -15; //the value in degrees
+            self.rotateImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+            
+        } completion:^(BOOL finished){
+        
+            if(finished){
+                
+                [UIView animateWithDuration:.2 animations:^{
+                    
+                    self.rotateImageView.transform = CGAffineTransformMakeRotation(0);
+                    
+                }];
+            }
+        
+        }];
+    }
 }
 
 - (void)toggleMovieRecording
@@ -456,8 +501,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    
     [VariableStore resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
@@ -555,6 +598,31 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 #pragma mark - Device Configuration
+
+- (void)deviceOrientationDidChange:(NSNotification*)note
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    
+    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown || orientation == UIDeviceOrientationLandscapeRight){
+    
+        self.inCorrentOrientation = NO;
+    
+        [UIView animateWithDuration:.2f animations:^{
+            self.rotateImageView.alpha = 0.7f;
+        }];
+        
+    }
+    else{
+    
+        self.inCorrentOrientation = YES;
+        
+        [UIView animateWithDuration:.2f animations:^{
+            self.rotateImageView.alpha = 0.0f;
+        }];
+    
+    }
+
+}
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
@@ -918,11 +986,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 #pragma mark - CTAssetsPickerControllerDelegate methods
-
-//- (void)assetsPickerControllerDidCancel:(CTAssetsPickerController *)picker
-//{
-////    [self cancelAndReturnToPreviousTab:YES];
-//}
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets {} // required by protocol
 

@@ -90,7 +90,7 @@
 }
 
 
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
     

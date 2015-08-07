@@ -81,11 +81,11 @@
 
 - (void)presentCamera
 {
-    self.tabBar.hidden = YES;
-    
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
     
     [self presentViewController:vc animated:YES completion:nil];
     
@@ -145,7 +145,6 @@
                                                   otherButtonTitles:GO_TO_SETTINGS, nil];
             [alert show];
         }
-        
         return NO;
     }
     else {

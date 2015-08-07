@@ -454,76 +454,38 @@
 {
     self.loggingIn = YES;
     
-    //Check to make sure we already have the fresco user id in the PFUser, if not, get the fresco id from parse
-    if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
+    if([PFUser currentUser] != nil){
     
-        [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *responseUser, NSError *error) {
+        //Check to make sure we already have the fresco user id in the PFUser, if not, delete the user from parse as it's invalid
+        if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
             
-            if(error){
-    
-                [self logout];
-                
-                NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"No user signed in"}];
-                
-                if(block) block(NO, error);
-                
-                _loggingIn = NO;
-                
-            }
-            else{
-                
-                NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
-                
-                //User exists
-                if(userId != nil){
-                
-                    [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
-                        
-                        //Successful refresh
-                        if(success){
-                            
-                            [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                
-                            if(block) block(YES, nil);
-                            
-                        }
-                        
-                        _loggingIn = NO;
-                        
-                    }];
+            [[PFUser currentUser] deleteInBackground];
+            
+            self.loggingIn = NO;
+        
+        }
+        //The fresco user id exists and proceed normally
+        else{
+            
+            NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+            
+            [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
+            
+                //Successful refresh
+                if(success){
+                    
+                    [[FRSLocationManager sharedManager] setupLocationMonitoring];
+                    
+                    block(YES, nil);
                     
                 }
-                //Does not exist, delete from Parse
-                else{
-                    [[PFUser currentUser] deleteInBackground];
-                }
+                
+                _loggingIn = NO;
             
-            }
-            
-        }];
+            }];
+        }
+        
     }
-    //The fresco user id exists
-    else{
-        
-        NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
-        
-        [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
-        
-            //Successful refresh
-            if(success){
-                
-                [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                
-                block(YES, nil);
-                
-            }
-            
-            _loggingIn = NO;
-        
-        }];
-    
-    }
-    
 }
 
 /*
@@ -1100,7 +1062,7 @@
     NSDictionary *params = @{@"id" : notificationId};
     
     //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"frescoAPIToken"];
+    NSString *token = self.frescoAPIToken;
     
     [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     
