@@ -15,7 +15,5 @@
 
 @property (nonatomic, strong) FRSGallery *gallery;
 
-- (void)openGalleryWithId:(NSString *)galleryId;
-
 @end
 
