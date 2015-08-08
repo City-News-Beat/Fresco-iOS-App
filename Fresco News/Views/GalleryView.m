@@ -108,7 +108,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
     }
     
-    [self setAspectRatio];
+    if(!inList) [self setAspectRatio];
     
 }
 
@@ -117,7 +117,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     if ([self.gallery.posts count]) {
         
         FRSPost *post = [self.gallery.posts firstObject];
-        
         
         //370 / height ---- post.image.width / post.image.height
         
@@ -130,7 +129,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
         }
         
-        if(height > 0){
+        if(height > 0 && height < 400){
         
             if (self.collectionPosts.constraints)
                 [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
@@ -140,8 +139,20 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                                                metrics:nil
                                                                                  views: @{@"posts":self.collectionPosts}]];
 
+            [self.collectionPosts updateConstraints];
+        }
+        else{
+        
+            if (self.collectionPosts.constraints)
+                [self.collectionPosts removeConstraints:self.collectionPosts.constraints];
+            
+            [self addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:[posts(400)]"
+                                                                          options:0
+                                                                          metrics:nil
+                                                                            views: @{@"posts":self.collectionPosts}]];
             
             [self.collectionPosts updateConstraints];
+        
         }
     }
 }

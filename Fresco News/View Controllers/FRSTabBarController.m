@@ -47,7 +47,7 @@
     else if([item.title isEqualToString:@"Me"]){
     
         //Check if the user is not logged in (we check PFUser here, instead of the datamanger, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
-        if(![PFUser currentUser]){
+        if([PFUser currentUser] == nil){
             FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
             [rvc setRootViewControllerToFirstRun];
         }

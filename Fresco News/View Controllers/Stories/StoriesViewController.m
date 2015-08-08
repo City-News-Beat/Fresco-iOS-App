@@ -130,7 +130,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
 }
 
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
     

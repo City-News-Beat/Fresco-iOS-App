@@ -60,7 +60,7 @@ static CGFloat kCellHeight = 44.0f;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self setUpGalleryInView];
-
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -92,6 +92,10 @@ static CGFloat kCellHeight = 44.0f;
 
     [self.galleryView setNeedsLayout];
     [self.galleryView layoutIfNeeded];
+    
+    [self.caption sizeToFit];
+    [self.caption setNeedsLayout];
+    [self.caption layoutIfNeeded];
     
     CGFloat scrollViewHeight = 0.0f;
     
