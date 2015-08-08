@@ -507,9 +507,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     tabBarController.tabBar.hidden = NO;
     
-    tabBarController.selectedIndex = returnToPreviousTab ? [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB] : 4 /* profile tab */;
+    if(returnToPreviousTab){
+        tabBarController.selectedIndex = returnToPreviousTab;
+    }
+    else if([FRSDataManager sharedManager].currentUser){
+        tabBarController.selectedIndex =  [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    }
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
