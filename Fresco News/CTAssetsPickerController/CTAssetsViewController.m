@@ -91,6 +91,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     [self setupAssets];
 
     if (self.picker.autoSubmit) {
@@ -98,7 +100,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         self.picker.autoSubmit = NO;
     }
 
-    [super viewWillAppear:animated];
     [self setupButtons];
     [self setupToolbar];
 
@@ -130,14 +131,13 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 #pragma mark - Setup
 
-- (void)setupViews
-{
+- (void)setupViews {
     self.collectionView.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setupButtons
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self.picker
                                                                             action:@selector(dismiss:)];
@@ -150,7 +150,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)setupToolbar
 {
     self.toolbarItems = [self toolbarItems];
+    self.navigationController.toolbar.alpha = 0.7;
     [self.navigationController setToolbarHidden:NO animated:NO];
+
 }
 
 - (void)setupAssets
@@ -302,6 +304,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     for (ALAsset *asset in selectedAssets) {
         [selectedAssetURLs addObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]];
     }
+    
+    self.navigationController.toolbar.alpha = ([selectedAssets count] == 0) ? 0.7 : 1.0;
 
     [[NSUserDefaults standardUserDefaults] setObject:selectedAssetURLs forKey:@"selectedAssets"];
 }

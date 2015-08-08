@@ -128,6 +128,7 @@
 #define STR_TRY_AGAIN                       NSLocalizedString(@"Try Again", nil)
 #define OFF                                 NSLocalizedString(@"Off", nil)
 #define WARNING                             NSLocalizedString(@"Warning", nil)
+#define WHATS_HAPPENING                     NSLocalizedString(@"What's happening?", nil)
 
 #define LOGIN                               NSLocalizedString(@"Login", nil)
 #define LOGIN_ERROR                         NSLocalizedString(@"Login Error", nil)

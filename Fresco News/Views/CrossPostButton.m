@@ -20,7 +20,7 @@
     }
     else {
         [super setSelected:NO];
-        self.alpha = 0.54;
+        self.alpha = 0.4;
     }
 }
 

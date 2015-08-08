@@ -58,7 +58,7 @@
     
     [self setFrescoNavigationBar];
     [self setupButtons];
-    
+
     self.title = @"Create a Gallery";
     self.galleryView.gallery = self.gallery;
     self.captionTextView.delegate = self;
@@ -67,16 +67,20 @@
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    self.navigationController.toolbar.alpha = ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) ? 0.7 : 1.0;
+    
+    
     [self.locationManager startUpdatingLocation];
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
-    self.captionTextView.text = captionString.length ? captionString : @"What's happening?";
+    self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
 
     if ([PFUser currentUser]) {
         self.twitterButton.hidden = NO;
@@ -178,12 +182,9 @@
         //Bring up alert view
         [self presentViewController:alertCon animated:YES completion:nil];
         
-    }
-    else{
-        
-        
+    } else {
+
         [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
-    
     }
 
     button.selected = !button.isSelected;
@@ -208,7 +209,7 @@
                 if(error){
                 
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:@"Error"
+                                                 alertControllerWithTitle:ERROR
                                                  message:@"We were unable to link your Facebook account!"
                                                  action:nil]
                                        animated:YES
@@ -240,7 +241,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
                                                         message:@"Are you sure you want remove this assignment?"
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
+                                              cancelButtonTitle:CANCEL
                                               otherButtonTitles:@"Remove", nil];
         
         [alert show];
@@ -538,11 +539,20 @@
 
 #pragma mark - UITextViewDelegate methods
 
+
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:@"What's happening?"]) {
+    if ([textView.text isEqualToString:WHATS_HAPPENING])
         textView.text = @"";
-    }
+    
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    
+    if ([textView.text isEqualToString:@""])
+        textView.text = WHATS_HAPPENING;
+    
+    return YES;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -557,6 +567,18 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    self.navigationController.toolbar.alpha = ([textView.text length] == 0 || [textView.text isEqualToString:WHATS_HAPPENING]) ? 0.7 : 1;
+    CGFloat toolbarAlpha = 1.0;
+    UIColor *textViewColor = [UIColor darkGrayColor];
+    
+    if ([textView.text length] == 0 || [textView.text isEqualToString:WHATS_HAPPENING]) {
+        toolbarAlpha = 0.7;
+        textViewColor = [UIColor lightGrayColor];
+    }
+
+    self.navigationController.toolbar.alpha = toolbarAlpha;
+    [textView setTextColor:textViewColor];
+    
     [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }
 
