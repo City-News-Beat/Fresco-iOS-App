@@ -34,4 +34,6 @@
 
 + (UIColor *)textHeaderBlackColor;
 
++ (UIColor *)disabledColor;
+
 @end

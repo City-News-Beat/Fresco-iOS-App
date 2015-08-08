@@ -10,6 +10,12 @@
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 
+typedef enum : NSUInteger {
+    LoginFresco,
+    LoginFacebook,
+    LoginTwitter
+} LoginType;
+
 @interface FirstRunAccountViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -18,9 +24,15 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+
+
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+- (IBAction)twitterButtonTapped:(id)sender;
+
+- (IBAction)facebookButtonTapped:(id)sender;
 
 @end
 
@@ -37,6 +49,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+
     
     // we may prepopulate these either during pushing or backing
     if (self.email)
@@ -98,6 +112,143 @@
                             self.bottomVerticalSpaceConstraint.constant = -1 * height;
                             [self.view layoutIfNeeded];
                         } completion:nil];
+}
+
+- (void)performLogin:(LoginType)login button:(UIButton *)button{
+    
+    self.view.userInteractionEnabled = NO;
+    
+    [button setTitle:@"" forState:UIControlStateNormal];
+    
+    CGRect spinnerFrame = (IS_IPHONE_5) ? CGRectMake(button.frame.size.width/2.2, button.frame.size.height/4, 20, 20) : CGRectMake(button.frame.size.width  / 2 - 7, 13, 20, 20);
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+    
+    self.spinner.color = [UIColor whiteColor];
+    [self.spinner startAnimating];
+    
+    [button addSubview:self.spinner];
+    
+    [UIView animateWithDuration:.3 animations:^{
+        
+        for (UIView *view in [self.view subviews]) {
+            if(view != button)
+                view.alpha = .26f;
+        }
+        
+    }];
+    
+    if(login == LoginFresco){
+        
+        [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+            
+            self.view.userInteractionEnabled = YES;
+            
+            if (user && [[FRSDataManager sharedManager] isLoggedIn]) {
+                
+                
+                [self transferUser];
+                
+            }
+            else{
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:INVALID_CREDENTIALS action:nil]
+                                   animated:YES completion:nil];
+                
+                
+                [button setTitle:LOGIN forState:UIControlStateNormal];
+                
+                [self revertScreenToNormal];
+                
+            }
+            
+        }];
+        
+    }
+    else if(login == LoginFacebook){
+        
+        [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
+            
+            self.view.userInteractionEnabled = YES;
+            
+            if (user) {
+                
+                [self transferUser];
+                
+            }
+            else {
+                //TODO: check if these are the strings we want
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:TWITTER_ERROR
+                                             action:DISMISS]
+                                   animated:YES
+                                 completion:nil];
+                
+                [button setTitle:FACEBOOK forState:UIControlStateNormal];
+                
+                [self revertScreenToNormal];
+            }
+            
+        }];
+        
+    }
+    else if(login == LoginTwitter){
+        
+        
+        [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
+            
+            self.view.userInteractionEnabled = YES;
+            
+            if (user) {
+                
+                [self transferUser];
+                
+            }
+            else {
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:TWITTER_ERROR
+                                             action:DISMISS]
+                                   animated:YES
+                                 completion:nil];
+                
+                [self revertScreenToNormal];
+                
+                [button setTitle:TWITTER forState:UIControlStateNormal];
+                
+                NSLog(@"%@", error);
+                
+            }
+        }];
+        
+    }
+}
+
+- (void)transferUser{
+    
+    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
+        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+    }
+    else
+        [self navigateToMainApp];
+}
+
+- (void)revertScreenToNormal{
+    
+    self.view.userInteractionEnabled = YES;
+    
+    [UIView animateWithDuration:.3 animations:^{
+        
+        self.spinner.alpha = 0;
+        
+        for (UIView *view in [self.view subviews]) view.alpha = 1;
+        
+    }];
+    
 }
 
 - (IBAction)clickedNext:(id)sender {
@@ -167,4 +318,11 @@
 }
 
 
+- (IBAction)twitterButtonTapped:(id)sender {
+    [self performLogin:LoginTwitter button:self.twitterButton];
+}
+
+- (IBAction)facebookButtonTapped:(id)sender {
+    [self performLogin:LoginFacebook button:self.facebookButton];
+}
 @end

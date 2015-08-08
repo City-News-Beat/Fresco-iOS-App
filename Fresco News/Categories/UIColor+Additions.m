@@ -68,4 +68,10 @@
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.52];
 }
 
++ (UIColor *)disabledColor {
+//    return [UIColor lightGrayColor];
+    
+    return [UIColor colorWithRed:185/255 green:185/255 blue:185/255 alpha:1];
+}
+
 @end

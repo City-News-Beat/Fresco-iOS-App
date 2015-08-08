@@ -2754,7 +2754,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="A4729C34-27A2-4A44-943E-2461039431DE" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="238FA2F9-DFFE-453E-8F5E-F4D7F5FAEEBD" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3334,6 +3334,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
+                                    <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Psk-1M-qIk"/>
                                     <action selector="twitterLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="YaB-Kj-Uls"/>
                                 </connections>
                             </button>
@@ -3358,10 +3359,12 @@
                                 </state>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="81a-84-0bd"/>
                                         <exclude reference="VLA-l3-rP6"/>
                                     </mask>
                                 </variation>
                                 <connections>
+                                    <action selector="facebookButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="mfr-az-JAo"/>
                                     <action selector="facebookLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Zhf-dY-xKs"/>
                                 </connections>
                             </button>
@@ -3384,6 +3387,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="Dyy-Xz-2TG" firstAttribute="height" secondItem="bWC-lh-H2g" secondAttribute="height" id="00J-tj-EaD"/>
                             <constraint firstItem="bWC-lh-H2g" firstAttribute="width" secondItem="Dyy-Xz-2TG" secondAttribute="height" multiplier="83:23" id="03u-i8-tOe"/>
                             <constraint firstItem="bWC-lh-H2g" firstAttribute="centerX" secondItem="efb-pa-Lj1" secondAttribute="centerX" constant="38" id="0Ui-ng-S0F"/>
                             <constraint firstItem="0qC-R2-kGU" firstAttribute="top" secondItem="4sr-us-fVk" secondAttribute="bottom" constant="-136.5" id="0dd-AN-BSd"/>
@@ -3431,6 +3435,7 @@
                             <constraint firstAttribute="trailing" secondItem="0qC-R2-kGU" secondAttribute="trailing" id="mte-fF-ogD"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="top" secondItem="odg-nT-te1" secondAttribute="bottom" constant="-10" id="no3-j8-rB5"/>
                             <constraint firstAttribute="trailingMargin" secondItem="TEQ-7h-Zc1" secondAttribute="trailing" constant="50" id="pty-Vl-UTu"/>
+                            <constraint firstItem="Dyy-Xz-2TG" firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="width" id="pzM-wm-ZHe"/>
                             <constraint firstAttribute="centerX" secondItem="TEQ-7h-Zc1" secondAttribute="centerX" id="q7e-cE-WQb"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="leading" secondItem="WT6-JR-z0E" secondAttribute="trailing" constant="-375" id="qrZ-ew-PLh"/>
                             <constraint firstAttribute="centerX" secondItem="bAX-sU-M8k" secondAttribute="centerX" constant="-0.5" id="sBr-P1-Di8"/>
@@ -3450,6 +3455,7 @@
                             <mask key="constraints">
                                 <exclude reference="pty-Vl-UTu"/>
                                 <exclude reference="sBr-P1-Di8"/>
+                                <exclude reference="03u-i8-tOe"/>
                                 <exclude reference="CKZ-Ml-k89"/>
                                 <exclude reference="Qr6-wa-FQE"/>
                                 <exclude reference="S5F-EA-bxb"/>
@@ -3474,9 +3480,10 @@
                         <outlet property="bottomVerticalSpaceConstraint" destination="TCS-UP-qZ6" id="c7m-W0-2r9"/>
                         <outlet property="confirmPasswordField" destination="0Ro-ba-ich" id="s2Z-LL-hL0"/>
                         <outlet property="emailField" destination="vBt-ig-Pax" id="yjW-yw-nR3"/>
+                        <outlet property="facebookButton" destination="Dyy-Xz-2TG" id="KJ2-QC-fE9"/>
                         <outlet property="fieldsWrapper" destination="0qC-R2-kGU" id="iDb-Mj-Dw4"/>
                         <outlet property="passwordField" destination="xJx-Uq-74r" id="tTh-Xd-psy"/>
-                        <outlet property="twitterButton" destination="0UT-Oh-D80" id="LoU-dN-DFX"/>
+                        <outlet property="twitterButton" destination="bWC-lh-H2g" id="4oR-mc-x8v"/>
                         <segue destination="pdb-B6-s7T" kind="show" identifier="showPersonalInfo" id="6TG-Ef-MS9"/>
                     </connections>
                 </viewController>
@@ -4165,7 +4172,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="A4729C34-27A2-4A44-943E-2461039431DE" width="29" height="29">
+        <image name="238FA2F9-DFFE-453E-8F5E-F4D7F5FAEEBD" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
