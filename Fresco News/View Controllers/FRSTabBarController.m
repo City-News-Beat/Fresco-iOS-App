@@ -155,11 +155,7 @@
             
             if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
                 
-                //If nav bar is hidden,
-                if(((HighlightsViewController *)vc).galleriesViewController.currentlyHidden)
-                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -20) animated:YES];
-                else
-                    [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
                 
             }
             else{
@@ -189,10 +185,7 @@
         
             if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
                 
-                if(((ProfileViewController *)vc).galleriesViewController.currentlyHidden)
-                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -20) animated:YES];
-                else
-                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
                 
             }
             else{

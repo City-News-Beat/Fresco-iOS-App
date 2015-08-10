@@ -60,7 +60,7 @@
     [self setupButtons];
 
     self.title = @"Create a Gallery";
-    self.galleryView.gallery = self.gallery;
+    [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
 
     // TODO: Confirm permissions

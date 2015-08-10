@@ -1007,23 +1007,23 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         return YES;
     #else
     
-    NSString *mimeType = [asset mimeType];
-    
-    if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
-        return NO;
-    }
-    
-    // Suspenders
-    NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-    if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
-        return NO;
-    }
+        NSString *mimeType = [asset mimeType];
+        
+        if (![mimeType isEqualToString:@"image/jpeg"] && ![mimeType isEqualToString:@"video/quicktime"]) {
+            return NO;
+        }
+        
+        // Suspenders
+        NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
+        if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
+            return NO;
+        }
 
-    if ([asset valueForProperty:ALAssetPropertyLocation]) {
+        if ([asset valueForProperty:ALAssetPropertyLocation]) {
+            return YES;
+        }
+
         return YES;
-    }
-
-    return NO;
     
     #endif
     

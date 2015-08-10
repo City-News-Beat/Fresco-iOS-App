@@ -230,39 +230,39 @@
     ** Navigation Bar Conditioning
     */
 
-    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
-        
-        //SHOW
-        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
-            
-            [self resetNavigationBar:YES];
-
-        }
-        
-        self.lastContentOffset = scrollView.contentOffset.y;
-        
-        
-    }
-    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
-        
-        //HIDE
-        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
-            
-            self.currentlyHidden = YES;
-            
-            self.statusBarBackground.frame = [[UIApplication sharedApplication] statusBarFrame];
-            
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
-            
-            [UIView animateWithDuration:.1 animations:^{
-                self.statusBarBackground.alpha = 1.0f;
-            }];
-            
-        }
-        
-        self.lastContentOffset = scrollView.contentOffset.y;
-        
-    }
+//    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
+//        
+//        //SHOW
+//        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
+//            
+//            [self resetNavigationBar:YES];
+//
+//        }
+//        
+//        self.lastContentOffset = scrollView.contentOffset.y;
+//        
+//        
+//    }
+//    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
+//        
+//        //HIDE
+//        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
+//            
+//            self.currentlyHidden = YES;
+//            
+//            self.statusBarBackground.frame = [[UIApplication sharedApplication] statusBarFrame];
+//            
+//            [self.navigationController setNavigationBarHidden:YES animated:YES];
+//            
+//            [UIView animateWithDuration:.1 animations:^{
+//                self.statusBarBackground.alpha = 1.0f;
+//            }];
+//            
+//        }
+//        
+//        self.lastContentOffset = scrollView.contentOffset.y;
+//        
+//    }
     
     /*
     ** Video Conditioning

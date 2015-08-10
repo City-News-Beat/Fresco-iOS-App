@@ -270,43 +270,43 @@ static CGFloat const kInterImageGap = 1.0f;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    /*
-     ** Navigation Bar Conditioning
-     */
-    
-    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
-        
-        //SHOW
-        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
-            
-            //Resets elements back to normal state
-            [self resetNavigationandTabBar];
-            
-        }
-        
-        self.lastContentOffset = scrollView.contentOffset.y;
-        
-    }
-    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
-        
-        //HIDE
-        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
-            
-            self.currentlyHidden = YES;
-            
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
-            
-            [UIView animateWithDuration:.1 animations:^{
-                self.statusBarBackground.alpha = 1.0f;
-            }];
-            
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            
-        }
-        
-        self.lastContentOffset = scrollView.contentOffset.y;
-        
-    }
+//    /*
+//     ** Navigation Bar Conditioning
+//     */
+//    
+//    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
+//        
+//        //SHOW
+//        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
+//            
+//            //Resets elements back to normal state
+//            [self resetNavigationandTabBar];
+//            
+//        }
+//        
+//        self.lastContentOffset = scrollView.contentOffset.y;
+//        
+//    }
+//    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
+//        
+//        //HIDE
+//        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
+//            
+//            self.currentlyHidden = YES;
+//            
+//            [self.navigationController setNavigationBarHidden:YES animated:YES];
+//            
+//            [UIView animateWithDuration:.1 animations:^{
+//                self.statusBarBackground.alpha = 1.0f;
+//            }];
+//            
+//            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+//            
+//        }
+//        
+//        self.lastContentOffset = scrollView.contentOffset.y;
+//        
+//    }
     
 }
 

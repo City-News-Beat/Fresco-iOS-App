@@ -2343,6 +2343,7 @@
                                                                 <constraint firstAttribute="width" secondItem="sI0-7Z-4qJ" secondAttribute="height" multiplier="50:29" id="Njw-7i-vNW"/>
                                                                 <constraint firstAttribute="width" secondItem="sI0-7Z-4qJ" secondAttribute="height" multiplier="51:29" id="Slk-cH-7fO"/>
                                                                 <constraint firstAttribute="width" secondItem="sI0-7Z-4qJ" secondAttribute="height" multiplier="600:349" id="bBr-St-uPA"/>
+                                                                <constraint firstAttribute="height" constant="346.5" id="hK3-lv-gSE"/>
                                                             </constraints>
                                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nP8-cx-EP8">
                                                                 <size key="itemSize" width="600" height="348"/>
@@ -2754,7 +2755,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="238FA2F9-DFFE-453E-8F5E-F4D7F5FAEEBD" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="4E48C9A7-E28C-46F6-AD62-CA48A4D1ABEA" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4172,7 +4173,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="238FA2F9-DFFE-453E-8F5E-F4D7F5FAEEBD" width="29" height="29">
+        <image name="4E48C9A7-E28C-46F6-AD62-CA48A4D1ABEA" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
