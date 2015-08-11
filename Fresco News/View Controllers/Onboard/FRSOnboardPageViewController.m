@@ -10,7 +10,7 @@
 #import "VariableStore.h"
 #import "FRSOnboardViewController.h"
 #import "FRSRootViewController.h"
-#import "AppDelegate.h"
+#import "FRSDataManager.h"
 
 @interface FRSOnboardPageViewController()
 
@@ -73,8 +73,11 @@
     }
     else{
         
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate setRootViewControllerToFirstRun];
+        if([[FRSDataManager sharedManager] isLoggedIn]){
+        
+        [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToFirstRun];
+            
+        }
         
     }
     

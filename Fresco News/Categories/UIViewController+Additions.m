@@ -257,4 +257,79 @@
     [self setRightBarButtonItemWithBadge:NO];
 }
 
+#pragma mark - Custom Presentation and Dismiss
+
+- (void)presentViewController:(UIViewController *)viewController withScale:(BOOL)scale{
+    
+    [UIView animateWithDuration:.2 animations:^{
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        
+        self.view.alpha = 0;
+    
+    } completion:^(BOOL finished){
+        
+        [CATransaction begin];
+        
+        CATransition *transition = [CATransition animation];
+        transition.type = kCATransitionFade;
+        transition.subtype = kCATransitionFromBottom;
+        transition.duration = 0.5f;
+        transition.fillMode = kCAFillModeForwards;
+        transition.removedOnCompletion = YES;
+        
+        [[UIApplication sharedApplication].keyWindow.layer addAnimation:transition forKey:@"transition"];
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        [CATransaction setCompletionBlock: ^ {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(transition.duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^ {
+                [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            });
+        }];
+        
+        [self presentViewController:viewController animated:NO completion:nil];
+        
+        [CATransaction commit];
+        
+        self.view.alpha = 1;
+    
+    }];
+    
+}
+
+- (void)dismissViewController:(UIViewController *)viewController withScale:(BOOL)scale{
+    
+    [UIView animateWithDuration:.2 animations:^{
+        
+        self.view.alpha = 0;
+        
+    } completion:^(BOOL finished){
+        
+        [CATransaction begin];
+        
+        CATransition *transition = [CATransition animation];
+        transition.type = kCATransitionFade;
+        transition.subtype = kCATransitionFromBottom;
+        transition.duration = 0.5f;
+        transition.fillMode = kCAFillModeForwards;
+        transition.removedOnCompletion = YES;
+        
+        [[UIApplication sharedApplication].keyWindow.layer addAnimation:transition forKey:@"transition"];
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        [CATransaction setCompletionBlock: ^ {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(transition.duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^ {
+                [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            });
+        }];
+        
+        [self dismissViewControllerAnimated:NO completion:NULL];
+        
+        [CATransaction commit];
+        
+    }];
+    
+}
+
+
+
+
 @end

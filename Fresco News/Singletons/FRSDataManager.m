@@ -686,11 +686,11 @@
 
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPISuccessBlock)responseBlock{
     
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
-    
-    [params addEntriesFromDictionary:inputParams];
-    
     if(self.currentUser.userID){
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+        
+        [params addEntriesFromDictionary:inputParams];
     
         [self validateAPIToken:^(BOOL success, NSError *error) {
             

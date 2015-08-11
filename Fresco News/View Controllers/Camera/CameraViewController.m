@@ -5,10 +5,12 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "CameraViewController.h"
 @import AVFoundation;
 @import AssetsLibrary;
 @import ImageIO;
+
+#import "UIViewController+Additions.h"
+#import "CameraViewController.h"
 #import "FRSTabBarController.h"
 #import "CameraPreviewView.h"
 #import "CTAssetsPickerController.h"
@@ -98,8 +100,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad{
     
     [super viewDidLoad];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
     UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)];
@@ -203,10 +203,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewWillAppear:animated];
     
-    self.view.hidden = NO;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
-
+    
     dispatch_async([self sessionQueue], ^{
         
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
@@ -236,15 +236,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.locationManager startUpdatingLocation];
 
     [self updateRecentPhotoView:nil];
-    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated{
 
     [super viewDidAppear:animated];
     
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-
+    if(self.previewView.alpha == 0){
+    
+        [UIView animateWithDuration:.4 animations:^{
+            self.previewView.alpha = 1;
+        }];
+    }
 }
 
 
@@ -252,8 +256,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
 
@@ -268,14 +272,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.locationManager stopUpdatingLocation];
 }
 
+
+#pragma mark - Orientation
+
 - (BOOL)shouldAutorotate
 {
-    return YES;
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
+    return NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -504,18 +506,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [VariableStore resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
-    
-    tabBarController.tabBar.hidden = NO;
-    
-    if(returnToPreviousTab){
-        tabBarController.selectedIndex = returnToPreviousTab;
-    }
-    else if([FRSDataManager sharedManager].currentUser){
-        tabBarController.selectedIndex =  [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-    }
-    
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    
+
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+
+    [self dismissViewController:self withScale:NO];
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
@@ -541,19 +535,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)doneButtonTapped:(id)sender
 {
+    [UIView animateWithDuration:.8 animations:^{
+        self.previewView.alpha = 0;
+    }];
+    
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
     picker.title =  @"Choose Media";
     picker.autoSubmit = (sender ? NO : YES);
     picker.createdAssetURLs = self.createdAssetURLs;
-    self.view.hidden = YES;
-    [self presentViewController:picker animated:(sender ? YES : NO) completion:nil];
+
+    [self presentViewController:picker animated:YES completion:nil];
+    
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    [self dismissViewControllerAnimated:NO completion:nil];
-}
 
 - (NSString *)temporaryPathForImage:(UIImage *)image
 {
