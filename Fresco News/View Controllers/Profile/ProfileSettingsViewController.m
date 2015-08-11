@@ -460,6 +460,8 @@ typedef enum : NSUInteger {
         
         [rvc setRootViewControllerToHighlights];
         
+        [self.navigationController popViewControllerAnimated:NO];
+        
     }];
     
     [logOut addAction:okAction];
@@ -553,6 +555,8 @@ typedef enum : NSUInteger {
                     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
                     
                     [rvc setRootViewControllerToHighlights];
+                    
+                    [self.navigationController popViewControllerAnimated:NO];
                     
                 }
                 else{
