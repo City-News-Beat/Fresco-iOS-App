@@ -127,7 +127,7 @@
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
         
-        [((ProfileViewController *) self.parentViewController) performNecessaryFetch:nil];
+        [((ProfileViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:nil];
         
         [self.profileHeaderViewController updateUserInfo];
         

@@ -90,7 +90,7 @@ static CGFloat const kInterImageGap = 1.0f;
     [self.refreshControl setTintColor:[UIColor blackColor]];
     [self.tableView addSubview:self.refreshControl];
     
-    [self performNecessaryFetch:nil];
+    [self performNecessaryFetch:NO withResponseBlock:nil];
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
@@ -98,7 +98,7 @@ static CGFloat const kInterImageGap = 1.0f;
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
         
-        [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num withReponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 [self.stories addObjectsFromArray:responseObject];
@@ -152,10 +152,10 @@ static CGFloat const kInterImageGap = 1.0f;
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
+- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock
 {
     
-    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil withReponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil shouldRefresh:refresh  withReponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
             if([self.stories count] == 0 || ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID]){
@@ -167,9 +167,7 @@ static CGFloat const kInterImageGap = 1.0f;
         }
         
     }];
-    
-    [self.refreshControl endRefreshing];
-    
+
 }
 
 /*
@@ -178,11 +176,13 @@ static CGFloat const kInterImageGap = 1.0f;
 
 - (void)refresh
 {
-    [self performNecessaryFetch:nil];
+    //Force the refresh as we're manually pulling to refresh here
+    [self performNecessaryFetch:YES withResponseBlock:nil];
     
     [self.tableView reloadData];
     
-    [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.5];
+    [self.refreshControl endRefreshing];
+
 }
 
 

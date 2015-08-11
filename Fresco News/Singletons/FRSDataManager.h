@@ -72,15 +72,15 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 #pragma mark - Galleries
 
-- (void)getGalleries:(NSDictionary *)params withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - Stories
 
 - (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset shouldRefresh:(BOOL)invalidate withReponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - Assignments
 
