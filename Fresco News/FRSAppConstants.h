@@ -100,7 +100,7 @@
 #pragma mark - Segue Identifiers
 
 #define SEG_SHOW_ACCT_INFO                  @"showAccountInfo"
-#define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignup"
+#define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignUp"
 #define SEG_SHOW_PERSONAL_INFO              @"showPersonalInfo"
 #define SEG_SHOW_PERMISSIONS                @"showPermissions"
 #define SEG_SHOW_RADIUS                     @"showRadius"

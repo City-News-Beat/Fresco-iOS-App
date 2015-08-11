@@ -83,14 +83,14 @@ typedef enum : NSUInteger {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
-
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillShowNotification
@@ -105,6 +105,9 @@ typedef enum : NSUInteger {
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -326,16 +329,16 @@ typedef enum : NSUInteger {
 - (IBAction)signUpButtonAction:(id)sender
 {
     
+    [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
     
-        [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
-        
-
 }
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {
-
-    [self navigateToMainApp];
-
+    
+    if(self.presentingViewController == nil)
+        [self navigateToMainApp];
+    else
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)transferUser{
@@ -343,8 +346,12 @@ typedef enum : NSUInteger {
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
     }
-    else
-        [self navigateToMainApp];
+    else{
+        if(self.presentingViewController == nil)
+            [self navigateToMainApp];
+        else
+            [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - Touch Handler

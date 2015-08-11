@@ -109,16 +109,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - Navigational Methods
-
-- (void)setRootViewControllerToTabBar{
-    [self.frsRootViewController setRootViewControllerToTabBar];
-}
-
-- (void)setRootViewControllerToFirstRun{
-    [self.frsRootViewController setRootViewControllerToFirstRun];
-}
-
 #pragma mark - Apperance Delegate Methods
 
 - (void)setupAppearances

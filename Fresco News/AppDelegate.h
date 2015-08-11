@@ -12,10 +12,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-- (void)setRootViewControllerToTabBar;
-
-- (void)setRootViewControllerToFirstRun;
-
 - (void)registerForPushNotifications;
 
 @end

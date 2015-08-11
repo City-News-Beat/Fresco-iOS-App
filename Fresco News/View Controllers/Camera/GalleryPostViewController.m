@@ -9,15 +9,14 @@
 @import Parse;
 @import FBSDKCoreKit;
 @import AssetsLibrary;
-
+#import <AFNetworking.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "GalleryPostViewController.h"
 #import "GalleryView.h"
-#import <AFNetworking.h>
 #import "FRSPost.h"
 #import "FRSImage.h"
+#import "FRSTabBarController.h"
 #import "CameraViewController.h"
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import "AppDelegate.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "CrossPostButton.h"
@@ -25,16 +24,18 @@
 #import "ALAsset+assetType.h"
 #import "MKMapView+Additions.h"
 #import "UIViewController+Additions.h"
+#import "FRSRootViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
+@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
+
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
-@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
@@ -48,6 +49,7 @@
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
 @end
 
 @implementation GalleryPostViewController
@@ -138,9 +140,13 @@
 
 #pragma mark - Navigational Methods
 
-- (void)returnToTabBar
-{
-    [((CameraViewController *)self.presentingViewController) cancelAndReturnToPreviousTab:NO];
+- (void)returnToTabBar{
+    
+    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
+    
+    tabBarController.selectedIndex = 4;
+    
+    [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)returnToCamera:(id)sender
@@ -381,33 +387,39 @@
 - (void)submitGalleryPost:(id)sender
 {
     
+    //First check if the caption is valid
     if([self.captionTextView.text isEqualToString:@"What's happening?"] || [self.captionTextView.text  isEqual: @""]){
     
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:@"Please enter a caption for your gallery!"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                  style:UIAlertActionStyleDefault
-                                                handler:nil]];
-
-        [self presentViewController:alert animated:YES completion:nil];
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Error"
+                                     message:@"Please enter a caption for your gallery!" action:nil]
+                           animated:YES completion:nil];
         
         return;
         
     }
     
+    //Check if the user is logged in before proceeding, send to sign up otherwise
     if (![[FRSDataManager sharedManager] isLoggedIn]) {
-        [self navigateToFirstRun];
-        [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"returnToCamera"];
+        
+        if(!self.presentingViewController.presentingViewController){
+        
+        }
+        else{
+        
+            [self navigateToFirstRun];
+        
+        }
+        
         return;
     }
 
     [self configureControlsForUpload:YES];
 
     NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
+    
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
     NSProgress *progress = nil;
     NSError *error;
 
@@ -475,14 +487,10 @@
             
                 [self configureControlsForUpload:NO];
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failed"
-                                                                             message:@"Please try again later"
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:nil]];
-                
-                [self presentViewController:alert animated:YES completion:nil];
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:@"Failed"
+                                             message:@"Please try again later" action:nil]
+                                   animated:YES completion:nil];
                 
             });
         }

@@ -18,8 +18,10 @@
 
 - (void)setRootViewControllerToTabBar;
 
-- (void)setRootViewControllerToFirstRun;
+- (void)presentFirstRunViewController:(UIViewController *)controller;
 
+- (void)setRootViewControllerToFirstRun;
+    
 - (void)setRootViewControllerToOnboard;
 
 - (void)setRootViewControllerToCamera;

@@ -36,7 +36,7 @@
 - (void)navigateToFirstRun
 {
     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
-    [rvc setRootViewControllerToFirstRun];
+    [rvc presentFirstRunViewController:self];
 }
 
 @end

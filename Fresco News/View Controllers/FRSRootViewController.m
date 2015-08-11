@@ -27,8 +27,18 @@
 
 @implementation FRSRootViewController
 
-#pragma mark - View Controller swapping
+#pragma mark - Orientation Delegate
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+#pragma mark - View Controller swapping
 
 - (void)hideTabBar{
     
@@ -55,22 +65,17 @@
     
     [[UITabBar appearance] setTintColor:[UIColor brandDarkColor]]; // setTintColor:
     
-    if(!self.tbc)
+    if(!self.tbc){
         self.tbc = (FRSTabBarController *)[self rootViewControllerWithIdentifier:@"tabBarController" underNavigationController:NO];
+    }
     
     [self switchRootViewController:self.tbc];
     
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"returnToCamera"]){
-        
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"returnToCamera"];
-        
-        [self.tbc returnToGalleryPost];
-        
-    }
-    else {
-        NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-        self.tbc.selectedIndex = (index == 4 ? 0 : index);
-    }
+
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+   
+    self.tbc.selectedIndex = (index == 4 ? 0 : index);
+    
 }
 
 - (void)setRootViewControllerToCamera{
@@ -83,10 +88,21 @@
     [self.tbc setSelectedIndex:0];
 }
 
-- (void)setRootViewControllerToFirstRun
+/*
+** Actually present the first run modally
+*/
+
+- (void)presentFirstRunViewController:(UIViewController *)controller
 {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
+    [controller presentViewController:[self rootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES] animated:YES completion:nil];
+}
+
+/*
+** Sets the root view controller completely to the first run
+*/
+
+- (void)setRootViewControllerToFirstRun{
+
     [self switchRootViewController:[self rootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES]];
 }
 
@@ -154,12 +170,6 @@
         viewController = [storyboard instantiateViewControllerWithIdentifier:identifier];
     
     return viewController;
-}
-
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma mark - UIAlertViewDelegate methods

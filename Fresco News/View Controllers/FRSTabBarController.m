@@ -18,8 +18,18 @@
 #import "NotificationsViewController.h"
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
+#import "UIViewController+Additions.h"
 
 @implementation FRSTabBarController
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
 
@@ -43,40 +53,6 @@
             [self presentCamera];
         }
     }
-    //Profile
-    else if([item.title isEqualToString:@"Me"]){
-    
-        //Check if the user is not logged in (we check PFUser here, instead of the datamanger, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
-        if([PFUser currentUser] == nil){
-            FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
-            [rvc setRootViewControllerToFirstRun];
-        }
-        else{
-            
-            [self setSelectedIndex:4];
-        
-        }
-    
-    }
-}
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait;
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    if ([self.selectedViewController isKindOfClass:[CameraViewController class]]) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }
-
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)presentCamera
@@ -84,17 +60,16 @@
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    
+    //Custom addition
+    [self presentViewController:vc withScale:YES];
 
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];
-    
-    [self presentViewController:vc animated:YES completion:nil];
-    
 }
 
 - (void)returnToGalleryPost
 {
-    self.tabBar.hidden = YES;
     CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    
     [self presentViewController:vc animated:NO completion:^{
         [vc doneButtonTapped:nil];
     }];
@@ -135,6 +110,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_VIEW_DISMISS object:nil];
     
     NSString *alertMessage = [NSString stringWithFormat:@"%@ %@", FRESCO, ENABLE_CAMERA_MSG];
+    
+    
+    //Check if the user is not logged in (we check PFUser here, instead of the datamanger, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
     
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
@@ -181,18 +159,32 @@
             [((AssignmentsViewController *)vc) zoomToCurrentLocation];
             return NO;
         }
-        else if ([vc isMemberOfClass:[ProfileViewController class]] && tabBarController.selectedIndex == 4) {
+        else if ([vc isMemberOfClass:[ProfileViewController class]]) {
         
-            if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+            if(tabBarController.selectedIndex == 4){
+            
+                if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+                    
+                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                    
+                }
+                else{
+                    [vc.navigationController popViewControllerAnimated:YES];
+                }
                 
-                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                return NO;
                 
             }
             else{
-                [vc.navigationController popViewControllerAnimated:YES];
-            }
             
-            return NO;
+                if(![[FRSDataManager sharedManager] isLoggedIn]){
+                    
+                    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+                    [rvc presentFirstRunViewController:self];
+                    
+                    return NO;
+                }
+            }
         }
     }
     
