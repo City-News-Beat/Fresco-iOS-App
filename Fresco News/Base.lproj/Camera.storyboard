@@ -582,6 +582,7 @@
                                 <variation key="heightClass=compact">
                                     <mask key="subviews">
                                         <include reference="cTB-sE-bUt"/>
+                                        <include reference="lgp-bo-kKi"/>
                                         <include reference="IXz-7M-G3x"/>
                                         <include reference="Pqb-RW-4AL"/>
                                         <include reference="U4D-IQ-UYa"/>
@@ -607,9 +608,6 @@
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=regular">
-                                    <mask key="subviews">
-                                        <include reference="lgp-bo-kKi"/>
-                                    </mask>
                                     <mask key="constraints">
                                         <include reference="At0-4X-6Kp"/>
                                         <include reference="XSQ-1l-NxX"/>

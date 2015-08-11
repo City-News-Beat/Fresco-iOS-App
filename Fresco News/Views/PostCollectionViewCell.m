@@ -39,10 +39,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     self.videoIndicatorView.hidden = YES;
     
-    if([self.post isVideo]){
-        [self removeTranscodePlaceHolder];
-    }
-
+    [self removeTranscodePlaceHolder];
+    
 }
 
 - (void)setPost:(FRSPost *)post
@@ -126,9 +124,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     self.transcodeLabel.hidden = YES;
     self.transcodeImage.hidden = YES;
-    
-    self.transcodeLabel.alpha = 0;
-    self.transcodeImage.alpha = 0;
     
     [self.transcodeImage removeFromSuperview];
     [self.transcodeLabel removeFromSuperview];
