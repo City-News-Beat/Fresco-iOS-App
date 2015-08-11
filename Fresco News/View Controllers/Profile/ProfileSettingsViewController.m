@@ -448,16 +448,23 @@ typedef enum : NSUInteger {
     
 }
 
-- (IBAction)logOut:(id)sender
-{
-    [[FRSDataManager sharedManager] logout];
+- (IBAction)logOut:(id)sender {
     
-    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+    UIAlertController *logOut = [[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Are you sure?" message:@"" action:CANCEL];
     
-    [rvc setRootViewControllerToHighlights];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        [[FRSDataManager sharedManager] logout];
+        
+        FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+        
+        [rvc setRootViewControllerToHighlights];
+        
+    }];
     
-    [self.navigationController popViewControllerAnimated:NO];
+    [logOut addAction:okAction];
     
+    [self presentViewController:logOut animated:YES completion:nil];
 }
 
 - (IBAction)disableAccount:(id)sender {
@@ -546,8 +553,6 @@ typedef enum : NSUInteger {
                     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
                     
                     [rvc setRootViewControllerToHighlights];
-                    
-                    [self.navigationController popViewControllerAnimated:NO];
                     
                 }
                 else{
