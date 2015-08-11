@@ -57,14 +57,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     [self setFrescoNavigationBar];
     [self setupButtons];
 
     self.title = @"Create a Gallery";
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
-
+    self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
+    
     // TODO: Confirm permissions
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -75,9 +76,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.toolbar.alpha = ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) ? 0.7 : 1.0;
-    
-    
+
     [self.locationManager startUpdatingLocation];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -112,6 +111,22 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+    CGFloat toolbarAlpha = 1.0;
+    UIColor *textViewColor = [UIColor darkGrayColor];
+    
+    if ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) {
+        toolbarAlpha = 0.7;
+        textViewColor = [UIColor lightGrayColor];
+    }
+    
+    self.navigationController.toolbar.alpha = toolbarAlpha;
+    [self.captionTextView setTextColor:textViewColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -162,8 +177,10 @@
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                        alertControllerWithTitle:@"Whoops"
-                                       message:@"It seems like you're not connected to facebook, click \"Connect\" if you'd like to connect Fresco with Twitter"
-                                       action:@"Cancel" handler:nil];
+                                       message:@"It seems like you're not connected to Twitter, click \"Connect\" if you'd like to connect Fresco with Twitter"
+                                       action:@"Cancel" handler:^(UIAlertAction *action) {
+                                           button.selected = NO;
+                                       }];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             
@@ -205,7 +222,9 @@
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                        alertControllerWithTitle:@"Whoops"
                                        message:@"It seems like you're not connected to Facebook, click \"Connect\" if you'd like to connect Fresco with Facebook"
-                                       action:@"Cancel" handler:nil];
+                                       action:@"Cancel" handler:^(UIAlertAction *action) {
+                                           button.selected = NO;
+                                       }];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             
@@ -388,7 +407,7 @@
 {
     
     //First check if the caption is valid
-    if([self.captionTextView.text isEqualToString:@"What's happening?"] || [self.captionTextView.text  isEqual: @""]){
+    if([self.captionTextView.text isEqualToString:WHATS_HAPPENING] || [self.captionTextView.text  isEqual: @""]){
     
         [self presentViewController:[[FRSAlertViewManager sharedManager]
                                      alertControllerWithTitle:@"Error"
@@ -570,12 +589,13 @@
     }
 
     [textView resignFirstResponder];
+    
     return NO;
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.navigationController.toolbar.alpha = ([textView.text length] == 0 || [textView.text isEqualToString:WHATS_HAPPENING]) ? 0.7 : 1;
+
     CGFloat toolbarAlpha = 1.0;
     UIColor *textViewColor = [UIColor darkGrayColor];
     
@@ -594,6 +614,9 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
+    
+    
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{

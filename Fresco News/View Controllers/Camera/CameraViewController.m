@@ -544,7 +544,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     picker.title =  @"Choose Media";
     picker.autoSubmit = (sender ? NO : YES);
     picker.createdAssetURLs = self.createdAssetURLs;
-
+    
     [self presentViewController:picker animated:YES completion:nil];
     
 }

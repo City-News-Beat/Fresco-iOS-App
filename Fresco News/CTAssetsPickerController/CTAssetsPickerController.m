@@ -50,7 +50,7 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
         _showsNumberOfAssets    = YES;
         
         self.preferredContentSize = CTAssetPickerPopoverContentSize;
-        
+
         [self setupNavigationController];
         [self addKeyValueObserver];
     }

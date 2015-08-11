@@ -86,6 +86,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self setupViews];
 }
 
@@ -102,11 +103,26 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
     [self setupButtons];
     [self setupToolbar];
-
+    
     // Do not delete - needed if a new asset has just been created
     if (self.assets.count) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    
+    CGFloat toolbarAlpha = 0.7f;
+    
+    if ([self.picker.selectedAssets count] > 0) {
+        toolbarAlpha = 1.0f;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController.toolbar setAlpha:toolbarAlpha];
+    });
+
+    [super viewDidAppear:animated];
 }
 
 - (void)dealloc
@@ -150,9 +166,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)setupToolbar
 {
     self.toolbarItems = [self toolbarItems];
-    self.navigationController.toolbar.alpha = 0.7;
     [self.navigationController setToolbarHidden:NO animated:NO];
-
 }
 
 - (void)setupAssets
@@ -510,6 +524,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)createGalleryPost:(id)sender
 {
     if (!self.picker.selectedAssets.count) {
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:ERROR
+                                     message:@"Please select at least one photo or video" action:nil]
+                           animated:YES completion:nil];
+        
         return;
     }
     
