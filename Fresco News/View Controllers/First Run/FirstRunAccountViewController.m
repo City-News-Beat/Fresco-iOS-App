@@ -273,6 +273,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)hitNext {
+    
     if ([self.emailField.text isValidEmail] &&
         [self.passwordField.text isValidPassword]) {
         
@@ -285,11 +286,12 @@ typedef enum : NSUInteger {
             [self
              presentViewController:[[FRSAlertViewManager sharedManager]
                                     alertControllerWithTitle:ERROR
-                                    message:FB_LOGOUT_PROMPT action:DISMISS]
+                                    message:PASSWORD_ERROR_TITLE action:DISMISS]
              animated:YES
              completion:nil];
         }
         else {
+            
             [[FRSDataManager sharedManager]
              signupUser:self.email
              email:self.email
@@ -307,6 +309,9 @@ typedef enum : NSUInteger {
                      
                      self.emailField.textColor = [UIColor redColor];
                  } else {
+                     
+                     //Tells the app to update the profile header if the user goes there
+                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
                      
                      [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
                  }

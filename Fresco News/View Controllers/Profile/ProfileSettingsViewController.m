@@ -380,9 +380,6 @@ typedef enum : NSUInteger {
     
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
   
-    if ([self.textfieldEmail.text length])
-        [updateParams setObject:self.textfieldEmail.text forKey:@"email"];
-        
     if ([self.textfieldFirst.text length])
         [updateParams setObject:self.textfieldFirst.text forKey:@"firstname"];
     

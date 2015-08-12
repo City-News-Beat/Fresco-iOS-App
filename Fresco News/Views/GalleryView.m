@@ -189,7 +189,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
-    self.sharedPlayer.muted = YES;
+    self.sharedPlayer.muted = NO;
     
     [self.sharedPlayer play];
     

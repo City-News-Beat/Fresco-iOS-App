@@ -144,7 +144,7 @@
 #define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)
 #define DISABLE_ACCT_ERROR                  NSLocalizedString(@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help.", nil)
 #define PASSWORD_ERROR_TITLE                NSLocalizedString(@"Passwords do not match", nil)
-#define PASSWORD_ERROR_MESSAGE              NSLocalizedString(@"Please make sure your new passwords are equals", nil)
+#define PASSWORD_ERROR_MESSAGE              NSLocalizedString(@"Please make sure your new passwords are equal", nil)
 
 #define INVALID_CREDENTIALS                 NSLocalizedString(@"Invalid Credentials", nil)
 #define TWITTER_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Twitter", nil)
