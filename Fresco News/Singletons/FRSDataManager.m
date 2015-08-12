@@ -325,6 +325,8 @@
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
     
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"avatar"];
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
 
 }
@@ -519,6 +521,8 @@
                 [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
                 
                 // authenticate to the API
                 [self validateAPIToken:^(BOOL success, NSError *error) {
@@ -727,6 +731,9 @@
                         [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
                         
                         [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
+                        
                     }
                     else {
                         error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain

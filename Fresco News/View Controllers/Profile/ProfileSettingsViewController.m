@@ -59,6 +59,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
+
 /*
 ** Radius Setting
 */
@@ -96,8 +98,11 @@ typedef enum : NSUInteger {
 
     [super viewDidLoad];
     
+    [self setSaveButtonState:NO];
+    
     //Checks if the user's primary login is through social, then disable the email and password fields
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
+        || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
        && [FRSDataManager sharedManager].currentUser.email == nil){
         
         [self.view viewWithTag:100].hidden = YES;
@@ -134,7 +139,6 @@ typedef enum : NSUInteger {
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
     
-    
     //Round the buttons
     self.connectTwitterButton.layer.cornerRadius = 4;
     self.connectTwitterButton.clipsToBounds = YES;
@@ -161,14 +165,12 @@ typedef enum : NSUInteger {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    // Radius slider values
-    self.scrollView.alwaysBounceHorizontal = NO;
 
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
-
+    
+    // Radius slider values
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
 
     // update the slider label
@@ -185,7 +187,6 @@ typedef enum : NSUInteger {
     else {
         
         [self.connectTwitterButton setHidden:NO];
-        
         [self.connectFacebookButton setHidden:NO];
     
         //Twitter
@@ -211,6 +212,18 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Controller Methods
+
+- (void)setSaveButtonState:(BOOL)enabled{
+
+    if(enabled){
+        self.saveChangesbutton.enabled = YES;
+        self.saveChangesbutton.alpha = 1.0f;
+    }
+    else{
+        self.saveChangesbutton.enabled = NO;
+        self.saveChangesbutton.alpha = 0.7f;
+    }
+}
 
 /*
 ** Runs Parse social connect based on SocialNetwork param
@@ -493,16 +506,23 @@ typedef enum : NSUInteger {
             
     }
     else{
-        
         self.radiusStepperLabel.text = OFF;
-        
     }
 }
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
+    
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
+    
     [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+}
+
+#pragma mark - UITextField Delegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -519,10 +539,7 @@ typedef enum : NSUInteger {
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-//    static NSString *userIdentifier = @"currentLocation";
-    
     //If the annotiation is for the user location
-    
     if (annotation == mapView.userLocation) {
       
         MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];

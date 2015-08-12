@@ -32,9 +32,7 @@
 - (void)viewDidLoad{
 
     [super viewDidLoad];
-    
-    [self updateUserInfo];
-    
+
     //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
     UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
     
@@ -62,40 +60,20 @@
 
 -(void)updateUserInfo{
     
-    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
+    [self.profileImageView
+     setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"avatar"]]
+     placeholderImage:[UIImage imageNamed:@"avatar"]];
 
-        self.labelDisplayName.text = [FRSDataManager sharedManager].currentUser.displayName;
-        
-        if([FRSDataManager sharedManager].currentUser.avatar != nil){
-        
-            [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
-                                         placeholderImage:[UIImage imageNamed:@"user"]
-                                                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                      self.profileImageView.image = image;
-
-                                                  } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                      // Do something...
-                                                  }];
-            
-        }
-    
-        
-        
-    }
-    else{
-    
-        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  [[NSUserDefaults standardUserDefaults] stringForKey:@"firstname"]  ,  [[NSUserDefaults standardUserDefaults] stringForKey:@"lastname"]];
-        
-    
-    }
-    
-    [self setTwitterInfo];
-    [self setFacebookInfo];
+    //Set the display name
+    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  [[NSUserDefaults standardUserDefaults] stringForKey:@"firstname"]  ,  [[NSUserDefaults standardUserDefaults] stringForKey:@"lastname"]];
     
     //Update the corner radius on the user image
     self.profileImageView.clipsToBounds = YES;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-
+    
+    [self setTwitterInfo];
+    [self setFacebookInfo];
+    
 }
 
 /*
@@ -119,22 +97,10 @@
         self.twitterIcon.hidden = YES;
         return;
     }
-
-    NSURL *verify = [NSURL URLWithString:TWITTER_VERIFY_URL];
-    NSMutableURLRequest *twitterRequest = [NSMutableURLRequest requestWithURL:verify];
-    [[PFTwitterUtils twitter] signRequest:twitterRequest];
-    NSURLResponse *response = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:twitterRequest
-                                         returningResponse:&response
-                                                     error:nil];
-    if(data){
+    else{
     
-        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        
-        if(!results[@"errors"])
-        
-            self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [results objectForKey:@"screen_name"]];
-        
+        self.twitterLabel.text = [NSString stringWithFormat:@"@%@", [PFTwitterUtils twitter].screenName];
+    
     }
 }
 
@@ -144,23 +110,26 @@
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         self.facebookLabel.hidden = YES;
         self.facebookIcon.hidden = YES;
-        return;
+    }
+    else{
+
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil HTTPMethod:@"GET"];
+        
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                              id result,
+                                              NSError *error) {
+            if (!error) {
+                self.facebookLabel.hidden = NO;
+                self.facebookIcon.hidden = NO;
+                self.facebookLabel.text = [result objectForKey:@"name"];
+            }
+            else {
+                self.facebookLabel.hidden = YES;
+                self.facebookIcon.hidden = YES;
+            }
+        }];
     }
 
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil HTTPMethod:@"GET"];
-    
-    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
-                                          id result,
-                                          NSError *error) {
-        NSLog(@"%@", error);
-        if (!error) {
-            self.facebookLabel.text = [result objectForKey:@"name"];
-        }
-        else {
-            self.facebookLabel.hidden = YES;
-            self.facebookIcon.hidden = YES;
-        }
-    }];
 }
 
 @end
