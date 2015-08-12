@@ -144,9 +144,8 @@ typedef enum : NSUInteger {
             
             self.view.userInteractionEnabled = YES;
             
-            if (user && [[FRSDataManager sharedManager] isLoggedIn]) {
-                
-                
+            if (user && [[FRSDataManager sharedManager] currentUserIsLoaded]) {
+            
                 [self transferUser];
                 
             }

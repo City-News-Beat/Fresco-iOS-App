@@ -123,7 +123,7 @@
     
     [super viewDidAppear:animated];
     
-    if([[FRSDataManager sharedManager] isLoggedIn]){
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
             self.storyBreaksView.hidden = NO;
         }

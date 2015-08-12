@@ -15,6 +15,7 @@
 #import "NotificationsViewController.h"
 #import "CameraViewController.h"
 #import "FRSOnboardPageViewController.h"
+#import "BaseNavigationController.h"
 #import <BTBadgeView.h>
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
@@ -163,7 +164,7 @@
     
     if (underNavigationController) {
         UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController = [[UINavigationController alloc] initWithRootViewController:vc];
+        viewController = [[BaseNavigationController alloc] initWithRootViewController:vc];
         vc.navigationController.navigationBar.hidden = YES;
     }
     else

@@ -62,7 +62,7 @@
 
 -(void)updateUserInfo{
     
-    if([FRSDataManager sharedManager].currentUser != nil){
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
 
         self.labelDisplayName.text = [FRSDataManager sharedManager].currentUser.displayName;
         

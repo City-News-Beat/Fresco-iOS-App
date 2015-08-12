@@ -75,7 +75,7 @@
         
         if([[FRSDataManager sharedManager] isLoggedIn]){
         
-        [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToFirstRun];
+            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToFirstRun];
             
         }
         

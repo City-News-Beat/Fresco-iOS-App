@@ -204,20 +204,18 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:[self.sharedPlayer currentItem]];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    if (self.sharedPlayer.rate > 0 && !self.sharedPlayer.error) {
+        
+        // player is playing
+        [UIView animateWithDuration:1.0 animations:^{
+            postCell.videoIndicatorView.alpha = 0.0f;
+        } completion:^(BOOL finished){
+            [postCell.videoIndicatorView stopAnimating];
+            postCell.videoIndicatorView.hidden = YES;
+        }];
+        
+    }
 
-        if (CMTimeGetSeconds(self.sharedPlayer.currentItem.currentTime) > 0 && !self.sharedPlayer.error) {
-
-            // player is playing
-            [UIView animateWithDuration:1.0 animations:^{
-                postCell.videoIndicatorView.alpha = 0.0f;
-            } completion:^(BOOL finished){
-                [postCell.videoIndicatorView stopAnimating];
-                postCell.videoIndicatorView.hidden = YES;
-            }];
-            
-        }
-    });
 
 }
 
