@@ -169,7 +169,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     
     CGFloat timeTrailingConstant = 17.0;
     
-    if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+    if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S)
          timeTrailingConstant = 16.5;
     
     
@@ -188,7 +188,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         CGFloat button1Width = 146.0;
         NSString *button1Title = VIEW_ASSIGNMENT;
         
-        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6) {
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S) {
             button1Width = 119.5;
             button1Title = VIEW;
         }
@@ -214,7 +214,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
         CGFloat multiplier = 1.22;
         
-        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S)
             multiplier = 1.263;
         
         if (IS_STANDARD_IPHONE_6_PLUS)
