@@ -26,8 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self setFrescoNavigationBar];
-    [self performNecessaryFetch:nil withRefresh:NO];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
@@ -64,6 +64,13 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:animated];
+    
+    [self performNecessaryFetch:nil withRefresh:NO];
 }
 
 #pragma mark - Data Loading

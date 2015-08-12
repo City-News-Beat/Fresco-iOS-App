@@ -112,10 +112,14 @@
 }
 
 - (void)populateProfile{
-
-    [self performNecessaryFetch:NO withResponseBlock:nil];
     
-    [self.galleriesViewController.profileHeaderViewController updateUserInfo];
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
+
+        [self performNecessaryFetch:NO withResponseBlock:nil];
+        
+        [self.galleriesViewController.profileHeaderViewController updateUserInfo];
+        
+    }
 
 }
 

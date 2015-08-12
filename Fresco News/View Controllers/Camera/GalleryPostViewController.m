@@ -419,7 +419,7 @@
     }
     
     //Check if the user is logged in before proceeding, send to sign up otherwise
-    if (![[FRSDataManager sharedManager] isLoggedIn]) {
+    if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
         
         if(!self.presentingViewController.presentingViewController){
         

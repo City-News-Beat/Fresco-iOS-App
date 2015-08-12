@@ -60,6 +60,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)refreshUser:(PFBooleanResultBlock)block;
 - (void)logout;
+- (BOOL)currentUserIsLoaded;
 - (BOOL)isLoggedIn;
 - (BOOL)currentUserValid;
 - (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock;

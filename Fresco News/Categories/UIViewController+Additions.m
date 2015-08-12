@@ -25,7 +25,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:NOTIFICATION_BADGE_RESET object:nil];
     
-    if ([[FRSDataManager sharedManager] isLoggedIn]) {
+    if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
         [self setRightBarButtonItemWithBadge:YES];
     }
 }
@@ -74,7 +74,7 @@
 
 - (BTBadgeView *)getBadgeView {
     
-    if([[FRSDataManager sharedManager] isLoggedIn]){
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
     
         BTBadgeView *badgeView = [[BTBadgeView alloc] initWithFrame:CGRectMake(4,-8, 30, 20)];
         
@@ -206,7 +206,7 @@
 
 - (void)showNotifications {
     
-    if([[FRSDataManager sharedManager] isLoggedIn]){
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
         

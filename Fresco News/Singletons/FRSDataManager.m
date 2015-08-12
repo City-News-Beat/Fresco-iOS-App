@@ -533,9 +533,7 @@
                     }
                     
                 }];
-                
             }
-            
         }
         else {
             
@@ -611,8 +609,7 @@
                     successBlock(YES, nil);
                 else
                     successBlock(NO, error);
-                
-                
+
             }];
             
         }];
@@ -670,9 +667,18 @@
     }];
 }
 
-- (BOOL)isLoggedIn
+/*
+** Tells us if the user is logged in and loaded
+*/
+
+- (BOOL)currentUserIsLoaded
 {
     return (self.currentUser.userID && self.frescoAPIToken);
+}
+
+- (BOOL)isLoggedIn
+{
+    return [PFUser currentUser];
 }
 
 // this tests for completeness and should be more comprehensive
