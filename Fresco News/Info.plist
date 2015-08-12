@@ -75,6 +75,23 @@
 			<key>Translucent</key>
 			<false/>
 		</dict>
+		<key>Fonts provided by application</key>
+		<array>
+			<string>Nota-BoldOblique.otf</string>
+			<string>Nota-Light.otf</string>
+			<string>Nota-LightOblique.otf</string>
+			<string>Nota-Bold.otf</string>
+			<string>Nota-Medium.otf</string>
+			<string>Nota-MediumOblique.otf</string>
+			<string>Nota-Normal.otf</string>
+			<string>Nota-NormalOblique.otf</string>
+			<string>Nota-Thin.otf</string>
+			<string>Nota-ThinOblique.otf</string>
+			<string>Nota-Xbold.otf</string>
+			<string>Nota-XboldOblique.otf</string>
+			<string>Nota-XLight.otf</string>
+			<string>Nota-XLightOblique.otf</string>
+		</array>
 	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

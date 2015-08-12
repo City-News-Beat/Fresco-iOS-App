@@ -118,6 +118,8 @@
 #define TWITTER                             @"Twitter"
 #define FB_LOGOUT_PROMPT                    NSLocalizedString(@"It seems like you logged in through Facebook. If you disconnect it, this would disable your account entirely!", nil)
 
+#define AWKWARD                             NSLocalizedString(@"AWKWARD", nil)
+#define NO_IPHONE_4S_LABEL                  NSLocalizedString(@"Fresco does not support your screen size yet.", nil)
 #define OK                                  NSLocalizedString(@"OK", nil)
 #define DISMISS                             NSLocalizedString(@"Dismiss", nil)
 #define DISABLE                             NSLocalizedString(@"Disable", nil)

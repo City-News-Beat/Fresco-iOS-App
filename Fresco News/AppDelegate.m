@@ -23,6 +23,7 @@
 #import "HighlightsViewController.h"
 #import "FRSRootViewController.h"
 #import "UIColor+Additions.h"
+#import "FRSDisabledViewController.h"
 
 //static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 //static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
@@ -39,50 +40,56 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    // Prevent conflict between background music and camera
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
-                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
-                                           error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES
-                                         error:nil];
-
-    [self configureAppWithLaunchOptions:launchOptions];
-    
-    [self setupAppearances];
-    
-    self.frsRootViewController = [[FRSRootViewController alloc] init];
-    
-    self.window.rootViewController = self.frsRootViewController;
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE]) {
-        [self registerForPushNotifications];
-        [self.frsRootViewController setRootViewControllerToTabBar];
-    }
-    else {
-        [self.frsRootViewController setRootViewControllerToOnboard];
-    }
-
-    //Refresh the existing user, if exists, then run location monitoring
-    [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
+    if (IS_IPHONE_4S) {
         
-        if (succeeded) {
-            
-            NSLog(@"successful login on launch");
-            
-            [[FRSLocationManager sharedManager] setupLocationMonitoring];
-            
+        FRSDisabledViewController *disabledVC = [[FRSDisabledViewController alloc] init];
+        self.window.rootViewController = disabledVC;
+        
+    } else {
+        // Prevent conflict between background music and camera
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
+                                         withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
+                                               error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES
+                                             error:nil];
+        
+        [self configureAppWithLaunchOptions:launchOptions];
+        
+        [self setupAppearances];
+        
+        self.frsRootViewController = [[FRSRootViewController alloc] init];
+        
+        self.window.rootViewController = self.frsRootViewController;
+        
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE]) {
+            [self registerForPushNotifications];
+            [self.frsRootViewController setRootViewControllerToTabBar];
         }
         else {
-           if(error) NSLog(@"Error on login %@", error);
+            [self.frsRootViewController setRootViewControllerToOnboard];
         }
         
-    }];
-
-    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-    }
+        //Refresh the existing user, if exists, then run location monitoring
+        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
+            
+            if (succeeded) {
+                
+                NSLog(@"successful login on launch");
+                
+                [[FRSLocationManager sharedManager] setupLocationMonitoring];
+                
+            }
+            else {
+                if(error) NSLog(@"Error on login %@", error);
+            }
+            
+        }];
         
+        if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+            [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        }
+    }
+    
 
     return YES;
 }
