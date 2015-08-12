@@ -206,8 +206,6 @@
 
     [PFPush handlePush:userInfo];
     
-    [self.frsRootViewController setRootViewControllerToTabBar];
-    
     // Check the type of the notifications
     
     //Breaking News
