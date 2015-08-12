@@ -89,13 +89,8 @@ static CGFloat kCellHeight = 44.0f;
 
     [super viewDidLayoutSubviews];
     
-
     [self.galleryView setNeedsLayout];
     [self.galleryView layoutIfNeeded];
-    
-    [self.caption sizeToFit];
-    [self.caption setNeedsLayout];
-    [self.caption layoutIfNeeded];
     
     CGFloat scrollViewHeight = 0.0f;
     
@@ -105,6 +100,10 @@ static CGFloat kCellHeight = 44.0f;
     
     self.galleryTable.frame = newFrame;
     
+    [self.caption setNeedsLayout];
+    [self.caption layoutIfNeeded];
+    [self.caption sizeToFit];
+    
     for (UIView *view in self.contentView.subviews) {
         
         scrollViewHeight += view.frame.size.height;
@@ -113,7 +112,7 @@ static CGFloat kCellHeight = 44.0f;
     
     self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[posts(%f)]", scrollViewHeight + 49 + 44]
+    [self.view addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[posts(%f)]", scrollViewHeight + 44]
                                                                        options:0
                                                                        metrics:nil
                                                                          views: @{@"posts":self.contentView}]];
