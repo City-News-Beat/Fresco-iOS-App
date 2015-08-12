@@ -87,6 +87,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
             weakSelf.imageView.alpha = 1.0f;
             
+            [weakSelf removeTranscodePlaceHolder];
+            
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
             if([self.post isVideo]){
@@ -124,7 +126,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     self.transcodeLabel.hidden = YES;
     self.transcodeImage.hidden = YES;
-    
+
     [self.transcodeImage removeFromSuperview];
     [self.transcodeLabel removeFromSuperview];
 

@@ -282,12 +282,29 @@
     
     GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:visibleIndexPath];
     
-    FRSPost *post = cell.gallery.posts[0];
+    NSIndexPath *visiblePostPath;
+    
+    //Loop through and grab the visible cell
+    for (PostCollectionViewCell *postCell in [cell.galleryView.collectionPosts visibleCells]) {
+        
+        //Check if it has a video, if it doesn't set the path to nil and break the loop
+        if(![postCell.post isVideo]){
+            
+            visiblePostPath = nil;
+        
+            break;
+            
+        }
+        //Otherwise set the visiblePosth path to the visible cell with a video
+        else visiblePostPath = [cell.galleryView.collectionPosts indexPathForCell:postCell];
+        
+    }
     
     //Check if the cell is a video first!
-    if([post isVideo]){
+    if(visiblePostPath != nil){
         
-        PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        //The cell that holds the video we want, at the visible index
+        PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:visiblePostPath];
         
         //If the video current playing isn't this one, or no video has played yet
         if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
@@ -302,58 +319,19 @@
                 postCell.videoIndicatorView.alpha = 1.0f;
             }];
             
-            //Dispatch event to make sure the condition is true for more than one second
-            double delayInSeconds = 1;
+            //Dispatch event to make sure the condition is true for more than .8 seconds
+            double delayInSeconds = .8;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
-                //If the video current playing isn't this one, or no video has played yet
+                //If the video current playing isn't this one, or no video has played yet, and the index before dispatch is still the same
                 if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.dispatchIndex == visibleIndexPath){
                     
                     [self disableVideo];
                     
                     self.playingIndex = visibleIndexPath;
                     
-                    // TODO: Check for missing/corrupt media at firstPost.url
-                    cell.galleryView.sharedPlayer = [AVPlayer playerWithURL:post.video];
-                    
-                    cell.galleryView.sharedPlayer.muted = NO;
-                    
-                    cell.galleryView.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-                    
-                    cell.galleryView.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:cell.galleryView.sharedPlayer];
-                    
-                    cell.galleryView.sharedLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                    
-                    cell.galleryView.sharedLayer.frame = [cell.galleryView.collectionPosts cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].frame;
-                    
-                    [cell.galleryView.sharedPlayer play];
-                    
-                    postCell.processingVideo = false;
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        if (cell.galleryView.sharedPlayer.rate > 0 && !cell.galleryView.sharedPlayer.error) {
-                            
-                            // player is playing
-                            [UIView animateWithDuration:0.7f animations:^{
-                                postCell.videoIndicatorView.alpha = 0.0f;
-                            } completion:^(BOOL finished){
-                                [postCell.layer addSublayer:cell.galleryView.sharedLayer];
-                                postCell.videoIndicatorView.hidden = YES;
-                                [postCell.videoIndicatorView stopAnimating];
-                            }];
-                            
-                        }
-                        
-                    });
-                    
-                    [[NSNotificationCenter defaultCenter] addObserver:self
-                                                             selector:@selector(playerItemDidReachEnd:)
-                                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                                               object:[cell.galleryView.sharedPlayer currentItem]];
-                    
-                    
+                    [cell.galleryView setUpPlayerWithUrl:postCell.post.video cell:postCell];
                     
                 }
                 

@@ -75,7 +75,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                 
                         if(!postCell.post.video){
   
-    
                             [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
                             
                         }
@@ -165,20 +164,22 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
+    //Pause the currently playing video
+    [self.sharedPlayer pause];
     
+    //Clean up the shared layer
+    [self.sharedLayer removeFromSuperlayer];
+    
+    //Start animating the indicator
     [postCell.videoIndicatorView startAnimating];
-    
     [UIView animateWithDuration:1.0 animations:^{
         postCell.videoIndicatorView.alpha = 1.0f;
     }];
     
-    [self.sharedPlayer pause];
+    //AVAsset needed to get the duration
+    AVAsset *videoAsset = [AVAsset assetWithURL:url];
     
-    [self.sharedLayer removeFromSuperlayer];
-    
-    self.sharedPlayer = [AVPlayer playerWithURL:url];
-    
-    self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    self.sharedPlayer = [AVPlayer playerWithPlayerItem:[AVPlayerItem playerItemWithAsset:videoAsset]];
     
     self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
     
@@ -186,34 +187,43 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     self.sharedLayer.frame = postCell.imageView.bounds;
     
-    [self.sharedPlayer setMuted:NO];
+    [postCell.imageView.layer addSublayer:self.sharedLayer];
+    
+    self.sharedPlayer.muted = YES;
     
     [self.sharedPlayer play];
     
     self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-
-    [postCell.imageView.layer addSublayer:self.sharedLayer];
     
+    //Bring play/pause button to front, so it can be visible on click
     [postCell bringSubviewToFront:postCell.playPause];
     
-    if (self.sharedPlayer.rate > 0 && !self.sharedPlayer.error) {
-        
-        // player is playing
-        [UIView animateWithDuration:1.0 animations:^{
-            postCell.videoIndicatorView.alpha = 0.0f;
-        } completion:^(BOOL finished){
-            [postCell.videoIndicatorView stopAnimating];
-            postCell.videoIndicatorView.hidden = YES;
-        }];
-        
-    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerItemDidReachEnd:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:[self.sharedPlayer currentItem]];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+
+        if (CMTimeGetSeconds(self.sharedPlayer.currentItem.currentTime) > 0 && !self.sharedPlayer.error) {
+
+            // player is playing
+            [UIView animateWithDuration:1.0 animations:^{
+                postCell.videoIndicatorView.alpha = 0.0f;
+            } completion:^(BOOL finished){
+                [postCell.videoIndicatorView stopAnimating];
+                postCell.videoIndicatorView.hidden = YES;
+            }];
+            
+        }
+    });
+
 }
+
+/*
+** Notification listener for when video reaches the end (tells it to repeat in a loop)
+*/
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     

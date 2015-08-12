@@ -9,7 +9,7 @@
 @import UIKit;
 @import AVFoundation;
 
-@class FRSGallery;
+@class FRSGallery, PostCollectionViewCell;
 
 @interface GalleryView : UIView
 
@@ -37,5 +37,8 @@
 
 
 - (void)setAspectRatio;
+
+
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell;
 
 @end
