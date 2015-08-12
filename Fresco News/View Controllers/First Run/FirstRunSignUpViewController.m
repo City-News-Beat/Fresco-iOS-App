@@ -40,7 +40,6 @@
     self.textfieldFirstName.returnKeyType = UIReturnKeyNext;
     self.textfieldLastName.returnKeyType = UIReturnKeyDone;
 
-    
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     
     singleTap.numberOfTapsRequired = 1;
@@ -138,12 +137,12 @@
         }];
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
-                                                        message:NAME_PROMPT
-                                                       delegate:self
-                                              cancelButtonTitle:OK
-                                              otherButtonTitles:nil, nil];
-        [alert show];
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:ERROR
+                                     message:NAME_PROMPT
+                                     action:nil]
+                           animated:YES
+                         completion:nil];
     }
 }
 

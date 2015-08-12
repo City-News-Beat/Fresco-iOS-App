@@ -720,6 +720,12 @@
                     
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                     
+                    if(responseObject[@"data"] == nil){
+                        responseBlock(NO, nil);
+                        return;
+                    }
+                    
+                    
                     FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
                     
                     NSError *error;
@@ -760,6 +766,11 @@
             }
             
         }];
+    }
+    else{
+    
+        if (responseBlock) responseBlock(NO, nil);
+    
     }
 }
 
