@@ -120,9 +120,11 @@ typedef enum : NSUInteger {
     
     [button setTitle:@"" forState:UIControlStateNormal];
     
-    CGRect spinnerFrame = (IS_IPHONE_5) ? CGRectMake(button.frame.size.width/2.2, button.frame.size.height/4, 20, 20) : CGRectMake(button.frame.size.width  / 2 - 7, 13, 20, 20);
+    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
     
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+    
+    self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
     
     self.spinner.color = [UIColor whiteColor];
     [self.spinner startAnimating];
@@ -132,8 +134,7 @@ typedef enum : NSUInteger {
     [UIView animateWithDuration:.3 animations:^{
         
         for (UIView *view in [self.view subviews]) {
-            if(view != button)
-                view.alpha = .26f;
+            if(view != button)  view.alpha = .26f;
         }
         
     }];
@@ -145,7 +146,8 @@ typedef enum : NSUInteger {
             self.view.userInteractionEnabled = YES;
             
             if (user && [[FRSDataManager sharedManager] currentUserIsLoaded]) {
-            
+                
+                
                 [self transferUser];
                 
             }
@@ -167,6 +169,9 @@ typedef enum : NSUInteger {
         
     }
     else if(login == LoginFacebook){
+        
+        //Facebook icon image
+        [self.view viewWithTag:51].hidden = YES;
         
         [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
             
@@ -196,6 +201,8 @@ typedef enum : NSUInteger {
     }
     else if(login == LoginTwitter){
         
+        //Twitter icon image
+        [self.view viewWithTag:50].hidden = YES;
         
         [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
             
@@ -227,18 +234,28 @@ typedef enum : NSUInteger {
     }
 }
 
+
 - (void)transferUser{
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
     }
-    else
-        [self navigateToMainApp];
+    else{
+        if(self.presentingViewController == nil)
+            [self navigateToMainApp];
+        else{
+            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
 }
-
 - (void)revertScreenToNormal{
     
     self.view.userInteractionEnabled = YES;
+    
+    //Social Images
+    [self.view viewWithTag:50].hidden = NO;
+    [self.view viewWithTag:51].hidden = NO;
     
     [UIView animateWithDuration:.3 animations:^{
         

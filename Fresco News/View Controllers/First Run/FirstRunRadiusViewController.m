@@ -110,8 +110,8 @@
 
 #pragma mark - Utility methods
 
-- (void)save
-{
+- (void)save {
+    
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(BOOL success, NSError *error) {
@@ -125,8 +125,6 @@
                                                   otherButtonTitles:nil];
             [alert show];
         }
-
-        
     }];
 
 }
