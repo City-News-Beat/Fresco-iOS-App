@@ -106,9 +106,17 @@ typedef enum : NSUInteger {
 {
     [super viewWillDisappear:animated];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationPortrait;
+}
+
+-(BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 #pragma mark - Text Field and Keyboard Delegates
@@ -337,8 +345,10 @@ typedef enum : NSUInteger {
     
     if(self.presentingViewController == nil)
         [self navigateToMainApp];
-    else
+    else{
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)transferUser{
@@ -349,8 +359,10 @@ typedef enum : NSUInteger {
     else{
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
-        else
+        else{
+            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
             [self dismissViewControllerAnimated:YES completion:nil];
+        }
     }
 }
 

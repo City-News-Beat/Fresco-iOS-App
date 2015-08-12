@@ -1237,6 +1237,9 @@
                             <constraint firstItem="Igs-6C-ri3" firstAttribute="top" secondItem="9OB-GS-ra8" secondAttribute="bottom" id="yv7-PI-9Z8"/>
                         </constraints>
                         <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="aQd-PX-Tma"/>
+                            </mask>
                             <mask key="constraints">
                                 <exclude reference="1jV-dq-ybc"/>
                                 <exclude reference="4Se-dT-pRt"/>
@@ -2760,7 +2763,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="8927D142-70F5-46B1-A80C-E73E0200CB69" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="441582A1-B200-4B95-8501-1E71A1A6A223" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4178,7 +4181,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="8927D142-70F5-46B1-A80C-E73E0200CB69" width="29" height="29">
+        <image name="441582A1-B200-4B95-8501-1E71A1A6A223" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
