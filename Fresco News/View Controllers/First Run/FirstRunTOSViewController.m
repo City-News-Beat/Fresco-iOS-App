@@ -25,6 +25,11 @@
 
     // No text appears at requested font size 14.0 - constraint issue?
     self.tosTextView.font = [UIFont systemFontOfSize:12.0];
+    
+    if (IS_STANDARD_IPHONE_6_PLUS) {
+        self.tosTextView.font = [UIFont systemFontOfSize:11.6];
+    }
+    
     self.tosTextView.text = @"";
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -42,7 +47,8 @@
 
 - (IBAction)actionDone:(id)sender
 {
-    [self navigateToMainApp];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //- (void)scrollViewDidScroll:(UIScrollView *)scrollView

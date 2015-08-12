@@ -73,9 +73,14 @@
     }
     else{
         
-        if([[FRSDataManager sharedManager] isLoggedIn]){
+        if(![[FRSDataManager sharedManager] isLoggedIn]){
         
             [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToFirstRun];
+            
+        }
+        else{
+        
+            [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToTabBar];
             
         }
         
