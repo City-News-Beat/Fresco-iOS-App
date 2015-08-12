@@ -140,11 +140,8 @@ static CGFloat kCellHeight = 44.0f;
     
     self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
     
-    if([post.address isKindOfClass:[NSString class]]){
+    if ([post.address length] > 0)
         self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
-    }
-    
-    
 }
 
 /*
