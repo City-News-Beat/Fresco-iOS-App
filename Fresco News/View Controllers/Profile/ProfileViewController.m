@@ -50,7 +50,7 @@
             // append data to data source, insert new cells at the end of table view
             NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
             
-            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num withResponseBlock:^(id responseObject, NSError *error) {
+            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
                     if ([responseObject count] > 0) {
@@ -94,7 +94,7 @@
 
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"runUpdateOnProfile"]){
         
-        [self performNecessaryFetch:nil];
+        [self performNecessaryFetch:YES withResponseBlock:nil];
     
         //Ensures that update is ran on profile view controller
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"runUpdateOnProfile"];
@@ -113,7 +113,7 @@
 
 - (void)populateProfile{
 
-    [self performNecessaryFetch:nil];
+    [self performNecessaryFetch:NO withResponseBlock:nil];
     
     [self.galleriesViewController.profileHeaderViewController updateUserInfo];
 
@@ -121,9 +121,11 @@
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
-{
-    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:0 withResponseBlock:^(id responseObject, NSError *error) {
+- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
+    
+    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID
+                                                 offset:[NSNumber numberWithInteger:0] shouldRefresh:refresh
+                                      withResponseBlock:^(id responseObject, NSError *error) {
         
         if (!error) {
             

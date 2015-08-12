@@ -37,10 +37,10 @@
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
-        NSDictionary *params = @{@"offset" : num, @"invalidate" : @"false"};
+        NSDictionary *params = @{@"offset" : num};
         
         //Make request for more posts, append to galleries array
-        [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 if ([responseObject count]) {
                     
@@ -70,14 +70,9 @@
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock withRefresh:(BOOL)refresh
 {
-    NSDictionary *params;
-    
-    if(refresh)
-        params = @{@"offset" : @0, @"invalidate" : @"1", @"stories" : @"true"};
-    else
-        params = @{@"offset" : @0, @"invalidate" : @"0", @"stories" : @"true"};
+    NSDictionary *params = @{@"offset" : @0, @"stories" : @"true", @"invalidate" : refresh ? @"1" : @"0"};
         
-    [[FRSDataManager sharedManager] getGalleries:params withResponseBlock:^(id responseObject, NSError *error){
+    [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:refresh withResponseBlock:^(id responseObject, NSError *error){
     
         if (!error) {
             

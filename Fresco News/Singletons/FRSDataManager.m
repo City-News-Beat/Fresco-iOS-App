@@ -785,13 +785,30 @@
 
 #pragma mark - Stories
 
-- (void)getStoriesWithResponseBlock:(NSNumber*)offset  withReponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getStoriesWithResponseBlock:(NSNumber*)offset shouldRefresh:(BOOL)refresh withReponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     NSString *path = @"story/recent";
     
-    offset = offset ?: [NSNumber numberWithInteger:0];
+    NSDictionary *params = @{
+                             @"limit" :@"8",
+                             @"notags" : @"true",
+                             @"offset" : offset ?: [NSNumber numberWithInteger:0],
+                             @"invalidate" : refresh ? @"1" : @"0",
+                             @"min" : @"6"
+                             };
     
-    NSDictionary *params = @{@"limit" : @"8", @"notags" : @"true", @"offset" : offset, @"min" : @"6"};
+//    //If we are refreshing, removed the cached response for the request
+//    if(refresh){
+//        
+//        NSMutableURLRequest *request = [[[FRSDataManager sharedManager] requestSerializer]
+//                                        requestWithMethod:@"GET"
+//                                        URLString:[NSString stringWithFormat:@"%@%@", [VariableStore sharedInstance].baseAPI, path]
+//                                        parameters:params error:nil];
+//        
+//        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+//        
+//    }
+    
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -801,14 +818,13 @@
             return [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:obj error:NULL];
         }];
 
-        if(responseBlock)
-            responseBlock(stories, nil);
+        if(responseBlock) responseBlock(stories, nil);
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        if(responseBlock)
-            responseBlock(nil, error);
+        if(responseBlock) responseBlock(nil, error);
     }];
     
 }
@@ -839,13 +855,17 @@
 
 #pragma mark - Galleries
 
-- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset withResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    offset = offset ?: 0;
+    NSDictionary *params = @{
+                             @"id" : userId,
+                             @"offset" : offset ?: 0,
+                             @"invalidate" : refresh ? @"1" : @"0"
+                             };
     
-    [self GET:[NSString stringWithFormat:@"user/galleries?id=%@&offset=%@&stories=true", userId, offset] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"user/galleries" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
@@ -857,6 +877,7 @@
 
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);
@@ -864,9 +885,16 @@
     }];
 }
 
-- (void)getGalleries:(NSDictionary *)params withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+- (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    //If we are refreshing, removed the cached response for the request
+    if(refresh){
+        
+//        params
+        
+    }
     
     [self GET:@"gallery/highlights" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
