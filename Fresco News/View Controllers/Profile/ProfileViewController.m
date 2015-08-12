@@ -106,10 +106,18 @@
 
 #pragma mark - NSNotificationCenter Notification handling
 
+/*
+** API Key for user is now available, run update on profile view
+*/
+
 - (void)handleAPIKeyAvailable:(NSNotification *)notification
 {
     [self populateProfile];
 }
+
+/*
+** Populates view controller with galleries and the profile header
+*/
 
 - (void)populateProfile{
     
