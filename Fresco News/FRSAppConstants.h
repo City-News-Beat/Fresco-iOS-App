@@ -148,6 +148,7 @@
 
 #define INVALID_CREDENTIALS                 NSLocalizedString(@"Invalid Credentials", nil)
 #define TWITTER_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Twitter", nil)
+#define FACEBOOK_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Facebook", nil)
 
 #define GO_TO_SETTINGS                      NSLocalizedString(@"Go to Settings", nil)
 #define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)

@@ -114,6 +114,10 @@ typedef enum : NSUInteger {
                         } completion:nil];
 }
 
+/*
+ ** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
+ */
+
 - (void)performLogin:(LoginType)login button:(UIButton *)button{
     
     self.view.userInteractionEnabled = NO;
@@ -186,7 +190,7 @@ typedef enum : NSUInteger {
                 //TODO: check if these are the strings we want
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
-                                             message:TWITTER_ERROR
+                                             message:FACEBOOK_ERROR
                                              action:DISMISS]
                                    animated:YES
                                  completion:nil];
