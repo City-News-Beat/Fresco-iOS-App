@@ -102,9 +102,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [super viewDidLoad];
     
     //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-    UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)];
+    [self.cancelButtonTapView
+     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)]];
     
-    [self.cancelButtonTapView addGestureRecognizer:settingsTap];
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    [self.rotateImageView
+     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
+    
+    /* Orientation notificaiton set up */
     
     [self deviceOrientationDidChange:nil];
     
@@ -319,7 +324,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
-#pragma mark - Actions
+#pragma mark - UI Actions
 
 - (IBAction)apertureButtonTapped:(id)sender
 {
@@ -339,25 +344,366 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     else{
         
-        [UIView animateWithDuration:.2 animations:^{
-        
-            float degrees = -15; //the value in degrees
-            self.rotateImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
-            
-        } completion:^(BOOL finished){
-        
-            if(finished){
-                
-                [UIView animateWithDuration:.2 animations:^{
-                    
-                    self.rotateImageView.transform = CGAffineTransformMakeRotation(0);
-                    
-                }];
-            }
-        
-        }];
+        [self animateRotateImageView:nil];
     }
 }
+
+
+- (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
+    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+}
+
+- (IBAction)cancelButtonTapped:(id)sender
+{
+    [self cancelAndReturnToPreviousTab:YES];
+}
+
+- (IBAction)flashButtonTapped:(UIButton *)button
+{
+    button.selected = !button.selected;
+    
+    [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
+    
+    dispatch_async([self sessionQueue], ^{
+        if ([[self movieFileOutput] isRecording]) {
+            [self setTorchMode:(button.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
+        }
+    });
+}
+
+- (IBAction)modeButtonTapped:(UIButton *)button
+{
+    if (!button.selected) {
+        
+        button.selected = YES;
+        
+        if (button.tag) {
+            [self updateCameraMode:CameraModeVideo];
+        }
+        else {
+            [self updateCameraMode:CameraModePhoto];
+        }
+    }
+}
+
+- (IBAction)doneButtonTapped:(id)sender
+{
+    [UIView animateWithDuration:.8 animations:^{
+        self.previewView.alpha = 0;
+    }];
+    
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
+    picker.delegate = self;
+    picker.title =  @"Choose Media";
+    picker.autoSubmit = (sender ? NO : YES);
+    picker.createdAssetURLs = self.createdAssetURLs;
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    
+}
+
+#pragma mark - UI Functions
+
+- (void)showUIForCameraMode:(CameraMode)cameraMode
+{
+    
+    if(cameraMode == CameraModeVideo){
+        
+        [UIView animateWithDuration:.2 animations:^{
+            
+            // Hide most of the UI
+            [self.circleLayer setOpacity:0];
+            self.controlsView.backgroundColor = [UIColor whiteColor];
+            [self.apertureButton setBackgroundColor:[UIColor goldApertureColor]];
+            
+            for (UIView *view in [self.controlsView subviews]) {
+                if(view != self.apertureButton){
+                    view.alpha = 1;
+                    view.userInteractionEnabled = YES;
+                }
+            }
+            
+        } completion:^(BOOL finished){
+            
+            [self.circleLayer removeFromSuperlayer];
+            
+        }];
+        
+    }
+    
+    self.activityIndicator.hidden = YES;
+}
+
+- (void)hideUIForCameraMode:(CameraMode)cameraMode
+{
+    
+    if(cameraMode == CameraModeVideo){
+        
+        [self runVideoRecordAnimation];
+        
+        [UIView animateWithDuration:.2 animations:^{
+            
+            // Hide most of the UI
+            self.controlsView.backgroundColor = [UIColor clearColor];
+            self.apertureButton.backgroundColor = [UIColor clearColor];
+            
+            for (UIView *view in [self.controlsView subviews]) {
+                if(view != self.apertureButton){
+                    view.alpha = 0;
+                    view.userInteractionEnabled = NO;
+                }
+            }
+            
+        }];
+        
+    }
+    
+}
+
+- (void)runStillImageCaptureAnimation
+{
+    
+    //fade in
+    [UIView animateWithDuration:.1f animations:^{
+        
+        [self.previewView setAlpha:0.0f];
+        
+    } completion:^(BOOL finished) {
+        
+        //fade out
+        [UIView animateWithDuration:.1f animations:^{
+            
+            [self.previewView setAlpha:1.0f];
+            
+        } completion:nil];
+        
+    }];
+    
+    NSMutableArray *images = [[NSMutableArray alloc] init];
+    
+    //24 is the number of frames in the animation
+    for (NSInteger i = 2; i < 25; i++) {
+        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+    }
+    
+    for (NSInteger i = 24; i > 0; i--) {
+        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+    }
+    
+    [self.apertureButton.imageView setAnimationImages:[images copy]];
+    
+    [self.apertureButton.imageView setAnimationDuration:.2];
+    
+    [self.apertureButton.imageView setAnimationRepeatCount:1];
+    
+    [self.apertureButton.imageView startAnimating];
+    
+}
+
+- (void)runVideoRecordAnimation{
+    
+    // Set up the shape of the circle
+    int radius = 39;
+    self.circleLayer = [CAShapeLayer layer];
+    // Make a circular shape
+    self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                                       cornerRadius:radius].CGPath;
+    // Center the shape in self.view
+    self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius - 3,
+                                            CGRectGetMidY(self.apertureButton.frame)-radius);
+    
+    // Configure the apperence of the circle
+    self.circleLayer.fillColor = [UIColor clearColor].CGColor;
+    self.circleLayer.strokeColor = [UIColor redCircleStrokeColor].CGColor;
+    self.circleLayer.lineWidth = 4;
+    
+    // Add to parent layer
+    [self.view.layer addSublayer:self.circleLayer];
+    
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration            = [[VariableStore sharedInstance] maximumVideoLength]; //Animate ove max vid length
+    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+    
+    // Animate from no part of the stroke being drawn to the entire stroke being drawn
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+    
+    // Experiment with timing to get the appearence to look the way you want
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    // Add the animation to the circle
+    [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    
+}
+
+- (void)checkDeviceAuthorizationStatus
+{
+    NSString *mediaType = AVMediaTypeVideo;
+    
+    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+        if (granted) {
+            self.deviceAuthorized = YES;
+            self.pleaseRotateLabel.text = @"Please rotate your phone";
+            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
+        }
+        else {
+            self.deviceAuthorized = NO;
+            self.pleaseRotateLabel.text = @"No permission to use the camera";
+            self.pleaseDisableLabel.text = @"Please change your privacy settings";
+        }
+    }];
+}
+
+/*
+** Toggles camera mode between photo/camera, * performs animation and changes preset *
+*/
+
+- (void)updateCameraMode:(CameraMode)cameraMode
+{
+    if (cameraMode == CameraModePhoto) {
+        
+        [UIView animateWithDuration:.2f animations:^{
+            
+            self.previewView.alpha = .0f;
+            self.controlsView.alpha = 1;
+            
+            //Reset the preview view to its original frame
+            if(self.previewView.savedBounds.size.width != 0) self.previewView.frame = self.previewView.savedBounds;
+            
+        } completion:^(BOOL finished){
+            
+            //Change the preset to display properly
+            [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            [self.apertureButton setImage:[UIImage imageNamed:@"shutter-1"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
+            self.videoButton.selected = NO;
+            
+            if(!self.photoButton.selected) self.photoButton.selected = YES;
+            
+            [UIView animateWithDuration:.2f animations:^{
+                
+                self.previewView.alpha = 1;
+                
+            }];
+            
+        }];
+        
+    }
+    else if(cameraMode == CameraModeVideo) {
+        
+        //Save the bounds, so we can reset back to it later
+        self.previewView.savedBounds = self.previewView.frame;
+        
+        [UIView animateWithDuration:.3f animations:^{
+            
+            self.previewView.alpha = .0f;
+            self.controlsView.alpha = .7;
+            
+            //Scale the preview view to the whole screen
+            self.previewView.frame = self.view.frame;
+            
+        } completion:^(BOOL finished){
+            
+            //Change the preset to display properly
+            [self.session setSessionPreset:AVCaptureSessionPreset1920x1080];
+            [self.apertureButton setImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
+            self.photoButton.selected = NO;
+            
+            [UIView animateWithDuration:.2f animations:^{
+                self.previewView.alpha = 1;
+            }];
+            
+        }];
+        
+    }
+}
+
+- (void)updateRecentPhotoView:(UIImage *)image
+{
+    if (image) {
+        [self.doneButton setImage:image forState:UIControlStateNormal];
+        return;
+    }
+    
+    // Grab the most recent image from the photo library
+    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
+                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                                     if (group) {
+                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
+                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
+                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
+                                                 *innerStop = YES;
+                                             }
+                                         }];
+                                     }
+                                 }
+                               failureBlock:^(NSError *error) {
+                                   NSLog(@"error: %@", error);
+                               }];
+}
+
+- (void)configureAssignmentLabel
+{
+    if (self.defaultAssignment) {
+        CGFloat distanceInMiles = [self.location distanceFromLocation:self.defaultAssignment.locationObject] / kMetersInAMile;
+        self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
+    }
+    else {
+        self.withinRangeOfDefaultAssignment = NO;
+    }
+    
+    if (self.withinRangeOfDefaultAssignment) {
+        self.assignmentLabel.hidden = NO;
+        NSString *assignmentString = self.defaultAssignment.title;
+        
+        // Leave lame leading and trailing space
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  In range of %@  ", assignmentString]];
+        
+        [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
+                        range:(NSRange){14, [string length] - 14}];
+        self.assignmentLabel.attributedText = string;
+    }
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 0.75 : 0.0;
+    } completion:^(BOOL finished) {
+        if (!self.withinRangeOfDefaultAssignment) {
+            self.assignmentLabel.hidden = YES;
+        }
+    }];
+    
+}
+
+- (void)animateRotateImageView:(UITapGestureRecognizer *)tapGestureRecognizer{
+
+    [UIView animateWithDuration:.2 animations:^{
+        
+        float degrees = -15; //the value in degrees
+        self.rotateImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+        
+    } completion:^(BOOL finished){
+        
+        if(finished){
+            
+            [UIView animateWithDuration:.2 animations:^{
+                
+                self.rotateImageView.transform = CGAffineTransformMakeRotation(0);
+                
+            }];
+        }
+        
+    }];
+}
+
+#pragma mark - Camera Functions
 
 - (void)toggleMovieRecording
 {
@@ -477,29 +823,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-- (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
-{
-    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
-    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
-}
-
-- (IBAction)cancelButtonTapped:(id)sender
-{
-    [self cancelAndReturnToPreviousTab:YES];
-}
-
-- (IBAction)flashButtonTapped:(UIButton *)button
-{
-    button.selected = !button.selected;
-    
-    [CameraViewController setFlashMode:(button.selected ? AVCaptureFlashModeOn : AVCaptureFlashModeOff) forDevice:[[self videoDeviceInput] device]];
-
-    dispatch_async([self sessionQueue], ^{
-        if ([[self movieFileOutput] isRecording]) {
-            [self setTorchMode:(button.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
-        }
-    });
-}
 
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
@@ -516,37 +839,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     CGPoint devicePoint = (CGPoint){0.5, 0.5};
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
-}
-
-- (IBAction)modeButtonTapped:(UIButton *)button
-{
-    if (!button.selected) {
-        
-        button.selected = YES;
-
-        if (button.tag) {
-            [self updateCameraMode:CameraModeVideo];
-        }
-        else {
-            [self updateCameraMode:CameraModePhoto];
-        }
-    }
-}
-
-- (IBAction)doneButtonTapped:(id)sender
-{
-    [UIView animateWithDuration:.8 animations:^{
-        self.previewView.alpha = 0;
-    }];
-    
-    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
-    picker.delegate = self;
-    picker.title =  @"Choose Media";
-    picker.autoSubmit = (sender ? NO : YES);
-    picker.createdAssetURLs = self.createdAssetURLs;
-    
-    [self presentViewController:picker animated:YES completion:nil];
-    
 }
 
 
@@ -698,285 +990,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     return captureDevice;
 }
-
-#pragma mark - UI
-
-- (void)showUIForCameraMode:(CameraMode)cameraMode
-{
-    
-    if(cameraMode == CameraModeVideo){
-        
-        [UIView animateWithDuration:.2 animations:^{
-            
-            // Hide most of the UI
-            [self.circleLayer setOpacity:0];
-            self.controlsView.backgroundColor = [UIColor whiteColor];
-            [self.apertureButton setBackgroundColor:[UIColor goldApertureColor]];
-            
-            for (UIView *view in [self.controlsView subviews]) {
-                if(view != self.apertureButton){
-                    view.alpha = 1;
-                    view.userInteractionEnabled = YES;
-                }
-            }
-            
-        } completion:^(BOOL finished){
-        
-            [self.circleLayer removeFromSuperlayer];
-        
-        }];
-            
-    }
-    
-    self.activityIndicator.hidden = YES;
-}
-
-- (void)hideUIForCameraMode:(CameraMode)cameraMode
-{
-    
-    if(cameraMode == CameraModeVideo){
-
-        [self runVideoRecordAnimation];
-        
-        [UIView animateWithDuration:.2 animations:^{
-
-            // Hide most of the UI
-            self.controlsView.backgroundColor = [UIColor clearColor];
-            self.apertureButton.backgroundColor = [UIColor clearColor];
-
-            for (UIView *view in [self.controlsView subviews]) {
-                if(view != self.apertureButton){
-                    view.alpha = 0;
-                    view.userInteractionEnabled = NO;
-                }
-            }
-
-        }];
-    
-    }
-    
-}
-
-- (void)runStillImageCaptureAnimation
-{
-    
-    //fade in
-    [UIView animateWithDuration:.1f animations:^{
-        
-        [self.previewView setAlpha:0.0f];
-        
-    } completion:^(BOOL finished) {
-        
-        //fade out
-        [UIView animateWithDuration:.1f animations:^{
-            
-            [self.previewView setAlpha:1.0f];
-            
-        } completion:nil];
-        
-    }];
-
-    NSMutableArray *images = [[NSMutableArray alloc] init];
-    
-    //24 is the number of frames in the animation
-    for (NSInteger i = 2; i < 25; i++) {
-        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
-    }
-    
-    for (NSInteger i = 24; i > 0; i--) {
-        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
-    }
-
-    [self.apertureButton.imageView setAnimationImages:[images copy]];
-    
-    [self.apertureButton.imageView setAnimationDuration:.2];
-    
-    [self.apertureButton.imageView setAnimationRepeatCount:1];
-    
-    [self.apertureButton.imageView startAnimating];
-
-}
-
-- (void)runVideoRecordAnimation{
-
-    // Set up the shape of the circle
-    int radius = 39;
-    self.circleLayer = [CAShapeLayer layer];
-    // Make a circular shape
-    self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
-                                             cornerRadius:radius].CGPath;
-    // Center the shape in self.view
-    self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius - 3,
-                                  CGRectGetMidY(self.apertureButton.frame)-radius);
-    
-    // Configure the apperence of the circle
-    self.circleLayer.fillColor = [UIColor clearColor].CGColor;
-    self.circleLayer.strokeColor = [UIColor redCircleStrokeColor].CGColor;
-    self.circleLayer.lineWidth = 4;
-    
-    // Add to parent layer
-    [self.view.layer addSublayer:self.circleLayer];
-    
-    // Configure animation
-    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = [[VariableStore sharedInstance] maximumVideoLength]; //Animate ove max vid length
-    drawAnimation.repeatCount         = 1.0;  // Animate only once..
-    
-    // Animate from no part of the stroke being drawn to the entire stroke being drawn
-    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
-    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
-    
-    // Experiment with timing to get the appearence to look the way you want
-    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    
-    // Add the animation to the circle
-    [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    
-}
-
-- (void)checkDeviceAuthorizationStatus
-{
-    NSString *mediaType = AVMediaTypeVideo;
-    
-    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (granted) {
-            self.deviceAuthorized = YES;
-            self.pleaseRotateLabel.text = @"Please rotate your phone";
-            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
-        }
-        else {
-            self.deviceAuthorized = NO;
-            self.pleaseRotateLabel.text = @"No permission to use the camera";
-            self.pleaseDisableLabel.text = @"Please change your privacy settings";
-        }
-    }];
-}
-
-/*
-** Toggles camera mode between photo/camera, * performs animation and changes preset *
-*/
-
-- (void)updateCameraMode:(CameraMode)cameraMode
-{
-    if (cameraMode == CameraModePhoto) {
-
-        [UIView animateWithDuration:.2f animations:^{
-            
-            self.previewView.alpha = .0f;
-            self.controlsView.alpha = 1;
-            
-            //Reset the preview view to its original frame
-            if(self.previewView.savedBounds.size.width != 0) self.previewView.frame = self.previewView.savedBounds;
-            
-        } completion:^(BOOL finished){
-            
-            //Change the preset to display properly
-            [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
-            [self.apertureButton setImage:[UIImage imageNamed:@"shutter-1"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-off.png"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-on.png"] forState:UIControlStateSelected];
-            self.videoButton.selected = NO;
-            
-            if(!self.photoButton.selected) self.photoButton.selected = YES;
-            
-            [UIView animateWithDuration:.2f animations:^{
-                
-                self.previewView.alpha = 1;
-            
-            }];
-            
-        }];
-    
-    }
-    else if(cameraMode == CameraModeVideo) {
-        
-        //Save the bounds, so we can reset back to it later
-        self.previewView.savedBounds = self.previewView.frame;
-        
-        [UIView animateWithDuration:.3f animations:^{
-            
-            self.previewView.alpha = .0f;
-            self.controlsView.alpha = .7;
-            
-            //Scale the preview view to the whole screen
-            self.previewView.frame = self.view.frame;
-            
-        } completion:^(BOOL finished){
-            
-            //Change the preset to display properly
-            [self.session setSessionPreset:AVCaptureSessionPreset1920x1080];
-            [self.apertureButton setImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-off.png"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-on.png"] forState:UIControlStateSelected];
-            self.photoButton.selected = NO;
-            
-            [UIView animateWithDuration:.2f animations:^{
-                 self.previewView.alpha = 1;
-             }];
-            
-        }];
-        
-    }
-}
-
-- (void)updateRecentPhotoView:(UIImage *)image
-{
-    if (image) {
-        [self.doneButton setImage:image forState:UIControlStateNormal];
-        return;
-    }
-
-    // Grab the most recent image from the photo library
-    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
-                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-                                     if (group) {
-                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
-                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
-                                                 *innerStop = YES;
-                                             }
-                                         }];
-                                     }
-                                 }
-                               failureBlock:^(NSError *error) {
-                                   NSLog(@"error: %@", error);
-                               }];
-}
-
-- (void)configureAssignmentLabel
-{
-    if (self.defaultAssignment) {
-        CGFloat distanceInMiles = [self.location distanceFromLocation:self.defaultAssignment.locationObject] / kMetersInAMile;
-        self.withinRangeOfDefaultAssignment = (distanceInMiles < [self.defaultAssignment.radius floatValue]);
-    }
-    else {
-        self.withinRangeOfDefaultAssignment = NO;
-    }
-
-    if (self.withinRangeOfDefaultAssignment) {
-        self.assignmentLabel.hidden = NO;
-        NSString *assignmentString = self.defaultAssignment.title;
-
-        // Leave lame leading and trailing space
-        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  In range of %@  ", assignmentString]];
-
-        [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
-                        range:(NSRange){14, [string length] - 14}];
-        self.assignmentLabel.attributedText = string;
-    }
-
-    [UIView animateWithDuration:0.5 animations:^{
-        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 0.75 : 0.0;
-    } completion:^(BOOL finished) {
-        if (!self.withinRangeOfDefaultAssignment) {
-            self.assignmentLabel.hidden = YES;
-        }
-    }];
-    
-}
-
 
 #pragma mark - NSTimer Delegate and Selectors
 
