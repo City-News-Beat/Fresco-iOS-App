@@ -202,13 +202,15 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         
         [cell.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
         
-        //25 from the storyboard constraint constant
-        cell.constraintNotificationDescription.constant = 25.0f;
-      
+        //Constant MUST BE SAME AS IN STORYBOARD CONSTRAINT
+        cell.constraintNotificationDescription.constant = 23.0f;
+        [cell updateConstraints];
         
     } else if ([notification.type isEqualToString:@"use"]) {
 
+        //3.0f is the space between the title and description
         cell.constraintNotificationDescription.constant = 3.0f;
+        [cell updateConstraints];
         
         cell.secondButton.hidden = YES;
         
