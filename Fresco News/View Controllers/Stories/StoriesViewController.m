@@ -158,7 +158,9 @@ static CGFloat const kInterImageGap = 1.0f;
     [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil shouldRefresh:refresh  withReponseBlock:^(id responseObject, NSError *error) {
         if (!error) {
             
-            if([self.stories count] == 0 || ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID]){
+            if([self.stories count] == 0
+               || ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID]
+               || refresh){
             
                 [self.stories setArray:responseObject];
                 [self.tableView reloadData];

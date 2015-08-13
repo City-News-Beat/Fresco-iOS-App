@@ -27,6 +27,8 @@
 {
     [super viewDidLoad];
     
+    [self performNecessaryFetch:NO withResponseBlock:nil];
+    
     [self setFrescoNavigationBar];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
@@ -69,15 +71,13 @@
 - (void)viewDidAppear:(BOOL)animated{
 
     [super viewDidAppear:animated];
-    
-    [self performNecessaryFetch:nil withRefresh:NO];
 }
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock withRefresh:(BOOL)refresh
-{
-    NSDictionary *params = @{@"offset" : @0, @"stories" : @"true", @"invalidate" : refresh ? @"1" : @"0"};
+- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
+    
+    NSDictionary *params = @{@"offset" : @0, @"stories" : @"true"};
         
     [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:refresh withResponseBlock:^(id responseObject, NSError *error){
     
@@ -86,14 +86,15 @@
             if ([responseObject count]) {
                 
                 //Check to make sure the first gallery and the response object's first gallery are different
-                if([self.galleriesViewController.galleries count] == 0 || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
+                if([self.galleriesViewController.galleries count] == 0
+                   || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
+                        isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]
+                   || refresh){
                 
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                    [self.galleriesViewController.tableView reloadData];
-                //                self.galleriesViewController.galleries = self.galleries;
-                //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).mediaURLString = @"http://newsbreaks.fresconews.com/uploads/14/f6af6fa4b1c226894cf66140d256bf65f76418e8.mp4";
-                //                ((FRSPost *)((FRSGallery *)self.galleries[0]).posts[0]).type = @"video";
                     
+                    [self.galleriesViewController.tableView reloadData];
+
                 }
             }
         }

@@ -40,7 +40,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>55</string>
+	<string>56</string>
 	<key>FacebookAppID</key>
 	<string>267157383448416</string>
 	<key>FacebookDisplayName</key>
@@ -68,13 +68,6 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIStatusBarTintParameters</key>
 	<dict>
-		<key>UINavigationBar</key>
-		<dict>
-			<key>Style</key>
-			<string>UIBarStyleDefault</string>
-			<key>Translucent</key>
-			<false/>
-		</dict>
 		<key>Fonts provided by application</key>
 		<array>
 			<string>Nota-BoldOblique.otf</string>
@@ -92,6 +85,13 @@
 			<string>Nota-XLight.otf</string>
 			<string>Nota-XLightOblique.otf</string>
 		</array>
+		<key>UINavigationBar</key>
+		<dict>
+			<key>Style</key>
+			<string>UIBarStyleDefault</string>
+			<key>Translucent</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

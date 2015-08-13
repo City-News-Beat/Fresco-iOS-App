@@ -817,9 +817,11 @@
                              @"limit" :@"8",
                              @"notags" : @"true",
                              @"offset" : offset ?: [NSNumber numberWithInteger:0],
-                             @"invalidate" : refresh ? @"1" : @"0",
                              @"min" : @"6"
                              };
+    
+    //If we are refreshing, removed the cached response for the request by setting the cache policy
+    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     
 //    //If we are refreshing, removed the cached response for the request
 //    if(refresh){
@@ -832,7 +834,6 @@
 //        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
 //        
 //    }
-    
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -850,6 +851,9 @@
         
         if(responseBlock) responseBlock(nil, error);
     }];
+    
+    //Set the policy back to normal
+    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
     
 }
 
@@ -883,11 +887,10 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{
-                             @"id" : userId,
-                             @"offset" : offset ?: 0,
-                             @"invalidate" : refresh ? @"1" : @"0"
-                             };
+    NSDictionary *params = @{ @"id" : userId, @"offset" : offset ?: 0 };
+    
+    //If we are refreshing, removed the cached response for the request by setting the cache policy
+    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
     
     [self GET:@"user/galleries" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
@@ -907,30 +910,40 @@
         if(responseBlock) responseBlock(nil, error);
         
     }];
+    
+    //Set the policy back to normal
+    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+    
 }
 
 - (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock{
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    //If we are refreshing, removed the cached response for the request
-    if(refresh){
-        
-//        params
-        
-    }
+    //If we are refreshing, removed the cached response for the request by setting the cache policy
+    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
     
     [self GET:@"gallery/highlights" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
             return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
         }];
+        
         if(responseBlock) responseBlock(galleries, nil);
+        
+    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);
+        
     }];
+    
+    //Set the policy back to normal
+    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+    
 }
 
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {

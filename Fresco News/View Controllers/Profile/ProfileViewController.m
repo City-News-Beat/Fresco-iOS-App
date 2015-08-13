@@ -121,14 +121,16 @@
 
 - (void)populateProfile{
     
-    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
-
-        [self performNecessaryFetch:NO withResponseBlock:nil];
-        
+    //Load the profile header with the cached data
+    if([[FRSDataManager sharedManager] isLoggedIn]){
         [self.galleriesViewController.profileHeaderViewController updateUserInfo];
-        
     }
-
+    
+    //Load galleries only if we successfuly load them from the database
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
+        
+        [self performNecessaryFetch:NO withResponseBlock:nil];
+    }
 }
 
 #pragma mark - Data Loading
