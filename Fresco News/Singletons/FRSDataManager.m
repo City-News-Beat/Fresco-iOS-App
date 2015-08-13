@@ -682,7 +682,7 @@
 
 - (BOOL)isLoggedIn
 {
-    return [PFUser currentUser];
+    return [PFUser currentUser] != nil;
 }
 
 // this tests for completeness and should be more comprehensive

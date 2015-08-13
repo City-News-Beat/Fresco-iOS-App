@@ -30,14 +30,14 @@
  ** Index of cell that is currently playing a video
  */
 
-@property (nonatomic, assign) NSIndexPath *playingIndex;
+@property (nonatomic, strong) NSIndexPath *playingIndex;
 
 
 /*
  ** Check if the navigation is in the detail
  */
 
-@property (nonatomic, assign) NSIndexPath *dispatchIndex;
+@property (nonatomic, strong) NSIndexPath *dispatchIndex;
 
 /*
  ** Scroll View's Last Content Offset, for nav bar conditioning
@@ -307,7 +307,7 @@
         PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:visiblePostPath];
         
         //If the video current playing isn't this one, or no video has played yet
-        if(self.playingIndex != visibleIndexPath || self.playingIndex == nil){
+        if(self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil){
             
             [self disableVideo];
             
