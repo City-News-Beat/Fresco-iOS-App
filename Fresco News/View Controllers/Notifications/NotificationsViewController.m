@@ -241,12 +241,9 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     cell.secondButton.clipsToBounds = YES;
 
     cell.firstButton.layer.borderWidth = 1.0;
-    cell.firstButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
+    cell.firstButton.layer.borderColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:.08].CGColor;
     cell.secondButton.layer.borderWidth = 1.0;
     cell.secondButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
-    
-    cell.firstButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
-    cell.secondButton.layer.borderColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:.12] CGColor];
     
     return cell;
 }
