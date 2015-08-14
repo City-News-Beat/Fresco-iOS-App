@@ -231,7 +231,7 @@ static CGFloat kCellHeight = 44.0f;
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"relatedStoryCell"];
         
-        [((UILabel *)[cell viewWithTag:100]) setText:[self.gallery.relatedStories objectAtIndex:0][@"title"]];
+        [((UILabel *)[cell viewWithTag:100]) setText:[self.gallery.relatedStories objectAtIndex:indexPath.row][@"title"]];
         
         //Check if it's not the last cell, then add a separator
         if (indexPath.row == 0) {
@@ -254,13 +254,13 @@ static CGFloat kCellHeight = 44.0f;
     //Articles
     else if (indexPath.section == 1 || self.gallery.relatedStories.count == 0) {
         
-        FRSArticle *article = [self.gallery.articles objectAtIndex:0];
+        FRSArticle *article = [self.gallery.articles objectAtIndex:indexPath.row];
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
         
         ((UILabel *)[cell viewWithTag:100]).text = article.title;
         
-        [cell.imageView setImageWithURL:article.URL placeholderImage:[UIImage imageNamed:@"article"]];
+        [cell.imageView setImageWithURL:article.favicon placeholderImage:[UIImage imageNamed:@"article"]];
 
         [cell.imageView.layer setCornerRadius:4];
         [cell.imageView.layer setMasksToBounds:YES];

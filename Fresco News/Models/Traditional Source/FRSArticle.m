@@ -14,7 +14,7 @@
 {
     return @{
              @"title" : @"title",
-             @"outlet" : @"outlet",
+             @"favicon" : @"favicon",
              @"URL" : @"link"
              };
 }
@@ -23,5 +23,11 @@
 {
     return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
 }
+
++ (NSValueTransformer *)faviconJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+}
+
 
 @end
