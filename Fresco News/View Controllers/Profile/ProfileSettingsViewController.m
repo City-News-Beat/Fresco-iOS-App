@@ -178,39 +178,6 @@ typedef enum : NSUInteger {
 }
 
 
-- (void)updateLinkingStatus {
-    
-    if (![PFUser currentUser]) {
-        [self.connectTwitterButton setHidden:YES];
-        [self.connectFacebookButton setHidden:YES];
-    }
-    else {
-        
-        [self.connectTwitterButton setHidden:NO];
-        [self.connectFacebookButton setHidden:NO];
-        
-        //Twitter
-        if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            self.twitterIconCenterXConstraint.constant = 45;
-        }
-        else {
-            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
-            self.twitterIconCenterXConstraint.constant = 35;
-        }
-        
-        //Facebook
-        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            self.facebookIconCenterXConstraint.constant = 45;
-        } else {
-            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
-            self.facebookIconCenterXConstraint.constant = 35;
-        }
-    }
-    
-}
-
 #pragma mark - Controller Methods
 
 - (void)setSaveButtonState:(BOOL)enabled{
@@ -247,7 +214,16 @@ typedef enum : NSUInteger {
             [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withReadPermissions:@[@"public_profile"] block:^(BOOL succeeded, NSError *error) {
                 
                 //If fails, alert user
-                if (!succeeded) [self triggerSocialResponse:SocialExists network:@"Facebook"];
+                if (!succeeded) {
+                    
+                    [self triggerSocialResponse:SocialExists network:@"Facebook"];
+                    
+                    [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser]];
+                    
+                }
+                else{
+                    [self triggerSocialResponse:0 network:nil];
+                }
                 
                 
             }];
@@ -261,9 +237,9 @@ typedef enum : NSUInteger {
                 [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
                     
                     if (succeeded)
-                        [self triggerSocialResponse:SocialExists network:@"Facebook"];
-                    else
                         [self triggerSocialResponse:SocialUnlinked network:@"Facebook"];
+                    else
+                        [self triggerSocialResponse:SocialExists network:@"Facebook"];
                     
                 }];
                 
@@ -281,8 +257,19 @@ typedef enum : NSUInteger {
             
             [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
                 
-                if(!succeeded)
+                if(!succeeded){
+                    
+                    [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error){
+                    
+                        
+                    
+                    }];
+                    
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
+                }
+                else{
+                    [self triggerSocialResponse:0 network:nil];
+                }
                 
                 
             }];
@@ -312,6 +299,39 @@ typedef enum : NSUInteger {
             
         }
         
+    }
+    
+}
+
+- (void)updateLinkingStatus {
+    
+    if (![PFUser currentUser]) {
+        [self.connectTwitterButton setHidden:YES];
+        [self.connectFacebookButton setHidden:YES];
+    }
+    else {
+        
+        [self.connectTwitterButton setHidden:NO];
+        [self.connectFacebookButton setHidden:NO];
+        
+        //Twitter
+        if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            self.twitterIconCenterXConstraint.constant = 45;
+        }
+        else {
+            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+            self.twitterIconCenterXConstraint.constant = 35;
+        }
+        
+        //Facebook
+        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            self.facebookIconCenterXConstraint.constant = 45;
+        } else {
+            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+            self.facebookIconCenterXConstraint.constant = 35;
+        }
     }
     
 }
@@ -372,28 +392,33 @@ typedef enum : NSUInteger {
     
     NSString *message = @"";
     
-    if(error == SocialDisable){
-        
-        [self disableAcctWithSocialNetwork:network];
-        
-    }
-    else{
-        
-        if(error == SocialExists)
-            message = [NSString stringWithFormat:@"It seems you already have an account linked with %@.", network];
-        else if(error == SocialUnlinked)
-            message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
-        
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:ERROR
-                                     message:message
-                                     action:nil]
-                           animated:YES
-                         completion:nil];
+    if(error != 0){
+    
+        if(error == SocialDisable){
+            
+            [self disableAcctWithSocialNetwork:network];
+            
+        }
+        else{
+            
+            if(error == SocialExists)
+                message = [NSString stringWithFormat:@"It seems you already have an account linked with %@.", network];
+            else if(error == SocialUnlinked)
+                message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:ERROR
+                                         message:message
+                                         action:nil]
+                               animated:YES
+                             completion:nil];
+            
+        }
         
     }
     
     [self updateLinkingStatus];
+    
     [self.spinner removeFromSuperview];
     
 }

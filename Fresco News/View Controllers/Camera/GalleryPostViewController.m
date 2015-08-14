@@ -197,9 +197,8 @@
                                      completion:nil];
                     
                 }
-                
-                
             }];
+            
         }]];
         
         //Bring up alert view

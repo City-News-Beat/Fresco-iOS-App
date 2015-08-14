@@ -7,6 +7,7 @@
 //
 
 #import "FRSRootViewController.h"
+#import "UIViewController+Additions.h"
 #import "FRSBaseViewController.h"
 #import "FRSGallery.h"
 #import "GalleryHeader.h"
@@ -18,6 +19,12 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:animated];
+    
 }
 
 // good for wholesale resetting of the app

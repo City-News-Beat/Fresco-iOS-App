@@ -38,7 +38,7 @@
 
 #pragma mark - Production - Base URL/API
 
-#define PRODUCTION_BASE_URL                 @"https://beta.fresconews.com"
+#define PRODUCTION_BASE_URL                 @"https://fresconews.com"
 #define PRODUCTION_BASE_API                 @"https://api.fresconews.com/v1/"
 #define BASE_PATH                           @""
 
@@ -46,7 +46,7 @@
 #pragma mark - Staging - Base URL/API
 
 
-#define STAGING_BASE_URL                    @"https://staging.web.fresconews.com"
+#define STAGING_BASE_URL                    @"https://alpha.fresconews.com"
 #define STAGING_BASE_API                    @"http://staging.fresconews.com/v1/"
 
 
