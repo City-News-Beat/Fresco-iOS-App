@@ -14,7 +14,7 @@
 #define NOTIFICATION_API_KEY_AVAILABLE      @"NotificationAPIKeyAvailable"
 #define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
 #define NOTIFICATION_BADGE_RESET            @"ResetNotificationBadge"
-#define NOTIFICATION_IMAGE_SET              @"UserImageSet"
+#define NOTIFICATION_IMAGE_SET              @"UserProfileImageChanged"
 
 #define ERROR_DOMAIN                        @"com.fresconews"
 
@@ -148,7 +148,13 @@
 
 #define INVALID_CREDENTIALS                 NSLocalizedString(@"Invalid Credentials", nil)
 #define TWITTER_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Twitter", nil)
-#define FACEBOOK_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Facebook", nil)
+#define FACEBOOK_ERROR                      NSLocalizedString(@"We ran into an error signing you in with Facebook", nil)
+
+#define ACCT_WILL_BE_DISABLED               NSLocalizedString(@"Account will be disabled", nil)
+
+#define WELL_MISS_YOU                       NSLocalizedString(@"We'll miss you!", nil)
+#define YOU_CAN_LOGIN_FOR_ONE_YR            NSLocalizedString(@"You can log in any time in the next year to restore your account.", nil)
+
 
 #define GO_TO_SETTINGS                      NSLocalizedString(@"Go to Settings", nil)
 #define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)

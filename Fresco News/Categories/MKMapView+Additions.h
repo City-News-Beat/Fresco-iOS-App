@@ -31,4 +31,5 @@ typedef enum {
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
 
++ (void)updateUserPinViewForMapView: (MKMapView *)mapView WithImage: (UIImage *)image;
 @end

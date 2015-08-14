@@ -1854,7 +1854,7 @@
                                                     <rect key="frame" x="0.0" y="358" width="374" height="215"/>
                                                 </variation>
                                                 <connections>
-                                                    <outlet property="delegate" destination="fkO-PC-iRn" id="d12-nP-NpT"/>
+                                                    <outlet property="delegate" destination="fkO-PC-iRn" id="giF-Yg-KIp"/>
                                                 </connections>
                                             </mapView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CxU-na-Xtd">
@@ -2190,6 +2190,10 @@
                                             <constraint firstItem="UCq-t6-lmB" firstAttribute="centerX" secondItem="gIG-ls-6Ze" secondAttribute="centerX" constant="36" id="zMb-Q9-7IY"/>
                                         </constraints>
                                         <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="BiN-ze-6Qn"/>
+                                                <exclude reference="eo0-MB-3dp"/>
+                                            </mask>
                                             <mask key="constraints">
                                                 <exclude reference="89F-UE-rSi"/>
                                                 <exclude reference="EPm-fR-X4x"/>
@@ -2269,7 +2273,7 @@
                         <outlet property="constraintAccountVerticalTop" destination="7Ip-lG-veG" id="2eH-6C-c0j"/>
                         <outlet property="facebookIconCenterXConstraint" destination="sSj-C5-okO" id="g2E-KA-rp8"/>
                         <outlet property="logoutButton" destination="LU0-z9-8vq" id="004-6b-DsU"/>
-                        <outlet property="mapviewRadius" destination="mpg-Nr-jZG" id="Wrk-34-DH1"/>
+                        <outlet property="mapView" destination="mpg-Nr-jZG" id="8LF-Zc-Ktd"/>
                         <outlet property="profileImageView" destination="zlq-SA-Ipu" id="Ecy-r8-lw7"/>
                         <outlet property="radiusStepper" destination="U9s-rE-jxC" id="wCB-IN-jpi"/>
                         <outlet property="radiusStepperLabel" destination="Bcm-cw-UW6" id="ncR-tA-4na"/>
@@ -2775,7 +2779,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="E3465DE6-F4F8-46A2-A22B-3AC6430643B2" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="0A11C9D8-8C2C-417C-961A-8E1ED1A208EC" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4193,7 +4197,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="E3465DE6-F4F8-46A2-A22B-3AC6430643B2" width="29" height="29">
+        <image name="0A11C9D8-8C2C-417C-961A-8E1ED1A208EC" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

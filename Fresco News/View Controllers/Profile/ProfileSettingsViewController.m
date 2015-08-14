@@ -1,4 +1,4 @@
- //
+//
 //  ProfileSettingsViewController.m
 //  FrescoNews
 //
@@ -35,15 +35,15 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 /*
-** Profile Picture
-*/
+ ** Profile Picture
+ */
 
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) UIImage *selectedImage;
 
 /*
-** Text Fields
-*/
+ ** Text Fields
+ */
 
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
@@ -52,8 +52,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 
 /*
-** Buttons
-*/
+ ** Buttons
+ */
 
 @property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
@@ -62,19 +62,19 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
 
 /*
-** Radius Setting
-*/
+ ** Radius Setting
+ */
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
-@property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @property (weak, nonatomic) IBOutlet MapOverlayTop *topMapOverlay;
 @property (weak, nonatomic) IBOutlet MapViewOverlayBottom *bottomMapOverlay;
 
 /*
-** UI Constraints
-*/
+ ** UI Constraints
+ */
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterIconCenterXConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *facebookIconCenterXConstraint;
@@ -95,7 +95,7 @@ typedef enum : NSUInteger {
 @implementation ProfileSettingsViewController
 
 - (void)viewDidLoad{
-
+    
     [super viewDidLoad];
     
     [self setSaveButtonState:NO];
@@ -108,7 +108,7 @@ typedef enum : NSUInteger {
         [self.view viewWithTag:100].hidden = YES;
         [self.view viewWithTag:101].hidden = YES;
         [self.view viewWithTag:102].hidden = YES;
-
+        
         CGFloat y = -self.view.frame.size.height/5;
         self.constraintAccountVerticalTop.constant = y;
         self.constraintAccountVerticalBottom.constant = 0;
@@ -116,7 +116,7 @@ typedef enum : NSUInteger {
         self.textfieldEmail.userInteractionEnabled = NO;
         self.textfieldNewPassword.userInteractionEnabled = NO;
         self.textfieldConfirmPassword.userInteractionEnabled = NO;
-
+        
     } else {
         self.constraintAccountVerticalTop.constant = [self.view viewWithTag:100].frame.size.height;
         self.constraintAccountVerticalBottom.constant = 0;
@@ -127,7 +127,7 @@ typedef enum : NSUInteger {
         [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]] placeholderImage:[UIImage imageNamed:@"user"]
                                               success:nil failure:nil];
     }
-
+    
     //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     singleTap.numberOfTapsRequired = 1;
@@ -151,28 +151,28 @@ typedef enum : NSUInteger {
     
     //Initialize Disable Account UIActionSheet
     self.disableAccountSheet = [[UIActionSheet alloc]
-                            initWithTitle:DISABLE_ACCT_TITLE
-                            delegate:self
-                            cancelButtonTitle:CANCEL
-                            destructiveButtonTitle:DISABLE
-                            otherButtonTitles:nil];
+                                initWithTitle:DISABLE_ACCT_TITLE
+                                delegate:self
+                                cancelButtonTitle:CANCEL
+                                destructiveButtonTitle:DISABLE
+                                otherButtonTitles:nil];
     
     //Disable Account Sheet Tag
     self.disableAccountSheet.tag = 100;
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
     
     // Radius slider values
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
-
+    
     // update the slider label
     [self sliderValueChanged:self.radiusStepper];
 }
@@ -188,7 +188,7 @@ typedef enum : NSUInteger {
         
         [self.connectTwitterButton setHidden:NO];
         [self.connectFacebookButton setHidden:NO];
-    
+        
         //Twitter
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
@@ -198,7 +198,7 @@ typedef enum : NSUInteger {
             [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
             self.twitterIconCenterXConstraint.constant = 35;
         }
-    
+        
         //Facebook
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
             [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
@@ -214,7 +214,7 @@ typedef enum : NSUInteger {
 #pragma mark - Controller Methods
 
 - (void)setSaveButtonState:(BOOL)enabled{
-
+    
     if(enabled){
         self.saveChangesbutton.enabled = YES;
         self.saveChangesbutton.alpha = 1.0f;
@@ -226,11 +226,11 @@ typedef enum : NSUInteger {
 }
 
 /*
-** Runs Parse social connect based on SocialNetwork param
-*/
+ ** Runs Parse social connect based on SocialNetwork param
+ */
 
 - (void)socialConnect:(SocialNetwork)network networkButton:(UIButton*)button{
-
+    
     [button setTitle:@"" forState:UIControlStateNormal];
     
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width), 7)];
@@ -238,7 +238,7 @@ typedef enum : NSUInteger {
     [self.spinner startAnimating];
     
     [button addSubview:self.spinner];
-
+    
     if(network == SocialNetworkFacebook){
         
         //Connect the user
@@ -264,15 +264,15 @@ typedef enum : NSUInteger {
                         [self triggerSocialResponse:SocialExists network:@"Facebook"];
                     else
                         [self triggerSocialResponse:SocialUnlinked network:@"Facebook"];
-
+                    
                 }];
                 
             }
             else
                 [self triggerSocialResponse:SocialDisable network:@"Facebook"];
-
+            
         }
-    
+        
     }
     else if(network == SocialNetworkTwitter){
         
@@ -283,7 +283,7 @@ typedef enum : NSUInteger {
                 
                 if(!succeeded)
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
-                    
+                
                 
             }];
             
@@ -313,29 +313,68 @@ typedef enum : NSUInteger {
         }
         
     }
+    
+}
 
+- (void)disableAcctWithSocialNetwork:(NSString *)network {
+    
+    NSString *warningTitle = WELL_MISS_YOU;
+    NSString *warningMessage = YOU_CAN_LOGIN_FOR_ONE_YR;
+    
+    if (network) {
+        warningTitle = ACCT_WILL_BE_DISABLED;
+        warningMessage = [NSString stringWithFormat:@"Since you signed up with %@, disconnecting %@ will disable your account. You can sign in any time in the next year to restore your account.", network, network];
+    }
+    
+    UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                   alertControllerWithTitle:warningTitle
+                                   message: warningMessage
+                                   action:CANCEL handler:nil];
+    
+    [alertCon addAction:[UIAlertAction actionWithTitle:DISABLE style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+        //            [self.disableAccountSheet showInView:self.view];
+        
+        [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
+            
+            if (success) {
+
+                [[FRSDataManager sharedManager] logout];
+                
+                FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+                
+                [rvc setRootViewControllerToHighlights];
+                
+                [self.navigationController popViewControllerAnimated:NO];
+                
+            }
+            else{
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:ERROR
+                                             message:DISABLE_ACCT_ERROR
+                                             action:nil]
+                                   animated:YES
+                                 completion:nil];
+                
+            }
+            
+        }];
+    }]];
+    
+    [self presentViewController:alertCon animated:YES completion:nil];
 }
 
 /*
-** Triggers a response based on the passed Error
-*/
+ ** Triggers a response based on the passed Error
+ */
 
 - (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
-
+    
     NSString *message = @"";
     
     if(error == SocialDisable){
-    
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                       alertControllerWithTitle:WARNING
-                                       message:[NSString stringWithFormat:@"It looks like you signed up with %@! Would you like to disable your account?", network]
-                                       action:CANCEL handler:nil];
         
-        [alertCon addAction:[UIAlertAction actionWithTitle:DISABLE style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
-            [self.disableAccountSheet showInView:self.view];
-        }]];
-        
-        [self presentViewController:alertCon animated:YES completion:nil];
+        [self disableAcctWithSocialNetwork:network];
         
     }
     else{
@@ -351,7 +390,7 @@ typedef enum : NSUInteger {
                                      action:nil]
                            animated:YES
                          completion:nil];
-    
+        
     }
     
     [self updateLinkingStatus];
@@ -365,7 +404,7 @@ typedef enum : NSUInteger {
 {
     
     [self socialConnect:SocialNetworkFacebook networkButton:self.connectFacebookButton];
-
+    
 }
 
 - (IBAction)connectTwitter:(id)sender
@@ -379,14 +418,14 @@ typedef enum : NSUInteger {
 {
     
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
-  
+    
     if ([self.textfieldFirst.text length])
         [updateParams setObject:self.textfieldFirst.text forKey:@"firstname"];
     
     if ([self.textfieldLast.text length])
         [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
- 
-
+    
+    
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
     NSData *imageData = nil;
@@ -397,7 +436,7 @@ typedef enum : NSUInteger {
     }
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
-
+        
         if (!success) {
             
             [self presentViewController:[[FRSAlertViewManager sharedManager]
@@ -415,10 +454,6 @@ typedef enum : NSUInteger {
         // On success, run password check
         else {
             
-            if (self.selectedImage) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IMAGE_SET object:nil];
-            }
-            
             //Tells the ProfileHeaderViewController to update it's view
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
@@ -432,7 +467,7 @@ typedef enum : NSUInteger {
                     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
                         
                         if(success) [self.navigationController popViewControllerAnimated:YES];
-                    
+                        
                     }];
                     
                 }
@@ -448,9 +483,9 @@ typedef enum : NSUInteger {
             }
             //If passwords are not reset, just go back
             else [self.navigationController popViewControllerAnimated:YES];
-
+            
         }
-
+        
     }];
     
     // send a second post to save the radius -- ignore success
@@ -480,9 +515,8 @@ typedef enum : NSUInteger {
 }
 
 - (IBAction)disableAccount:(id)sender {
-    
-    [self.disableAccountSheet showInView:self.view];
-    
+
+    [self disableAcctWithSocialNetwork:nil];
 }
 
 #pragma mark - UISilder Delegate and Actions
@@ -492,7 +526,7 @@ typedef enum : NSUInteger {
     CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
     if(roundedValue > 0){
-    
+        
         NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
         
         NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
@@ -500,9 +534,9 @@ typedef enum : NSUInteger {
         // only update changes
         if (![self.radiusStepperLabel.text isEqualToString:newValue])
             self.radiusStepperLabel.text = newValue;
-            
+        
     }
-    else{
+    else {
         self.radiusStepperLabel.text = OFF;
     }
 }
@@ -513,7 +547,7 @@ typedef enum : NSUInteger {
     
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
     
-    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    [self.mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
 }
 
 #pragma mark - UITextField Delegate
@@ -538,13 +572,13 @@ typedef enum : NSUInteger {
     
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
-      
+        
         MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
         
         if(!pinView){
-        
+            
             return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
-
+            
         }
     }
     
@@ -561,7 +595,7 @@ typedef enum : NSUInteger {
         if(buttonIndex == 0){
             
             [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
-            
+                
                 if(success){
                     
                     [[FRSDataManager sharedManager] logout];
@@ -581,16 +615,16 @@ typedef enum : NSUInteger {
                                                  action:nil]
                                        animated:YES
                                      completion:nil];
-                
+                    
                 }
                 
             }];
-
+            
         }
         //Cancel clicked
         else if(buttonIndex == 1){
             
-
+            
         }
     }
 }
@@ -623,10 +657,17 @@ typedef enum : NSUInteger {
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+
     self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
     
     self.profileImageView.image = self.selectedImage;
-
+    
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
+    
+    [MKMapView updateUserPinViewForMapView:self.mapView WithImage:self.selectedImage];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IMAGE_SET object:self.profileImageView.image];
+    
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
     

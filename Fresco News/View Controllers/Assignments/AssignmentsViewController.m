@@ -54,8 +54,6 @@
 
     @property (assign, nonatomic) BOOL viewingClusters;
 
-//    @property (assign, nonatomic) BOOL isLoggedInWithAvatar;
-
     @property (strong, nonatomic) NSNumber *operatingRadius;
 
     @property (strong, nonatomic) NSNumber *operatingLat;
@@ -103,10 +101,10 @@
         [self updateAssignments];
     else
         [self presentCurrentAssignment];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUserAvatar:) name:NOTIFICATION_IMAGE_SET object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:@"onboard" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIFICATION_IMAGE_SET object:nil];
 }
 
 /*
@@ -205,17 +203,8 @@
 ** Listener checking if user has set or changed profile picture
 */
 
-- (void)loadUserAvatar: (NSNotification *)notification {
-    
-//    //TODO: uncomment conditional
-//    
-////    if ([FRSDataManager sharedManager].currentUser.avatar) {
-//    [self.assignmentsMap removeAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
-//    [self.assignmentsMap addAnnotation:[self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER].annotation];
-////    }
-
-    self.pinView.annotation = nil;
-    self.pinView = nil;
+- (void)updateUserPin:(NSNotification *)notification {
+    [MKMapView updateUserPinViewForMapView:self.assignmentsMap WithImage:notification.object];
 }
 
 //create function
