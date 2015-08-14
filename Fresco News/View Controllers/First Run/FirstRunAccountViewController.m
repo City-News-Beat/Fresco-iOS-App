@@ -236,6 +236,8 @@ typedef enum : NSUInteger {
         }];
         
     }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    
 }
 
 

@@ -2779,7 +2779,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="0A11C9D8-8C2C-417C-961A-8E1ED1A208EC" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="4AC7328E-7015-465C-8598-897B0469C13E" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3360,7 +3360,6 @@
                                 </variation>
                                 <connections>
                                     <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Psk-1M-qIk"/>
-                                    <action selector="twitterLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="YaB-Kj-Uls"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" tag="50" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="efb-pa-Lj1" userLabel="twitterIcon">
@@ -3390,7 +3389,6 @@
                                 </variation>
                                 <connections>
                                     <action selector="facebookButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="mfr-az-JAo"/>
-                                    <action selector="facebookLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Zhf-dY-xKs"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" tag="51" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="arb-kU-pXZ" userLabel="facebookIcon">
@@ -4197,7 +4195,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0A11C9D8-8C2C-417C-961A-8E1ED1A208EC" width="29" height="29">
+        <image name="4AC7328E-7015-465C-8598-897B0469C13E" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4333,6 +4331,6 @@ AAAAAAAAAAAAAAAAABdTA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="qw6-i4-1D2"/>
-        <segue reference="6TG-Ef-MS9"/>
+        <segue reference="BrQ-Qn-DKp"/>
     </inferredMetricsTieBreakers>
 </document>
