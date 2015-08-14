@@ -39,6 +39,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 @property (strong, nonatomic) CAShapeLayer *circleLayer;
 
+@property (strong, nonatomic) CLLocation* currentLocation;
+
+/*
+ ** Condition var to tell if the interval is already set
+ */
+
+@property (assign, nonatomic) BOOL intervalSet;
+
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
@@ -1064,14 +1072,36 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     self.location = [locations lastObject];
+    
+    if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
+    
+        self.currentLocation = [locations lastObject];
+        
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+            
+            if(responseObject != nil){
+           
+                self.defaultAssignment = [responseObject firstObject];
+            
+                [self configureAssignmentLabel];
+                
+            }
+            
+        }];
 
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        // TODO: Make this smarter
-        [self findNearbyAssignments];
-    });
-
-    [self configureAssignmentLabel];
+    }
+    
+    //Set interval for location update every `locationUpdateInterval` seconds
+    if (!self.intervalSet) {
+        // NSLog(@"Starting timer...");
+        [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        
+        self.intervalSet = YES;
+        
+    }
+    
+    [self.locationManager stopUpdatingLocation];
+    
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
@@ -1088,11 +1118,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)findNearbyAssignments
+- (void)restartLocationUpdates
 {
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        self.defaultAssignment = [responseObject firstObject];
-    }];
+    [self.locationManager startUpdatingLocation];
 }
+
 
 @end

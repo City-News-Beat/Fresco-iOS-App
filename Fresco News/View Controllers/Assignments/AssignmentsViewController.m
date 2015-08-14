@@ -507,35 +507,6 @@
             annotationView.canShowCallout = YES;
             
             annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
-            
-            /* Annotation View */
-            
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
-            
-            UIImageView *asignmentImageView = [[UIImageView alloc] init];
-            
-            [asignmentImageView setImage:[UIImage imageNamed:@"assignment-dot"]];
-            
-            asignmentImageView.frame = CGRectMake(-5,-5, 22, 22);
-            asignmentImageView.layer.masksToBounds = YES;
-            asignmentImageView.layer.cornerRadius = asignmentImageView.frame.size.width / 2;
-            
-            //Add a shadow by wrapping the avatar into a container
-            UIView *container = [[UIView alloc] initWithFrame:asignmentImageView.frame];
-            
-            // setup shadow layer and corner
-            container.layer.shadowColor = [UIColor blackColor].CGColor;
-            container.layer.shadowOffset = CGSizeMake(0, 1);
-            container.layer.shadowOpacity = .52;
-            container.layer.shadowRadius = 2;
-            container.layer.cornerRadius = asignmentImageView.frame.size.width / 2;
-            container.clipsToBounds = NO;
-            
-            [container addSubview:asignmentImageView];
-            
-            [annotationView addSubview:container];
-            
-            /* End View */
         
             /* Callout */
             
