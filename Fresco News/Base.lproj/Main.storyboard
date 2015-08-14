@@ -2782,7 +2782,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="8AD837B8-4EB9-4667-A472-5B62BCCDE629" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="5FD91A13-A13F-454C-A44D-407AFD8A4C3B" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3248,6 +3248,9 @@
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="APe-K0-XGS" id="ipf-a2-1Wg"/>
+                                        </connections>
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZIf-HL-jUI">
                                         <rect key="frame" x="17" y="45" width="358" height="1"/>
@@ -3262,6 +3265,9 @@
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="APe-K0-XGS" id="Mch-Ba-E8T"/>
+                                        </connections>
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sqx-Jg-j83">
                                         <rect key="frame" x="17" y="91" width="358" height="1"/>
@@ -3276,6 +3282,9 @@
                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="APe-K0-XGS" id="JCs-Cx-X5C"/>
+                                        </connections>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3362,7 +3371,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Psk-1M-qIk"/>
+                                    <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" tag="50" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="efb-pa-Lj1" userLabel="twitterIcon">
@@ -3391,7 +3400,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="facebookButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="mfr-az-JAo"/>
+                                    <action selector="facebookButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="2NU-RO-SVU"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" tag="51" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="arb-kU-pXZ" userLabel="facebookIcon">
@@ -4198,7 +4207,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="8AD837B8-4EB9-4667-A472-5B62BCCDE629" width="29" height="29">
+        <image name="5FD91A13-A13F-454C-A44D-407AFD8A4C3B" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4334,6 +4343,6 @@ AAAAAAAAAAAAAAAAABdTA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="qw6-i4-1D2"/>
-        <segue reference="BrQ-Qn-DKp"/>
+        <segue reference="6TG-Ef-MS9"/>
     </inferredMetricsTieBreakers>
 </document>

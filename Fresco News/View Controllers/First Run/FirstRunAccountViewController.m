@@ -30,9 +30,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
-- (IBAction)twitterButtonTapped:(id)sender;
-
-- (IBAction)facebookButtonTapped:(id)sender;
 
 @end
 
@@ -50,18 +47,12 @@ typedef enum : NSUInteger {
 {
     [super viewWillAppear:animated];
     
-
-    
     // we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
     
     if (self.password)
         self.passwordField.text = self.password;
-    
-    self.emailField.delegate = self;
-    self.passwordField.delegate = self;
-    self.confirmPasswordField.delegate = self;
 
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyNext;
@@ -84,6 +75,23 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - UI Actions
+
+- (IBAction)clickedNext:(id)sender {
+    
+    [self hitNext];
+}
+- (IBAction)facebookButtonTapped:(id)sender {
+    
+     [self performLogin:LoginTwitter button:self.twitterButton];
+}
+
+- (IBAction)twitterButtonTapped:(id)sender {
+    
+     [self performLogin:LoginFacebook button:self.facebookButton];
+}
+
+#pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -114,9 +122,29 @@ typedef enum : NSUInteger {
                         } completion:nil];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
+        [self.emailField resignFirstResponder];
+    }
+    
+    if ([self.passwordField isFirstResponder] && [touch view] != self.passwordField) {
+        [self.passwordField resignFirstResponder];
+    }
+    
+    if ([self.confirmPasswordField isFirstResponder] && [touch view] != self.confirmPasswordField) {
+        [self.confirmPasswordField resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
+
+#pragma mark - Sign up / Login Methods
+
 /*
- ** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
- */
+** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
+*/
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button{
     
@@ -143,36 +171,7 @@ typedef enum : NSUInteger {
         
     }];
     
-    if(login == LoginFresco){
-        
-        [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if (user && [[FRSDataManager sharedManager] currentUserIsLoaded]) {
-                
-                
-                [self transferUser];
-                
-            }
-            else{
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:nil];
-                
-                
-                [button setTitle:LOGIN forState:UIControlStateNormal];
-                
-                [self revertScreenToNormal];
-                
-            }
-            
-        }];
-        
-    }
-    else if(login == LoginFacebook){
+  if(login == LoginFacebook){
         
         //Facebook icon image
         [self.view viewWithTag:51].hidden = YES;
@@ -187,6 +186,7 @@ typedef enum : NSUInteger {
                 
             }
             else {
+                
                 //TODO: check if these are the strings we want
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
@@ -236,15 +236,15 @@ typedef enum : NSUInteger {
         }];
         
     }
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
-    
 }
 
 
 - (void)transferUser{
     
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
     }
     else{
         if(self.presentingViewController == nil)
@@ -271,11 +271,6 @@ typedef enum : NSUInteger {
         
     }];
     
-}
-
-- (IBAction)clickedNext:(id)sender {
-
-    [self hitNext];
 }
 
 - (void)hitNext {
@@ -316,10 +311,7 @@ typedef enum : NSUInteger {
                      self.emailField.textColor = [UIColor redColor];
                  } else {
                      
-                     //Tells the app to update the profile header if the user goes there
-                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
-                     
-                     [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
+                     [self transferUser];
                  }
                  
              }];
@@ -327,29 +319,5 @@ typedef enum : NSUInteger {
     }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    UITouch *touch = [[event allTouches] anyObject];
-    if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
-        [self.emailField resignFirstResponder];
-    }
-    
-    if ([self.passwordField isFirstResponder] && [touch view] != self.passwordField) {
-        [self.passwordField resignFirstResponder];
-    }
-    
-    if ([self.confirmPasswordField isFirstResponder] && [touch view] != self.confirmPasswordField) {
-        [self.confirmPasswordField resignFirstResponder];
-    }
-    [super touchesBegan:touches withEvent:event];
-}
 
-
-- (IBAction)twitterButtonTapped:(id)sender {
-    [self performLogin:LoginTwitter button:self.twitterButton];
-}
-
-- (IBAction)facebookButtonTapped:(id)sender {
-    [self performLogin:LoginFacebook button:self.facebookButton];
-}
 @end
