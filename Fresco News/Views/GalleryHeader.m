@@ -31,9 +31,13 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
     
     self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
     
-    if ([post.address length] > 0) {
-        self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.labelTimeAndPlace.text];
-        [self.labelTimeAndPlace sizeToFit];
+    if([post.address isKindOfClass:[NSString class]]){
+    
+        if ([post.address length] > 0) {
+            self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.labelTimeAndPlace.text];
+            [self.labelTimeAndPlace sizeToFit];
+        }
+        
     }
     
     self.labelByLine.text = post.byline;

@@ -328,6 +328,8 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"avatar"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
 
 }
 
@@ -782,7 +784,7 @@
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
         
         //Run the disable request
-        [self POST:@"user/disable" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+        [self POST:@"user/deactivate" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         

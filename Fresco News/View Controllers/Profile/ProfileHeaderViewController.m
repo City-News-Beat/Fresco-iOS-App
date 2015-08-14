@@ -95,7 +95,6 @@
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         self.twitterLabel.hidden = YES;
         self.twitterIcon.hidden = YES;
-        return;
     }
     else{
     

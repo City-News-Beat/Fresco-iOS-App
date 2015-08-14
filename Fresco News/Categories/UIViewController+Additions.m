@@ -25,44 +25,50 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:NOTIFICATION_BADGE_RESET object:nil];
     
-    if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-        [self setRightBarButtonItemWithBadge:YES];
-    }
 }
 
 /*
 ** Sets up UI of notification bar button and clears NSUserDefaults
 */
 
-- (void)setRightBarButtonItemWithBadge:(BOOL)badge {
+- (void)setRightBarButtonItemWithBadge:(BOOL)badge setDisabled:(BOOL)disabled {
     
-    UIImage *bell = [UIImage imageNamed:@"notifications"];
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    button.alpha = .54;
-    
-    button.bounds = CGRectMake( 0, 0, bell.size.width, bell.size.height );
-    
-    button.clipsToBounds = NO;
-    
-    [button setImage:bell forState:UIControlStateNormal];
-    
-    [button addTarget:self action:@selector(toggleNotifications:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *notificationIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
-    [self.navigationItem setRightBarButtonItem:notificationIcon];
-    
-    //Set the badge on the notification bell
-    if(badge) {
-        [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
+    if(disabled){
         
-    } else {
+        [self.navigationItem setRightBarButtonItem:nil];
         
-        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"] > 0) {
-            [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"notificationsCount"];
+    }
+    else{
+    
+        UIImage *bell = [UIImage imageNamed:@"notifications"];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        button.alpha = .54;
+        
+        button.bounds = CGRectMake( 0, 0, bell.size.width, bell.size.height );
+        
+        button.clipsToBounds = NO;
+        
+        [button setImage:bell forState:UIControlStateNormal];
+        
+        [button addTarget:self action:@selector(toggleNotifications:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *notificationIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
+        
+        [self.navigationItem setRightBarButtonItem:notificationIcon];
+        
+        //Set the badge on the notification bell
+        if(badge) {
+            [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
+            
+        } else {
+            
+            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"] > 0) {
+                [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"notificationsCount"];
+            }
         }
+        
     }
 
 }
@@ -208,7 +214,7 @@
     
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
+        [self setRightBarButtonItemWithBadge:NO setDisabled:NO];
         
         //Retreieve Notifications View Controller from storyboard
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -246,15 +252,15 @@
 */
 
 - (void)handleAPIKeyAvailable:(NSNotification *)notification{
-    [self setRightBarButtonItemWithBadge:YES];
+    [self setRightBarButtonItemWithBadge:YES setDisabled:NO];
 }
 
 /*
 ** Selector for notification that removes badge
 */
 
-- (void)resetNotificationBadge:(NSNotification *)notification{
-    [self setRightBarButtonItemWithBadge:NO];
+- (void)resetNotificationBell:(NSNotification *)notification{
+    [self setRightBarButtonItemWithBadge:NO setDisabled:YES];
 }
 
 #pragma mark - Custom Presentation and Dismiss
