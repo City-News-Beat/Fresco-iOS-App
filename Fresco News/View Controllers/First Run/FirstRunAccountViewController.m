@@ -83,12 +83,12 @@ typedef enum : NSUInteger {
 }
 - (IBAction)facebookButtonTapped:(id)sender {
     
-     [self performLogin:LoginTwitter button:self.twitterButton];
+     [self performLogin:LoginFacebook button:self.facebookButton];
 }
 
 - (IBAction)twitterButtonTapped:(id)sender {
     
-     [self performLogin:LoginFacebook button:self.facebookButton];
+     [self performLogin:LoginTwitter button:self.twitterButton];
 }
 
 #pragma mark - UITextFieldDelegate
