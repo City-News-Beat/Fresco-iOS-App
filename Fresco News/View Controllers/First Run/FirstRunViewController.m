@@ -217,13 +217,12 @@ typedef enum : NSUInteger {
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:nil];
-                
-                
-                [button setTitle:LOGIN forState:UIControlStateNormal];
-                
-                [self revertScreenToNormal];
-                
+                                   animated:YES completion:^{
+                                       [button setTitle:LOGIN forState:UIControlStateNormal];
+                                       
+                                       [self revertScreenToNormal];
+                                       
+                                   }];
             }
             
         }];
@@ -247,14 +246,16 @@ typedef enum : NSUInteger {
                 //TODO: check if these are the strings we want
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
-                                             message:TWITTER_ERROR
+                                             message:FACEBOOK_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:nil];
-                
-                [button setTitle:FACEBOOK forState:UIControlStateNormal];
-                
-                [self revertScreenToNormal];
+                                 completion:^{
+                                     
+                                     [button setTitle:FACEBOOK forState:UIControlStateNormal];
+                                     
+                                     [self revertScreenToNormal];
+                                 }];
+            
             }
             
         }];
@@ -281,11 +282,14 @@ typedef enum : NSUInteger {
                                              message:TWITTER_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:nil];
+                                 completion:^{
+                                     
+                                     [button setTitle:TWITTER forState:UIControlStateNormal];
+                                     [self revertScreenToNormal];
+                                     
+                                 }];
                 
-                [self revertScreenToNormal];
-                
-                [button setTitle:TWITTER forState:UIControlStateNormal];
+
                 
                 NSLog(@"%@", error);
                 
