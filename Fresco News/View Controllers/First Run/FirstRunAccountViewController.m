@@ -166,7 +166,8 @@ typedef enum : NSUInteger {
     [UIView animateWithDuration:.3 animations:^{
         
         for (UIView *view in [self.view subviews]) {
-            if(view != button)  view.alpha = .26f;
+            if(view != button && view.tag!= 51 && view.tag != 50)
+                view.alpha = .26f;
         }
         
     }];

@@ -23,7 +23,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:NOTIFICATION_VIEW_DISMISS object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBadge:) name:NOTIFICATION_BADGE_RESET object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBell:) name:NOTIFICATION_BADGE_RESET object:nil];
     
 }
 
