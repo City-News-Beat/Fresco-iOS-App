@@ -309,6 +309,8 @@
     
     self.tokenValidatedForSession = false;
     
+    
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
@@ -318,6 +320,8 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
 
 }
 

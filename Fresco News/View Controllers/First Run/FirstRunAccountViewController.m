@@ -243,6 +243,8 @@ typedef enum : NSUInteger {
 - (void)transferUser{
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
+    
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];

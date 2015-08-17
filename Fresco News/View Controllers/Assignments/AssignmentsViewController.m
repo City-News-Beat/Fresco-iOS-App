@@ -96,8 +96,27 @@
         [self presentCurrentAssignment];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:@"onboard" object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIFICATION_IMAGE_SET object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:@"profilePicReset" object:nil];
+
+}
+
+- (void)resetPin:(NSNotification *)notification {
+
+    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
+    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
+    
+    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
+    [self.assignmentsMap setRegion:newRegion animated:NO];
+    
+    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
+    [self.assignmentsMap setRegion:oldRegion animated:NO];
+
     
 }
+
 
 /*
 ** Prevents scroll and map delegates from being called outside controller

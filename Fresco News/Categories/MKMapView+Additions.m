@@ -159,9 +159,13 @@
             
             MKAnnotationView *profileAnnotation = [mapView viewForAnnotation:annotation];
             
-            if ([(UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]) isKindOfClass:[UIImageView class]]) {
-                UIImageView *profileImageView = (UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]);
-                [profileImageView setImage:image];
+            if([profileAnnotation.subviews count] > 0){
+            
+                if ([(UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]) isKindOfClass:[UIImageView class]]) {
+                    UIImageView *profileImageView = (UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]);
+                    [profileImageView setImage:image];
+                }
+                
             }
             
         }
