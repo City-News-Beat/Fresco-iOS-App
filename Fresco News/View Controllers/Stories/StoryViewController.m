@@ -27,7 +27,7 @@
     
     [super viewDidLoad];
     
-    self.title = self.story.title;
+    self.title = @"Story";
     
     [self performNecessaryFetch:nil];
     
