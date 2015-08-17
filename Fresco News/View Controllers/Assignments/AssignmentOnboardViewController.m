@@ -20,6 +20,7 @@
 @implementation AssignmentOnboardViewController
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
   
     UIVisualEffect *blurEffect;
@@ -57,12 +58,8 @@
 
 
 - (IBAction)letsGoButtonTapped:(id)sender {
-//    [UIView animateWithDuration:0.3 animations:^{
-//        self.view.alpha = 0;
-//    }];
-//    [self.view removeFromSuperview];
 
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"onboard" object:nil];
+    
 }
 @end

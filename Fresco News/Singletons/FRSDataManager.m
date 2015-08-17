@@ -350,7 +350,10 @@
         if (user) {
             [self refreshUser:^(BOOL succeeded, NSError *error) {
                 
-                block(user, error);
+                if(!succeeded)
+                    [self logout];
+                else
+                    block(user, error);
             
             }];
         }
@@ -423,34 +426,6 @@
 }
 
 /*
-** Pull Fresco user information from Fresco's API
-*/
-
-- (void)getFrescoUser:(NSString *)userId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    NSDictionary *params = @{@"id" : userId};
-
-    [self GET:@"user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-        
-        if(responseBlock) responseBlock(frsUser, nil);
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    
-        if(responseBlock) responseBlock(nil, error);
-    
-    }];
-}
-
-
-/*
 ** Refreshes current user signed in
 */
 
@@ -483,6 +458,11 @@
                     block(YES, nil);
                     
                 }
+                else{
+                
+                    block(NO, nil);
+                
+                }
                 
                 _loggingIn = NO;
             
@@ -510,6 +490,8 @@
                 [[PFUser currentUser] deleteInBackground];
                 
                 error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"Can't find the user"}];
+                
+                if(responseBlock) responseBlock(NO, nil);
                 
             }
             //User is valid, continue to set
@@ -553,6 +535,33 @@
         
     }];
     
+}
+
+/*
+** Pull Fresco user information from Fresco's API
+*/
+
+- (void)getFrescoUser:(NSString *)userId withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"id" : userId};
+    
+    [self GET:@"user/profile" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        FRSUser *frsUser = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        if(responseBlock) responseBlock(frsUser, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
 }
 
 /*
@@ -722,35 +731,37 @@
                     
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                     
-                    if(responseObject[@"data"] == nil){
+                    if(responseObject[@"data"] == nil)
                         responseBlock(NO, nil);
-                        return;
+                    else{
+                    
+                        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+                        
+                        NSError *error;
+                        
+                        if ([user isKindOfClass:[FRSUser class]]) {
+                            
+                            self.currentUser = user;
+                            
+                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
+                            
+                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
+                            
+                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
+                            
+                            if (responseBlock) responseBlock(YES, error);
+                            
+                        }
+                        else {
+                            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                        code:ErrorSignupCantGetUser
+                                                    userInfo:@{@"error" : @"Couldn't get user"}];
+                            user = nil;
+                            
+                            if (responseBlock) responseBlock(NO, error);
+                        }
+  
                     }
-                    
-                    
-                    FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-                    
-                    NSError *error;
-                    
-                    if ([user isKindOfClass:[FRSUser class]]) {
-                        
-                        self.currentUser = user;
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
-                        
-                    }
-                    else {
-                        error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                                    code:ErrorSignupCantGetUser
-                                                userInfo:@{@"error" : @"Couldn't get user"}];
-                        user = nil;
-                    }
-                    
-                    if (responseBlock) responseBlock(YES, error);
                     
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
@@ -788,15 +799,13 @@
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-            if (responseObject[@"success"]) {
-                
+            //Successfully disabled
+            if ([responseObject[@"err"] isKindOfClass:[NSNull class]]){
                 if(responseBlock) responseBlock(YES, nil);
-                
             }
             else{
                 if(responseBlock) responseBlock(NO, nil);
             }
-            
             
         } failure:^(NSURLSessionDataTask *task, NSError *error){
             

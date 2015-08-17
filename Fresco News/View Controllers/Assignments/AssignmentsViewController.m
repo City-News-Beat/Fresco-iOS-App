@@ -19,7 +19,7 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "AssignmentOnboardViewController.h"
 
-#define kSCROLL_VIEW_INSET 100
+#define kSCROLL_VIEW_INSET 75
 
 //static NSString *assignmentIdentifier = @"AssignmentAnnotation";
 //static NSString *clusterIdentifier = @"ClusterAnnotation";
@@ -43,9 +43,11 @@
     @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
     @property (nonatomic) MKAnnotationView *pinView;
+
     /*
     ** Conditioning Variables
     */
+
     @property (assign, nonatomic) BOOL centeredAssignment;
 
     @property (assign, nonatomic) BOOL navigateTo;
@@ -72,11 +74,6 @@
     
     [self tweakUI];
     
-    [self.view bringSubviewToFront:self.onboardContainerView];
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_ASSIGNMENTS_ONBOARDING])
-       [self.onboardContainerView removeFromSuperview];
-
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:NAVIGATE_TO_ASSIGNMENT
                             delegate:self
@@ -90,12 +87,8 @@
 
     //Set all values to 0 to reset controller
     self.operatingRadius = 0;
-    
     self.operatingLat = 0;
-    
     self.operatingLon = 0;
-    
-    self.storyBreaksView.hidden = YES;
     
     if(self.currentAssignment == nil)
         [self updateAssignments];
@@ -104,7 +97,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:@"onboard" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIFICATION_IMAGE_SET object:nil];
 }
 
 /*
@@ -124,6 +116,9 @@
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
             self.storyBreaksView.hidden = NO;
+        }
+        else{
+            self.storyBreaksView.hidden = YES;
         }
     }
     
@@ -147,6 +142,8 @@
    if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
        self.storyBreaksView.hidden = YES;
    }
+   else
+    self.storyBreaksView.hidden = YES;
     
     self.scrollView.alpha = 0;
     
@@ -772,14 +769,35 @@
     }
 }
 
+#pragma mark - UIStoryboardSegue Delegate
 
-- (void)hideOnboarding: (NSNotification *)notification {
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
+    
+    if ([identifier isEqualToString:@"assignmentOnboard"]) {
+        
+        //Check if the assignmnet onboarding should be set through the user defautls
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_ASSIGNMENTS_ONBOARDING])
+            return NO;
+        else
+            [self.view bringSubviewToFront:self.onboardContainerView];
+        
+    }
+
+    return YES;
+
+}
+
+- (void)hideOnboarding:(NSNotification *)notification {
     
     [UIView animateWithDuration:0.3 animations:^{
         self.onboardContainerView.alpha = 0;
-    }];
+    } completion:^(BOOL finished){
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+        [self.onboardContainerView removeFromSuperview];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+        
+    }];
+
 }
 
 @end

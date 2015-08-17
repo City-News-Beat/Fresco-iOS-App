@@ -136,6 +136,9 @@
             else {
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
             }
+            
+            [((UIButton *)sender) setUserInteractionEnabled:YES];
+            
         }];
     }
     else {

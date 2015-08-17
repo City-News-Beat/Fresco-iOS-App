@@ -46,6 +46,7 @@
         self.window.rootViewController = disabledVC;
         
     } else {
+        
         // Prevent conflict between background music and camera
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -75,11 +76,12 @@
             if (succeeded) {
                 
                 NSLog(@"successful login on launch");
-                
-                [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                
+
             }
             else {
+                
+                [[FRSDataManager sharedManager] logout];
+                
                 if(error) NSLog(@"Error on login %@", error);
             }
             
@@ -88,9 +90,9 @@
         if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
         }
+        
     }
     
-
     return YES;
 }
 

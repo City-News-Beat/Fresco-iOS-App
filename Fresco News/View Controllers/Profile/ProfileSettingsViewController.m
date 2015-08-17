@@ -25,7 +25,8 @@ typedef enum : NSUInteger {
 typedef enum : NSUInteger {
     SocialExists,
     SocialDisable,
-    SocialUnlinked
+    SocialUnlinked,
+    SocialNoError
 } SocialError;
 
 @interface ProfileSettingsViewController () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIActionSheetDelegate>
@@ -222,7 +223,7 @@ typedef enum : NSUInteger {
                     
                 }
                 else{
-                    [self triggerSocialResponse:0 network:nil];
+                    [self triggerSocialResponse:SocialNoError network:nil];
                 }
                 
                 
@@ -268,7 +269,7 @@ typedef enum : NSUInteger {
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
                 }
                 else{
-                    [self triggerSocialResponse:0 network:nil];
+                    [self triggerSocialResponse:SocialNoError network:nil];
                 }
                 
                 
@@ -338,12 +339,20 @@ typedef enum : NSUInteger {
 
 - (void)disableAcctWithSocialNetwork:(NSString *)network {
     
-    NSString *warningTitle = WELL_MISS_YOU;
-    NSString *warningMessage = YOU_CAN_LOGIN_FOR_ONE_YR;
+    NSString *warningTitle;
+    NSString *warningMessage;
     
     if (network) {
+        
         warningTitle = ACCT_WILL_BE_DISABLED;
+        
         warningMessage = [NSString stringWithFormat:@"Since you signed up with %@, disconnecting %@ will disable your account. You can sign in any time in the next year to restore your account.", network, network];
+    }
+    else{
+        
+        warningTitle = WELL_MISS_YOU;
+        warningMessage = YOU_CAN_LOGIN_FOR_ONE_YR;
+    
     }
     
     UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
@@ -352,8 +361,7 @@ typedef enum : NSUInteger {
                                    action:CANCEL handler:nil];
     
     [alertCon addAction:[UIAlertAction actionWithTitle:DISABLE style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
-        //            [self.disableAccountSheet showInView:self.view];
-        
+
         [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
             
             if (success) {
@@ -392,7 +400,7 @@ typedef enum : NSUInteger {
     
     NSString *message = @"";
     
-    if(error != 0){
+    if(error != SocialNoError){
     
         if(error == SocialDisable){
             
@@ -610,63 +618,8 @@ typedef enum : NSUInteger {
     return nil;
 }
 
-#pragma mark - Action Sheet Delegate
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (actionSheet.tag == 100) {
-        
-        //Disable clicked
-        if(buttonIndex == 0){
-            
-            [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
-                
-                if(success){
-                    
-                    [[FRSDataManager sharedManager] logout];
-                    
-                    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
-                    
-                    [rvc setRootViewControllerToHighlights];
-                    
-                    [self.navigationController popViewControllerAnimated:NO];
-                    
-                }
-                else{
-                    
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:ERROR
-                                                 message:DISABLE_ACCT_ERROR
-                                                 action:nil]
-                                       animated:YES
-                                     completion:nil];
-                    
-                }
-                
-            }];
-            
-        }
-        //Cancel clicked
-        else if(buttonIndex == 1){
-            
-            
-        }
-    }
-}
-
 
 #pragma mark - UIImagePickerController Delegate
-
--(void)tapDetected{
-    
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.allowsEditing = YES;
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-    
-}
 
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
@@ -678,6 +631,17 @@ typedef enum : NSUInteger {
         navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }
+}
+
+-(void)tapDetected{
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.allowsEditing = YES;
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+    
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
