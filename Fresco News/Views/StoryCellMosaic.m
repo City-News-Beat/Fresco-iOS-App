@@ -78,7 +78,7 @@ static CGFloat const kInterImageGap = 1.0f;
         thumbnailView.contentMode = UIViewContentModeScaleAspectFill;
 
         // 3x is for retina displays
-        [thumbnailView setImageWithURL:[image cdnAssetURLWithSize:CGSizeMake(frame.size.width * 3, frame.size.height * 3)]];
+        [thumbnailView setImageWithURL:[image smallImageUrl]];
 
         [self.contentView addSubview:thumbnailView];
         
@@ -94,12 +94,12 @@ static CGFloat const kInterImageGap = 1.0f;
             ++rows;
             y += kImageHeight + kInterImageGap;
             x = 0.0f;
-            
-            // we almost always want to redo this image on the next row
-            // but check the edge case where the image is wider than the
-            // whole frame which would cause an endless loop
-            if (imageWidth + kInterImageGap < self.frame.size.width)
-                --i;
+//            
+//            // we almost always want to redo this image on the next row
+//            // but check the edge case where the image is wider than the
+//            // whole frame which would cause an endless loop
+//            if (imageWidth + kInterImageGap < self.frame.size.width)
+//                --i;
         }
         
         ++i;

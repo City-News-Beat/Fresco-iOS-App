@@ -902,7 +902,7 @@
 
 - (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock {
     
-    NSDictionary *params = @{@"galleries" : ids};
+    NSDictionary *params = @{@"galleries" : ids, @"sort" : @"true"};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

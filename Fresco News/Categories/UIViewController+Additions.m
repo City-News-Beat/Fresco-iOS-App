@@ -25,6 +25,13 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBell:) name:NOTIFICATION_BADGE_RESET object:nil];
     
+    
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]){
+    
+        [self setRightBarButtonItemWithBadge:YES setDisabled:NO];
+        
+    }
+    
 }
 
 /*
