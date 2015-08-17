@@ -151,7 +151,7 @@
  
  }
 
-+ (void)updateUserPinViewForMapView: (MKMapView *)mapView WithImage: (UIImage *)image
++ (void)updateUserPinViewForMapView:(MKMapView *)mapView WithImage: (UIImage *)image
 {
     for (id<MKAnnotation> annotation in mapView.annotations){
         
