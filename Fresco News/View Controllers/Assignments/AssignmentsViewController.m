@@ -284,7 +284,7 @@
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
     
         //Check if the user moves at least a difference greater than .4
-        if((fabsf(radius.floatValue - _operatingRadius.floatValue) > .4 &&  ([radius floatValue] > [self.operatingRadius floatValue]))
+        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4 && ([radius floatValue] > [self.operatingRadius floatValue]))
            
            ||
            
@@ -301,8 +301,14 @@
             
             if([radius integerValue] < 500){
 
-                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue] ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.centerCoordinate.latitude, self.assignmentsMap.centerCoordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
-                    if (!error) {
+                [[FRSDataManager sharedManager]
+                 getAssignmentsWithinRadius:[radius floatValue]
+                 ofLocation:CLLocationCoordinate2DMake(
+                                                       self.assignmentsMap.centerCoordinate.latitude,
+                                                       self.assignmentsMap.centerCoordinate.longitude)
+                 withResponseBlock:^(id responseObject, NSError *error) {
+                    
+                     if (!error) {
                         
                         self.viewingClusters = false;
                         
@@ -339,8 +345,13 @@
             }
             else{
                 
-                [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude lon:self.assignmentsMap.centerCoordinate.longitude radius:[radius floatValue] withResponseBlock:^(id responseObject, NSError *error) {
-                    if (!error) {
+                [[FRSDataManager sharedManager]
+                 getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
+                 lon:self.assignmentsMap.centerCoordinate.longitude
+                 radius:[radius floatValue]
+                 withResponseBlock:^(id responseObject, NSError *error) {
+                    
+                     if (!error) {
                         
                         self.viewingClusters = true;
                         
@@ -429,10 +440,7 @@
             count++;
         }
         
-        /*
-        ** Run this after populating map with assignments, this ensures we have the annotation to select
-        */
-
+        // Run this after populating map with assignments, this ensures we have the annotation to select
         if(self.currentAssignment){
             
             [self selectCurrentAssignmentAnnotation];
@@ -773,4 +781,5 @@
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
 }
+
 @end
