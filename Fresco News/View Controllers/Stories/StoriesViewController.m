@@ -132,7 +132,7 @@ static CGFloat const kInterImageGap = 1.0f;
 
 -(void)viewWillAppear:(BOOL)animated{
     
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
     self.tableView.delegate = self;
     

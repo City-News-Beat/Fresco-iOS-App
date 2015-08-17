@@ -194,7 +194,9 @@
                                                  message:@"We were unable to link your Twitter account!"
                                                  action:nil]
                                        animated:YES
-                                     completion:nil];
+                                     completion:^{
+                                         button.selected = NO;
+                                     }];
                     
                 }
             }];
@@ -237,7 +239,9 @@
                                                  message:@"We were unable to link your Facebook account!"
                                                  action:nil]
                                        animated:YES
-                                     completion:nil];
+                                     completion:^{
+                                         button.selected = NO;
+                                     }];
                 
                 }
 

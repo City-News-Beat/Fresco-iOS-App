@@ -104,7 +104,8 @@
 }
 
 - (void)resetPin:(NSNotification *)notification {
-
+    self.assignmentsMap.delegate = self;
+    
     CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
     CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
     
@@ -114,16 +115,20 @@
     MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
     [self.assignmentsMap setRegion:oldRegion animated:NO];
 
-    
+    self.assignmentsMap.delegate = nil;
 }
 
-
 /*
-** Prevents scroll and map delegates from being called outside controller
-*/
+ ** Prevents scroll and map delegates from being called outside controller
+ */
 
-- (void)dealloc
-{
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.assignmentsMap.delegate = self;
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     self.scrollView.delegate = nil;
     self.assignmentsMap.delegate = nil;
 }
