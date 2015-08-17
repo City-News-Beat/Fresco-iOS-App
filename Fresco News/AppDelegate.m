@@ -40,57 +40,49 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    if (IS_IPHONE_4S) {
+    
+    // Prevent conflict between background music and camera
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
+                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
+                                           error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES
+                                         error:nil];
+    
+    [self configureAppWithLaunchOptions:launchOptions];
+    
+    [self setupAppearances];
+    
+    self.frsRootViewController = [[FRSRootViewController alloc] init];
+    
+    self.window.rootViewController = self.frsRootViewController;
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
+        [self registerForPushNotifications];
+        [self.frsRootViewController setRootViewControllerToTabBar];
+    }
+    else {
+        [self.frsRootViewController setRootViewControllerToOnboard];
+    }
+    
+    //Refresh the existing user, if exists, then run location monitoring
+    [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
         
-        FRSDisabledViewController *disabledVC = [[FRSDisabledViewController alloc] init];
-        self.window.rootViewController = disabledVC;
-        
-    } else {
-        
-        // Prevent conflict between background music and camera
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
-                                         withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
-                                               error:nil];
-        [[AVAudioSession sharedInstance] setActive:YES
-                                             error:nil];
-        
-        [self configureAppWithLaunchOptions:launchOptions];
-        
-        [self setupAppearances];
-        
-        self.frsRootViewController = [[FRSRootViewController alloc] init];
-        
-        self.window.rootViewController = self.frsRootViewController;
-        
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE]) {
-            [self registerForPushNotifications];
-            [self.frsRootViewController setRootViewControllerToTabBar];
+        if (succeeded) {
+            
+            NSLog(@"successful login on launch");
+
         }
         else {
-            [self.frsRootViewController setRootViewControllerToOnboard];
+            
+            [[FRSDataManager sharedManager] logout];
+            
+            if(error) NSLog(@"Error on login %@", error);
         }
         
-        //Refresh the existing user, if exists, then run location monitoring
-        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
-            
-            if (succeeded) {
-                
-                NSLog(@"successful login on launch");
-
-            }
-            else {
-                
-                [[FRSDataManager sharedManager] logout];
-                
-                if(error) NSLog(@"Error on login %@", error);
-            }
-            
-        }];
-        
-        if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-        }
-        
+    }];
+    
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     
     return YES;

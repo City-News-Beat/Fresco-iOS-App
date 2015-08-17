@@ -94,20 +94,6 @@
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */; };
-		BC7190FD1B7C0DC200E72BE5 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190EF1B7C0CB200E72BE5 /* Nota-Bold.otf */; };
-		BC7190FE1B7C0DC200E72BE5 /* Nota-BoldOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F01B7C0CB200E72BE5 /* Nota-BoldOblique.otf */; };
-		BC7190FF1B7C0DC200E72BE5 /* Nota-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F11B7C0CB200E72BE5 /* Nota-Light.otf */; };
-		BC7191001B7C0DC200E72BE5 /* Nota-LightOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F21B7C0CB200E72BE5 /* Nota-LightOblique.otf */; };
-		BC7191011B7C0DC200E72BE5 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F31B7C0CB200E72BE5 /* Nota-Medium.otf */; };
-		BC7191021B7C0DC200E72BE5 /* Nota-MediumOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F41B7C0CB200E72BE5 /* Nota-MediumOblique.otf */; };
-		BC7191031B7C0DC200E72BE5 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F51B7C0CB200E72BE5 /* Nota-Normal.otf */; };
-		BC7191041B7C0DC200E72BE5 /* Nota-NormalOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F61B7C0CB200E72BE5 /* Nota-NormalOblique.otf */; };
-		BC7191051B7C0DC200E72BE5 /* Nota-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F71B7C0CB200E72BE5 /* Nota-Thin.otf */; };
-		BC7191061B7C0DC200E72BE5 /* Nota-ThinOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F81B7C0CB200E72BE5 /* Nota-ThinOblique.otf */; };
-		BC7191071B7C0DC200E72BE5 /* Nota-Xbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190F91B7C0CB200E72BE5 /* Nota-Xbold.otf */; };
-		BC7191081B7C0DC200E72BE5 /* Nota-XboldOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190FA1B7C0CB200E72BE5 /* Nota-XboldOblique.otf */; };
-		BC7191091B7C0DC200E72BE5 /* Nota-XLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190FB1B7C0CB200E72BE5 /* Nota-XLight.otf */; };
-		BC71910A1B7C0DC200E72BE5 /* Nota-XLightOblique.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC7190FC1B7C0CB200E72BE5 /* Nota-XLightOblique.otf */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
@@ -359,20 +345,6 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BC7190EB1B7C01B400E72BE5 /* FRSDisabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDisabledViewController.h; sourceTree = "<group>"; };
 		BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisabledViewController.m; sourceTree = "<group>"; };
-		BC7190EF1B7C0CB200E72BE5 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
-		BC7190F01B7C0CB200E72BE5 /* Nota-BoldOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-BoldOblique.otf"; sourceTree = "<group>"; };
-		BC7190F11B7C0CB200E72BE5 /* Nota-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Light.otf"; sourceTree = "<group>"; };
-		BC7190F21B7C0CB200E72BE5 /* Nota-LightOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-LightOblique.otf"; sourceTree = "<group>"; };
-		BC7190F31B7C0CB200E72BE5 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
-		BC7190F41B7C0CB200E72BE5 /* Nota-MediumOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-MediumOblique.otf"; sourceTree = "<group>"; };
-		BC7190F51B7C0CB200E72BE5 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
-		BC7190F61B7C0CB200E72BE5 /* Nota-NormalOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-NormalOblique.otf"; sourceTree = "<group>"; };
-		BC7190F71B7C0CB200E72BE5 /* Nota-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Thin.otf"; sourceTree = "<group>"; };
-		BC7190F81B7C0CB200E72BE5 /* Nota-ThinOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-ThinOblique.otf"; sourceTree = "<group>"; };
-		BC7190F91B7C0CB200E72BE5 /* Nota-Xbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Xbold.otf"; sourceTree = "<group>"; };
-		BC7190FA1B7C0CB200E72BE5 /* Nota-XboldOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-XboldOblique.otf"; sourceTree = "<group>"; };
-		BC7190FB1B7C0CB200E72BE5 /* Nota-XLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-XLight.otf"; sourceTree = "<group>"; };
-		BC7190FC1B7C0CB200E72BE5 /* Nota-XLightOblique.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-XLightOblique.otf"; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
@@ -690,7 +662,6 @@
 		1EDA44B31AA4CCC70082E08D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BC7190EE1B7C0C9900E72BE5 /* Fonts */,
 				1E408B761AA79A370057AC16 /* PrefixHeader.pch */,
 				1EDA44B41AA4CCC70082E08D /* Info.plist */,
 				1EDA44B51AA4CCC70082E08D /* main.m */,
@@ -930,27 +901,6 @@
 				E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		BC7190EE1B7C0C9900E72BE5 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				BC7190EF1B7C0CB200E72BE5 /* Nota-Bold.otf */,
-				BC7190F01B7C0CB200E72BE5 /* Nota-BoldOblique.otf */,
-				BC7190F11B7C0CB200E72BE5 /* Nota-Light.otf */,
-				BC7190F21B7C0CB200E72BE5 /* Nota-LightOblique.otf */,
-				BC7190F31B7C0CB200E72BE5 /* Nota-Medium.otf */,
-				BC7190F41B7C0CB200E72BE5 /* Nota-MediumOblique.otf */,
-				BC7190F51B7C0CB200E72BE5 /* Nota-Normal.otf */,
-				BC7190F61B7C0CB200E72BE5 /* Nota-NormalOblique.otf */,
-				BC7190F71B7C0CB200E72BE5 /* Nota-Thin.otf */,
-				BC7190F81B7C0CB200E72BE5 /* Nota-ThinOblique.otf */,
-				BC7190F91B7C0CB200E72BE5 /* Nota-Xbold.otf */,
-				BC7190FA1B7C0CB200E72BE5 /* Nota-XboldOblique.otf */,
-				BC7190FB1B7C0CB200E72BE5 /* Nota-XLight.otf */,
-				BC7190FC1B7C0CB200E72BE5 /* Nota-XLightOblique.otf */,
-			);
-			name = Fonts;
 			sourceTree = "<group>";
 		};
 		BE77E1E79885C4C61AC87E44 /* Pods */ = {
@@ -1295,20 +1245,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC7190FD1B7C0DC200E72BE5 /* Nota-Bold.otf in Resources */,
-				BC7190FE1B7C0DC200E72BE5 /* Nota-BoldOblique.otf in Resources */,
-				BC7190FF1B7C0DC200E72BE5 /* Nota-Light.otf in Resources */,
-				BC7191001B7C0DC200E72BE5 /* Nota-LightOblique.otf in Resources */,
-				BC7191011B7C0DC200E72BE5 /* Nota-Medium.otf in Resources */,
-				BC7191021B7C0DC200E72BE5 /* Nota-MediumOblique.otf in Resources */,
-				BC7191031B7C0DC200E72BE5 /* Nota-Normal.otf in Resources */,
-				BC7191041B7C0DC200E72BE5 /* Nota-NormalOblique.otf in Resources */,
-				BC7191051B7C0DC200E72BE5 /* Nota-Thin.otf in Resources */,
-				BC7191061B7C0DC200E72BE5 /* Nota-ThinOblique.otf in Resources */,
-				BC7191071B7C0DC200E72BE5 /* Nota-Xbold.otf in Resources */,
-				BC7191081B7C0DC200E72BE5 /* Nota-XboldOblique.otf in Resources */,
-				BC7191091B7C0DC200E72BE5 /* Nota-XLight.otf in Resources */,
-				BC71910A1B7C0DC200E72BE5 /* Nota-XLightOblique.otf in Resources */,
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */,

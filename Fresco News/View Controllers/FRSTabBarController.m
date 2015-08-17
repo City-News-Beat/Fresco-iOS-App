@@ -79,6 +79,20 @@
 
 - (void)setupTabBarAppearances
 {
+    if(IS_IPHONE_4S){
+        
+        NSMutableArray *tabbarViewControllers = [NSMutableArray arrayWithArray: [self viewControllers]];
+        
+        [tabbarViewControllers removeObjectAtIndex:4];
+        
+        [tabbarViewControllers removeObjectAtIndex:3];
+        
+        [tabbarViewControllers removeObjectAtIndex:2];
+        
+        [self setViewControllers: tabbarViewControllers];
+        
+    }
+
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
@@ -100,6 +114,7 @@
         }
         ++i;
     }
+    
 }
 
 #pragma mark - TabBarController Delegate
