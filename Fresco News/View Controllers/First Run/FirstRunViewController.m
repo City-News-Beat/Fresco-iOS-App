@@ -208,7 +208,6 @@ typedef enum : NSUInteger {
             
             if (user && [[FRSDataManager sharedManager] currentUserIsLoaded]) {
                 
-      
                 [self transferUser];
                 
             }

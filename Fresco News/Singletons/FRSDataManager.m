@@ -223,20 +223,25 @@
                 //User is saved
                 if (success){
                     
-                    // authenticate to the API
-                    [self validateAPIToken:^(BOOL success, NSError *error) {
+                    //Set a new API token with our Parse session
+                    [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
                         
-                        if (success)
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
-                        else
+                        if (responseObject != nil){
+                            
+                            if(responseBlock) responseBlock(user, nil);
+
+                        }
+                        else{
+                            
+                            if(responseBlock) responseBlock(nil, error);
+                            
                             NSLog(@"Could not authenticate to the API");
+                        }
                         
                     }];
-                    
-                    if(responseBlock) responseBlock(user, nil);
-                    
+
                 }
-                //User is not saved (delete user)
+                //User is not saved, delete user from parse
                 else {
                     
                     [[PFUser currentUser] deleteInBackground];
@@ -288,23 +293,6 @@
     }];
 }
 
-/*
- ** Addresses the possibility that one installation (device) can have several users on it
- */
-
-- (void)tieUserToInstallation
-{
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    PFUser *user = [PFUser currentUser];
-    
-    if (user && currentInstallation.deviceToken) {
-        PFUser *installationOwner = [currentInstallation objectForKey:@"owner"];
-        if (![installationOwner.objectId isEqualToString:user.objectId]) {
-            [currentInstallation setObject:user forKey:@"owner"];
-            [currentInstallation saveInBackground];
-        }
-    }
-}
 
 /*
 ** Master Logout
@@ -380,7 +368,7 @@
     //Existing user
     else if (user) {
         [self refreshUser:^(BOOL succeeded, NSError *error) {
-            if(!error)
+            if(succeeded)
                 block(user, error);
             else
                 block(nil, error);
@@ -401,7 +389,6 @@
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)resultBlock
 {
     assert(resultBlock);
-    
     
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile" ] block:^(PFUser *user, NSError *error) {
     
@@ -433,6 +420,7 @@
 {
     self.loggingIn = YES;
     
+    //Check if we have a Parse User set
     if([PFUser currentUser] != nil){
     
         //Check to make sure we already have the fresco user id in the PFUser, if not, delete the user from parse as it's invalid
@@ -450,7 +438,7 @@
             
             [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
             
-                //Successful refresh
+                //Successful refresh and log in
                 if(success){
                     
                     [[FRSLocationManager sharedManager] setupLocationMonitoring];
@@ -458,12 +446,9 @@
                     block(YES, nil);
                     
                 }
-                else{
-                
+                else
                     block(NO, nil);
-                
-                }
-                
+
                 _loggingIn = NO;
             
             }];
@@ -479,57 +464,46 @@
 - (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock
 {
     
-    [self getFrescoUser:frescoUserId withResponseBlock:^(FRSUser *responseUser, NSError *error) {
+    __block FRSDataManager *dM = self;
+    
+    [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(FRSUser *user, NSError *error) {
         
-        if (!error) {
+        if(!error){
             
-            //Check if the user's user id is not set
-            if (!responseUser.userID) {
+            if(user.userID != nil){
                 
-                //Delete user from Parse if it doesn't exist in the DB
-                [[PFUser currentUser] deleteInBackground];
+                [dM tieUserToInstallation];
                 
-                error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantGetUser userInfo:@{@"error" : @"Can't find the user"}];
+                dM.currentUser = user;
                 
-                if(responseBlock) responseBlock(NO, nil);
+                //Cache the user fields
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.first forKey:@"firstname"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:@"lastname"];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:@"avatar"];
+
+                //Send notif to app
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
+                
+                responseBlock(YES, nil);
                 
             }
-            //User is valid, continue to set
             else{
-
-                // this supports notifications, not login state
-                [self tieUserToInstallation];
                 
-                self.currentUser = responseUser;
+                responseBlock(NO, nil);
+            
+                dM.frescoAPIToken = nil;
                 
-                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
-                
-                // authenticate to the API
-                [self validateAPIToken:^(BOOL success, NSError *error) {
-                    
-                    if (success){
-                        responseBlock(YES, error);
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
-                    }
-                    else{
-                        responseBlock(NO, error);
-                        NSLog(@"Could not authenticate to the API");
-                    }
-                    
-                }];
+                NSLog(@"Could not connect retrieve user");
+            
             }
         }
-        else {
-            
-            self.frescoAPIToken = nil;
+        else{
             
             responseBlock(NO, error);
             
-            NSLog(@"Error getting fresco user %@", error);
+            NSLog(@"Could not connect to the API");
             
         }
         
@@ -564,90 +538,12 @@
     }];
 }
 
-/*
-** Check and validate existing token, otherwise grab a new one
-*/
-
-- (void)validateAPIToken:(FRSAPISuccessBlock)successBlock {
-    
-    if(self.tokenValidatedForSession){
-        successBlock(YES, nil);
-        return;
-    }
-    
-    //Check cache first and short circuit if it exists
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
-    
-    if ([token length]) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-        [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
-        
-        //Make sure token is still valid
-        [self GET:@"user/me" parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            
-            //If token is valid
-            if([responseObject valueForKeyPath:@"data"]){
-                
-                self.frescoAPIToken = token;
-                
-                successBlock(YES, nil);
-                
-                self.tokenValidatedForSession = YES;
-                
-            }
-            //If token is invalid, get a new one
-            else{
-                
-                [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
-                    
-                    if(!error){
-                        
-                        successBlock(YES, nil);
-                        
-                        _tokenValidatedForSession = YES;
-                        
-                    }
-                    
-                }];
-                
-            }
-            
-        }failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-            [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
-                
-                if(!error)
-                    successBlock(YES, nil);
-                else
-                    successBlock(NO, error);
-
-            }];
-            
-        }];
-        
-    }
-    //If token is not set, get a new one
-    else{
-        
-        [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(BOOL success, NSError *error) {
-            
-            if(success)
-                successBlock(YES, nil);
-        }];
-        
-    }
-    
-}
 
 /*
 ** Request Auth Token from API with Session String
 */
 
-- (void)setNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPISuccessBlock)responseBlock{
+- (void)setNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPIResponseBlock)responseBlock{
     
     NSDictionary *params = @{@"parseSession" : sessionToken};
     
@@ -656,22 +552,33 @@
     [self POST:@"auth/loginparse" parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-
+        
         NSString *token = [responseObject valueForKeyPath:@"data.token"];
         
-        if (token) {
+        if(token != nil){
             
             //This token will be used to authenticate data calls that require it
             self.frescoAPIToken = token;
             
+            //Set manager var to know that the token is validated
+            self.tokenValidatedForSession = YES;
+            
             // cache the token
             [[NSUserDefaults standardUserDefaults] setObject:self.frescoAPIToken forKey:kFrescoTokenKey];
             
-            if(responseBlock) responseBlock(YES, nil);
+            FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:[responseObject valueForKeyPath:@"data.user"] error:NULL];
+            
+            responseBlock(user, nil);
             
         }
         else{
-            if(responseBlock) responseBlock(NO, nil);
+            
+            NSError *error;
+            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                        code:ErrorSignupCantGetUser
+                                    userInfo:@{@"error" : @"Couldn't retrieve session"}];
+            
+            responseBlock(nil, error);
         }
         
 
@@ -679,7 +586,28 @@
     
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
+        responseBlock(nil, error);
+        
     }];
+}
+
+/*
+** Addresses the possibility that one installation (device) can have several users on it
+*/
+
+- (void)tieUserToInstallation
+{
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    PFUser *user = [PFUser currentUser];
+    
+    if (user && currentInstallation.deviceToken) {
+        PFUser *installationOwner = [currentInstallation objectForKey:@"owner"];
+        if (![installationOwner.objectId isEqualToString:user.objectId]) {
+            [currentInstallation setObject:user forKey:@"owner"];
+            [currentInstallation saveInBackground];
+        }
+    }
 }
 
 /*
@@ -712,73 +640,64 @@
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
         
         [params addEntriesFromDictionary:inputParams];
-    
-        [self validateAPIToken:^(BOOL success, NSError *error) {
+        
+        if(!self.tokenValidatedForSession) return;
             
-            // on success we call ourselves again
-            if (success) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            
+            if (imageData != nil) {
+                [params removeObjectForKey:@"avatar"];
+                [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+            }
+            
+        }success:^(NSURLSessionDataTask *task, id responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            if(responseObject[@"data"] == nil)
+                responseBlock(NO, nil);
+            else{
                 
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-
-                [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
                 
-                    if (imageData != nil) {
-                        [params removeObjectForKey:@"avatar"];
-                        [formData appendPartWithFileData:imageData name:@"avatar" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
-                    }
+                NSError *error;
                 
-                }success:^(NSURLSessionDataTask *task, id responseObject) {
+                if ([user isKindOfClass:[FRSUser class]]) {
                     
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                    self.currentUser = user;
                     
-                    if(responseObject[@"data"] == nil)
-                        responseBlock(NO, nil);
-                    else{
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
                     
-                        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-                        
-                        NSError *error;
-                        
-                        if ([user isKindOfClass:[FRSUser class]]) {
-                            
-                            self.currentUser = user;
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
-                            
-                            if (responseBlock) responseBlock(YES, error);
-                            
-                        }
-                        else {
-                            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
-                                                        code:ErrorSignupCantGetUser
-                                                    userInfo:@{@"error" : @"Couldn't get user"}];
-                            user = nil;
-                            
-                            if (responseBlock) responseBlock(NO, error);
-                        }
-  
-                    }
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
                     
-                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
                     
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                    if (responseBlock) responseBlock(YES, error);
                     
-                    NSLog(@"Error updating user %@", error);
+                }
+                else {
+                    error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                                                code:ErrorSignupCantGetUser
+                                            userInfo:@{@"error" : @"Couldn't get user"}];
+                    user = nil;
                     
                     if (responseBlock) responseBlock(NO, error);
-                    
-                }];
+                }
                 
             }
-            else {
-                NSLog(@"Could not authenticate to the API");
-            }
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            NSLog(@"Error updating user %@", error);
+            
+            if (responseBlock) responseBlock(NO, error);
             
         }];
+
     }
     else{
     
@@ -789,7 +708,7 @@
 
 - (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock{
 
-    //Make sure we have a user signe din
+    //Make sure we have a user signed in
     if(self.currentUser.userID){
         
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
