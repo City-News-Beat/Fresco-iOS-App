@@ -185,11 +185,11 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 //    //Check if assignment, then check if the assignment has expired
     if([notification.type isEqualToString:@"assignment"]) {
         
-        CGFloat button1Width = 146.0;
+        CGFloat button1Width = 147.5;
         NSString *button1Title = VIEW_ASSIGNMENT;
         
         if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S) {
-            button1Width = 119.5;
+            button1Width = 120.72;
             button1Title = VIEW;
         }
         

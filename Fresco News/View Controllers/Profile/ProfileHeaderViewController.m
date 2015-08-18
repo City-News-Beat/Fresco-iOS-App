@@ -60,9 +60,19 @@
 
 -(void)updateUserInfo{
     
-    [self.profileImageView
-     setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:@"avatar"]]
-     placeholderImage:[UIImage imageNamed:@"avatar"]];
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"] != nil){
+        
+        [self.profileImageView
+         setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
+         placeholderImage:[UIImage imageNamed:@"avatar"]];
+    
+    }
+    else{
+        
+        [self.profileImageView setImage:[UIImage imageNamed:@"user"]];
+        
+    }
+
 
     //Set the display name
     self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  [[NSUserDefaults standardUserDefaults] stringForKey:@"firstname"]  ,  [[NSUserDefaults standardUserDefaults] stringForKey:@"lastname"]];
