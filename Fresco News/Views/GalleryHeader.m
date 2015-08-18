@@ -29,18 +29,17 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 {
     FRSPost *post = (FRSPost *)[gallery.posts firstObject];
     
-    self.labelTimeAndPlace.text = [MTLModel relativeDateStringFromDate:gallery.createTime];
-    
     if([post.address isKindOfClass:[NSString class]]){
     
-        if ([post.address length] > 0) {
-            self.labelTimeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.labelTimeAndPlace.text];
-            [self.labelTimeAndPlace sizeToFit];
-        }
+        self.labelTimeAndPlace.text =  post.address;
+        [self.labelTimeAndPlace sizeToFit];
         
     }
+    else
+        self.labelTimeAndPlace.text = @"No Location";
     
-    self.labelByLine.text = post.byline;
+    self.labelByLine.text =  [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:gallery.createTime]];
+
     
     self.backgroundColor = [UIColor whiteColor];
 }

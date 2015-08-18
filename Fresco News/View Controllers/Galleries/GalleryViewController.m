@@ -135,12 +135,14 @@ static CGFloat kCellHeight = 44.0f;
     
     FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
     
-    self.byline.text = post.byline;
+    if([post.address isKindOfClass:[NSString class]]){
     
-    self.timeAndPlace.text = [MTLModel relativeDateStringFromDate:self.gallery.createTime];
+        self.timeAndPlace.text =  post.address;
+        [self.timeAndPlace sizeToFit];
+        
+    }
     
-    if ([post.address length] > 0)
-        self.timeAndPlace.text = [NSString stringWithFormat:@"%@, %@", post.address, self.timeAndPlace.text];
+    self.byline.text = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
 }
 
 /*
