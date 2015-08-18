@@ -42,8 +42,9 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet UILabel *pressBelowLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *invertedTriangleImageView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *socialTipView;
+
 
 // Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
@@ -71,6 +72,11 @@
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
+    [self.socialTipView setUserInteractionEnabled:YES];
+    
+    UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    
+    [self.socialTipView addGestureRecognizer:singleTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -91,16 +97,18 @@
         self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
 
         BOOL hideCrosspostingHelp = [defaults boolForKey:@"galleryPreviouslyPosted"];
-        self.pressBelowLabel.hidden = hideCrosspostingHelp;
-        self.invertedTriangleImageView.hidden = hideCrosspostingHelp;
+        self.socialTipView.hidden = hideCrosspostingHelp;
     }
     else {
         self.twitterButton.hidden = YES;
         self.facebookButton.hidden = YES;
         self.twitterHeightConstraint.constant = 0;
-        self.pressBelowLabel.hidden = YES;
-        self.invertedTriangleImageView.hidden = YES;
+
+        self.socialTipView.hidden = YES;
     }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
+    
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -173,6 +181,8 @@
 
 - (IBAction)twitterButtonTapped:(CrossPostButton *)button
 {
+    [self updateSocialTipView];
+    
     if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
@@ -217,6 +227,7 @@
 
 - (IBAction)facebookButtonTapped:(CrossPostButton *)button
 {
+    [self updateSocialTipView];
     
     if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         
@@ -280,8 +291,8 @@
 }
 
 
-- (void)crossPostToTwitter:(NSString *)string
-{
+- (void)crossPostToTwitter:(NSString *)string {
+    
     if (!self.twitterButton.selected) {
         return;
     }
@@ -303,6 +314,20 @@
             NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
     }];
+}
+
+- (void)updateSocialTipView {
+ 
+    if (self.socialTipView.hidden == NO) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.socialTipView.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            
+          self.socialTipView.hidden = YES;
+        
+        }];
+    }
 }
 
 - (void)crossPostToFacebook:(NSString *)string
@@ -408,14 +433,19 @@
 
 - (void)submitGalleryPost:(id)sender
 {
+    [self updateSocialTipView];
     
     //First check if the caption is valid
     if([self.captionTextView.text isEqualToString:WHATS_HAPPENING] || [self.captionTextView.text  isEqual: @""]){
-    
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:@"Error"
-                                     message:@"Please enter a caption for your gallery!" action:nil]
-                           animated:YES completion:nil];
+        
+        if (![self.captionTextView isFirstResponder]) {
+            CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
+            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+            animation.duration = 0.8;
+            animation.values = @[@(-8), @(8), @(-6), @(6), @(-4), @(4), @(-2), @(2), @(0)];
+            [self.captionTextView.layer addAnimation:animation forKey:@"shake"];
+        }
+      
         
         return;
         
@@ -527,8 +557,6 @@
             
             [self crossPostToFacebook:crossPostString];
 
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
-            
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"runUpdateOnProfile"];
             
             [VariableStore resetDraftGalleryPost];
@@ -572,6 +600,8 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
+    [self updateSocialTipView];
+    
     if ([textView.text isEqualToString:WHATS_HAPPENING])
         textView.text = @"";
     

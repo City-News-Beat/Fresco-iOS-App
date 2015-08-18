@@ -299,11 +299,15 @@
             });
         }];
         
-        [self presentViewController:viewController animated:NO completion:nil];
+        [self presentViewController:viewController animated:NO completion:^{
         
-        [CATransaction commit];
+            
+            [CATransaction commit];
+            
+            self.view.alpha = 1;
         
-        self.view.alpha = 1;
+        }];
+        
     
     }];
     
