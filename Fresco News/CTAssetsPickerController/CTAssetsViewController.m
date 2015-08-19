@@ -108,21 +108,11 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     if (self.assets.count) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
-}
 
-- (void)viewDidAppear:(BOOL)animated{
-    
-    CGFloat toolbarAlpha = 0.7f;
-    
     if ([self.picker.selectedAssets count] > 0) {
-        toolbarAlpha = 1.0f;
+        self.navigationController.toolbar.barTintColor = [UIColor greenToolbarColor];
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.navigationController.toolbar setAlpha:toolbarAlpha];
-    });
-
-    [super viewDidAppear:animated];
 }
 
 - (void)dealloc
@@ -319,7 +309,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [selectedAssetURLs addObject:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]];
     }
     
-    self.navigationController.toolbar.alpha = ([selectedAssets count] == 0) ? 0.7 : 1.0;
+    self.navigationController.toolbar.barTintColor = ([selectedAssets count] == 0) ? [UIColor disabledToolbarColor] : [UIColor greenToolbarColor];
 
     [[NSUserDefaults standardUserDefaults] setObject:selectedAssetURLs forKey:@"selectedAssets"];
 }
