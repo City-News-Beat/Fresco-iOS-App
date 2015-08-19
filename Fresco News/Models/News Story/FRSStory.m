@@ -24,7 +24,8 @@
              @"galleryIds" : @"galleries",
              @"articleIds" : @"articles",
              @"thumbnails" : @"thumbnails",
-             @"date" : @"time_created"
+             @"createdTime" : @"time_created",
+             @"editedTime" : @"time_edited"
              };
 }
 
@@ -32,6 +33,18 @@
 {
     return [MTLModel sourcesJSONTransformer];
 }
+
+
++ (NSValueTransformer *)createdTimeJSONTransformer
+{
+    return [MTLModel dateJSONTransformer];
+}
+
++ (NSValueTransformer *)editedTimeJSONTransformer
+{
+    return [MTLModel dateJSONTransformer];
+}
+
 
 - (NSString *)caption
 {

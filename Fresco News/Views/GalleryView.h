@@ -36,6 +36,12 @@
 @property (nonatomic, strong) AVPlayerLayer *sharedLayer;
 
 
+/*
+** Shared Player Item of Controller
+*/
+
+@property (nonatomic, strong) AVPlayerItem *sharedItem;
+
 - (void)setAspectRatio;
 
 

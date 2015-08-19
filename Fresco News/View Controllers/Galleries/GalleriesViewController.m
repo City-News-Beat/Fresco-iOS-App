@@ -152,6 +152,11 @@
         if(cell.galleryView.sharedPlayer != nil){
             [cell.galleryView.sharedLayer removeFromSuperlayer];
             [cell.galleryView.sharedPlayer pause];
+            @try{
+                [cell.galleryView.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+            }@catch(id anException){
+                //do nothing, obviously it wasn't attached because an exception was thrown
+            }
             cell.galleryView.sharedPlayer = nil;
         }
     }

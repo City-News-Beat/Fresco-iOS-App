@@ -64,22 +64,26 @@
         [self.frsRootViewController setRootViewControllerToOnboard];
     }
     
-    //Refresh the existing user, if exists, then run location monitoring
-    [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
-        
-        if (succeeded) {
+    if([FRSDataManager sharedManager].reachabilityManager.isReachable){
+    
+        //Refresh the existing user, if exists, then run location monitoring
+        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
             
-            NSLog(@"successful login on launch");
+            if (succeeded) {
+                
+                NSLog(@"successful login on launch");
 
-        }
-        else {
+            }
+            else {
+                
+                [[FRSDataManager sharedManager] logout];
+                
+                if(error) NSLog(@"Error on login %@", error);
+            }
             
-            [[FRSDataManager sharedManager] logout];
+        }];
             
-            if(error) NSLog(@"Error on login %@", error);
-        }
-        
-    }];
+    }
     
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
