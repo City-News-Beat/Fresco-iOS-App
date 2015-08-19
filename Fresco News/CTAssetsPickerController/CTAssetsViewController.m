@@ -175,7 +175,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
             // Only show assets less than six hours old (see -shouldShowAsset:)
 #if !(TARGET_IPHONE_SIMULATOR)
             NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-            if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
+            if ([date timeIntervalSinceDate:[NSDate date]] < MAX_ASSET_AGE) {
                 *stop = YES;
             }
 #endif
@@ -514,11 +514,6 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)createGalleryPost:(id)sender
 {
     if (!self.picker.selectedAssets.count) {
-        
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:ERROR
-                                     message:@"Please select at least one photo or video" action:nil]
-                           animated:YES completion:nil];
         
         return;
     }

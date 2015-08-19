@@ -56,6 +56,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (BOOL)connected;
 
+- (NSString *)endpointForPath:(NSString *)endpoint;
+
 #pragma mark - Users
 
 - (void)refreshUser:(PFBooleanResultBlock)block;
@@ -77,6 +79,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)resetDraftGalleryPost;
 
 #pragma mark - Stories
 

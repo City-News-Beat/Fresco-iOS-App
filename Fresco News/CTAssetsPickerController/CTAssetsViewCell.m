@@ -85,8 +85,8 @@ static UIColor *disabledVideoTitleColor;
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         self.title = [df stringFromTimeInterval:[[asset valueForProperty:ALAssetPropertyDuration] doubleValue]];
 
-        if ([[asset valueForProperty:ALAssetPropertyDuration] doubleValue] > [VariableStore sharedInstance].maximumVideoLength) {
-            self.title = [self.title stringByAppendingFormat:@" > 0:%@", @([VariableStore sharedInstance].maximumVideoLength)];
+        if ([[asset valueForProperty:ALAssetPropertyDuration] doubleValue] > MAX_VIDEO_LENGTH) {
+            self.title = [self.title stringByAppendingFormat:@" > 0:%@", @(MAX_VIDEO_LENGTH)];
             self.videoExceedsMaximumLength = YES;
         }
     }

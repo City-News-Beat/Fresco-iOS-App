@@ -238,7 +238,7 @@
                 self.textfieldLastName.text = self.lastName;
 
                 // grab the image url
-                NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", [VariableStore sharedInstance].cdnFacebookBaseURL, [result valueForKeyPath:@"id"]];
+                NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", CDN_FACEBOOK_URL, [result valueForKeyPath:@"id"]];
                 if (urlString) {
                     self.socialImageURL = [NSURL URLWithString:urlString];
                     [self.addPhotoImageView setImageWithURL:self.socialImageURL];

@@ -147,13 +147,13 @@
     
 //    //Taplytics Setup
 //    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
-//    
-    [Parse setApplicationId:[VariableStore sharedInstance].parseAppId clientKey:[VariableStore sharedInstance].parseClientKey];
+//
+    [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
-    [PFTwitterUtils initializeWithConsumerKey:[VariableStore sharedInstance].twitterConsumerKey
-                               consumerSecret:[VariableStore sharedInstance].twitterConsumerSecret];
+    [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
+                               consumerSecret:TWITTER_CONSUMER_SECRET];
 }
 
 - (void)registerForPushNotifications

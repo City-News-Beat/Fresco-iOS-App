@@ -8,8 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "UIColor+Additions.h"
-#import "VariableStore.h"
+//#import "VariableStore.h"
 #import "FRSAlertViewManager.h"
+
+enum FRSErrorCodes {
+    ErrorSignupDuplicateEmail = 101,
+    ErrorSignupCantCreateUser,
+    ErrorSignupCantSaveUser,
+    ErrorSignupCantGetUser,
+    ErrorSignupNoUserOnServer,
+    ErrorSignupNoUserFromParseUser,
+} frsErrorCodes;
 
 #define NOTIFICATION_API_KEY_AVAILABLE      @"NotificationAPIKeyAvailable"
 #define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
@@ -24,30 +33,22 @@
 #define KEYS_PLIST_PATH                     [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"]
 #define KEYS_DICTIONARY                     [NSDictionary dictionaryWithContentsOfFile:KEYS_PLIST_PATH]
 
-#pragma mark - Production - Parse
 
-#define PRODUCTION_PARSE_APP_ID             [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-#define PRODUCTION_PARSE_CLIENT_KEY         [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+#pragma mark - Base URL/API & Parse
 
-
-#pragma mark - Staging - Parse
-
-#define STAGING_PARSE_APP_ID                [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-#define STAGING_PARSE_CLIENT_KEY            [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-
-
-#pragma mark - Production - Base URL/API
-
-#define PRODUCTION_BASE_URL                 @"https://fresconews.com"
-#define PRODUCTION_BASE_API                 @"https://api.fresconews.com/v1/"
 #define BASE_PATH                           @""
 
-
-#pragma mark - Staging - Base URL/API
-
-
-#define STAGING_BASE_URL                    @"https://alpha.fresconews.com"
-#define STAGING_BASE_API                    @"http://staging.fresconews.com/v1/"
+//#ifdef DEBUG
+//    #define BASE_URL                        @"https://alpha.fresconews.com"
+//    #define BASE_API                        @"http://staging.fresconews.com/v1/"
+//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+//#else
+    #define BASE_URL                        @"https://fresconews.com"
+    #define BASE_API                        @"https://api.fresconews.com/v1/"
+    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
+    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+//#endif
 
 
 #pragma mark - Twitter Auth

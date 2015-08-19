@@ -151,7 +151,7 @@ static CGFloat kCellHeight = 44.0f;
 
 - (void)shareGallery:(id)sender
 {
-    NSString *string = [NSString stringWithFormat:@"%@/gallery/%@", PRODUCTION_BASE_URL, self.gallery.galleryID];
+    NSString *string = [NSString stringWithFormat:@"%@/gallery/%@", BASE_URL, self.gallery.galleryID];
     NSURL *URL = [NSURL URLWithString:string];
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]

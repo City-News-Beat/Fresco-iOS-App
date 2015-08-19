@@ -16,50 +16,48 @@
 
 //FOUNDATION_EXPORT NSString * const kNotificationImageSet;
 
-enum FRSErrorCodes {
-    ErrorSignupDuplicateEmail = 101,
-    ErrorSignupCantCreateUser,
-    ErrorSignupCantSaveUser,
-    ErrorSignupCantGetUser,
-    ErrorSignupNoUserOnServer,
-    ErrorSignupNoUserFromParseUser,
-} frsErrorCodes;
+//enum FRSErrorCodes {
+//    ErrorSignupDuplicateEmail = 101,
+//    ErrorSignupCantCreateUser,
+//    ErrorSignupCantSaveUser,
+//    ErrorSignupCantGetUser,
+//    ErrorSignupNoUserOnServer,
+//    ErrorSignupNoUserFromParseUser,
+//} frsErrorCodes;
 
 @interface VariableStore : NSObject
-
-+ (VariableStore *)sharedInstance;
-
-+ (NSString *)endpointForPath:(NSString *)endpoint;
-
-+ (void)resetDraftGalleryPost;
-
-// errors
-@property NSString *errorDomain;
-
-/*
-** Colors
-*/
-
-@property UIColor *brandDarkColor;
-@property UIColor *backgroundColor;
-
-/*
-** API
-*/
-
-@property NSString *baseUrl;
-@property NSString *baseAPI;
-@property NSString *basePath;
-@property NSString *cdnBaseURL;
-@property NSString *cdnFacebookBaseURL;
-@property NSString *parseAppId;
-@property NSString *parseClientKey;
-@property NSString *twitterConsumerKey;
-@property NSString *twitterConsumerSecret;
-
-@property CGFloat maximumVideoLength;
-@property NSInteger maximumAssetAge;
-@property NSInteger locationUpdateInterval;
+//
+//+ (VariableStore *)sharedInstance;
+//
+//
+//
+//// errors
+//@property NSString *errorDomain;
+//
+///*
+//** Colors
+//*/
+//
+//@property UIColor *brandDarkColor;
+//@property UIColor *backgroundColor;
+//
+///*
+//** API
+//*/
+//
+//@property NSString *baseUrl;
+//@property NSString *baseAPI;
+//@property NSString *basePath;
+//@property NSString *cdnBaseURL;
+//@property NSString *cdnFacebookBaseURL;
+//@property NSString *parseAppId;
+//@property NSString *parseClientKey;
+//@property NSString *twitterConsumerKey;
+//@property NSString *twitterConsumerSecret;
+//
+//@property CGFloat maximumVideoLength;
+//@property NSInteger maximumAssetAge;
+//@property NSInteger locationUpdateInterval;
 
 //@property NSString * const kNotificationAPIKeyAvailable;
 

@@ -36,7 +36,7 @@
         sizeString = [NSString stringWithFormat:@"%@h_%d", sizeString, (int)size.height];
     }
     
-    NSString *fullURL = [NSString stringWithFormat:@"%@/%@/%@", [VariableStore sharedInstance].cdnBaseURL, sizeString, [[self smallImageUrl] absoluteString]];
+    NSString *fullURL = [NSString stringWithFormat:@"%@/%@/%@", CDN_BASE_URL, sizeString, [[self smallImageUrl] absoluteString]];
     
     return [NSURL URLWithString:fullURL];
     

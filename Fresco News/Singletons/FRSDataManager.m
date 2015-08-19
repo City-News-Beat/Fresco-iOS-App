@@ -54,11 +54,12 @@
     return configuration;
 }
 
+
 #pragma mark - object lifecycle
 
 - (id)init
 {
-    NSURL *baseURL = [NSURL URLWithString:[VariableStore sharedInstance].baseAPI];
+    NSURL *baseURL = [NSURL URLWithString:BASE_API];
 
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         
@@ -87,6 +88,14 @@
         
     }
     return self;
+}
+
+- (NSString *)endpointForPath:(NSString *)endpoint
+{
+    return [NSString stringWithFormat:@"%@%@%@",
+            [NSURL URLWithString:BASE_API],
+            [NSURL URLWithString:BASE_PATH],
+            endpoint];
 }
 
 #pragma mark - AFHTTPSessionManager overrides
@@ -188,7 +197,7 @@
         }];
     }
     else {
-        NSError *error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"User has no email"}];
+        NSError *error = [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"User has no email"}];
         block(NO, error);
     }
 }
@@ -246,7 +255,7 @@
                     
                     [[PFUser currentUser] deleteInBackground];
                     
-                    NSError *saveError = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                    NSError *saveError = [NSError errorWithDomain:ERROR_DOMAIN
                                                              code:ErrorSignupCantSaveUser
                                                          userInfo:@{@"error" : @"Couldn't save user"}];
                     
@@ -269,9 +278,9 @@
                 NSError *error;
                 
                 if ([[responseObject objectForKey:@"err"] isEqualToString:@"EMAIL_IN_USE"])
-                    error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"Email is already in use"}];
+                    error = [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"Email is already in use"}];
                 else
-                    error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"Couldn't create the user"}];
+                    error = [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"Couldn't create the user"}];
                 
                 if (responseBlock) responseBlock(nil, error);
                 
@@ -578,7 +587,7 @@
         else{
             
             NSError *error;
-            error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+            error = [NSError errorWithDomain:ERROR_DOMAIN
                                         code:ErrorSignupCantGetUser
                                     userInfo:@{@"error" : @"Couldn't retrieve session"}];
             
@@ -682,7 +691,7 @@
                     
                 }
                 else {
-                    error = [NSError errorWithDomain:[VariableStore sharedInstance].errorDomain
+                    error = [NSError errorWithDomain:ERROR_DOMAIN
                                                 code:ErrorSignupCantGetUser
                                             userInfo:@{@"error" : @"Couldn't get user"}];
                     user = nil;
@@ -762,7 +771,7 @@
 //        
 //        NSMutableURLRequest *request = [[[FRSDataManager sharedManager] requestSerializer]
 //                                        requestWithMethod:@"GET"
-//                                        URLString:[NSString stringWithFormat:@"%@%@", [VariableStore sharedInstance].baseAPI, path]
+//                                        URLString:[NSString stringWithFormat:@"%@%@", BASE_API, path]
 //                                        parameters:params error:nil];
 //        
 //        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
@@ -924,6 +933,14 @@
         
     }];
     
+}
+
+- (void)resetDraftGalleryPost
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:nil forKey:UD_CAPTION_STRING_IN_PROGRESS];
+    [defaults setObject:nil forKey:UD_DEFAULT_ASSIGNMENT_ID];
+    [defaults setObject:nil forKey:UD_SELECTED_ASSETS];
 }
 
 #pragma mark - Assignments

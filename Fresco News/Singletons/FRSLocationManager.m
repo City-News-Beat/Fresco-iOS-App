@@ -106,7 +106,7 @@
     //Set interval for location update every `locationUpdateInterval` seconds
     if (!self.intervalSet) {
           // NSLog(@"Starting timer...");
-        [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].locationUpdateInterval target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
         
         self.intervalSet = YES;
     

@@ -532,7 +532,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     // Configure animation
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = [[VariableStore sharedInstance] maximumVideoLength]; //Animate ove max vid length
+    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
     drawAnimation.repeatCount         = 1.0;  // Animate only once..
     
     // Animate from no part of the stroke being drawn to the entire stroke being drawn
@@ -742,7 +742,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self hideUIForCameraMode:CameraModeVideo];
 
         //Set up timer to disable video after maximumVideoLength seconds
-        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:[VariableStore sharedInstance].maximumVideoLength target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
         
         // Stops background audio
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
@@ -834,7 +834,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
-    [VariableStore resetDraftGalleryPost];
+//    [VariableStore resetDraftGalleryPost];
+    [[FRSDataManager sharedManager] resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
 
@@ -1031,7 +1032,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         // Suspenders
         NSDate *date = [asset valueForProperty:ALAssetPropertyDate];
-        if ([date timeIntervalSinceDate:[NSDate date]] < [VariableStore sharedInstance].maximumAssetAge) {
+        if ([date timeIntervalSinceDate:[NSDate date]] < MAX_ASSET_AGE) {
             return NO;
         }
 
@@ -1049,7 +1050,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
         NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-        return lround(duration) <= [VariableStore sharedInstance].maximumVideoLength;
+        return lround(duration) <= MAX_VIDEO_LENGTH;
     }
 
     return YES;
