@@ -41,6 +41,16 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     self.collectionPosts.delegate = self;
 }
 
+- (void)dealloc{
+    
+    @try{
+        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    }@catch(id anException){
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
+
+}
+
 - (void)setGallery:(FRSGallery *)gallery
 {
     [self setGallery:gallery isInList:NO];
@@ -176,13 +186,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         postCell.videoIndicatorView.alpha = 1.0f;
     }];
 
-    self.sharedPlayer = [AVPlayer playerWithPlayerItem:[AVPlayerItem playerItemWithURL:url]];
-    
-    @try{
-        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-    }@catch(id anException){
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
+    self.sharedPlayer = [AVPlayer playerWithURL:url];
+
     //Set up the AVPlayerItem
     [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
     
@@ -225,6 +230,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         //DISABLE THE UIACTIVITY INDICATOR HERE
         if (self.sharedPlayer.currentItem.status == AVPlayerStatusReadyToPlay) {
             
+            [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+            
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
@@ -237,8 +244,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                 [postCell.videoIndicatorView stopAnimating];
                 postCell.videoIndicatorView.hidden = YES;
                 
-                [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-            
             }];
         }
     }
@@ -468,6 +473,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         if([self sharedPlayer] != nil){
             
             //Stop the player
+            [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
             
             [self.sharedPlayer pause];
             

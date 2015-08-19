@@ -319,6 +319,9 @@
     
     [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
     
+    //Sync Defaults
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     //Send notifications to the rest of the app to update front-end elements
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
@@ -488,6 +491,8 @@
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:@"lastname"];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:@"avatar"];
+                
+                [[NSUserDefaults standardUserDefaults] synchronize];
 
                 //Send notif to app
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
@@ -627,7 +632,9 @@
 
 - (BOOL)isLoggedIn
 {
-    return [PFUser currentUser] != nil;
+    if([PFUser currentUser] != nil) return YES;
+    
+    return NO;
 }
 
 // this tests for completeness and should be more comprehensive
@@ -679,6 +686,9 @@
                     [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
                     
                     [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
+                    
+                    //Sync defaults
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                     
                     if (responseBlock) responseBlock(YES, error);
                     
@@ -822,33 +832,37 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{ @"id" : userId, @"offset" : offset ?: 0 };
+    if(userId != nil){
     
-    //If we are refreshing, removed the cached response for the request by setting the cache policy
-    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
-    
-    [self GET:@"user/galleries" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSDictionary *params = @{ @"id" : userId, @"offset" : offset ?: 0 };
         
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        //If we are refreshing, removed the cached response for the request by setting the cache policy
+        if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
         
-        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        [self GET:@"user/galleries" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+            }];
+            
+            if(responseBlock) responseBlock(galleries, nil);
+
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            if(responseBlock) responseBlock(nil, error);
+            
         }];
         
-        if(responseBlock) responseBlock(galleries, nil);
+        //Set the policy back to normal
+        self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+    
+    }
 
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-        if(responseBlock) responseBlock(nil, error);
-        
-    }];
-    
-    //Set the policy back to normal
-    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
-    
 }
 
 - (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock{
