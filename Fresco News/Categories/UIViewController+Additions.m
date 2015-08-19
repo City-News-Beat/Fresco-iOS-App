@@ -123,7 +123,10 @@
                         }
                         
                         [[NSUserDefaults standardUserDefaults]setInteger:badgeCount forKey:UD_NOTIFICATIONS_COUNT];
-                        NSLog(@"%ld", (long)badgeCount);
+                        
+                    }
+                    else{
+                        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
                     }
                 }
             }];

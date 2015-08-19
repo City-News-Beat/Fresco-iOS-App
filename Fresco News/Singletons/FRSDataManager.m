@@ -309,8 +309,6 @@
     
     self.tokenValidatedForSession = false;
     
-    
-    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
@@ -318,6 +316,10 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"avatar"];
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
+    
+    [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
+    
+    //Send notifications to the rest of the app to update front-end elements
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
     
@@ -750,8 +752,7 @@
     NSDictionary *params = @{
                              @"limit" :@"8",
                              @"notags" : @"true",
-                             @"offset" : offset ?: [NSNumber numberWithInteger:0],
-                             @"min" : @"6"
+                             @"offset" : offset ?: [NSNumber numberWithInteger:0]
                              };
     
     //If we are refreshing, removed the cached response for the request by setting the cache policy
