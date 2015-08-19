@@ -153,6 +153,7 @@
             [cell.galleryView.sharedLayer removeFromSuperlayer];
             [cell.galleryView.sharedPlayer pause];
             cell.galleryView.sharedPlayer = nil;
+            [cell.galleryView.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
         }
     }
     

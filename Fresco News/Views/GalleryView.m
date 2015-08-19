@@ -175,11 +175,16 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     [UIView animateWithDuration:1.0 animations:^{
         postCell.videoIndicatorView.alpha = 1.0f;
     }];
+
+    self.sharedPlayer = [AVPlayer playerWithPlayerItem:[AVPlayerItem playerItemWithURL:url]];
     
-    //AVAsset needed to get the duration
-    AVAsset *videoAsset = [AVAsset assetWithURL:url];
-    
-    self.sharedPlayer = [AVPlayer playerWithPlayerItem:[AVPlayerItem playerItemWithAsset:videoAsset]];
+    @try{
+        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    }@catch(id anException){
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
+    //Set up the AVPlayerItem
+    [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
     
     self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
     
@@ -204,19 +209,39 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:[self.sharedPlayer currentItem]];
     
-    if (self.sharedPlayer.rate > 0 && !self.sharedPlayer.error) {
+    self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
+
+}
+
+/*
+** Notification listener for status of AVPlayerItem
+*/
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    //Check if we have the right notif for the AVPlayer
+    if (object == self.sharedPlayer.currentItem && [keyPath isEqualToString:@"status"]) {
         
-        // player is playing
-        [UIView animateWithDuration:1.0 animations:^{
-            postCell.videoIndicatorView.alpha = 0.0f;
-        } completion:^(BOOL finished){
-            [postCell.videoIndicatorView stopAnimating];
-            postCell.videoIndicatorView.hidden = YES;
-        }];
-        
+        //DISABLE THE UIACTIVITY INDICATOR HERE
+        if (self.sharedPlayer.currentItem.status == AVPlayerStatusReadyToPlay) {
+            
+            //Get the collection view cell of the playing item
+            PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
+            
+            [UIView animateWithDuration:1.0 animations:^{
+            
+                postCell.videoIndicatorView.alpha = 0.0f;
+            
+            } completion:^(BOOL finished){
+            
+                [postCell.videoIndicatorView stopAnimating];
+                postCell.videoIndicatorView.hidden = YES;
+                
+                [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+            
+            }];
+        }
     }
-
-
 }
 
 /*
