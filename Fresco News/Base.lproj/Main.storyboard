@@ -674,6 +674,7 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                             </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="5lF-OT-bel" secondAttribute="bottom" id="G2D-s2-TfB"/>
                                                 <constraint firstItem="5lF-OT-bel" firstAttribute="top" secondItem="SA0-Ix-fnD" secondAttribute="top" id="QQl-xq-tUl"/>
@@ -2779,7 +2780,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="9782BA93-F962-4D99-A88A-ABEBBD4CFD7B" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="A9BB5DD7-1941-4853-A779-DFB151BE9903" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4204,7 +4205,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="9782BA93-F962-4D99-A88A-ABEBBD4CFD7B" width="29" height="29">
+        <image name="A9BB5DD7-1941-4853-A779-DFB151BE9903" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

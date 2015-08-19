@@ -36,7 +36,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         
     }
     else
-        self.labelTimeAndPlace.text = @"No Location";
+        self.labelTimeAndPlace.text = @"";
     
     self.labelByLine.text =  [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:gallery.createTime]];
 
