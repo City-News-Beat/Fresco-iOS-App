@@ -7,7 +7,6 @@
 //
 
 #import "FRSOnboardPageViewController.h"
-//#import "VariableStore.h"
 #import "FRSOnboardViewController.h"
 #import "FRSRootViewController.h"
 #import "FRSDataManager.h"

@@ -9,7 +9,6 @@
 @import AVFoundation;
 
 #import "FRSRootViewController.h"
-//#import "VariableStore.h"
 #import "FRSDataManager.h"
 #import "FRSTabBarController.h"
 #import "NotificationsViewController.h"

@@ -2,7 +2,6 @@
 #import "NotificationsViewController.h"
 #import "FRSDataManager.h"
 #import "FRSDataManager.h"
-//#import "VariableStore.h"
 #import <BTBadgeView.h>
 
 @implementation UIViewController (Additions)

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "UIColor+Additions.h"
-//#import "VariableStore.h"
 #import "FRSAlertViewManager.h"
 
 enum FRSErrorCodes {

@@ -834,7 +834,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)cancelAndReturnToPreviousTab:(BOOL)returnToPreviousTab
 {
-//    [VariableStore resetDraftGalleryPost];
     [[FRSDataManager sharedManager] resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;

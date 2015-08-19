@@ -455,7 +455,6 @@
 
     [self configureControlsForUpload:YES];
 
-//    NSString *urlString = [VariableStore endpointForPath:@"gallery/assemble"];
     NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -547,7 +546,6 @@
 
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"runUpdateOnProfile"];
             
-//            [VariableStore resetDraftGalleryPost];
             [[FRSDataManager sharedManager] resetDraftGalleryPost];
             [self returnToTabBar];
 
