@@ -301,11 +301,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == CapturingStillImageContext) {
-        BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
-
-        if (isCapturingStillImage) {
-            [self runStillImageCaptureAnimation];
-        }
+//        BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
+//
+//        if (isCapturingStillImage) {
+//            [self runStillImageCaptureAnimation];
+//        }
     }
     else if (context == RecordingContext) {
         //
@@ -339,6 +339,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if(self.inCorrentOrientation){
         
         if (self.photoButton.selected) {
+            
+            [self runStillImageCaptureAnimation];
             
             [self snapStillImage];
 
@@ -472,23 +474,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)runStillImageCaptureAnimation
 {
-    
-    //fade in
-    [UIView animateWithDuration:.1f animations:^{
-        
-        [self.previewView setAlpha:0.0f];
-        
-    } completion:^(BOOL finished) {
-        
-        //fade out
-        [UIView animateWithDuration:.1f animations:^{
-            
-            [self.previewView setAlpha:1.0f];
-            
-        } completion:nil];
-        
-    }];
-    
     NSMutableArray *images = [[NSMutableArray alloc] init];
     
     //24 is the number of frames in the animation
@@ -507,6 +492,25 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.apertureButton.imageView setAnimationRepeatCount:1];
     
     [self.apertureButton.imageView startAnimating];
+    
+    //fade in
+    [UIView animateWithDuration:.1f animations:^{
+        
+        [self.previewView setAlpha:0.0f];
+        
+    } completion:^(BOOL finished) {
+        
+        //fade out
+        [UIView animateWithDuration:.1f animations:^{
+            
+            [self.previewView setAlpha:1.0f];
+            
+        } completion:^(BOOL finished) {
+            [self setRecentPhotoViewHidden:YES];
+        }];
+        
+    }];
+    
     
 }
 
@@ -554,13 +558,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
         if (granted) {
             self.deviceAuthorized = YES;
-            self.pleaseRotateLabel.text = @"Please rotate your phone";
-            self.pleaseDisableLabel.text = @"Also, please disable orientation lock (if set)";
         }
         else {
             self.deviceAuthorized = NO;
-            self.pleaseRotateLabel.text = @"No permission to use the camera";
-            self.pleaseDisableLabel.text = @"Please change your privacy settings";
         }
     }];
 }
@@ -711,6 +711,37 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
+
+- (void)setRecentPhotoViewHidden:(BOOL)hidden{
+
+    if(hidden){
+        
+        self.doneButton.enabled = NO;
+        
+        self.activityIndicator.alpha = 0.0f;
+        [self.activityIndicator startAnimating];
+        
+        [UIView animateWithDuration:.5 animations:^{
+            self.doneLabel.alpha = 0.0f;
+            self.activityIndicator.alpha = 1.0f;
+        }];
+    
+    }
+    else{
+        
+        self.doneButton.enabled = YES;
+        
+        [UIView animateWithDuration:.5 animations:^{
+            self.doneLabel.alpha = 1.0f;
+            self.activityIndicator.alpha = 0.0f;
+        } completion:^(BOOL finished) {
+            [self.activityIndicator stopAnimating];
+        }];
+        
+    }
+
+}
+
 #pragma mark - Camera Functions
 
 - (void)toggleMovieRecording
@@ -724,12 +755,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         self.videoTimer = nil;
         
-        //Represent UI for video
+        //Present UI for video
         [self showUIForCameraMode:CameraModeVideo];
         
-        [self.activityIndicator startAnimating];
-        self.doneLabel.hidden = YES;
-        self.doneButton.enabled = NO;
+        //Update the recent photo view
+        [self setRecentPhotoViewHidden:YES];
     
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -818,14 +848,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 }
                 [metadata setObject:@(CGImagePropertyOrientation) forKeyedSubscript:(NSString *)kCGImagePropertyOrientation];
 
-                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage]
-                                                                    metadata:metadata
-                                                             completionBlock:^(NSURL *assetURL, NSError *error) {
-                                                                 [self.createdAssetURLs addObject:assetURL];
-                                                             }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateRecentPhotoView:image];
-                });
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
+                 completionBlock:^(NSURL *assetURL, NSError *error) {
+                     [self setRecentPhotoViewHidden:NO];
+                     [self updateRecentPhotoView:image];
+                     [self.createdAssetURLs addObject:assetURL];
+                 }];
             }
         }];
     });
@@ -879,9 +907,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
         
-        [self.activityIndicator stopAnimating];
-        self.doneLabel.hidden = NO;
-        self.doneButton.enabled = YES;
+        [self setRecentPhotoViewHidden:NO];
 
         if(assetURL != nil){
             [self.createdAssetURLs addObject:assetURL];

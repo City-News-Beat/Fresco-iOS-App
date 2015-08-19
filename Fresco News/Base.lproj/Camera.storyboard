@@ -232,7 +232,7 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX">
+                                            <activityIndicatorView hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="wlt-7O-mUX" userLabel="Activity Indicator">
                                                 <rect key="frame" x="-10" y="-10" width="20" height="20"/>
                                             </activityIndicatorView>
                                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H43-Px-pxG" userLabel="Aperture Button">
@@ -1001,13 +1001,13 @@
                                         <exclude reference="DUq-AH-QMm"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="MXH-pw-eFS"/>
                                         <exclude reference="4n5-8G-Q9f"/>
                                         <exclude reference="999-E2-mkD"/>
                                         <exclude reference="KQt-KK-wlZ"/>
                                         <exclude reference="UiG-oW-5C5"/>
                                         <exclude reference="ZyY-4k-xZJ"/>
                                         <exclude reference="trv-HJ-msd"/>
+                                        <exclude reference="MXH-pw-eFS"/>
                                         <exclude reference="1KP-Lb-rUI"/>
                                         <exclude reference="ylJ-pa-y0M"/>
                                         <exclude reference="Z5L-4V-bLr"/>
