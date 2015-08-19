@@ -119,22 +119,9 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-}
-
--(void)viewDidAppear:(BOOL)animated {
     
-    [super viewDidAppear:animated];
+    [self toggleToolbarAppearance];
     
-    CGFloat toolbarAlpha = 1.0;
-    UIColor *textViewColor = [UIColor darkGrayColor];
-    
-    if ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) {
-        toolbarAlpha = 0.7;
-        textViewColor = [UIColor lightGrayColor];
-    }
-    
-    self.navigationController.toolbar.alpha = toolbarAlpha;
-    [self.captionTextView setTextColor:textViewColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -626,19 +613,26 @@
     return NO;
 }
 
+- (void)toggleToolbarAppearance {
+    
+    UIColor *textViewColor = [UIColor darkGrayColor];
+    UIColor *toolbarColor = [UIColor greenToolbarColor];
+    
+    if ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) {
+        
+        toolbarColor = [UIColor disabledToolbarColor];
+        
+        textViewColor = [UIColor lightGrayColor];
+    }
+    self.navigationController.toolbar.barTintColor = toolbarColor;
+    
+    [self.captionTextView setTextColor:textViewColor];
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
 
-    CGFloat toolbarAlpha = 1.0;
-    UIColor *textViewColor = [UIColor darkGrayColor];
-    
-    if ([textView.text length] == 0 || [textView.text isEqualToString:WHATS_HAPPENING]) {
-        toolbarAlpha = 0.7;
-        textViewColor = [UIColor lightGrayColor];
-    }
-
-    self.navigationController.toolbar.alpha = toolbarAlpha;
-    [textView setTextColor:textViewColor];
+    [self toggleToolbarAppearance];
     
     [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }

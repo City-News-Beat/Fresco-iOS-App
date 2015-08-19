@@ -12,6 +12,8 @@
 
 + (UIColor *)greenToolbarColor;
 
++ (UIColor *)disabledToolbarColor;
+
 + (UIColor *)darkGoldBarButtonColor;
 
 + (UIColor *)frescoBlueColor;
