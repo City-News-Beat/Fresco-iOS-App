@@ -443,9 +443,6 @@
         
         if(!self.presentingViewController.presentingViewController){
         
-        }
-        else{
-        
             [self navigateToFirstRun];
         
         }
