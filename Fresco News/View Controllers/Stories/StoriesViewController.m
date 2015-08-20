@@ -334,7 +334,8 @@ static CGFloat const kInterImageGap = 1.0f;
     
     svc.story = story;
     
-    svc.selectedThumbnail = index;
+    if([[story.thumbnails objectAtIndex:index] isKindOfClass:[FRSPost class]])
+        svc.selectedGallery = ((FRSPost *)[story.thumbnails objectAtIndex:index]).galleryID;
     
     [self.navigationController pushViewController:svc animated:YES];
     
@@ -357,7 +358,7 @@ static CGFloat const kInterImageGap = 1.0f;
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
     
     for (FRSPost *post in story.thumbnails) {
-        if (post.image.height && post.image.width && post.image.URL) {
+        if (post.image.height && post.image.width && post.image.URL && post.galleryID) {
             [array addObject:post.image];
         }
         else {

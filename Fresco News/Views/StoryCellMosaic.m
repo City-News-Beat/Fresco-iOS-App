@@ -63,21 +63,18 @@ static CGFloat const kInterImageGap = 1.0f;
         CGFloat scale = kImageHeight / [image.height floatValue];
         CGFloat imageWidth = [image.width floatValue] * scale;
         
-        // make the image view
+        // make the image view frame
         frame = CGRectMake(x, y, imageWidth, kImageHeight);
         
         // lay the view down
-        StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:frame];
+        StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:CGRectMake(x, y, imageWidth, kImageHeight)];
         
         thumbnailView.contentMode = UIViewContentModeScaleAspectFill;
-
         // 3x is for retina displays
         [thumbnailView setImageWithURL:[image smallImageUrl]];
-
-        [self.contentView addSubview:thumbnailView];
-        
         thumbnailView.thumbSequence = i;
         
+        [self.contentView addSubview:thumbnailView];
         [self setupTapHandlingForThumbnail:thumbnailView];
         
         // calculate offsets for the next iteration

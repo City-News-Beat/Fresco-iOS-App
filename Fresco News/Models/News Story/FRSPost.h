@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) FRSImage *image;
 @property (nonatomic, copy, readonly) NSString *postID;
+@property (nonatomic, copy, readonly) NSString *galleryID;
 @property (nonatomic, copy, readonly) NSString *source;
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, strong) NSURL *imageUrl;

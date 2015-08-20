@@ -14,5 +14,7 @@
 
 @property (nonatomic, assign) NSInteger thumbSequence;
 
+@property (nonatomic, copy) NSString *galleryID;
+
 @end
 

@@ -20,7 +20,7 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 
-@property (nonatomic, assign) NSInteger selectedThumbnail;
+@property (nonatomic, assign) NSString *selectedGallery;
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
 
