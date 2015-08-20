@@ -51,10 +51,6 @@
 
 - (IBAction)actionDone:(id)sender
 {
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -66,7 +66,7 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4G-pC-xgT">
-                    <rect key="frame" x="150" y="189.5" width="300" height="33.5"/>
+                    <rect key="frame" x="150" y="199.5" width="300" height="33.5"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="300" id="ar1-rB-num"/>
                     </constraints>
@@ -75,7 +75,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="onboard1" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-VV-ZeP">
-                    <rect key="frame" x="80" y="273" width="440" height="186"/>
+                    <rect key="frame" x="80" y="283" width="440" height="186"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="186" id="R20-U3-6Ox"/>
                         <constraint firstAttribute="width" constant="440" id="vpT-Vu-boD"/>
@@ -88,7 +88,7 @@
                 <constraint firstItem="i6r-VV-ZeP" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" constant="80" id="6nr-02-t6U"/>
                 <constraint firstAttribute="trailing" secondItem="i6r-VV-ZeP" secondAttribute="trailing" constant="80" id="HeB-rW-v6D"/>
                 <constraint firstItem="5yh-Zw-0gh" firstAttribute="trailing" secondItem="HzQ-GT-Lxg" secondAttribute="trailing" id="JPP-37-lb4"/>
-                <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="5" id="JsO-nf-YWc"/>
+                <constraint firstItem="R4G-pC-xgT" firstAttribute="top" secondItem="Ium-KU-UjR" secondAttribute="bottom" constant="15" id="JsO-nf-YWc"/>
                 <constraint firstAttribute="centerX" secondItem="ZD8-3C-M9w" secondAttribute="centerX" id="KjO-jH-IgZ"/>
                 <constraint firstItem="Ium-KU-UjR" firstAttribute="top" secondItem="ZD8-3C-M9w" secondAttribute="bottom" constant="40" id="Rea-Mj-8FH"/>
                 <constraint firstItem="ZD8-3C-M9w" firstAttribute="centerX" secondItem="R4G-pC-xgT" secondAttribute="centerX" constant="0.5" id="V4q-dr-Ttr"/>

@@ -131,11 +131,6 @@
     [self performSegueWithIdentifier:SEG_SHOW_RADIUS sender:self];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:SEG_SHOW_RADIUS]) {}
-}
-
 #pragma mark - Request authorization methods
 
 - (void)requestCameraAuthorization

@@ -202,7 +202,7 @@ typedef enum : NSUInteger {
             
             self.view.userInteractionEnabled = YES;
             
-            if (user && [[FRSDataManager sharedManager] currentUserIsLoaded]) {
+            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
                 
                 [self transferUser];
                 
@@ -232,7 +232,7 @@ typedef enum : NSUInteger {
             
             self.view.userInteractionEnabled = YES;
             
-            if (user) {
+            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
                 
                 [self transferUser];
                 
@@ -265,7 +265,7 @@ typedef enum : NSUInteger {
             
             self.view.userInteractionEnabled = YES;
             
-            if (user) {
+            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
                 
                 [self transferUser];
                 
@@ -291,6 +291,28 @@ typedef enum : NSUInteger {
             }
         }];
         
+    }
+}
+
+- (void)transferUser{
+    
+    //Set has Launched Before to prevent onboard from ocurring again
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
+    
+    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
+        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+    }
+    else{
+        if(self.presentingViewController == nil)
+            [self navigateToMainApp];
+        else{
+            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
     }
 }
 
@@ -321,8 +343,7 @@ typedef enum : NSUInteger {
 - (IBAction)loginButtonAction:(id)sender {
     
     //Check fields first
-    if([self.emailField.text isValidEmail]
-       && [self.passwordField.text isValidPassword]){
+    if([self.emailField.text isValidEmail] && [self.passwordField.text isValidPassword]){
     
         [self performLogin:LoginFresco button:self.loginButton];
     
@@ -353,6 +374,10 @@ typedef enum : NSUInteger {
     
 }
 
+/*
+** "No Thanks, I'll sign up later" button
+*/
+
 - (IBAction)buttonWontLogin:(UIButton *)sender {
     
     //Set has Launched Before to prevent onboard from ocurring again
@@ -365,24 +390,6 @@ typedef enum : NSUInteger {
     else{
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         [self dismissViewControllerAnimated:YES completion:nil];
-    }
-}
-
-- (void)transferUser{
-    
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
-    
-    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
-    }
-    else{
-        if(self.presentingViewController == nil)
-            [self navigateToMainApp];
-        else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
     }
 }
 

@@ -172,7 +172,7 @@ typedef enum : NSUInteger {
         
     }];
     
-  if(login == LoginFacebook){
+    if(login == LoginFacebook){
         
         //Facebook icon image
         [self.view viewWithTag:51].hidden = YES;
@@ -242,6 +242,10 @@ typedef enum : NSUInteger {
 
 - (void)transferUser{
     
+    //Set has Launched Before to prevent onboard from ocurring again
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
+    
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
     
@@ -277,8 +281,7 @@ typedef enum : NSUInteger {
 
 - (void)hitNext {
     
-    if ([self.emailField.text isValidEmail] &&
-        [self.passwordField.text isValidPassword]) {
+    if ([self.emailField.text isValidEmail] && [self.passwordField.text isValidPassword]) {
         
         // save this to allow backing to the VC
         self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -312,6 +315,10 @@ typedef enum : NSUInteger {
                      
                      self.emailField.textColor = [UIColor redColor];
                  } else {
+                     
+                     //Set has Launched Before to prevent onboard from ocurring again
+                     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
+                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
                      
                      [self transferUser];
                  }

@@ -45,26 +45,10 @@
                             @{@"display": @"40 mi", @"value" : @(40)},
                             @{@"display": @"50 mi", @"value" : @(50)} ];
 
-    self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:5] valueForKey:@"value"] floatValue];
+    self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
     
-//    // Add map overlay
-//    UIView *overlayAView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
-//    UIView *overlayBView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.frame.size.width, self.mapView.frame.size.height)];
-//    
-//    overlayAView.backgroundColor = [UIColor colorWithHex:@"#0077ff" alpha:0.26];
-//    overlayBView.backgroundColor = [UIColor colorWithHex:@"#ffffff" alpha:0.54];
-//    
-//    
-//    [self.mapView addSubview:overlayAView];
-//    [self.mapView addSubview:overlayBView];
-}
-
-- (IBAction)actionDone:(id)sender
-{
-    [self save];
-    [self navigateToMainApp];
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
