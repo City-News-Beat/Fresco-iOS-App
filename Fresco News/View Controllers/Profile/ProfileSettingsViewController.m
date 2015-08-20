@@ -100,7 +100,7 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     [self setSaveButtonStateEnabled:NO];
-//    self.saveChangesbutton.alpha = 0;
+    self.saveChangesbutton.alpha = 0.1;
     
     //Checks if the user's primary login is through social, then disable the email and password fields
     if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
@@ -170,9 +170,15 @@ typedef enum : NSUInteger {
 {
     [super viewWillAppear:animated];
     
-//    [UIView animateWithDuration:0.3 animations:^{
-//        self.saveChangesbutton.alpha = 1;
-//    }];
+    [UIView animateWithDuration:0.3 animations:^{
+    }];
+    
+    [UIView animateWithDuration:0.3 delay:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.saveChangesbutton.alpha = 1;
+        
+    } completion:^(BOOL finished) {
+        
+    }];
     
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
@@ -641,11 +647,7 @@ typedef enum : NSUInteger {
     }
     
     if (textField == self.textfieldConfirmPassword) {
-        [self.textfieldEmail becomeFirstResponder];
-    }
-    
-    if (textField == self.textfieldEmail) {
-        [self.textfieldEmail resignFirstResponder];
+        [self.textfieldConfirmPassword resignFirstResponder];
     }
     
     return YES;
