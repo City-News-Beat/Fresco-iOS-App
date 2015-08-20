@@ -109,23 +109,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     [super viewDidLoad];
     
-    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-    [self.cancelButtonTapView
-     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)]];
-    
-    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-    [self.rotateImageView
-     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
-    
-    /* Orientation notificaiton set up */
-    
-    [self deviceOrientationDidChange:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(deviceOrientationDidChange:)
-     name:UIDeviceOrientationDidChangeNotification
-     object:nil];
+    [self configureUIElements];
     
     self.createdAssetURLs = [NSMutableArray new];
     
@@ -136,8 +120,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     session.automaticallyConfiguresApplicationAudioSession = NO;
     session.sessionPreset = AVCaptureSessionPresetPhoto;
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    
-    if(!self.photoButton.selected) self.photoButton.selected = YES;
     
     [self setSession:session];
 
@@ -283,6 +265,33 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self.locationManager stopUpdatingLocation];
+}
+
+-(void)configureUIElements{
+    
+    
+    /* Assignment Label */
+    self.assignmentLabel.alpha = 0;
+
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    [self.cancelButtonTapView
+     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab:)]];
+    
+    //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
+    [self.rotateImageView
+     addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
+    
+    /* Orientation notificaiton set up */
+    
+    [self deviceOrientationDidChange:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(deviceOrientationDidChange:)
+     name:UIDeviceOrientationDidChangeNotification
+     object:nil];
+    if(!self.photoButton.selected) self.photoButton.selected = YES;
+
 }
 
 
@@ -669,19 +678,27 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     
     if (self.withinRangeOfDefaultAssignment) {
+        
         self.assignmentLabel.hidden = NO;
-        NSString *assignmentString = self.defaultAssignment.title;
         
-        // Leave lame leading and trailing space
-        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  In range of %@  ", assignmentString]];
+        NSString *assignmentString = [NSString stringWithFormat:@"   In range of %@   ", self.defaultAssignment.title];
+        NSRange boldedRange = (NSRange){14, [assignmentString length] - 14};
         
-        [string setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:17.0]}
-                        range:(NSRange){14, [string length] - 14}];
-        self.assignmentLabel.attributedText = string;
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:assignmentString];
+        
+        [attrString beginEditing];
+        [attrString addAttribute:NSFontAttributeName
+                           value:[UIFont fontWithName:HELVETICA_NEUE_REGULAR size:11.0]
+                           range:boldedRange];
+        
+        [attrString endEditing];
+        
+        self.assignmentLabel.attributedText = attrString;
+
     }
     
     [UIView animateWithDuration:0.5 animations:^{
-        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 0.75 : 0.0;
+        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 1.0f : 0.0f;
     } completion:^(BOOL finished) {
         if (!self.withinRangeOfDefaultAssignment) {
             self.assignmentLabel.hidden = YES;

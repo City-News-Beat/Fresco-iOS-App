@@ -91,7 +91,7 @@ enum FRSErrorCodes {
 #define HELVETICA_NEUE_MEDIUM               @"HelveticaNeue-Medium"
 #define HELVETICA_NEUE_LIGHT                @"HelveticaNeue-Light"
 #define HELVETICA_NEUE_THIN                 @"HelveticaNeue-Thin"
-#define HELVETICA_NEUE_REGULAR              @"HelveticaNeue-Regular"
+#define HELVETICA_NEUE_REGULAR              @"HelveticaNeue"
 
 
 #pragma mark - MapView Identifiers
