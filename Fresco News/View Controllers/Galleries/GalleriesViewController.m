@@ -149,20 +149,9 @@
     
     self.dispatchIndex = nil;
     
-    for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
-        //If the player is actually playing
-        if(cell.galleryView.sharedPlayer != nil){
-            [cell.galleryView.sharedLayer removeFromSuperlayer];
-            [cell.galleryView.sharedPlayer pause];
-            @try{
-                [cell.galleryView.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-            }@catch(id anException){
-                //do nothing, obviously it wasn't attached because an exception was thrown
-            }
-            cell.galleryView.sharedPlayer = nil;
-        }
-    }
-    
+    for(GalleryTableViewCell *cell in [self.tableView visibleCells])
+        [cell.galleryView cleanUpVideoPlayer];
+
 }
 
 /*

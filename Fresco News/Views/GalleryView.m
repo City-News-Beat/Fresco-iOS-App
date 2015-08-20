@@ -43,13 +43,12 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)dealloc{
     
-    @try{
-        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-    }@catch(id anException){
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
+    [self removeObserverForPlayer];
 
 }
+
+
+#pragma mark - Gallery Methods
 
 - (void)setGallery:(FRSGallery *)gallery
 {
@@ -230,8 +229,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         //DISABLE THE UIACTIVITY INDICATOR HERE
         if (self.sharedPlayer.currentItem.status == AVPlayerStatusReadyToPlay) {
             
-            [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-            
+            [self removeObserverForPlayer];
+
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
@@ -257,6 +256,38 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
     
+}
+
+/*
+** Cleans up notificaiton observer on the AVPlayers item
+*/
+
+- (void)removeObserverForPlayer{
+
+    @try{
+        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    }@catch(id anException){
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
+
+}
+
+/*
+** Cleans up video player, stops playing
+*/
+
+- (void)cleanUpVideoPlayer{
+    
+    //Check if the player is actually playing
+    if(self.sharedPlayer != nil){
+        
+        [self.sharedLayer removeFromSuperlayer];
+        [self.sharedPlayer pause];
+        [self removeObserverForPlayer];
+        self.sharedPlayer = nil;
+        
+    }
+
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -473,8 +504,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         if([self sharedPlayer] != nil){
             
             //Stop the player
-            [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-            
+            [self removeObserverForPlayer];
+
             [self.sharedPlayer pause];
             
             [self.sharedLayer removeFromSuperlayer];
