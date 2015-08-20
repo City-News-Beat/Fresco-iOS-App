@@ -227,6 +227,7 @@
             
             //Update Parse User with Fresco ID
             [[PFUser currentUser] setObject:self.currentUser.userID forKey:kFrescoUserIdKey];
+            
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
                 
                 //User is saved

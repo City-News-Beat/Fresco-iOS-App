@@ -138,8 +138,8 @@
 }
 
 /*
- ** Disable any playing video
- */
+** Disable any playing video
+*/
 
 - (void)disableVideo{
     

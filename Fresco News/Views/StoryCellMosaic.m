@@ -27,11 +27,6 @@ static CGFloat const kInterImageGap = 1.0f;
     return kCellIdentifier;
 }
 
-- (void)awakeFromNib
-{
-    self.contentView.backgroundColor = [UIColor whiteColor];
-}
-
 - (void)prepareForReuse
 {
     // get rid of all the image views
@@ -39,9 +34,8 @@ static CGFloat const kInterImageGap = 1.0f;
     for (UIView *v in [self.contentView subviews]) {
         if ([v isKindOfClass:[StoryThumbnailView class]])
             [((StoryThumbnailView *) v) cancelImageRequestOperation];
-        [v removeFromSuperview];
     }
-    self.imageArray = nil;
+//    self.imageArray = nil;
 }
 
 - (void)configureImages
@@ -98,8 +92,8 @@ static CGFloat const kInterImageGap = 1.0f;
 //            // we almost always want to redo this image on the next row
 //            // but check the edge case where the image is wider than the
 //            // whole frame which would cause an endless loop
-//            if (imageWidth + kInterImageGap < self.frame.size.width)
-//                --i;
+            if (imageWidth + kInterImageGap < self.frame.size.width)
+                --i;
         }
         
         ++i;

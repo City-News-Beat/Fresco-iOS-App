@@ -29,7 +29,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 {
     FRSPost *post = (FRSPost *)[gallery.posts firstObject];
     
-    if([post.address isKindOfClass:[NSString class]]){
+    if([post.address isKindOfClass:[NSString class]] && ![post.address isEqualToString:@"No Location"]){
     
         self.labelTimeAndPlace.text =  post.address;
         [self.labelTimeAndPlace sizeToFit];
