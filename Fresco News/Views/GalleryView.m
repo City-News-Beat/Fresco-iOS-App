@@ -179,11 +179,14 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //Clean up the shared layer
     [self.sharedLayer removeFromSuperlayer];
     
-    //Start animating the indicator
-    [postCell.videoIndicatorView startAnimating];
-    [UIView animateWithDuration:1.0 animations:^{
-        postCell.videoIndicatorView.alpha = 1.0f;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //update UI in main thread.
+        //Start animating the indicator
+        [postCell.videoIndicatorView startAnimating];
+        [UIView animateWithDuration:1.0 animations:^{
+            postCell.videoIndicatorView.alpha = 1.0f;
+        }];
+    });
 
     self.sharedPlayer = [AVPlayer playerWithURL:url];
 
@@ -234,16 +237,21 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
-            [UIView animateWithDuration:1.0 animations:^{
-            
-                postCell.videoIndicatorView.alpha = 0.0f;
-            
-            } completion:^(BOOL finished){
-            
-                [postCell.videoIndicatorView stopAnimating];
-                postCell.videoIndicatorView.hidden = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-            }];
+                [UIView animateWithDuration:1.0 animations:^{
+                    
+                    postCell.videoIndicatorView.alpha = 0.0f;
+                    
+                } completion:^(BOOL finished){
+                    
+                    [postCell.videoIndicatorView stopAnimating];
+                    postCell.videoIndicatorView.hidden = YES;
+                    
+                }];
+                
+            });
+            
         }
     }
 }
