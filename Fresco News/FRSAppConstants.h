@@ -37,16 +37,17 @@ enum FRSErrorCodes {
 
 #define BASE_PATH                           @""
 
+
 //#ifdef DEBUG
-//    #define BASE_URL                        @"https://alpha.fresconews.com"
-//    #define BASE_API                        @"http://staging.fresconews.com/v1/"
-//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+    #define BASE_URL                        @"https://alpha.fresconews.com"
+    #define BASE_API                        @"http://staging.fresconews.com/v1/"
+    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
 //#else
-    #define BASE_URL                        @"https://fresconews.com"
-    #define BASE_API                        @"https://api.fresconews.com/v1/"
-    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+//    #define BASE_URL                        @"https://fresconews.com"
+//    #define BASE_API                        @"https://api.fresconews.com/v1/"
+//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
+//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
 //#endif
 
 
@@ -60,9 +61,7 @@ enum FRSErrorCodes {
 
 #pragma mark - CDN
 
-#define CDN_BASE_URL                        @"http://res.cloudinary.com/fresco-news/image/fetch"
-#define CDN_FACEBOOK_URL                    @"http://res.cloudinary.com/fresco-news/image/facebook"
-
+///
 
 #pragma mark - Float/Int Values
 
@@ -72,6 +71,11 @@ enum FRSErrorCodes {
 
 
 #pragma mark - User Defaults
+
+#define UD_FIRSTNAME                        @"firstname"
+#define UD_LASTNAME                         @"lastname"
+#define UD_AVATAR                           @"avatar"
+#define UD_TOKEN                            @"frescoAPIToken"
 
 #define UD_CAPTION_STRING_IN_PROGRESS       @"captionStringInProgress"
 #define UD_DEFAULT_ASSIGNMENT_ID            @"defaultAssignmentID"
@@ -136,6 +140,7 @@ enum FRSErrorCodes {
 #define LOGIN_ERROR                         NSLocalizedString(@"Login Error", nil)
 #define LOGIN_PROMPT                        NSLocalizedString(@"Please enter a valid email and password", nil)
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
+#define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 #define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)
 #define T_O_S_UNAVAILABLE_MSG               NSLocalizedString(@"Terms of Service not available", nil)
