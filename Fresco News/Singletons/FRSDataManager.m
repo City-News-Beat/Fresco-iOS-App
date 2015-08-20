@@ -930,13 +930,15 @@
     }];
 }
 
-- (void)getGalleriesFromIds:(NSArray *)ids responseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getGalleriesFromStory:(NSString *)storyId withOffset:(NSNumber *)offset responseBlock:(FRSAPIResponseBlock)responseBlock {
     
-    NSDictionary *params = @{@"galleries" : ids, @"sort" : @"true"};
+    NSDictionary *params;
+    
+    if(offset != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1"};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    [self GET:@"gallery/resolve/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self GET:@"story/galleries/" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         

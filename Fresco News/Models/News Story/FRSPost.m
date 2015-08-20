@@ -18,6 +18,7 @@
 {
     return @{
              @"postID" : @"_id",
+             @"galleryID" : @"gallery",
              @"user" : @"owner",
              @"source" : @"source",
              @"mediaWidth" : @"meta.width",
