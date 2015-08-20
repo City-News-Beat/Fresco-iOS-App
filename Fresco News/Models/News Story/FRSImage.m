@@ -24,21 +24,23 @@
 */
 
 - (NSURL *)cdnAssetURLWithSize:(CGSize)size{
+//    
+//    NSString *sizeString;
+//    
+//    if (size.width > 0) {
+//        sizeString = [NSString stringWithFormat:@"w_%d", (int)size.width];
+//        if (size.height)
+//            sizeString = [sizeString stringByAppendingString:@","];
+//    }
+//    if (size.height > 0) {
+//        sizeString = [NSString stringWithFormat:@"%@h_%d", sizeString, (int)size.height];
+//    }
+//    
+//    NSString *fullURL = [NSString stringWithFormat:@"%@/%@/%@", CDN_BASE_URL, sizeString, [[self smallImageUrl] absoluteString]];
+//    
+//    return [NSURL URLWithString:fullURL];
     
-    NSString *sizeString;
-    
-    if (size.width > 0) {
-        sizeString = [NSString stringWithFormat:@"w_%d", (int)size.width];
-        if (size.height)
-            sizeString = [sizeString stringByAppendingString:@","];
-    }
-    if (size.height > 0) {
-        sizeString = [NSString stringWithFormat:@"%@h_%d", sizeString, (int)size.height];
-    }
-    
-    NSString *fullURL = [NSString stringWithFormat:@"%@/%@/%@", CDN_BASE_URL, sizeString, [[self smallImageUrl] absoluteString]];
-    
-    return [NSURL URLWithString:fullURL];
+    return nil;
     
 }
 
