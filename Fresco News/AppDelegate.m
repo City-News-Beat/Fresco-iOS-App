@@ -135,7 +135,7 @@
 {
     NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [UIToolbar appearance].barTintColor = [UIColor disabledToolbarColor];
+    [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
 - (void)setupBarButtonItemAppearance

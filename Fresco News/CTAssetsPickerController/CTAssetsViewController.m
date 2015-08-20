@@ -109,9 +109,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
 
-    if ([self.picker.selectedAssets count] > 0) {
-        self.navigationController.toolbar.barTintColor = [UIColor greenToolbarColor];
-    }
+    self.navigationController.toolbar.barTintColor = ([self.picker.selectedAssets count] == 0) ? [UIColor disabledToolbarColor] : [UIColor greenToolbarColor];
     
 }
 
