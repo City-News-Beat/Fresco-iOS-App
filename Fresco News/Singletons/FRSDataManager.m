@@ -934,7 +934,7 @@
     
     NSDictionary *params;
     
-    if(offset != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1"};
+    if(offset != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1", @"limit" : @"10"};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

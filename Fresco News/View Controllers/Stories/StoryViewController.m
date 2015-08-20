@@ -166,13 +166,39 @@
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 
                 [self.galleriesViewController.tableView reloadData];
+                
+                //Check if there is a gallery selected from the thumbnail
+                if(self.selectedGallery){
 
+                    NSUInteger galleryIndex = 0;
+
+                    BOOL galleryFound = NO;
+
+                    //Loop through the galleries and find the corresponding cell
+                    for (FRSGallery *gallery in self.galleriesViewController.galleries) {
+                        galleryIndex ++;
+                        if([gallery.galleryID isEqualToString:self.selectedGallery]){
+                            galleryFound = YES;
+                            break;
+                        }
+                    }
+
+                    //If the index matches
+                    if(galleryIndex > 0 && galleryFound){
+
+                        NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:galleryIndex -1];
+
+                        [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
+                        self.galleriesViewController.currentlyHidden = NO;
+    
+                    }
+                }
             }
         }
         
     }];
 
-    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
