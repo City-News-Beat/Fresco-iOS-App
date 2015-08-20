@@ -38,6 +38,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     [[self imageView] cancelImageRequestOperation];
 
     [self.videoIndicatorView removeFromSuperview];
+    [self.photoIndicatorView removeFromSuperview];
     
     [self removeTranscodePlaceHolder];
     
