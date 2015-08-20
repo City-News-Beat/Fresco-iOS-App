@@ -52,6 +52,8 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
         
+        CGRect spinnerFrame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
+        
         if(self.post.isVideo) {
             
             //Set up for play/pause button
@@ -67,7 +69,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             self.playPause.image = [UIImage imageNamed:@"pause"];
             
             //Set up for indicator view
-            self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(weakSelf.frame.size.width - 25, 15, 10, 10)];
+            self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
             self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
             self.videoIndicatorView.alpha = 0;
             self.videoIndicatorView.hidden = YES;
@@ -82,7 +84,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         } else {
             
             self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            self.photoIndicatorView.frame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
+            self.photoIndicatorView.frame = spinnerFrame;
             [self addSubview:self.photoIndicatorView];
             [self bringSubviewToFront:self.photoIndicatorView];
         

@@ -325,7 +325,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="119"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Notification Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GM2-t7-q02" userLabel="Notification Title">
-                                                            <rect key="frame" x="50" y="8" width="124.5" height="20"/>
+                                                            <rect key="frame" x="50" y="8" width="124.5" height="19.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="gAh-ok-DKm"/>
                                                                 <constraint firstAttribute="height" constant="36" id="voF-lK-1T7"/>
@@ -342,7 +342,7 @@
                                                             </variation>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalCompressionResistancePriority="749" text="Event Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxa-uO-2L4">
-                                                            <rect key="frame" x="50" y="30" width="82" height="18.5"/>
+                                                            <rect key="frame" x="50" y="29.5" width="82" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="GaH-wP-P7Q"/>
                                                                 <constraint firstAttribute="height" constant="36" id="hIE-fG-8HT"/>
@@ -358,7 +358,7 @@
                                                             </variation>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="249" text="Assignment body content" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xzj-wV-KbU" userLabel="Notification Description">
-                                                            <rect key="frame" x="50" y="51" width="542" height="19.5"/>
+                                                            <rect key="frame" x="50" y="50.5" width="542" height="14.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="164" id="18O-BR-spY"/>
                                                                 <constraint firstAttribute="width" secondItem="Xzj-wV-KbU" secondAttribute="height" multiplier="179:6" id="aA3-hN-jem"/>
@@ -385,7 +385,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" text="10h" textAlignment="right" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XH7-Om-VZ8">
-                                                            <rect key="frame" x="558" y="9" width="25" height="18.5"/>
+                                                            <rect key="frame" x="558" y="9" width="25" height="18"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.37" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -450,7 +450,7 @@
                                                         <constraint firstItem="QiY-9g-RrE" firstAttribute="leading" secondItem="J9o-vw-ME1" secondAttribute="trailing" constant="13" id="CLx-0H-6lk"/>
                                                         <constraint firstItem="XH7-Om-VZ8" firstAttribute="baseline" secondItem="GM2-t7-q02" secondAttribute="baseline" id="GUU-x9-fFj"/>
                                                         <constraint firstItem="XH7-Om-VZ8" firstAttribute="trailing" secondItem="Isw-ZN-cA3" secondAttribute="trailingMargin" constant="-8" id="GaI-V9-PXx"/>
-                                                        <constraint firstItem="Xzj-wV-KbU" firstAttribute="top" secondItem="mxa-uO-2L4" secondAttribute="bottom" constant="3" id="GmS-yk-0JA"/>
+                                                        <constraint firstItem="Xzj-wV-KbU" firstAttribute="top" secondItem="mxa-uO-2L4" secondAttribute="bottom" constant="4" id="GmS-yk-0JA"/>
                                                         <constraint firstItem="KM8-Sr-35t" firstAttribute="top" secondItem="Isw-ZN-cA3" secondAttribute="top" constant="11" id="HTT-ij-k9H"/>
                                                         <constraint firstItem="QiY-9g-RrE" firstAttribute="leading" secondItem="J9o-vw-ME1" secondAttribute="trailing" constant="13" id="IEf-67-Awe"/>
                                                         <constraint firstAttribute="trailing" secondItem="MDh-Hi-3yb" secondAttribute="trailing" id="NF6-SK-cEp"/>
@@ -485,7 +485,7 @@
                                                         <constraint firstAttribute="bottom" secondItem="MDh-Hi-3yb" secondAttribute="bottom" constant="1" id="qLh-Xj-4q3"/>
                                                         <constraint firstItem="J9o-vw-ME1" firstAttribute="bottom" secondItem="QiY-9g-RrE" secondAttribute="bottom" id="rUC-tq-iSe"/>
                                                         <constraint firstItem="mxa-uO-2L4" firstAttribute="top" secondItem="GM2-t7-q02" secondAttribute="bottom" constant="2" id="sCz-eh-d4N"/>
-                                                        <constraint firstItem="J9o-vw-ME1" firstAttribute="top" secondItem="Xzj-wV-KbU" secondAttribute="bottom" constant="4" id="uat-GY-0v7"/>
+                                                        <constraint firstItem="J9o-vw-ME1" firstAttribute="top" secondItem="Xzj-wV-KbU" secondAttribute="bottom" constant="10" id="uat-GY-0v7"/>
                                                         <constraint firstItem="J9o-vw-ME1" firstAttribute="baseline" secondItem="QiY-9g-RrE" secondAttribute="baseline" id="ut0-9h-IHD"/>
                                                         <constraint firstAttribute="bottom" secondItem="QiY-9g-RrE" secondAttribute="bottom" constant="10" id="vkl-T3-nDG"/>
                                                         <constraint firstAttribute="trailing" secondItem="Xzj-wV-KbU" secondAttribute="trailing" constant="8" id="x3s-ET-mnH"/>
@@ -2794,7 +2794,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="C9258F4A-D427-481F-A372-13732C6A5037" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="0E53852A-2096-475E-9784-19EDE45A9E6F" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4219,7 +4219,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="C9258F4A-D427-481F-A372-13732C6A5037" width="29" height="29">
+        <image name="0E53852A-2096-475E-9784-19EDE45A9E6F" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
