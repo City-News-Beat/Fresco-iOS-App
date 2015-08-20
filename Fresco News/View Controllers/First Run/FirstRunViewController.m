@@ -123,23 +123,14 @@ typedef enum : NSUInteger {
         [self.passwordField becomeFirstResponder];
         
     } else if (textField == self.passwordField) {
+        [self.passwordField resignFirstResponder];
         
         if ([self.emailField.text length] == 0 && [self.passwordField.text length] == 0) {
             
             [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
             
-        } else if ([self.emailField.text isValidEmail] &&
-                   [self.passwordField.text isValidPassword] &&
-                   [FRSDataManager sharedManager].currentUser)
-        {
-            [self loginButtonAction:self];
-            
         } else {
-            
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:LOGIN_ERROR
-                                         message:LOGIN_PROMPT action:nil]
-                               animated:YES completion:nil];
+            [self loginButtonAction:self];
         }
     }
     
