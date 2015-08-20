@@ -87,14 +87,11 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             [self bringSubviewToFront:self.photoIndicatorView];
         
         }
-       
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            
             //back to the main thread for the UI call
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.photoIndicatorView startAnimating];
             });
-            // more on the background thread
+        
             [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                 
                 self.processingVideo = false;
@@ -136,10 +133,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                 }
                 
             }];
-            
-        });
-        
-
     }
     else {
         // local
