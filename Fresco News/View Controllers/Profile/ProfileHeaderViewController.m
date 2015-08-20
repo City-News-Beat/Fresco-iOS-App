@@ -64,7 +64,7 @@
         
         [self.profileImageView
          setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
-         placeholderImage:[UIImage imageNamed:@"avatar"]];
+         placeholderImage:[UIImage imageNamed:@"user"]];
     
     }
     else{
@@ -73,9 +73,23 @@
         
     }
 
+    NSString *first = [[NSUserDefaults standardUserDefaults] stringForKey:UD_FIRSTNAME];
+    
+    NSString *last = [[NSUserDefaults standardUserDefaults] stringForKey:UD_LASTNAME];
+    
+    if(first == nil && last == nil){
+        
+        //Set the display name
+        self.labelDisplayName.text = @"Unnamed User";
+    
+    }
+    else{
+        
+        //Set the display name
+        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  first , last];
+    
+    }
 
-    //Set the display name
-    self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  [[NSUserDefaults standardUserDefaults] stringForKey:@"firstname"]  ,  [[NSUserDefaults standardUserDefaults] stringForKey:@"lastname"]];
     
     //Update the corner radius on the user image
     self.profileImageView.clipsToBounds = YES;

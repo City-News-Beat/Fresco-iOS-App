@@ -221,7 +221,7 @@
         FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
         
         //If the response from the server is valid
-        if ([user isKindOfClass:[FRSUser class]] && user.userID) {
+        if (user != nil && [user isKindOfClass:[FRSUser class]]) {
             
             self.currentUser = user;
             
@@ -319,13 +319,13 @@
     
     self.tokenValidatedForSession = false;
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"firstname"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_FIRSTNAME];
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastname"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LASTNAME];
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"avatar"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_AVATAR];
     
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"frescoAPIToken"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_TOKEN];
     
     [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
     
@@ -465,8 +465,13 @@
                     block(YES, nil);
                     
                 }
-                else
+                //Failed refresh and log in
+                else{
+                    
+                    [[FRSDataManager sharedManager] logout];
+                    
                     block(NO, nil);
+                }
 
                 _loggingIn = NO;
             
@@ -496,11 +501,11 @@
                 dM.currentUser = user;
                 
                 //Cache the user fields
-                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.first forKey:@"firstname"];
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.first forKey:UD_FIRSTNAME];
                 
-                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:@"lastname"];
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:UD_LASTNAME];
                 
-                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:@"avatar"];
+                [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:UD_AVATAR];
                 
                 [[NSUserDefaults standardUserDefaults] synchronize];
 
@@ -687,15 +692,15 @@
                 
                 NSError *error;
                 
-                if ([user isKindOfClass:[FRSUser class]]) {
+                if (user.userID != nil) {
                     
                     self.currentUser = user;
                     
-                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:@"firstname"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.first forKey:UD_FIRSTNAME];
                     
-                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:@"lastname"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.last forKey:UD_LASTNAME];
                     
-                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:@"avatar"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.currentUser.avatar forKey:UD_AVATAR];
                     
                     //Sync defaults
                     [[NSUserDefaults standardUserDefaults] synchronize];

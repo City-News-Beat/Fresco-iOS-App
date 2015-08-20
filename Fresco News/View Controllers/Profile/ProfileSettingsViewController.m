@@ -490,8 +490,9 @@ typedef enum : NSUInteger {
             //Tells the ProfileHeaderViewController to update it's view
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
-            if (self.selectedImage)
+            if (self.selectedImage){
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IMAGE_SET object:self.profileImageView.image];
+            }
             
             //If they are set, reset them via parse
             if ([self.textfieldNewPassword.text length]) {

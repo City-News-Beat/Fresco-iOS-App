@@ -79,10 +79,6 @@ typedef enum : NSUInteger {
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -359,8 +355,13 @@ typedef enum : NSUInteger {
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {
     
-    if(self.presentingViewController == nil)
+    //Set has Launched Before to prevent onboard from ocurring again
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
+    
+    if(self.presentingViewController == nil){
         [self navigateToMainApp];
+    }
     else{
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         [self dismissViewControllerAnimated:YES completion:nil];

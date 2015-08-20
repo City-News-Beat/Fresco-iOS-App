@@ -131,7 +131,12 @@
 
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
             if (!success) {
-                NSLog(@"Error: %@", error);
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:ERROR
+                                             message:NAME_ERROR_MSG
+                                             action:nil]
+                                   animated:YES
+                                 completion:nil];
             }
             else {
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
@@ -224,7 +229,8 @@
     }
 
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
-                                                                   parameters:@{@"fields" : @"first_name, last_name, id"}
+                                                                   parameters:@{
+                                                                                @"fields" : @"picture.width(500).height(500){url}, first_name, last_name, id, email"}
                                                                    HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,
@@ -238,10 +244,15 @@
                 self.textfieldLastName.text = self.lastName;
 
                 // grab the image url
-                NSString *urlString = [NSString stringWithFormat:@"%@/%@.png", CDN_FACEBOOK_URL, [result valueForKeyPath:@"id"]];
+                NSString *urlString = result[@"picture"][@"data"][@"url"];
+                
                 if (urlString) {
-                    self.socialImageURL = [NSURL URLWithString:urlString];
-                    [self.addPhotoImageView setImageWithURL:self.socialImageURL];
+    
+                    
+                    self.selectedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:result[@"picture"][@"data"][@"url"]]]];
+
+                    [self.addPhotoImageView setImage:self.selectedImage];
+                    
                 }
             });
         }

@@ -248,6 +248,7 @@ static CGFloat kCellHeight = 44.0f;
             
         }
         
+        //Add the custom separator
         CALayer *separatorLineView = [CALayer layer];
         separatorLineView.frame =CGRectMake(0, 43, tableView.frame.size.width, 1);
         separatorLineView.backgroundColor =[UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
@@ -263,6 +264,8 @@ static CGFloat kCellHeight = 44.0f;
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"articleCell"];
         
         ((UILabel *)[cell viewWithTag:100]).text = article.title;
+        
+        [((UILabel *)[cell viewWithTag:100]) sizeToFit];
         
         [cell.imageView setImageWithURL:article.favicon placeholderImage:[UIImage imageNamed:@"article"]];
 
@@ -282,6 +285,7 @@ static CGFloat kCellHeight = 44.0f;
             
         }
         
+        //Add the custom separator
         CALayer *separatorLineView = [CALayer layer];
         separatorLineView.frame =CGRectMake(0, 43, tableView.frame.size.width, 1);
         separatorLineView.backgroundColor =[UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
