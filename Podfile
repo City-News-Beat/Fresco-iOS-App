@@ -12,6 +12,5 @@ pod 'Mantle', '~> 1.3'
 pod 'Functional.m', '~> 1.0'
 pod 'FXBlurView'
 pod 'GRKGradientView'
-pod 'Taplytics'
 
 inhibit_all_warnings!
