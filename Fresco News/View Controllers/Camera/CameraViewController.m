@@ -350,7 +350,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         if (self.photoButton.selected) {
             
             [self runStillImageCaptureAnimation];
-            
+
             [self snapStillImage];
 
         }
@@ -430,25 +430,29 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     if(cameraMode == CameraModeVideo){
         
-        [UIView animateWithDuration:.2 animations:^{
-            
-            // Hide most of the UI
-            [self.circleLayer setOpacity:0];
-            self.controlsView.backgroundColor = [UIColor whiteColor];
-            [self.apertureButton setBackgroundColor:[UIColor goldApertureColor]];
-            
-            for (UIView *view in [self.controlsView subviews]) {
-                if(view != self.apertureButton){
-                    view.alpha = 1;
-                    view.userInteractionEnabled = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+        
+            [UIView animateWithDuration:.2 animations:^{
+                
+                // Hide most of the UI
+                [self.circleLayer setOpacity:0];
+                self.controlsView.backgroundColor = [UIColor whiteColor];
+                [self.apertureButton setBackgroundColor:[UIColor goldApertureColor]];
+                
+                for (UIView *view in [self.controlsView subviews]) {
+                    if(view != self.apertureButton){
+                        view.alpha = 1;
+                        view.userInteractionEnabled = YES;
+                    }
                 }
-            }
+                
+            } completion:^(BOOL finished){
+                
+                [self.circleLayer removeFromSuperlayer];
+                
+            }];
             
-        } completion:^(BOOL finished){
-            
-            [self.circleLayer removeFromSuperlayer];
-            
-        }];
+        });
         
     }
     
@@ -460,22 +464,26 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     if(cameraMode == CameraModeVideo){
         
-        [self runVideoRecordAnimation];
+        dispatch_async(dispatch_get_main_queue(), ^{
         
-        [UIView animateWithDuration:.2 animations:^{
+            [self runVideoRecordAnimation];
             
-            // Hide most of the UI
-            self.controlsView.backgroundColor = [UIColor clearColor];
-            self.apertureButton.backgroundColor = [UIColor clearColor];
-            
-            for (UIView *view in [self.controlsView subviews]) {
-                if(view != self.apertureButton){
-                    view.alpha = 0;
-                    view.userInteractionEnabled = NO;
+            [UIView animateWithDuration:.2 animations:^{
+                
+                // Hide most of the UI
+                self.controlsView.backgroundColor = [UIColor clearColor];
+                self.apertureButton.backgroundColor = [UIColor clearColor];
+                
+                for (UIView *view in [self.controlsView subviews]) {
+                    if(view != self.apertureButton){
+                        view.alpha = 0;
+                        view.userInteractionEnabled = NO;
+                    }
                 }
-            }
+                
+            }];
             
-        }];
+        });
         
     }
     
@@ -483,43 +491,47 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)runStillImageCaptureAnimation
 {
-    NSMutableArray *images = [[NSMutableArray alloc] init];
     
-    //24 is the number of frames in the animation
-    for (NSInteger i = 2; i < 25; i++) {
-        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
-    }
-    
-    for (NSInteger i = 24; i > 0; i--) {
-        [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
-    }
-    
-    [self.apertureButton.imageView setAnimationImages:[images copy]];
-    
-    [self.apertureButton.imageView setAnimationDuration:.2];
-    
-    [self.apertureButton.imageView setAnimationRepeatCount:1];
-    
-    [self.apertureButton.imageView startAnimating];
-    
-    //fade in
-    [UIView animateWithDuration:.1f animations:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.previewView setAlpha:0.0f];
+        NSMutableArray *images = [[NSMutableArray alloc] init];
         
-    } completion:^(BOOL finished) {
+        //24 is the number of frames in the animation
+        for (NSInteger i = 2; i < 25; i++) {
+            [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+        }
         
-        //fade out
+        for (NSInteger i = 24; i > 0; i--) {
+            [images addObject:[UIImage imageNamed:[NSString stringWithFormat:@"shutter-%li",(long)i]]];
+        }
+        
+        [self.apertureButton.imageView setAnimationImages:[images copy]];
+        
+        [self.apertureButton.imageView setAnimationDuration:.2];
+        
+        [self.apertureButton.imageView setAnimationRepeatCount:1];
+        
+        [self.apertureButton.imageView startAnimating];
+        
+        //fade in
         [UIView animateWithDuration:.1f animations:^{
             
-            [self.previewView setAlpha:1.0f];
+            [self.previewView setAlpha:0.0f];
             
         } completion:^(BOOL finished) {
-            [self setRecentPhotoViewHidden:YES];
+            
+            //fade out
+            [UIView animateWithDuration:.1f animations:^{
+                
+                [self.previewView setAlpha:1.0f];
+                
+            } completion:^(BOOL finished) {
+                [self setRecentPhotoViewHidden:YES];
+            }];
+            
         }];
-        
-    }];
-    
+            
+    });
     
 }
 
@@ -708,24 +720,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 - (void)animateRotateImageView:(UITapGestureRecognizer *)tapGestureRecognizer{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
 
-    [UIView animateWithDuration:.2 animations:^{
-        
-        float degrees = -15; //the value in degrees
-        self.rotateImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
-        
-    } completion:^(BOOL finished){
-        
-        if(finished){
+        [UIView animateWithDuration:.2 animations:^{
             
-            [UIView animateWithDuration:.2 animations:^{
+            float degrees = -15; //the value in degrees
+            self.rotateImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+            
+        } completion:^(BOOL finished){
+            
+            if(finished){
                 
-                self.rotateImageView.transform = CGAffineTransformMakeRotation(0);
-                
-            }];
-        }
+                [UIView animateWithDuration:.2 animations:^{
+                    
+                    self.rotateImageView.transform = CGAffineTransformMakeRotation(0);
+                    
+                }];
+            }
+            
+        }];
         
-    }];
+    });
 }
 
 
@@ -733,30 +749,37 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     if(hidden){
         
-        self.doneButton.enabled = NO;
-        
-        self.activityIndicator.alpha = 0.0f;
-        [self.activityIndicator startAnimating];
-        
-        [UIView animateWithDuration:.5 animations:^{
-            self.doneLabel.alpha = 0.0f;
-            self.activityIndicator.alpha = 1.0f;
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+                
+            self.doneButton.enabled = NO;
+            
+            self.activityIndicator.alpha = 0.0f;
+            [self.activityIndicator startAnimating];
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 0.0f;
+                self.activityIndicator.alpha = 1.0f;
+            }];
+                
+        });
     
     }
     else{
         
-        self.doneButton.enabled = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
         
-        [UIView animateWithDuration:.5 animations:^{
-            self.doneLabel.alpha = 1.0f;
-            self.activityIndicator.alpha = 0.0f;
-        } completion:^(BOOL finished) {
-            [self.activityIndicator stopAnimating];
-        }];
+            self.doneButton.enabled = YES;
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 1.0f;
+                self.activityIndicator.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                [self.activityIndicator stopAnimating];
+            }];
+            
+        });
         
     }
-
 }
 
 #pragma mark - Camera Functions
