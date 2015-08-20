@@ -72,6 +72,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                         
                         [self.tableView reloadData];
                         
+                        
                     } else
                         self.disableEndlessScroll = YES;
                     
@@ -80,6 +81,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 }
             }];
             
+        } else {
+            [self.tableView.infiniteScrollingView stopAnimating];
         }
         
     }];

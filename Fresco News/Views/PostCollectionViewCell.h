@@ -20,7 +20,10 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *videoIndicatorView;
 
+@property (nonatomic, strong) UIActivityIndicatorView *photoIndicatorView;
+
 @property (nonatomic, assign) BOOL processingVideo;
+
 
 + (NSString *)identifier;
 

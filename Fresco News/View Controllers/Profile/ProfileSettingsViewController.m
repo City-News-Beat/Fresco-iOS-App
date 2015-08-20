@@ -95,11 +95,12 @@ typedef enum : NSUInteger {
 
 @implementation ProfileSettingsViewController
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
     
     [super viewDidLoad];
     
     [self setSaveButtonStateEnabled:NO];
+    self.saveChangesbutton.alpha = 0.1;
     
     //Checks if the user's primary login is through social, then disable the email and password fields
     if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
@@ -161,11 +162,23 @@ typedef enum : NSUInteger {
     //Disable Account Sheet Tag
     self.disableAccountSheet.tag = 100;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+    }];
+    
+    [UIView animateWithDuration:0.3 delay:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.saveChangesbutton.alpha = 1;
+        
+    } completion:^(BOOL finished) {
+        
+    }];
     
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
@@ -192,15 +205,17 @@ typedef enum : NSUInteger {
 ** Sets the state of the save button
 */
 
-- (void)setSaveButtonStateEnabled:(BOOL)enabled{
+- (void)setSaveButtonStateEnabled:(BOOL)enabled {
     
     if(enabled){
         self.saveChangesbutton.enabled = YES;
-        self.saveChangesbutton.alpha = 1.0f;
+        self.saveChangesbutton.backgroundColor = [UIColor greenToolbarColor];
+
     }
     else{
         self.saveChangesbutton.enabled = NO;
-        self.saveChangesbutton.alpha = 0.7f;
+        self.saveChangesbutton.backgroundColor = [UIColor disabledToolbarColor];
+
     }
 }
 
@@ -614,9 +629,30 @@ typedef enum : NSUInteger {
 
 #pragma mark - UITextField Delegate
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
+- (void)textFieldDidChange:(UITextField *)textField {
+     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
 }
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField == self.textfieldFirst) {
+        [self.textfieldLast becomeFirstResponder];
+    }
+    if (textField == self.textfieldLast) {
+        [self.textfieldLast resignFirstResponder];
+    }
+    
+    if (textField == self.textfieldNewPassword) {
+        [self.textfieldConfirmPassword becomeFirstResponder];
+    }
+    
+    if (textField == self.textfieldConfirmPassword) {
+        [self.textfieldConfirmPassword resignFirstResponder];
+    }
+    
+    return YES;
+}
+
 
 #pragma mark - MKMapViewDelegate
 

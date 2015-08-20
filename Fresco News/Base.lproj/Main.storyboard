@@ -1757,7 +1757,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="56" y="12" width="310" height="18"/>
                                                         </variation>
@@ -1780,7 +1780,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="57" y="92" width="309" height="18"/>
                                                         </variation>
@@ -1921,7 +1921,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" secureTextEntry="YES"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="136" y="49" width="230" height="18"/>
                                                         </variation>
@@ -1944,7 +1944,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="136" y="49" width="230" height="18"/>
                                                         </variation>
@@ -1967,7 +1967,7 @@
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
                                                         <variation key="heightClass=compact-widthClass=regular" misplaced="YES">
                                                             <rect key="frame" x="136" y="49" width="230" height="18"/>
                                                         </variation>
@@ -2240,17 +2240,21 @@
                         <constraints>
                             <constraint firstItem="nqH-iM-sZZ" firstAttribute="height" secondItem="GEb-Qh-DIJ" secondAttribute="height" constant="-150" id="2bf-wU-xP9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="d4m-tG-TCs" secondAttribute="trailing" constant="-16" id="7VW-20-CbG"/>
+                            <constraint firstItem="d4m-tG-TCs" firstAttribute="width" secondItem="GEb-Qh-DIJ" secondAttribute="width" id="AYE-Rc-Zn3"/>
                             <constraint firstItem="xHX-Av-OJh" firstAttribute="top" secondItem="3Kw-5z-LCT" secondAttribute="bottom" id="NZm-sl-4SV"/>
                             <constraint firstItem="d4m-tG-TCs" firstAttribute="leading" secondItem="GEb-Qh-DIJ" secondAttribute="leadingMargin" constant="-16" id="QDd-ke-jzp"/>
                             <constraint firstAttribute="trailing" secondItem="xHX-Av-OJh" secondAttribute="trailing" id="Qu1-Yn-rVK"/>
                             <constraint firstAttribute="width" secondItem="mpg-Nr-jZG" secondAttribute="width" id="b7L-Uf-fSP"/>
                             <constraint firstItem="xHX-Av-OJh" firstAttribute="leading" secondItem="GEb-Qh-DIJ" secondAttribute="leading" id="fFy-E4-QHt"/>
+                            <constraint firstAttribute="centerX" secondItem="d4m-tG-TCs" secondAttribute="centerX" id="fgq-on-iP0"/>
                             <constraint firstItem="dgS-nd-hEW" firstAttribute="top" secondItem="d4m-tG-TCs" secondAttribute="bottom" id="k7z-pG-Jx2"/>
                             <constraint firstItem="dgS-nd-hEW" firstAttribute="top" secondItem="xHX-Av-OJh" secondAttribute="bottom" id="o0a-yD-Q0Y"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="2bf-wU-xP9"/>
+                                <exclude reference="7VW-20-CbG"/>
+                                <exclude reference="QDd-ke-jzp"/>
                             </mask>
                         </variation>
                     </view>
@@ -2790,7 +2794,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="21AA4BCA-A312-4602-B682-649EFBBC461A" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="C6852EF0-1816-4DA8-BFB6-79F5A7831C43" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -4215,7 +4219,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="21AA4BCA-A312-4602-B682-649EFBBC461A" width="29" height="29">
+        <image name="C6852EF0-1816-4DA8-BFB6-79F5A7831C43" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
