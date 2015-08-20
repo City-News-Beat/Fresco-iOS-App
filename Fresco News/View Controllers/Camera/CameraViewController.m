@@ -90,6 +90,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 @property (nonatomic) NSTimer *videoTimer;
+@property (nonatomic) NSTimer *locationTimer;
 
 @end
 
@@ -265,6 +266,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 
     [self.locationManager stopUpdatingLocation];
+    
+    //Clear the timer so it doesn't re-run
+    [self.videoTimer invalidate];
+    self.videoTimer = nil;
 }
 
 -(void)configureUIElements{
@@ -1158,12 +1163,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     
     //Set interval for location update every `locationUpdateInterval` seconds
-    if (!self.intervalSet) {
+    if (self.locationTimer == nil) {
         // NSLog(@"Starting timer...");
-        [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
-        
-        self.intervalSet = YES;
-        
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
     }
     
     [self.locationManager stopUpdatingLocation];
