@@ -99,7 +99,7 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
-    [self setSaveButtonState:NO];
+    [self setSaveButtonStateEnabled:NO];
     
     //Checks if the user's primary login is through social, then disable the email and password fields
     if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
@@ -178,10 +178,21 @@ typedef enum : NSUInteger {
     [self sliderValueChanged:self.radiusStepper];
 }
 
+- (void)willMoveToParentViewController:(UIViewController *)parent{
+
+    [super willMoveToParentViewController:parent];
+    
+    [self saveChanges];
+
+}
 
 #pragma mark - Controller Methods
 
-- (void)setSaveButtonState:(BOOL)enabled{
+/*
+** Sets the state of the save button
+*/
+
+- (void)setSaveButtonStateEnabled:(BOOL)enabled{
     
     if(enabled){
         self.saveChangesbutton.enabled = YES;
@@ -194,8 +205,8 @@ typedef enum : NSUInteger {
 }
 
 /*
- ** Runs Parse social connect based on SocialNetwork param
- */
+** Runs Parse social connect based on SocialNetwork param
+*/
 
 - (void)socialConnect:(SocialNetwork)network networkButton:(UIButton*)button{
     
@@ -304,6 +315,10 @@ typedef enum : NSUInteger {
     
 }
 
+/*
+** Updates the status of the social buttons
+*/
+
 - (void)updateLinkingStatus {
     
     if (![PFUser currentUser]) {
@@ -336,6 +351,10 @@ typedef enum : NSUInteger {
     }
     
 }
+
+/*
+** Invokes disable account dialog, and runs disable command if confirmed
+*/
 
 - (void)disableAcctWithSocialNetwork:(NSString *)network {
     
@@ -393,8 +412,8 @@ typedef enum : NSUInteger {
 }
 
 /*
- ** Triggers a response based on the passed Error
- */
+** Triggers a response based on the passed Error
+*/
 
 - (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
     
@@ -431,25 +450,11 @@ typedef enum : NSUInteger {
     
 }
 
-#pragma mark - IBActions
+- (void)saveChanges{
+    
+    //Break if the saveChangesButton is not enabled
+    if(!self.saveChangesbutton.enabled) return;
 
-- (IBAction)connectFacebook:(id)sender
-{
-    
-    [self socialConnect:SocialNetworkFacebook networkButton:self.connectFacebookButton];
-    
-}
-
-- (IBAction)connectTwitter:(id)sender
-{
-    
-    [self socialConnect:SocialNetworkTwitter networkButton:self.connectTwitterButton];
-    
-}
-
-- (IBAction)saveChanges:(id)sender
-{
-    
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
     
     if ([self.textfieldFirst.text length])
@@ -527,14 +532,30 @@ typedef enum : NSUInteger {
     
     // send a second post to save the radius -- ignore success
     [updateParams removeAllObjects];
+
+}
+
+#pragma mark - IBActions
+
+- (IBAction)connectFacebook:(id)sender
+{
+    
+    [self socialConnect:SocialNetworkFacebook networkButton:self.connectFacebookButton];
+    
+}
+
+- (IBAction)connectTwitter:(id)sender
+{
+    
+    [self socialConnect:SocialNetworkTwitter networkButton:self.connectTwitterButton];
     
 }
 
 - (IBAction)logOut:(id)sender {
     
-    UIAlertController *logOut = [[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Are you sure?" message:@"" action:CANCEL];
+    UIAlertController *logOutAlertController = [[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Are you sure?" message:@"" action:CANCEL];
     
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [logOutAlertController addAction:[UIAlertAction actionWithTitle:@"Log Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         
         [[FRSDataManager sharedManager] logout];
         
@@ -544,16 +565,20 @@ typedef enum : NSUInteger {
         
         [self.navigationController popViewControllerAnimated:NO];
         
-    }];
     
-    [logOut addAction:okAction];
+    }]];
     
-    [self presentViewController:logOut animated:YES completion:nil];
+    [self presentViewController:logOutAlertController animated:YES completion:nil];
 }
 
 - (IBAction)disableAccount:(id)sender {
 
     [self disableAcctWithSocialNetwork:nil];
+}
+
+- (IBAction)saveChangeClicked:(id)sender
+{
+    [self saveChanges];
 }
 
 #pragma mark - UISilder Delegate and Actions
@@ -580,7 +605,7 @@ typedef enum : NSUInteger {
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
     
@@ -590,7 +615,7 @@ typedef enum : NSUInteger {
 #pragma mark - UITextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -655,7 +680,7 @@ typedef enum : NSUInteger {
     
     self.profileImageView.image = self.selectedImage;
     
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonState:YES];
+    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
     [MKMapView updateUserPinViewForMapView:self.mapView WithImage:self.selectedImage];
     
