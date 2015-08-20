@@ -21,6 +21,8 @@
 #import "GalleryViewController.h"
 #import "FRSPost.h"
 #import "PostCollectionViewCell.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface GalleriesViewController()
 

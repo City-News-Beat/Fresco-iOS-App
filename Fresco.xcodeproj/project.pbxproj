@@ -120,6 +120,8 @@
 		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
 		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
 		E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
+		E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB15F1B852BEF0017AAA5 /* Fabric.framework */; };
+		E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */; };
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
@@ -391,6 +393,8 @@
 		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
 		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
 		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
+		E72DB15F1B852BEF0017AAA5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
 		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
 		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
@@ -435,6 +439,7 @@
 				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
 				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
 				1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */,
+				E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */,
 				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
 				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
 				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
@@ -452,6 +457,7 @@
 				1E4983B21AFBBD8800924F59 /* FBSDKLoginKit.framework in Frameworks */,
 				42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */,
 				80AA49FED257B703E367D68E /* libPods.a in Frameworks */,
+				E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +482,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E72DB15F1B852BEF0017AAA5 /* Fabric.framework */,
+				E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */,
 				1E4983D01AFBCF5100924F59 /* Bolts.framework */,
 				1E4983CE1AFBCF0800924F59 /* Accounts.framework */,
 				1E4983CC1AFBCEF400924F59 /* Social.framework */,
@@ -1103,6 +1111,7 @@
 				E71F0E561B0B936200186BAD /* Embed App Extensions */,
 				1EDF047A1B0E7E5800B35858 /* ShellScript */,
 				E7AD777D1B2B2DD700C1A6EC /* Embed Watch Content */,
+				E72DB15E1B852A6D0017AAA5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1351,6 +1360,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		E72DB15E1B852A6D0017AAA5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5d3a50cd6b6c16af7a378a24019dc620c50ea24e fb5bec029f2408d8373b98ff0bbd6e9ba7ffe881e2b745fc4d9bb5d78bcb52d1";
 		};
 /* End PBXShellScriptBuildPhase section */
 

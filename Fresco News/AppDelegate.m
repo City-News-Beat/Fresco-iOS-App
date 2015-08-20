@@ -11,7 +11,8 @@
 @import FBSDKCoreKit;
 @import Parse;
 @import AVFoundation;
-@import Taplytics;
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import <AFNetworkActivityLogger.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "AppDelegate.h"
@@ -148,13 +149,13 @@
 {
     
     [[AFNetworkActivityLogger sharedLogger] startLogging];
-    
+    [Fabric with:@[CrashlyticsKit]];
+
 //    //Taplytics Setup
 //    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
 //
     [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-
+    
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
                                consumerSecret:TWITTER_CONSUMER_SECRET];

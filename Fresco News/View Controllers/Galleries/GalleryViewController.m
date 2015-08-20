@@ -17,6 +17,8 @@
 #import "PostCollectionViewCell.h"
 #import "StoryViewController.h"
 #import "GalleryTableViewCell.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 static CGFloat kSectionHeight = 40.0f;
 
