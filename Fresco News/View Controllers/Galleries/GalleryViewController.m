@@ -212,14 +212,13 @@ static CGFloat kCellHeight = 44.0f;
     /* Create custom view to display section header... */
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, tableView.frame.size.width, kSectionHeight)];
     [label setFont:[UIFont fontWithName:HELVETICA_NEUE_LIGHT size:13]];
+    [label setTextColor:[UIColor textHeaderBlackColor]];
     
     if (section == 0 && self.gallery.relatedStories.count > 0)
         [label setText:@"RELATED STORIES"];
     else if (section == 1 || self.gallery.relatedStories.count == 0)
         [label setText:@"ARTICLES"];
-    
-    [label setTextColor:[UIColor textHeaderBlackColor]];
-    
+
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0f, tableView.frame.size.width, kSectionHeight)];
     [view addSubview:label];
     [view setBackgroundColor:[UIColor whiteColor]];
@@ -242,7 +241,7 @@ static CGFloat kCellHeight = 44.0f;
             
             CALayer *topLayerStories = [CALayer layer];
             topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.galleryTable.frame.size.width, 1.0f);
-            topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            topLayerStories.backgroundColor = [UIColor cellSeperatorBlackColor].CGColor;
             
             [cell.contentView.layer addSublayer:topLayerStories];
             
@@ -251,7 +250,7 @@ static CGFloat kCellHeight = 44.0f;
         //Add the custom separator
         CALayer *separatorLineView = [CALayer layer];
         separatorLineView.frame =CGRectMake(0, 43, tableView.frame.size.width, 1);
-        separatorLineView.backgroundColor =[UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+        separatorLineView.backgroundColor =[UIColor cellSeperatorBlackColor].CGColor;
         [cell.contentView.layer addSublayer:separatorLineView];
         
         return cell;
@@ -279,7 +278,7 @@ static CGFloat kCellHeight = 44.0f;
             
             CALayer *topLayerStories = [CALayer layer];
             topLayerStories.frame = CGRectMake(0.0f, 0.0f, self.galleryTable.frame.size.width, 1.0f);
-            topLayerStories.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+            topLayerStories.backgroundColor = [UIColor cellSeperatorBlackColor].CGColor;
             
             [cell.contentView.layer addSublayer:topLayerStories];
             
@@ -288,7 +287,7 @@ static CGFloat kCellHeight = 44.0f;
         //Add the custom separator
         CALayer *separatorLineView = [CALayer layer];
         separatorLineView.frame =CGRectMake(0, 43, tableView.frame.size.width, 1);
-        separatorLineView.backgroundColor =[UIColor colorWithRed:0 green:0 blue:0 alpha:.12].CGColor;
+        separatorLineView.backgroundColor =[UIColor cellSeperatorBlackColor].CGColor;
         [cell.contentView.layer addSublayer:separatorLineView];
         
         return cell;

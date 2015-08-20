@@ -77,6 +77,10 @@
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.52];
 }
 
++ (UIColor *)cellSeperatorBlackColor {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.26];
+}
+
 + (UIColor *)disabledBackgroundColor {
       return [UIColor colorWithRed:242/255.0 green:242/255.0 blue:237/255.0 alpha:1];
 }
