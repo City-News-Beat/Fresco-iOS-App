@@ -44,6 +44,7 @@
 
 - (void)setAspectRatio;
 
+- (void)cleanUpVideoPlayer;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell;
 
