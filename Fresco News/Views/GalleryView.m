@@ -269,7 +269,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)removeObserverForPlayer{
 
-    [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    @try{
+        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
+    }
+    @catch(id anException){}
+   
 }
 
 /*
