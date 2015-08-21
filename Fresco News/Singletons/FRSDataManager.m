@@ -13,6 +13,8 @@
 #import "FRSLocationManager.h"
 #import "NSFileManager+Additions.h"
 #import "FRSStory.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoTokenKey @"frescoAPIToken"
@@ -182,12 +184,20 @@
             //Now that we're signed up with Parse create the Fresco user
             if (succeeded) {
                 
-                //Check for duplicate installation
-                [self tieUserToInstallation];
-                
                 [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
 
-                    block(self.currentUser ? YES : NO, error);
+                    if(self.currentUser != nil){
+                    
+                        [Answers logSignUpWithMethod:@"Fresco"
+                                             success:@YES
+                                    customAttributes:@{}];
+                        
+                        block(YES, nil);
+ 
+                    }
+                    else{
+                        block(NO, nil);
+                    }
                     
                 }];
             }
@@ -211,7 +221,9 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     //Construct params to create user
-    NSDictionary *params = @{@"email" : [PFUser currentUser].email ?: [NSNull null], @"parse_id" : [PFUser currentUser].objectId};
+    NSDictionary *params = @{
+                             @"email" : [PFUser currentUser].email ?: [NSNull null],
+                             @"parse_id" : [PFUser currentUser].objectId};
     
     //Run the API call to create the user on the database side
     [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -233,6 +245,9 @@
                 //User is saved
                 if (success){
                     
+                    //Check for duplicate installation
+                    [self tieUserToInstallation];
+                    
                     //Set a new API token with our Parse session
                     [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(id responseObject, NSError *error) {
                         
@@ -253,6 +268,8 @@
                 }
                 //User is not saved, delete user from parse
                 else {
+                    
+                    self.currentUser = nil;
                     
                     [[PFUser currentUser] deleteInBackground];
                     
@@ -372,16 +389,23 @@
 ** Social Login Method
 */
 
-- (void)socialLoginWithUser:(PFUser *)user error:(NSError *)error block:(PFUserResultBlock)block
+- (void)socialLoginWithUser:(PFUser *)user error:(NSError *)error block:(PFUserResultBlock)block withNetwork:(NSString *)network
 {
     
     //If the it's a new user
     if (user.isNew) {
         [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
-            if(!error)
+            if(!error){
+                
+                [Answers logSignUpWithMethod:network
+                                     success:@YES
+                            customAttributes:@{}];
+                
                 block(user, error);
-            else
+            }
+            else{
                 block(nil, error);
+            }
         }];
     }
     //Existing user
@@ -411,7 +435,7 @@
     
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile" ] block:^(PFUser *user, NSError *error) {
     
-        [self socialLoginWithUser:user error:error block:resultBlock];
+        [self socialLoginWithUser:user error:error block:resultBlock withNetwork:@"Facebook"];
     
     }];
 }
@@ -426,7 +450,7 @@
     
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
     
-        [self socialLoginWithUser:user error:error block:resultBlock];
+        [self socialLoginWithUser:user error:error block:resultBlock withNetwork:@"Twitter"];
    
     }];
 }
@@ -452,7 +476,7 @@
         }
         //The fresco user id exists and proceed normally
         else{
-            
+        
             NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
             
             [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
@@ -476,8 +500,8 @@
                 _loggingIn = NO;
             
             }];
+            
         }
-        
     }
 }
 
@@ -934,7 +958,7 @@
     
     NSDictionary *params;
     
-    if(offset != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1", @"limit" : @"10"};
+    if(offset != nil && storyId != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1", @"limit" : @"10"};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -942,9 +966,13 @@
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
-        }];
+        NSArray *galleries;
+        
+        if(responseObject){
+            galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+            }];
+        }
         
         if(responseBlock) responseBlock(galleries, nil);
         

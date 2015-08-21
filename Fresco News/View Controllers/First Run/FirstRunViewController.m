@@ -64,7 +64,6 @@ typedef enum : NSUInteger {
         button.layer.cornerRadius = 4;
         button.clipsToBounds = YES;
     }
-
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
@@ -291,11 +290,14 @@ typedef enum : NSUInteger {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+    }
+    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
+        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
     }
     else{
         if(self.presentingViewController == nil)
@@ -334,7 +336,7 @@ typedef enum : NSUInteger {
 - (IBAction)loginButtonAction:(id)sender {
     
     //Check fields first
-    if([self.emailField.text isValidEmail] && [self.passwordField.text isValidPassword]){
+    if([self.emailField.text isValidEmail]){
     
         [self performLogin:LoginFresco button:self.loginButton];
     

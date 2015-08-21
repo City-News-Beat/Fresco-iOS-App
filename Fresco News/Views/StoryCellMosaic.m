@@ -47,7 +47,8 @@ static CGFloat const kInterImageGap = 1.0f;
         }
     }
     
-    CGRect frame;
+    
+    CGRect frame = self.frame;
     CGFloat x = 0.0f;
     CGFloat y = 0.0f;
     int rows = 1;
@@ -80,8 +81,8 @@ static CGFloat const kInterImageGap = 1.0f;
         // calculate offsets for the next iteration
         x += imageWidth + kInterImageGap;
         
-        // check for wrap
-        if (x > self.frame.size.width) {
+        // check for wrap and that the cell height is greater
+        if (x > self.frame.size.width && self.frame.size.height > 96.0f) {
             ++rows;
             y += kImageHeight + kInterImageGap;
             x = 0.0f;

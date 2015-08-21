@@ -143,9 +143,7 @@ static CGFloat const kInterImageGap = 1.0f;
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    [self resetNavigationandTabBar];
-    
+
     self.tableView.delegate = nil;
     
 }
@@ -247,12 +245,15 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     
     NSUInteger index = indexPath.section;
-    
+
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
-    
+
     CGFloat width;
     BOOL flag = NO;
+    
+    //Check if we should double the height
     for (FRSImage *image in self.imageArrays[index]) {
+        
         if (flag) {
             return 96.0 * 2;
         }
@@ -260,70 +261,14 @@ static CGFloat const kInterImageGap = 1.0f;
         CGFloat scale = kImageHeight / [image.height floatValue];
         CGFloat imageWidth = [image.width floatValue] * scale;
         width += imageWidth + kInterImageGap;
+        
         if (width > self.view.frame.size.width) {
             flag = YES; // Return 192.0 on next iteration, if there is one
         }
     }
     
+    //Return by default
     return 96.0;
-}
-
-#pragma mark - Scroll View Delegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-//    /*
-//     ** Navigation Bar Conditioning
-//     */
-//    
-//    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
-//        
-//        //SHOW
-//        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
-//            
-//            //Resets elements back to normal state
-//            [self resetNavigationandTabBar];
-//            
-//        }
-//        
-//        self.lastContentOffset = scrollView.contentOffset.y;
-//        
-//    }
-//    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
-//        
-//        //HIDE
-//        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
-//            
-//            self.currentlyHidden = YES;
-//            
-//            [self.navigationController setNavigationBarHidden:YES animated:YES];
-//            
-//            [UIView animateWithDuration:.1 animations:^{
-//                self.statusBarBackground.alpha = 1.0f;
-//            }];
-//            
-//            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-//            
-//        }
-//        
-//        self.lastContentOffset = scrollView.contentOffset.y;
-//        
-//    }
-    
-}
-
--(void)resetNavigationandTabBar{
-    
-    self.currentlyHidden = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    self.tableView.contentInset = UIEdgeInsetsZero;
-    
-    [UIView animateWithDuration:.1 animations:^{
-        self.statusBarBackground.alpha = 0.0f;
-    }];
-    
 }
 
 #pragma mark - Tap Gesture Delegate Handlers

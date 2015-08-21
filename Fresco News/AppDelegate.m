@@ -66,24 +66,28 @@
     }
     
     if([FRSDataManager sharedManager].reachabilityManager.isReachable){
-    
-        //Refresh the existing user, if exists, then run location monitoring
-        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
+        
+        //Check if the user has agreed to the TOS, otherwise log them out
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
+        
+            [[FRSDataManager sharedManager] logout];
             
-            if (succeeded) {
+        }
+        else{
+        
+            //Refresh the existing user, if exists, then run location monitoring
+            [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
                 
-                NSLog(@"successful login on launch");
+                if (succeeded) {
+                    
+                    NSLog(@"successful login on launch");
 
-            }
-            else {
+                }
                 
-                [[FRSDataManager sharedManager] logout];
+            }];
                 
-                if(error) NSLog(@"Error on login %@", error);
-            }
-            
-        }];
-            
+        }
+        
     }
     
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {

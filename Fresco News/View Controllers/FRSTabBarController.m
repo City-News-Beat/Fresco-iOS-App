@@ -194,7 +194,8 @@
             
                 if(![[FRSDataManager sharedManager] isLoggedIn]){
                     
-                    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
+                    FRSRootViewController *rvc = (FRSRootViewController *)self.parentViewController;
+                    
                     [rvc presentFirstRunViewController:self];
                     
                     return NO;

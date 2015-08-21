@@ -173,11 +173,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
-    //Pause the currently playing video
-    [self.sharedPlayer pause];
-    
-    //Clean up the shared layer
-    [self.sharedLayer removeFromSuperlayer];
+    //Cleans up the video player if playing
+    [self cleanUpVideoPlayer];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         //update UI in main thread.
@@ -274,10 +271,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
     @try{
         [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-    }@catch(id anException){
-        //do nothing, obviously it wasn't attached because an exception was thrown
     }
-
+    @catch(id anException){}
+   
 }
 
 /*
@@ -286,14 +282,19 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)cleanUpVideoPlayer{
     
-    //Check if the player is actually playing
-    if(self.sharedPlayer != nil){
+    @try{
         
-        [self.sharedLayer removeFromSuperlayer];
-        [self.sharedPlayer pause];
-        [self removeObserverForPlayer];
-        self.sharedPlayer = nil;
+        //Check if the player is actually playing
+        if(self.sharedPlayer != nil){
+            
+            [self.sharedLayer removeFromSuperlayer];
+            [self.sharedPlayer pause];
+            [self removeObserverForPlayer];  
+        }
         
+    }
+    @catch(id anException){
+        //do nothing, obviously it wasn't attached because an exception was thrown
     }
 
 }
@@ -508,17 +509,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell doesn't have a video
     else{
         
-        //If the Player is actually playing
-        if([self sharedPlayer] != nil){
-            
-            //Stop the player
-            [self removeObserverForPlayer];
-
-            [self.sharedPlayer pause];
-            
-            [self.sharedLayer removeFromSuperlayer];
-            
-        }
+        [self cleanUpVideoPlayer];
         
     }
     

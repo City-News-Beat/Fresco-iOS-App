@@ -108,9 +108,6 @@
     
     [super viewWillDisappear:animated];
     
-    //Slide back up
-    [self resetNavigationBar:NO];
-    
     //Turn off any video
     [self disableVideo];
     
@@ -135,8 +132,14 @@
         
     }
     
-    [self.tableView reloadData];
+    [self reloadData];
     [self.refreshControl endRefreshing];
+}
+
+- (void)reloadData{
+
+    [self.tableView reloadData];
+//    [self checkForVideo];
 }
 
 /*
@@ -149,8 +152,9 @@
     
     self.dispatchIndex = nil;
     
-    for(GalleryTableViewCell *cell in [self.tableView visibleCells])
+    for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
         [cell.galleryView cleanUpVideoPlayer];
+    }
 
 }
 
@@ -221,6 +225,9 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    
+    [self checkForVideo];
 
     /*
     ** Navigation Bar Conditioning
@@ -260,26 +267,35 @@
 //        
 //    }
     
-    /*
-    ** Video Conditioning
-    */
+    
+    
+}
+
+#pragma mark - Video Conditioning
+
+
+/*
+ ** Video Conditioning
+ */
+
+- (void)checkForVideo{
     
     //Make sure we're in the parent view controller, not the detail view
     if(![[self.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]] &&
        ![[self.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
         return;
     }
-    
+
     CGRect visibleRect = (CGRect){.origin = self.tableView.contentOffset, .size = self.tableView.bounds.size};
-    
+
     CGPoint visiblePoint = CGPointMake(CGRectGetMidX(visibleRect), CGRectGetMidY(visibleRect));
-    
+
     NSIndexPath *visibleIndexPath = [self.tableView indexPathForRowAtPoint:visiblePoint];
-    
+
     GalleryTableViewCell *cell = (GalleryTableViewCell *) [self.tableView cellForRowAtIndexPath:visibleIndexPath];
-    
+
     NSIndexPath *visiblePostPath;
-    
+
     //Loop through and grab the visible cell
     for (PostCollectionViewCell *postCell in [cell.galleryView.collectionPosts visibleCells]) {
         
@@ -287,7 +303,7 @@
         if(![postCell.post isVideo]){
             
             visiblePostPath = nil;
-        
+            
             break;
             
         }
@@ -295,8 +311,8 @@
         else visiblePostPath = [cell.galleryView.collectionPosts indexPathForCell:postCell];
         
     }
-    
-    //Check if the cell is a video first!
+
+    //Check if we successfuly obtained a post with a video
     if(visiblePostPath != nil){
         
         //The cell that holds the video we want, at the visible index
@@ -309,11 +325,14 @@
             
             self.dispatchIndex = visibleIndexPath;
             
-            [postCell.videoIndicatorView startAnimating];
-            
-            [UIView animateWithDuration:1.0 animations:^{
-                postCell.videoIndicatorView.alpha = 1.0f;
-            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //update UI in main thread.
+                //Start animating the indicator
+                [postCell.videoIndicatorView startAnimating];
+                [UIView animateWithDuration:1.0 animations:^{
+                    postCell.videoIndicatorView.alpha = 1.0f;
+                }];
+            });
             
             //Dispatch event to make sure the condition is true for more than .8 seconds
             double delayInSeconds = .8;
@@ -344,29 +363,7 @@
         [self disableVideo];
         
     }
-    
-}
 
-/*
-** Resets navigation bar to normal state
-*/
-
--(void)resetNavigationBar:(BOOL)animated{
-    
-    self.currentlyHidden = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-
-    self.statusBarBackground.alpha = 0.0f;
-
-}
-
-#pragma mark - Video Notifier
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    
-    [(AVPlayerItem *)[notification object] seekToTime:kCMTimeZero];
-    
 }
 
 
@@ -386,11 +383,35 @@
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
                                       applicationActivities:nil];
+    
+    [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        
+        if(completed){
+            
+            NSString *type;
+            
+            if(activityType == UIActivityTypePostToFacebook) type = @"Facebook";
+            
+            else if(activityType == UIActivityTypePostToTwitter) type = @"Twitter";
+            
+            else if(activityType == UIActivityTypeMail) type = @"Email";
+            
+            else if(activityType == UIActivityTypeCopyToPasteboard) type = @"Clipboard";
+            
+            else type = activityType;
+            
+            [Answers logShareWithMethod:type
+                            contentName:@"Gallery"
+                            contentType:@"gallery"
+                              contentId:gallery.galleryID
+                       customAttributes:@{@"location" : @"Gallery List"}];
+        }
+        
+    }];
+    
     [self.navigationController presentViewController:activityViewController
                                             animated:YES
-                                          completion:^{
-                                              // ...
-                                          }];
+                                          completion:nil];
     
 }
 

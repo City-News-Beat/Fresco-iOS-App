@@ -93,7 +93,7 @@
                 
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     
-                    [self.galleriesViewController.tableView reloadData];
+                    [self.galleriesViewController reloadData];
 
                 }
             }
