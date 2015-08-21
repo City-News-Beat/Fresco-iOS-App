@@ -958,7 +958,7 @@
     
     NSDictionary *params;
     
-    if(offset != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1", @"limit" : @"10"};
+    if(offset != nil && storyId != nil) params = @{@"id" : storyId, @"offset" : offset, @"sort" : @"1", @"limit" : @"10"};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -966,9 +966,13 @@
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
-            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
-        }];
+        NSArray *galleries;
+        
+        if(responseObject){
+            galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+                return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+            }];
+        }
         
         if(responseBlock) responseBlock(galleries, nil);
         
