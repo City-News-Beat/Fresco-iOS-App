@@ -149,8 +149,9 @@
     
     self.dispatchIndex = nil;
     
-    for(GalleryTableViewCell *cell in [self.tableView visibleCells])
+    for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
         [cell.galleryView cleanUpVideoPlayer];
+    }
 
 }
 

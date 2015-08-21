@@ -71,7 +71,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
             self.videoIndicatorView.alpha = 0;
             self.videoIndicatorView.hidden = YES;
-            
            
             //Add subviews and bring to the front so they don't get hidden
             [self addSubview:self.playPause];

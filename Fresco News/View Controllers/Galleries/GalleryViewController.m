@@ -170,11 +170,7 @@ static CGFloat kCellHeight = 44.0f;
 - (void)disableVideo
 {
     
-    if(self.galleryView.sharedPlayer != nil){
-        [self.galleryView.sharedPlayer pause];
-        self.galleryView.sharedPlayer = nil;
-        [self.galleryView.sharedLayer removeFromSuperlayer];
-    }
+   [self.galleryView cleanUpVideoPlayer];
     
 }
 

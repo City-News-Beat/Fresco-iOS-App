@@ -191,6 +191,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     self.sharedPlayer = [AVPlayer playerWithURL:url];
 
     //Set up the AVPlayerItem
+    [self removeObserverForPlayer];
     [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
     
     self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
@@ -286,14 +287,19 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)cleanUpVideoPlayer{
     
-    //Check if the player is actually playing
-    if(self.sharedPlayer != nil){
+    @try{
         
-        [self.sharedLayer removeFromSuperlayer];
-        [self.sharedPlayer pause];
-        [self removeObserverForPlayer];
-        self.sharedPlayer = nil;
+        //Check if the player is actually playing
+        if(self.sharedPlayer != nil){
+            
+            [self.sharedLayer removeFromSuperlayer];
+            [self.sharedPlayer pause];
+            [self removeObserverForPlayer];  
+        }
         
+    }
+    @catch(id anException){
+        //do nothing, obviously it wasn't attached because an exception was thrown
     }
 
 }

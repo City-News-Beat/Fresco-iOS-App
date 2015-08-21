@@ -365,11 +365,13 @@
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
             CLLocation *location = [post.image.asset valueForProperty:ALAssetPropertyLocation];
-            for (FRSAssignment *assignment in self.assignments) {
-                if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
-                    self.defaultAssignment = assignment;
-                    [self showAssignment:YES];
-                    return;
+            if(location != nil){
+                for (FRSAssignment *assignment in self.assignments) {
+                    if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
+                        self.defaultAssignment = assignment;
+                        [self showAssignment:YES];
+                        return;
+                    }
                 }
             }
         }
@@ -433,15 +435,14 @@
             [self.captionTextView.layer addAnimation:animation forKey:@"shake"];
         }
       
-        
         return;
-        
+    
     }
     
     //Check if the user is logged in before proceeding, send to sign up otherwise
     if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
         
-        if(!self.presentingViewController.presentingViewController){
+        if(self.presentingViewController.presentingViewController){
         
             [self navigateToFirstRun];
         
@@ -541,7 +542,7 @@
             
             [self crossPostToFacebook:crossPostString];
 
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"runUpdateOnProfile"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
             
             [[FRSDataManager sharedManager] resetDraftGalleryPost];
             [self returnToTabBar];
