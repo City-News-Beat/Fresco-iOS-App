@@ -12,6 +12,7 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
+#import "FirstRunTOSViewController.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
@@ -422,6 +423,11 @@ typedef enum : NSUInteger {
         FirstRunAccountViewController *fracvc = [segue destinationViewController];
         fracvc.email = self.emailField.text;
         fracvc.password = self.passwordField.text;
+    }
+    
+    if ([[segue identifier] isEqualToString:@"replaceWithTOS"]) {
+        FirstRunTOSViewController *tosVC = [segue destinationViewController];
+        tosVC.updatedTerms = YES;
     }
 }
 

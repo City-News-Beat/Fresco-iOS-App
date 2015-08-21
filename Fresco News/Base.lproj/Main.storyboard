@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -2795,7 +2795,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="AFEE3EA0-49A9-4EC4-88CB-AB1A031F2DB8" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="110C632C-4921-43FB-92E0-B731222951C2" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3838,7 +3838,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <segue destination="rD6-e0-Xnl" kind="show" id="Y7v-Ta-Z29"/>
+                                    <segue destination="rD6-e0-Xnl" kind="show" identifier="termsOfService" id="Y7v-Ta-Z29"/>
                                 </connections>
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-tF-KOl">
@@ -4084,7 +4084,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Agree">
-                                    <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="disabled">
@@ -4111,20 +4111,29 @@
                             <constraint firstItem="Nqd-Yj-xpu" firstAttribute="top" secondItem="4vh-fy-Drp" secondAttribute="bottom" constant="-10" id="55Z-xE-Wd6"/>
                             <constraint firstItem="XHc-gl-j8n" firstAttribute="leading" secondItem="mtl-N4-Cbf" secondAttribute="leading" id="Dxb-Ec-P7g"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Nqd-Yj-xpu" secondAttribute="trailing" constant="-16" id="FJk-Sp-829"/>
+                            <constraint firstItem="Nqd-Yj-xpu" firstAttribute="width" secondItem="mtl-N4-Cbf" secondAttribute="width" id="FM6-ka-hXd"/>
                             <constraint firstItem="AWO-wh-qSX" firstAttribute="top" secondItem="XHc-gl-j8n" secondAttribute="bottom" constant="44" id="LHL-Rl-G6Y"/>
                             <constraint firstItem="Nqd-Yj-xpu" firstAttribute="leading" secondItem="4vh-fy-Drp" secondAttribute="leading" id="NaE-Tk-O6M"/>
                             <constraint firstItem="XHc-gl-j8n" firstAttribute="top" secondItem="W4e-r4-LqF" secondAttribute="bottom" id="Ndw-kI-UtT"/>
+                            <constraint firstAttribute="centerX" secondItem="Nqd-Yj-xpu" secondAttribute="centerX" id="TKF-df-OxO"/>
                             <constraint firstItem="AWO-wh-qSX" firstAttribute="top" secondItem="Nqd-Yj-xpu" secondAttribute="bottom" id="UGX-Oh-9Xs"/>
                             <constraint firstAttribute="trailing" secondItem="XHc-gl-j8n" secondAttribute="trailing" id="fVv-J3-XPc"/>
                             <constraint firstItem="Nqd-Yj-xpu" firstAttribute="trailing" secondItem="4vh-fy-Drp" secondAttribute="trailing" id="oJd-hB-kAk"/>
                             <constraint firstItem="Nqd-Yj-xpu" firstAttribute="leading" secondItem="mtl-N4-Cbf" secondAttribute="leadingMargin" constant="-16" id="xVk-cD-ewa"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="FJk-Sp-829"/>
+                                <exclude reference="xVk-cD-ewa"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="aQv-Gh-EyA"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="agreeButton" destination="Nqd-Yj-xpu" id="Dr0-aq-kR7"/>
+                        <outlet property="progressBarImageView" destination="4vh-fy-Drp" id="hx2-hv-OEm"/>
                         <outlet property="scrollView" destination="XHc-gl-j8n" id="4oa-e8-rLv"/>
                         <outlet property="tosTextView" destination="Ppr-2y-zFU" id="OHq-ez-fgk"/>
                     </connections>
@@ -4234,7 +4243,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AFEE3EA0-49A9-4EC4-88CB-AB1A031F2DB8" width="29" height="29">
+        <image name="110C632C-4921-43FB-92E0-B731222951C2" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4372,6 +4381,6 @@ AAAAAAAAAAAAAAAAABdTA
     <inferredMetricsTieBreakers>
         <segue reference="SWl-Ux-T2G"/>
         <segue reference="BrQ-Qn-DKp"/>
-        <segue reference="ghl-jW-pRy"/>
+        <segue reference="Y7v-Ta-Z29"/>
     </inferredMetricsTieBreakers>
 </document>

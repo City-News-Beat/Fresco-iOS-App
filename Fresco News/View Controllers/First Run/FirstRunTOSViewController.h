@@ -10,4 +10,6 @@
 
 @interface FirstRunTOSViewController : FRSBaseViewController
 
+@property (nonatomic) BOOL updatedTerms;
+
 @end

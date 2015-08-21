@@ -261,7 +261,7 @@ typedef enum : NSUInteger {
         //Sets condition for agreegement to the TOS
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
 
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
     }
     else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];

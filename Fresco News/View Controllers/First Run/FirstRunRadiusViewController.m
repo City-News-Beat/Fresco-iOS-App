@@ -12,6 +12,7 @@
 #import "MKMapView+Additions.h"
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
+#import "FirstRunTOSViewController.h"
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
@@ -114,7 +115,12 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [self save];
+    if ([segue.identifier isEqualToString:@"termsOfService"]) {
+        FirstRunTOSViewController *vc = [segue destinationViewController];
+        vc.updatedTerms = NO;
+        [self save];
+    }
+
 }
 
 @end
