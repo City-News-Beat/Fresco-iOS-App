@@ -8,6 +8,7 @@
 
 #import "FirstRunTOSViewController.h"
 #import "FRSDataManager.h"
+#import "FRSRootViewController.h"
 
 @interface FirstRunTOSViewController () <UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -45,14 +46,41 @@
     }];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    
+}
+
 /*
 ** Final step of First Run
 */
 
 - (IBAction)actionDone:(id)sender
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_TOS_AGREED];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)actionCancel:(id)sender {
+    
+    UIAlertController *logOutAlertController = [[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Are you sure?" message:@"The terms of service are what give us permission to show you nearby assignments and get your photos and videos seen and paid for by news outlets." action:CANCEL];
+    
+    [logOutAlertController addAction:[UIAlertAction actionWithTitle:@"Log Out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+        
+        [[FRSDataManager sharedManager] logout];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    }]];
+    
+    [self presentViewController:logOutAlertController animated:YES completion:nil];
+    
 }
 
 //- (void)scrollViewDidScroll:(UIScrollView *)scrollView

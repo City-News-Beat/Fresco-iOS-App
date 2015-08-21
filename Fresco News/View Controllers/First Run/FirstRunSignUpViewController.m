@@ -111,12 +111,12 @@
     
     [((UIButton *)sender) setUserInteractionEnabled:NO];
     
+    // save this to allow backing to the VC
+    self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
     //Check if both fields are populated
     if ((self.firstName.length && self.lastName.length)) {
-        
-        // save this to allow backing to the VC
-        self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         NSData *imageData = self.selectedImage ? UIImageJPEGRepresentation(self.selectedImage, 0.5) : nil;
         
@@ -140,6 +140,9 @@
                                  completion:nil];
             }
             else {
+                
+                [((UIButton *)sender) setUserInteractionEnabled:YES];
+                
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
             }
             
@@ -251,7 +254,6 @@
                 
                 if (urlString) {
     
-                    
                     self.selectedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:result[@"picture"][@"data"][@"url"]]]];
 
                     [self.addPhotoImageView setImage:self.selectedImage];

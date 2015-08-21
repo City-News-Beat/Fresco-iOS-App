@@ -64,7 +64,6 @@ typedef enum : NSUInteger {
         button.layer.cornerRadius = 4;
         button.clipsToBounds = YES;
     }
-
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
@@ -296,6 +295,9 @@ typedef enum : NSUInteger {
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+    }
+    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
+        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
     }
     else{
         if(self.presentingViewController == nil)

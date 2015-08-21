@@ -476,7 +476,7 @@
         }
         //The fresco user id exists and proceed normally
         else{
-            
+        
             NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
             
             [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
@@ -500,8 +500,8 @@
                 _loggingIn = NO;
             
             }];
+            
         }
-        
     }
 }
 
