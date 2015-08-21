@@ -13,7 +13,7 @@
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
@@ -31,8 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
     
     self.textfieldFirstName.delegate = self;
     self.textfieldLastName.delegate = self;
@@ -74,10 +72,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    return NO;
-}
-
 #pragma mark - Text Field Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -108,9 +102,8 @@
 
 - (IBAction)actionNext:(id)sender
 {
-    
     [((UIButton *)sender) setUserInteractionEnabled:NO];
-    
+
     // save this to allow backing to the VC
     self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -142,7 +135,6 @@
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
             }
             
-            [((UIButton *)sender) setUserInteractionEnabled:YES];
             
         }];
     }
@@ -154,6 +146,8 @@
                            animated:YES
                          completion:nil];
     }
+    [((UIButton *)sender) setUserInteractionEnabled:YES];
+
 }
 
 #pragma mark - Social data

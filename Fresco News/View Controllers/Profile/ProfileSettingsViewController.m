@@ -100,8 +100,9 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     [self setSaveButtonStateEnabled:NO];
-    self.saveChangesbutton.alpha = 0.1;
-    
+
+    self.saveChangesbutton.alpha = 0;
+
     //Checks if the user's primary login is through social, then disable the email and password fields
     if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
         || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
@@ -170,18 +171,8 @@ typedef enum : NSUInteger {
 {
     [super viewWillAppear:animated];
     
-    [UIView animateWithDuration:0.3 animations:^{
-    }];
-    
-    [UIView animateWithDuration:0.3 delay:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.saveChangesbutton.alpha = 1;
-        
-    } completion:^(BOOL finished) {
-        
-    }];
-    
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
-    self.textfieldLast.text = [FRSDataManager sharedManager].currentUser.last;
+    self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
     
     // Radius slider values
@@ -191,12 +182,25 @@ typedef enum : NSUInteger {
     [self sliderValueChanged:self.radiusStepper];
 }
 
-- (void)willMoveToParentViewController:(UIViewController *)parent{
-
-    [super willMoveToParentViewController:parent];
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    [self saveChanges];
+    self.saveChangesbutton.alpha = 1;
 
+}
+
+-(void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [self.saveChangesbutton sizeToFit];
+
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    
+    if (self.saveChangesbutton.alpha != 1) {
+        
+
+    }
 }
 
 #pragma mark - Controller Methods
@@ -698,7 +702,7 @@ typedef enum : NSUInteger {
     }
 }
 
--(void)tapDetected{
+-(void)tapDetected {
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.allowsEditing = YES;
