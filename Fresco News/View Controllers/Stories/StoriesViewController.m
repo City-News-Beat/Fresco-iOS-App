@@ -143,9 +143,7 @@ static CGFloat const kInterImageGap = 1.0f;
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    [self resetNavigationandTabBar];
-    
+
     self.tableView.delegate = nil;
     
 }
@@ -309,20 +307,6 @@ static CGFloat const kInterImageGap = 1.0f;
 //        self.lastContentOffset = scrollView.contentOffset.y;
 //        
 //    }
-    
-}
-
--(void)resetNavigationandTabBar{
-    
-    self.currentlyHidden = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    self.tableView.contentInset = UIEdgeInsetsZero;
-    
-    [UIView animateWithDuration:.1 animations:^{
-        self.statusBarBackground.alpha = 0.0f;
-    }];
     
 }
 

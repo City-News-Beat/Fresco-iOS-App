@@ -28,14 +28,12 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 
-@property (nonatomic, assign) BOOL currentlyHidden;
-
 /*
 ** Refresh function
 */
 
 - (void)refresh;
 
--(void)resetNavigationBar:(BOOL)animated;
+- (void)reloadData;
 
 @end

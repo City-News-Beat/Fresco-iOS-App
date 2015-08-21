@@ -167,9 +167,8 @@
                         isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
                 
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                    [self.galleriesViewController.tableView reloadData];
+                    [self.galleriesViewController reloadData];
             
-                    
                 }
             }
         }

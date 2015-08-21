@@ -173,11 +173,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
-    //Pause the currently playing video
-    [self.sharedPlayer pause];
-    
-    //Clean up the shared layer
-    [self.sharedLayer removeFromSuperlayer];
+    //Cleans up the video player if playing
+    [self cleanUpVideoPlayer];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         //update UI in main thread.
@@ -191,7 +188,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     self.sharedPlayer = [AVPlayer playerWithURL:url];
 
     //Set up the AVPlayerItem
-    [self removeObserverForPlayer];
     [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
     
     self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
@@ -273,12 +269,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)removeObserverForPlayer{
 
-    @try{
-        [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
-    }@catch(id anException){
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
-
+    [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
 }
 
 /*
@@ -514,17 +505,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell doesn't have a video
     else{
         
-        //If the Player is actually playing
-        if([self sharedPlayer] != nil){
-            
-            //Stop the player
-            [self removeObserverForPlayer];
-
-            [self.sharedPlayer pause];
-            
-            [self.sharedLayer removeFromSuperlayer];
-            
-        }
+        [self cleanUpVideoPlayer];
         
     }
     

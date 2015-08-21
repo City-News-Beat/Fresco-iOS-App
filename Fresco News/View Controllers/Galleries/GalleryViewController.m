@@ -44,9 +44,6 @@ static CGFloat kCellHeight = 44.0f;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UITableView *galleryTable;
 
-
-@property (nonatomic, assign) BOOL bordersLaidOut;
-
 @end
 
 @implementation GalleryViewController
@@ -65,18 +62,10 @@ static CGFloat kCellHeight = 44.0f;
     
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-
-    [super viewDidAppear:animated];
-
-}
-
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
