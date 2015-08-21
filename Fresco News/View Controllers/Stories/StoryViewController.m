@@ -46,114 +46,20 @@
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
                     [self.galleriesViewController.tableView reloadData];
-                    
-                    [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+    
                 }
             }
             
+            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+            
         }];
-
-        
-//        if([self.offset integerValue] != 0){
-//            
-//            NSArray *galleryIds;
-//            
-//            //Load by intervals of 10
-//            if(self.story.galleryIds.count > ([self.offset integerValue] + 10)){
-//                
-//                // append data to data source, insert new cells at the end of table view
-//                galleryIds = [self.story.galleryIds subarrayWithRange:NSMakeRange([self.offset integerValue],10)];
-//                
-//                self.offset = [NSNumber numberWithInteger:([self.offset integerValue] + 10)];
-//                
-//            }
-//            else{
-//                
-//                galleryIds = [self.story.galleryIds subarrayWithRange:NSMakeRange([self.offset integerValue], (self.story.galleryIds.count - [self.offset integerValue]))];
-//                
-//                self.offset = 0;
-//                
-//            }
-//            
-//            //Make request for more posts, append to galleries array
-//            [[FRSDataManager sharedManager] getGalleriesFromIds:galleryIds responseBlock:^(id responseObject, NSError *error) {
-//                if (!error) {
-//                    if ([responseObject count]) {
-//                        
-//                        [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
-//                        
-//                        [self.galleriesViewController.tableView reloadData];
-//                        
-//                    }
-//                }
-//            }];
-//        
-//        }
-
     }];
-
 }
 
 #pragma mark - Data Loading
 
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
-    
-//    NSArray *galleryIds;
-//    
-//    if(self.story.galleryIds.count > 10){
-//        
-//        galleryIds = [self.story.galleryIds subarrayWithRange:NSMakeRange(0, 10)];
-//        
-//        self.offset = [NSNumber numberWithInt:10];
-//    }
-//    else{
-//    
-//        galleryIds = self.story.galleryIds;
-//        
-//        self.offset = nil;
-//    }
-//
-//    
-//    [[FRSDataManager sharedManager] getGalleriesFromIds:galleryIds responseBlock:^(id responseObject, NSError *error) {
-//        if (!error) {
-//            
-//            if ([responseObject count]) {
-//                
-//                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-//                [self.galleriesViewController.tableView reloadData];
-//                
-//                //Check if there is a gallery selected from the thumbnail
-//                if(self.selectedGallery){
-//                    
-//                    NSUInteger galleryIndex = 0;
-//                    
-//                    BOOL galleryFound = NO;
-//                    
-//                    //Loop through the galleries and find the corresponding cell
-//                    for (FRSGallery *gallery in self.galleriesViewController.galleries) {
-//                        galleryIndex ++;
-//                        if([gallery.galleryID isEqualToString:self.selectedGallery]){
-//                            galleryFound = YES;
-//                            break;
-//                        }
-//                    }
-//                    
-//                    //If the index matches
-//                    if(galleryIndex > 0 && galleryFound){
-//                    
-//                        NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:galleryIndex -1];
-//                    
-//                        [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-//                        
-//                        self.galleriesViewController.currentlyHidden = NO;
-//    
-//                    }
-//                }
-//            }
-//        }
-//    }];
-    
     
     [[FRSDataManager sharedManager] getGalleriesFromStory:self.story.storyID
      withOffset:[NSNumber numberWithInteger:0]

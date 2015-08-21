@@ -111,17 +111,14 @@
     
     [((UIButton *)sender) setUserInteractionEnabled:NO];
     
-    // save this to allow backing to the VC
-    self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    NSData *imageData = nil;
-    if (self.selectedImage) {
-        imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
-    }
-    
-    // both fields must be populated
+    //Check if both fields are populated
     if ((self.firstName.length && self.lastName.length)) {
+        
+        // save this to allow backing to the VC
+        self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        NSData *imageData = self.selectedImage ? UIImageJPEGRepresentation(self.selectedImage, 0.5) : nil;
         
         NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
 
@@ -130,7 +127,11 @@
         }
 
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
+            
             if (!success) {
+                
+                [((UIButton *)sender) setUserInteractionEnabled:YES];
+                
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:ERROR
                                              message:NAME_ERROR_MSG
@@ -142,11 +143,13 @@
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
             }
             
-            [((UIButton *)sender) setUserInteractionEnabled:YES];
-            
         }];
+        
     }
     else {
+        
+        [((UIButton *)sender) setUserInteractionEnabled:YES];
+        
         [self presentViewController:[[FRSAlertViewManager sharedManager]
                                      alertControllerWithTitle:ERROR
                                      message:NAME_PROMPT

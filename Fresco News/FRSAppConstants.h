@@ -85,6 +85,8 @@ enum FRSErrorCodes {
 #define UD_HAS_LAUNCHED_BEFORE              @"hasLaunchedBefore"
 #define UD_ASSIGNMENTS_ONBOARDING           @"assignmentsOnboarding"
 #define UD_UPDATE_PROFILE_HEADER            @"updateProfileHeader"
+#define UD_UPDATE_PROFILE                   @"updateProfile"
+#define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
 
 #pragma mark - Fonts
 

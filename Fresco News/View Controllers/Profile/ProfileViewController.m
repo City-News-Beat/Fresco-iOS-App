@@ -86,34 +86,26 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
     [super viewDidAppear:animated];
     
-    if(!self.initialUpdate){
-       [self populateProfile];
+    if(!self.initialUpdate || [[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_PROFILE]){
+       
+        [self populateProfile];
+        
         self.initialUpdate = YES;
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_PROFILE];
     }
 
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"runUpdateOnProfile"]){
+    if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
         [self performNecessaryFetch:YES withResponseBlock:nil];
-    
-        //Ensures that update is ran on profile view controller
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"runUpdateOnProfile"];
+
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_USER_GALLERIES];
     
     }
 
-}
-
-
-#pragma mark - NSNotificationCenter Notification handling
-
-/*
-** API Key for user is now available, run update on profile view
-*/
-
-- (void)handleAPIKeyAvailable:(NSNotification *)notification
-{
-    [self populateProfile];
 }
 
 /*
@@ -132,6 +124,18 @@
         
         [self performNecessaryFetch:NO withResponseBlock:nil];
     }
+}
+
+
+#pragma mark - NSNotificationCenter Notification handling
+
+/*
+** API Key for user is now available, run update on profile view
+*/
+
+- (void)handleAPIKeyAvailable:(NSNotification *)notification
+{
+    [self populateProfile];
 }
 
 #pragma mark - Data Loading
@@ -158,7 +162,9 @@
                 [self setUserMessage:YES];
             
                 //Check to make sure the first gallery and the response object's first gallery are different
-                if([self.galleriesViewController.galleries count] == 0 || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
+                if([self.galleriesViewController.galleries count] == 0
+                   || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
+                        isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
                 
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     [self.galleriesViewController.tableView reloadData];
@@ -255,4 +261,5 @@
         self.galleriesViewController.containingViewController = self;
     }
 }
+
 @end

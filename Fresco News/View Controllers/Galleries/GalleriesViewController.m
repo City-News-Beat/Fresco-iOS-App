@@ -387,11 +387,35 @@
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[string, URL]
                                       applicationActivities:nil];
+    
+    [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        
+        if(completed){
+            
+            NSString *type;
+            
+            if(activityType == UIActivityTypePostToFacebook) type = @"Facebook";
+            
+            else if(activityType == UIActivityTypePostToTwitter) type = @"Twitter";
+            
+            else if(activityType == UIActivityTypeMail) type = @"Email";
+            
+            else if(activityType == UIActivityTypeCopyToPasteboard) type = @"Clipboard";
+            
+            else type = activityType;
+            
+            [Answers logShareWithMethod:type
+                            contentName:@"Gallery"
+                            contentType:@"gallery"
+                              contentId:gallery.galleryID
+                       customAttributes:@{@"location" : @"Gallery List"}];
+        }
+        
+    }];
+    
     [self.navigationController presentViewController:activityViewController
                                             animated:YES
-                                          completion:^{
-                                              // ...
-                                          }];
+                                          completion:nil];
     
 }
 

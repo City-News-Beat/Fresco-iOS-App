@@ -31,6 +31,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
 
+@property (assign, nonatomic) BOOL signUpRunning;
+
 @end
 
 @implementation FirstRunAccountViewController
@@ -41,6 +43,8 @@ typedef enum : NSUInteger {
     //[(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
     self.facebookButton.layer.cornerRadius = 4;
     self.twitterButton.layer.cornerRadius = 4;
+    
+    self.signUpRunning = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -246,7 +250,8 @@ typedef enum : NSUInteger {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
@@ -279,54 +284,85 @@ typedef enum : NSUInteger {
     
 }
 
-- (void)hitNext {
+- (void)hitNext{
     
-    if ([self.emailField.text isValidEmail] && [self.passwordField.text isValidPassword]) {
+    if(_signUpRunning) return;
+    
+    _signUpRunning = YES;
+    
+    if (![self.emailField.text isValidEmail]){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Invalid Email"
+                                     message:@"Please enter a valid email" action:DISMISS]
+                           animated:YES
+                         completion:nil];
+        
+        _signUpRunning = NO;
+    
+    }
+    else if(![self.passwordField.text isValidPassword]){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Invalid Password"
+                                     message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
+                           animated:YES
+                         completion:nil];
+
+        _signUpRunning = NO;
+
+    }
+    //Both fields valid
+    else{
         
         // save this to allow backing to the VC
         self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
         self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
         NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         if (![self.password isEqualToString:confirmPassword]) {
-            [self
-             presentViewController:[[FRSAlertViewManager sharedManager]
-                                    alertControllerWithTitle:ERROR
-                                    message:PASSWORD_ERROR_TITLE action:DISMISS]
-             animated:YES
-             completion:nil];
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:ERROR
+                                         message:PASSWORD_ERROR_TITLE action:DISMISS]
+                               animated:YES
+                             completion:nil];
         }
         else {
             
-            [[FRSDataManager sharedManager]
-             signupUser:self.email
-             email:self.email
-             password:self.password
-             block:^(BOOL succeeded, NSError *error) {
-                 
-                 if (error) {
-                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
-                                                                     message:[error.userInfo objectForKey:@"error"]
-                                                                    delegate: self
-                                                           cancelButtonTitle: CANCEL
-                                                           otherButtonTitles:nil, nil];
-                     [alert addButtonWithTitle:STR_TRY_AGAIN];
-                     [alert show];
+            [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
+                
+                //Failed signup
+                if (error) {
+                    
+                     [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                  alertControllerWithTitle:ERROR
+                                                  message:[error.userInfo objectForKey:@"error"] action:STR_TRY_AGAIN]
+                                        animated:YES
+                                      completion:nil];
                      
                      self.emailField.textColor = [UIColor redColor];
-                 } else {
-                     
+                 
+                }
+                //Successfully signed up
+                else {
+                 
                      //Set has Launched Before to prevent onboard from ocurring again
                      if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
                          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
                      
                      [self transferUser];
-                 }
-                 
+                    
+                }
+                
+                _signUpRunning = NO;
+                
              }];
         }
     }
-}
 
+}
 
 @end
