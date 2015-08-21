@@ -32,6 +32,10 @@
 {
     [super viewDidLoad];
     
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
     self.textfieldFirstName.delegate = self;
     self.textfieldLastName.delegate = self;
 
@@ -153,7 +157,6 @@
                            animated:YES
                          completion:nil];
     }
-    [((UIButton *)sender) setUserInteractionEnabled:YES];
 
 }
 

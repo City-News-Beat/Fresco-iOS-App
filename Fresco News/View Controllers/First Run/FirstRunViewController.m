@@ -290,11 +290,19 @@ typedef enum : NSUInteger {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
+    //Tells profile to update
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
+    
+    //Tells rest of the app to update respective occurence of the user's profile picture
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
     
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
+        
+        //Sets condition for agreegement to the TOS
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
+
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+        
     }
     else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
@@ -307,6 +315,8 @@ typedef enum : NSUInteger {
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)revertScreenToNormal{

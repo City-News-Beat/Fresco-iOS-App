@@ -22,6 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.agreeButton.enabled = YES; // But probably we want to require scrolling to the end first
 
     // No text appears at requested font size 14.0 - constraint issue?

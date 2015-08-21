@@ -65,28 +65,25 @@
         [self.frsRootViewController setRootViewControllerToOnboard];
     }
     
+    //Check if the user has agreed to the TOS, otherwise log them out
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
+        
+        [[FRSDataManager sharedManager] logout];
+        
+    }
+    
     if([FRSDataManager sharedManager].reachabilityManager.isReachable){
-        
-        //Check if the user has agreed to the TOS, otherwise log them out
-        if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        
-            [[FRSDataManager sharedManager] logout];
+    
+        //Refresh the existing user, if exists, then run location monitoring
+        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
             
-        }
-        else{
-        
-            //Refresh the existing user, if exists, then run location monitoring
-            [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
                 
-                if (succeeded) {
-                    
-                    NSLog(@"successful login on launch");
+                NSLog(@"successful login on launch");
 
-                }
-                
-            }];
-                
-        }
+            }
+            
+        }];
         
     }
     
