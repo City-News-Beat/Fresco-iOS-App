@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -2795,7 +2795,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="110C632C-4921-43FB-92E0-B731222951C2" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="EE8C4B8E-B493-463E-A6B0-238F6DA5C13F" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3360,35 +3360,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWC-lh-H2g" userLabel="Twitter">
-                                <rect key="frame" x="16" y="315" width="166" height="46"/>
-                                <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="83:23" id="DtD-G8-CJv"/>
-                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="79:21" id="F8T-PG-DPH"/>
-                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="79:21" id="P4I-zi-h5y"/>
-                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="167:45" id="ZCm-Xe-30V"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Twitter">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="DtD-G8-CJv"/>
-                                        <exclude reference="F8T-PG-DPH"/>
-                                        <exclude reference="P4I-zi-h5y"/>
-                                        <exclude reference="ZCm-Xe-30V"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" tag="50" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="efb-pa-Lj1" userLabel="twitterIcon">
                                 <rect key="frame" x="51" y="328" width="20" height="20"/>
+                                <color key="backgroundColor" red="0.81568627449999997" green="0.0078431372550000003" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="8iC-WI-xeu"/>
                                 </constraints>
@@ -3431,6 +3405,33 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWC-lh-H2g" userLabel="Twitter">
+                                <rect key="frame" x="16" y="315" width="166" height="46"/>
+                                <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="83:23" id="DtD-G8-CJv"/>
+                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="79:21" id="F8T-PG-DPH"/>
+                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="79:21" id="P4I-zi-h5y"/>
+                                    <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="167:45" id="ZCm-Xe-30V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Twitter">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="DtD-G8-CJv"/>
+                                        <exclude reference="F8T-PG-DPH"/>
+                                        <exclude reference="P4I-zi-h5y"/>
+                                        <exclude reference="ZCm-Xe-30V"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -3533,11 +3534,12 @@
                         <outlet property="passwordField" destination="xJx-Uq-74r" id="tTh-Xd-psy"/>
                         <outlet property="twitterButton" destination="bWC-lh-H2g" id="4oR-mc-x8v"/>
                         <segue destination="pdb-B6-s7T" kind="show" identifier="showPersonalInfo" id="6TG-Ef-MS9"/>
+                        <segue destination="rD6-e0-Xnl" kind="show" identifier="signup_replaceWithTOS" id="ipo-ch-au7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bwh-Rn-luL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1196.5" y="2198.5"/>
+            <point key="canvasLocation" x="-1196.5" y="2184.5"/>
         </scene>
         <!--First Run Sign Up View Controller-->
         <scene sceneID="2pb-Rw-CTi">
@@ -4140,7 +4142,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Xi-VJ-vsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1204.5" y="5885.5"/>
+            <point key="canvasLocation" x="-2026.5" y="3499.5"/>
         </scene>
         <!--Assignment Onboard View Controller-->
         <scene sceneID="eAN-6s-mVh">
@@ -4243,7 +4245,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="110C632C-4921-43FB-92E0-B731222951C2" width="29" height="29">
+        <image name="EE8C4B8E-B493-463E-A6B0-238F6DA5C13F" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4380,7 +4382,7 @@ AAAAAAAAAAAAAAAAABdTA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="SWl-Ux-T2G"/>
-        <segue reference="BrQ-Qn-DKp"/>
-        <segue reference="Y7v-Ta-Z29"/>
+        <segue reference="6TG-Ef-MS9"/>
+        <segue reference="ipo-ch-au7"/>
     </inferredMetricsTieBreakers>
 </document>

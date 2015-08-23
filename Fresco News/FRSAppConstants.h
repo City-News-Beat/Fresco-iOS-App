@@ -109,6 +109,7 @@ enum FRSErrorCodes {
 #define SEG_SHOW_ACCT_INFO                  @"showAccountInfo"
 #define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignUp"
 #define SEG_REPLACE_WITH_TOS                @"replaceWithTOS"
+#define SEG_SIGNUP_REPLACE_WITH_TOS         @"signup_replaceWithTOS"
 #define SEG_SHOW_PERSONAL_INFO              @"showPersonalInfo"
 #define SEG_SHOW_PERMISSIONS                @"showPermissions"
 #define SEG_SHOW_RADIUS                     @"showRadius"
@@ -147,7 +148,7 @@ enum FRSErrorCodes {
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 #define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)
-#define T_O_S_UNAVAILABLE_MSG               NSLocalizedString(@"Terms of Service not available", nil)
+#define T_O_S_UNAVAILABLE_MSG               NSLocalizedString(@"The Terms of Service are currently unavailable. Please check back later.", nil)
 #define DISABLE_ACCT_TITLE                  NSLocalizedString(@"Are you sure? You can recover your account up to one year from today.", nil)
 
 #define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)

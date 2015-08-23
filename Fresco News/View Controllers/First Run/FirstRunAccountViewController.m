@@ -7,6 +7,7 @@
 //
 
 #import "FirstRunAccountViewController.h"
+#import "FirstRunTOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 
@@ -25,7 +26,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
-
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -104,6 +104,7 @@ typedef enum : NSUInteger {
     } else if (textField == self.passwordField) {
         [self.confirmPasswordField becomeFirstResponder];
     }else if (textField == self.confirmPasswordField) {
+        [self.confirmPasswordField resignFirstResponder];
         [self hitNext];  
     }
     
@@ -264,7 +265,7 @@ typedef enum : NSUInteger {
         [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
     }
     else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
+        [self performSegueWithIdentifier:SEG_SIGNUP_REPLACE_WITH_TOS sender:self];
     }
     else{
         if(self.presentingViewController == nil)
@@ -311,6 +312,8 @@ typedef enum : NSUInteger {
                          completion:nil];
         
         _signUpRunning = NO;
+        
+        return;
     
     }
     else if(![self.passwordField.text isValidPassword]){
@@ -322,59 +325,65 @@ typedef enum : NSUInteger {
                          completion:nil];
 
         _signUpRunning = NO;
+        
+        return;
 
     }
     //Both fields valid
-    else{
+    
+    // save this to allow backing to the VC
+    self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (![self.password isEqualToString:confirmPassword]) {
         
-        // save this to allow backing to the VC
-        self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:ERROR
+                                     message:PASSWORD_ERROR_TITLE action:DISMISS]
+                           animated:YES
+                         completion:nil];
+    }
+    else {
         
-        self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        if (![self.password isEqualToString:confirmPassword]) {
+        [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:ERROR
-                                         message:PASSWORD_ERROR_TITLE action:DISMISS]
-                               animated:YES
-                             completion:nil];
-        }
-        else {
+            //Failed signup
+            if (error) {
+                
+                 [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                              alertControllerWithTitle:ERROR
+                                              message:[error.userInfo objectForKey:@"error"] action:STR_TRY_AGAIN]
+                                    animated:YES
+                                  completion:nil];
+                 
+                 self.emailField.textColor = [UIColor redColor];
+             
+            }
+            //Successfully signed up
+            else {
+
+                 [self transferUser];
+                
+            }
             
-            [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
-                
-                //Failed signup
-                if (error) {
-                    
-                     [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                  alertControllerWithTitle:ERROR
-                                                  message:[error.userInfo objectForKey:@"error"] action:STR_TRY_AGAIN]
-                                        animated:YES
-                                      completion:nil];
-                     
-                     self.emailField.textColor = [UIColor redColor];
-                 
-                }
-                //Successfully signed up
-                else {
-                 
-                     //Set has Launched Before to prevent onboard from ocurring again
-                     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-                     
-                     [self transferUser];
-                    
-                }
-                
-                _signUpRunning = NO;
-                
-             }];
-        }
+            _signUpRunning = NO;
+            
+         }];
     }
 
+}
+
+#pragma mark - Segues
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:SEG_REPLACE_WITH_TOS]) {
+        FirstRunTOSViewController *tosVC = [segue destinationViewController];
+        tosVC.updatedTerms = YES;
+    }
 }
 
 @end
