@@ -2795,7 +2795,7 @@
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="EE8C4B8E-B493-463E-A6B0-238F6DA5C13F" id="zi1-gE-XhI">
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="85DEE7B4-74E2-4B05-A11B-C2DCFDB81180" id="zi1-gE-XhI">
                                                                     <rect key="frame" x="15" y="12" width="18" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
@@ -3360,13 +3360,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" tag="50" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="efb-pa-Lj1" userLabel="twitterIcon">
-                                <rect key="frame" x="51" y="328" width="20" height="20"/>
-                                <color key="backgroundColor" red="0.81568627449999997" green="0.0078431372550000003" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="8iC-WI-xeu"/>
-                                </constraints>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dyy-Xz-2TG" userLabel="Facebook">
                                 <rect key="frame" x="193" y="315" width="166" height="46"/>
                                 <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -3396,16 +3389,6 @@
                                     <constraint firstAttribute="height" constant="20" id="nLW-db-3gG"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0UT-Oh-D80">
-                                <rect key="frame" x="16" y="315" width="166" height="46"/>
-                                <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="    Twitter">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWC-lh-H2g" userLabel="Twitter">
                                 <rect key="frame" x="16" y="315" width="166" height="46"/>
                                 <color key="backgroundColor" red="0.0" green="0.67450980390000004" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -3433,6 +3416,12 @@
                                     <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" tag="50" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="efb-pa-Lj1" userLabel="twitterIcon">
+                                <rect key="frame" x="51" y="328" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="8iC-WI-xeu"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -3445,7 +3434,6 @@
                             <constraint firstItem="odg-nT-te1" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leading" id="3JH-3w-IDJ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="TBX-ma-HXY" secondAttribute="trailing" constant="-16" id="3YI-CO-wvJ"/>
                             <constraint firstItem="0qC-R2-kGU" firstAttribute="leading" secondItem="4sr-us-fVk" secondAttribute="leading" id="3ob-xl-Vpl"/>
-                            <constraint firstAttribute="leading" secondItem="0UT-Oh-D80" secondAttribute="trailing" constant="11" id="6PY-G8-jWz"/>
                             <constraint firstAttribute="trailing" secondItem="TBX-ma-HXY" secondAttribute="trailing" id="6rQ-BL-qFW"/>
                             <constraint firstItem="Dyy-Xz-2TG" firstAttribute="trailing" secondItem="KeG-2G-fq1" secondAttribute="trailingMargin" id="8Oz-T1-Xtg"/>
                             <constraint firstItem="arb-kU-pXZ" firstAttribute="centerX" secondItem="Dyy-Xz-2TG" secondAttribute="centerX" constant="-49" id="8si-pd-gXR"/>
@@ -3454,7 +3442,6 @@
                             <constraint firstItem="WT6-JR-z0E" firstAttribute="top" secondItem="0qC-R2-kGU" secondAttribute="bottom" constant="130" id="Cpe-0u-9j3"/>
                             <constraint firstItem="4sr-us-fVk" firstAttribute="top" secondItem="bWC-lh-H2g" secondAttribute="bottom" constant="43.5" id="DQj-RV-a2b"/>
                             <constraint firstItem="Dyy-Xz-2TG" firstAttribute="leading" secondItem="bWC-lh-H2g" secondAttribute="trailing" constant="11" id="Db1-zx-839"/>
-                            <constraint firstItem="0UT-Oh-D80" firstAttribute="top" secondItem="Bdn-5L-uvv" secondAttribute="bottom" constant="34" id="Jkt-O7-VJC"/>
                             <constraint firstItem="0qC-R2-kGU" firstAttribute="top" secondItem="4sr-us-fVk" secondAttribute="top" constant="1" id="KYg-SR-AN2"/>
                             <constraint firstItem="bWC-lh-H2g" firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="83:23" id="Kfg-am-4Xx"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Bdn-5L-uvv" secondAttribute="trailing" id="KwL-ob-EJd"/>
@@ -3472,7 +3459,6 @@
                             <constraint firstItem="0qC-R2-kGU" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leading" id="Zel-rL-hoT"/>
                             <constraint firstItem="Bdn-5L-uvv" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leadingMargin" id="aEu-4N-tWi"/>
                             <constraint firstItem="TBX-ma-HXY" firstAttribute="top" secondItem="4sr-us-fVk" secondAttribute="bottom" priority="250" constant="79" id="baS-5o-Q0R"/>
-                            <constraint firstItem="0UT-Oh-D80" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leadingMargin" id="bdW-sp-Ckl"/>
                             <constraint firstItem="4sr-us-fVk" firstAttribute="top" secondItem="bWC-lh-H2g" secondAttribute="bottom" constant="43.5" id="cnC-cc-AbW"/>
                             <constraint firstItem="0qC-R2-kGU" firstAttribute="leading" secondItem="KeG-2G-fq1" secondAttribute="leading" id="ey6-OO-jHc"/>
                             <constraint firstItem="arb-kU-pXZ" firstAttribute="centerY" secondItem="Dyy-Xz-2TG" secondAttribute="centerY" id="fNJ-Xd-711"/>
@@ -3498,9 +3484,6 @@
                             <constraint firstItem="bWC-lh-H2g" firstAttribute="centerY" secondItem="efb-pa-Lj1" secondAttribute="centerY" id="z5S-Rj-4CQ"/>
                         </constraints>
                         <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="0UT-Oh-D80"/>
-                            </mask>
                             <mask key="constraints">
                                 <exclude reference="pty-Vl-UTu"/>
                                 <exclude reference="sBr-P1-Di8"/>
@@ -4245,7 +4228,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="EE8C4B8E-B493-463E-A6B0-238F6DA5C13F" width="29" height="29">
+        <image name="85DEE7B4-74E2-4B05-A11B-C2DCFDB81180" width="29" height="29">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
