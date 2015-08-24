@@ -377,7 +377,7 @@
 
 - (void)shareTapped:(FRSGallery *)gallery{
     
-    NSString *string = [NSString stringWithFormat:@"http://fresconews.com/gallery/%@", gallery.galleryID];
+    NSString *string = [NSString stringWithFormat:@"%@/gallery/%@",BASE_URL, gallery.galleryID];
     NSURL *URL = [NSURL URLWithString:string];
     
     UIActivityViewController *activityViewController =
