@@ -29,6 +29,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *subHeader;
 @property (weak, nonatomic) IBOutlet UIImageView *onboardImage;
 @property (weak, nonatomic) IBOutlet UIImageView *progressImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomTextContainer;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomLogo;
 
 @end
 
@@ -69,6 +72,7 @@
     
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self setUpViews];
     
     self.mainHeader.text = [self.mainHeaders objectAtIndex:self.index];
     
@@ -90,14 +94,26 @@
     [self.frsTableViewCellDelegate nextPageClicked:self.index];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) setUpViews {
+        
+    if (IS_STANDARD_IPHONE_6) {
+        self.constraintBottomLogo.constant = 65;
+        self.constraintBottomTextContainer.constant = 65;
+        self.constraintBottomImage.constant = 85;
+    }
+    
+    if (IS_ZOOMED_IPHONE_6 || IS_IPHONE_5) {
+        self.constraintBottomLogo.constant = 30;
+        self.constraintBottomTextContainer.constant = 40;
+        self.constraintBottomImage.constant = 65;
+    }
+    
+    if (IS_STANDARD_IPHONE_6_PLUS || IS_ZOOMED_IPHONE_6) {
+        self.constraintBottomLogo.constant = 85;
+        self.constraintBottomTextContainer.constant = 85;
+        self.constraintBottomImage.constant = 105;
+    }
+    
 }
-*/
 
 @end
