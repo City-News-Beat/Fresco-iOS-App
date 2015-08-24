@@ -16,13 +16,14 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
+#import "UISocialButton.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
 
-@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 
@@ -53,6 +54,9 @@
         button.layer.cornerRadius = 4;
         button.clipsToBounds = YES;
     }
+    
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
@@ -160,9 +164,13 @@
 
 }
 
-- (IBAction)facebookLogin:(id)sender{ [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil]; }
+- (IBAction)facebookLogin:(id)sender{
+    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
+}
 
-- (IBAction)twitterLogin:(id)sender { [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil]; }
+- (IBAction)twitterLogin:(id)sender {
+    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
+}
 
 /*
 ** Signup Button

@@ -10,11 +10,12 @@
 #import "FirstRunTOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
+#import "UISocialButton.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
-@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
@@ -32,9 +33,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //[(UIScrollView *)self.view setContentSize:CGSizeMake(320, 700)];
-    self.facebookButton.layer.cornerRadius = 4;
-    self.twitterButton.layer.cornerRadius = 4;
+    
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
     self.signUpRunning = NO;
 }
