@@ -285,6 +285,10 @@ typedef enum : NSUInteger {
     }
 }
 
+/*
+** Method to send us out of view controller
+*/
+
 - (void)transferUser{
     
     //Set has Launched Before to prevent onboard from ocurring again
@@ -424,8 +428,7 @@ typedef enum : NSUInteger {
         fracvc.email = self.emailField.text;
         fracvc.password = self.passwordField.text;
     }
-    
-    if ([[segue identifier] isEqualToString:@"replaceWithTOS"]) {
+    else if ([[segue identifier] isEqualToString:SEG_REPLACE_WITH_TOS]) {
         FirstRunTOSViewController *tosVC = [segue destinationViewController];
         tosVC.updatedTerms = YES;
     }

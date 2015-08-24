@@ -134,6 +134,7 @@ enum FRSErrorCodes {
 #define SEG_SHOW_ACCT_INFO                  @"showAccountInfo"
 #define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignUp"
 #define SEG_REPLACE_WITH_TOS                @"replaceWithTOS"
+#define SEG_SIGNUP_REPLACE_WITH_TOS         @"signup_replaceWithTOS"
 #define SEG_SHOW_PERSONAL_INFO              @"showPersonalInfo"
 #define SEG_SHOW_PERMISSIONS                @"showPermissions"
 #define SEG_SHOW_RADIUS                     @"showRadius"
@@ -187,11 +188,24 @@ enum FRSErrorCodes {
 #define LOGIN                               NSLocalizedString(@"Login", nil)
 #define LOGIN_ERROR                         NSLocalizedString(@"Login Error", nil)
 #define LOGIN_PROMPT                        NSLocalizedString(@"Please enter a valid email and password", nil)
+
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
+
+#define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
+
+#define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)
+
+#define DISABLE_ACCT_TITLE                  NSLocalizedString(@"Are you sure? You can recover your account up to one year from today.", nil)
+#define DISABLE_ACCT_ERROR                  NSLocalizedString(@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help.", nil)
+
+#define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)
+
 #define PASSWORD_ERROR_TITLE                NSLocalizedString(@"Passwords do not match", nil)
 #define PASSWORD_ERROR_MESSAGE              NSLocalizedString(@"Please make sure your new passwords are equal", nil)
+
 #define INVALID_CREDENTIALS                 NSLocalizedString(@"Invalid Credentials", nil)
+
 #define TWITTER_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Twitter", nil)
 #define FACEBOOK_ERROR                      NSLocalizedString(@"We ran into an error signing you in with Facebook", nil)
 
