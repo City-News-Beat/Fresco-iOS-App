@@ -38,7 +38,7 @@
     self.didScrollToBottomOnce = NO;
     
     // No text appears at requested font size 14.0 - constraint issue?
-    self.tosTextView.font = [UIFont systemFontOfSize:12.0];
+    self.tosTextView.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:12];
     
     if (IS_STANDARD_IPHONE_6_PLUS) {
         self.tosTextView.font = [UIFont systemFontOfSize:11.6];
@@ -58,16 +58,18 @@
     }
     
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
             if (error && responseObject == nil) {
                 self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
                 // self.monitorScrolling = YES; // for now
             }
             else {
                 self.tosTextView.text = responseObject[@"data"];
+                [self.tosTextView sizeToFit];
+                CGRect frame = self.tosTextView.frame;
+                frame.size.height = self.tosTextView.contentSize.height;
+                self.tosTextView.frame = frame;
                 // self.monitorScrolling = YES;
             }
-        });
     }];
     
 }
