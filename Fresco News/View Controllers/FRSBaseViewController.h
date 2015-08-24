@@ -8,9 +8,19 @@
 
 @import UIKit;
 
+typedef enum : NSUInteger {
+    LoginFresco,
+    LoginFacebook,
+    LoginTwitter
+} LoginType;
+
 @interface FRSBaseViewController : UIViewController
 
 @property (strong, nonatomic) NSMutableArray *galleries;
+
+/* Spinner */
+
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 
 
 /*
@@ -22,5 +32,9 @@
 - (void)navigateToFirstRun;
 
 - (void)navigateToCamera;
+
+- (void)transferUser;
+
+- (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info;
 
 @end

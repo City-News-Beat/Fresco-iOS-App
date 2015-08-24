@@ -89,7 +89,7 @@ typedef enum : NSUInteger {
 
 /* Spinner */
 
-@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+//@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 
 @end
 

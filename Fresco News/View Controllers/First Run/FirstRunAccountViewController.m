@@ -11,12 +11,6 @@
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 
-typedef enum : NSUInteger {
-    LoginFresco,
-    LoginFacebook,
-    LoginTwitter
-} LoginType;
-
 @interface FirstRunAccountViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
@@ -24,8 +18,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
-
-@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -87,12 +79,12 @@ typedef enum : NSUInteger {
 }
 - (IBAction)facebookButtonTapped:(id)sender {
     
-     [self performLogin:LoginFacebook button:self.facebookButton];
+     [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
 }
 
 - (IBAction)twitterButtonTapped:(id)sender {
     
-     [self performLogin:LoginTwitter button:self.twitterButton];
+     [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -142,159 +134,6 @@ typedef enum : NSUInteger {
         [self.confirmPasswordField resignFirstResponder];
     }
     [super touchesBegan:touches withEvent:event];
-}
-
-
-#pragma mark - Sign up / Login Methods
-
-/*
-** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
-*/
-
-- (void)performLogin:(LoginType)login button:(UIButton *)button{
-    
-    self.view.userInteractionEnabled = NO;
-    
-    [button setTitle:@"" forState:UIControlStateNormal];
-    
-    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
-    
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-    
-    self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
-    
-    self.spinner.color = [UIColor whiteColor];
-    [self.spinner startAnimating];
-    
-    [button addSubview:self.spinner];
-    
-    [UIView animateWithDuration:.3 animations:^{
-        
-        for (UIView *view in [self.view subviews]) {
-            if(view != button && view.tag!= 51 && view.tag != 50)
-                view.alpha = .26f;
-        }
-        
-    }];
-    
-    if(login == LoginFacebook){
-        
-        //Facebook icon image
-        [self.view viewWithTag:51].hidden = YES;
-        
-        [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if (user) {
-                
-                [self transferUser];
-                
-            }
-            else {
-                
-                //TODO: check if these are the strings we want
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:FACEBOOK_ERROR
-                                             action:DISMISS]
-                                   animated:YES
-                                 completion:nil];
-                
-                [button setTitle:FACEBOOK forState:UIControlStateNormal];
-                
-                [self revertScreenToNormal];
-            }
-            
-        }];
-        
-    }
-    else if(login == LoginTwitter){
-        
-        //Twitter icon image
-        [self.view viewWithTag:50].hidden = YES;
-        
-        [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if (user) {
-                
-                [self transferUser];
-                
-            }
-            else {
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:TWITTER_ERROR
-                                             action:DISMISS]
-                                   animated:YES
-                                 completion:nil];
-                
-                [self revertScreenToNormal];
-                
-                [button setTitle:TWITTER forState:UIControlStateNormal];
-                
-                NSLog(@"%@", error);
-                
-            }
-        }];
-        
-    }
-}
-
-
-- (void)transferUser{
-    
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
-    //Tells profile to update
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
-    
-    //Tells rest of the app to update respective occurence of the user's profile picture
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
-    
-    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        
-        //Sets condition for agreegement to the TOS
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-
-        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
-    }
-    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_SIGNUP_REPLACE_WITH_TOS sender:self];
-    }
-    else{
-        if(self.presentingViewController == nil)
-            [self navigateToMainApp];
-        else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-}
-- (void)revertScreenToNormal{
-    
-    self.view.userInteractionEnabled = YES;
-    
-    //Social Images
-    [self.view viewWithTag:50].hidden = NO;
-    [self.view viewWithTag:51].hidden = NO;
-    
-    [UIView animateWithDuration:.3 animations:^{
-        
-        self.spinner.alpha = 0;
-        
-        for (UIView *view in [self.view subviews]) view.alpha = 1;
-        
-    }];
-    
 }
 
 - (void)hitNext{
@@ -351,11 +190,11 @@ typedef enum : NSUInteger {
         [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
             
             //Failed signup
-            if (error) {
+            if (error || !succeeded) {
                 
                  [self presentViewController:[[FRSAlertViewManager sharedManager]
                                               alertControllerWithTitle:ERROR
-                                              message:[error.userInfo objectForKey:@"error"] action:STR_TRY_AGAIN]
+                                              message:SIGNUP_ERROR action:STR_TRY_AGAIN]
                                     animated:YES
                                   completion:nil];
                  

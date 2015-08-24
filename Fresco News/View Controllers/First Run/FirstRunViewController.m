@@ -17,12 +17,6 @@
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
 
-typedef enum : NSUInteger {
-    LoginFresco,
-    LoginFacebook,
-    LoginTwitter
-} LoginType;
-
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
@@ -34,16 +28,10 @@ typedef enum : NSUInteger {
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 
-
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
-
-
-/* Spinner */
-
-@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 
 /*
 ** Constraints
@@ -153,194 +141,6 @@ typedef enum : NSUInteger {
                         } completion:nil];
 }
 
-#pragma mark - Controller Functions
-
-/*
-** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
-*/
-
-- (void)performLogin:(LoginType)login button:(UIButton *)button{
-    
-    self.view.userInteractionEnabled = NO;
-    
-    [button setTitle:@"" forState:UIControlStateNormal];
-    
-    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
-    
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-    
-    self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
-    
-    self.spinner.color = [UIColor whiteColor];
-    [self.spinner startAnimating];
-    
-    [button addSubview:self.spinner];
-    
-    [UIView animateWithDuration:.3 animations:^{
-        
-        for (UIView *view in [self.view subviews]) {
-            if(view != button && view.tag!= 51 && view.tag != 50){
-                view.alpha = .26f;
-            }
-
-        }
-        
-    }];
-    
-    if(login == LoginFresco){
-        
-        [[FRSDataManager sharedManager] loginUser:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-                
-                [self transferUser];
-                
-            }
-            else{
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:^{
-                                       [button setTitle:LOGIN forState:UIControlStateNormal];
-                                       
-                                       [self revertScreenToNormal];
-                                       
-                                   }];
-            }
-            
-        }];
-    
-    }
-    else if(login == LoginFacebook){
-        
-        //Facebook icon image
-        [self.view viewWithTag:51].hidden = YES;
-        
-        [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-                
-                [self transferUser];
-                
-            }
-            else {
-                //TODO: check if these are the strings we want
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:FACEBOOK_ERROR
-                                             action:DISMISS]
-                                   animated:YES
-                                 completion:^{
-                                     
-                                     [button setTitle:FACEBOOK forState:UIControlStateNormal];
-                                     
-                                     [self revertScreenToNormal];
-                                 }];
-            
-            }
-            
-        }];
-        
-    }
-    else if(login == LoginTwitter){
-        
-        //Twitter icon image
-        [self.view viewWithTag:50].hidden = YES;
-
-        [[FRSDataManager sharedManager] loginViaTwitterWithBlock:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-                
-                [self transferUser];
-                
-            }
-            else {
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:TWITTER_ERROR
-                                             action:DISMISS]
-                                   animated:YES
-                                 completion:^{
-                                     
-                                     [button setTitle:TWITTER forState:UIControlStateNormal];
-                                     [self revertScreenToNormal];
-                                     
-                                 }];
-                
-
-                
-                NSLog(@"%@", error);
-                
-            }
-        }];
-        
-    }
-}
-
-/*
-** Method to send us out of view controller
-*/
-
-- (void)transferUser{
-    
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
-    //Tells profile to update
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
-    
-    //Tells rest of the app to update respective occurence of the user's profile picture
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
-    
-    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        
-        //Sets condition for agreegement to the TOS
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
-        
-    }
-    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
-    }
-    else{
-        if(self.presentingViewController == nil)
-            [self navigateToMainApp];
-        else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)revertScreenToNormal{
-    
-    self.view.userInteractionEnabled = YES;
-    
-    //Social Images
-    [self.view viewWithTag:50].hidden = NO;
-    [self.view viewWithTag:51].hidden = NO;
-
-    [UIView animateWithDuration:.3 animations:^{
-        
-        self.spinner.alpha = 0;
-    
-        for (UIView *view in [self.view subviews]) view.alpha = 1;
-        
-    }];
-
-}
 
 #pragma mark - IBAction Listeners
 
@@ -353,7 +153,10 @@ typedef enum : NSUInteger {
     //Check fields first
     if([self.emailField.text isValidEmail]){
     
-        [self performLogin:LoginFresco button:self.loginButton];
+        [self performLogin:LoginFresco button:self.loginButton
+             withLoginInfo:@{@"email" : self.emailField.text,
+                             @"password" : self.passwordField.text
+                             }];
     
     } else {
         
@@ -367,9 +170,9 @@ typedef enum : NSUInteger {
 
 }
 
-- (IBAction)facebookLogin:(id)sender{ [self performLogin:LoginFacebook button:self.facebookButton]; }
+- (IBAction)facebookLogin:(id)sender{ [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil]; }
 
-- (IBAction)twitterLogin:(id)sender { [self performLogin:LoginTwitter button:self.twitterButton]; }
+- (IBAction)twitterLogin:(id)sender { [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil]; }
 
 /*
 ** Signup

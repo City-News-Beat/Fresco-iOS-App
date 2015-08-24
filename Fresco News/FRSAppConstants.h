@@ -135,7 +135,6 @@ enum FRSErrorCodes {
 #define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignUp"
 #define SEG_REPLACE_WITH_TOS                @"replaceWithTOS"
 #define SEG_SIGNUP_REPLACE_WITH_TOS         @"signup_replaceWithTOS"
-#define SEG_SHOW_PERSONAL_INFO              @"showPersonalInfo"
 #define SEG_SHOW_PERMISSIONS                @"showPermissions"
 #define SEG_SHOW_RADIUS                     @"showRadius"
 #define SEG_SETTINGS                        @"settingsSegue"
@@ -150,10 +149,7 @@ enum FRSErrorCodes {
 
 
 
-
-
 #pragma mark - User-facing Strings -
-
 
 
 
@@ -162,8 +158,6 @@ enum FRSErrorCodes {
 #define FRESCO                              @"Fresco" // Not localizing name i.e. would be Fresh in Spanish
 #define FACEBOOK                            @"Facebook"
 #define TWITTER                             @"Twitter"
-
-
 
 
 #pragma mark - Global Macros
@@ -182,12 +176,13 @@ enum FRSErrorCodes {
 
 
 
-
 #pragma mark - First Run Log in / Sign up
 
 #define LOGIN                               NSLocalizedString(@"Login", nil)
 #define LOGIN_ERROR                         NSLocalizedString(@"Login Error", nil)
 #define LOGIN_PROMPT                        NSLocalizedString(@"Please enter a valid email and password", nil)
+
+#define SIGNUP_ERROR                        NSLocalizedString(@"It seems there was an error signing you up. Please try again in a bit.", nil)
 
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
@@ -208,7 +203,6 @@ enum FRSErrorCodes {
 
 #define TWITTER_ERROR                       NSLocalizedString(@"We ran into an error signing you in with Twitter", nil)
 #define FACEBOOK_ERROR                      NSLocalizedString(@"We ran into an error signing you in with Facebook", nil)
-
 
 
 
@@ -278,20 +272,14 @@ enum FRSErrorCodes {
 #define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
 
 
-
-
 #pragma mark - Highlights
 
 #define HIGHLIGHTS                          NSLocalizedString(@"Highlights", nil)
 
 
-
-
 #pragma mark - Stories
 
 #define STORIES                             NSLocalizedString(@"Stories", nil)
-
-
 
 
 #pragma mark - Notifications
@@ -307,8 +295,6 @@ enum FRSErrorCodes {
 
 #define GALLERY_UNAVAILABLE_TITLE           NSLocalizedString(@"Gallery Unavailable", nil)
 #define GALLERY_UNAVAILABLE_MSG             NSLocalizedString(@"We couldn't find this gallery!", nil)
-
-
 
 
 
