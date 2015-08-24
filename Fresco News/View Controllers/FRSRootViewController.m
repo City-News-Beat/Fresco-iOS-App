@@ -56,11 +56,12 @@
         
         self.tbc.tabBar.frame = CGRectMake(self.tbc.tabBar.frame.origin.x, y, self.tbc.tabBar.frame.size.width, self.tbc.tabBar.frame.size.height);
         
-    }];}
+    }];
+}
 
 
-- (void)setRootViewControllerToTabBar
-{
+- (void)setRootViewControllerToTabBar{
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [[UITabBar appearance] setTintColor:[UIColor brandDarkColor]]; // setTintColor:

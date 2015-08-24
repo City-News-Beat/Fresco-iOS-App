@@ -244,41 +244,6 @@ typedef enum : NSUInteger {
     }
 }
 
-
-- (void)transferUser{
-    
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
-    //Tells profile to update
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
-    
-    //Tells rest of the app to update respective occurence of the user's profile picture
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
-    
-    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        
-        //Sets condition for agreegement to the TOS
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-
-        [self performSegueWithIdentifier:SEG_SHOW_PERSONAL_INFO sender:self];
-    }
-    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_SIGNUP_REPLACE_WITH_TOS sender:self];
-    }
-    else{
-        if(self.presentingViewController == nil)
-            [self navigateToMainApp];
-        else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-}
 - (void)revertScreenToNormal{
     
     self.view.userInteractionEnabled = YES;
@@ -351,11 +316,11 @@ typedef enum : NSUInteger {
         [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
             
             //Failed signup
-            if (error) {
+            if (error || !succeeded) {
                 
                  [self presentViewController:[[FRSAlertViewManager sharedManager]
                                               alertControllerWithTitle:ERROR
-                                              message:[error.userInfo objectForKey:@"error"] action:STR_TRY_AGAIN]
+                                              message:SIGNUP_ERROR action:STR_TRY_AGAIN]
                                     animated:YES
                                   completion:nil];
                  

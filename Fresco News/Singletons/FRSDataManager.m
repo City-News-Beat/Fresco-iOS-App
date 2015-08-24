@@ -196,14 +196,15 @@
  
                     }
                     else{
-                        block(NO, nil);
+                        
+                        block(NO, error);
                     }
                     
                 }];
             }
             // bubble failure back up to caller
             else
-                block(succeeded, error);
+                block(NO, error);
         }];
     }
     else {

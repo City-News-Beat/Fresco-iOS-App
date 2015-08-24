@@ -23,4 +23,6 @@
 
 - (void)navigateToCamera;
 
+- (void)transferUser;
+
 @end

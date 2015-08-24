@@ -156,7 +156,7 @@ typedef enum : NSUInteger {
 #pragma mark - Controller Functions
 
 /*
-** Login Method, takes a LoginType to perform repstive login i.e. facebook, twitter, regular login (fresco)
+** Login Method, takes a LoginType to perform repsective login i.e. facebook, twitter, regular login (fresco)
 */
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button{
@@ -275,53 +275,12 @@ typedef enum : NSUInteger {
                                      
                                  }];
                 
-
-                
                 NSLog(@"%@", error);
                 
             }
         }];
         
     }
-}
-
-/*
-** Method to send us out of view controller
-*/
-
-- (void)transferUser{
-    
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
-    //Tells profile to update
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
-    
-    //Tells rest of the app to update respective occurence of the user's profile picture
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
-    
-    if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
-        
-        //Sets condition for agreegement to the TOS
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
-        
-    }
-    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
-    }
-    else{
-        if(self.presentingViewController == nil)
-            [self navigateToMainApp];
-        else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)revertScreenToNormal{
