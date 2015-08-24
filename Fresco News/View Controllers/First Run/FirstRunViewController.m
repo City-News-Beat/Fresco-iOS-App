@@ -93,16 +93,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationPortrait;
-}
-
--(BOOL)shouldAutorotate
-{
-    return NO;
-}
-
 #pragma mark - Text Field and Keyboard Delegates
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -175,7 +165,7 @@
 - (IBAction)twitterLogin:(id)sender { [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil]; }
 
 /*
-** Signup
+** Signup Button
 */
 
 - (IBAction)signUpButtonAction:(id)sender
@@ -186,7 +176,7 @@
 }
 
 /*
-** "No Thanks, I'll sign up later" button
+** "No Thanks, I'll sign up later" Button
 */
 
 - (IBAction)buttonWontLogin:(UIButton *)sender {
