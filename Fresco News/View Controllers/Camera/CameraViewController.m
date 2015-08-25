@@ -233,8 +233,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
 
-    [self updateRecentPhotoView:nil];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -297,7 +295,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      selector:@selector(deviceOrientationDidChange:)
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
+    
     if(!self.photoButton.selected) self.photoButton.selected = YES;
+    
+    self.doneLabel.hidden = YES;
 
 }
 
@@ -660,28 +661,50 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)updateRecentPhotoView:(UIImage *)image
 {
+    
     if (image) {
         [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
+
+}
+
+- (void)setRecentPhotoViewHidden:(BOOL)hidden{
     
-    // Grab the most recent image from the photo library
-    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
-                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-                                     if (group) {
-                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
-                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
-                                                 *innerStop = YES;
-                                             }
-                                         }];
-                                     }
-                                 }
-                               failureBlock:^(NSError *error) {
-                                   NSLog(@"error: %@", error);
-                               }];
+    if(hidden){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.doneButton.enabled = NO;
+            
+            self.activityIndicator.alpha = 0.0f;
+            [self.activityIndicator startAnimating];
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 0.0f;
+                self.activityIndicator.alpha = 1.0f;
+            }];
+            
+        });
+        
+    }
+    else{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.doneLabel.hidden = NO;
+            self.doneButton.enabled = YES;
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 1.0f;
+                self.activityIndicator.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                [self.activityIndicator stopAnimating];
+            }];
+            
+        });
+        
+    }
 }
 
 - (void)configureAssignmentLabel
@@ -747,44 +770,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }];
         
     });
-}
-
-
-- (void)setRecentPhotoViewHidden:(BOOL)hidden{
-
-    if(hidden){
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-                
-            self.doneButton.enabled = NO;
-            
-            self.activityIndicator.alpha = 0.0f;
-            [self.activityIndicator startAnimating];
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 0.0f;
-                self.activityIndicator.alpha = 1.0f;
-            }];
-                
-        });
-    
-    }
-    else{
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-        
-            self.doneButton.enabled = YES;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 1.0f;
-                self.activityIndicator.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                [self.activityIndicator stopAnimating];
-            }];
-            
-        });
-        
-    }
 }
 
 #pragma mark - Camera Functions
