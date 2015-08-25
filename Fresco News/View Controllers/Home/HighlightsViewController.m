@@ -7,6 +7,7 @@
 //
 
 #import "HighlightsViewController.h"
+#import "FRSRootViewController.h"
 #import "GalleriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -19,6 +20,8 @@
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
+@property (nonatomic, assign) BOOL initialRefresh;
+
 @end
 
 @implementation HighlightsViewController
@@ -27,7 +30,14 @@
 {
     [super viewDidLoad];
     
-    [self performNecessaryFetch:NO withResponseBlock:nil];
+    //Check if the app visited onbard, then go straight to updating
+    if(((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController).onboardVisited){
+    
+        [self updateHighlights:nil];
+    
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHighlights:) name:REACHABILITY_MONITORING object:nil];
     
     [self setFrescoNavigationBar];
     
@@ -43,6 +53,7 @@
         
         //Make request for more posts, append to galleries array
         [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
+            
             if (!error) {
                 if ([responseObject count]) {
                     
@@ -54,11 +65,11 @@
                     
                 }
             }
+            
         }];
-        
-        
     }];
     
+    //Set up bar button items
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:HIGHLIGHTS
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:[self navigationController]
@@ -68,12 +79,48 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+#pragma mark - Data Loading
 
-    [super viewDidAppear:animated];
+/*
+** Notification listener telling us the reachability manager is ready
+*/
+
+- (void)updateHighlights:(NSNotification *)notification {
+
+    //Check for initial refresh,
+    if(!self.initialRefresh){
+        
+        [self.galleriesViewController.refreshControl beginRefreshing];
+        
+        [self.galleriesViewController.tableView setContentOffset:CGPointMake(0, -self.galleriesViewController.refreshControl.frame.size.height) animated:NO];
+        
+        [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+            
+            if(success){
+                
+                //Wait one second so the animation doesn't jitter
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    
+                    [self.galleriesViewController.refreshControl endRefreshing];
+                    
+                    [self.galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                    
+                });
+            }
+            
+        }];
+        
+    }
+    //Perform update without refresh
+    else{
+        [self performNecessaryFetch:NO withResponseBlock:nil];
+    }
+
 }
 
-#pragma mark - Data Loading
+/*
+** General data command for fetching initial highlights (galleries)
+*/
 
 - (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
     
@@ -94,9 +141,16 @@
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     
                     [self.galleriesViewController reloadData];
+                    
+                    if(responseBlock) responseBlock(YES, nil);
 
                 }
             }
+        }
+        else {
+         
+            if(responseBlock) responseBlock(NO, nil);
+            
         }
     
     }];

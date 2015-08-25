@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) UIViewController *viewController;
 
+@property (nonatomic, assign) BOOL onboardVisited;
+
 - (void)setRootViewControllerToTabBar;
 
 - (void)presentFirstRunViewController:(UIViewController *)controller;

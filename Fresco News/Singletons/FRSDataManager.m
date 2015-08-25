@@ -71,6 +71,8 @@
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:REACHABILITY_MONITORING object:self];
+            
             //Check if the network is reachable, there's no current user, and there's no login in process
             if(self.reachabilityManager.reachable && self.currentUser == nil && !self.loggingIn){
                 
@@ -909,9 +911,11 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    //If we are refreshing, removed the cached response for the request by setting the cache policy
-    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
-    
+    if(self.reachabilityManager.reachable && refresh){
+        //If we are refreshing, removed the cached response for the request by setting the cache policy
+        self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
+    }
+        
     [self GET:@"gallery/highlights" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -960,6 +964,7 @@
     NSDictionary *params;
     
     if(offset != nil && storyId != nil){
+        
         params = @{
                    @"id" : storyId,
                    @"offset" : offset,

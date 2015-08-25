@@ -26,24 +26,22 @@
 
 @interface GalleriesViewController()
 
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
-
 /*
- ** Index of cell that is currently playing a video
- */
+** Index of cell that is currently playing a video
+*/
 
 @property (nonatomic, strong) NSIndexPath *playingIndex;
 
 
 /*
- ** Check if the navigation is in the detail
- */
+** Check if the navigation is in the detail
+*/
 
 @property (nonatomic, strong) NSIndexPath *dispatchIndex;
 
 /*
- ** Scroll View's Last Content Offset, for nav bar conditioning
- */
+** Scroll View's Last Content Offset, for nav bar conditioning
+*/
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
@@ -118,7 +116,8 @@
 
 - (void)refresh
 {
-    
+    [self.refreshControl beginRefreshing];
+
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
         
         [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:nil];

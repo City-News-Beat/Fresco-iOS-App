@@ -57,13 +57,6 @@
     
     self.window.rootViewController = self.frsRootViewController;
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
-        [self registerForPushNotifications];
-        [self.frsRootViewController setRootViewControllerToTabBar];
-    }
-    else {
-        [self.frsRootViewController setRootViewControllerToOnboard];
-    }
     
     //Check if the user has agreed to the TOS, otherwise log them out
     if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
@@ -72,19 +65,13 @@
         
     }
     
-    if([FRSDataManager sharedManager].reachabilityManager.isReachable){
-    
-        //Refresh the existing user, if exists, then run location monitoring
-        [[FRSDataManager sharedManager] refreshUser:^(BOOL succeeded, NSError *error) {
-            
-            if (succeeded) {
-                
-                NSLog(@"successful login on launch");
-
-            }
-            
-        }];
-        
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
+        [self registerForPushNotifications];
+        [self.frsRootViewController setRootViewControllerToTabBar];
+    }
+    else {
+        [self.frsRootViewController setRootViewControllerToOnboard];
+        self.frsRootViewController.onboardVisited = YES;
     }
     
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {

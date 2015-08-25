@@ -30,7 +30,7 @@ enum FRSErrorCodes {
 #define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
 #define NOTIFICATION_BADGE_RESET            @"ResetNotificationBadge"
 #define NOTIFICATION_IMAGE_SET              @"UserProfileImageChanged"
-
+#define REACHABILITY_MONITORING             @"ReachabilityManagerIsMonitoring"
 
 
 

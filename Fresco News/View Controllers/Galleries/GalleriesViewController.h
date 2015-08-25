@@ -20,6 +20,8 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @property (strong, nonatomic) NSMutableArray *galleries;
 
 @property (weak, nonatomic) UIViewController *containingViewController;
