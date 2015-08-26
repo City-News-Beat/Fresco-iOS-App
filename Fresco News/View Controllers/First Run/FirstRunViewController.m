@@ -33,16 +33,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomLogo;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomTextContainer;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomSignupContainer;
-
-/*
-** Constraints
-*/
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
 @end
 
@@ -51,6 +41,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
     //Round buttons
     for (UIButton *button in self.buttons) {
@@ -79,7 +71,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupViews];
+  
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -100,19 +92,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)setupViews {
-    if (IS_STANDARD_IPHONE_6) {
-//        self.constraintBottomLogo.constant = 0;
-//        self.constraintBottomTextContainer.constant = 50;
-//        self.constraintBottomSignupContainer.constant = 90;
-    }
-//
-//    if (IS_STANDARD_IPHONE_6_PLUS) {
-//        self.constraintBottomLogo.constant = 61.5;
-//        self.constraintBottomTextContainer.constant = 53;
-//        self.constraintBottomSignupContainer.constant = 30;
-//    }
-}
 
 #pragma mark - Text Field and Keyboard Delegates
 
@@ -138,17 +117,21 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
+
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height = 0;
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -7.2 * self.emailField.frame.size.height;
-                            }
+
+                            CGRect viewFrame = self.view.frame;
+
+                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+                                viewFrame.origin.y = -100;
+                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+                                viewFrame.origin.y = 0;
                             
-//                            self.topVerticalSpaceConstraint.constant = height;
-                            self.bottomVerticalSpaceConstraint.constant = -1 * height;
-                            [self.view layoutIfNeeded];
+                            self.view.frame = viewFrame;
+                        
                         } completion:nil];
 }
 

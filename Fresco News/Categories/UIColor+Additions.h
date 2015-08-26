@@ -40,4 +40,6 @@
 
 + (UIColor *)disabledBackgroundColor;
 
++ (UIColor *)frescoGreyBackgroundColor;
+
 @end

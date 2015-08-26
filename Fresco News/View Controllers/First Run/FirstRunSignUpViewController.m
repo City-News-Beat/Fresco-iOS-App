@@ -106,58 +106,57 @@
 
 - (IBAction)actionNext:(id)sender
 {
-//    [((UIButton *)sender) setUserInteractionEnabled:NO];
-//
-//    // save this to allow backing to the VC
-//    self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    
-//    //Check if both fields are populated
-//    if ((self.firstName.length && self.lastName.length)) {
-//        
-//        NSData *imageData = self.selectedImage ? UIImageJPEGRepresentation(self.selectedImage, 0.5) : nil;
-//        
-//        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
-//
-//        if (self.socialImageURL) {
-//            [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
-//        }
-//
-//        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
-//            
-//            if (!success) {
-//                
-//                [((UIButton *)sender) setUserInteractionEnabled:YES];
-//                
-//                [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                             alertControllerWithTitle:ERROR
-//                                             message:NAME_ERROR_MSG
-//                                             action:nil]
-//                                   animated:YES
-//                                 completion:nil];
-//            }
-//            else {
-//                
-//                [((UIButton *)sender) setUserInteractionEnabled:YES];
-//                
-//                [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
-//            }
-//
-//        }];
-//        
-//    }
-//    else {
-//        
-//        [((UIButton *)sender) setUserInteractionEnabled:YES];
-//        
-//        [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                     alertControllerWithTitle:ERROR
-//                                     message:NAME_PROMPT
-//                                     action:nil]
-//                           animated:YES
-//                         completion:nil];
-//    }
-    [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+    [((UIButton *)sender) setUserInteractionEnabled:NO];
+
+    // save this to allow backing to the VC
+    self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    //Check if both fields are populated
+    if ((self.firstName.length && self.lastName.length)) {
+        
+        NSData *imageData = self.selectedImage ? UIImageJPEGRepresentation(self.selectedImage, 0.5) : nil;
+        
+        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
+
+        if (self.socialImageURL) {
+            [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
+        }
+
+        [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
+            
+            if (!success) {
+                
+                [((UIButton *)sender) setUserInteractionEnabled:YES];
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                             alertControllerWithTitle:ERROR
+                                             message:NAME_ERROR_MSG
+                                             action:nil]
+                                   animated:YES
+                                 completion:nil];
+            }
+            else {
+                
+                [((UIButton *)sender) setUserInteractionEnabled:YES];
+                
+                [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+            }
+
+        }];
+        
+    }
+    else {
+        
+        [((UIButton *)sender) setUserInteractionEnabled:YES];
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:ERROR
+                                     message:NAME_PROMPT
+                                     action:nil]
+                           animated:YES
+                         completion:nil];
+    }
 
 }
 

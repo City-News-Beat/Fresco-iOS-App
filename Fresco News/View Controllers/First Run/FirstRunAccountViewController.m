@@ -17,8 +17,6 @@
 @property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -43,6 +41,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
     // we may prepopulate these either during pushing or backing
     if (self.email)
@@ -104,19 +104,22 @@
     return NO;
 }
 
+
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height = 0;
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -5.8 * self.confirmPasswordField.frame.size.height;
-                            }
                             
-                            self.topVerticalSpaceConstraint.constant = height;
-                            self.bottomVerticalSpaceConstraint.constant = -1 * height;
-                            [self.view layoutIfNeeded];
+                            CGRect viewFrame = self.view.frame;
+                            
+                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+                                viewFrame.origin.y = -100;
+                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+                                viewFrame.origin.y = 0;
+                            
+                            self.view.frame = viewFrame;
+                            
                         } completion:nil];
 }
 
@@ -139,81 +142,81 @@
 
 - (void)hitNext{
     
-//    if(_signUpRunning) return;
-//    
-//    _signUpRunning = YES;
-//    
-//    if (![self.emailField.text isValidEmail]){
-//    
-//        [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                     alertControllerWithTitle:@"Invalid Email"
-//                                     message:@"Please enter a valid email" action:DISMISS]
-//                           animated:YES
-//                         completion:nil];
-//        
-//        _signUpRunning = NO;
-//        
-//        return;
-//    
-//    }
-//    else if(![self.passwordField.text isValidPassword]){
-//    
-//        [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                     alertControllerWithTitle:@"Invalid Password"
-//                                     message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
-//                           animated:YES
-//                         completion:nil];
-//
-//        _signUpRunning = NO;
-//        
-//        return;
-//
-//    }
-//    //Both fields valid
-//    
-//    // save this to allow backing to the VC
-//    self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    
-//    self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    
-//    NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    
-//    if (![self.password isEqualToString:confirmPassword]) {
-//        
-//        [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                     alertControllerWithTitle:ERROR
-//                                     message:PASSWORD_ERROR_TITLE action:DISMISS]
-//                           animated:YES
-//                         completion:nil];
-//    }
-//    else {
-//        
-//        [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
-//            
-//            //Failed signup
-//            if (error || !succeeded) {
-//                
-//                 [self presentViewController:[[FRSAlertViewManager sharedManager]
-//                                              alertControllerWithTitle:ERROR
-//                                              message:SIGNUP_ERROR action:STR_TRY_AGAIN]
-//                                    animated:YES
-//                                  completion:nil];
-//                 
-//                 self.emailField.textColor = [UIColor redColor];
-//             
-//            }
-//            //Successfully signed up
-//            else {
-//
-//                 [self transferUser];
-//                
-//            }
-//            
-//            _signUpRunning = NO;
-//            
-//         }];
-//    }
-[self transferUser];
+    if(_signUpRunning) return;
+    
+    _signUpRunning = YES;
+    
+    if (![self.emailField.text isValidEmail]){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Invalid Email"
+                                     message:@"Please enter a valid email" action:DISMISS]
+                           animated:YES
+                         completion:nil];
+        
+        _signUpRunning = NO;
+        
+        return;
+    
+    }
+    else if(![self.passwordField.text isValidPassword]){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Invalid Password"
+                                     message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
+                           animated:YES
+                         completion:nil];
+
+        _signUpRunning = NO;
+        
+        return;
+
+    }
+    //Both fields valid
+    
+    // save this to allow backing to the VC
+    self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (![self.password isEqualToString:confirmPassword]) {
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:ERROR
+                                     message:PASSWORD_ERROR_TITLE action:DISMISS]
+                           animated:YES
+                         completion:nil];
+    }
+    else {
+        
+        [[FRSDataManager sharedManager] signupUser:self.email email:self.email password:self.password block:^(BOOL succeeded, NSError *error) {
+            
+            //Failed signup
+            if (error || !succeeded) {
+                
+                 [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                              alertControllerWithTitle:ERROR
+                                              message:SIGNUP_ERROR action:STR_TRY_AGAIN]
+                                    animated:YES
+                                  completion:nil];
+                 
+                 self.emailField.textColor = [UIColor redColor];
+             
+            }
+            //Successfully signed up
+            else {
+
+                 [self transferUser];
+                
+            }
+            
+            _signUpRunning = NO;
+            
+         }];
+    }
+
 }
 
 #pragma mark - Segues
