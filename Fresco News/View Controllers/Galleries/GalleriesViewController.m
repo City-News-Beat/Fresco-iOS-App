@@ -280,8 +280,12 @@
 - (void)checkForVideo{
     
     //Make sure we're in the parent view controller, not the detail view
-    if(![[self.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]] &&
-       ![[self.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+    if(![[self.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]
+       &&
+       ![[self.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]
+       &&
+       ![[self.navigationController visibleViewController] isKindOfClass:[StoryViewController class]]
+       ){
         return;
     }
 
