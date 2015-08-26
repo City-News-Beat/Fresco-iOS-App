@@ -31,9 +31,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
+    
     
     self.signUpRunning = NO;
 }
@@ -107,6 +108,7 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
@@ -114,13 +116,14 @@
                             CGRect viewFrame = self.view.frame;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-                                viewFrame.origin.y = -100;
+                                viewFrame.origin.y = -140;
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
                                 viewFrame.origin.y = 0;
                             
                             self.view.frame = viewFrame;
                             
                         } completion:nil];
+    
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -141,6 +144,8 @@
 }
 
 - (void)hitNext{
+    
+                     [self transferUser];
     
     if(_signUpRunning) return;
     

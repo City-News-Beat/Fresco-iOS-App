@@ -13,7 +13,7 @@
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
@@ -32,8 +32,11 @@
 {
     [super viewDidLoad];
     
+    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
+    
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
     
     self.textfieldFirstName.delegate = self;
@@ -76,6 +79,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return NO;
+}
+
+
 #pragma mark - Text Field Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -94,13 +105,16 @@
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-                            CGFloat height = 0;
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height = -7 * self.textfieldLastName.frame.size.height;
-                            }
-                            self.topVerticalSpaceConstraint.constant = height; // Constraint not connected?
-                            self.bottomVerticalSpaceConstraint.constant = -1 * height;
-                            [self.view layoutIfNeeded];
+                            
+                            CGRect viewFrame = self.view.frame;
+                            
+                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+                                viewFrame.origin.y = -100;
+                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+                                viewFrame.origin.y = 0;
+                            
+                            self.view.frame = viewFrame;
+                            
                         } completion:nil];
 }
 
