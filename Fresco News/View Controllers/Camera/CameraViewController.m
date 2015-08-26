@@ -82,12 +82,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (nonatomic) BOOL inCorrentOrientation;
+@property (nonatomic) BOOL takingStillImage;
 
 // Utilities
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
-@property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 @property (nonatomic) NSTimer *videoTimer;
 @property (nonatomic) NSTimer *locationTimer;
@@ -113,6 +113,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self configureUIElements];
     
     self.createdAssetURLs = [NSMutableArray new];
+    
+    self.takingStillImage = NO;
     
     // Create the AVCaptureSession an set to photo
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -231,8 +233,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
 
-    [self updateRecentPhotoView:nil];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -295,7 +295,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      selector:@selector(deviceOrientationDidChange:)
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
+    
     if(!self.photoButton.selected) self.photoButton.selected = YES;
+    
+    self.doneLabel.hidden = YES;
 
 }
 
@@ -354,9 +357,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         if (self.photoButton.selected) {
             
-            [self runStillImageCaptureAnimation];
-
-            [self snapStillImage];
+            if(!self.takingStillImage) [self snapStillImage];
 
         }
         else {
@@ -660,28 +661,50 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)updateRecentPhotoView:(UIImage *)image
 {
+    
     if (image) {
         [self.doneButton setImage:image forState:UIControlStateNormal];
         return;
     }
+
+}
+
+- (void)setRecentPhotoViewHidden:(BOOL)hidden{
     
-    // Grab the most recent image from the photo library
-    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos
-                                 usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-                                     if (group) {
-                                         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-                                         [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *innerStop) {
-                                             if ([asset valueForProperty:ALAssetPropertyLocation]) {
-                                                 [self.doneButton setImage:[UIImage imageWithCGImage:[asset thumbnail]] forState:UIControlStateNormal];
-                                                 *innerStop = YES;
-                                             }
-                                         }];
-                                     }
-                                 }
-                               failureBlock:^(NSError *error) {
-                                   NSLog(@"error: %@", error);
-                               }];
+    if(hidden){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.doneButton.enabled = NO;
+            
+            self.activityIndicator.alpha = 0.0f;
+            [self.activityIndicator startAnimating];
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 0.0f;
+                self.activityIndicator.alpha = 1.0f;
+            }];
+            
+        });
+        
+    }
+    else{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.doneLabel.hidden = NO;
+            self.doneButton.enabled = YES;
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 1.0f;
+                self.activityIndicator.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                [self.activityIndicator stopAnimating];
+            }];
+            
+        });
+        
+    }
 }
 
 - (void)configureAssignmentLabel
@@ -749,44 +772,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-
-- (void)setRecentPhotoViewHidden:(BOOL)hidden{
-
-    if(hidden){
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-                
-            self.doneButton.enabled = NO;
-            
-            self.activityIndicator.alpha = 0.0f;
-            [self.activityIndicator startAnimating];
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 0.0f;
-                self.activityIndicator.alpha = 1.0f;
-            }];
-                
-        });
-    
-    }
-    else{
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-        
-            self.doneButton.enabled = YES;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 1.0f;
-                self.activityIndicator.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                [self.activityIndicator stopAnimating];
-            }];
-            
-        });
-        
-    }
-}
-
 #pragma mark - Camera Functions
 
 - (void)toggleMovieRecording
@@ -828,8 +813,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         if (![[self movieFileOutput] isRecording]) {
             
-            [self setLockInterfaceRotation:YES];
-
             AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
             item.keySpace = AVMetadataKeySpaceCommon;
             item.key = AVMetadataCommonKeyLocation;
@@ -866,10 +849,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)snapStillImage
 {
+    self.takingStillImage = YES;
+    
     dispatch_async([self sessionQueue], ^{
         
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
+
+        [self runStillImageCaptureAnimation];
 
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             
@@ -898,6 +885,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                      [self setRecentPhotoViewHidden:NO];
                      [self updateRecentPhotoView:image];
                      [self.createdAssetURLs addObject:assetURL];
+                     self.takingStillImage = NO;
                  }];
             }
         }];
@@ -944,8 +932,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         NSLog(@"%@", error);
     }
 
-    [self setLockInterfaceRotation:NO];
-    
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
@@ -966,6 +952,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         if (backgroundRecordingID != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
         }
+        
     }];
 }
 

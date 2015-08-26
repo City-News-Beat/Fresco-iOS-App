@@ -303,11 +303,20 @@ static CGFloat const kInterImageGap = 1.0f;
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:10];
     
     for (FRSPost *post in story.thumbnails) {
-        if (post.image.height && post.image.width && post.image.URL && post.galleryID) {
+        
+        //Check if the post is valid i.e. has a parent gallery id and an URL
+        if (post.image.URL && post.galleryID) {
+            
+            //Fall back if the image is missing it's meta width and height
+            if(!post.image.width || !post.image.height){
+                post.image.width = [NSNumber numberWithInteger:150];
+                post.image.height = [NSNumber numberWithInteger:150];
+            }
+            
             [array addObject:post.image];
         }
         else {
-            NSLog(@"Post ID missing image, height, and/or width: %@", post.postID);
+            NSLog(@"Post ID missing URL or galery: %@", post.postID);
         }
     }
     
