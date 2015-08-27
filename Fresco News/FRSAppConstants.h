@@ -10,6 +10,10 @@
 #import "UIColor+Additions.h"
 #import "FRSAlertViewManager.h"
 
+/*
+ ** Add four spaces in between sections
+*/
+
 
 #pragma mark - Enums
 
@@ -24,13 +28,17 @@ enum FRSErrorCodes {
 
 
 
+
 #pragma mark - Notification Strings
 
-#define NOTIFICATION_API_KEY_AVAILABLE      @"NotificationAPIKeyAvailable"
-#define NOTIFICATION_VIEW_DISMISS           @"DismissNotificationsView"
-#define NOTIFICATION_BADGE_RESET            @"ResetNotificationBadge"
-#define NOTIFICATION_IMAGE_SET              @"UserProfileImageChanged"
-#define REACHABILITY_MONITORING             @"ReachabilityManagerIsMonitoring"
+#define NOTIF_API_KEY_AVAILABLE             @"NotificationAPIKeyAvailable"
+#define NOTIF_VIEW_DISMISS                  @"DismissNotificationsView"
+#define NOTIF_BADGE_RESET                   @"ResetNotificationBadge"
+#define NOTIF_IMAGE_SET                     @"UserProfileImageChanged"
+#define NOTIF_REACHABILITY_MONITORING       @"ReachabilityManagerIsMonitoring"
+#define NOTIF_ONBOARD                       @"Onboard"
+#define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
+
 
 
 

@@ -71,7 +71,7 @@
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:REACHABILITY_MONITORING object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_REACHABILITY_MONITORING object:self];
             
             //Check if the network is reachable, there's no current user, and there's no login in process
             if(self.reachabilityManager.reachable && self.currentUser == nil && !self.loggingIn){
@@ -354,9 +354,9 @@
     
     //Send notifications to the rest of the app to update front-end elements
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BADGE_RESET object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_BADGE_RESET object:self];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePicReset" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_PROFILE_PIC_RESET object:self];
 
 }
 
@@ -537,7 +537,7 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
 
                 //Send notif to app
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_API_KEY_AVAILABLE object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_API_KEY_AVAILABLE object:nil];
                 
                 responseBlock(YES, nil);
                 

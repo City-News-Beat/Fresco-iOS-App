@@ -18,11 +18,11 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIFICATION_API_KEY_AVAILABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:NOTIFICATION_VIEW_DISMISS object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNotifications:) name:NOTIF_VIEW_DISMISS object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBell:) name:NOTIFICATION_BADGE_RESET object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetNotificationBell:) name:NOTIF_BADGE_RESET object:nil];
     
     
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){

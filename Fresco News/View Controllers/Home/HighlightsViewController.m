@@ -37,7 +37,7 @@
     
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHighlights:) name:REACHABILITY_MONITORING object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHighlights:) name:NOTIF_REACHABILITY_MONITORING object:nil];
     
     [self setFrescoNavigationBar];
     

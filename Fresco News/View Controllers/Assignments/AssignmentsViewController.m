@@ -95,11 +95,11 @@
     else
         [self presentCurrentAssignment];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:@"onboard" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIFICATION_IMAGE_SET object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIF_IMAGE_SET object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:@"profilePicReset" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_PROFILE_PIC_RESET object:nil];
 
 }
 

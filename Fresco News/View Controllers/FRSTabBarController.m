@@ -122,7 +122,7 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_VIEW_DISMISS object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
     
     NSString *alertMessage = [NSString stringWithFormat:@"%@ %@", FRESCO, ENABLE_CAMERA_MSG];
     

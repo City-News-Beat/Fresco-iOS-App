@@ -515,7 +515,7 @@ typedef enum : NSUInteger {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
             if (self.selectedImage){
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IMAGE_SET object:self.profileImageView.image];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:self.profileImageView.image];
             }
             
             //If they are set, reset them via parse
