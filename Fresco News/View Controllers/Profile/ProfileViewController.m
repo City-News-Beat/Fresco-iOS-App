@@ -38,7 +38,7 @@
     self.initialUpdate = NO;
     
     //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIFICATION_API_KEY_AVAILABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
     
     self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 

@@ -59,7 +59,7 @@
 
 - (IBAction)letsGoButtonTapped:(id)sender {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"onboard" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ONBOARD object:nil];
     
 }
 @end
