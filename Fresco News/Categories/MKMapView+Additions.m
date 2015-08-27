@@ -96,7 +96,6 @@
 
 + (MKAnnotationView *)setupPinForAnnotation:(id <MKAnnotation>)annotation withAnnotationView:(MKAnnotationView *)annotationView {
     
-//    static NSString *userIdentifier = @"currentLocation";
     //Check if the user has a profile image
     
     if ([FRSDataManager sharedManager].currentUser.avatar) {
@@ -107,28 +106,7 @@
             
             pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
             
-            UIImageView *profileImageView = [[UIImageView alloc] init];
-            
-            [profileImageView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
-            
-            profileImageView.frame = CGRectMake(-5,-5, 22, 22);
-            profileImageView.layer.masksToBounds = YES;
-            profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2;
-            
-            //Add a shadow by wrapping the avatar into a container
-            UIView *container = [[UIView alloc] initWithFrame:profileImageView.frame];
-            
-            // setup shadow layer and corner
-            container.layer.shadowColor = [UIColor blackColor].CGColor;
-            container.layer.shadowOffset = CGSizeMake(0, 1);
-            container.layer.shadowOpacity = .52;
-            container.layer.shadowRadius = 2;
-            container.layer.cornerRadius = profileImageView.frame.size.width / 2;
-            container.clipsToBounds = NO;
-            
-            [container addSubview:profileImageView];
-            
-            [pinnedView addSubview:container];
+            [MKMapView addShadowToAnnotationView:pinnedView forAssignment:NO];
             
         }
         
@@ -172,14 +150,36 @@
     }
 }
 
-+ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView
-{
-    UIImageView *customPinView = [UIImageView new];
-    [customPinView setImage:[UIImage imageNamed:@"assignment-dot"]];
+/*
+ ** Helper method to set image for pin view
+*/
+
++ (void)setPinImageView:(UIImageView *)customPinView forAssignment: (BOOL)isAssignment {
+    
+    if (isAssignment == YES) { // is Assignment annotation view
+        
+        [customPinView setImage:[UIImage imageNamed:@"assignment-dot"]];
+    
+    } else {           // is User annotation view
+        
+        [customPinView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
+    }
     
     customPinView.frame = CGRectMake(-5,-5, 22, 22);
     customPinView.layer.masksToBounds = YES;
     customPinView.layer.cornerRadius = customPinView.frame.size.width / 2;
+
+}
+
+/*
+ ** Houses imageview created above in a container and adds shadow to it
+ */
+
++ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment {
+    
+    UIImageView *customPinView = [UIImageView new];
+    
+    [MKMapView setPinImageView:customPinView forAssignment:isAssignment];
     
     UIView *container = [[UIView alloc] initWithFrame:customPinView.frame];
     container.layer.shadowColor = [UIColor blackColor].CGColor;

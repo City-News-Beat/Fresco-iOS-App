@@ -533,7 +533,7 @@
           
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
             
-            [MKMapView addShadowToAnnotationView:annotationView];
+            [MKMapView addShadowToAnnotationView:annotationView forAssignment:YES];
             
             annotationView.canShowCallout = YES;
             
@@ -568,7 +568,7 @@
             
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
             
-            [MKMapView addShadowToAnnotationView:annotationView];
+            [MKMapView addShadowToAnnotationView:annotationView forAssignment:YES];
             
         }
         else {
