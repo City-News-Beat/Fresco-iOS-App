@@ -172,4 +172,29 @@
     }
 }
 
++ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView
+{
+    UIImageView *customPinView = [UIImageView new];
+    [customPinView setImage:[UIImage imageNamed:@"assignment-dot"]];
+    
+    customPinView.frame = CGRectMake(-5,-5, 22, 22);
+    customPinView.layer.masksToBounds = YES;
+    customPinView.layer.cornerRadius = customPinView.frame.size.width / 2;
+    
+    UIView *container = [[UIView alloc] initWithFrame:customPinView.frame];
+    container.layer.shadowColor = [UIColor blackColor].CGColor;
+    container.layer.shadowOffset = CGSizeMake(0, 1);
+    container.layer.shadowOpacity = .52;
+    container.layer.shadowRadius = 2;
+    container.layer.cornerRadius = customPinView.frame.size.width / 2;
+    container.clipsToBounds = NO;
+    [container addSubview:customPinView];
+    
+    
+    [annotationView addSubview:container];
+    [annotationView bringSubviewToFront:container];
+    
+    annotationView.enabled = YES;
+}
+
 @end

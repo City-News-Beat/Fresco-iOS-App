@@ -481,7 +481,7 @@
     AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
     
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
-    
+
     [self.assignmentsMap addOverlay:circle];
     
     [self.assignmentsMap addAnnotation:annotation];
@@ -532,11 +532,11 @@
         if (annotationView == nil) {
           
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
-            annotationView.enabled = YES;
+            
+            [MKMapView addShadowToAnnotationView:annotationView];
+            
             annotationView.canShowCallout = YES;
             
-            annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
-        
             /* Callout */
             
                 UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
@@ -567,9 +567,8 @@
         if (annotationView == nil) {
             
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
-            annotationView.enabled = YES;
             
-            annotationView.image = [UIImage imageNamed:@"assignment-dot"]; //here we use a nice image instead of the default pins
+            [MKMapView addShadowToAnnotationView:annotationView];
             
         }
         else {

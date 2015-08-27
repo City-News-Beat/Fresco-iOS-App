@@ -81,13 +81,6 @@ enum FRSErrorCodes {
 
 
 
-#pragma mark - CDN
-
-///
-
-
-
-
 #pragma mark - Float/Int Values
 
 #define MAX_VIDEO_LENGTH                    60.0f
