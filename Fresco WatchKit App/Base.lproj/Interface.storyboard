@@ -215,13 +215,13 @@
                                     <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <edgeInsets key="margins" left="0.0" right="0.0" top="1" bottom="3"/>
                                 </group>
-                                <group width="1" alignment="left" id="Mhc-58-2q0">
+                                <group width="1" alignment="left" spacing="0.0" id="Mhc-58-2q0">
                                     <items>
                                         <label width="1" alignment="left" text="Lorem Ipsum is simply dummy text of the printing and typesetting industry." textAlignment="left" numberOfLines="40" id="XBx-Fk-b40">
                                             <fontDescription key="font" type="system" pointSize="17"/>
                                         </label>
                                     </items>
-                                    <edgeInsets key="margins" left="3" right="0.0" top="0.0" bottom="5"/>
+                                    <edgeInsets key="margins" left="3" right="0.0" top="0.0" bottom="3"/>
                                 </group>
                             </items>
                             <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>

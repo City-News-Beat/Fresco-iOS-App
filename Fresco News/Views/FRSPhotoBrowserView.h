@@ -11,6 +11,7 @@
 @interface FRSPhotoBrowserView : UIView
 
 @property (nonatomic, strong) NSArray *captions;
+
 @property (nonatomic, strong, readonly) NSArray *images;
 
 - (void)setImages:(NSArray *)images withInitialIndex:(NSUInteger)imageIndex;

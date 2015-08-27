@@ -487,6 +487,7 @@
         NSInteger count = 0;
         
       for (FRSPost *post in self.gallery.posts) {
+          
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSData *data;
             NSString *mimeType;

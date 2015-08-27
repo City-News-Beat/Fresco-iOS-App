@@ -57,13 +57,18 @@
     
     self.window.rootViewController = self.frsRootViewController;
     
+    //Check if we are launching through a push notification
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+    }
+    
+    //Reset the previously selected tab on launch
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     //Check if the user has agreed to the TOS, otherwise log them out
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED])
         [[FRSDataManager sharedManager] logout];
-        
-    }
+    
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         [self registerForPushNotifications];
@@ -72,10 +77,6 @@
     else {
         [self.frsRootViewController setRootViewControllerToOnboard];
         self.frsRootViewController.onboardVisited = YES;
-    }
-    
-    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     
     return YES;

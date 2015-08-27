@@ -118,7 +118,6 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
 
-    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
