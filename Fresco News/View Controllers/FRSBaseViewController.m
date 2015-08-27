@@ -108,8 +108,6 @@
         
         [button setImage:nil forState:UIControlStateNormal];
         
-        [self hideViewsExceptView:button withView:self.view];
-        
         CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
@@ -122,9 +120,10 @@
         
         [button addSubview:self.spinner];
         
+        [self hideViewsExceptView:button withView:self.view];
+
     });
     
-
     if(login == LoginFresco){
 
         [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
@@ -271,11 +270,13 @@
             
             for (UIView *subview in subviews) {
                 
-                if(subview != exceptionView && subview != exceptionView.superview && subview != self.spinner)
+                if(subview != exceptionView && subview != exceptionView.superview)
                     subview.alpha = .26f;
-                
-                // List the subviews of subview after
-                [self hideViewsExceptView:exceptionView withView:subview];
+
+                if(subview != exceptionView){
+                    // List the subviews of subview after
+                    [self hideViewsExceptView:exceptionView withView:subview];
+                }
                 
             }
             

@@ -168,6 +168,7 @@ enum FRSErrorCodes {
 #define DISABLE                             NSLocalizedString(@"Disable", nil)
 #define CANCEL                              NSLocalizedString(@"Cancel", nil)
 #define ERROR                               NSLocalizedString(@"Error", nil)
+#define SUCCESS                             NSLocalizedString(@"Success", nil)
 #define DONE                                NSLocalizedString(@"Done", nil)
 #define NEXT                                NSLocalizedString(@"Next", nil)
 #define STR_TRY_AGAIN                       NSLocalizedString(@"Try Again", nil)
