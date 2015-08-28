@@ -73,6 +73,40 @@ static CGFloat const kInterImageGap = 1.0f;
         thumbnailView.contentMode = UIViewContentModeScaleAspectFill;
         // 3x is for retina displays
         [thumbnailView setImageWithURL:[image smallImageUrl]];
+
+        
+//        dispatch_async (dispatch_get_main_queue(), ^{
+//            
+//            __weak StoryThumbnailView *weakSelf = thumbnailView;
+//            
+
+//            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[image smallImageUrl]];
+//            [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
+//            
+//            [thumbnailView setImageWithURLRequest:request placeholderImage:nil
+//                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *requestedImage) {
+//
+//                                              if (request) {
+//                                                  
+//                                                  [UIView transitionWithView:weakSelf
+//                                                                    duration:0.8f
+//                                                                     options:UIViewAnimationOptionTransitionCrossDissolve
+//                                                                  animations:^{
+//                                                                      
+//                                                                      [weakSelf setImage:requestedImage];
+//                                                                  
+//                                                                  }
+//                                                                  completion:NULL];
+//                                              }
+//                                              else{
+//                                                  NSLog(@"ok");
+//                                                  [weakSelf setImageWithURL:[image smallImageUrl]];
+//                                                  
+//                                              }
+//                                          }
+//                                          failure:NULL];
+//        });
+        
         thumbnailView.thumbSequence = i;
         
         [self.contentView addSubview:thumbnailView];
