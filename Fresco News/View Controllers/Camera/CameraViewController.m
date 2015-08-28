@@ -287,7 +287,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
     
     /* Orientation notificaiton set up */
-    
+
     [self deviceOrientationDidChange:nil];
     
     [[NSNotificationCenter defaultCenter]
@@ -415,9 +415,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)doneButtonTapped:(id)sender
 {
-    [UIView animateWithDuration:.8 animations:^{
-        self.previewView.alpha = 0;
-    }];
     
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.delegate = self;
@@ -425,7 +422,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     picker.autoSubmit = (sender ? NO : YES);
     picker.createdAssetURLs = self.createdAssetURLs;
     
-    [self presentViewController:picker animated:YES completion:nil];
+    [self presentViewController:picker withScale:YES];
     
 }
 
@@ -671,26 +668,22 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)setRecentPhotoViewHidden:(BOOL)hidden{
     
-    if(hidden){
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if(hidden){
             
-            self.doneButton.enabled = NO;
+                self.doneButton.enabled = NO;
+                
+                self.activityIndicator.alpha = 0.0f;
+                [self.activityIndicator startAnimating];
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    self.doneLabel.alpha = 0.0f;
+                    self.activityIndicator.alpha = 1.0f;
+                }];
             
-            self.activityIndicator.alpha = 0.0f;
-            [self.activityIndicator startAnimating];
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 0.0f;
-                self.activityIndicator.alpha = 1.0f;
-            }];
-            
-        });
-        
-    }
-    else{
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        }
+        else{
             
             self.doneLabel.hidden = NO;
             self.doneButton.enabled = YES;
@@ -702,9 +695,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [self.activityIndicator stopAnimating];
             }];
             
-        });
-        
-    }
+        }
+    });
 }
 
 - (void)configureAssignmentLabel

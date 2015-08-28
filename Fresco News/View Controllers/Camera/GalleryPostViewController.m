@@ -665,7 +665,9 @@
                             [self.view layoutIfNeeded];
     } completion:nil];
 }
-                    
+
+#pragma mark - Alert View Delegate
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
