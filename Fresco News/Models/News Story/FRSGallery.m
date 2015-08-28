@@ -62,27 +62,34 @@
     }
     
     NSMutableArray *posts = [NSMutableArray new];
+   
     for (ALAsset *asset in assets) {
+        
         FRSPost *post = [[FRSPost alloc] init];
+        
         FRSImage *image = [[FRSImage alloc] init];
+        
         image.asset = asset;
+        
         NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
 
-#if TARGET_IPHONE_SIMULATOR
-        image.latitude = @(40.6);
-        image.longitude = @(-74.1);
-#else
-        CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
-        if (location || [assetType isEqualToString:ALAssetTypeVideo] /* Location temporarily not required for video */) {
-            image.latitude = @(location.coordinate.latitude);
-            image.longitude = @(location.coordinate.longitude);
-        }
-        else {
-            NSLog(@"Skipping - no location information available");
-            continue;
-        }
-#endif
+        #if TARGET_IPHONE_SIMULATOR
+            image.latitude = @(40.6);
+            image.longitude = @(-74.1);
+        #else
+            CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
+            if (location || [assetType isEqualToString:ALAssetTypeVideo] /* Location temporarily not required for video */) {
+                image.latitude = @(location.coordinate.latitude);
+                image.longitude = @(location.coordinate.longitude);
+            }
+            else {
+                NSLog(@"Skipping - no location information available");
+                continue;
+            }
+        #endif
+        
         post.image = image;
+        post.createdDate = [asset valueForProperty:ALAssetPropertyDate];
 
         if ([assetType isEqualToString:ALAssetTypePhoto]) {
             post.type = @"image";
@@ -103,6 +110,7 @@
     }
     
     _posts = posts;
+    
     return self;
 }
 

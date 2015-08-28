@@ -105,7 +105,6 @@ static CGFloat const kInterImageGap = 1.0f;
                 
                 [self.tableView reloadData];
                 
-                
                 [self.tableView.infiniteScrollingView stopAnimating];
                 
             }
