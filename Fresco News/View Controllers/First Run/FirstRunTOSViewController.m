@@ -58,7 +58,7 @@
     }
     
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
-            if (error && responseObject == nil) {
+            if (error || responseObject == nil) {
                 self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
                 // self.monitorScrolling = YES; // for now
             }

@@ -3971,7 +3971,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="lpq-qV-t2s">
-                                                <rect key="frame" x="85" y="-19" width="204" height="130.5"/>
+                                                <rect key="frame" x="85" y="14" width="204" height="130.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="lpq-qV-t2s" secondAttribute="height" multiplier="3:1" id="ON5-eu-ueJ"/>
                                                 </constraints>
@@ -4011,6 +4011,7 @@
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="2oI-Wi-JdA"/>
+                                                <exclude reference="QaQ-MR-db7"/>
                                                 <exclude reference="cT3-KK-VAQ"/>
                                                 <exclude reference="h46-Id-FFd"/>
                                                 <exclude reference="72u-Iv-vkF"/>
@@ -4022,6 +4023,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Yb5-ZR-0Iz" secondAttribute="trailing" id="4te-Xo-6dw"/>
+                                    <constraint firstAttribute="centerY" secondItem="lpq-qV-t2s" secondAttribute="centerY" multiplier="3.8" id="4zl-Lo-m7s"/>
                                     <constraint firstAttribute="centerX" secondItem="Ppr-2y-zFU" secondAttribute="centerX" id="VFg-Ez-GnL"/>
                                     <constraint firstAttribute="bottom" secondItem="Yb5-ZR-0Iz" secondAttribute="bottom" id="dK5-Bh-jWx"/>
                                     <constraint firstItem="Yb5-ZR-0Iz" firstAttribute="leading" secondItem="XHc-gl-j8n" secondAttribute="leading" id="j0y-KL-erX"/>
