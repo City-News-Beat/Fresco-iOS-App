@@ -15,12 +15,8 @@
 #import <MapKit/MapKit.h>
 #import "MapViewOverlayBottom.h"
 #import "MapOverlayTop.h"
+#import "UISocialButton.h"
 #import <SVPulsingAnnotationView.h>
-
-typedef enum : NSUInteger {
-    SocialNetworkFacebook,
-    SocialNetworkTwitter
-} SocialNetwork;
 
 typedef enum : NSUInteger {
     SocialExists,
@@ -56,8 +52,8 @@ typedef enum : NSUInteger {
  ** Buttons
  */
 
-@property (weak, nonatomic) IBOutlet UIButton *connectTwitterButton;
-@property (weak, nonatomic) IBOutlet UIButton *connectFacebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
@@ -143,9 +139,11 @@ typedef enum : NSUInteger {
     self.profileImageView.clipsToBounds = YES;
     
     //Round the buttons
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter];
     self.connectTwitterButton.layer.cornerRadius = 4;
     self.connectTwitterButton.clipsToBounds = YES;
     
+    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook];
     self.connectFacebookButton.layer.cornerRadius = 4;
     self.connectFacebookButton.clipsToBounds = YES;
     
@@ -230,12 +228,22 @@ typedef enum : NSUInteger {
 - (void)socialConnect:(SocialNetwork)network networkButton:(UIButton*)button{
     
     [button setTitle:@"" forState:UIControlStateNormal];
+    [button setImage:nil forState:UIControlStateNormal];
     
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(20, 20, (self.connectFacebookButton.frame.size.width), 7)];
-    self.spinner.color = [UIColor whiteColor];
-    [self.spinner startAnimating];
+    self.connectTwitterButton.enabled = NO;
+    self.connectFacebookButton.enabled = NO;
     
-    [button addSubview:self.spinner];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+        self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
+        self.spinner.color = [UIColor whiteColor];
+        [self.spinner startAnimating];
+        
+        [button addSubview:self.spinner];
+            
+    });
     
     if(network == SocialNetworkFacebook){
         
@@ -290,11 +298,7 @@ typedef enum : NSUInteger {
                 
                 if(!succeeded){
                     
-                    [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error){
-                    
-                        
-                    
-                    }];
+                    [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:nil];
                     
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
                 }
@@ -335,6 +339,53 @@ typedef enum : NSUInteger {
 }
 
 /*
+ ** Triggers a response based on the passed Error
+ */
+
+- (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
+    
+    NSString *message = @"";
+    NSString *title = @"";
+    
+    if(error != SocialNoError){
+        
+        if(error == SocialDisable){
+            
+            [self disableAcctWithSocialNetwork:network];
+            
+        }
+        else{
+            
+            if(error == SocialExists){
+                message = [NSString stringWithFormat:@"It seems you already have an account linked with %@.", network];
+                title = ERROR;
+            }
+            else if(error == SocialUnlinked){
+                message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
+                title = SUCCESS;
+            }
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:title
+                                         message:message
+                                         action:nil]
+                               animated:YES
+                             completion:nil];
+            
+        }
+        
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.connectTwitterButton.enabled = YES;
+        self.connectFacebookButton.enabled = YES;
+        [self updateLinkingStatus];
+        [self.spinner removeFromSuperview];
+    });
+    
+}
+
+/*
 ** Updates the status of the social buttons
 */
 
@@ -351,25 +402,30 @@ typedef enum : NSUInteger {
         
         //Twitter
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
             [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
             self.twitterIconCenterXConstraint.constant = 45;
         }
         else {
+            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
             [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
             self.twitterIconCenterXConstraint.constant = 35;
         }
         
         //Facebook
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
             [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
             self.facebookIconCenterXConstraint.constant = 45;
         } else {
+            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
             [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
             self.facebookIconCenterXConstraint.constant = 35;
         }
     }
     
 }
+
 
 /*
 ** Invokes disable account dialog, and runs disable command if confirmed
@@ -428,45 +484,6 @@ typedef enum : NSUInteger {
     }]];
     
     [self presentViewController:alertCon animated:YES completion:nil];
-}
-
-/*
-** Triggers a response based on the passed Error
-*/
-
-- (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
-    
-    NSString *message = @"";
-    
-    if(error != SocialNoError){
-    
-        if(error == SocialDisable){
-            
-            [self disableAcctWithSocialNetwork:network];
-            
-        }
-        else{
-            
-            if(error == SocialExists)
-                message = [NSString stringWithFormat:@"It seems you already have an account linked with %@.", network];
-            else if(error == SocialUnlinked)
-                message = [NSString stringWithFormat:@"You've been disconnected from %@.", network];
-            
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                         alertControllerWithTitle:ERROR
-                                         message:message
-                                         action:nil]
-                               animated:YES
-                             completion:nil];
-            
-        }
-        
-    }
-    
-    [self updateLinkingStatus];
-    
-    [self.spinner removeFromSuperview];
-    
 }
 
 - (void)saveChanges{

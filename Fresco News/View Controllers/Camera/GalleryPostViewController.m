@@ -463,12 +463,18 @@
     NSMutableDictionary *postMetadata = [NSMutableDictionary new];
     
     for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
+        
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
 
         FRSPost *post = self.gallery.posts[i];
+        
+        NSTimeInterval postTime = round([post.createdDate timeIntervalSince1970] * 1000);
+        
         postMetadata[filename] = @{ @"type" : post.type,
                                     @"lat" : post.image.latitude,
-                                    @"lon" : post.image.longitude };
+                                    @"lon" : post.image.longitude,
+                                    @"timeCaptured" : [NSString stringWithFormat:@"%ld",(long)postTime]
+                                };
     }
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
@@ -487,6 +493,7 @@
         NSInteger count = 0;
         
       for (FRSPost *post in self.gallery.posts) {
+          
             NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
             NSData *data;
             NSString *mimeType;
@@ -664,7 +671,9 @@
                             [self.view layoutIfNeeded];
     } completion:nil];
 }
-                    
+
+#pragma mark - Alert View Delegate
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {

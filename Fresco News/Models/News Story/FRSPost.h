@@ -30,6 +30,7 @@
 @property (nonatomic, copy, readonly) NSString *byline;
 @property (nonatomic, copy, readonly) NSNumber *visibility;
 @property (nonatomic, copy, readonly) NSString *address;
+@property (nonatomic, strong) NSDate *createdDate;
 
 - (NSURL *)largeImageURL;
 - (BOOL)isVideo;

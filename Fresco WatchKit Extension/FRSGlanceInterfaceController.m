@@ -29,28 +29,65 @@
     //Check if there is context, if there isn't, get the posts from the app
     if(context == nil){
         
-//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//        
-//        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//        
-//        [manager GET:@"http://www.fresconews.com/api/frs-query.php?type=getPosts&limit=4" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//            
-//            _posts = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-//            
-//            if(_posts != nil){
-//            
-//                [self.firstImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_posts[0][@"small_path"]]]];
-//                
-//                [self.secondImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_posts[1][@"small_path"]]]];
-//                
-//                [self.thirdImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_posts[2][@"small_path"]]]];
-//                
-//            }
-//            
-//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            NSLog(@"%@", error);
-//        }];
+        NSURL *baseURL = [NSURL URLWithString:@"https://api.fresconews.com/v1/"];
+        
+        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+        
+        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        
+        [manager GET:@"gallery/highlights" parameters:@{@"limit" : @5} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil][@"data"];
+            
+            //Loop through the galleries
+            for (NSDictionary *gallery in galleries) {
+                
+                //Find a gallery with more than 3 images
+                if([gallery[@"posts"] count] > 2){
+                    
+                    NSInteger count = 0;
+                    
+                    for (NSDictionary *post in gallery[@"posts"]) {
+                        
+                        NSString *image = post[@"image"];
+                        
+                        if (!([image rangeOfString:@"cloudfront"].location == NSNotFound)){
+                            
+                            NSMutableString *mu = [NSMutableString stringWithString:image];
+                            
+                            NSRange range = [mu rangeOfString:@"/images/"];
+                            
+                            if (!(range.location == NSNotFound)) {
+                                
+                                [mu insertString:@"small/" atIndex:(range.location + range.length)];
+                                
+                                image = mu;
+                                
+                            }
+                            
+                        }
+
+                        if(count == 0)
+                            [self.firstImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image]]];
+                        else if(count == 1)
+                            [self.secondImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image]]];
+                        else if(count == 2)
+                            [self.thirdImage setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image]]];
+                        
+                        count++;
+                        
+                    }
+                    
+                    return;
+                    
+                }
+            }
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@", error);
+        }];
 
         
     }

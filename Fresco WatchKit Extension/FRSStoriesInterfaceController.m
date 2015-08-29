@@ -58,7 +58,7 @@
         
         [row.storyLocation setText:self.stories[i][@"thumbnails"][0][@"location"][@"address"]];
                 
-        NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"thumbnails"][0][@"time_created"] integerValue])];
+        NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"time_edited"] integerValue] / 1000)];
         
         [row.storyTime setText:[NSRelativeDate relativeDateString:date]];
         
@@ -81,9 +81,9 @@
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex{
     
-    NSDictionary *galleries = [_stories objectAtIndex:rowIndex][@"galleries"];
+    NSString *storyId = [self.stories objectAtIndex:rowIndex][@"_id"];
     
-    [self pushControllerWithName:@"galleries" context:galleries];
+    [self pushControllerWithName:@"galleries" context:storyId];
     
 }
 

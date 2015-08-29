@@ -10,6 +10,7 @@
 #import "FRSGalleryRowController.h"
 #import <AFNetworking/AFNetworking.h>
 #import "NSRelativeDate.h"
+#import "FRSAppConstants.h"
 
 @implementation FRSGalleriesInterfaceController
 
@@ -19,14 +20,14 @@
     
     if(context == nil){
         
-        NSURL *baseURL = [NSURL URLWithString:@"https://api.fresconews.com/v1/"];
+        NSURL *baseURL = [NSURL URLWithString:BASE_API];
         
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
         
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         
-        [manager GET:@"gallery/highlights" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [manager GET:@"gallery/highlights" parameters:@{@"limit" : @7} success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
             NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil][@"data"];
             
@@ -39,14 +40,32 @@
         }];
     
     }
+    //Context is sent i.e. pushed from Stories View
     else{
+        
+        [self setTitle:@"Story"];
+        
+        NSString *storyId = context;
     
-        // Configure interface objects here.
-        self.galleries = context;
+        NSURL *baseURL = [NSURL URLWithString:BASE_API];
         
-        [self setTitle:@"Story"]; 
+        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
         
-        [self populateGalleries];
+        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        
+        [manager GET:@"story/galleries" parameters:@{@"id" : storyId, @"limit" : @7} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSArray *galleries = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil][@"data"];
+            
+            self.galleries = galleries;
+            
+            [self populateGalleries];
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@", error);
+        }];
+    
         
     }
     
@@ -84,7 +103,7 @@
         
                     if (!(range.location == NSNotFound)) {
         
-                        [mu insertString:@"medium/" atIndex:(range.location + range.length)];
+                        [mu insertString:@"small/" atIndex:(range.location + range.length)];
         
                         image = mu;
                         

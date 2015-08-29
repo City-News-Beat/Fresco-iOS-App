@@ -12,6 +12,7 @@
 #import "FRSGallery.h"
 #import "GalleryHeader.h"
 #import "FRSDataManager.h"
+#import "UISocialButton.h"
 #import "AppDelegate.h"
 
 @implementation FRSBaseViewController
@@ -99,35 +100,32 @@
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
     
-    self.view.userInteractionEnabled = NO;
-    
-    [button setTitle:@"" forState:UIControlStateNormal];
-    
-    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
-    
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-    
-    self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
-    
-    self.spinner.color = [UIColor whiteColor];
-    
-    [self.spinner startAnimating];
-    
-    [button addSubview:self.spinner];
-    
-    [UIView animateWithDuration:.3 animations:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        for (UIView *view in [self.view subviews]) {
-            if(view != button && view.tag!= 51 && view.tag != 50){
-                view.alpha = .26f;
-            }
-            
-        }
+        self.view.userInteractionEnabled = NO;
         
-    }];
+        [button setTitle:@"" forState:UIControlStateNormal];
+        
+        [button setImage:nil forState:UIControlStateNormal];
+        
+        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+        
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+        
+        self.spinner.center = CGPointMake(button.frame.size.width  / 2, button.frame.size.height / 2);
+        
+        self.spinner.color = [UIColor whiteColor];
+        
+        [self.spinner startAnimating];
+        
+        [button addSubview:self.spinner];
+        
+        [self hideViewsExceptView:button withView:self.view];
+
+    });
     
     if(login == LoginFresco){
-        
+
         [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
             
             self.view.userInteractionEnabled = YES;
@@ -139,15 +137,14 @@
             }
             else{
                 
+                [button setTitle:LOGIN forState:UIControlStateNormal];
+                [self hideActivityIndicator];
+                [self revertScreenToNormal:self.view];
+    
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:^{
-                                       [button setTitle:LOGIN forState:UIControlStateNormal];
-                                       
-                                       [self revertScreenToNormal];
-                                       
-                                   }];
+                                   animated:YES completion:nil];
             }
             
         }];
@@ -168,19 +165,20 @@
                 
             }
             else {
+                
+                
+                [button setTitle:FACEBOOK forState:UIControlStateNormal];
+                [button setImage:[UIImage imageNamed:FACEBOOK] forState:UIControlStateNormal];
+                [self hideActivityIndicator];
+                [self revertScreenToNormal:self.view];
+                
                 //TODO: check if these are the strings we want
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:FACEBOOK_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:^{
-                                     
-                                     [button setTitle:FACEBOOK forState:UIControlStateNormal];
-                                     
-                                     [self revertScreenToNormal];
-                                 }];
-                
+                                 completion:nil];
             }
             
         }];
@@ -202,41 +200,89 @@
             }
             else {
                 
+                [button setTitle:TWITTER forState:UIControlStateNormal];
+                [button setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+                [self revertScreenToNormal:self.view];
+                [self hideActivityIndicator];
+                
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:TWITTER_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:^{
-                                     
-                                     [button setTitle:TWITTER forState:UIControlStateNormal];
-                                     [self revertScreenToNormal];
-                                     
-                                 }];
-                
-                NSLog(@"%@", error);
-                
+                                 completion:nil];
             }
         }];
-        
     }
 }
 
-- (void)revertScreenToNormal{
-    
-    self.view.userInteractionEnabled = YES;
-    
-    //Social Images
-    [self.view viewWithTag:50].hidden = NO;
-    [self.view viewWithTag:51].hidden = NO;
-    
-    [UIView animateWithDuration:.3 animations:^{
+- (void)hideActivityIndicator{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.spinner.alpha = 0;
+        [self.spinner removeFromSuperview];
+            
+    });
+    
+}
+
+- (void)revertScreenToNormal:(UIView *)parentView{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        for (UIView *view in [self.view subviews]) view.alpha = 1;
+        self.view.userInteractionEnabled = YES;
+
+        // Get the subviews of the view
+        NSArray *subviews = [parentView subviews];
         
-    }];
+        // Return if there are no subviews
+        if ([subviews count] == 0)
+            return; // COUNT CHECK LINE
+        
+        [UIView animateWithDuration:.3 animations:^{
+            
+            for (UIView *subview in subviews) {
+                
+                subview.alpha = 1.0f;
+                
+                // List the subviews of subview fater
+                [self revertScreenToNormal:subview];
+                
+            }
+            
+        }];
+        
+    });
+    
+}
+
+- (void)hideViewsExceptView:(UIView *)exceptionView withView:(UIView *)parentView{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        // Get the subviews of the view
+        NSArray *subviews = [parentView subviews];
+        
+        // Return if there are no subviews
+        if ([subviews count] == 0) return; // COUNT CHECK LINE
+        
+        [UIView animateWithDuration:.3 animations:^{
+            
+            for (UIView *subview in subviews) {
+                
+                if(subview != exceptionView && subview != exceptionView.superview)
+                    subview.alpha = .26f;
+
+                if(subview != exceptionView){
+                    // List the subviews of subview after
+                    [self hideViewsExceptView:exceptionView withView:subview];
+                }
+                
+            }
+            
+        }];
+        
+    });
     
 }
 

@@ -12,57 +12,53 @@
 
 + (NSString *)relativeDateString:(NSDate*)date {
     
-    double ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
+    int ti = [[NSDate date] timeIntervalSince1970] - [date timeIntervalSince1970];
     
-    if(ti < 60){
-        return @"just now";
+    if(ti <= 0){
+        return [NSString stringWithFormat:@"just now"];
+    }
+    else if(ti < 60){
+        
+        int diff = ti;
+        
+        return [NSString stringWithFormat:@"%ds", diff];
     }
     else if(ti < 3600){
         
-        int diff = round(ti / 60);
+        int diff = ti / 60;
         
-        return [NSString stringWithFormat:@"%d m", diff];
+        return [NSString stringWithFormat:@"%dm", diff];
         
     }
     else if(ti<86400){
         
-        int diff = round(ti / 60 / 60);
+        int diff = ti / 60 / 60;
         
-        return [NSString stringWithFormat:@"%d h", diff];
+        return [NSString stringWithFormat:@"%dh", diff];
         
     }
     else if(ti < 604800){
         
-        int diff = round(ti / 60 / 60 / 24);
+        int diff = ti / 60 / 60 / 24;
         
-        return [NSString stringWithFormat:@"%d d", diff];
-        
-    }
-    else if(ti < 2629740){
-        
-        int diff = round(ti / 60 / 60 / 24 / 4);
-        
-        return [NSString stringWithFormat:@"%d w", diff];
-        
+        return [NSString stringWithFormat:@"%dd", diff];
         
     }
     else if(ti < 31556900){
         
-        int diff = round(ti / 60 / 60 / 24 / 4 / 12);
+        int diff = ti / 60 / 60 / 24 / 4;
         
-        return  [NSString stringWithFormat:@"%d mo", diff];
+        return [NSString stringWithFormat:@"%dw", diff];
         
-        
-    }
-    else if(ti < 3155690000){
-        
-        int diff = round(ti / 60 / 60 / 24 / 30 / 52);
-        
-        return [NSString stringWithFormat:@"%d y", diff];
         
     }
-    else
-        return @"Never";
+    else{
+        
+        int diff = ti / 60 / 60 / 24 / 30 / 52;
+        
+        return [NSString stringWithFormat:@"%dy", diff];
+        
+    }
     
     return 0;
     
