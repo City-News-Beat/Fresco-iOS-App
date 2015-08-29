@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *agreeButton;
 @property (weak, nonatomic) IBOutlet UITextView *tosTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTextViewHeight;
 
 @property (assign, nonatomic) BOOL didScrollToBottomOnce;
 
@@ -28,11 +29,9 @@
     [super viewDidLoad];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
-    
+
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    
     
     self.agreeButton.enabled = YES; // But probably we want to require scrolling to the end first
     self.didScrollToBottomOnce = NO;
@@ -57,35 +56,29 @@
         [self.agreeButton setTitleColor:[UIColor disabledToolbarColor] forState:UIControlStateNormal];
     }
     
+    __block NSString *text;
+    
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
             if (error || responseObject == nil) {
                 self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
                 // self.monitorScrolling = YES; // for now
             }
             else {
-                self.tosTextView.text = responseObject[@"data"];
-                [self.tosTextView sizeToFit];
-                CGRect frame = self.tosTextView.frame;
-                frame.size.height = self.tosTextView.contentSize.height;
-                self.tosTextView.frame = frame;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    text = (NSString *)responseObject[@"data"];
+                    [self.tosTextView setText:text];
+                    self.constraintTextViewHeight.constant = [self.tosTextView sizeThatFits:CGSizeMake(self.tosTextView.frame.size.width, CGFLOAT_MAX)].height;
+
+                });
+                
+//                CGRect frame = self.tosTextView.frame;
+//                frame.size.height = self.tosTextView.contentSize.height;
+//                self.tosTextView.frame = frame;
                 // self.monitorScrolling = YES;
             }
     }];
-    
+ 
 }
-
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    
-    [super viewWillDisappear:animated];
-    
-}
-
 
 /*
 ** Final step of First Run, "Agreed" button

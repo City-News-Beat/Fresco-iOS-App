@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+@property (weak, nonatomic) IBOutlet UITextView *tosTextView;
 
 @property (assign, nonatomic) BOOL signUpRunning;
 
@@ -35,7 +36,21 @@
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
+    NSString *termsOfService = @"Terms of Service";
     
+    NSString *signupTerms = [NSString stringWithFormat:@"By signing up, you agree to the %@", termsOfService];
+    
+    NSMutableAttributedString *terms = [[NSMutableAttributedString alloc] initWithString:signupTerms];
+    
+    NSRange range = NSMakeRange([signupTerms length] - [termsOfService length], [termsOfService length]);
+
+    [terms addAttribute:NSLinkAttributeName value:@"https://www.fresconews.com/terms" range:range];
+
+    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor frescoBlueColor] range:range];
+    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.54] range:NSMakeRange(0, [signupTerms length] - [termsOfService length])];
+   
+    self.tosTextView.attributedText = terms;
+    self.tosTextView.textAlignment = NSTextAlignmentCenter;
     self.signUpRunning = NO;
 }
 
@@ -144,8 +159,6 @@
 }
 
 - (void)hitNext{
-    
-                     [self transferUser];
     
     if(_signUpRunning) return;
     
