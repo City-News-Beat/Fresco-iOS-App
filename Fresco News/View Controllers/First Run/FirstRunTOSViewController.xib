@@ -2,12 +2,10 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FirstRunTOSViewController">
             <connections>
-                <outlet property="scrollView" destination="LR1-8Z-ihD" id="nQG-Pl-3Bn"/>
                 <outlet property="tosTextView" destination="ORx-nq-vcH" id="c3a-nE-or0"/>
                 <outlet property="view" destination="iN0-l3-epB" id="2Ou-lU-NHb"/>
             </connections>
@@ -17,49 +15,22 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="30" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LR1-8Z-ihD">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <subviews>
-                        <view tag="20" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M6Z-ZH-8ib" userLabel="Content View">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                            <subviews>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ORx-nq-vcH">
-                                    <rect key="frame" x="15.5" y="0.0" width="569" height="600"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                </textView>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="width" secondItem="ORx-nq-vcH" secondAttribute="width" multiplier="1.055" id="Fie-r6-5Fc"/>
-                                <constraint firstItem="ORx-nq-vcH" firstAttribute="top" secondItem="M6Z-ZH-8ib" secondAttribute="top" id="HM2-lo-AL7"/>
-                                <constraint firstAttribute="centerX" secondItem="ORx-nq-vcH" secondAttribute="centerX" id="aIS-9M-MHY"/>
-                                <constraint firstAttribute="height" secondItem="ORx-nq-vcH" secondAttribute="height" id="hgd-Gw-Hs5"/>
-                            </constraints>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="M6Z-ZH-8ib" firstAttribute="leading" secondItem="LR1-8Z-ihD" secondAttribute="leading" id="8sJ-aj-x9w"/>
-                        <constraint firstAttribute="centerX" secondItem="M6Z-ZH-8ib" secondAttribute="centerX" id="MaF-kx-ndB"/>
-                        <constraint firstAttribute="trailing" secondItem="M6Z-ZH-8ib" secondAttribute="trailing" id="VjO-dZ-zfI"/>
-                        <constraint firstItem="M6Z-ZH-8ib" firstAttribute="top" secondItem="LR1-8Z-ihD" secondAttribute="top" id="bCa-Xv-qq0"/>
-                        <constraint firstAttribute="centerY" secondItem="M6Z-ZH-8ib" secondAttribute="centerY" id="p8v-Ah-aG2"/>
-                        <constraint firstAttribute="bottom" secondItem="M6Z-ZH-8ib" secondAttribute="bottom" id="tqk-qH-YWx"/>
-                    </constraints>
-                </scrollView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ORx-nq-vcH">
+                    <rect key="frame" x="16" y="0.0" width="568" height="600"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="LR1-8Z-ihD" secondAttribute="centerY" id="4UM-X4-nbW"/>
-                <constraint firstAttribute="centerX" secondItem="LR1-8Z-ihD" secondAttribute="centerX" id="CWG-8L-fUd"/>
-                <constraint firstAttribute="trailing" secondItem="LR1-8Z-ihD" secondAttribute="trailing" id="HVU-NO-j97"/>
-                <constraint firstAttribute="bottom" secondItem="LR1-8Z-ihD" secondAttribute="bottom" id="clt-HD-Bgc"/>
-                <constraint firstItem="LR1-8Z-ihD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="nN3-Vt-c42"/>
-                <constraint firstItem="LR1-8Z-ihD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="plI-lW-bMt"/>
+                <constraint firstAttribute="trailing" secondItem="ORx-nq-vcH" secondAttribute="trailing" constant="16" id="Gnx-7R-lKn"/>
+                <constraint firstAttribute="centerX" secondItem="ORx-nq-vcH" secondAttribute="centerX" id="MsW-up-pHh"/>
+                <constraint firstAttribute="bottom" secondItem="ORx-nq-vcH" secondAttribute="bottom" id="WIt-jc-AVN"/>
+                <constraint firstAttribute="centerY" secondItem="ORx-nq-vcH" secondAttribute="centerY" id="bRK-Td-Tlu"/>
+                <constraint firstItem="ORx-nq-vcH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="lE4-4y-JfA"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <point key="canvasLocation" x="117" y="436"/>

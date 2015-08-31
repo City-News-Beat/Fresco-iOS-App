@@ -13,7 +13,6 @@
 
 @interface FirstRunTOSViewController ()
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITextView *tosTextView;
 
 @end
