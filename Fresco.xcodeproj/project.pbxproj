@@ -92,6 +92,7 @@
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
+		BC47F6FD1B94A9AB00969034 /* FirstRunTOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC47F6FC1B94A9AB00969034 /* FirstRunTOSViewController.xib */; };
 		BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
@@ -343,6 +344,7 @@
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BC419B671B6FED2700122B87 /* FRSAppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppConstants.h; sourceTree = "<group>"; };
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		BC47F6FC1B94A9AB00969034 /* FirstRunTOSViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunTOSViewController.xib; sourceTree = "<group>"; };
 		BC7190EB1B7C01B400E72BE5 /* FRSDisabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDisabledViewController.h; sourceTree = "<group>"; };
 		BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisabledViewController.m; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
 				32CA6FF31B45974F00242E1E /* FirstRunTOSViewController.h */,
 				32CA6FF41B45974F00242E1E /* FirstRunTOSViewController.m */,
+				BC47F6FC1B94A9AB00969034 /* FirstRunTOSViewController.xib */,
 			);
 			name = FirstRun;
 			path = "First Run";
@@ -1262,6 +1265,7 @@
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
+				BC47F6FD1B94A9AB00969034 /* FirstRunTOSViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

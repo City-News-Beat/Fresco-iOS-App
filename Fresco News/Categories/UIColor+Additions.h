@@ -32,7 +32,7 @@
 
 + (UIColor *)whiteBackgroundColor;
 
-+ (UIColor *)cellSeperatorBlackColor;
++ (UIColor *)cellSeparatorBlackColor;
 
 + (UIColor *)textInputBlackColor;
 

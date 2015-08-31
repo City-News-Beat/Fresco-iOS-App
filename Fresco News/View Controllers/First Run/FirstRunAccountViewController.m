@@ -12,7 +12,7 @@
 #import "NSString+Validation.h"
 #import "UISocialButton.h"
 
-@interface FirstRunAccountViewController () <UITextFieldDelegate>
+@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
@@ -29,33 +29,21 @@
 
 @implementation FirstRunAccountViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+    
     [super viewDidLoad];
 
+    self.tosTextView.delegate = self;
+    
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
-    NSString *termsOfService = @"Terms of Service";
-    
-    NSString *signupTerms = [NSString stringWithFormat:@"By signing up, you agree to the %@", termsOfService];
-    
-    NSMutableAttributedString *terms = [[NSMutableAttributedString alloc] initWithString:signupTerms];
-    
-    NSRange range = NSMakeRange([signupTerms length] - [termsOfService length], [termsOfService length]);
-
-    [terms addAttribute:NSLinkAttributeName value:@"https://www.fresconews.com/terms" range:range];
-
-    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor frescoBlueColor] range:range];
-    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.54] range:NSMakeRange(0, [signupTerms length] - [termsOfService length])];
-   
-    self.tosTextView.attributedText = terms;
-    self.tosTextView.textAlignment = NSTextAlignmentCenter;
+    [self setupTerms];
     self.signUpRunning = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
+    
     [super viewWillAppear:animated];
     
     self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
@@ -82,8 +70,8 @@
                                                object:nil];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
+    
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -94,6 +82,7 @@
     
     [self hitNext];
 }
+
 - (IBAction)facebookButtonTapped:(id)sender {
     
      [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
@@ -104,6 +93,22 @@
      [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
 
+#pragma mark - UITextViewDelegate
+
+-(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    // modally present the view controller
+    NSLog(@"Going to replace this log with a modal presentation of TOS");
+    
+    FirstRunTOSViewController *tosVC = [FirstRunTOSViewController new];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tosVC];
+    
+
+    [self presentViewController:navigationController animated:YES completion:nil];
+          
+    return NO;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -112,7 +117,7 @@
         [self.passwordField becomeFirstResponder];
     } else if (textField == self.passwordField) {
         [self.confirmPasswordField becomeFirstResponder];
-    }else if (textField == self.confirmPasswordField) {
+    } else if (textField == self.confirmPasswordField) {
         [self.confirmPasswordField resignFirstResponder];
         [self hitNext];  
     }
@@ -121,8 +126,7 @@
 }
 
 
-- (void)keyboardWillShowOrHide:(NSNotification *)notification
-{
+- (void)keyboardWillShowOrHide:(NSNotification *)notification {
     
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
@@ -158,7 +162,26 @@
     [super touchesBegan:touches withEvent:event];
 }
 
-- (void)hitNext{
+- (void)setupTerms {
+    
+    NSString *termsOfService = @"Terms of Service";
+    
+    NSString *signupTerms = [NSString stringWithFormat:@"By signing up, you agree to the %@", termsOfService];
+    
+    NSMutableAttributedString *terms = [[NSMutableAttributedString alloc] initWithString:signupTerms];
+    
+    NSRange range = NSMakeRange([signupTerms length] - [termsOfService length], [termsOfService length]);
+    
+    [terms addAttribute:NSLinkAttributeName value:@"https://www.fresconews.com/terms" range:range];
+    
+    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor frescoBlueColor] range:range];
+    [terms addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.54] range:NSMakeRange(0, [signupTerms length] - [termsOfService length])];
+    
+    self.tosTextView.attributedText = terms;
+    self.tosTextView.textAlignment = NSTextAlignmentCenter;
+}
+
+- (void)hitNext {
     
     if(_signUpRunning) return;
     
