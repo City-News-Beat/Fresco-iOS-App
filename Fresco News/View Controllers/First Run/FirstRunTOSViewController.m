@@ -9,6 +9,7 @@
 #import "FirstRunTOSViewController.h"
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
+#import "UIViewController+Additions.h"
 
 @interface FirstRunTOSViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
@@ -28,56 +29,44 @@
 {
     [super viewDidLoad];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-
-    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
-        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nil"] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7]];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.topItem.title = @"Terms of Service";
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor textInputBlackColor]}];
+    
+    UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTerms)];
+    
+    self.navigationItem.rightBarButtonItem = closeBarButtonItem;
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor textHeaderBlackColor];
+    self.view.backgroundColor = [UIColor whiteBackgroundColor];
+    [[self.view viewWithTag:30] setBackgroundColor:[UIColor whiteBackgroundColor]];
     
     self.agreeButton.enabled = YES; // But probably we want to require scrolling to the end first
     self.didScrollToBottomOnce = NO;
     
     // No text appears at requested font size 14.0 - constraint issue?
-    self.tosTextView.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:12];
-    
-    if (IS_STANDARD_IPHONE_6_PLUS) {
-        self.tosTextView.font = [UIFont systemFontOfSize:11.6];
-    }
-    
     self.tosTextView.text = @"";
     
-    if (self.updatedTerms) {
-        self.progressBarImageView.hidden = YES;
-        self.agreeButton.backgroundColor = [UIColor disabledToolbarColor];
-        [self.agreeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    }
-    else {
-        self.progressBarImageView.hidden = NO;
-        self.agreeButton.backgroundColor = [UIColor whiteColor];
-        [self.agreeButton setTitleColor:[UIColor disabledToolbarColor] forState:UIControlStateNormal];
-    }
     
-    __block NSString *text;
     
     [[FRSDataManager sharedManager] getTermsOfService:^(id responseObject, NSError *error) {
-            if (error || responseObject == nil) {
-                self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
-                // self.monitorScrolling = YES; // for now
-            }
-            else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    text = (NSString *)responseObject[@"data"];
-                    [self.tosTextView setText:text];
-                    self.constraintTextViewHeight.constant = [self.tosTextView sizeThatFits:CGSizeMake(self.tosTextView.frame.size.width, CGFLOAT_MAX)].height;
-
-                });
-                
-//                CGRect frame = self.tosTextView.frame;
-//                frame.size.height = self.tosTextView.contentSize.height;
-//                self.tosTextView.frame = frame;
-                // self.monitorScrolling = YES;
-            }
+        if (error || responseObject == nil) {
+            self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
+            // self.monitorScrolling = YES; // for now
+        }
+        else {
+            
+            [self.tosTextView setText:responseObject[@"data"]];
+        }
+        
+        [self.tosTextView setTextColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.54]];
+        
+        self.tosTextView.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:11];
+        
     }];
- 
+    
 }
 
 /*
@@ -119,6 +108,10 @@
 /*
 ** Cancel button is hit, exiting TOS view
 */
+
+- (void)dismissTerms {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (IBAction)actionCancel:(id)sender {
     

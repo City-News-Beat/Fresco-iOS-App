@@ -78,10 +78,10 @@
 }
 
 + (UIColor *)textHeaderBlackColor {
-    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.52];
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54];
 }
 
-+ (UIColor *)cellSeperatorBlackColor {
++ (UIColor *)cellSeparatorBlackColor {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.26];
 }
 

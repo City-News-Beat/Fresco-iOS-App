@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -3181,7 +3181,7 @@
                                 <rect key="frame" x="0.0" y="314" width="375" height="273"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Lorem ipsum dolor sit er elit lamet,  " textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sUo-xg-64K" userLabel="Terms Text View">
-                                        <rect key="frame" x="-0.5" y="230" width="375" height="39"/>
+                                        <rect key="frame" x="-0.5" y="234" width="375" height="35"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -3344,7 +3344,7 @@
                                     <constraint firstAttribute="bottom" secondItem="0qC-R2-kGU" secondAttribute="bottom" constant="42" id="0PV-nB-sY5"/>
                                     <constraint firstAttribute="centerX" secondItem="0qC-R2-kGU" secondAttribute="centerX" id="2HF-bh-V2W"/>
                                     <constraint firstItem="4sr-us-fVk" firstAttribute="width" secondItem="0qC-R2-kGU" secondAttribute="width" id="69A-74-Vgv"/>
-                                    <constraint firstItem="sUo-xg-64K" firstAttribute="top" secondItem="0qC-R2-kGU" secondAttribute="top" constant="133" id="8Fd-YY-haE"/>
+                                    <constraint firstItem="sUo-xg-64K" firstAttribute="top" secondItem="0qC-R2-kGU" secondAttribute="top" constant="137" id="8Fd-YY-haE"/>
                                     <constraint firstAttribute="trailing" secondItem="Dyy-Xz-2TG" secondAttribute="trailing" constant="17" id="9QM-Yl-020"/>
                                     <constraint firstItem="bWC-lh-H2g" firstAttribute="top" secondItem="3yy-O5-PrB" secondAttribute="top" constant="9" id="9gK-XA-z88"/>
                                     <constraint firstItem="0qC-R2-kGU" firstAttribute="top" secondItem="bWC-lh-H2g" secondAttribute="bottom" constant="42" id="CxT-kM-DYM"/>
@@ -3886,11 +3886,10 @@
             </objects>
             <point key="canvasLocation" x="-364.5" y="5088.5"/>
         </scene>
-        <!--First RunTOS View Controller-->
+        <!--View Controller-->
         <scene sceneID="USQ-N6-2yb">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Xi-VJ-vsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="firstRunTOSViewController" hidesBottomBarWhenPushed="YES" id="rD6-e0-Xnl" customClass="FirstRunTOSViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="firstRunTOSViewController" hidesBottomBarWhenPushed="YES" id="rD6-e0-Xnl" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W4e-r4-LqF"/>
                         <viewControllerLayoutGuide type="bottom" id="AWO-wh-qSX"/>
@@ -4057,6 +4056,7 @@
                         <outlet property="tosTextView" destination="Ppr-2y-zFU" id="OHq-ez-fgk"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Xi-VJ-vsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="726.5" y="2379.5"/>
         </scene>
@@ -4207,8 +4207,8 @@
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SWl-Ux-T2G"/>
-        <segue reference="ipo-ch-au7"/>
         <segue reference="6TG-Ef-MS9"/>
+        <segue reference="ipo-ch-au7"/>
+        <segue reference="SWl-Ux-T2G"/>
     </inferredMetricsTieBreakers>
 </document>
