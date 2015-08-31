@@ -96,8 +96,6 @@
 #pragma mark - UITextViewDelegate
 
 -(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    // modally present the view controller
-    NSLog(@"Going to replace this log with a modal presentation of TOS");
     
     FirstRunTOSViewController *tosVC = [FirstRunTOSViewController new];
     
