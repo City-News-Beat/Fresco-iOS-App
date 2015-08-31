@@ -20,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) NSArray *stepperSteps;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
+- (IBAction)doneButtonTapped:(id)sender;
+
 @end
 
 @implementation FirstRunRadiusViewController
@@ -125,13 +128,7 @@
 
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"termsOfService"]) {
-        FirstRunTOSViewController *vc = [segue destinationViewController];
-        vc.updatedTerms = NO;
-        [self save];
-    }
-
+- (IBAction)doneButtonTapped:(id)sender {
+    [self save];
 }
-
 @end
