@@ -305,12 +305,7 @@
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
     
         //Check if the user moves at least a difference greater than .4
-        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4 && ([radius floatValue] > [self.operatingRadius floatValue]))
-           
-           ||
-           
-           (fabs((self.assignmentsMap.centerCoordinate.latitude - [self.operatingLat floatValue]) * 69) > .7 || fabs((self.assignmentsMap.centerCoordinate.longitude - [self.operatingLon floatValue]) * 69) > .7 )
-           ){
+        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4 && ([radius floatValue] > [self.operatingRadius floatValue]))){
             
             self.updating = true;
         
@@ -332,28 +327,36 @@
                      if (!error) {
                         
                         self.viewingClusters = false;
-                        
-                        NSMutableArray *copy = [[NSMutableArray alloc] init];
-                        
-                        for(FRSAssignment* assignment in responseObject){
-                            [copy addObject:assignment.assignmentId];
-                        }
-                        
-                        if(self.assignments != nil){
+                         
+                        if([responseObject count] > 0){
+    
+                            NSMutableArray *copy = [[NSMutableArray alloc] init];
                             
-                            for(FRSAssignment *assignment in self.assignments){
-                                
-                                [copy removeObject:assignment.assignmentId];
-                            
+                            for(FRSAssignment* assignment in responseObject){
+                                [copy addObject:assignment.assignmentId];
                             }
                             
+                            if(self.assignments != nil){
+                                
+                                for(FRSAssignment *assignment in self.assignments){
+                                    
+                                    [copy removeObject:assignment.assignmentId];
+                                
+                                }
+                                
+                            }
+                            
+                            if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
+                                
+                                self.assignments = responseObject;
+                                
+                                [self populateMapWithAnnotations];
+                            
+                            }
                         }
+                        else{
                         
-                        if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
-                            
-                            self.assignments = responseObject;
-                            
-                            [self populateMapWithAnnotations];
+                            [self clearMapAnnotations];
                         
                         }
                         
@@ -405,30 +408,7 @@
     
     if(_viewingClusters){
         
-        if(self.assignmentsMap.annotations != nil){
-        
-            for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
-                
-                MKAnnotationView *view = [self.assignmentsMap viewForAnnotation:annotation];
-                
-                if (view) {
-                    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                        view.alpha = 0.0;
-                    } completion:^(BOOL finished) {
-                        [self.assignmentsMap removeAnnotation:annotation];
-                        view.alpha = 1.0;
-                    }];
-                } else {
-                    [self.assignmentsMap removeAnnotation:annotation];
-                }
-                
-            }
-    
-            self.assignments = nil;
-            
-            [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
-
-        }
+        [self clearMapAnnotations];
         
         for(FRSCluster *cluster in self.clusters){
             
@@ -498,6 +478,38 @@
     
     [self.assignmentsMap addAnnotation:annotation];
     
+}
+
+/*
+** Cleans up annotations on the map
+*/
+
+- (void)clearMapAnnotations{
+
+    if(self.assignmentsMap.annotations != nil){
+        
+        for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
+            
+            MKAnnotationView *view = [self.assignmentsMap viewForAnnotation:annotation];
+            
+            if (view) {
+                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                    view.alpha = 0.0;
+                } completion:^(BOOL finished) {
+                    [self.assignmentsMap removeAnnotation:annotation];
+                    view.alpha = 1.0;
+                }];
+            } else {
+                [self.assignmentsMap removeAnnotation:annotation];
+            }
+            
+        }
+        
+        self.assignments = nil;
+        
+        [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
+        
+    }
 }
 
 #pragma mark - ScrollViewDelegate
