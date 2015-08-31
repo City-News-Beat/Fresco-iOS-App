@@ -65,11 +65,7 @@
     //Reset the previously selected tab on launch
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-    //Check if the user has agreed to the TOS, otherwise log them out
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED])
-        [[FRSDataManager sharedManager] logout];
-    
-    
+    //Check if we've launcahed the app before or if the app is the iPhone 4s/4
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];

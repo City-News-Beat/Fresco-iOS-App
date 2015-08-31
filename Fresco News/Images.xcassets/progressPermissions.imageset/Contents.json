@@ -2,18 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "progressPermissions.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "progressPermissions@2x.png"
+      "filename" : "progress-4-3@6-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "progressPermissions@3x.png"
+      "filename" : "progress-4-3@6p.png"
     }
   ],
   "info" : {

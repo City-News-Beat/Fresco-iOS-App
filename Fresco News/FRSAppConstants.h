@@ -96,7 +96,7 @@ enum FRSErrorCodes {
 #define UD_LASTNAME                         @"lastname"
 #define UD_AVATAR                           @"avatar"
 #define UD_TOKEN                            @"frescoAPIToken"
-#define UD_TOS_AGREED                       @"tos"
+#define UD_NOTIF_SETTINGS                   @"notificationSetting"
 #define UD_CAPTION_STRING_IN_PROGRESS       @"captionStringInProgress"
 #define UD_DEFAULT_ASSIGNMENT_ID            @"defaultAssignmentID"
 #define UD_SELECTED_ASSETS                  @"selectedAssets"
@@ -134,12 +134,11 @@ enum FRSErrorCodes {
 
 #define SEG_SHOW_ACCT_INFO                  @"showAccountInfo"
 #define SEG_REPLACE_WITH_SIGNUP             @"replaceWithSignUp"
-#define SEG_REPLACE_WITH_TOS                @"replaceWithTOS"
 #define SEG_SIGNUP_REPLACE_WITH_TOS         @"signup_replaceWithTOS"
 #define SEG_SHOW_PERMISSIONS                @"showPermissions"
 #define SEG_SHOW_RADIUS                     @"showRadius"
 #define SEG_SETTINGS                        @"settingsSegue"
-
+#define SEG_PRESENT_TOS                     @"presentTOS"
 
 
 

@@ -110,6 +110,17 @@
                                                   otherButtonTitles:nil];
             [alert show];
         }
+        else{
+        
+            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+            
+            if(self.presentingViewController == nil)
+                [self navigateToMainApp];
+            else{
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }
+        
+        }
     }];
 
 }

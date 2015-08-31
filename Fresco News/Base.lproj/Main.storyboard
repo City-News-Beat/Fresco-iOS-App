@@ -3889,6 +3889,7 @@
         <!--First RunTOS View Controller-->
         <scene sceneID="USQ-N6-2yb">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Xi-VJ-vsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="firstRunTOSViewController" hidesBottomBarWhenPushed="YES" id="rD6-e0-Xnl" customClass="FirstRunTOSViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W4e-r4-LqF"/>
@@ -4056,7 +4057,6 @@
                         <outlet property="tosTextView" destination="Ppr-2y-zFU" id="OHq-ez-fgk"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Xi-VJ-vsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="726.5" y="2379.5"/>
         </scene>
@@ -4190,10 +4190,10 @@
         <image name="onboard1" width="167" height="186"/>
         <image name="onboard2" width="150" height="246"/>
         <image name="onboard3" width="302" height="252"/>
-        <image name="progressNotifications" width="375" height="21"/>
-        <image name="progressPermissions" width="375" height="21"/>
-        <image name="progressPersonal" width="375" height="21"/>
-        <image name="progressSignUp" width="375" height="21"/>
+        <image name="progressNotifications" width="375" height="20"/>
+        <image name="progressPermissions" width="375" height="20"/>
+        <image name="progressPersonal" width="375" height="20"/>
+        <image name="progressSignUp" width="375" height="20"/>
         <image name="progressTOS" width="375" height="21"/>
         <image name="settings" width="18" height="19"/>
         <image name="share" width="13" height="18"/>
@@ -4208,7 +4208,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="SWl-Ux-T2G"/>
-        <segue reference="6TG-Ef-MS9"/>
         <segue reference="ipo-ch-au7"/>
+        <segue reference="6TG-Ef-MS9"/>
     </inferredMetricsTieBreakers>
 </document>

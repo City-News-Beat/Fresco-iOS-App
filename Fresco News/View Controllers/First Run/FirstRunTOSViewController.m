@@ -89,8 +89,7 @@
     //Check if we've hit the bottom of the scrol view yet
     if (self.didScrollToBottomOnce) {
         
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_TOS_AGREED];
-        
+
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         
         if(self.presentingViewController == nil)
@@ -128,8 +127,7 @@
     [logOutAlertController addAction:[UIAlertAction actionWithTitle:@"Log Out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
         
         [[FRSDataManager sharedManager] logout];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-        
+
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
         else{

@@ -237,14 +237,4 @@
 
 }
 
-#pragma mark - Segues
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:SEG_REPLACE_WITH_TOS]) {
-        FirstRunTOSViewController *tosVC = [segue destinationViewController];
-        tosVC.updatedTerms = YES;
-    }
-}
-
 @end

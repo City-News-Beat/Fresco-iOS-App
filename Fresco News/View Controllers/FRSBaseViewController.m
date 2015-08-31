@@ -71,17 +71,10 @@
     //New user, send them to rest of the first run
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         
-        //Sets condition for agreegement to the TOS
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_TOS_AGREED];
-        
         [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
         
     }
-    //User hasn't agreed to TOS
-    else if(![[NSUserDefaults standardUserDefaults] boolForKey:UD_TOS_AGREED]){
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_TOS sender:self];
-    }
-    //User has agreed and already exists i.e. send them back to the app
+    //User is valid and exists i.e. send them back to the app
     else{
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
