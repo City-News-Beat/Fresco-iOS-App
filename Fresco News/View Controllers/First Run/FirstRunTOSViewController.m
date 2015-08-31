@@ -24,7 +24,7 @@
     [super viewDidLoad];
     
     [self setupView];
-    
+   
     [self getTermsFromServer];
 }
 
@@ -72,6 +72,8 @@
     [[self.view viewWithTag:30] setBackgroundColor:[UIColor whiteBackgroundColor]];
     
     self.tosTextView.text = @"";
+    
+     self.tosTextView.textContainerInset = UIEdgeInsetsMake(10, 16, 10, 16);
 }
 
 
