@@ -79,10 +79,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalTop;
 
-/* Action Sheet */
-
-@property (strong, nonatomic) UIActionSheet *disableAccountSheet;
-
 /* Spinner */
 
 //@property (strong, nonatomic) UIActivityIndicatorView *spinner;
@@ -95,7 +91,7 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
-    [self setSaveButtonStateEnabled:NO];
+    [self getYolked];
 
     self.saveChangesbutton.alpha = 0;
 
@@ -149,18 +145,7 @@ typedef enum : NSUInteger {
     
     //Update social connect buttons
     [self updateLinkingStatus];
-    
-    //Initialize Disable Account UIActionSheet
-    self.disableAccountSheet = [[UIActionSheet alloc]
-                                initWithTitle:DISABLE_ACCT_TITLE
-                                delegate:self
-                                cancelButtonTitle:CANCEL
-                                destructiveButtonTitle:DISABLE
-                                otherButtonTitles:nil];
-    
-    //Disable Account Sheet Tag
-    self.disableAccountSheet.tag = 100;
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     
 }
@@ -180,25 +165,42 @@ typedef enum : NSUInteger {
     [self sliderValueChanged:self.radiusStepper];
 }
 
--(void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
+   
     [super viewDidAppear:animated];
     
     self.saveChangesbutton.alpha = 1;
 
 }
 
--(void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    [self.saveChangesbutton sizeToFit];
+- (void)getYolked{
 
-}
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
     
-    if (self.saveChangesbutton.alpha != 1) {
-        
-
-    }
+    egg.frame = CGRectMake(0, 0, self.view.frame.size.width / 1.3, 220);
+    egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
+    egg.contentMode = UIViewContentModeScaleAspectFit;
+    
+    [self.scrollView addSubview:egg];
+    
+    
+    UILabel *version = [[UILabel alloc] init];
+    version.numberOfLines = 0;
+    version.frame = CGRectMake(0, 0, 80, 70);
+    version.center = CGPointMake(self.view.bounds.size.width/2 , self.view.frame.size.height + 130);
+    version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
+    version.text = [NSString
+                    stringWithFormat:@"Build %@\n\nVersion %@",
+                    [[NSBundle mainBundle]infoDictionary][@"CFBundleVersion"],
+                    [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
+    version.textColor = [UIColor textHeaderBlackColor];
+    version.textAlignment = NSTextAlignmentCenter;
+    [version sizeToFit];
+    
+    [self.scrollView addSubview:version];
+    
+    [self setSaveButtonStateEnabled:NO];
+    
 }
 
 #pragma mark - Controller Methods
