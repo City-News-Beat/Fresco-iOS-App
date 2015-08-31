@@ -24,7 +24,6 @@
 #import "HighlightsViewController.h"
 #import "FRSRootViewController.h"
 #import "UIColor+Additions.h"
-#import "FRSDisabledViewController.h"
 
 //static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
 //static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions

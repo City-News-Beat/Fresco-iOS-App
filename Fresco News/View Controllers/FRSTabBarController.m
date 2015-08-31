@@ -122,26 +122,31 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
-    
-    NSString *alertMessage = [NSString stringWithFormat:@"%@ %@", FRESCO, ENABLE_CAMERA_MSG];
-    
-    
     //Check if the user is not logged in (we check PFUser here, instead of the datamanger, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
     
     if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ENABLE_CAMERA_TITLE
-                                                            message:alertMessage
-                                                           delegate:self
-                                                  cancelButtonTitle:CANCEL
-                                                  otherButtonTitles:GO_TO_SETTINGS, nil];
-            [alert show];
+            
+            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                           alertControllerWithTitle:ENABLE_CAMERA_TITLE
+                                           message:GO_TO_SETTINGS
+                                           action:DISMISS handler:nil];
+            
+            [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
+            }]];
+            
+            [self presentViewController:alertCon animated:YES completion:nil];
+            
         }
         return NO;
     }
     else {
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
+
         UIViewController *vc = [viewController.childViewControllers firstObject];
         
         if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {

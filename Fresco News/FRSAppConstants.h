@@ -220,7 +220,7 @@ enum FRSErrorCodes {
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
 #define ENABLE_CAMERA_MSG                   NSLocalizedString(@"needs permission to access the camera to continue.", nil)
 
-#define GO_TO_SETTINGS                      NSLocalizedString(@"Go to Settings", nil)
+#define GO_TO_SETTINGS                      NSLocalizedString(@"It seems like your camera isn't enabled. Please go to settings for Fresco to enable the camera.", nil)
 
 #pragma mark - First Run Radius
 

@@ -244,7 +244,7 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     
     NSUInteger index = indexPath.section;
-
+    
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
 
     CGFloat width;

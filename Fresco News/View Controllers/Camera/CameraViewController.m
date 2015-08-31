@@ -854,6 +854,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             if (imageDataSampleBuffer) {
                 
+                self.takingStillImage = NO;
+                
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
@@ -877,7 +879,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                      [self setRecentPhotoViewHidden:NO];
                      [self updateRecentPhotoView:image];
                      [self.createdAssetURLs addObject:assetURL];
-                     self.takingStillImage = NO;
                  }];
             }
         }];
@@ -1155,12 +1156,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Access to Location Disabled"
-                                                        message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Dismiss"
-                                              otherButtonTitles:nil];
-        [alert show];
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Access to Location Disabled"
+                                     message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+                                     action:DISMISS]
+                           animated:YES
+                         completion:nil];
+
         [self.locationManager stopUpdatingLocation];
     }
 }

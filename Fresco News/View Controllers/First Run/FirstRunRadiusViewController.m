@@ -106,12 +106,11 @@
         
         if (!success) {
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:ERROR
-                                                            message:NOTIF_RADIUS_ERROR_MSG
-                                                           delegate:nil
-                                                  cancelButtonTitle:DISMISS
-                                                  otherButtonTitles:nil];
-            [alert show];
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:ERROR
+                                         message:NOTIF_RADIUS_ERROR_MSG action:DISMISS]
+                               animated:YES
+                             completion:nil];
         }
         else{
         
