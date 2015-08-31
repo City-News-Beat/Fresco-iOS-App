@@ -8,6 +8,7 @@
 
 #import "FRSLocationManager.h"
 #import "FRSDataManager.h"
+#import "FRSAssignment.h"
 
 @interface FRSLocationManager ()
 
@@ -27,7 +28,13 @@
 ** Condition var to tell if the interval is already set
 */
 
-@property (assign, nonatomic) BOOL intervalSet;
+@property (strong, nonatomic) NSTimer *locationTimer;
+
+/*
+** Current assignment of the location manager
+*/
+
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
 
 @end
 
@@ -89,45 +96,74 @@
         
         [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
         
-//        //Uncomment for local notifications while testing
-//        UILocalNotification *notification = [[UILocalNotification alloc] init];
-//        notification.alertBody = [self.location description];
-//        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-//        notification.timeZone = [NSTimeZone defaultTimeZone];
-//        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+        [self sendLocalPushForAssignment];
+        
+//        Uncomment for local notifications while testing
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.alertBody = [self.location description];
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+        notification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
         
         NSLog(@"Successfully updated location");
         
     }
-    else {
-        // NSLog(@"not a new location");
-    }
     
-    //Set interval for location update every `locationUpdateInterval` seconds
-    if (!self.intervalSet) {
-          // NSLog(@"Starting timer...");
-        [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
-        
-        self.intervalSet = YES;
-    
-    }
-
     //Stop updating location, will be turned back on `restartLocationUpdates` on the interval
     [self stopUpdatingLocation];
     
+    //Set interval for location update every `locationUpdateInterval` seconds
+    if (self.locationTimer == nil) {
+          // NSLog(@"Starting timer...");
+       self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        
+    }
     
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-//    [self stopMonitoringSignificantLocationChanges];
-//    [self stopUpdatingLocation];
 }
 
 - (void)restartLocationUpdates
 {
     [self startUpdatingLocation];
 }
+
+- (void)sendLocalPushForAssignment{
+
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        
+        if([responseObject count] > 0){
+            
+            FRSAssignment *retrievedAssignment = (FRSAssignment *)[responseObject firstObject];
+            
+            //Check if the current assignment is nil, or if the current assignment and the fethced one are different
+            if(self.currentAssignment == nil
+               || !([retrievedAssignment.assignmentId isEqualToString:self.currentAssignment.assignmentId])){
+                
+                CGFloat distanceInMiles = [self.location distanceFromLocation:retrievedAssignment.locationObject] / kMetersInAMile;
+                
+                //Checks if the user is within radius of the assignmnet
+                if(distanceInMiles < [retrievedAssignment.radius floatValue]){
+            
+                    self.currentAssignment = [responseObject firstObject];
+                    
+                    UILocalNotification *notification = [[UILocalNotification alloc] init];
+                    notification.alertBody = [NSString stringWithFormat:@"In range of %@", self.currentAssignment.title];
+                    notification.userInfo = @{
+                                              @"type" : @"assignment",
+                                              @"assignment" : self.currentAssignment.assignmentId};
+                    
+                    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+                    notification.soundName = UILocalNotificationDefaultSoundName;
+                    notification.timeZone = [NSTimeZone defaultTimeZone];
+                    [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+                    
+                }
+                
+            }
+        }
+    }];
+}
+
 
 
 @end

@@ -126,8 +126,7 @@ enum FRSErrorCodes {
 #define ASSIGNMENT_IDENTIFIER               @"AssignmentAnnotation"
 #define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
 #define USER_IDENTIFIER                     @"currentLocation"
-
-
+#define kMetersInAMile                      1609.34
 
 
 #pragma mark - Segue Identifiers

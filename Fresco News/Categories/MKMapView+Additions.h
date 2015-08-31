@@ -16,8 +16,6 @@ typedef enum {
     MKMapViewLegalLabelPositionBottomRight = 2,
 } MKMapViewLegalLabelPosition;
 
-#define kMetersInAMile 1609.34
-
 @property (nonatomic, readonly) UILabel *legalLabel;
 
 - (void)offsetLegalLabel:(CGSize)distance;
