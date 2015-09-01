@@ -660,6 +660,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            self.doneLabel.hidden = NO;
+            
             [UIView animateWithDuration:.1
                  animations:^{
                      self.doneButton.alpha = 0.0f;
@@ -686,15 +688,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         if(hidden){
             
-                self.doneButton.enabled = NO;
-                
-                self.activityIndicator.alpha = 0.0f;
-                [self.activityIndicator startAnimating];
-                
-                [UIView animateWithDuration:.5 animations:^{
-                    self.doneLabel.alpha = 0.0f;
-                    self.activityIndicator.alpha = 1.0f;
-                }];
+            self.doneLabel.hidden = YES;
+            self.doneButton.enabled = NO;
+            
+            self.activityIndicator.alpha = 0.0f;
+            [self.activityIndicator startAnimating];
+            
+            [UIView animateWithDuration:.5 animations:^{
+                self.doneLabel.alpha = 0.0f;
+                self.activityIndicator.alpha = 1.0f;
+            }];
             
         }
         else{
