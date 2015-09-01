@@ -40,8 +40,8 @@
             self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
             
         } else {
-            
             [self.tosTextView setText:responseObject[@"data"]];
+            
         }
         
         [self.tosTextView setTextColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.54]];
