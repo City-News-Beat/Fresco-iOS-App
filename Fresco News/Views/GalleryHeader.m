@@ -9,7 +9,6 @@
 #import "GalleryHeader.h"
 #import "FRSPost.h"
 #import "FRSGallery.h"
-#import <FXBlurView.h>
 
 @interface GalleryHeader ()
 @property (weak, nonatomic) IBOutlet UILabel *labelTimeAndPlace;
