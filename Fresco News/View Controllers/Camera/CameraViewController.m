@@ -517,20 +517,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self.apertureButton.imageView startAnimating];
         
         //fade in
-        [UIView animateWithDuration:.1f animations:^{
+        [UIView animateWithDuration:.2f animations:^{
             
             [self.previewView setAlpha:0.0f];
             
         } completion:^(BOOL finished) {
             
             //fade out
-            [UIView animateWithDuration:.1f animations:^{
+            [UIView animateWithDuration:.2f animations:^{
                 
                 [self.previewView setAlpha:1.0f];
                 
-            } completion:^(BOOL finished) {
-                [self setRecentPhotoViewHidden:YES];
-            }];
+            } completion:nil];
             
         }];
             
@@ -658,12 +656,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)updateRecentPhotoView:(UIImage *)image
 {
-    
     if (image) {
-        [self.doneButton setImage:image forState:UIControlStateNormal];
-        return;
-    }
+                
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIView animateWithDuration:.1
+                 animations:^{
+                     self.doneButton.alpha = 0.0f;
+                 }
+                 completion:^(BOOL finished) {
+                     
+                     self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                     [self.doneButton setImage:image forState:UIControlStateNormal];
 
+                     [UIView animateWithDuration:.2 animations:^{
+                         self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                         self.doneButton.alpha = 1.0f;
+                         self.takingStillImage = NO;
+                     }];
+            }];
+        });
+                
+    }
 }
 
 - (void)setRecentPhotoViewHidden:(BOOL)hidden{
@@ -729,14 +743,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     }
     
-    [UIView animateWithDuration:0.5 animations:^{
-        self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 1.0f : 0.0f;
-    } completion:^(BOOL finished) {
-        if (!self.withinRangeOfDefaultAssignment) {
-            self.assignmentLabel.hidden = YES;
-        }
-    }];
+    if(!self.assignmentLabel.hidden){
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.assignmentLabel.alpha = self.withinRangeOfDefaultAssignment ? 1.0f : 0.0f;
+        } completion:^(BOOL finished) {
+            if (!self.withinRangeOfDefaultAssignment) {
+                self.assignmentLabel.hidden = YES;
+            }
+        }];
     
+    }
 }
 
 - (void)animateRotateImageView:(UITapGestureRecognizer *)tapGestureRecognizer{
@@ -849,12 +866,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
 
         [self runStillImageCaptureAnimation];
-
+        
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             
             if (imageDataSampleBuffer) {
-                
-                self.takingStillImage = NO;
                 
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
@@ -873,10 +888,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                     CGImagePropertyOrientation = 1;
                 }
                 [metadata setObject:@(CGImagePropertyOrientation) forKeyedSubscript:(NSString *)kCGImagePropertyOrientation];
-
+                
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
-                     [self setRecentPhotoViewHidden:NO];
                      [self updateRecentPhotoView:image];
                      [self.createdAssetURLs addObject:assetURL];
                  }];
