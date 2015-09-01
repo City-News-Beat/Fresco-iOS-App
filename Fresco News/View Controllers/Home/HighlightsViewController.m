@@ -55,15 +55,16 @@
         [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
             
             if (!error) {
-                if ([responseObject count]) {
+                if ([responseObject count] > 0) {
                     
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
                     [self.galleriesViewController.tableView reloadData];
-                    
-                    [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
-                    
+
                 }
+                
+                [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+                
             }
             
         }];

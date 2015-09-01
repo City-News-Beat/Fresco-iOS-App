@@ -9,7 +9,6 @@ pod 'BTBadgeView'
 pod 'SVPulsingAnnotationView'
 pod 'Mantle', '~> 1.3'
 pod 'Functional.m', '~> 1.0'
-pod 'FXBlurView'
 pod 'GRKGradientView'
 
 inhibit_all_warnings!

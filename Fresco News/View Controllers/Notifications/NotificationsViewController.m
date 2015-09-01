@@ -66,14 +66,15 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
             [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
                     
-                    if ([responseObject count]) {
+                    if ([responseObject count] > 0) {
                         
                         [self.notifications addObjectsFromArray:responseObject];
                         
                         [self.tableView reloadData];
                         
                         
-                    } else
+                    }
+                    else
                         self.disableEndlessScroll = YES;
                     
                     [self.tableView.infiniteScrollingView stopAnimating];

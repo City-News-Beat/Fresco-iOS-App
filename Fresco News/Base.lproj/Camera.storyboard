@@ -167,30 +167,6 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Done" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XwU-A0-kYQ" userLabel="Done Label">
-                                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="52" id="1r5-pT-Gbi"/>
-                                                    <constraint firstAttribute="height" constant="21" id="PrK-F0-zeY"/>
-                                                    <constraint firstAttribute="width" constant="42" id="axP-3D-2Pa"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="1r5-pT-Gbi"/>
-                                                        <exclude reference="PrK-F0-zeY"/>
-                                                        <exclude reference="axP-3D-2Pa"/>
-                                                    </mask>
-                                                </variation>
-                                                <variation key="heightClass=compact">
-                                                    <mask key="constraints">
-                                                        <exclude reference="PrK-F0-zeY"/>
-                                                        <exclude reference="axP-3D-2Pa"/>
-                                                    </mask>
-                                                </variation>
-                                            </label>
                                             <button opaque="NO" clipsSubviews="YES" alpha="0.56000000238418579" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0E-i7-DeO" userLabel="Done Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                 <constraints>
@@ -215,6 +191,30 @@
                                                     <action selector="doneButtonTapped:" destination="mwP-m8-Afk" eventType="touchUpInside" id="xw6-GC-iBh"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Done" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XwU-A0-kYQ" userLabel="Done Label">
+                                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="52" id="1r5-pT-Gbi"/>
+                                                    <constraint firstAttribute="height" constant="21" id="PrK-F0-zeY"/>
+                                                    <constraint firstAttribute="width" constant="42" id="axP-3D-2Pa"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="1r5-pT-Gbi"/>
+                                                        <exclude reference="PrK-F0-zeY"/>
+                                                        <exclude reference="axP-3D-2Pa"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=compact">
+                                                    <mask key="constraints">
+                                                        <exclude reference="PrK-F0-zeY"/>
+                                                        <exclude reference="axP-3D-2Pa"/>
+                                                    </mask>
+                                                </variation>
+                                            </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="job-9J-IZj" userLabel="Spacer View 3">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -343,8 +343,8 @@
                                                 <exclude reference="him-yf-QJK"/>
                                                 <exclude reference="w2h-li-84S"/>
                                                 <exclude reference="95f-lc-6mD"/>
-                                                <exclude reference="XwU-A0-kYQ"/>
                                                 <exclude reference="U0E-i7-DeO"/>
+                                                <exclude reference="XwU-A0-kYQ"/>
                                                 <exclude reference="job-9J-IZj"/>
                                                 <exclude reference="wlt-7O-mUX"/>
                                                 <exclude reference="H43-Px-pxG"/>
@@ -404,8 +404,8 @@
                                                 <include reference="him-yf-QJK"/>
                                                 <include reference="w2h-li-84S"/>
                                                 <include reference="95f-lc-6mD"/>
-                                                <include reference="XwU-A0-kYQ"/>
                                                 <include reference="U0E-i7-DeO"/>
+                                                <include reference="XwU-A0-kYQ"/>
                                                 <include reference="job-9J-IZj"/>
                                                 <include reference="wlt-7O-mUX"/>
                                                 <include reference="H43-Px-pxG"/>
