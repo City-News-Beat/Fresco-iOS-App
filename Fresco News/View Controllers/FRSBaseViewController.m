@@ -131,6 +131,7 @@
             else{
                 
                 [button setTitle:LOGIN forState:UIControlStateNormal];
+                [button setImage:nil forState:UIControlStateNormal];
                 [self hideActivityIndicator];
                 [self revertScreenToNormal:self.view];
     

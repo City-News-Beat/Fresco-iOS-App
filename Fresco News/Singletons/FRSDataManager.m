@@ -598,6 +598,19 @@
 
 - (void)setNewTokenWithSession:(NSString *)sessionToken withResonseBlock:(FRSAPIResponseBlock)responseBlock{
     
+    if(sessionToken == nil){
+    
+        NSError *error;
+        error = [NSError errorWithDomain:ERROR_DOMAIN
+                                    code:ErrorSignupCantGetUser
+                                userInfo:@{@"error" : @"Couldn't retrieve session"}];
+        
+        responseBlock(nil, error);
+        
+        return;
+    
+    }
+    
     NSDictionary *params = @{@"parseSession" : sessionToken};
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
