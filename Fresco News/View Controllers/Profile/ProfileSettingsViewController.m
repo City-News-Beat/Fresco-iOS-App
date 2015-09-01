@@ -16,6 +16,7 @@
 #import "MapViewOverlayBottom.h"
 #import "MapOverlayTop.h"
 #import "UISocialButton.h"
+#import "NSString+Validation.h"
 #import <SVPulsingAnnotationView.h>
 
 typedef enum : NSUInteger {
@@ -494,6 +495,17 @@ typedef enum : NSUInteger {
     if ([self.textfieldLast.text length])
         [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
     
+    if(![self.textfieldNewPassword.text isValidPassword]){
+        
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Invalid Password"
+                                     message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
+                           animated:YES
+                         completion:nil];
+        
+        return;
+        
+    }
     
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
