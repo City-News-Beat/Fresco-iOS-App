@@ -24,7 +24,7 @@
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
-@interface GalleriesViewController()
+@interface GalleriesViewController ()
 
 /*
 ** Index of cell that is currently playing a video
@@ -109,7 +109,7 @@
     //Turn off any video
     [self disableVideo];
     
-    //Disable delegate, turned back on in `viewDidAppear`
+    //Disable delegate, turned back on in `viewWillAppear`
     self.tableView.delegate = nil;
     
 }
