@@ -120,19 +120,25 @@
 
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
         
-        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:nil];
+        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+            
+            [self reloadData];
+            [self.refreshControl endRefreshing];
+            
+        }];
         
     }
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
         
-        [((ProfileViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:nil];
+        [((ProfileViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+            [self reloadData];
+            [self.refreshControl endRefreshing];
+        }];
         
         [self.profileHeaderViewController updateUserInfo];
         
     }
-    
-    [self reloadData];
-    [self.refreshControl endRefreshing];
+
 }
 
 - (void)reloadData{

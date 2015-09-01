@@ -101,9 +101,13 @@ static CGFloat const kInterImageGap = 1.0f;
         [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
-                [self.stories addObjectsFromArray:responseObject];
-                
-                [self.tableView reloadData];
+                if ([responseObject count] > 0) {
+                    
+                    [self.stories addObjectsFromArray:responseObject];
+                    
+                    [self.tableView reloadData];
+                    
+                }
                 
                 [self.tableView.infiniteScrollingView stopAnimating];
                 
@@ -163,6 +167,13 @@ static CGFloat const kInterImageGap = 1.0f;
                 [self.tableView reloadData];
             
             }
+            
+            if(responseBlock) responseBlock(YES, nil);
+        }
+        else{
+        
+            if(responseBlock) responseBlock(NO, nil);
+        
         }
         
     }];
@@ -176,12 +187,14 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)refresh
 {
     //Force the refresh as we're manually pulling to refresh here
-    [self performNecessaryFetch:YES withResponseBlock:nil];
+    [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+        
+        [self.tableView reloadData];
+        
+        [self.refreshControl endRefreshing];
+        
+    }];
     
-    [self.tableView reloadData];
-    
-    [self.refreshControl endRefreshing];
-
 }
 
 
