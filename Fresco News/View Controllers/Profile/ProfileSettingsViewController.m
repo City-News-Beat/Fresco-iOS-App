@@ -91,8 +91,6 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
-    [self getYolked];
-
     self.saveChangesbutton.alpha = 0;
 
     //Checks if the user's primary login is through social, then disable the email and password fields
@@ -116,6 +114,9 @@ typedef enum : NSUInteger {
         self.constraintAccountVerticalTop.constant = [self.view viewWithTag:100].frame.size.height;
         self.constraintAccountVerticalBottom.constant = 0;
     }
+    
+    [self.scrollView setNeedsLayout];
+    [self.scrollView layoutIfNeeded];
     
     //Update the profile image
     if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
@@ -143,17 +144,6 @@ typedef enum : NSUInteger {
     self.connectFacebookButton.layer.cornerRadius = 4;
     self.connectFacebookButton.clipsToBounds = YES;
     
-    //Update social connect buttons
-    [self updateLinkingStatus];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
@@ -163,6 +153,15 @@ typedef enum : NSUInteger {
     
     // update the slider label
     [self sliderValueChanged:self.radiusStepper];
+    
+    //Update social connect buttons
+    [self updateLinkingStatus];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    
+    [self setSaveButtonStateEnabled:NO];
+    
+    [self getYolked];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -173,6 +172,7 @@ typedef enum : NSUInteger {
 
 }
 
+
 - (void)getYolked{
 
     UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
@@ -181,13 +181,11 @@ typedef enum : NSUInteger {
     egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
     egg.contentMode = UIViewContentModeScaleAspectFit;
     
-    [self.scrollView addSubview:egg];
-    
-    
+
     UILabel *version = [[UILabel alloc] init];
     version.numberOfLines = 0;
-    version.frame = CGRectMake(0, 0, 80, 70);
-    version.center = CGPointMake(self.view.bounds.size.width/2 , self.view.frame.size.height + 130);
+    version.frame = CGRectMake(0, 0, 60, 70);
+    version.center = CGPointMake(self.view.bounds.size.width/2 , self.scrollView.contentSize.height + 100);
     version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
     version.text = [NSString
                     stringWithFormat:@"Build %@\n\nVersion %@",
@@ -198,8 +196,7 @@ typedef enum : NSUInteger {
     [version sizeToFit];
     
     [self.scrollView addSubview:version];
-    
-    [self setSaveButtonStateEnabled:NO];
+    [self.scrollView addSubview:egg];
     
 }
 
@@ -259,8 +256,6 @@ typedef enum : NSUInteger {
                     
                     [self triggerSocialResponse:SocialExists network:@"Facebook"];
                     
-                    [PFFacebookUtils unlinkUserInBackground:[PFUser currentUser]];
-                    
                 }
                 else{
                     [self triggerSocialResponse:SocialNoError network:nil];
@@ -300,8 +295,6 @@ typedef enum : NSUInteger {
                 
                 if(!succeeded){
                     
-                    [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:nil];
-                    
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
                 }
                 else{
@@ -320,7 +313,7 @@ typedef enum : NSUInteger {
                 
                 [PFTwitterUtils unlinkUserInBackground:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
                     
-                    if (!error && succeeded)
+                    if (succeeded)
                         [self triggerSocialResponse:SocialUnlinked network:@"Twitter"];
                     else
                         [self triggerSocialResponse:SocialExists network:@"Twitter"];

@@ -247,7 +247,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
 
-    CGFloat width;
+    CGFloat width = 0;
     BOOL flag = NO;
     
     //Check if we should double the height

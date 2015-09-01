@@ -274,8 +274,8 @@
 
 
 /*
- ** Video Conditioning
- */
+** Video Conditioning
+*/
 
 - (void)checkForVideo{
     

@@ -47,8 +47,6 @@ static CGFloat const kInterImageGap = 1.0f;
         }
     }
     
-    
-    CGRect frame = self.frame;
     CGFloat x = 0.0f;
     CGFloat y = 0.0f;
     int rows = 1;
@@ -63,9 +61,6 @@ static CGFloat const kInterImageGap = 1.0f;
         
         CGFloat scale = kImageHeight / [image.height floatValue];
         CGFloat imageWidth = [image.width floatValue] * scale;
-        
-        // make the image view frame
-        frame = CGRectMake(x, y, imageWidth, kImageHeight);
         
         // lay the view down
         StoryThumbnailView *thumbnailView = [[StoryThumbnailView alloc] initWithFrame:CGRectMake(x, y, imageWidth, kImageHeight)];
