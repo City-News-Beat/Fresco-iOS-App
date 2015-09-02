@@ -48,6 +48,7 @@
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
     UIInterfaceOrientation orientationNew;
+    
     self.isLandscape = NO;
     
     if (acceleration.x >= 0.75) {
@@ -76,7 +77,7 @@
     
     orientationLast = orientationNew;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Landscape" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ORIENTATION_CHANGE object:nil];
 
 }
 

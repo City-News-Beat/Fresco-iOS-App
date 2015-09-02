@@ -292,16 +292,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     /* Orientation notification set up */
 
-    // DONT NEED THE BELOW ANYMORE
-//    [self deviceOrientationDidChange:nil];
-    
-//    [[NSNotificationCenter defaultCenter]
-//     addObserver:self
-//     selector:@selector(deviceOrientationDidChange:)
-//     name:UIDeviceOrientationDidChangeNotification
-//     object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:@"Landscape" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
     
     if(!self.photoButton.selected) self.photoButton.selected = YES;
     
@@ -978,26 +969,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewTiltToLandscape: (NSNotification *)notification {
     
-    if ([FRSMotionManager sharedManager].isLandscape == YES) {
-        
-//        if (self.rotateImageView.alpha > 0.0f) {
-        
+    if ([FRSMotionManager sharedManager].isLandscape == YES && self.rotateImageView.alpha > 0.0f) {
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
             [UIView animateWithDuration:.2f animations:^{
                 self.rotateImageView.alpha = 0.0f;
                 
             }];
-//        }
+            
+        });
+
+    }
+    else if (self.rotateImageView.alpha == 0.0f) {
         
-        
-    } else {
-        
-//        if (self.rotateImageView.alpha == 0.0f) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
             [UIView animateWithDuration:.2f animations:^{
                 self.rotateImageView.alpha = 0.7f;
                 
             }];
-//        }
+            
+        });
     }
 }
 
