@@ -38,7 +38,7 @@ enum FRSErrorCodes {
 #define NOTIF_REACHABILITY_MONITORING       @"ReachabilityManagerIsMonitoring"
 #define NOTIF_ONBOARD                       @"Onboard"
 #define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
-
+#define NOTIF_UPDATED_TOS                    @"UpdatedTOS"
 
 
 
@@ -49,24 +49,23 @@ enum FRSErrorCodes {
 
 
 
-
 #pragma mark - Base URL/API & Parse
 
 #define ERROR_DOMAIN                        @"com.fresconews"
 
 #define BASE_PATH                           @""
 
-#ifdef DEBUG
-    #define BASE_URL                        @"https://alpha.fresconews.com"
-    #define BASE_API                        @"http://staging.fresconews.com/v1/"
-    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-#else
+//#ifdef DEBUG
+//    #define BASE_URL                        @"https://alpha.fresconews.com"
+//    #define BASE_API                        @"http://staging.fresconews.com/v1/"
+//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+//#else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
-#endif
+//#endif
 
 
 

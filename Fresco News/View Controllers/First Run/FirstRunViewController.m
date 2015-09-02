@@ -12,7 +12,7 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
-#import "FirstRunTOSViewController.h"
+#import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"

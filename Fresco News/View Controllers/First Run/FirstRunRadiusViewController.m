@@ -12,7 +12,7 @@
 #import "MKMapView+Additions.h"
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
-#import "FirstRunTOSViewController.h"
+#import "TOSViewController.h"
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;

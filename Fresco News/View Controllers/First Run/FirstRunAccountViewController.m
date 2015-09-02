@@ -7,7 +7,7 @@
 //
 
 #import "FirstRunAccountViewController.h"
-#import "FirstRunTOSViewController.h"
+#import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 #import "UISocialButton.h"
@@ -39,6 +39,7 @@
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
     [self setupTerms];
+    
     self.signUpRunning = NO;
 }
 
@@ -97,11 +98,10 @@
 
 -(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
     
-    FirstRunTOSViewController *tosVC = [FirstRunTOSViewController new];
+    TOSViewController *tosVC = [TOSViewController new];
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tosVC];
     
-
     [self presentViewController:navigationController animated:YES completion:nil];
           
     return NO;

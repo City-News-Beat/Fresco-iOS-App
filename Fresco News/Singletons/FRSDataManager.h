@@ -72,6 +72,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
 - (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 - (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock;
+- (void)updateUserLocation:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - Galleries
 
@@ -99,9 +100,9 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
-#pragma mark - Other
+#pragma mark - TOS
 
-- (void)updateUserLocation:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
-- (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock;
+- (void)getTermsOfService:(BOOL)validate withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)agreeToTOS:(FRSAPISuccessBlock)successBlock;
 
 @end

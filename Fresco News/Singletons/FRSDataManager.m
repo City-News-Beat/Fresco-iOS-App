@@ -15,6 +15,7 @@
 #import "FRSStory.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "FRSAlertViewManager.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoTokenKey @"frescoAPIToken"
@@ -413,13 +414,16 @@
     }
     //Existing user
     else if (user) {
+        
         [self refreshUser:^(BOOL succeeded, NSError *error) {
+            
             if(succeeded)
                 block(user, error);
             else
                 block(nil, error);
 
         }];
+        
     }
     // Failure
     else
@@ -464,6 +468,8 @@
 
 - (void)refreshUser:(PFBooleanResultBlock)block
 {
+    __weak typeof(self) weakSelf = self;
+    
     self.loggingIn = YES;
     
     //Check if we have a Parse User set
@@ -486,6 +492,19 @@
             
                 //Successful refresh and log in
                 if(success){
+                    
+                    //Validate Terms Here
+                    [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
+                        
+                        //Check if not latest terms, if  error and data field has terms inside
+                        if(responseObject[@"data"] != nil){
+                        
+                            //Send notif to app to present TOS update flow
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPDATED_TOS object:nil];
+ 
+                        }
+                     
+                    }];
                     
                     [[FRSLocationManager sharedManager] setupLocationMonitoring];
                     
@@ -1238,22 +1257,64 @@
 
 #pragma mark - TOS
 
-- (void)getTermsOfService:(FRSAPIResponseBlock)responseBlock
+- (void)getTermsOfService:(BOOL)validate withResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    if(validate){
+        
+        NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+        
+        [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    }
 
     [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        if (![responseObject[@"data"] isEqual:[NSNull null]]) {
+        //We want to validate, check if response is null meaning user has latest terms
+        if ([responseObject[@"data"] isEqual:[NSNull null]] && validate){
+            if(responseBlock) responseBlock(nil, nil);
+        }
+        //We don't want to validate, and the terms are not null
+        else if(![responseObject[@"data"] isEqual:[NSNull null]]){
             if(responseBlock) responseBlock(responseObject, nil);
         }
+        //The response comes back null and we're not validating
+        else
+           if(responseBlock) responseBlock(nil, nil);
+
 
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         if (responseBlock) responseBlock(nil, error);
     }];
 }
+
+- (void)agreeToTOS:(FRSAPISuccessBlock)successBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    [self POST:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(successBlock) successBlock(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error){
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+         if(successBlock) successBlock(NO, nil);
+    }];
+    
+}
+
 
 @end

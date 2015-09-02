@@ -24,7 +24,7 @@
     return manager;
 }
 
-#pragma mark - UIAlertcController Object Methods
+#pragma mark - UIAlertController Object Methods
 
 - (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action{
 
@@ -47,6 +47,5 @@
     return alert;
 
 }
-
 
 @end

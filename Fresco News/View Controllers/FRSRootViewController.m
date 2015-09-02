@@ -15,6 +15,7 @@
 #import "CameraViewController.h"
 #import "FRSOnboardPageViewController.h"
 #import "BaseNavigationController.h"
+#import "TOSViewController.h"
 #import <BTBadgeView.h>
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
@@ -36,6 +37,14 @@
 
 - (BOOL)shouldAutorotate {
     return NO;
+}
+
+- (void)viewDidLoad{
+
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdatedTOSNeeded:) name:NOTIF_UPDATED_TOS object:nil];
+
 }
 
 #pragma mark - View Controller swapping
@@ -172,13 +181,34 @@
     return viewController;
 }
 
-#pragma mark - UIAlertViewDelegate methods
+#pragma mark - NotificationCenter Listener
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
+- (void)handleUpdatedTOSNeeded:(NSNotification *)notification{
+    
+    UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                   alertControllerWithTitle:@"Updated Terms of Service"
+                                   message:@"We’ve updated our Terms of Service since the last time you logged on. Please read the terms before continuing."
+                                   action:@"Logout" handler:^(UIAlertAction *action) {
+                                       
+                                       [[FRSDataManager sharedManager] logout];
+                                       
+                                       [self setRootViewControllerToHighlights];
+                                       
+                                   }];
+    
+    [alertCon addAction:[UIAlertAction actionWithTitle:@"Open Terms" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        
+        TOSViewController *tosVC = [TOSViewController new];
+        tosVC.agreedState = YES;
+        
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tosVC];
+        
+        [self presentViewController:navigationController animated:YES completion:nil];
+        
+    }]];
+    
+    [self presentViewController:alertCon animated:YES completion:nil];
+
 }
 
 @end
