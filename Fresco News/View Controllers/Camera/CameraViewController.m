@@ -675,7 +675,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [self.activityIndicator stopAnimating];
                 [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
                 self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                [self.doneButton setBackgroundImage:image forState:UIControlStateNormal];
+                
+                if(image)
+                    [self.doneButton setBackgroundImage:image forState:UIControlStateNormal];
                 
                 [UIView animateWithDuration:.2 animations:^{
                      self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
