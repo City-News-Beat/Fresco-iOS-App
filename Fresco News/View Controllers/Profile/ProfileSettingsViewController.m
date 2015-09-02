@@ -495,7 +495,7 @@ typedef enum : NSUInteger {
     if ([self.textfieldLast.text length])
         [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
     
-    if(![self.textfieldNewPassword.text isValidPassword]){
+    if([self.view viewWithTag:100].hidden == NO && ![self.textfieldNewPassword.text isValidPassword]){
         
         [self presentViewController:[[FRSAlertViewManager sharedManager]
                                      alertControllerWithTitle:@"Invalid Password"
