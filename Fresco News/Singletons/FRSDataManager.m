@@ -499,7 +499,7 @@
                     [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
                         
                         //Check if not latest terms, if  error and data field has terms inside
-                        if(responseObject[@"data"] != nil || ![responseObject[@"data"] isEqual:[NSNull null]]){
+                        if(![responseObject[@"data"] isEqual:[NSNull null]]){
                         
                             //Send notif to app to present TOS update flow
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPDATED_TOS object:nil];
