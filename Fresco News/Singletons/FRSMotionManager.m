@@ -1,0 +1,87 @@
+//
+//  FRSMotionManager.m
+//  Fresco
+//
+//  Created by Nicolas Rizk on 9/2/15.
+//  Copyright (c) 2015 Fresco. All rights reserved.
+//
+
+#import "FRSMotionManager.h"
+
+@interface FRSMotionManager() {
+    UIInterfaceOrientation orientationLast;
+}
+
+@end
+
+@implementation FRSMotionManager
+
++ (FRSMotionManager *)sharedManager {
+    
+    static FRSMotionManager *manager = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        manager = [[FRSMotionManager alloc] init];
+    });
+    
+    return manager;
+}
+
+- (void)startTrackingMovement {
+    
+    self.accelerometerUpdateInterval = .2;
+    self.gyroUpdateInterval = .2;
+    
+    [[FRSMotionManager sharedManager] startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
+                                        withHandler:^(CMAccelerometerData  *accelerometerData, NSError *error) {
+                                            if (!error) {
+                                                [self outputAccelertionData:accelerometerData.acceleration];
+                                                
+                                            } else {
+                                                NSLog(@"%@", error);
+                                            }
+                                        }];
+}
+
+
+- (void)outputAccelertionData:(CMAcceleration)acceleration {
+    
+    UIInterfaceOrientation orientationNew;
+    self.isLandscape = NO;
+    
+    if (acceleration.x >= 0.75) {
+        orientationNew = UIInterfaceOrientationLandscapeLeft;
+    
+        
+    } else if (acceleration.x <= -0.75) {
+        orientationNew = UIInterfaceOrientationLandscapeRight;
+        self.isLandscape = YES;
+
+    } else if (acceleration.y <= -0.75) {
+        orientationNew = UIInterfaceOrientationPortrait;
+
+        
+    } else if (acceleration.y >= 0.75) {
+        orientationNew = UIInterfaceOrientationPortraitUpsideDown;
+   
+        
+    } else {
+        // Consider same as last time
+        return;
+    }
+    
+    if (orientationNew == orientationLast)
+        return;
+    
+    orientationLast = orientationNew;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Landscape" object:nil];
+
+}
+
+-(void)stopTrackingMovement {
+    [self stopAccelerometerUpdates];
+}
+
+@end

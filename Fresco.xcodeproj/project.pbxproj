@@ -93,6 +93,7 @@
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC47F6FC1B94A9AB00969034 /* TOSViewController.xib */; };
+		BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */; };
 		BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
@@ -345,6 +346,8 @@
 		BC419B671B6FED2700122B87 /* FRSAppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppConstants.h; sourceTree = "<group>"; };
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BC47F6FC1B94A9AB00969034 /* TOSViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TOSViewController.xib; path = "First Run/TOSViewController.xib"; sourceTree = "<group>"; };
+		BC4D2DED1B9754ED00E6026B /* FRSMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSMotionManager.h; path = Singletons/FRSMotionManager.h; sourceTree = "<group>"; };
+		BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSMotionManager.m; path = Singletons/FRSMotionManager.m; sourceTree = "<group>"; };
 		BC7190EB1B7C01B400E72BE5 /* FRSDisabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDisabledViewController.h; sourceTree = "<group>"; };
 		BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisabledViewController.m; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
@@ -747,6 +750,8 @@
 				E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */,
 				E7C112011B681C7F009C637C /* FRSAlertViewManager.h */,
 				E7C112021B681C7F009C637C /* FRSAlertViewManager.m */,
+				BC4D2DED1B9754ED00E6026B /* FRSMotionManager.h */,
+				BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -1455,6 +1460,7 @@
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
+				BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,

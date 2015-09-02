@@ -20,6 +20,7 @@
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
+#import "FRSMotionManager.h"
 
 @implementation TemplateCameraViewController
 // Do not delete
@@ -239,6 +240,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [super viewDidAppear:animated];
     
+    [[FRSMotionManager sharedManager] startTrackingMovement];
+    
     if(self.previewView.alpha == 0){
     
         [UIView animateWithDuration:.4 animations:^{
@@ -248,9 +251,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
+    
     [super viewDidDisappear:animated];
+    
+    [[FRSMotionManager sharedManager] stopTrackingMovement];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
@@ -274,7 +279,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 -(void)configureUIElements{
     
-    
     /* Assignment Label */
     self.assignmentLabel.alpha = 0;
 
@@ -286,15 +290,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.rotateImageView
      addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
     
-    /* Orientation notificaiton set up */
+    /* Orientation notification set up */
 
-    [self deviceOrientationDidChange:nil];
+    // DONT NEED THE BELOW ANYMORE
+//    [self deviceOrientationDidChange:nil];
     
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(deviceOrientationDidChange:)
-     name:UIDeviceOrientationDidChangeNotification
-     object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//     selector:@selector(deviceOrientationDidChange:)
+//     name:UIDeviceOrientationDidChangeNotification
+//     object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:@"Landscape" object:nil];
     
     if(!self.photoButton.selected) self.photoButton.selected = YES;
     
@@ -353,7 +360,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)apertureButtonTapped:(id)sender
 {
-    if(self.inCorrentOrientation){
+    if([FRSMotionManager sharedManager].isLandscape){
         
         if (self.photoButton.selected) {
             
@@ -969,30 +976,51 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - Device Configuration
 
-- (void)deviceOrientationDidChange:(NSNotification*)note
-{
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+- (void)viewTiltToLandscape: (NSNotification *)notification {
     
-    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown || orientation == UIDeviceOrientationLandscapeRight){
-    
-        self.inCorrentOrientation = NO;
-    
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.7f;
-        }];
+    if ([FRSMotionManager sharedManager].isLandscape == YES) {
         
-    }
-    else{
-    
-        self.inCorrentOrientation = YES;
+//        if (self.rotateImageView.alpha > 0.0f) {
         
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.0f;
-        }];
-    
+            [UIView animateWithDuration:.2f animations:^{
+                self.rotateImageView.alpha = 0.0f;
+                
+            }];
+//        }
+        
+        
+    } else {
+        
+//        if (self.rotateImageView.alpha == 0.0f) {
+        
+            [UIView animateWithDuration:.2f animations:^{
+                self.rotateImageView.alpha = 0.7f;
+                
+            }];
+//        }
     }
-
 }
+
+//- (void)deviceOrientationDidChange:(NSNotification*)note {
+//    
+//    if ([FRSMotionManager sharedManager].isLandscape == YES) {
+//        
+//        self.inCorrentOrientation = YES;
+//        
+//        [UIView animateWithDuration:.2f animations:^{
+//            self.rotateImageView.alpha = 0.0f;
+//        }];
+//        
+//    } else {
+//        
+//        self.inCorrentOrientation = NO;
+//        
+//        [UIView animateWithDuration:.2f animations:^{
+//            self.rotateImageView.alpha = 0.7f;
+//        }];
+//    }
+//
+//}
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
