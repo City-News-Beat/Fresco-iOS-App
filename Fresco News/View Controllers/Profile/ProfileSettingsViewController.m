@@ -185,7 +185,7 @@ typedef enum : NSUInteger {
 
     UILabel *version = [[UILabel alloc] init];
     version.numberOfLines = 0;
-    version.frame = CGRectMake(0, 0, 60, 70);
+    version.frame = CGRectMake(0, 0, 65, 70);
     version.center = CGPointMake(self.view.bounds.size.width/2 , self.scrollView.contentSize.height + 100);
     version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
     version.text = [NSString

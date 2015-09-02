@@ -493,6 +493,8 @@
                 //Successful refresh and log in
                 if(success){
                     
+                    block(YES, nil);
+                    
                     //Validate Terms Here
                     [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
                         
@@ -507,8 +509,6 @@
                     }];
                     
                     [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                    
-                    block(YES, nil);
                     
                 }
                 //Failed refresh and log in
