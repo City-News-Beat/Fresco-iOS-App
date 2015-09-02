@@ -12,7 +12,7 @@
 
 + (FRSMotionManager *)sharedManager;
 
-@property (nonatomic) BOOL isLandscape;
+@property (nonatomic) UIInterfaceOrientation lastOrientation;
 
 - (void)startTrackingMovement;
 - (void)stopTrackingMovement;

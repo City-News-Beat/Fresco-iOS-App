@@ -8,12 +8,6 @@
 
 #import "FRSMotionManager.h"
 
-@interface FRSMotionManager() {
-    UIInterfaceOrientation orientationLast;
-}
-
-@end
-
 @implementation FRSMotionManager
 
 + (FRSMotionManager *)sharedManager {
@@ -48,34 +42,43 @@
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
     UIInterfaceOrientation orientationNew;
-    
-    self.isLandscape = NO;
-    
-    if (acceleration.x >= 0.75) {
-        orientationNew = UIInterfaceOrientationLandscapeLeft;
-    
         
-    } else if (acceleration.x <= -0.75) {
-        orientationNew = UIInterfaceOrientationLandscapeRight;
-        self.isLandscape = YES;
-
-    } else if (acceleration.y <= -0.75) {
-        orientationNew = UIInterfaceOrientationPortrait;
-
+    if (acceleration.z > -2 && acceleration.z < 2) {
         
-    } else if (acceleration.y >= 0.75) {
-        orientationNew = UIInterfaceOrientationPortraitUpsideDown;
    
         
-    } else {
-        // Consider same as last time
-        return;
+        if (acceleration.x >= 0.75) {
+            orientationNew = UIInterfaceOrientationLandscapeLeft;
+            
+        
+        } else if (acceleration.x <= -0.75) {
+            orientationNew = UIInterfaceOrientationLandscapeRight;
+            
+        } else if (acceleration.y <= -0.75) {
+            orientationNew = UIInterfaceOrientationPortrait;
+            
+            
+        } else if (acceleration.y >= 0.75) {
+            orientationNew = UIInterfaceOrientationPortraitUpsideDown;
+            
+            
+        } else if (acceleration.x > -0.04 && acceleration.x < 0 && acceleration.y < -0.7 && acceleration.z < -0.65) {
+            orientationNew = UIInterfaceOrientationLandscapeRight;
+            
+        }
+        else {
+            // Consider same as last time
+            return;
+        }
     }
-    
-    if (orientationNew == orientationLast)
+//    NSLog(@"X: %f", acceleration.x);
+//    NSLog(@"Y: %f", acceleration.y);
+//    NSLog(@"Z: %f", acceleration.z);
+//    
+    if (orientationNew == self.lastOrientation)
         return;
     
-    orientationLast = orientationNew;
+    self.lastOrientation = orientationNew;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ORIENTATION_CHANGE object:nil];
 
