@@ -895,7 +895,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
                      [self updateRecentPhotoView:image];
-                     [self.createdAssetURLs addObject:assetURL];
+                     if(assetURL != nil)
+                         [self.createdAssetURLs addObject:assetURL];
                  }];
             }
         }];
