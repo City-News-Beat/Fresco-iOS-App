@@ -38,6 +38,8 @@
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
     
+    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
+    
     [self setupTerms];
     
     self.signUpRunning = NO;
@@ -47,8 +49,9 @@
     
     [super viewWillAppear:animated];
     
-    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
+
     // we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
