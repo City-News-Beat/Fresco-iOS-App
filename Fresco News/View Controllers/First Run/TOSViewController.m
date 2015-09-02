@@ -100,7 +100,7 @@
         
         UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTerms)];
         self.navigationItem.rightBarButtonItem = closeBarButtonItem;
-        self.navigationItem.rightBarButtonItem.tintColor = [UIColor textHeaderBlackColor];
+        self.navigationItem.rightBarButtonItem.tintColor = [UIColor frescoBlueColor];
     
     }
     
