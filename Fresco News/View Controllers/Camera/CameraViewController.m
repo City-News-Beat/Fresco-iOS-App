@@ -55,7 +55,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *cancelButtonTapView;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UILabel *doneLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *apertureButton;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
@@ -296,7 +295,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     if(!self.photoButton.selected) self.photoButton.selected = YES;
     
-    self.doneLabel.hidden = YES;
+    [self.doneButton setTitle:@"" forState:UIControlStateNormal];
 
 }
 
@@ -457,7 +456,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
     }
     
-    self.activityIndicator.hidden = YES;
 }
 
 - (void)hideUIForCameraMode:(CameraMode)cameraMode
@@ -652,62 +650,40 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)updateRecentPhotoView:(UIImage *)image
-{
-    if (image) {
-                
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.doneLabel.hidden = NO;
-            
-            [UIView animateWithDuration:.1
-                 animations:^{
-                     self.doneButton.alpha = 0.0f;
-                 }
-                 completion:^(BOOL finished) {
-                     
-                     self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                     [self.doneButton setImage:image forState:UIControlStateNormal];
 
-                     [UIView animateWithDuration:.2 animations:^{
-                         self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                         self.doneButton.alpha = 1.0f;
-                         self.takingStillImage = NO;
-                     }];
-            }];
-        });
-                
-    }
-}
 
-- (void)setRecentPhotoViewHidden:(BOOL)hidden{
+- (void)setRecentPhotoViewHidden:(BOOL)hidden withImage:(UIImage *)image{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(hidden){
-            
-            self.doneLabel.hidden = YES;
-            self.doneButton.enabled = NO;
-            
-            self.activityIndicator.alpha = 0.0f;
+        
             [self.activityIndicator startAnimating];
             
             [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 0.0f;
+                 self.doneButton.alpha = 0.0f;
                 self.activityIndicator.alpha = 1.0f;
             }];
             
         }
         else{
             
-            self.doneLabel.hidden = NO;
-            self.doneButton.enabled = YES;
-            
             [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 1.0f;
                 self.activityIndicator.alpha = 0.0f;
             } completion:^(BOOL finished) {
+                
                 [self.activityIndicator stopAnimating];
+                [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+                self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                [self.doneButton setBackgroundImage:image forState:UIControlStateNormal];
+                
+                [UIView animateWithDuration:.2 animations:^{
+                     self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                     self.doneButton.alpha = 1.0f;
+                 } completion:^(BOOL finished) {
+                      self.takingStillImage = NO;
+                 }];
+                
             }];
             
         }
@@ -799,7 +775,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self showUIForCameraMode:CameraModeVideo];
         
         //Update the recent photo view
-        [self setRecentPhotoViewHidden:YES];
+        [self setRecentPhotoViewHidden:YES withImage:nil];
     
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -872,6 +848,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             if (imageDataSampleBuffer) {
                 
+                [self setRecentPhotoViewHidden:YES withImage:nil];
+                
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
@@ -892,7 +870,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
-                     [self updateRecentPhotoView:image];
+                     [self setRecentPhotoViewHidden:NO withImage:image];
                      if(assetURL != nil)
                          [self.createdAssetURLs addObject:assetURL];
                  }];
@@ -947,7 +925,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
         
-        [self setRecentPhotoViewHidden:NO];
+        [self setRecentPhotoViewHidden:NO withImage:nil];
 
         if(assetURL != nil){
             [self.createdAssetURLs addObject:assetURL];
