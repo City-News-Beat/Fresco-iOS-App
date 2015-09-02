@@ -39,14 +39,12 @@
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
+
 }
 
 /*
- ** pull TOS from server
- */
+** Pull TOS from server
+*/
 
 - (void)getTermsFromServer {
     

@@ -92,14 +92,15 @@
  */
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         self.view.userInteractionEnabled = NO;
         
         [button setTitle:@"" forState:UIControlStateNormal];
         
-        [button setImage:nil forState:UIControlStateNormal];
+        if(button.imageView.image)
+            [button setImage:nil forState:UIControlStateNormal];
         
         CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
         
@@ -114,9 +115,9 @@
         [button addSubview:self.spinner];
         
         [self hideViewsExceptView:button withView:self.view];
-
+            
     });
-    
+
     if(login == LoginFresco){
 
         [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
@@ -131,10 +132,9 @@
             else{
                 
                 [button setTitle:LOGIN forState:UIControlStateNormal];
-                [button setImage:nil forState:UIControlStateNormal];
                 [self hideActivityIndicator];
                 [self revertScreenToNormal:self.view];
-    
+                
                 [self presentViewController:[[FRSAlertViewManager sharedManager]
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:INVALID_CREDENTIALS action:nil]
