@@ -261,9 +261,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
     
-    [[FRSMotionManager sharedManager] stopTrackingMovement];
+    [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_ORIENTATION_CHANGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -292,6 +291,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     //Clear the timer so it doesn't re-run
     [self.videoTimer invalidate];
     self.videoTimer = nil;
+    
+    [self.locationTimer invalidate];
+    self.locationTimer = nil;
 }
 
 -(void)configureUIElements{
@@ -1175,15 +1177,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     self.location = [locations lastObject];
     
-    if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
+    if ((!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) && self.defaultAssignment == nil) {
     
         self.currentLocation = [locations lastObject];
         
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
             if(responseObject != nil){
-           
-                self.defaultAssignment = [responseObject firstObject];
+                
+                if(![self.defaultAssignment.assignmentId isEqualToString:((FRSAssignment *)[responseObject firstObject]).assignmentId]){
+                    self.defaultAssignment = [responseObject firstObject];
+                }
             
                 [self configureAssignmentLabel];
                 
@@ -1196,7 +1200,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     //Set interval for location update every `locationUpdateInterval` seconds
     if (self.locationTimer == nil) {
         // NSLog(@"Starting timer...");
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
     }
     
     [self.locationManager stopUpdatingLocation];
@@ -1219,9 +1223,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)restartLocationUpdates
-{
-    [self.locationManager startUpdatingLocation];
+- (void)restartLocationUpdates{
+    
+    if(self.defaultAssignment == nil)
+        [self.locationManager startUpdatingLocation];
+    else{
+        [self.locationTimer invalidate];
+        self.locationTimer = nil;
+    }
 }
 
 
