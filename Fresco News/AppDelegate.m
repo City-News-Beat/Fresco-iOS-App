@@ -132,7 +132,7 @@
 - (void)configureAppWithLaunchOptions:(NSDictionary *)launchOptions
 {
     
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
     [Fabric with:@[CrashlyticsKit]];
 
 //    //Taplytics Setup
