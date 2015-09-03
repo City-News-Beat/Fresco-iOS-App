@@ -498,6 +498,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
     
+    
     //If the cell has a video
     if([postCell.post isVideo]){
         if(!postCell.post.video){
