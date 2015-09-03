@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -2560,7 +2560,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="587"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time and Place" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auA-Ch-X60" userLabel="Time and Place">
-                                                <rect key="frame" x="16" y="10" width="80.5" height="14.5"/>
+                                                <rect key="frame" x="10" y="10" width="80.5" height="14.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="14.5" id="Kuc-r0-bFw"/>
                                                 </constraints>
@@ -2569,7 +2569,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Byline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gfT-dy-y2d" userLabel="By Line">
-                                                <rect key="frame" x="553" y="10" width="31" height="14.5"/>
+                                                <rect key="frame" x="559" y="10" width="31" height="14.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="fxY-Dj-ijH"/>
                                                 </constraints>
@@ -2745,9 +2745,9 @@
                                             <constraint firstItem="8Yk-4b-t8l" firstAttribute="leading" secondItem="IeD-Ay-mif" secondAttribute="leading" id="94L-7t-2GS"/>
                                             <constraint firstAttribute="bottom" secondItem="8Yk-4b-t8l" secondAttribute="bottom" id="9kU-cp-4vg"/>
                                             <constraint firstAttribute="trailing" secondItem="8Yk-4b-t8l" secondAttribute="trailing" id="9sU-ml-PQ0"/>
-                                            <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="IeD-Ay-mif" secondAttribute="leading" constant="16" id="DdW-wO-lnV"/>
+                                            <constraint firstItem="auA-Ch-X60" firstAttribute="leading" secondItem="IeD-Ay-mif" secondAttribute="leading" constant="10" id="DdW-wO-lnV"/>
                                             <constraint firstItem="auA-Ch-X60" firstAttribute="top" secondItem="IeD-Ay-mif" secondAttribute="top" constant="10" id="HMt-nt-9YT"/>
-                                            <constraint firstAttribute="trailing" secondItem="gfT-dy-y2d" secondAttribute="trailing" constant="16" id="Orb-ei-ovc"/>
+                                            <constraint firstAttribute="trailing" secondItem="gfT-dy-y2d" secondAttribute="trailing" constant="10" id="Orb-ei-ovc"/>
                                             <constraint firstItem="aY7-64-YQf" firstAttribute="top" secondItem="V6V-dx-ZU2" secondAttribute="bottom" constant="9.5" id="Pkk-dW-MfI"/>
                                             <constraint firstAttribute="trailing" secondItem="aY7-64-YQf" secondAttribute="trailing" constant="16" id="QPp-jR-HTK"/>
                                             <constraint firstItem="8Yk-4b-t8l" firstAttribute="top" secondItem="aY7-64-YQf" secondAttribute="bottom" constant="10" id="R7d-oy-Afu"/>
