@@ -243,9 +243,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
          name:UIDeviceOrientationDidChangeNotification
          object:nil];
 
-    
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
-        self.inCorrentOrientation = NO;
     
     [[FRSMotionManager sharedManager] startTrackingMovement];
 
