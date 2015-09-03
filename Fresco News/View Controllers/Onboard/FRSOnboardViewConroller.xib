@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSOnboardViewConroller">
+            <connections>
+                <outlet property="containerPageViewController" destination="uLz-Mu-ouR" id="mE0-II-KES"/>
+                <outlet property="nextButton" destination="SUl-58-8YB" id="lgo-oT-7iE"/>
+                <outlet property="progressImage" destination="VWQ-53-pL4" id="v56-8L-xL8"/>
+                <outlet property="view" destination="DFD-9b-t5h" id="u8B-rk-ATX"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="DFD-9b-t5h">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-13-deN">
+                    <rect key="frame" x="198" y="43" width="204" height="72"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="wz5-13-deN" secondAttribute="height" multiplier="17:6" id="Ekw-Rn-5yF"/>
+                        <constraint firstAttribute="width" constant="204" id="GHN-7A-J3X"/>
+                        <constraint firstAttribute="height" constant="72" id="PB5-4c-Gqr"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="GHN-7A-J3X"/>
+                            <exclude reference="PB5-4c-Gqr"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SUl-58-8YB">
+                    <rect key="frame" x="0.0" y="555" width="600" height="45"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="Tsi-lV-EJb"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                    <state key="normal" title="Next">
+                        <color key="titleColor" red="0.97254901959999995" green="0.67843137249999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="nextButtonTapped:" destination="-1" eventType="touchUpInside" id="P0q-l6-TQa"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="progress-3-1" translatesAutoresizingMaskIntoConstraints="NO" id="VWQ-53-pL4">
+                    <rect key="frame" x="0.0" y="536" width="600" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="mSr-Ct-0Rg"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uLz-Mu-ouR" userLabel="Page View Controller">
+                    <rect key="frame" x="0.0" y="131" width="600" height="404"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="600" id="2Ea-vI-JTz"/>
+                        <constraint firstAttribute="width" constant="600" id="3KM-Ja-5if"/>
+                        <constraint firstAttribute="height" constant="405" id="Sw0-fh-NHG"/>
+                        <constraint firstAttribute="width" constant="600" id="UC1-b7-6fU"/>
+                        <constraint firstAttribute="height" constant="310" id="cum-3W-TbP"/>
+                        <constraint firstAttribute="width" constant="600" id="if4-C2-4UD"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="2Ea-vI-JTz"/>
+                            <exclude reference="3KM-Ja-5if"/>
+                            <exclude reference="Sw0-fh-NHG"/>
+                            <exclude reference="UC1-b7-6fU"/>
+                            <exclude reference="cum-3W-TbP"/>
+                            <exclude reference="if4-C2-4UD"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="VWQ-53-pL4" secondAttribute="bottom" constant="-16" id="0s3-WO-4lJ"/>
+                <constraint firstAttribute="centerY" secondItem="wz5-13-deN" secondAttribute="centerY" multiplier="3.8" id="3Tc-fn-B2m"/>
+                <constraint firstItem="VWQ-53-pL4" firstAttribute="top" secondItem="uLz-Mu-ouR" secondAttribute="bottom" constant="1" id="3nD-2N-Ehz"/>
+                <constraint firstAttribute="trailing" secondItem="VWQ-53-pL4" secondAttribute="trailing" id="4bp-Ab-k1F"/>
+                <constraint firstAttribute="bottom" secondItem="SUl-58-8YB" secondAttribute="bottom" id="6fz-Sx-g5G"/>
+                <constraint firstAttribute="trailing" secondItem="uLz-Mu-ouR" secondAttribute="trailing" id="8BG-cd-G7l"/>
+                <constraint firstItem="uLz-Mu-ouR" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Gcm-Mc-LHk"/>
+                <constraint firstAttribute="centerX" secondItem="wz5-13-deN" secondAttribute="centerX" id="KC6-cp-6II"/>
+                <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="bottom" constant="16" id="Zq2-M1-kh3"/>
+                <constraint firstAttribute="centerX" secondItem="uLz-Mu-ouR" secondAttribute="centerX" id="fWL-eX-VIA"/>
+                <constraint firstItem="VWQ-53-pL4" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="hlM-vv-UMy"/>
+                <constraint firstAttribute="trailing" secondItem="SUl-58-8YB" secondAttribute="trailing" id="jgx-g9-eBe"/>
+                <constraint firstItem="SUl-58-8YB" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="thS-c9-AGp"/>
+                <constraint firstItem="wz5-13-deN" firstAttribute="top" secondItem="DFD-9b-t5h" secondAttribute="top" constant="43" id="y34-s4-oEk"/>
+            </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="fWL-eX-VIA"/>
+                    <exclude reference="y34-s4-oEk"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="1417" y="-1371"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="largeLogo" width="204" height="71"/>
+        <image name="progress-3-1" width="375" height="20"/>
+    </resources>
+</document>

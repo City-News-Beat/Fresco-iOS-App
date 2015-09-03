@@ -6,18 +6,19 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "FRSOnboardPageViewController.h"
-#import "FRSOnboardViewController.h"
+#import "OnboardPageViewController.h"
+#import "OnboardPageCellController.h"
 #import "FRSRootViewController.h"
 #import "FRSDataManager.h"
+#import "FRSOnboardViewConroller.h"
 
-@interface FRSOnboardPageViewController()
+@interface OnboardPageViewController()
 
 @property (nonatomic, assign) BOOL runningNextPage;
 
 @end
 
-@implementation FRSOnboardPageViewController
+@implementation OnboardPageViewController
 
 -(id)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options{
 
@@ -28,7 +29,7 @@
         
         self.view.backgroundColor = [UIColor whiteBackgroundColor];
     
-        FRSOnboardViewController *viewController = [self viewControllerAtIndex:0];
+        OnboardPageCellController *viewController = [self viewControllerAtIndex:0];
         
         NSArray *viewControllers = @[viewController];
 
@@ -41,8 +42,12 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.delegate = self;
+    self.dataSource = self;
     
     
 }
@@ -52,17 +57,25 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - FRSOnboardViewController Delegate
-
--(void)nextPageClicked:(NSInteger)index{
+- (void)movedToViewAtIndex:(NSInteger)index{
     
     if (index < 2 && !self.runningNextPage) {
         
         _runningNextPage = YES;
         
-        FRSOnboardViewController *viewController = [self viewControllerAtIndex:(index +1)];
+        self.currentIndex ++;
+        
+        OnboardPageCellController *viewController = [self viewControllerAtIndex:self.currentIndex];
         
         NSArray *controllers = @[viewController];
+        
+        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
+            
+            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
+            
+            [parentVC updateStateWithIndex:self.currentIndex];
+            
+        }
         
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
@@ -70,7 +83,10 @@
         
         }];
     }
+    
     else{
+        
+        //put into parent vc that handles everything
         
         if(![[FRSDataManager sharedManager] isLoggedIn]){
         
@@ -91,7 +107,7 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
 
-    NSUInteger index = ((FRSOnboardViewController*) viewController).index;
+    NSUInteger index = ((OnboardPageCellController*) viewController).index;
     
     if (index == 0 || (index == NSNotFound)) {
         return nil;
@@ -105,7 +121,7 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
-    NSUInteger index = ((FRSOnboardViewController*) viewController).index;
+    NSUInteger index = ((OnboardPageCellController*) viewController).index;
     
     index++;
     
@@ -117,21 +133,38 @@
     
 }
 
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed{
+
+    if(!completed) return;
+    
+    NSUInteger index = [[self.viewControllers lastObject] index];
+    
+    self.currentIndex = index;
+    
+    if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
+    
+        FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
+        
+        [parentVC updateStateWithIndex:self.currentIndex];
+    
+    }
+}
+
+
+
 #pragma mark - UIPageViewController DataSource
 
-- (FRSOnboardViewController *)viewControllerAtIndex:(NSUInteger)index
+- (OnboardPageCellController *)viewControllerAtIndex:(NSUInteger)index
 {
     
     if (index == 3) {
         return nil;
     }
 
-    FRSOnboardViewController *viewController = [[FRSOnboardViewController alloc] initWithNibName:@"FRSOnboardViewController" bundle:nil];
+    OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithNibName:@"FRSOnboardViewController" bundle:nil];
     
     viewController.index = index;
-    
-    viewController.frsTableViewCellDelegate = self;
-    
+        
     return viewController;
 
 }

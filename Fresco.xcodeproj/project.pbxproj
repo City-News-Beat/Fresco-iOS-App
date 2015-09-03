@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
+		0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */; };
@@ -127,9 +129,9 @@
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
-		E77F6AC41B583839009AFF8D /* FRSOnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */; };
-		E78428121B57F4010090DFCC /* FRSOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* FRSOnboardViewController.m */; };
-		E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */; };
+		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
+		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
+		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
@@ -193,6 +195,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
+		0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
+		0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
@@ -406,11 +411,11 @@
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
-		E77F6AC21B583839009AFF8D /* FRSOnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardPageViewController.h; sourceTree = "<group>"; };
-		E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardPageViewController.m; sourceTree = "<group>"; };
-		E784280F1B57F4010090DFCC /* FRSOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewController.h; sourceTree = "<group>"; };
-		E78428101B57F4010090DFCC /* FRSOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewController.m; sourceTree = "<group>"; };
-		E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewController.xib; sourceTree = "<group>"; };
+		E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
+		E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageViewController.m; sourceTree = "<group>"; };
+		E784280F1B57F4010090DFCC /* OnboardPageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageCellController.h; sourceTree = "<group>"; };
+		E78428101B57F4010090DFCC /* OnboardPageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageCellController.m; sourceTree = "<group>"; };
+		E78428111B57F4010090DFCC /* OnboardPageCellController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnboardPageCellController.xib; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
@@ -1026,11 +1031,14 @@
 		E784280E1B57F3E30090DFCC /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
-				E77F6AC21B583839009AFF8D /* FRSOnboardPageViewController.h */,
-				E77F6AC31B583839009AFF8D /* FRSOnboardPageViewController.m */,
-				E784280F1B57F4010090DFCC /* FRSOnboardViewController.h */,
-				E78428101B57F4010090DFCC /* FRSOnboardViewController.m */,
-				E78428111B57F4010090DFCC /* FRSOnboardViewController.xib */,
+				0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */,
+				0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */,
+				0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */,
+				E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */,
+				E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */,
+				E784280F1B57F4010090DFCC /* OnboardPageCellController.h */,
+				E78428101B57F4010090DFCC /* OnboardPageCellController.m */,
+				E78428111B57F4010090DFCC /* OnboardPageCellController.xib */,
 			);
 			path = Onboard;
 			sourceTree = "<group>";
@@ -1267,12 +1275,13 @@
 			files = (
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
-				E78428131B57F4010090DFCC /* FRSOnboardViewController.xib in Resources */,
+				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
+				0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */,
 				BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1403,7 +1412,8 @@
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */,
-				E78428121B57F4010090DFCC /* FRSOnboardViewController.m in Sources */,
+				0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */,
+				E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
@@ -1416,7 +1426,7 @@
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
-				E77F6AC41B583839009AFF8D /* FRSOnboardPageViewController.m in Sources */,
+				E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
 				E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */,
 				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,
