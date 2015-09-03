@@ -56,7 +56,7 @@ enum FRSErrorCodes {
 #define BASE_PATH                           @""
 
 #ifdef DEBUG
-    #define BASE_URL                        @"https://alpha.fresconews.com"
+    #define BASE_URL                        @"http://alpha.fresconews.com"
     #define BASE_API                        @"http://staging.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]

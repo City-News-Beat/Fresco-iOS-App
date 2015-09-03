@@ -202,6 +202,11 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
+- (IBAction)forgotPassword:(id)sender {
+    
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/forgot",BASE_URL]]];
+    
+}
 
 #pragma mark - Touch Handler
 

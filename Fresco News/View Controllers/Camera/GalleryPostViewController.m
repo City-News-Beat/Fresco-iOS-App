@@ -452,7 +452,7 @@
     }
 
     [self configureControlsForUpload:YES];
-
+    
     NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -516,6 +516,7 @@
                                     mimeType:mimeType];
             count++;
         }
+                                                                                  
     } error:nil];
 
     [request setValue:[FRSDataManager sharedManager].frescoAPIToken forHTTPHeaderField:@"authtoken"];
@@ -576,7 +577,11 @@
 
 - (void)showUploadProgress:(CGFloat)fractionCompleted
 {
-    [self.uploadProgressView setProgress:fractionCompleted animated:YES];
+    
+    [UIView animateWithDuration:1 animations:^{
+        [self.uploadProgressView setProgress:fractionCompleted animated:YES];
+    }];
+    
 }
 
 #pragma mark - KVO
