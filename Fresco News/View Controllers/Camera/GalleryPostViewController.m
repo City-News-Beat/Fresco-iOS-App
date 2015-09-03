@@ -127,11 +127,26 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    //Turn off any video
+    [self disableVideo];
+    
     [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+/*
+ ** Disable any playing video
+ */
+
+- (void)disableVideo{
+    
+    [self.galleryView cleanUpVideoPlayer];
+    
+}
+
 #pragma mark - UI Setup
+
 - (void)setupButtons
 {
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
@@ -451,6 +466,17 @@
         return;
     }
 
+    if([self.gallery.posts count] > MAX_POST_COUNT){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Error"
+                                     message:@"Galleries can only contain up to 8 photos or videos." action:nil]
+                           animated:YES completion:nil];
+        
+        return;
+    
+    }
+    
     [self configureControlsForUpload:YES];
     
     NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];

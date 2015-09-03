@@ -21,6 +21,7 @@
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import "FRSMotionManager.h"
+#import "UIImage+ALAsset.h"
 
 @implementation TemplateCameraViewController
 // Do not delete
@@ -868,6 +869,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [self setRecentPhotoViewHidden:YES withImage:nil];
                 
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
 
@@ -887,9 +889,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
-                     [self setRecentPhotoViewHidden:NO withImage:image];
-                     if(assetURL != nil && [self.createdAssetURLs count] < 8)
-                         [self.createdAssetURLs addObject:assetURL];
+                     
+                     [[[ALAssetsLibrary alloc] init] assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                         
+                         [self setRecentPhotoViewHidden:NO withImage:[UIImage imageFromAsset:asset]];
+    
+                         if(assetURL != nil && [self.createdAssetURLs count] < MAX_POST_COUNT)
+                             [self.createdAssetURLs addObject:assetURL];
+                         
+                     } failureBlock:^(NSError *error) {
+                         NSLog(@"Failed to produce asset");
+                     }];
+                    
                  }];
             }
         }];
@@ -1117,7 +1128,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
-    return picker.selectedAssets.count < 10;
+    return picker.selectedAssets.count < MAX_POST_COUNT;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
