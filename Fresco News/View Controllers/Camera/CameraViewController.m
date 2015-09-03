@@ -20,6 +20,7 @@
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
+#import "FRSMotionManager.h"
 
 @implementation TemplateCameraViewController
 // Do not delete
@@ -54,7 +55,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (weak, nonatomic) IBOutlet UIView *cancelButtonTapView;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UILabel *doneLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *apertureButton;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
@@ -200,7 +200,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+        
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.controlViewWidthConstraint.constant = 0.3 * self.view.frame.size.width;
@@ -232,6 +232,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
+    
+    /* Orientation notification set up */
+    
+    [self deviceOrientationDidChange:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:)
+     name:UIDeviceOrientationDidChangeNotification
+     object:nil];
+
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
+//    
+//    [[FRSMotionManager sharedManager] startTrackingMovement];
+
 
 }
 
@@ -247,9 +260,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[FRSMotionManager sharedManager] stopTrackingMovement];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_ORIENTATION_CHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+}
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
+    
     [super viewDidDisappear:animated];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
@@ -274,7 +296,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 -(void)configureUIElements{
     
-    
     /* Assignment Label */
     self.assignmentLabel.alpha = 0;
 
@@ -286,20 +307,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self.rotateImageView
      addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
     
-    /* Orientation notificaiton set up */
-
-    [self deviceOrientationDidChange:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(deviceOrientationDidChange:)
-     name:UIDeviceOrientationDidChangeNotification
-     object:nil];
-    
     if(!self.photoButton.selected) self.photoButton.selected = YES;
     
-    self.doneLabel.hidden = YES;
-
+    [self.doneButton setTitle:@"" forState:UIControlStateNormal];
 }
 
 
@@ -353,7 +363,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)apertureButtonTapped:(id)sender
 {
-    if(self.inCorrentOrientation){
+    if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight || self.inCorrentOrientation == YES) {
         
         if (self.photoButton.selected) {
             
@@ -459,7 +469,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
     }
     
-    self.activityIndicator.hidden = YES;
 }
 
 - (void)hideUIForCameraMode:(CameraMode)cameraMode
@@ -654,62 +663,42 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)updateRecentPhotoView:(UIImage *)image
-{
-    if (image) {
-                
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.doneLabel.hidden = NO;
-            
-            [UIView animateWithDuration:.1
-                 animations:^{
-                     self.doneButton.alpha = 0.0f;
-                 }
-                 completion:^(BOOL finished) {
-                     
-                     self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                     [self.doneButton setImage:image forState:UIControlStateNormal];
 
-                     [UIView animateWithDuration:.2 animations:^{
-                         self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                         self.doneButton.alpha = 1.0f;
-                         self.takingStillImage = NO;
-                     }];
-            }];
-        });
-                
-    }
-}
 
-- (void)setRecentPhotoViewHidden:(BOOL)hidden{
+- (void)setRecentPhotoViewHidden:(BOOL)hidden withImage:(UIImage *)image{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(hidden){
-            
-            self.doneLabel.hidden = YES;
-            self.doneButton.enabled = NO;
-            
-            self.activityIndicator.alpha = 0.0f;
+        
             [self.activityIndicator startAnimating];
             
             [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 0.0f;
+                 self.doneButton.alpha = 0.0f;
                 self.activityIndicator.alpha = 1.0f;
             }];
             
         }
         else{
             
-            self.doneLabel.hidden = NO;
-            self.doneButton.enabled = YES;
-            
             [UIView animateWithDuration:.5 animations:^{
-                self.doneLabel.alpha = 1.0f;
                 self.activityIndicator.alpha = 0.0f;
             } completion:^(BOOL finished) {
+                
                 [self.activityIndicator stopAnimating];
+                [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+                self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                
+                if(image)
+                    [self.doneButton setBackgroundImage:image forState:UIControlStateNormal];
+                
+                [UIView animateWithDuration:.2 animations:^{
+                     self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                     self.doneButton.alpha = 1.0f;
+                 } completion:^(BOOL finished) {
+                      self.takingStillImage = NO;
+                 }];
+                
             }];
             
         }
@@ -801,7 +790,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self showUIForCameraMode:CameraModeVideo];
         
         //Update the recent photo view
-        [self setRecentPhotoViewHidden:YES];
+        [self setRecentPhotoViewHidden:YES withImage:nil];
     
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                          withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -874,6 +863,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             if (imageDataSampleBuffer) {
                 
+                [self setRecentPhotoViewHidden:YES withImage:nil];
+                
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
@@ -894,8 +885,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
-                     [self updateRecentPhotoView:image];
-                     if(assetURL != nil)
+                     [self setRecentPhotoViewHidden:NO withImage:image];
+                     if(assetURL != nil && [self.createdAssetURLs count] < 8)
                          [self.createdAssetURLs addObject:assetURL];
                  }];
             }
@@ -949,7 +940,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
         
-        [self setRecentPhotoViewHidden:NO];
+        [self setRecentPhotoViewHidden:NO withImage:nil];
 
         if(assetURL != nil){
             [self.createdAssetURLs addObject:assetURL];
@@ -969,29 +960,71 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - Device Configuration
 
+- (void)viewTiltToLandscape:(NSNotification *)notification {
+    
+    if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight) {
+        
+        if(self.rotateImageView.alpha != 0.0f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+            
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.0f;
+                    
+                }];
+                
+            });
+        }
+
+    } else {
+        
+        if(self.rotateImageView.alpha != 0.7f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.7f;
+                    
+                }];
+                
+            });
+        }
+    }
+}
+
 - (void)deviceOrientationDidChange:(NSNotification*)note
 {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
     if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown || orientation == UIDeviceOrientationLandscapeRight){
-    
+        
         self.inCorrentOrientation = NO;
-    
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.7f;
-        }];
+        
+        if(self.rotateImageView.alpha != 0.7f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.7f;
+                }];
+                
+            });
+        }
         
     }
     else{
-    
+        
         self.inCorrentOrientation = YES;
         
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.0f;
-        }];
-    
+        if(self.rotateImageView.alpha != 0.0f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.0f;
+                }];
+                
+            });
+        }
+        
     }
-
+    
 }
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange

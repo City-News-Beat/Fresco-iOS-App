@@ -30,6 +30,7 @@ typedef enum {
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
 
 + (void)updateUserPinViewForMapView: (MKMapView *)mapView WithImage: (UIImage *)image;
++ (void)setPinImageView:(UIImageView *)customPinView forAssignment:(BOOL)isAssignment;
 + (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment;
 
 @end

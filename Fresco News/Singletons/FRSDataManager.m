@@ -499,7 +499,7 @@
                     [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
                         
                         //Check if not latest terms, if  error and data field has terms inside
-                        if(responseObject[@"data"] != nil){
+                        if(![responseObject[@"data"] isEqual:[NSNull null]]){
                         
                             //Send notif to app to present TOS update flow
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPDATED_TOS object:nil];
@@ -840,19 +840,8 @@
                              };
     
     //If we are refreshing, removed the cached response for the request by setting the cache policy
-    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    
-//    //If we are refreshing, removed the cached response for the request
-//    if(refresh){
-//        
-//        NSMutableURLRequest *request = [[[FRSDataManager sharedManager] requestSerializer]
-//                                        requestWithMethod:@"GET"
-//                                        URLString:[NSString stringWithFormat:@"%@%@", BASE_API, path]
-//                                        parameters:params error:nil];
-//        
-//        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-//        
-//    }
+    if(refresh)
+        self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -1051,12 +1040,19 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [self GET:[NSString stringWithFormat:@"assignment/get?id=%@", assignmentId] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         FRSAssignment *assignment = [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
         if(responseBlock) responseBlock(assignment, nil);
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         if(responseBlock) responseBlock(nil, error);
+        
     }];
 }
 
@@ -1068,12 +1064,18 @@
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSDictionary *params = @{@"lat" :@(coordinate.latitude), @"lon" : @(coordinate.longitude), @"radius" : @(radius), @"active" : @"true"};
+    NSDictionary *params = @{
+                             @"lat" :@(coordinate.latitude),
+                             @"lon" : @(coordinate.longitude),
+                             @"radius" : @(radius),
+                             @"active" : @"true"
+                            };
 
     [self GET:@"assignment/find" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
         if (![responseObject[@"data"] isEqual:[NSNull null]]) {
+           
             NSArray *assignments = [[responseObject objectForKey:@"data"] map:^id(id obj) {
                 return [MTLJSONAdapter modelOfClass:[FRSAssignment class] fromJSONDictionary:obj error:NULL];
             }];
@@ -1261,29 +1263,23 @@
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
+    
     if(validate){
         
         NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
         
         [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     }
-
+    else{
+        
+        [self.requestSerializer setValue:nil forHTTPHeaderField:@"authToken"];
+    }
+    
     [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        //We want to validate, check if response is null meaning user has latest terms
-        if ([responseObject[@"data"] isEqual:[NSNull null]] && validate){
-            if(responseBlock) responseBlock(nil, nil);
-        }
-        //We don't want to validate, and the terms are not null
-        else if(![responseObject[@"data"] isEqual:[NSNull null]]){
-            if(responseBlock) responseBlock(responseObject, nil);
-        }
-        //The response comes back null and we're not validating
-        else
-           if(responseBlock) responseBlock(nil, nil);
-
+        if(responseBlock) responseBlock(responseObject, nil);
 
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -1291,6 +1287,7 @@
         
         if (responseBlock) responseBlock(nil, error);
     }];
+
 }
 
 - (void)agreeToTOS:(FRSAPISuccessBlock)successBlock{

@@ -39,20 +39,19 @@
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
+
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
 }
 
 /*
- ** pull TOS from server
- */
+** Pull TOS from server
+*/
 
 - (void)getTermsFromServer {
     
     [[FRSDataManager sharedManager] getTermsOfService:NO withResponseBlock:^(id responseObject, NSError *error) {
         
-        if (error || responseObject == nil) {
+        if (error || [responseObject[@"data"] isEqual:[NSNull null]]) {
             
             self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
             
@@ -83,13 +82,17 @@
     [self.navigationController.navigationBar
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor textInputBlackColor]}];
     
-
-    if(self.agreedState){
+    if (self.agreedState){
         
-        UIBarButtonItem *logoutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTermsWithLogout)];
+        UIBarButtonItem *logoutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Log out" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTermsWithLogout)];
         
         self.navigationItem.leftBarButtonItem = logoutBarButtonItem;
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor redColor];
+        
+        [logoutBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                     [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:17.0], NSFontAttributeName,
+                                                     [UIColor redColor], NSForegroundColorAttributeName,
+                                                     nil]
+                                           forState:UIControlStateNormal];
         
         UIBarButtonItem *agreeBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Agree" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTerms)];
         self.navigationItem.rightBarButtonItem = agreeBarButtonItem;
@@ -100,7 +103,7 @@
         
         UIBarButtonItem *closeBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTerms)];
         self.navigationItem.rightBarButtonItem = closeBarButtonItem;
-        self.navigationItem.rightBarButtonItem.tintColor = [UIColor textHeaderBlackColor];
+        self.navigationItem.rightBarButtonItem.tintColor = [UIColor frescoBlueColor];
     
     }
     

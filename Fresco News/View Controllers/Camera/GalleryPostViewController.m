@@ -452,7 +452,7 @@
     }
 
     [self configureControlsForUpload:YES];
-
+    
     NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -516,6 +516,7 @@
                                     mimeType:mimeType];
             count++;
         }
+                                                                                  
     } error:nil];
 
     [request setValue:[FRSDataManager sharedManager].frescoAPIToken forHTTPHeaderField:@"authtoken"];
@@ -541,18 +542,27 @@
         else {
             
             NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
+            
+            @try{
+                
+                // TODO: Handle error conditions
+                NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
+                
+                [self crossPostToTwitter:crossPostString];
+                
+                [self crossPostToFacebook:crossPostString];
+                
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                
+                [[FRSDataManager sharedManager] resetDraftGalleryPost];
+                
+                [self returnToTabBar];
+                
+            }
+            @catch(NSException *exception){
+                NSLog(@"%@", exception);
+            }
 
-            // TODO: Handle error conditions
-            NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
-            
-            [self crossPostToTwitter:crossPostString];
-            
-            [self crossPostToFacebook:crossPostString];
-
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
-            
-            [[FRSDataManager sharedManager] resetDraftGalleryPost];
-            [self returnToTabBar];
 
         }
     }];
@@ -567,7 +577,11 @@
 
 - (void)showUploadProgress:(CGFloat)fractionCompleted
 {
-    [self.uploadProgressView setProgress:fractionCompleted animated:YES];
+    
+    [UIView animateWithDuration:1 animations:^{
+        [self.uploadProgressView setProgress:fractionCompleted animated:YES];
+    }];
+    
 }
 
 #pragma mark - KVO

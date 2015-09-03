@@ -145,40 +145,34 @@
     [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID
                                                  offset:[NSNumber numberWithInteger:0] shouldRefresh:refresh
                                       withResponseBlock:^(id responseObject, NSError *error) {
-        
-        if (!error) {
-            
-            if(responseObject == nil || [responseObject count] == 0) {
-        
-                [self setUserMessage:NO];
-                
-                self.galleriesViewController.galleries = nil;
-                
-                [self.galleriesViewController.tableView reloadData];
-            
-            }
-            else{
-            
-                [self setUserMessage:YES];
-            
-                //Check to make sure the first gallery and the response object's first gallery are different
-                if([self.galleriesViewController.galleries count] == 0
-                   || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
-                        isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
-                
-                    self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                    [self.galleriesViewController reloadData];
-            
-                }
-            }
-            
-            if(responseBlock) responseBlock(YES, nil);
+                                          
 
+        if(responseObject == nil || [responseObject count] == 0) {
+    
+            [self setUserMessage:NO];
+            
+            self.galleriesViewController.galleries = nil;
+            
+            [self.galleriesViewController.tableView reloadData];
+        
         }
         else{
-            if(responseBlock) responseBlock(NO, nil);
-        }
         
+            [self setUserMessage:YES];
+        
+            //Check to make sure the first gallery and the response object's first gallery are different
+            if([self.galleriesViewController.galleries count] == 0
+               || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
+                    isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
+            
+                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
+                [self.galleriesViewController reloadData];
+        
+            }
+        }
+                                
+      if(responseBlock) responseBlock(YES, nil);
+    
     }];
 }
 

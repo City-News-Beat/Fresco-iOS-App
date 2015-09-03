@@ -495,16 +495,33 @@ typedef enum : NSUInteger {
     if ([self.textfieldLast.text length])
         [updateParams setObject:self.textfieldLast.text forKey:@"lastname"];
     
-    if(![self.textfieldNewPassword.text isValidPassword]){
-        
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:@"Invalid Password"
-                                     message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
-                           animated:YES
-                         completion:nil];
-        
-        return;
-        
+    //Check if the password field is not empty and is being needed for check
+    if(self.textfieldNewPassword.text && self.textfieldNewPassword.text.length > 0){
+       
+        //Check if the password field text is valid
+        if(![self.textfieldNewPassword.text isValidPassword]){
+
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:@"Invalid Password"
+                                         message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
+                               animated:YES
+                             completion:nil];
+            
+            return;
+        }
+        //If the password is valid, check if the password fields match
+        else if(![self.textfieldNewPassword.text isEqualToString:self.textfieldConfirmPassword.text]){
+            
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:PASSWORD_ERROR_TITLE
+                                         message:PASSWORD_ERROR_MESSAGE
+                                         action:DISMISS]
+                               animated:YES
+                             completion:nil];
+            
+            return;
+        }
+       
     }
     
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
@@ -545,26 +562,14 @@ typedef enum : NSUInteger {
             //If they are set, reset them via parse
             if ([self.textfieldNewPassword.text length]) {
                 
-                if([self.textfieldNewPassword.text isEqualToString:self.textfieldConfirmPassword.text]){
+                [PFUser currentUser].password = self.textfieldNewPassword.text;
+                
+                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
                     
-                    [PFUser currentUser].password = self.textfieldNewPassword.text;
+                    if(success) [self.navigationController popViewControllerAnimated:YES];
                     
-                    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
-                        
-                        if(success) [self.navigationController popViewControllerAnimated:YES];
-                        
-                    }];
-                    
-                }
-                else{
-                    
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                 alertControllerWithTitle:PASSWORD_ERROR_TITLE
-                                                 message:PASSWORD_ERROR_MESSAGE
-                                                 action:DISMISS]
-                                       animated:YES
-                                     completion:nil];
-                }
+                }];
+                
             }
             //If passwords are not reset, just go back
             else [self.navigationController popViewControllerAnimated:YES];

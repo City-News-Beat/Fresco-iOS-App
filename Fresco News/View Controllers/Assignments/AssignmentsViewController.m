@@ -545,8 +545,8 @@
           
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
             
-            [MKMapView addShadowToAnnotationView:annotationView forAssignment:YES];
-            
+            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
+            annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             
             /* Callout */
@@ -579,8 +579,9 @@
         if (annotationView == nil) {
             
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
+            annotationView.enabled = YES;
             
-            [MKMapView addShadowToAnnotationView:annotationView forAssignment:YES];
+            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
             
         }
         else {
