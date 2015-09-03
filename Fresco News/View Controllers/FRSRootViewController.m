@@ -13,9 +13,10 @@
 #import "FRSTabBarController.h"
 #import "NotificationsViewController.h"
 #import "CameraViewController.h"
-#import "FRSOnboardPageViewController.h"
+#import "OnboardPageViewController.h"
 #import "BaseNavigationController.h"
 #import "TOSViewController.h"
+#import "FRSOnboardViewConroller.h"
 #import <BTBadgeView.h>
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
@@ -119,9 +120,9 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
-    FRSOnboardPageViewController *onboardController = [[FRSOnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-    
-    [self switchRootViewController:onboardController];
+    FRSOnboardViewConroller *onboardVC = [[FRSOnboardViewConroller alloc] init];
+
+    [self switchRootViewController:onboardVC];
     
 }
 

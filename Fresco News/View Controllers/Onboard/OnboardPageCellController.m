@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "FRSOnboardViewController.h"
+#import "OnboardPageCellController.h"
 
-@interface FRSOnboardViewController ()
+@interface OnboardPageCellController ()
 
 /*
 ** Dictionary Values
@@ -35,7 +35,7 @@
 
 @end
 
-@implementation FRSOnboardViewController
+@implementation OnboardPageCellController
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
 
@@ -60,8 +60,6 @@
                             @"onboard3.png"
                             ];
         
-        
-    
     }
     
     return self;
@@ -87,11 +85,6 @@
         [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
     }
     
-}
-
-- (IBAction)nextButtonTapped:(id)sender {
-    
-    [self.frsTableViewCellDelegate nextPageClicked:self.index];
 }
 
 - (void) setUpViews {
