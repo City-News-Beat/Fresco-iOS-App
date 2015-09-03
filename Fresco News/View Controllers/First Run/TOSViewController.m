@@ -40,6 +40,7 @@
     
     [super viewWillDisappear:animated];
 
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 /*
@@ -50,7 +51,7 @@
     
     [[FRSDataManager sharedManager] getTermsOfService:NO withResponseBlock:^(id responseObject, NSError *error) {
         
-        if (error || responseObject == nil) {
+        if (error || [responseObject[@"data"] isEqual:[NSNull null]]) {
             
             self.tosTextView.text = T_O_S_UNAVAILABLE_MSG;
             
@@ -84,7 +85,7 @@
 
     if(self.agreedState){
         
-        UIBarButtonItem *logoutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTermsWithLogout)];
+        UIBarButtonItem *logoutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Log out" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTermsWithLogout)];
         
         self.navigationItem.leftBarButtonItem = logoutBarButtonItem;
         self.navigationItem.leftBarButtonItem.tintColor = [UIColor redColor];

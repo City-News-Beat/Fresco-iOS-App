@@ -96,9 +96,10 @@
         
         [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
         
-        //Check if we're inactive
-        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+        //Check if we're inactive, then send the local push for the assignment
+        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive){
             [self sendLocalPushForAssignment];
+        }
         
 //        Uncomment for local notifications while testing
 //        UILocalNotification *notification = [[UILocalNotification alloc] init];
