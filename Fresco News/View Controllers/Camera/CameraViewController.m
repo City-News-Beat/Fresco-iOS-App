@@ -241,9 +241,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
-    
-    [[FRSMotionManager sharedManager] startTrackingMovement];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
+//    
+//    [[FRSMotionManager sharedManager] startTrackingMovement];
 
 
 }
@@ -960,29 +960,33 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - Device Configuration
 
-- (void)viewTiltToLandscape: (NSNotification *)notification {
+- (void)viewTiltToLandscape:(NSNotification *)notification {
     
     if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight) {
-
-        dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if(self.rotateImageView.alpha != 0.0f){
+            dispatch_async(dispatch_get_main_queue(), ^{
             
-            [UIView animateWithDuration:.2f animations:^{
-                self.rotateImageView.alpha = 0.0f;
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.0f;
+                    
+                }];
                 
-            }];
-            
-        });
+            });
+        }
 
     } else {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [UIView animateWithDuration:.2f animations:^{
-                self.rotateImageView.alpha = 0.7f;
+        if(self.rotateImageView.alpha != 0.7f){
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-            }];
-            
-        });
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.7f;
+                    
+                }];
+                
+            });
+        }
     }
 }
 
@@ -994,18 +998,30 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         self.inCorrentOrientation = NO;
         
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.7f;
-        }];
+        if(self.rotateImageView.alpha != 0.7f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.7f;
+                }];
+                
+            });
+        }
         
     }
     else{
         
         self.inCorrentOrientation = YES;
         
-        [UIView animateWithDuration:.2f animations:^{
-            self.rotateImageView.alpha = 0.0f;
-        }];
+        if(self.rotateImageView.alpha != 0.0f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.0f;
+                }];
+                
+            });
+        }
         
     }
     
