@@ -161,7 +161,7 @@
         return nil;
     }
 
-    OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithNibName:@"FRSOnboardViewController" bundle:nil];
+    OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithNibName:@"OnboardPageCellController" bundle:nil];
     
     viewController.index = index;
         
