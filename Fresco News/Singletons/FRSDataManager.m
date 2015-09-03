@@ -1274,13 +1274,18 @@
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
+    
     if(validate){
         
         NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
         
         [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
     }
-
+    else{
+        
+        [self.requestSerializer setValue:nil forHTTPHeaderField:@"authToken"];
+    }
+    
     [self GET:@"terms" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -1293,6 +1298,7 @@
         
         if (responseBlock) responseBlock(nil, error);
     }];
+
 }
 
 - (void)agreeToTOS:(FRSAPISuccessBlock)successBlock{
