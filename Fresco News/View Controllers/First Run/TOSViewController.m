@@ -82,13 +82,17 @@
     [self.navigationController.navigationBar
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor textInputBlackColor]}];
     
-
-    if(self.agreedState){
+    if (self.agreedState){
         
         UIBarButtonItem *logoutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Log out" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTermsWithLogout)];
         
         self.navigationItem.leftBarButtonItem = logoutBarButtonItem;
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor redColor];
+        
+        [logoutBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                     [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:17.0], NSFontAttributeName,
+                                                     [UIColor redColor], NSForegroundColorAttributeName,
+                                                     nil]
+                                           forState:UIControlStateNormal];
         
         UIBarButtonItem *agreeBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Agree" style:UIBarButtonItemStyleDone target:self action:@selector(dismissTerms)];
         self.navigationItem.rightBarButtonItem = agreeBarButtonItem;
