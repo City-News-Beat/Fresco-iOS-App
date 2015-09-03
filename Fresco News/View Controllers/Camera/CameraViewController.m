@@ -235,15 +235,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     /* Orientation notification set up */
     
-        [self deviceOrientationDidChange:nil];
-        
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(deviceOrientationDidChange:)
-         name:UIDeviceOrientationDidChangeNotification
-         object:nil];
+    [self deviceOrientationDidChange:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:)
+     name:UIDeviceOrientationDidChangeNotification
+     object:nil];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
     
     [[FRSMotionManager sharedManager] startTrackingMovement];
 
@@ -888,7 +886,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
                      [self setRecentPhotoViewHidden:NO withImage:image];
-                     if(assetURL != nil)
+                     if(assetURL != nil && [self.createdAssetURLs count] < 8)
                          [self.createdAssetURLs addObject:assetURL];
                  }];
             }
