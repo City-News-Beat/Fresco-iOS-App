@@ -482,7 +482,37 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
-- (void)saveChanges{
+- (void)updateStateForSpinner:(UIActivityIndicatorView *)spinner {
+    
+    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+    
+    if (!spinner) spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+    
+    if (!spinner.isAnimating) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            spinner.center = CGPointMake(self.saveChangesbutton.frame.size.width  / 2, self.saveChangesbutton.frame.size.height / 2);
+            
+            spinner.color = [UIColor whiteColor];
+            
+            [spinner startAnimating];
+            
+            [self.saveChangesbutton addSubview:spinner];
+            
+        });
+        
+    } else {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
+        });
+    }
+    
+}
+
+- (void)saveChanges {
     
     //Break if the saveChangesButton is not enabled
     if(!self.saveChangesbutton.enabled) return;
@@ -507,6 +537,8 @@ typedef enum : NSUInteger {
                                animated:YES
                              completion:nil];
             
+         
+            
             return;
         }
         //If the password is valid, check if the password fields match
@@ -519,10 +551,20 @@ typedef enum : NSUInteger {
                                animated:YES
                              completion:nil];
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.toolbarSpinner stopAnimating];
+                [self.toolbarSpinner removeFromSuperview];
+            });
+            
             return;
         }
        
     }
+    
+    [self.saveChangesbutton setTitle:@"" forState:UIControlStateNormal];
+    
+    [self updateStateForSpinner:self.toolbarSpinner];
+    
     
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
@@ -548,6 +590,13 @@ typedef enum : NSUInteger {
                                animated:YES
                              completion:nil];
             
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.toolbarSpinner stopAnimating];
+                [self.toolbarSpinner removeFromSuperview];
+            });
+            
+            
         }
         // On success, run password check
         else {
@@ -568,11 +617,23 @@ typedef enum : NSUInteger {
                     
                     if(success) [self.navigationController popViewControllerAnimated:YES];
                     
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.toolbarSpinner stopAnimating];
+                        [self.toolbarSpinner removeFromSuperview];
+                    });
+                    
                 }];
                 
             }
             //If passwords are not reset, just go back
-            else [self.navigationController popViewControllerAnimated:YES];
+            else {
+                [self.navigationController popViewControllerAnimated:YES];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.toolbarSpinner stopAnimating];
+                    [self.toolbarSpinner removeFromSuperview];
+                });
+            }
             
         }
         

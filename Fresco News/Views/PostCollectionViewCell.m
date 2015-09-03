@@ -52,13 +52,13 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
         
-        CGRect spinnerFrame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
-        
+        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
+        CGPoint spinnerCenter = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
         if(self.post.isVideo) {
             
             //Set up for play/pause button
             self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
-            self.playPause.center = CGPointMake(weakSelf.frame.size.width /2 , weakSelf.center.y);
+            self.playPause.center = CGPointMake(weakSelf.frame.size.width / 2 , weakSelf.center.y);
             self.playPause.contentMode = UIViewContentModeScaleAspectFit;
             self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
             self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
@@ -70,6 +70,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
             //Set up for indicator view
             self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+            self.videoIndicatorView.center = spinnerCenter;
             self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
             self.videoIndicatorView.alpha = 0;
             self.videoIndicatorView.hidden = YES;
@@ -85,6 +86,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             
             self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             self.photoIndicatorView.frame = spinnerFrame;
+            self.photoIndicatorView.center = spinnerCenter;
             [self addSubview:self.photoIndicatorView];
             [self bringSubviewToFront:self.photoIndicatorView];
         
