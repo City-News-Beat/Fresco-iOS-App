@@ -167,14 +167,9 @@ static CGFloat const kInterImageGap = 1.0f;
                 [self.tableView reloadData];
             
             }
-            
-            if(responseBlock) responseBlock(YES, nil);
         }
-        else{
         
-            if(responseBlock) responseBlock(NO, nil);
-        
-        }
+        if(responseBlock) responseBlock(YES, nil);
         
     }];
 

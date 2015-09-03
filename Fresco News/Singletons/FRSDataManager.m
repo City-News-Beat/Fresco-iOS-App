@@ -840,19 +840,8 @@
                              };
     
     //If we are refreshing, removed the cached response for the request by setting the cache policy
-    if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-    
-//    //If we are refreshing, removed the cached response for the request
-//    if(refresh){
-//        
-//        NSMutableURLRequest *request = [[[FRSDataManager sharedManager] requestSerializer]
-//                                        requestWithMethod:@"GET"
-//                                        URLString:[NSString stringWithFormat:@"%@%@", BASE_API, path]
-//                                        parameters:params error:nil];
-//        
-//        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-//        
-//    }
+    if(refresh)
+        self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     

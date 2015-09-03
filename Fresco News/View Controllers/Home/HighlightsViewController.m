@@ -142,17 +142,11 @@
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     
                     [self.galleriesViewController reloadData];
-                    
-                    if(responseBlock) responseBlock(YES, nil);
-
                 }
             }
         }
-        else {
-         
-            if(responseBlock) responseBlock(NO, nil);
-            
-        }
+        
+        if(responseBlock) responseBlock(YES, nil);
     
     }];
 }
