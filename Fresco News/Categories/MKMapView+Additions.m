@@ -154,7 +154,7 @@
  ** Helper method to set image for pin view
 */
 
-+ (void)setPinImageView:(UIImageView *)customPinView forAssignment: (BOOL)isAssignment {
++ (void)setPinImageView:(UIImageView *)customPinView forAssignment:(BOOL)isAssignment {
     
     if (isAssignment == YES) { // is Assignment annotation view
         
@@ -194,7 +194,6 @@
     [annotationView addSubview:container];
     [annotationView bringSubviewToFront:container];
     
-    annotationView.enabled = YES;
 }
 
 @end
