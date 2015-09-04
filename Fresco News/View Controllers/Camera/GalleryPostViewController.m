@@ -26,7 +26,10 @@
 #import "UIViewController+Additions.h"
 #import "FRSRootViewController.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate> {
+    UITapGestureRecognizer *socialTipTap;
+    UITapGestureRecognizer *submitTap;
+}
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
@@ -73,10 +76,6 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.socialTipView setUserInteractionEnabled:YES];
-    
-    UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
-    
-    [self.socialTipView addGestureRecognizer:singleTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,6 +84,12 @@
 
     [self.locationManager startUpdatingLocation];
 
+    socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    [self.socialTipView addGestureRecognizer:socialTipTap];
+    
+    submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:submitTap];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
     self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
@@ -127,6 +132,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.socialTipView removeGestureRecognizer:socialTipTap];
+    [self.navigationController.toolbar removeGestureRecognizer:submitTap];
     
     //Turn off any video
     [self disableVideo];
@@ -604,7 +612,6 @@
                     [self.spinner stopAnimating];
                     [self.spinner removeFromSuperview];
                 });
-                
             }
             @catch(NSException *exception){
                 NSLog(@"%@", exception);

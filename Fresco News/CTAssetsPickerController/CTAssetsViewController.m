@@ -49,7 +49,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 @end
 
-@interface CTAssetsViewController ()
+@interface CTAssetsViewController () {
+    UITapGestureRecognizer *submitTap;
+}
 
 @property (nonatomic, weak) CTAssetsPickerController *picker;
 @property (nonatomic, strong) NSMutableArray *assets;
@@ -96,6 +98,9 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     
     [self setupAssets];
 
+    submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:submitTap];
+    
     if (self.picker.autoSubmit) {
         [self createGalleryPost:nil];
         self.picker.autoSubmit = NO;
@@ -111,6 +116,12 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
     self.navigationController.toolbar.barTintColor = ([self.picker.selectedAssets count] == 0) ? [UIColor disabledToolbarColor] : [UIColor greenToolbarColor];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController.toolbar removeGestureRecognizer:submitTap];
 }
 
 - (void)dealloc
