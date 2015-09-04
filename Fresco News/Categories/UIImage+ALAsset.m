@@ -13,10 +13,8 @@
 
 + (UIImage *)imageFromAsset:(ALAsset *)asset
 {
-    ALAssetRepresentation *representation = [asset defaultRepresentation];
-    return [UIImage imageWithCGImage:representation.fullResolutionImage
-                               scale:[representation scale]
-                         orientation:(UIImageOrientation)[representation orientation]];
+//    ALAssetRepresentation *representation = [asset defaultRepresentation];
+    return [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
 }
 
 @end

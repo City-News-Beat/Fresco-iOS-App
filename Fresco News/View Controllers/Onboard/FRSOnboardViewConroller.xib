@@ -2,8 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSOnboardViewConroller">
@@ -22,7 +20,7 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-13-deN">
                     <rect key="frame" x="198" y="43" width="204" height="72"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="wz5-13-deN" secondAttribute="height" multiplier="17:6" id="Ekw-Rn-5yF"/>
+                        <constraint firstAttribute="height" constant="72" id="Dzg-oI-acq"/>
                         <constraint firstAttribute="width" constant="204" id="GHN-7A-J3X"/>
                         <constraint firstAttribute="height" constant="72" id="PB5-4c-Gqr"/>
                     </constraints>
@@ -80,14 +78,14 @@
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="VWQ-53-pL4" secondAttribute="bottom" constant="-16" id="0s3-WO-4lJ"/>
-                <constraint firstAttribute="centerY" secondItem="wz5-13-deN" secondAttribute="centerY" multiplier="3.8" id="3Tc-fn-B2m"/>
                 <constraint firstItem="VWQ-53-pL4" firstAttribute="top" secondItem="uLz-Mu-ouR" secondAttribute="bottom" constant="1" id="3nD-2N-Ehz"/>
                 <constraint firstAttribute="trailing" secondItem="VWQ-53-pL4" secondAttribute="trailing" id="4bp-Ab-k1F"/>
                 <constraint firstAttribute="bottom" secondItem="SUl-58-8YB" secondAttribute="bottom" id="6fz-Sx-g5G"/>
                 <constraint firstAttribute="trailing" secondItem="uLz-Mu-ouR" secondAttribute="trailing" id="8BG-cd-G7l"/>
                 <constraint firstItem="uLz-Mu-ouR" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Gcm-Mc-LHk"/>
-                <constraint firstAttribute="centerX" secondItem="wz5-13-deN" secondAttribute="centerX" id="KC6-cp-6II"/>
-                <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="bottom" constant="16" id="Zq2-M1-kh3"/>
+                <constraint firstItem="wz5-13-deN" firstAttribute="centerX" secondItem="uLz-Mu-ouR" secondAttribute="centerX" id="bnr-wG-Rgf"/>
+                <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="bottom" constant="16" id="cgf-uD-6lZ"/>
+                <constraint firstItem="wz5-13-deN" firstAttribute="top" secondItem="DFD-9b-t5h" secondAttribute="top" constant="43" id="dOU-oY-rtF"/>
                 <constraint firstAttribute="centerX" secondItem="uLz-Mu-ouR" secondAttribute="centerX" id="fWL-eX-VIA"/>
                 <constraint firstItem="VWQ-53-pL4" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="hlM-vv-UMy"/>
                 <constraint firstAttribute="trailing" secondItem="SUl-58-8YB" secondAttribute="trailing" id="jgx-g9-eBe"/>

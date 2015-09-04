@@ -51,9 +51,15 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     __weak PostCollectionViewCell *weakSelf = self;
 
     if (_post.postID) {
-        
-        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
+
+        CGRect spinnerFrame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
         CGPoint spinnerCenter = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+        
+        self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.photoIndicatorView.frame = spinnerFrame;
+        [self addSubview:self.photoIndicatorView];
+        [self bringSubviewToFront:self.photoIndicatorView];
+
         if(self.post.isVideo) {
             
             //Set up for play/pause button
@@ -81,62 +87,33 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             [self addSubview:self.videoIndicatorView];
             [self bringSubviewToFront:self.videoIndicatorView];
             [self bringSubviewToFront:self.playPause];
-            
-        } else {
-            
-            self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            self.photoIndicatorView.frame = spinnerFrame;
-            self.photoIndicatorView.center = spinnerCenter;
-            [self addSubview:self.photoIndicatorView];
-            [self bringSubviewToFront:self.photoIndicatorView];
-        
+
         }
+    
+        
+        //back to the main thread for the UI call
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.photoIndicatorView startAnimating];
+        });
+    
+        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            
+            self.processingVideo = false;
+            
+            weakSelf.imageView.image = image;
+            
+            weakSelf.imageView.alpha = 1.0f;
+            
+            [weakSelf removeTranscodePlaceHolder];
+            
             //back to the main thread for the UI call
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.photoIndicatorView startAnimating];
+                [self.photoIndicatorView stopAnimating];
+                [self.photoIndicatorView removeFromSuperview];
             });
+
+        } failure:nil];
         
-            [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                
-                self.processingVideo = false;
-                
-                weakSelf.imageView.image = image;
-                
-                weakSelf.imageView.alpha = 1.0f;
-                
-                [weakSelf removeTranscodePlaceHolder];
-                
-                //back to the main thread for the UI call
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.photoIndicatorView stopAnimating];
-                });
-                
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                
-//                if([self.post isVideo]){
-//                    
-//                    if(response != nil){
-//                        
-//                        self.processingVideo = true;
-//                        
-//                        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
-//                        self.transcodeImage.frame = CGRectMake(0, 0, 150, 150);
-//                        self.transcodeImage.center = self.center;
-//                        
-//                        self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
-//                        self.transcodeLabel.text = @"We’re still processing this video!";
-//                        self.transcodeLabel.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:18.0f];
-//                        self.transcodeLabel.center = CGPointMake(self.center.x, self.center.y + 100);
-//                        self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
-//                        
-//                        [self addSubview:self.transcodeImage];
-//                        [self addSubview:self.transcodeLabel];
-//                        
-//                    }
-//                    
-//                }
-                
-            }];
     }
     else {
         // local

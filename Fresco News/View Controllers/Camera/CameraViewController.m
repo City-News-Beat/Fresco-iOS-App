@@ -21,6 +21,7 @@
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import "FRSMotionManager.h"
+#import "UIImage+ALAsset.h"
 
 @implementation TemplateCameraViewController
 // Do not delete
@@ -261,9 +262,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
     
-    [[FRSMotionManager sharedManager] stopTrackingMovement];
+    [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_ORIENTATION_CHANGE object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -292,6 +292,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     //Clear the timer so it doesn't re-run
     [self.videoTimer invalidate];
     self.videoTimer = nil;
+    
+    [self.locationTimer invalidate];
+    self.locationTimer = nil;
 }
 
 -(void)configureUIElements{
@@ -866,6 +869,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [self setRecentPhotoViewHidden:YES withImage:nil];
                 
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 NSMutableDictionary *metadata = [[self.location EXIFMetadata] mutableCopy];
 
@@ -885,9 +889,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] metadata:metadata
                  completionBlock:^(NSURL *assetURL, NSError *error) {
-                     [self setRecentPhotoViewHidden:NO withImage:image];
-                     if(assetURL != nil && [self.createdAssetURLs count] < 8)
-                         [self.createdAssetURLs addObject:assetURL];
+                     
+                     [[[ALAssetsLibrary alloc] init] assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                         
+                         [self setRecentPhotoViewHidden:NO withImage:[UIImage imageFromAsset:asset]];
+    
+                         if(assetURL != nil && [self.createdAssetURLs count] < MAX_POST_COUNT)
+                             [self.createdAssetURLs addObject:assetURL];
+                         
+                     } failureBlock:^(NSError *error) {
+                         NSLog(@"Failed to produce asset");
+                     }];
+                    
                  }];
             }
         }];
@@ -1115,7 +1128,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(ALAsset *)asset
 {
-    return picker.selectedAssets.count < 10;
+    return picker.selectedAssets.count < MAX_POST_COUNT;
 }
 
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldShowAsset:(ALAsset *)asset
@@ -1175,15 +1188,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     self.location = [locations lastObject];
     
-    if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
+    if ((!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) && self.defaultAssignment == nil) {
     
         self.currentLocation = [locations lastObject];
         
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:100 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:self.location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
             if(responseObject != nil){
-           
-                self.defaultAssignment = [responseObject firstObject];
+                
+                if(![self.defaultAssignment.assignmentId isEqualToString:((FRSAssignment *)[responseObject firstObject]).assignmentId]){
+                    self.defaultAssignment = [responseObject firstObject];
+                }
             
                 [self configureAssignmentLabel];
                 
@@ -1196,7 +1211,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     //Set interval for location update every `locationUpdateInterval` seconds
     if (self.locationTimer == nil) {
         // NSLog(@"Starting timer...");
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
     }
     
     [self.locationManager stopUpdatingLocation];
@@ -1219,9 +1234,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)restartLocationUpdates
-{
-    [self.locationManager startUpdatingLocation];
+- (void)restartLocationUpdates{
+    
+    if(self.defaultAssignment == nil)
+        [self.locationManager startUpdatingLocation];
+    else{
+        [self.locationTimer invalidate];
+        self.locationTimer = nil;
+    }
 }
 
 

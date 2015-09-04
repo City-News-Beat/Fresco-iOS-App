@@ -328,8 +328,8 @@
         PostCollectionViewCell *postCell = (PostCollectionViewCell *)[cell.galleryView.collectionPosts cellForItemAtIndexPath:visiblePostPath];
         
         //If the video current playing isn't this one, or no video has played yet
-        if(self.playingIndex.row != visibleIndexPath.row || self.playingIndex == nil){
-            
+        if(![self.playingIndex isEqual:visibleIndexPath] || self.playingIndex == nil){
+
             [self disableVideo];
             
             self.dispatchIndex = visibleIndexPath;
@@ -349,7 +349,7 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
                 //If the video current playing isn't this one, or no video has played yet, and the index before dispatch is still the same
-                if((self.playingIndex != visibleIndexPath || self.playingIndex == nil) && cell != nil && self.dispatchIndex == visibleIndexPath){
+                if((![self.playingIndex isEqual:visibleIndexPath] || self.playingIndex == nil) && cell != nil && self.dispatchIndex == visibleIndexPath){
                     
                     [self disableVideo];
                     

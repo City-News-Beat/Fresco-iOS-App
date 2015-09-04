@@ -131,11 +131,26 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    //Turn off any video
+    [self disableVideo];
+    
     [self.captionTextView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+/*
+ ** Disable any playing video
+ */
+
+- (void)disableVideo{
+    
+    [self.galleryView cleanUpVideoPlayer];
+    
+}
+
 #pragma mark - UI Setup
+
 - (void)setupButtons
 {
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
@@ -457,7 +472,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
         self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
         self.spinner.color = [UIColor whiteColor];
@@ -468,6 +483,17 @@
     });
 
 
+    if([self.gallery.posts count] > MAX_POST_COUNT){
+    
+        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                     alertControllerWithTitle:@"Error"
+                                     message:@"Galleries can only contain up to 8 photos or videos." action:nil]
+                           animated:YES completion:nil];
+        
+        return;
+    
+    }
+    
     [self configureControlsForUpload:YES];
     
     NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];
