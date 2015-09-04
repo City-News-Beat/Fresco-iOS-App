@@ -238,13 +238,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     [self deviceOrientationDidChange:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:)
-     name:UIDeviceOrientationDidChangeNotification
-     object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:)
+//     name:UIDeviceOrientationDidChangeNotification
+//     object:nil];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewTiltToLandscape:) name:NOTIF_ORIENTATION_CHANGE object:nil];
-//    
-//    [[FRSMotionManager sharedManager] startTrackingMovement];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:NOTIF_ORIENTATION_CHANGE object:nil];
+//
+    [[FRSMotionManager sharedManager] startTrackingMovement];
 
 
 }
@@ -266,7 +266,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_ORIENTATION_CHANGE object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     
 }
 
@@ -366,7 +366,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)apertureButtonTapped:(id)sender
 {
-    if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight || self.inCorrentOrientation == YES) {
+    if (self.inCorrentOrientation == YES) {
         
         if (self.photoButton.selected) {
             
@@ -1005,9 +1005,54 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)deviceOrientationDidChange:(NSNotification*)note
 {
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+//    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+//    
+//    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown || orientation == UIDeviceOrientationLandscapeRight){
+//        
+//        self.inCorrentOrientation = NO;
+//        
+//        if(self.rotateImageView.alpha != 0.7f){
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                
+//                [UIView animateWithDuration:.2f animations:^{
+//                    self.rotateImageView.alpha = 0.7f;
+//                }];
+//                
+//            });
+//        }
+//        
+//    }
+//    else{
+//        
+//        self.inCorrentOrientation = YES;
+//        
+//        if(self.rotateImageView.alpha != 0.0f){
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                
+//                [UIView animateWithDuration:.2f animations:^{
+//                    self.rotateImageView.alpha = 0.0f;
+//                }];
+//                
+//            });
+//        }
+//        
+//    }
     
-    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown || orientation == UIDeviceOrientationLandscapeRight){
+    if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight) {
+        
+        self.inCorrentOrientation = YES;
+        
+        if (self.rotateImageView.alpha != 0.0f){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [UIView animateWithDuration:.2f animations:^{
+                    self.rotateImageView.alpha = 0.0f;
+                }];
+                
+            });
+        }
+
+    } else {
         
         self.inCorrentOrientation = NO;
         
@@ -1020,22 +1065,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 
             });
         }
-        
-    }
-    else{
-        
-        self.inCorrentOrientation = YES;
-        
-        if(self.rotateImageView.alpha != 0.0f){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [UIView animateWithDuration:.2f animations:^{
-                    self.rotateImageView.alpha = 0.0f;
-                }];
-                
-            });
-        }
-        
     }
     
 }

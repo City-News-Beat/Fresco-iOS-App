@@ -62,7 +62,7 @@
             orientationNew = UIInterfaceOrientationPortraitUpsideDown;
             
             
-        } else if (acceleration.x > -0.04 && acceleration.x < 0 && acceleration.y < -0.7 && acceleration.z < -0.65) {
+        } else if (acceleration.z < -0.85) {
             orientationNew = UIInterfaceOrientationLandscapeRight;
             
         }
@@ -71,10 +71,10 @@
             return;
         }
     }
-//    NSLog(@"X: %f", acceleration.x);
-//    NSLog(@"Y: %f", acceleration.y);
-//    NSLog(@"Z: %f", acceleration.z);
-//    
+    NSLog(@"X: %f", acceleration.x);
+    NSLog(@"Y: %f", acceleration.y);
+    NSLog(@"Z: %f", acceleration.z);
+    
     if (orientationNew == self.lastOrientation)
         return;
     
