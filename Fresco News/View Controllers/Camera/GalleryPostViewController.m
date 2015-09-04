@@ -62,6 +62,10 @@
     [self setFrescoNavigationBar];
     [self setupButtons];
 
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    gesture.numberOfTapsRequired = 1;
+    [self.navigationController.toolbar addGestureRecognizer:gesture];
+    
     self.title = @"Create a Gallery";
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
@@ -403,7 +407,7 @@
     return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
                                             style:UIBarButtonItemStyleDone
                                            target:self
-                                           action:@selector(submitGalleryPost:)];
+                                           action:nil];
 }
 
 - (UIBarButtonItem *)spaceButtonItem
@@ -450,6 +454,19 @@
         
         return;
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+        self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
+        self.spinner.color = [UIColor whiteColor];
+        [self.spinner startAnimating];
+        self.navigationController.toolbar.items = nil;
+        [self.navigationController.toolbar addSubview:self.spinner];
+        
+    });
+
 
     [self configureControlsForUpload:YES];
     
@@ -558,6 +575,10 @@
                 
                 [self returnToTabBar];
                 
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.spinner stopAnimating];
+                });
+                
             }
             @catch(NSException *exception){
                 NSLog(@"%@", exception);
@@ -573,6 +594,9 @@
                forKeyPath:@"fractionCompleted"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
+    
+    
+
 }
 
 - (void)showUploadProgress:(CGFloat)fractionCompleted

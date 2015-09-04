@@ -550,12 +550,7 @@ typedef enum : NSUInteger {
                                          action:DISMISS]
                                animated:YES
                              completion:nil];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.toolbarSpinner stopAnimating];
-                [self.toolbarSpinner removeFromSuperview];
-            });
-            
+
             return;
         }
        
@@ -570,7 +565,7 @@ typedef enum : NSUInteger {
     
     NSData *imageData = nil;
     
-    if(self.selectedImage){
+    if(self.selectedImage) {
         
         imageData = UIImageJPEGRepresentation(self.selectedImage, 0.5);
     }
