@@ -67,6 +67,8 @@
         
         OnboardPageCellController *viewController = [self viewControllerAtIndex:self.currentIndex];
         
+        if(viewController == nil) return;
+        
         NSArray *controllers = @[viewController];
         
         if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
@@ -79,7 +81,7 @@
         
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
-            _runningNextPage = NO;
+            if(finished) _runningNextPage = NO;
         
         }];
     }

@@ -61,10 +61,6 @@
 
     [self setFrescoNavigationBar];
     [self setupButtons];
-
-    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
-    gesture.numberOfTapsRequired = 1;
-    [self.navigationController.toolbar addGestureRecognizer:gesture];
     
     self.title = @"Create a Gallery";
     [self.galleryView setGallery:self.gallery isInList:YES];
@@ -422,14 +418,14 @@
     return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
                                             style:UIBarButtonItemStyleDone
                                            target:self
-                                           action:nil];
+                                           action:@selector(submitGalleryPost:)];
 }
 
 - (UIBarButtonItem *)spaceButtonItem
 {
     return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                         target:nil
-                                                         action:nil];
+                                                         target:self
+                                                         action:@selector(submitGalleryPost:)];
 }
 
 - (NSArray *)toolbarItems
@@ -470,18 +466,6 @@
         return;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
-        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-        self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
-        self.spinner.color = [UIColor whiteColor];
-        [self.spinner startAnimating];
-        self.navigationController.toolbar.items = nil;
-        [self.navigationController.toolbar addSubview:self.spinner];
-        
-    });
-
 
     if([self.gallery.posts count] > MAX_POST_COUNT){
     
@@ -493,6 +477,18 @@
         return;
     
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+        self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
+        self.spinner.color = [UIColor whiteColor];
+        [self.spinner startAnimating];
+        self.navigationController.toolbar.items = nil;
+        [self.navigationController.toolbar addSubview:self.spinner];
+        
+    });
     
     [self configureControlsForUpload:YES];
     
@@ -549,7 +545,7 @@
                 mimeType = @"video/mp4";
             }
             else {
-                data = UIImageJPEGRepresentation([UIImage imageFromAsset:post.image.asset], 1.0);
+                data = UIImageJPEGRepresentation([UIImage fullResImageFromAsset:post.image.asset], 1.0);
                 mimeType = @"image/jpeg";
             }
 
@@ -572,6 +568,9 @@
             NSLog(@"Error posting to Fresco: %@", uploadError);
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.spinner stopAnimating];
+                [self.spinner removeFromSuperview];
             
                 [self configureControlsForUpload:NO];
                 
@@ -603,6 +602,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
+                    [self.spinner removeFromSuperview];
                 });
                 
             }

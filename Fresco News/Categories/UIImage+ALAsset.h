@@ -14,4 +14,6 @@
 
 + (UIImage *)imageFromAsset:(ALAsset *)asset;
 
++ (UIImage *)fullResImageFromAsset:(ALAsset *)asset;
+
 @end
