@@ -305,7 +305,7 @@
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
     
         //Check if the user moves at least a difference greater than .4
-        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4 && ([radius floatValue] > [self.operatingRadius floatValue]))){
+        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4)){
             
             self.updating = true;
         
