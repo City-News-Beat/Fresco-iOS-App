@@ -71,9 +71,10 @@
             return;
         }
     }
-    NSLog(@"X: %f", acceleration.x);
-    NSLog(@"Y: %f", acceleration.y);
-    NSLog(@"Z: %f", acceleration.z);
+    
+//    NSLog(@"X: %f", acceleration.x);
+//    NSLog(@"Y: %f", acceleration.y);
+//    NSLog(@"Z: %f", acceleration.z);
     
     if (orientationNew == self.lastOrientation)
         return;
