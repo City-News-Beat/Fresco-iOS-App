@@ -135,7 +135,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 - (void)exitNotificationView{
 
-    [self.navigationController hideNotifications:nil];
+    [self hideNotifications:nil];
     
 }
 
@@ -317,15 +317,16 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     //Check if the assignment has expired
                     if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
                 
-                        [self exitNotificationView];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
                         
                         UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                         
                         AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                         
-                        [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:NO];
+                        [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:YES withAnimation:NO];
                         
-                        [tabBarController setSelectedIndex:3];
+                        if(tabBarController.selectedIndex != 3)
+                            [tabBarController setSelectedIndex:3];
                         
                         
                     }
@@ -411,7 +412,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                 //Check if the assignment has expired
                 if(([assignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
                     
-                    [self exitNotificationView];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
                     
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     
@@ -419,7 +420,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
                     
                     [tabBarController setSelectedIndex:3];
                     
-                    [assignmentVC setCurrentAssignment:assignment navigateTo:YES present:NO];
+                    [assignmentVC setCurrentAssignment:assignment navigateTo:YES present:YES withAnimation:NO];
                 
                 
                 }

@@ -234,7 +234,7 @@
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     [tabBarController setSelectedIndex:3];
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:NO];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:YES withAnimation:NO];
                 }
             }];
         }
@@ -280,7 +280,7 @@
                 if (!error) {
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:NO];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:YES withAnimation:NO];
                     [tabBarController setSelectedIndex:3];
                 }
             }];

@@ -47,6 +47,7 @@
     /*
     ** Conditioning Variables
     */
+    @property (strong, nonatomic) CLLocation *lastLoc;
 
     @property (assign, nonatomic) BOOL centeredAssignment;
 
@@ -74,6 +75,9 @@
     
     [self tweakUI];
     
+    self.assignmentsMap.delegate = self;
+    self.scrollView.delegate = self;
+    
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:NAVIGATE_TO_ASSIGNMENT
                             delegate:self
@@ -89,12 +93,7 @@
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
-    
-    if(self.currentAssignment == nil)
-        [self updateAssignments];
-    else
-        [self presentCurrentAssignment];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIF_IMAGE_SET object:nil];
@@ -103,40 +102,10 @@
 
 }
 
-- (void)resetPin:(NSNotification *)notification {
-    self.assignmentsMap.delegate = self;
+- (void)viewWillAppear:(BOOL)animated{
     
-    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
-    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
-    
-    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
-    [self.assignmentsMap setRegion:newRegion animated:NO];
-    
-    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
-    [self.assignmentsMap setRegion:oldRegion animated:NO];
-
-    self.assignmentsMap.delegate = nil;
-}
-
-/*
- ** Prevents scroll and map delegates from being called outside controller
- */
-
--(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.assignmentsMap.delegate = self;
-}
 
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    self.scrollView.delegate = nil;
-    self.assignmentsMap.delegate = nil;
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-    
-    [super viewDidAppear:animated];
-    
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
             self.storyBreaksView.hidden = NO;
@@ -146,14 +115,31 @@
         }
     }
     
-    if(self.currentAssignment == nil)
-        [self updateAssignments];
-    else
-        [self presentCurrentAssignment];
+    [self updateAssignments];
+    
+    if(self.currentAssignment && self.scrollView.alpha == 0.0f){
+    
+        [self presentCurrentAssignmentWithAnimation:YES];
+        
+    }
+    
+}
 
+
+- (void)resetPin:(NSNotification *)notification {
+    
+    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
+    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
+    
+    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
+    [self.assignmentsMap setRegion:newRegion animated:NO];
+    
+    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
+    [self.assignmentsMap setRegion:oldRegion animated:NO];
 }
 
 - (void)viewDidLayoutSubviews{
+    
     self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
 }
 
@@ -237,7 +223,7 @@
 ** Sets current assignment of view controller, with conditioning variables and checks for expiration
 */
 
--(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present{
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present withAnimation:(BOOL)animate{
     
     if(([currentAssignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
         
@@ -247,7 +233,7 @@
         
         if(navigate) self.navigateTo = YES;
         
-        if(present) [self presentCurrentAssignment];
+        if(present) [self presentCurrentAssignmentWithAnimation:animate];
     
     }
 }
@@ -256,26 +242,32 @@
 ** Presents current assignment of view controller, fades in view
 */
 
--(void)presentCurrentAssignment{
+-(void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
     
-    self.assignmentTitle.text= self.currentAssignment.title;
+    if(self.isViewLoaded){
     
-    self.assignmentDescription.text = self.currentAssignment.caption;
-    
-    self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
-    
-    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
-    
-    [UIView animateWithDuration:.4 animations:^(void) {
-        [self.scrollView setAlpha:1];
-    }];
-    
-    if(self.navigateTo) [self.navigationSheet showInView:self.view];
-    
-    self.navigateTo = false;
-    
-    [self selectCurrentAssignmentAnnotation];
-
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.assignmentTitle.text= self.currentAssignment.title;
+            
+            self.assignmentDescription.text = self.currentAssignment.caption;
+            
+            self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
+            
+            [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius withAnimation:animate];
+            
+            [UIView animateWithDuration:.4 animations:^(void) {
+                [self.scrollView setAlpha:1];
+            }];
+            
+            if(self.navigateTo) [self.navigationSheet showInView:self.view];
+            
+            self.navigateTo = false;
+            
+            [self selectCurrentAssignmentAnnotation];
+            
+        });
+    }
 }
 
 - (void)selectCurrentAssignmentAnnotation{
@@ -613,14 +605,14 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES];
+        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES withAnimation:YES];
         
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
         
         FRSCluster *cluster = [self.clusters objectAtIndex:((ClusterAnnotation *) view.annotation).clusterIndex];
         
-        [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
+        [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius withAnimation:YES];
         
     }
     
@@ -653,7 +645,7 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
-    [self updateAssignments];
+    if(self.centeredUserLocation) [self updateAssignments];
     
 }
 
@@ -664,18 +656,16 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    if(self.currentAssignment == nil) {
-        [self zoomToCurrentLocation];
-    }
+    [self zoomToCurrentLocation];
 }
 
 #pragma mark - Location Zoom/View Methods
 
 /*
- ** Zoom to specified coordinates
- */
+** Zoom to specified coordinates
+*/
 
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius{
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate{
     
     //Span uses degrees, 1 degree = 69 miles
     MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
@@ -684,7 +674,7 @@
     
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
     
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
+    [self.assignmentsMap setRegion:regionThatFits animated:animate];
     
     self.operatingRadius = 0;
     
@@ -697,17 +687,20 @@
 
 - (void)zoomToCurrentLocation {
     
-    //center on the current location
-    if (!self.centeredUserLocation){
-        
-        __block BOOL runUserLocation = true;
-        
+    __block BOOL runUserLocation = true;
+    
+    //Check if we're already centered
+    if (self.centeredUserLocation)
+        return;
+    
+    if ([self.lastLoc distanceFromLocation:self.assignmentsMap.userLocation.location] > 0 || self.lastLoc == nil){
+    
         //Find nearby assignments in a 20 mile radius
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count]){
+                if([responseObject count] > 0){
                     
                     //Don't zoom to uer location
                     runUserLocation = false;
@@ -749,28 +742,30 @@
             
         }];
         
-        if(runUserLocation){
+    }
+
+    if(runUserLocation){
+        
+        if(self.assignmentsMap.userLocation.location != nil){
             
-            if(self.assignmentsMap.userLocation.location != nil){
-                
-                // Zooming map after delay for effect
-                MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-                
-                MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-                
-                MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                
-                [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                
-            }
+            // Zooming map after delay for effect
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+            
+            MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+            
+            MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+            
+            [self.assignmentsMap setRegion:regionThatFits animated:YES];
+            
+            self.lastLoc = self.assignmentsMap.userLocation.location;
             
         }
         
-        self.centeredUserLocation = YES;
-        
-        self.operatingRadius = 0;
-        
     }
+    
+    self.centeredUserLocation = YES;
+    
+    self.operatingRadius = 0;
     
 }
 

@@ -37,7 +37,7 @@
 
 @property (assign, nonatomic) BOOL centeredUserLocation;
 
--(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present;
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present withAnimation:(BOOL)animate;
 
 - (void)zoomToCurrentLocation;
 

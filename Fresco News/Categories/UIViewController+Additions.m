@@ -179,13 +179,15 @@
     
     NSUInteger count = 0;
     
-    for (UIViewController *vc in self.childViewControllers) {
-        if ([vc isKindOfClass:[NotificationsViewController class]]) {
-            exists = YES;
-            break;
+
+        for (UIViewController *vc in self.childViewControllers) {
+            if ([vc isKindOfClass:[NotificationsViewController class]]) {
+                exists = YES;
+                break;
+            }
+            count ++;
         }
-        count ++;
-    }
+    
     
     if (exists) {
     
