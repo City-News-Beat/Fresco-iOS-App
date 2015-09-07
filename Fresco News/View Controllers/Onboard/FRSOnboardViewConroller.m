@@ -223,7 +223,7 @@
                                 options: UIViewAnimationOptionCurveEaseIn
                              animations:^{
                                  
-                                 self.filledProgressView2.frame = CGRectOffset(self.filledProgressView2.frame, 110, 0);
+                                 self.filledProgressView2.frame = CGRectOffset(self.filledProgressView2.frame, 140, 0);
                                  
                                  self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
