@@ -53,6 +53,8 @@
 
 @property (strong, nonatomic) IBOutlet UIView *filledProgressView3;
 
+@property (strong, nonatomic) IBOutlet UIView *emptyProgressView3;
+
 /*
  ** Bools to check which index pageViewController is returning form
  */
@@ -142,6 +144,7 @@
     self.filledProgressView3.alpha = 0;
     self.filledProgressView2base.alpha = 0;
     
+    
     //Bools
     self.didComeFromIndex0 = NO;
     self.didComeFromIndex1 = NO;
@@ -190,6 +193,8 @@
             
             if ((self.didComeFromIndex1 = YES)) {
                 NSLog (@"Coming from index 1");
+                
+                self.filledProgressView2base.alpha = 0;
                 
                 [UIView animateWithDuration: 0.3
                                       delay: 0.0
@@ -258,6 +263,8 @@
             if ((self.didComeFromIndex2 = YES)) {
                 NSLog (@"Coming from index 2");
                 
+                self.filledProgressView3.alpha = 0;
+                
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
                 [UIView animateWithDuration: 0.3
@@ -269,6 +276,8 @@
                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                      self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                                      
+                                  
+
                                  }
                                  completion:^(BOOL finished) {
                                      self.circleView3.alpha = 0;
