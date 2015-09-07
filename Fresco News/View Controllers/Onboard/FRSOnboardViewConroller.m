@@ -102,7 +102,7 @@
     
     //Set didMove for the pagedVC
     [self.pagedViewController didMoveToParentViewController:self];
-
+    
     
     //Filled in circles
     self.circleView1.layer.cornerRadius = 12;
@@ -121,7 +121,7 @@
     self.circleView3.backgroundColor = [UIColor radiusGoldColor];
     self.circleView3.layer.borderWidth = 3;
     self.circleView3.layer.borderColor = [[UIColor whiteColor] CGColor];
-
+    
     //Empty circles
     self.emptyCircleView1.layer.cornerRadius = 12;
     self.emptyCircleView1.backgroundColor = [UIColor whiteColor];
@@ -146,7 +146,7 @@
     self.didComeFromIndex0 = NO;
     self.didComeFromIndex1 = NO;
     self.didComeFromIndex2 = NO;
-
+    
 }
 
 - (IBAction)nextButtonTapped:(id)sender {
@@ -180,7 +180,7 @@
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
                                                   animations:^{
-                                                    
+                                                      
                                                       self.circleView1.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }
                                                   completion:^(BOOL finished) {
@@ -188,15 +188,25 @@
                                                   }];
                              }];
             
-            
             if ((self.didComeFromIndex1 = YES)) {
-                NSLog (@"Coming from index 2");
-                self.emptyCircleView2.alpha = 1;
-                self.circleView2.alpha = 0;
-                self.emptyCircleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                NSLog (@"Coming from index 1");
+                
+                [UIView animateWithDuration: 0.3
+                                      delay: 0.0
+                                    options: UIViewAnimationOptionCurveEaseIn
+                                 animations:^{
+                                     
+                                     self.emptyCircleView2.alpha = 1;
+                                     self.emptyCircleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                     self.circleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                     
+                                 }
+                                 completion:^(BOOL finished) {
+                                     self.circleView2.alpha = 0;
+                                 }
+                 ];
                 
             }
-            
             
             NSLog (@"Current Index: %lu", self.pagedViewController.currentIndex);
         }
@@ -207,7 +217,7 @@
             self.circleView2.transform = CGAffineTransformMakeScale(0, 0);
             
             self.didComeFromIndex1 = YES;
-
+            
             [UIView animateWithDuration: 0.3
                                   delay: 0.0
                                 options: UIViewAnimationOptionCurveEaseIn
@@ -218,7 +228,7 @@
                                  self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
                              completion:^(BOOL finished) {
-
+                                 
                              }];
             
             [UIView animateWithDuration: 0.3
@@ -247,12 +257,24 @@
             
             if ((self.didComeFromIndex2 = YES)) {
                 NSLog (@"Coming from index 2");
-                self.emptyCircleView3.alpha = 1;
-                self.circleView3.alpha = 0;
+                
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
-
+                
+                [UIView animateWithDuration: 0.3
+                                      delay: 0.0
+                                    options: UIViewAnimationOptionCurveEaseIn
+                                 animations:^{
+                                     
+                                     self.emptyCircleView3.alpha = 1;
+                                     self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                     self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                     
+                                 }
+                                 completion:^(BOOL finished) {
+                                     self.circleView3.alpha = 0;
+                                 }
+                 ];
             }
-            
             
             NSLog (@"Current Index: %lu", self.pagedViewController.currentIndex);
         }
@@ -268,7 +290,7 @@
                                 options: UIViewAnimationOptionCurveEaseIn
                              animations:^{
                                  self.filledProgressView3.alpha = 1;
-                                  self.filledProgressView3.frame = CGRectOffset(self.filledProgressView3.frame, 110, 0);
+                                 self.filledProgressView3.frame = CGRectOffset(self.filledProgressView3.frame, 110, 0);
                                  
                                  self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
