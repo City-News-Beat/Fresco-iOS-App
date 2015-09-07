@@ -92,11 +92,11 @@
                     </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5JP-6l-Eib" userLabel="Filled Progress View 1">
-                    <rect key="frame" x="0.0" y="552" width="92" height="3"/>
+                    <rect key="frame" x="0.0" y="552" width="97" height="3"/>
                     <color key="backgroundColor" red="1" green="0.77647058823529413" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="3" id="VPo-bH-T1w"/>
-                        <constraint firstAttribute="width" constant="92" id="iF1-Px-c7g"/>
+                        <constraint firstAttribute="width" constant="97" id="iF1-Px-c7g"/>
                         <constraint firstAttribute="width" constant="200" id="qbD-pe-NhH"/>
                     </constraints>
                     <variation key="default">
@@ -106,7 +106,7 @@
                     </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="djI-Fy-FU9" userLabel="Filled Progress View 2 base">
-                    <rect key="frame" x="146" y="552" width="159" height="3"/>
+                    <rect key="frame" x="144" y="552" width="161" height="3"/>
                     <color key="backgroundColor" red="1" green="0.77647058820000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="200" id="EBL-ra-b6i"/>
@@ -148,7 +148,7 @@
                         </mask>
                     </variation>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a07-0q-LYe" userLabel="Empty Circle View 1">
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a07-0q-LYe" userLabel="Empty Circle View 1">
                     <rect key="frame" x="138" y="541" width="25" height="25"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -250,7 +250,7 @@
                 <constraint firstItem="PjB-82-hcL" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="s9y-Ke-Rts"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="yNN-Mu-9Hw" secondAttribute="bottom" id="tel-YO-H0N"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="thS-c9-AGp"/>
-                <constraint firstItem="a07-0q-LYe" firstAttribute="leading" secondItem="djI-Fy-FU9" secondAttribute="leading" constant="-8" id="xl3-hD-iEd"/>
+                <constraint firstItem="a07-0q-LYe" firstAttribute="leading" secondItem="djI-Fy-FU9" secondAttribute="leading" constant="-6" id="xl3-hD-iEd"/>
                 <constraint firstItem="wz5-13-deN" firstAttribute="top" secondItem="DFD-9b-t5h" secondAttribute="top" constant="43" id="y34-s4-oEk"/>
             </constraints>
             <variation key="default">
