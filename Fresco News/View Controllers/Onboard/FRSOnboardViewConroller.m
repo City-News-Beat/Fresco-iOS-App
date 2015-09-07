@@ -24,16 +24,14 @@
 @property (weak, nonatomic) IBOutlet UIView *containerPageViewController;
 
 /*
- ** UI
+ ** UI Elements
  */
+
+- (IBAction)nextButtonTapped:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIImageView *progressImage;
 
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
-
-@property (strong, nonatomic) NSArray *progressImages;
-
-- (IBAction)nextButtonTapped:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIView *circleView1;
 
@@ -47,16 +45,14 @@
 
 @property (strong, nonatomic) IBOutlet UIView *emptyCircleView3;
 
-@property (strong, nonatomic) IBOutlet UIView *filledProgressView2;
+@property (strong, nonatomic) IBOutlet UIView *progressView;
 
-@property (strong, nonatomic) IBOutlet UIView *filledProgressView2base;
+@property (strong, nonatomic) IBOutlet UIView *emptyProgressView;
 
-@property (strong, nonatomic) IBOutlet UIView *filledProgressView3;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyProgressView3;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
 
 /*
- ** Bools to check which index pageViewController is returning form
+ ** Misc.
  */
 
 @property (assign) BOOL didComeFromIndex0;
@@ -65,27 +61,12 @@
 
 @property (assign) BOOL didComeFromIndex2;
 
-
 @end
+
 
 
 @implementation FRSOnboardViewConroller
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
-    
-    if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]){
-        
-        // Create the data model for progress images
-        self.progressImages = @[
-                                @"progress-3-1.png",
-                                @"progress-3-1.png",
-                                @"progress-3-1.png"
-                                ];
-    }
-    
-    return self;
-    
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -140,17 +121,15 @@
     self.emptyCircleView3.layer.borderWidth = 3;
     self.emptyCircleView3.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
     
-    //Progress Bar
-    self.filledProgressView3.alpha = 0;
-    self.filledProgressView2base.alpha = 0;
-    
-    
-    //Bools
+    //Initialize Bools
     self.didComeFromIndex0 = NO;
     self.didComeFromIndex1 = NO;
     self.didComeFromIndex2 = NO;
     
+    //Initialize Progress Bar
+    
 }
+
 
 - (IBAction)nextButtonTapped:(id)sender {
     
@@ -158,12 +137,14 @@
     
 }
 
+
 - (void)updateStateWithIndex:(NSInteger)index{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         //Set progress images to reflect currentIndex
         if (self.pagedViewController.currentIndex == 0){
+            
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
             self.circleView1.transform = CGAffineTransformMakeScale(0, 0);
@@ -173,6 +154,9 @@
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  
+                                 self.emptyProgressViewLeadingConstraint.constant = 0;
+                                 [self.view layoutIfNeeded];
+                    
                                  self.emptyCircleView1.alpha = 0.0;
                                  self.circleView1.alpha = 1.0;
                                  self.circleView1.transform = CGAffineTransformMakeScale(1.3, 1.3);
@@ -192,10 +176,7 @@
                              }];
             
             if ((self.didComeFromIndex1 = YES)) {
-                NSLog (@"Coming from index 1");
-                
-                self.filledProgressView2base.alpha = 0;
-                
+    
                 [UIView animateWithDuration: 0.3
                                       delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
@@ -210,14 +191,12 @@
                                      self.circleView2.alpha = 0;
                                  }
                  ];
-                
             }
-            
-            NSLog (@"Current Index: %lu", self.pagedViewController.currentIndex);
         }
         
         
         if (self.pagedViewController.currentIndex == 1){
+            
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             self.circleView2.transform = CGAffineTransformMakeScale(0, 0);
             
@@ -228,7 +207,9 @@
                                 options: UIViewAnimationOptionCurveEaseIn
                              animations:^{
                                  
-                                 self.filledProgressView2.frame = CGRectOffset(self.filledProgressView2.frame, 140, 0);
+
+                                 self.emptyProgressViewLeadingConstraint.constant = 110;
+                                 [self.view layoutIfNeeded];
                                  
                                  self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
@@ -244,26 +225,21 @@
                                  self.emptyCircleView2.alpha = 0.0;
                                  self.circleView2.alpha = 1.0;
                                  self.circleView2.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                                 
+
                              }
                              completion:^(BOOL finished) {
                                  [UIView animateWithDuration: 0.2
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
                                                   animations:^{
-                                                      
                                                       self.circleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
                                                   }
                                                   completion:^(BOOL finished) {
-                                                      self.filledProgressView2base.alpha = 1;
-                                                      self.filledProgressView2.alpha = 0;
                                                   }];
                              }];
             
             if ((self.didComeFromIndex2 = YES)) {
-                NSLog (@"Coming from index 2");
-                
-                self.filledProgressView3.alpha = 0;
                 
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
@@ -275,17 +251,15 @@
                                      self.emptyCircleView3.alpha = 1;
                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                      self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                                     
-                                  
 
                                  }
                                  completion:^(BOOL finished) {
                                      self.circleView3.alpha = 0;
+                                    
                                  }
                  ];
             }
             
-            NSLog (@"Current Index: %lu", self.pagedViewController.currentIndex);
         }
         
         if (self.pagedViewController.currentIndex == 2){
@@ -298,9 +272,10 @@
                                   delay: 0.0
                                 options: UIViewAnimationOptionCurveEaseIn
                              animations:^{
-                                 self.filledProgressView3.alpha = 1;
-                                 self.filledProgressView3.frame = CGRectOffset(self.filledProgressView3.frame, 110, 0);
                                  
+                                 self.emptyProgressViewLeadingConstraint.constant = 210;
+                                 [self.view layoutIfNeeded];
+
                                  self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
                              completion:nil];
@@ -322,18 +297,14 @@
                                                   animations:^{
                                                       
                                                       self.circleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                                  }
-                                                  completion:^(BOOL finished) {
                                                       
-                                                  }];
+                                                  }
+                                                  completion:nil
+                                                      
+                                                  ];
                              }];
-            
-            
-            NSLog (@"Current Index: %lu", self.pagedViewController.currentIndex);
         }
-        
     });
-    
 }
 
 @end
