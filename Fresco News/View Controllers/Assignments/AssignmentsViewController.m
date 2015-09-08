@@ -242,7 +242,7 @@
 ** Presents current assignment of view controller, fades in view
 */
 
--(void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
+- (void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
     
     if(self.isViewLoaded){
     
@@ -615,8 +615,6 @@
         [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius withAnimation:YES];
         
     }
-    
-    [mapView selectAnnotation:view.annotation animated:YES];
     
 }
 
