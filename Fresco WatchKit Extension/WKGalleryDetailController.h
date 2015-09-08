@@ -9,7 +9,7 @@
 @import WatchKit;
 @import Foundation;
 
-@interface FRSWKGalleryDetail : WKInterfaceController
+@interface WKGalleryDetailController : WKInterfaceController
 
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *galleryLocation;
 
@@ -19,9 +19,8 @@
 
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *galleryByline;
 
-@property (weak, nonatomic) IBOutlet WKInterfaceImage *galleryImage;
+@property (weak, nonatomic) IBOutlet WKInterfaceTable *galleryImages;
 
 @property (strong, nonatomic) NSDictionary *gallery;
-
 
 @end

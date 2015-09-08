@@ -8,11 +8,11 @@
         <!--Galleries-->
         <scene sceneID="iWt-CA-Njd">
             <objects>
-                <controller identifier="galleries" title="Galleries" id="2MF-GS-TfT" customClass="FRSGalleriesInterfaceController">
+                <controller identifier="galleries" title="Galleries" id="2MF-GS-TfT" customClass="WKGalleriesInterfaceController">
                     <items>
                         <table alignment="left" id="amK-e8-C8f">
                             <items>
-                                <tableRow identifier="postRow" id="MvE-4I-gWV" customClass="FRSGalleryRowController">
+                                <tableRow identifier="postRow" id="MvE-4I-gWV" customClass="WKGalleryRowController">
                                     <group key="rootItem" width="1" height="133" alignment="left" layout="vertical" radius="7" id="KKh-5H-sxX">
                                         <items>
                                             <group width="1" height="133" alignment="left" verticalAlignment="bottom" contentMode="scaleAspectFill" layout="vertical" id="IyN-bY-QDL">
@@ -53,11 +53,11 @@
         <!--Stories-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller identifier="stories" title="Stories" id="AgC-eL-Hgc" customClass="FRSStoriesInterfaceController">
+                <controller identifier="stories" title="Stories" id="AgC-eL-Hgc" customClass="WKStoriesInterfaceController">
                     <items>
                         <table alignment="left" id="TXo-xg-4Hl">
                             <items>
-                                <tableRow identifier="storyRow" id="BBv-TR-iyN" customClass="FRSStoryRowController">
+                                <tableRow identifier="storyRow" id="BBv-TR-iyN" customClass="WKStoryRowController">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" radius="4" id="GPp-A6-zit">
                                         <items>
                                             <group width="1" alignment="left" id="6wc-7Z-2Nd">
@@ -179,7 +179,7 @@
         <!--Post Detail-->
         <scene sceneID="HmX-eZ-HgA">
             <objects>
-                <controller identifier="postDetail" id="uL3-M2-bi3" userLabel="Post Detail" customClass="FRSWKGalleryDetail">
+                <controller identifier="postDetail" id="uL3-M2-bi3" userLabel="Post Detail" customClass="WKGalleryDetailController">
                     <items>
                         <group width="1" alignment="left" layout="vertical" id="eXa-6v-27A">
                             <items>
@@ -197,10 +197,25 @@
                                             </items>
                                             <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
                                         </group>
-                                        <group width="1" alignment="left" radius="6" id="OOz-rB-o8Y">
+                                        <group width="1" alignment="left" radius="6" id="fl9-13-a0F">
                                             <items>
-                                                <imageView width="1" alignment="center" contentMode="scaleAspectFill" id="yMv-Ye-U0l"/>
+                                                <table alignment="left" id="1F9-Bb-isQ">
+                                                    <items>
+                                                        <tableRow identifier="imageRow" selectable="NO" id="D9E-Mq-pBM" userLabel="imageRow" customClass="WKImageRowController">
+                                                            <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" radius="6" id="Esm-7I-kG8">
+                                                                <items>
+                                                                    <imageView width="1" alignment="center" contentMode="scaleAspectFill" id="2WQ-Fv-gi8"/>
+                                                                </items>
+                                                                <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                                            </group>
+                                                            <connections>
+                                                                <outlet property="postImage" destination="2WQ-Fv-gi8" id="uxd-Ra-i9a"/>
+                                                            </connections>
+                                                        </tableRow>
+                                                    </items>
+                                                </table>
                                             </items>
+                                            <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                         </group>
                                         <group width="1" alignment="left" id="Opc-ac-k0I">
                                             <items>
@@ -230,13 +245,13 @@
                     <connections>
                         <outlet property="galleryByline" destination="qlp-rX-fgS" id="Be5-Yq-mo2"/>
                         <outlet property="galleryCaption" destination="XBx-Fk-b40" id="Ri3-TQ-9HK"/>
-                        <outlet property="galleryImage" destination="yMv-Ye-U0l" id="KTv-VQ-TYm"/>
+                        <outlet property="galleryImages" destination="1F9-Bb-isQ" id="4mo-c2-h75"/>
                         <outlet property="galleryLocation" destination="pED-O4-NJK" id="F3i-bv-GC0"/>
                         <outlet property="galleryTime" destination="Qlk-LY-nfE" id="Twl-Fi-M9H"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="388" y="40"/>
+            <point key="canvasLocation" x="388" y="39.75"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">

@@ -6,13 +6,14 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import "FRSStoriesInterfaceController.h"
-#import "FRSStoryRowController.h"
-#import "FRSWKGalleryDetail.h"
-#import "NSRelativeDate.h"
+#import "WKStoriesInterfaceController.h"
+#import "WKStoryRowController.h"
+#import "WKGalleryDetailController.h"
+#import "WKRelativeDate.h"
+#import "WKImagePath.h"
 #import <AFNetworking/AFNetworking.h>
 
-@implementation FRSStoriesInterfaceController
+@implementation WKStoriesInterfaceController
 
 - (void)awakeWithContext:(id)context {
     
@@ -52,7 +53,7 @@
     
     for (NSInteger i = 0; i < _stories.count; i++) {
         
-        FRSStoryRowController* row = [self.storyTable rowControllerAtIndex:i];
+        WKStoryRowController* row = [self.storyTable rowControllerAtIndex:i];
         
         [row.storyTitle setText:self.stories[i][@"title"]];
         
@@ -60,17 +61,22 @@
                 
         NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.stories[i][@"time_edited"] integerValue] / 1000)];
         
-        [row.storyTime setText:[NSRelativeDate relativeDateString:date]];
+        [row.storyTime setText:[WKRelativeDate relativeDateString:date]];
         
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
             //Background Thread
-            if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 0)
-                
-                [row.storyImage1 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.stories[i][@"thumbnails"][0][@"image"]]]];
             
+            if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 0){
+
+                [row.storyImage1 setImageData:[NSData dataWithContentsOfURL:[WKImagePath
+                                                                             CDNImageURL:self.stories[i][@"thumbnails"][0][@"image"]
+                                                                             withSize:SmallImageSize]]];
+            }
             if([((NSArray *)self.stories[i][@"thumbnails"]) count] > 1)
                 
-                [row.storyImage2 setImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:_stories[i][@"thumbnails"][1][@"image"]]]];
+                 [row.storyImage2 setImageData:[NSData dataWithContentsOfURL:[WKImagePath
+                                                                              CDNImageURL:self.stories[i][@"thumbnails"][1][@"image"]
+                                                                              withSize:SmallImageSize]]];
             
         });
         

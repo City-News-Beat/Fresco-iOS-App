@@ -9,7 +9,7 @@
 @import WatchKit;
 @import Foundation;
 
-@interface FRSGalleriesInterfaceController : WKInterfaceController
+@interface WKGalleriesInterfaceController : WKInterfaceController
 
 @property (nonatomic, strong) NSArray *galleries;
 

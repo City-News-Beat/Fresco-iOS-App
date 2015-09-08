@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSRelativeDate : NSDate
+@interface WKRelativeDate : NSDate
 
 + (NSString *)relativeDateString:(NSDate*)string;
 

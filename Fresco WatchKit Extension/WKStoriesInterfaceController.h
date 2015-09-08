@@ -9,7 +9,7 @@
 @import WatchKit;
 @import Foundation;
 
-@interface FRSStoriesInterfaceController : WKInterfaceController
+@interface WKStoriesInterfaceController : WKInterfaceController
 
 @property (nonatomic, strong) NSArray *stories;
 

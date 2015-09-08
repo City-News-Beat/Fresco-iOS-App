@@ -9,11 +9,9 @@
 @import Foundation;
 @import WatchKit;
 
-@interface FRSGalleryRowController : NSObject
+@interface WKGalleryRowController : NSObject
 
 @property (weak, nonatomic) IBOutlet WKInterfaceGroup *galleryGroup;
-
-@property (weak, nonatomic) IBOutlet WKInterfaceImage *galleryImage;
 
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *galleryLocation;
 

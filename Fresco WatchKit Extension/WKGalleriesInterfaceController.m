@@ -6,13 +6,14 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import "FRSGalleriesInterfaceController.h"
-#import "FRSGalleryRowController.h"
-#import <AFNetworking/AFNetworking.h>
-#import "NSRelativeDate.h"
+#import "WKGalleriesInterfaceController.h"
+#import "WKGalleryRowController.h"
+#import "WKRelativeDate.h"
+#import "WKImagePath.h"
 #import "FRSAppConstants.h"
+#import <AFNetworking/AFNetworking.h>
 
-@implementation FRSGalleriesInterfaceController
+@implementation WKGalleriesInterfaceController
 
 - (void)awakeWithContext:(id)context {
     
@@ -81,38 +82,20 @@
         
         for (NSInteger i = 0; i < self.galleries.count; i++) {
             
-            FRSGalleryRowController* row = [self.postTable rowControllerAtIndex:i];
+            WKGalleryRowController* row = [self.postTable rowControllerAtIndex:i];
             
             NSArray *posts = self.galleries[i][@"posts"];
             
             NSDate *date = [[NSDate date] initWithTimeIntervalSince1970:([(NSNumber *)self.galleries[i][@"time_created"] integerValue] / 1000)];
             
-            [row.galleryTime setText:[NSRelativeDate relativeDateString:date]];
+            [row.galleryTime setText:[WKRelativeDate relativeDateString:date]];
             
             [row.galleryLocation setText:self.galleries[i][@"caption"]];
             
             dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
                 
-                NSString *image = posts[0][@"image"];
-                
-                if (!([image rangeOfString:@"cloudfront"].location == NSNotFound)){
-        
-                    NSMutableString *mu = [NSMutableString stringWithString:image];
-        
-                    NSRange range = [mu rangeOfString:@"/images/"];
-        
-                    if (!(range.location == NSNotFound)) {
-        
-                        [mu insertString:@"small/" atIndex:(range.location + range.length)];
-        
-                        image = mu;
-                        
-                    }
-                    
-                }
-                
                 //Background Thread
-                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[NSURL URLWithString:image]]];
+                [row.galleryGroup setBackgroundImageData:[NSData dataWithContentsOfURL:[WKImagePath CDNImageURL:posts[0][@"image"] withSize:SmallImageSize]]];
                 
             });
 
@@ -129,19 +112,6 @@
     
     [self pushControllerWithName:@"postDetail" context:galleryData];
     
-}
-
-- (void)willActivate {
-    
-    // This method is called when watch view controller is about to be visible to user
-    [super willActivate];
-
-    
-}
-
-- (void)didDeactivate {
-    // This method is called when watch view controller is no longer visible
-    [super didDeactivate];
 }
 
 @end

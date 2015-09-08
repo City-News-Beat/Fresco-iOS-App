@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import "FRSStoryRowController.h"
+#import "WKStoryRowController.h"
 
-@implementation FRSStoryRowController
+@implementation WKStoryRowController
 
 
 @end

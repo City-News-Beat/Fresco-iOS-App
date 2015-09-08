@@ -110,6 +110,9 @@
 		E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */; };
 		E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */; };
 		E706DFC41B56B024001A6DD0 /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */; };
+		E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */; };
+		E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
+		E70F4BE21B9F958400A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
 		E71F0E3E1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E3D1B0B936200186BAD /* Images.xcassets */; };
 		E71F0E421B0B936200186BAD /* Fresco WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E411B0B936200186BAD /* Fresco WatchKit App.app */; };
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
@@ -118,11 +121,11 @@
 		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
 		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
 		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
-		E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */; };
-		E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */; };
-		E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */; };
-		E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* FRSStoryRowController.m */; };
-		E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */; };
+		E71F0E6A1B0B948200186BAD /* WKGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */; };
+		E71F0E6B1B0B948200186BAD /* WKGalleriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E601B0B948200186BAD /* WKGalleriesInterfaceController.m */; };
+		E71F0E6C1B0B948200186BAD /* WKStoriesInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E621B0B948200186BAD /* WKStoriesInterfaceController.m */; };
+		E71F0E6D1B0B948200186BAD /* WKStoryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E641B0B948200186BAD /* WKStoryRowController.m */; };
+		E71F0E6E1B0B948200186BAD /* WKGalleryDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E661B0B948200186BAD /* WKGalleryDetailController.m */; };
 		E720DEA21B8BA7F400855C3F /* UISocialButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E720DEA11B8BA7F400855C3F /* UISocialButton.m */; };
 		E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
 		E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB15F1B852BEF0017AAA5 /* Fabric.framework */; };
@@ -134,8 +137,8 @@
 		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
-		E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
-		E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */; };
+		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
+		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
@@ -380,6 +383,10 @@
 		E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
 		E706DFC21B56B024001A6DD0 /* FRSLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSLocationManager.h; path = Singletons/FRSLocationManager.h; sourceTree = "<group>"; };
 		E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSLocationManager.m; path = Singletons/FRSLocationManager.m; sourceTree = "<group>"; };
+		E70F4BD91B9F87E500A765E0 /* WKImageRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKImageRowController.h; sourceTree = "<group>"; };
+		E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKImageRowController.m; sourceTree = "<group>"; };
+		E70F4BDE1B9F920D00A765E0 /* WKImagePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKImagePath.h; sourceTree = "<group>"; };
+		E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKImagePath.m; sourceTree = "<group>"; };
 		E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Fresco WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E71F0E321B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E331B0B936200186BAD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -394,16 +401,16 @@
 		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
 		E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationController.m; sourceTree = "<group>"; };
-		E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryRowController.h; sourceTree = "<group>"; };
-		E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryRowController.m; sourceTree = "<group>"; };
-		E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleriesInterfaceController.h; sourceTree = "<group>"; };
-		E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleriesInterfaceController.m; sourceTree = "<group>"; };
-		E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoriesInterfaceController.h; sourceTree = "<group>"; };
-		E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoriesInterfaceController.m; sourceTree = "<group>"; };
-		E71F0E631B0B948200186BAD /* FRSStoryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryRowController.h; sourceTree = "<group>"; };
-		E71F0E641B0B948200186BAD /* FRSStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryRowController.m; sourceTree = "<group>"; };
-		E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWKGalleryDetail.h; sourceTree = "<group>"; };
-		E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWKGalleryDetail.m; sourceTree = "<group>"; };
+		E71F0E5D1B0B948200186BAD /* WKGalleryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGalleryRowController.h; sourceTree = "<group>"; };
+		E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGalleryRowController.m; sourceTree = "<group>"; };
+		E71F0E5F1B0B948200186BAD /* WKGalleriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGalleriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E601B0B948200186BAD /* WKGalleriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGalleriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E611B0B948200186BAD /* WKStoriesInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKStoriesInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E621B0B948200186BAD /* WKStoriesInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKStoriesInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E631B0B948200186BAD /* WKStoryRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKStoryRowController.h; sourceTree = "<group>"; };
+		E71F0E641B0B948200186BAD /* WKStoryRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKStoryRowController.m; sourceTree = "<group>"; };
+		E71F0E651B0B948200186BAD /* WKGalleryDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGalleryDetailController.h; sourceTree = "<group>"; };
+		E71F0E661B0B948200186BAD /* WKGalleryDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGalleryDetailController.m; sourceTree = "<group>"; };
 		E720DEA01B8BA7F400855C3F /* UISocialButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISocialButton.h; sourceTree = "<group>"; };
 		E720DEA11B8BA7F400855C3F /* UISocialButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISocialButton.m; sourceTree = "<group>"; };
 		E72DB15F1B852BEF0017AAA5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -422,8 +429,8 @@
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
-		E7AAC0A01B4DEBBB003EC8E3 /* NSRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSRelativeDate.h; sourceTree = "<group>"; };
-		E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSRelativeDate.m; sourceTree = "<group>"; };
+		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKRelativeDate.h; sourceTree = "<group>"; };
+		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKRelativeDate.m; sourceTree = "<group>"; };
 		E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterImages.xcassets; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
 		E7B733221B13E3F2009C26D0 /* FRSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSNotification.m; path = Notification/FRSNotification.m; sourceTree = "<group>"; };
@@ -931,6 +938,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E70F4BE11B9F927800A765E0 /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */,
+				E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */,
+				E70F4BDE1B9F920D00A765E0 /* WKImagePath.h */,
+				E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */,
+			);
+			name = Additions;
+			sourceTree = "<group>";
+		};
 		E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -940,8 +958,7 @@
 				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
 				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
 				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
-				E7AAC0A01B4DEBBB003EC8E3 /* NSRelativeDate.h */,
-				E7AAC0A11B4DEBBB003EC8E3 /* NSRelativeDate.m */,
+				E70F4BE11B9F927800A765E0 /* Additions */,
 				E71F0E701B0B99F100186BAD /* Stories */,
 				E71F0E6F1B0B99DD00186BAD /* Galleries */,
 				E71F0E3D1B0B936200186BAD /* Images.xcassets */,
@@ -982,12 +999,14 @@
 		E71F0E6F1B0B99DD00186BAD /* Galleries */ = {
 			isa = PBXGroup;
 			children = (
-				E71F0E5F1B0B948200186BAD /* FRSGalleriesInterfaceController.h */,
-				E71F0E601B0B948200186BAD /* FRSGalleriesInterfaceController.m */,
-				E71F0E5D1B0B948200186BAD /* FRSGalleryRowController.h */,
-				E71F0E5E1B0B948200186BAD /* FRSGalleryRowController.m */,
-				E71F0E651B0B948200186BAD /* FRSWKGalleryDetail.h */,
-				E71F0E661B0B948200186BAD /* FRSWKGalleryDetail.m */,
+				E71F0E5F1B0B948200186BAD /* WKGalleriesInterfaceController.h */,
+				E71F0E601B0B948200186BAD /* WKGalleriesInterfaceController.m */,
+				E71F0E5D1B0B948200186BAD /* WKGalleryRowController.h */,
+				E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */,
+				E70F4BD91B9F87E500A765E0 /* WKImageRowController.h */,
+				E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */,
+				E71F0E651B0B948200186BAD /* WKGalleryDetailController.h */,
+				E71F0E661B0B948200186BAD /* WKGalleryDetailController.m */,
 			);
 			name = Galleries;
 			sourceTree = "<group>";
@@ -995,10 +1014,10 @@
 		E71F0E701B0B99F100186BAD /* Stories */ = {
 			isa = PBXGroup;
 			children = (
-				E71F0E611B0B948200186BAD /* FRSStoriesInterfaceController.h */,
-				E71F0E621B0B948200186BAD /* FRSStoriesInterfaceController.m */,
-				E71F0E631B0B948200186BAD /* FRSStoryRowController.h */,
-				E71F0E641B0B948200186BAD /* FRSStoryRowController.m */,
+				E71F0E611B0B948200186BAD /* WKStoriesInterfaceController.h */,
+				E71F0E621B0B948200186BAD /* WKStoriesInterfaceController.m */,
+				E71F0E631B0B948200186BAD /* WKStoryRowController.h */,
+				E71F0E641B0B948200186BAD /* WKStoryRowController.m */,
 			);
 			name = Stories;
 			sourceTree = "<group>";
@@ -1451,7 +1470,7 @@
 				E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */,
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
-				E7AAC0A21B4DEBBB003EC8E3 /* NSRelativeDate.m in Sources */,
+				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
@@ -1462,6 +1481,7 @@
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
+				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
@@ -1516,15 +1536,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E71F0E6D1B0B948200186BAD /* FRSStoryRowController.m in Sources */,
+				E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */,
+				E71F0E6D1B0B948200186BAD /* WKStoryRowController.m in Sources */,
 				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
-				E7AAC0A31B4DED29003EC8E3 /* NSRelativeDate.m in Sources */,
-				E71F0E6E1B0B948200186BAD /* FRSWKGalleryDetail.m in Sources */,
-				E71F0E6C1B0B948200186BAD /* FRSStoriesInterfaceController.m in Sources */,
+				E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */,
+				E71F0E6E1B0B948200186BAD /* WKGalleryDetailController.m in Sources */,
+				E70F4BE21B9F958400A765E0 /* WKImagePath.m in Sources */,
+				E71F0E6C1B0B948200186BAD /* WKStoriesInterfaceController.m in Sources */,
 				E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */,
-				E71F0E6A1B0B948200186BAD /* FRSGalleryRowController.m in Sources */,
+				E71F0E6A1B0B948200186BAD /* WKGalleryRowController.m in Sources */,
 				E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */,
-				E71F0E6B1B0B948200186BAD /* FRSGalleriesInterfaceController.m in Sources */,
+				E71F0E6B1B0B948200186BAD /* WKGalleriesInterfaceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
