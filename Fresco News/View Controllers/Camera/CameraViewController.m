@@ -22,8 +22,6 @@
 #import "MKMapView+Additions.h"
 #import "FRSMotionManager.h"
 #import "UIImage+ALAsset.h"
-#import "UIImage+Custom.h"
-
 
 typedef enum : NSUInteger {
     CameraModePhoto,
