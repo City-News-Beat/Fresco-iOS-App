@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -196,6 +196,7 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="RjB-Kz-riC"/>
                                                 <exclude reference="51W-Io-F6x"/>
                                                 <exclude reference="JGy-Lr-B8k"/>
                                                 <exclude reference="NAk-Ho-7GI"/>
@@ -223,6 +224,7 @@
                                     <constraint firstAttribute="trailing" secondItem="ure-nI-UMR" secondAttribute="trailing" id="83m-dE-33r"/>
                                     <constraint firstItem="ure-nI-UMR" firstAttribute="leading" secondItem="Sp5-6N-XZe" secondAttribute="leading" id="BdH-IO-HgN"/>
                                     <constraint firstAttribute="bottom" secondItem="ure-nI-UMR" secondAttribute="bottom" id="Hdo-GY-qKA"/>
+                                    <constraint firstItem="ure-nI-UMR" firstAttribute="width" secondItem="Sp5-6N-XZe" secondAttribute="width" id="oam-za-Y6Q"/>
                                     <constraint firstItem="ure-nI-UMR" firstAttribute="top" secondItem="Sp5-6N-XZe" secondAttribute="top" id="p9U-XM-MGw"/>
                                 </constraints>
                                 <connections>

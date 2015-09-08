@@ -98,8 +98,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
         [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
-            self.processingVideo = false;
-            
             weakSelf.imageView.image = image;
             
             weakSelf.imageView.alpha = 1.0f;

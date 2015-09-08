@@ -234,6 +234,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
+            postCell.playingVideo = YES;
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [UIView animateWithDuration:1.0 animations:^{
@@ -310,23 +312,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
-
     [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
-    
-    UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processDoubleTap:)];
-    doubleTapGesture.delaysTouchesBegan = NO;
-    [doubleTapGesture setNumberOfTapsRequired:2];
-    [doubleTapGesture setNumberOfTouchesRequired:1];
-    
-    [cell addGestureRecognizer:doubleTapGesture];
-    
-    UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processSingleTap:)];
-    singleTapGesture.delaysTouchesBegan = NO;
-    [singleTapGesture setNumberOfTapsRequired:1];
-    [singleTapGesture setNumberOfTouchesRequired:1];
-    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
-    
-    [cell addGestureRecognizer:singleTapGesture];
         
     return cell;
 }
@@ -352,14 +338,12 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     return 0.0f;
 }
 
-#pragma mark - UITapGesture Functions
-
-- (void)processSingleTap:(UITapGestureRecognizer *)sender {
-   
-    PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
     //If the cell has a video
-    if(cell.post.isVideo && !cell.processingVideo){
+    if(cell.post.isVideo && cell.playingVideo){
         
         if(self.sharedPlayer.rate > 0){
             
@@ -391,25 +375,17 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             }];
             
         }
-        
-        
     }
-    
-}
-
-- (void)processDoubleTap:(UITapGestureRecognizer *)sender {
-    
-    PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
-    
-    if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
-    
+    //Post is a picture, not a video
+    else if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
+        
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         
         FRSPhotoBrowserView *browserView = [[FRSPhotoBrowserView alloc] initWithFrame:[window bounds]];
         [self setPhotoBrowserView:browserView];
         
         [[self photoBrowserView] setImages:@[cell.post.largeImageURL] withInitialIndex:0];
-
+        
         [window addSubview:[self photoBrowserView]];
         [[self photoBrowserView] setAlpha:0.f];
         

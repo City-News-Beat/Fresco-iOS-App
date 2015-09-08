@@ -22,8 +22,6 @@
 #import "CrossPostButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
-#import "MKMapView+Additions.h"
-#import "UIViewController+Additions.h"
 #import "FRSRootViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate> {
@@ -58,14 +56,28 @@
 
 @implementation GalleryPostViewController
 
+#pragma Orientation
+
+-(BOOL)shouldAutorotate {
+    return YES;
+}
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    [self setFrescoNavigationBar];
     [self setupButtons];
     
     self.title = @"Create a Gallery";
+    self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -146,8 +158,8 @@
 }
 
 /*
- ** Disable any playing video
- */
+** Disable any playing video
+*/
 
 - (void)disableVideo{
     
