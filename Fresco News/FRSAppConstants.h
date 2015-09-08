@@ -27,7 +27,9 @@ enum FRSErrorCodes {
 } frsErrorCodes;
 
 
+#define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
+#define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
 
 #pragma mark - Notification Strings
 
@@ -218,9 +220,7 @@ enum FRSErrorCodes {
 #define NOTIF_ENABLED                       NSLocalizedString(@"Notifications Enabled", nil)
 
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
-#define ENABLE_CAMERA_MSG                   NSLocalizedString(@"needs permission to access the camera to continue.", nil)
-
-#define GO_TO_SETTINGS                      NSLocalizedString(@"It seems like your camera isn't enabled. Please go to settings for Fresco to enable the camera.", nil)
+#define GO_TO_SETTINGS                      NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
 
 #pragma mark - First Run Radius
 
