@@ -234,6 +234,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
+            postCell.playingVideo = YES;
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [UIView animateWithDuration:1.0 animations:^{
@@ -341,7 +343,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     //If the cell has a video
-    if(cell.post.isVideo && !cell.processingVideo){
+    if(cell.post.isVideo && cell.playingVideo){
         
         if(self.sharedPlayer.rate > 0){
             
