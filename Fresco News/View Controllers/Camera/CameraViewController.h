@@ -15,7 +15,3 @@
 - (IBAction)doneButtonTapped:(id)sender;
 
 @end
-
-@interface TemplateCameraViewController : UIViewController
-// Do not delete
-@end
