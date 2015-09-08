@@ -133,6 +133,8 @@
 {
     [super viewWillDisappear:animated];
     
+    [self.locationManager stopUpdatingLocation];
+    
     [self.socialTipView removeGestureRecognizer:socialTipTap];
     [self.navigationController.toolbar removeGestureRecognizer:submitTap];
     
@@ -382,13 +384,17 @@
 - (void)configureAssignmentForLocation:(CLLocation *)location
 {
     // TODO: Add support for expiring/expired assignments
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        
         self.assignments = responseObject;
 
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
+            
             CLLocation *location = [post.image.asset valueForProperty:ALAssetPropertyLocation];
+            
             if(location != nil){
+                
                 for (FRSAssignment *assignment in self.assignments) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.defaultAssignment = assignment;
@@ -474,7 +480,7 @@
         return;
     }
     
-
+    //Check if there are less than the max amount of posts
     if([self.gallery.posts count] > MAX_POST_COUNT){
     
         [self presentViewController:[[FRSAlertViewManager sharedManager]
@@ -486,6 +492,7 @@
     
     }
     
+    //Run the spinner animation to indicate that upload has started
     dispatch_async(dispatch_get_main_queue(), ^{
         
         CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
@@ -533,35 +540,53 @@
                                   @"posts" : jsonData,
                                   @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
 
+    
+    //Form the request
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
                                                                                              parameters:parameters
                                                                               constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
-        
-      for (FRSPost *post in self.gallery.posts) {
-          
-            NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSData *data;
-            NSString *mimeType;
+                                                                  
+        @autoreleasepool {
+            
+            for (FRSPost *post in self.gallery.posts) {
+              
+                NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
+                NSData *data;
+                NSString *mimeType;
 
-            if (post.image.asset.isVideo) {
-                ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
-                UInt8 *buffer = malloc((unsigned long)representation.size);
-                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
-                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-                mimeType = @"video/mp4";
-            }
-            else {
-                data = UIImageJPEGRepresentation([UIImage fullResImageFromAsset:post.image.asset], 1.0);
-                mimeType = @"image/jpeg";
-            }
+                if (post.image.asset.isVideo) {
+                    
+                    ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
+                    
+                    UInt8 *buffer = malloc((unsigned long)representation.size);
+                    
+                    NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
+                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                    
+                    mimeType = @"video/mp4";
+                    
+                }
+                else {
+                    
+                    ALAssetRepresentation *rep = [post.image.asset defaultRepresentation];
+                    Byte *buffer = (Byte*)malloc(rep.size);
+                    
+                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                    
+                    mimeType = @"image/jpeg";
+                    
+                }
 
-            [formData appendPartWithFileData:data
-                                        name:filename
-                                    fileName:filename
-                                    mimeType:mimeType];
-            count++;
+                [formData appendPartWithFileData:data
+                                            name:filename
+                                        fileName:filename
+                                        mimeType:mimeType];
+                count++;
+            }
+            
         }
                                                                                   
     } error:nil];
@@ -612,6 +637,7 @@
                     [self.spinner stopAnimating];
                     [self.spinner removeFromSuperview];
                 });
+                
             }
             @catch(NSException *exception){
                 NSLog(@"%@", exception);
@@ -760,10 +786,28 @@
     [self configureAssignmentForLocation:[locations lastObject]];
 }
 
+
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // Undefined behavior
-    [self.locationManager stopUpdatingLocation];
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Access to Location Disabled"
+                                       message:@"Fresco news your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
+                                       action:DISMISS handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
+        [self.locationManager stopUpdatingLocation];
+    }
 }
+
 
 @end
