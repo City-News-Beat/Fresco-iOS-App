@@ -22,6 +22,7 @@
 #import "MKMapView+Additions.h"
 #import "FRSMotionManager.h"
 #import "UIImage+ALAsset.h"
+#import "UIImage+Custom.h"
 
 
 typedef enum : NSUInteger {
@@ -45,6 +46,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UILabel *broadcastLabel;
 @property (weak, nonatomic) IBOutlet UIView *broadcastStatus;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
+@property (weak, nonatomic) IBOutlet UIImageView *doneButtonImageView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *rotateImageView;
 @property (weak, nonatomic) IBOutlet UILabel *pleaseRotateLabel;
@@ -117,6 +119,13 @@ typedef enum : NSUInteger {
     self.createdAssetURLs = [NSMutableArray new];
     
     self.takingStillImage = NO;
+    
+    self.doneButtonBackground.backgroundColor = [UIColor blackColor];
+    
+    self.doneButtonBackground.clipsToBounds = YES;
+    self.doneButtonBackground.layer.cornerRadius = 8;
+    self.doneButtonImageView.clipsToBounds = YES;
+    self.doneButtonImageView.layer.cornerRadius = self.doneButtonBackground.layer.cornerRadius;
     
     // Create the AVCaptureSession an set to photo
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -697,8 +706,10 @@ typedef enum : NSUInteger {
                 [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
                 self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
                 
-                if(image)
-                    [self.doneButton setBackgroundImage:image forState:UIControlStateNormal];
+                if (image) {
+                    self.doneButtonBackground.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
+                    [self.doneButtonImageView setImage:image];
+                }
                 
                 [UIView animateWithDuration:.2 animations:^{
                      self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
