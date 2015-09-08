@@ -909,7 +909,6 @@ typedef enum : NSUInteger {
 
                 }];
                 
-                
                 CFRelease(imageDataSampleBuffer);
                 
             }

@@ -309,8 +309,7 @@
             
             if([radius integerValue] < 500){
 
-                [[FRSDataManager sharedManager]
-                 getAssignmentsWithinRadius:[radius floatValue]
+                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue]
                  ofLocation:CLLocationCoordinate2DMake(
                                                        self.assignmentsMap.centerCoordinate.latitude,
                                                        self.assignmentsMap.centerCoordinate.longitude)
@@ -345,6 +344,12 @@
                                 [self populateMapWithAnnotations];
                             
                             }
+                            else if(([self.assignments count] +1) > [self.assignmentsMap.annotations count]){
+                            
+                                [self populateMapWithAnnotations];
+                                
+                            }
+                            
                         }
                         else{
                         
@@ -361,8 +366,7 @@
             }
             else{
                 
-                [[FRSDataManager sharedManager]
-                 getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
+                [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
                  lon:self.assignmentsMap.centerCoordinate.longitude
                  radius:[radius floatValue]
                  withResponseBlock:^(id responseObject, NSError *error) {
@@ -643,7 +647,8 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
-    if(self.centeredUserLocation) [self updateAssignments];
+    if(self.centeredUserLocation)
+        [self updateAssignments];
     
 }
 
@@ -694,7 +699,7 @@
     if ([self.lastLoc distanceFromLocation:self.assignmentsMap.userLocation.location] > 0 || self.lastLoc == nil){
     
         //Find nearby assignments in a 20 mile radius
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 //If the assignments exists, navigate to the avg location respective to the current location
