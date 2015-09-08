@@ -1246,14 +1246,17 @@
         
         [params addEntriesFromDictionary:inputParams];
         
-        [self POST:@"user/locate" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-                
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-              
-            }failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                NSLog(@"Error: %@", error);
-            }];
+        [self POST:@"user/locate" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            NSLog(@"Error: %@", error);
+
+        }];
+        
     }
 }
 
