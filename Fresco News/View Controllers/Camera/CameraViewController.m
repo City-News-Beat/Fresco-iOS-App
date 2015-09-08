@@ -888,7 +888,7 @@ typedef enum : NSUInteger {
                 
                 }
 
-                NSInteger CGImagePropertyOrientation = 2; // AVCaptureVideoOrientationLandscapeRight
+                NSInteger CGImagePropertyOrientation = 1; // AVCaptureVideoOrientationLandscapeRight
                 
                 [metadata setObject:@(CGImagePropertyOrientation) forKeyedSubscript:(NSString *)kCGImagePropertyOrientation];
                 
