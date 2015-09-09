@@ -66,6 +66,13 @@
                         <constraint firstAttribute="height" constant="3" id="exm-Cv-lMj"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVY-n1-TVF" userLabel="End Cover Progress View">
+                    <rect key="frame" x="450" y="552" width="150" height="3"/>
+                    <color key="backgroundColor" red="0.70980392156862748" green="0.71372549019607845" blue="0.70980392156862748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="3" id="g1u-qF-834"/>
+                    </constraints>
+                </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a07-0q-LYe" userLabel="Empty Circle View 1">
                     <rect key="frame" x="138" y="541" width="25" height="25"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -131,10 +138,12 @@
                 <constraint firstAttribute="bottom" secondItem="SUl-58-8YB" secondAttribute="bottom" id="6fz-Sx-g5G"/>
                 <constraint firstAttribute="trailing" secondItem="uLz-Mu-ouR" secondAttribute="trailing" id="8BG-cd-G7l"/>
                 <constraint firstItem="trM-0q-Cax" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="0.5" id="8Om-Dr-X6f"/>
+                <constraint firstAttribute="trailing" secondItem="PVY-n1-TVF" secondAttribute="trailing" id="9Es-Jv-k94"/>
                 <constraint firstItem="5JP-6l-Eib" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Cen-78-OMb"/>
                 <constraint firstAttribute="centerX" secondItem="a07-0q-LYe" secondAttribute="centerX" multiplier="2" id="Fg4-0p-edS"/>
                 <constraint firstItem="uLz-Mu-ouR" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Gcm-Mc-LHk"/>
                 <constraint firstItem="geR-3B-zv3" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="1.5" id="Idd-99-qxR"/>
+                <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="PVY-n1-TVF" secondAttribute="bottom" id="Opt-Yf-S0b"/>
                 <constraint firstItem="Mtl-hC-3Ud" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="1.5" id="PyC-NR-ORC"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="geR-3B-zv3" secondAttribute="bottom" constant="-11" id="ViB-P2-Ucc"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="xiZ-dA-7zx" secondAttribute="bottom" constant="-11" id="XK5-K6-VgU"/>
@@ -152,6 +161,7 @@
                 <constraint firstAttribute="trailing" secondItem="qT9-es-J43" secondAttribute="trailing" id="n6s-wo-Ep2"/>
                 <constraint firstAttribute="trailing" secondItem="5JP-6l-Eib" secondAttribute="trailing" id="nsW-5M-YFM"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="thS-c9-AGp"/>
+                <constraint firstItem="PVY-n1-TVF" firstAttribute="leading" secondItem="geR-3B-zv3" secondAttribute="leading" constant="12" id="usH-FC-O4P"/>
                 <constraint firstItem="qT9-es-J43" firstAttribute="leading" secondItem="a07-0q-LYe" secondAttribute="leading" constant="12" id="zfu-nh-20j"/>
             </constraints>
             <point key="canvasLocation" x="1417" y="-1371"/>
