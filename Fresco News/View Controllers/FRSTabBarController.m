@@ -186,7 +186,7 @@
             }
         }
     }
-    else if(tabBarController.selectedIndex != 2){
+    else if(vc == nil){
     
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             
