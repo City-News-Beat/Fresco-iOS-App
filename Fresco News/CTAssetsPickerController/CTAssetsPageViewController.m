@@ -91,7 +91,11 @@
 
 - (NSInteger)pageIndex
 {
-    return ((CTAssetItemViewController *)self.viewControllers[0]).pageIndex;
+    //Check if the array is not empty first
+    if(self.viewControllers || [self.viewControllers count])
+        return ((CTAssetItemViewController *)self.viewControllers[0]).pageIndex;
+    
+    return 0;
 }
 
 - (void)setPageIndex:(NSInteger)pageIndex
