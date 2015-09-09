@@ -806,7 +806,7 @@
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                        alertControllerWithTitle:@"Access to Location Disabled"
-                                       message:@"Fresco news your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
+                                       message:@"Fresco uses your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
                                        action:DISMISS handler:nil];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
