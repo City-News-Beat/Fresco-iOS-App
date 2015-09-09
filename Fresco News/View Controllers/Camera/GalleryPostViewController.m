@@ -396,7 +396,7 @@
 - (void)configureAssignmentForLocation:(CLLocation *)location
 {
     // TODO: Add support for expiring/expired assignments
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         
         self.assignments = responseObject;
 
