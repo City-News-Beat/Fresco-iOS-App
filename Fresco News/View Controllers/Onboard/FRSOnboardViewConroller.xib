@@ -17,7 +17,6 @@
                 <outlet property="emptyProgressView" destination="qT9-es-J43" id="1uV-we-gjr"/>
                 <outlet property="emptyProgressViewLeadingConstraint" destination="zfu-nh-20j" id="X8B-0L-d9J"/>
                 <outlet property="nextButton" destination="SUl-58-8YB" id="lgo-oT-7iE"/>
-                <outlet property="progressImage" destination="VWQ-53-pL4" id="v56-8L-xL8"/>
                 <outlet property="progressView" destination="5JP-6l-Eib" id="0JN-iN-7ME"/>
                 <outlet property="view" destination="DFD-9b-t5h" id="u8B-rk-ATX"/>
             </connections>
@@ -121,21 +120,13 @@
                         <constraint firstAttribute="width" constant="25" id="hCf-Vo-ekQ"/>
                     </constraints>
                 </view>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="progress-3-1" translatesAutoresizingMaskIntoConstraints="NO" id="VWQ-53-pL4">
-                    <rect key="frame" x="0.0" y="536" width="600" height="35"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="35" id="mSr-Ct-0Rg"/>
-                    </constraints>
-                </imageView>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="L0j-Lr-Swf" secondAttribute="bottom" constant="-11" id="0PL-9J-0bo"/>
-                <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="VWQ-53-pL4" secondAttribute="bottom" constant="-16" id="0s3-WO-4lJ"/>
                 <constraint firstAttribute="centerX" secondItem="L0j-Lr-Swf" secondAttribute="centerX" id="1EX-OV-pOW"/>
-                <constraint firstItem="VWQ-53-pL4" firstAttribute="top" secondItem="uLz-Mu-ouR" secondAttribute="bottom" constant="1" id="3nD-2N-Ehz"/>
-                <constraint firstAttribute="trailing" secondItem="VWQ-53-pL4" secondAttribute="trailing" id="4bp-Ab-k1F"/>
                 <constraint firstAttribute="bottom" secondItem="SUl-58-8YB" secondAttribute="bottom" id="6fz-Sx-g5G"/>
+                <constraint firstItem="uLz-Mu-ouR" firstAttribute="bottom" secondItem="SUl-58-8YB" secondAttribute="bottom" constant="-65" id="7za-JB-a0K"/>
                 <constraint firstAttribute="trailing" secondItem="uLz-Mu-ouR" secondAttribute="trailing" id="8BG-cd-G7l"/>
                 <constraint firstItem="trM-0q-Cax" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="0.5" id="8Om-Dr-X6f"/>
                 <constraint firstAttribute="trailing" secondItem="PVY-n1-TVF" secondAttribute="trailing" id="9Es-Jv-k94"/>
@@ -155,7 +146,6 @@
                 <constraint firstItem="wz5-13-deN" firstAttribute="centerX" secondItem="uLz-Mu-ouR" secondAttribute="centerX" id="bnr-wG-Rgf"/>
                 <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="bottom" constant="16" id="cgf-uD-6lZ"/>
                 <constraint firstItem="wz5-13-deN" firstAttribute="top" secondItem="DFD-9b-t5h" secondAttribute="top" constant="43" id="dOU-oY-rtF"/>
-                <constraint firstItem="VWQ-53-pL4" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="hlM-vv-UMy"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="qT9-es-J43" secondAttribute="bottom" id="ivQ-kp-E4f"/>
                 <constraint firstAttribute="trailing" secondItem="SUl-58-8YB" secondAttribute="trailing" id="jgx-g9-eBe"/>
                 <constraint firstAttribute="trailing" secondItem="qT9-es-J43" secondAttribute="trailing" id="n6s-wo-Ep2"/>
@@ -169,6 +159,5 @@
     </objects>
     <resources>
         <image name="largeLogo" width="204" height="71"/>
-        <image name="progress-3-1" width="375" height="20"/>
     </resources>
 </document>

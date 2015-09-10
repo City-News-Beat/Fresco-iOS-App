@@ -17,8 +17,6 @@
  ** Views and Viewcontrollers
  */
 
-@property (strong, nonatomic) OnboardPageCellController *onboardViewController;
-
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageViewController;
@@ -28,8 +26,6 @@
  */
 
 - (IBAction)nextButtonTapped:(id)sender;
-
-@property (strong, nonatomic) IBOutlet UIImageView *progressImage;
 
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
 
@@ -178,6 +174,8 @@
                                  self.circleView1.alpha = 1.0;
                                  self.circleView1.transform = CGAffineTransformMakeScale(1.3, 1.3);
                                  
+                                 [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+                                 
                              }
                              completion:^(BOOL finished) {
                                  //animation is not running
@@ -190,8 +188,9 @@
                                                       
                                                   }
                                                   completion:^(BOOL finished) {
-                                                      
-                                                      
+    
+                                                      [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+
                                                   }];
                                  
                              }];
@@ -213,7 +212,6 @@
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
                                      self.animationIsRunning = YES;
-                                     
                                      self.emptyCircleView2.alpha = 1;
                                      self.emptyCircleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                      self.circleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
@@ -221,9 +219,6 @@
                                  }
                                  completion:^(BOOL finished) {
                                      if (finished){
-                                         
-                                         self.animationIsRunning = NO;
-
                                          self.circleView2.alpha = 0;
                                          self.didFinishAnimationAtIndex0 = YES;
                                          self.animationIsRunning = NO;
@@ -256,18 +251,16 @@
                                  
                                  self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
-                             completion:^(BOOL finished) {
-                                 
-                             }];
+                             completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: self.delay
+                                  delay: 0.0 //self.delay
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  self.animationIsRunning = YES;
-                                 self.emptyCircleView2.alpha = 0.0;
-                                 self.circleView2.alpha = 1.0;
                                  
+                                 self.emptyCircleView3.alpha = 1.0;
+                                 self.circleView2.alpha = 1.0;
                                  self.circleView2.transform = CGAffineTransformMakeScale(1.3, 1.3);
 
                              }
@@ -276,6 +269,7 @@
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
                                                   animations:^{
+                            
                                                       self.circleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
 
                                                   }
@@ -299,7 +293,7 @@
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
                 [UIView animateWithDuration: 0.2
-                                      delay: self.delay
+                                      delay: 0.0 //self.delay
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
                                      
@@ -308,12 +302,12 @@
                                      self.emptyCircleView3.alpha = 1;
                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                      self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                     self.circleView3.alpha = 0;
+
                                  }
                                  completion:^(BOOL finished) {
                                      if (finished){
-                                         self.circleView3.alpha = 0;
                                          self.didFinishAnimationAtIndex1 = YES;
-                                         
                                          self.animationIsRunning = NO;
                                      }
                                  }
@@ -328,7 +322,7 @@
             self.circleView3.transform = CGAffineTransformMakeScale(0, 0);
             
             self.didComeFromIndex2 = YES;
-
+            
             [UIView animateWithDuration: 0.2
                                   delay: 0.0
                                 options: UIViewAnimationOptionCurveEaseIn
@@ -337,17 +331,17 @@
                                  self.emptyProgressViewLeadingConstraint.constant = 230;
                                  [self.view layoutIfNeeded];
 
-                                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                              }
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: self.delay
+                                  delay: 0.0 //self.delay
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  
                                  self.animationIsRunning = YES;
-                                 
+                                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+
                                  self.emptyCircleView3.alpha = 1.0;
                                  self.circleView3.alpha = 1.0;
                                  self.circleView3.transform = CGAffineTransformMakeScale(1.3, 1.3);
@@ -358,16 +352,16 @@
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
                                                   animations:^{
-                                                      
+                                                     
+
                                                       self.circleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }
                                                   completion:^(BOOL finished) {
                                                       self.animationIsRunning = NO;
+                                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                                                   }
-                                  
                                                   ];
                              }];
-        
         }
     });
 }
