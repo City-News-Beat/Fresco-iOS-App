@@ -68,6 +68,11 @@
 
 @property (assign) BOOL didFinishAnimationAtIndex2;
 
+
+@property (nonatomic, assign) BOOL animationIsRunning;
+
+@property (nonatomic, assign) NSTimeInterval delay;
+
 @end
 
 @implementation FRSOnboardViewConroller
@@ -90,8 +95,9 @@
     //Set didMove for the pagedVC
     [self.pagedViewController didMoveToParentViewController:self];
     
+    
     [self circleInitialization];
-
+    
     
     //Initialize Bools
     self.didComeFromIndex0 = NO;
@@ -105,39 +111,36 @@
 }
 
 - (void) circleInitialization {
-    //Filled in circles
-    self.circleView1.layer.cornerRadius = 12;
-    self.circleView1.backgroundColor = [UIColor radiusGoldColor];
-    self.circleView1.layer.borderWidth = 3;
-    self.circleView1.layer.borderColor = [[UIColor whiteColor] CGColor];
     
     self.circleView2.alpha = 0;
-    self.circleView2.layer.cornerRadius = 12;
-    self.circleView2.backgroundColor = [UIColor radiusGoldColor];
-    self.circleView2.layer.borderWidth = 3;
-    self.circleView2.layer.borderColor = [[UIColor whiteColor] CGColor];
-    
     self.circleView3.alpha = 0;
-    self.circleView3.layer.cornerRadius = 12;
-    self.circleView3.backgroundColor = [UIColor radiusGoldColor];
-    self.circleView3.layer.borderWidth = 3;
-    self.circleView3.layer.borderColor = [[UIColor whiteColor] CGColor];
+
+    NSArray *circleViews = @[self.emptyCircleView1,
+                             self.emptyCircleView2,
+                             self.emptyCircleView3,
+                             self.circleView1,
+                             self.circleView2,
+                             self.circleView3];
     
-    //Empty circles
-    self.emptyCircleView1.layer.cornerRadius = 12;
-    self.emptyCircleView1.backgroundColor = [UIColor whiteColor];
-    self.emptyCircleView1.layer.borderWidth = 3;
-    self.emptyCircleView1.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
+    NSArray *emptyCircleViews = [circleViews subarrayWithRange:NSMakeRange(0, 3)];
+
+    NSArray *fullCircleViews = [circleViews subarrayWithRange:NSMakeRange(3, 3)];
     
-    self.emptyCircleView2.layer.cornerRadius = 12;
-    self.emptyCircleView2.backgroundColor = [UIColor whiteColor];
-    self.emptyCircleView2.layer.borderWidth = 3;
-    self.emptyCircleView2.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
+    for (UIView *circleView in circleViews) {
+        circleView.layer.cornerRadius = 12;
+        circleView.layer.borderWidth = 3;
+    }
     
-    self.emptyCircleView3.layer.cornerRadius = 12;
-    self.emptyCircleView3.backgroundColor = [UIColor whiteColor];
-    self.emptyCircleView3.layer.borderWidth = 3;
-    self.emptyCircleView3.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
+    for (UIView *emptyCircleView in emptyCircleViews) {
+        emptyCircleView.backgroundColor = [UIColor whiteColor];
+        emptyCircleView.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
+    }
+    
+    for (UIView *fullCircleView in fullCircleViews) {
+        fullCircleView.backgroundColor = [UIColor radiusGoldColor];
+        fullCircleView.layer.borderColor = [UIColor whiteColor].CGColor;
+    }
+    
 }
 
 - (IBAction)nextButtonTapped:(id)sender {
@@ -147,15 +150,21 @@
 }
 
 - (void)updateStateWithIndex:(NSInteger)index{
+
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
             
+            
+            
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
             self.circleView1.transform = CGAffineTransformMakeScale(0, 0);
+            //Say animation is running
+            
+            
             
             [UIView animateWithDuration: 0.2
                                   delay: 0.0
@@ -171,6 +180,7 @@
                                  
                              }
                              completion:^(BOOL finished) {
+                                 //animation is not running
                                  [UIView animateWithDuration: 0.2
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
@@ -180,17 +190,29 @@
                                                       
                                                   }
                                                   completion:^(BOOL finished) {
+                                                      
+                                                      
                                                   }];
                                  
                              }];
             
-            if ((self.didComeFromIndex1 = YES) && (self.didFinishAnimationAtIndex1
-                                                   )) {
-    
+            if ((self.didComeFromIndex1 = YES)) {
+                
+                if ((self.animationIsRunning = YES)){
+                    
+                    self.delay = 0.2f;
+                    
+                } else {
+                    
+                    self.delay = 0.0f;
+                    
+                }
+
                 [UIView animateWithDuration: 0.2
                                       delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
+                                     self.animationIsRunning = YES;
                                      
                                      self.emptyCircleView2.alpha = 1;
                                      self.emptyCircleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
@@ -198,11 +220,18 @@
                                      
                                  }
                                  completion:^(BOOL finished) {
-                                     self.circleView2.alpha = 0;
-                                     self.didFinishAnimationAtIndex0 = YES;
+                                     if (finished){
+                                         
+                                         self.animationIsRunning = NO;
 
+                                         self.circleView2.alpha = 0;
+                                         self.didFinishAnimationAtIndex0 = YES;
+                                         self.animationIsRunning = NO;
+                                     }
                                  }
+                 
                  ];
+            
             }
         }
         
@@ -221,7 +250,7 @@
                                   delay: 0.0
                                 options: UIViewAnimationOptionCurveEaseIn
                              animations:^{
-                                 
+
                                  self.emptyProgressViewLeadingConstraint.constant = 105;
                                  [self.view layoutIfNeeded];
                                  
@@ -232,10 +261,10 @@
                              }];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0
+                                  delay: self.delay
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
-                                 
+                                 self.animationIsRunning = YES;
                                  self.emptyCircleView2.alpha = 0.0;
                                  self.circleView2.alpha = 1.0;
                                  
@@ -251,38 +280,55 @@
 
                                                   }
                                                   completion:^(BOOL finished) {
+                                                      self.animationIsRunning = NO;
                                                   }];
                              }];
             
-            if ((self.didComeFromIndex2 = YES) && (self.didFinishAnimationAtIndex2)) {
+            if ((self.didComeFromIndex2 = YES)) {
+
+                if ((self.animationIsRunning = YES)){
+                    
+                    self.delay = 0.2f;
+                    
+                } else {
+                    
+                    self.delay = 0.0f;
+                    
+                }
                 
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
                 [UIView animateWithDuration: 0.2
-                                      delay: 0.0
+                                      delay: self.delay
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
+                                     
+                                     self.animationIsRunning = YES;
                                      
                                      self.emptyCircleView3.alpha = 1;
                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                      self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
                                  }
                                  completion:^(BOOL finished) {
-                                     self.circleView3.alpha = 0;
-                                     self.didFinishAnimationAtIndex1 = YES;
+                                     if (finished){
+                                         self.circleView3.alpha = 0;
+                                         self.didFinishAnimationAtIndex1 = YES;
+                                         
+                                         self.animationIsRunning = NO;
+                                     }
                                  }
                  ];
             }
         }
         }
-        
+
         // INDEX 2
         if (self.pagedViewController.currentIndex == 2){
             [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
             self.circleView3.transform = CGAffineTransformMakeScale(0, 0);
             
             self.didComeFromIndex2 = YES;
-            
+
             [UIView animateWithDuration: 0.2
                                   delay: 0.0
                                 options: UIViewAnimationOptionCurveEaseIn
@@ -296,9 +342,11 @@
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0
+                                  delay: self.delay
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
+                                 
+                                 self.animationIsRunning = YES;
                                  
                                  self.emptyCircleView3.alpha = 1.0;
                                  self.circleView3.alpha = 1.0;
@@ -314,10 +362,12 @@
                                                       self.circleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }
                                                   completion:^(BOOL finished) {
-                                                      self.didFinishAnimationAtIndex2 = YES;
+                                                      self.animationIsRunning = NO;
                                                   }
+                                  
                                                   ];
                              }];
+        
         }
     });
 }
