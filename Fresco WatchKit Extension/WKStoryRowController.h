@@ -9,7 +9,7 @@
 @import Foundation;
 @import WatchKit;
 
-@interface FRSStoryRowController : NSObject
+@interface WKStoryRowController : NSObject
 
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *storyTitle;
 

@@ -67,7 +67,12 @@ typedef enum : NSUInteger {
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+
 @property (nonatomic) BOOL isCorrectOrientation;
+
+@property (nonatomic) AVAssetWriter *assetWriter;
+@property (nonatomic) AVAssetWriterInput *assetWriterInput;
+
 @property (nonatomic) BOOL takingStillImage;
 
 // Utilities

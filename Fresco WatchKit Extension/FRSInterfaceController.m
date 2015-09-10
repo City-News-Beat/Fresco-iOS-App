@@ -6,19 +6,9 @@
 //
 
 #import "FRSInterfaceController.h"
-#import "FRSGalleryRowController.h"
-#import "FRSWKGalleryDetail.h"
+#import "WKGalleryRowController.h"
+#import "WKGalleryDetailController.h"
 
 @implementation FRSInterfaceController
-
-- (id)init{
-
-    if(self = [super init]) {
-    }
-
-    return self;
-
-}
-
 
 @end

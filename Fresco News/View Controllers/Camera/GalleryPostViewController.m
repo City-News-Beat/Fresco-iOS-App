@@ -396,7 +396,7 @@
 - (void)configureAssignmentForLocation:(CLLocation *)location
 {
     // TODO: Add support for expiring/expired assignments
-    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         
         self.assignments = responseObject;
 
@@ -806,7 +806,7 @@
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                        alertControllerWithTitle:@"Access to Location Disabled"
-                                       message:@"Fresco news your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
+                                       message:@"Fresco uses your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
                                        action:DISMISS handler:nil];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){

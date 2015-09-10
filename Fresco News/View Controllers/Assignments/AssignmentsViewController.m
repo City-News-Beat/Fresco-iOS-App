@@ -609,7 +609,13 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES withAnimation:YES];
+        //Check if we have an assignment at this index
+        if([self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] != nil){
+        
+            //Set the current assignment
+            [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES withAnimation:YES];
+            
+        }
         
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){

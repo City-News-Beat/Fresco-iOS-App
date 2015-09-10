@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "NSRelativeDate.h"
+#import "WKRelativeDate.h"
 
-@implementation NSRelativeDate
+@implementation WKRelativeDate
 
 + (NSString *)relativeDateString:(NSDate*)date {
     

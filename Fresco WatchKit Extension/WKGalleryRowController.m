@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import "FRSGalleryRowController.h"
+#import "WKGalleryRowController.h"
 
-@implementation FRSGalleryRowController
+@implementation WKGalleryRowController
 
 @end

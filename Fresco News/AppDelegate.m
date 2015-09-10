@@ -22,6 +22,7 @@
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "HighlightsViewController.h"
+#import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
 #import "UIColor+Additions.h"
 
@@ -196,6 +197,11 @@
 
     [PFPush handlePush:userInfo];
     
+    //Check that the user is not in the onboard screen, otherwise break the method call
+    if([self.frsRootViewController.viewController isKindOfClass:[FRSOnboardViewConroller class]]){
+        return;
+    }
+    
     // Check the type of the notifications
     
     //Breaking News
@@ -280,8 +286,8 @@
                 if (!error) {
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:YES withAnimation:NO];
                     [tabBarController setSelectedIndex:3];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:YES withAnimation:NO];
                 }
             }];
         }
