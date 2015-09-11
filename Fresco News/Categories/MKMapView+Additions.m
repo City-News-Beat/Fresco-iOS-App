@@ -90,7 +90,7 @@
 {
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     [circleView setFillColor:color];
-    circleView.alpha = .26;
+    circleView.alpha = .3;
     return circleView;
 }
 
