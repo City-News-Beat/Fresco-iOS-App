@@ -67,9 +67,12 @@ typedef enum : NSUInteger {
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+
+@property (nonatomic) BOOL isCorrectOrientation;
+
 @property (nonatomic) AVAssetWriter *assetWriter;
 @property (nonatomic) AVAssetWriterInput *assetWriterInput;
-@property (nonatomic) BOOL inCorrentOrientation;
+
 @property (nonatomic) BOOL takingStillImage;
 
 // Utilities
@@ -351,7 +354,7 @@ typedef enum : NSUInteger {
 {
     
     //Check if we're in the correct orientation
-    if (self.inCorrentOrientation == YES) {
+    if (self.isCorrectOrientation == YES) {
         
         //If we're in Photo mode
         if (self.photoButton.selected) {
@@ -1030,7 +1033,7 @@ typedef enum : NSUInteger {
     
     if ([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight) {
         
-        self.inCorrentOrientation = YES;
+        self.isCorrectOrientation = YES;
         
         if (self.rotateImageView.alpha != 0.0f){
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -1044,7 +1047,7 @@ typedef enum : NSUInteger {
 
     } else {
         
-        self.inCorrentOrientation = NO;
+        self.isCorrectOrientation = NO;
         
         if(self.rotateImageView.alpha != 0.7f){
             dispatch_async(dispatch_get_main_queue(), ^{
