@@ -19,6 +19,8 @@
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
+@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
+
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*
@@ -79,21 +81,20 @@
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
-    //Add onboard view controller to parent vc
+    //Add onboard view controller to parent view controller
     [self addChildViewController:self.pagedViewController];
     
-    //Set bounds of pageVC to bounds of subview in the xib
+    //Set bounds of paged view controller to bounds of subview in the xib
     self.pagedViewController.view.frame = self.containerPageView.frame;
     
-    //Add pageVC as subview to containerPageViewController
+    //Add paged view controller as subview to containerPageViewController
     [self.view addSubview:self.pagedViewController.view];
     
-    //Set didMove for the pagedVC
+    //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
     
-    
+
     [self circleInitialization];
-    [self imageInitialization];
     
     //Initialize Bools
     self.didComeFromIndex0 = NO;
@@ -103,17 +104,18 @@
     self.didFinishAnimationAtIndex0 = NO;
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
-
-
-    
-
-}
-
-- (void) imageInitialization {
     
     
-//    SVGKImage* newImage 
+    //Make paged view controller cell
+    self.pagedCellController = [[OnboardPageCellController alloc] init];
+    self.pagedCellController.view.frame = self.pagedViewController.view.frame;
+    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
     
+    self.pagedCellController.onboard1EarthImageView.alpha = 1;
+    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
+    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
+    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
+    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
     
 }
 
@@ -165,13 +167,16 @@
         if (self.pagedViewController.currentIndex == 0){
             
             
+            self.pagedCellController.onboard1EarthImageView.alpha = 1;
+            self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
+            self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
+            self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
+            self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
+            
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
             self.circleView1.transform = CGAffineTransformMakeScale(0, 0);
-            //Say animation is running
-            
-            
             
             [UIView animateWithDuration: 0.2
                                   delay: 0.0
@@ -189,7 +194,6 @@
                                  
                              }
                              completion:^(BOOL finished) {
-                                 //animation is not running
                                  [UIView animateWithDuration: 0.2
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
@@ -323,7 +327,6 @@
                                          self.didFinishAnimationAtIndex1 = YES;
                                          self.animationIsRunning = NO;
                                          
-                                         NSLog (@"in completion block of animation at index 1!!");
                                      }
                                  }
                  ];
@@ -374,7 +377,7 @@
                                                   completion:^(BOOL finished) {
                                                       self.animationIsRunning = NO;
                                                       self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                                                      NSLog (@"in completion block of animation at index 2!!");
+
                                                   }
                                                   ];
                              }];

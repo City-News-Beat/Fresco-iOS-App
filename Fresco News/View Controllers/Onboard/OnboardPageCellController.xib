@@ -8,6 +8,22 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardPageCellController">
             <connections>
                 <outlet property="mainHeader" destination="Ium-KU-UjR" id="Hak-z5-3yP"/>
+                <outlet property="onboard1AssignmentBottomLeft" destination="5w7-H3-KCx" id="vDC-xz-gmL"/>
+                <outlet property="onboard1AssignmentBottomRight" destination="asr-D8-TFC" id="AFx-DQ-nyA"/>
+                <outlet property="onboard1AssignmentTopLeft" destination="Vyr-4b-MQW" id="l7L-Vp-uOu"/>
+                <outlet property="onboard1AssignmentTopRight" destination="RIS-PG-OBj" id="AOI-E4-r1W"/>
+                <outlet property="onboard1EarthImageView" destination="thk-6u-OL4" id="fAJ-1O-6RF"/>
+                <outlet property="onboard2Camera" destination="fdy-YN-Qp2" id="Z3h-hb-hUz"/>
+                <outlet property="onboard2Cloud" destination="mLj-U0-pzG" id="QzX-Ip-AjZ"/>
+                <outlet property="onboard2Upload" destination="D6k-qF-c3A" id="Aho-nx-GaQ"/>
+                <outlet property="onboard3Cash1" destination="i1W-1G-ZZE" id="gEc-nt-NUk"/>
+                <outlet property="onboard3Cash2" destination="gdP-Qd-69V" id="I59-fC-Z5h"/>
+                <outlet property="onboard3Cash3" destination="GTU-y7-xVf" id="pHJ-M5-9pj"/>
+                <outlet property="onboard3GreyCloud" destination="Bim-44-AQy" id="2av-Fw-Rpj"/>
+                <outlet property="onboard3Newspaper" destination="exU-3L-VA5" id="xG3-m5-MLD"/>
+                <outlet property="onboard3Television" destination="Cgs-33-PG8" id="TFj-va-0Ja"/>
+                <outlet property="onboard3UploadLeft" destination="Gr9-Bh-0M7" id="fi4-Vv-9zS"/>
+                <outlet property="onboard3UploadRight" destination="UGG-mN-UnJ" id="nwe-hp-1tN"/>
                 <outlet property="onboardImage" destination="i6r-VV-ZeP" id="H9x-7V-b37"/>
                 <outlet property="subHeader" destination="R4G-pC-xgT" id="fKX-mp-pe3"/>
                 <outlet property="view" destination="UBw-4J-zX1" id="zlD-Vv-f5x"/>
@@ -15,11 +31,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="UBw-4J-zX1">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="333"/>
+            <rect key="frame" x="0.0" y="0.0" width="300" height="345"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4VZ-Gc-rOE" userLabel="Container">
-                    <rect key="frame" x="0.0" y="16" width="300" height="60"/>
+                    <rect key="frame" x="0.0" y="20" width="300" height="60"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4G-pC-xgT">
                             <rect key="frame" x="0.0" y="24" width="300" height="34"/>
@@ -48,88 +64,133 @@
                     </constraints>
                 </view>
                 <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="onboard3" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-VV-ZeP">
-                    <rect key="frame" x="-75" y="121" width="450" height="200"/>
+                    <rect key="frame" x="-75" y="128" width="450" height="200"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="200" id="R20-U3-6Ox"/>
                         <constraint firstAttribute="width" constant="450" id="vpT-Vu-boD"/>
                     </constraints>
                 </imageView>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YqP-W2-zIL" userLabel="onboard1 Container View">
-                    <rect key="frame" x="8" y="84" width="284" height="241"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YqP-W2-zIL" userLabel="onboard1 Container View">
+                    <rect key="frame" x="8" y="95" width="284" height="241"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="earth" translatesAutoresizingMaskIntoConstraints="NO" id="thk-6u-OL4">
                             <rect key="frame" x="59" y="47" width="173" height="173"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="Vyr-4b-MQW">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="Vyr-4b-MQW" userLabel="assignment-top-left">
                             <rect key="frame" x="53" y="51" width="50" height="50"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="RIS-PG-OBj">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="RIS-PG-OBj" userLabel="assignment-top-right">
                             <rect key="frame" x="145" y="22" width="50" height="50"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="asr-D8-TFC">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="asr-D8-TFC" userLabel="assignment-bottom-right">
                             <rect key="frame" x="179" y="140" width="50" height="50"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="5w7-H3-KCx">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="5w7-H3-KCx" userLabel="assignment-bottom-left">
                             <rect key="frame" x="92" y="127" width="50" height="50"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="241" id="2Vb-ow-rLH"/>
+                        <constraint firstAttribute="width" constant="284" id="Qxo-Yg-f09"/>
+                    </constraints>
                 </view>
-                <view alpha="0.29999999999999999" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3IA-Dc-RzZ" userLabel="onboard2 Container View">
-                    <rect key="frame" x="8" y="84" width="284" height="241"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3IA-Dc-RzZ" userLabel="onboard2 Container View">
+                    <rect key="frame" x="8" y="96" width="284" height="241"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="mLj-U0-pzG">
-                            <rect key="frame" x="81" y="37" width="122" height="83"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="mLj-U0-pzG">
+                            <rect key="frame" x="81" y="37" width="122" height="102"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="D6k-qF-c3A">
-                            <rect key="frame" x="130" y="136" width="25" height="22"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="D6k-qF-c3A">
+                            <rect key="frame" x="128" y="121" width="28" height="26"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="camera" translatesAutoresizingMaskIntoConstraints="NO" id="fdy-YN-Qp2">
-                            <rect key="frame" x="109" y="179" width="66" height="58"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera" translatesAutoresizingMaskIntoConstraints="NO" id="fdy-YN-Qp2">
+                            <rect key="frame" x="109" y="153" width="66" height="72"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="D6k-qF-c3A" secondAttribute="centerX" id="04b-NR-0cv"/>
+                        <constraint firstAttribute="centerX" secondItem="fdy-YN-Qp2" secondAttribute="centerX" id="2S9-zK-V4c"/>
+                        <constraint firstAttribute="trailing" secondItem="fdy-YN-Qp2" secondAttribute="trailing" constant="109" id="94j-fS-FBD"/>
+                        <constraint firstAttribute="centerY" secondItem="D6k-qF-c3A" secondAttribute="centerY" multiplier="0.9" id="9rN-Ni-iYw"/>
+                        <constraint firstItem="mLj-U0-pzG" firstAttribute="top" secondItem="3IA-Dc-RzZ" secondAttribute="top" constant="37" id="ULf-Sy-Rqw"/>
+                        <constraint firstAttribute="bottom" secondItem="fdy-YN-Qp2" secondAttribute="bottom" constant="16" id="d3q-qc-ELg"/>
+                        <constraint firstItem="fdy-YN-Qp2" firstAttribute="leading" secondItem="3IA-Dc-RzZ" secondAttribute="leading" constant="109" id="dBD-cR-Dtc"/>
+                        <constraint firstItem="mLj-U0-pzG" firstAttribute="leading" secondItem="3IA-Dc-RzZ" secondAttribute="leading" constant="81" id="dxq-LE-P0E"/>
+                        <constraint firstAttribute="width" constant="284" id="hEO-q6-05T"/>
+                        <constraint firstAttribute="trailing" secondItem="mLj-U0-pzG" secondAttribute="trailing" constant="81" id="k0u-WO-aL0"/>
+                        <constraint firstItem="fdy-YN-Qp2" firstAttribute="bottom" secondItem="mLj-U0-pzG" secondAttribute="bottom" constant="98" id="paZ-jl-T9p"/>
+                        <constraint firstAttribute="centerX" secondItem="mLj-U0-pzG" secondAttribute="centerX" id="siC-bf-WDx"/>
+                        <constraint firstAttribute="height" constant="241" id="t3h-Kj-hla"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="hEO-q6-05T"/>
+                            <exclude reference="t3h-Kj-hla"/>
+                            <exclude reference="paZ-jl-T9p"/>
+                        </mask>
+                    </variation>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tan-ul-deo" userLabel="onboard3 Container View">
-                    <rect key="frame" x="8" y="84" width="284" height="241"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tan-ul-deo" userLabel="onboard3 Container View">
+                    <rect key="frame" x="8" y="95" width="284" height="241"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="grey-cloud" translatesAutoresizingMaskIntoConstraints="NO" id="Bim-44-AQy">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="grey-cloud" translatesAutoresizingMaskIntoConstraints="NO" id="Bim-44-AQy">
                             <rect key="frame" x="81" y="41" width="122" height="77"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="television" translatesAutoresizingMaskIntoConstraints="NO" id="Cgs-33-PG8">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="television" translatesAutoresizingMaskIntoConstraints="NO" id="Cgs-33-PG8">
                             <rect key="frame" x="45" y="176" width="80" height="60"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="newspaper" translatesAutoresizingMaskIntoConstraints="NO" id="exU-3L-VA5">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="newspaper" translatesAutoresizingMaskIntoConstraints="NO" id="exU-3L-VA5">
                             <rect key="frame" x="165" y="173" width="68" height="63"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="Gr9-Bh-0M7">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="Gr9-Bh-0M7" userLabel="upload-left">
                             <rect key="frame" x="95" y="135" width="25" height="22"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="i1W-1G-ZZE">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="i1W-1G-ZZE">
                             <rect key="frame" x="25" y="64" width="35" height="31"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="gdP-Qd-69V">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="gdP-Qd-69V">
                             <rect key="frame" x="205" y="36" width="35" height="31"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="UGG-mN-UnJ">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="UGG-mN-UnJ" userLabel="upload-right">
                             <rect key="frame" x="165" y="135" width="25" height="22"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="GTU-y7-xVf">
+                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="GTU-y7-xVf">
                             <rect key="frame" x="227" y="112" width="35" height="31"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="284" id="Tvf-qc-oEx"/>
+                        <constraint firstAttribute="height" constant="241" id="lR5-Ln-Q4y"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="centerX" secondItem="4VZ-Gc-rOE" secondAttribute="centerX" id="4Lz-Bh-67c"/>
+                <constraint firstAttribute="centerY" secondItem="3IA-Dc-RzZ" secondAttribute="centerY" multiplier="0.8" id="9vQ-4k-Lgc"/>
+                <constraint firstItem="3IA-Dc-RzZ" firstAttribute="top" secondItem="4VZ-Gc-rOE" secondAttribute="bottom" constant="16" id="Hle-ui-cES"/>
                 <constraint firstAttribute="centerY" secondItem="4VZ-Gc-rOE" secondAttribute="centerY" multiplier="1.5" constant="98" id="MP9-n5-QBr"/>
+                <constraint firstAttribute="centerY" secondItem="tan-ul-deo" secondAttribute="centerY" multiplier="0.8" id="O56-uk-rte"/>
+                <constraint firstAttribute="centerX" secondItem="YqP-W2-zIL" secondAttribute="centerX" id="Zfx-Qa-YSf"/>
+                <constraint firstAttribute="centerY" secondItem="YqP-W2-zIL" secondAttribute="centerY" multiplier="0.8" id="b8z-WJ-1qN"/>
+                <constraint firstItem="3IA-Dc-RzZ" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" constant="8" id="dpa-QI-Faw"/>
+                <constraint firstAttribute="trailing" secondItem="3IA-Dc-RzZ" secondAttribute="trailing" constant="8" id="fba-eT-1lP"/>
                 <constraint firstAttribute="centerX" secondItem="i6r-VV-ZeP" secondAttribute="centerX" id="mXD-4N-Nhz"/>
+                <constraint firstAttribute="bottom" secondItem="3IA-Dc-RzZ" secondAttribute="bottom" constant="8" id="o3I-dH-99n"/>
+                <constraint firstAttribute="centerX" secondItem="tan-ul-deo" secondAttribute="centerX" id="tdb-vg-jZt"/>
+                <constraint firstAttribute="centerX" secondItem="3IA-Dc-RzZ" secondAttribute="centerX" id="ud4-qs-yvy"/>
                 <constraint firstAttribute="centerY" secondItem="i6r-VV-ZeP" secondAttribute="centerY" multiplier="0.8" constant="-10" id="zFk-wf-x7b"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="1192" y="-20.5"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="9vQ-4k-Lgc"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="1192" y="-14.5"/>
         </view>
     </objects>
     <resources>

@@ -49,7 +49,6 @@
     self.delegate = self;
     self.dataSource = self;
     
-    
 }
 
 - (void)didReceiveMemoryWarning {
