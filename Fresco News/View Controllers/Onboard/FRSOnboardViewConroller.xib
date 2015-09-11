@@ -10,7 +10,7 @@
                 <outlet property="circleView1" destination="trM-0q-Cax" id="GOI-bs-Hfh"/>
                 <outlet property="circleView2" destination="xiZ-dA-7zx" id="Tvb-v5-mj7"/>
                 <outlet property="circleView3" destination="Mtl-hC-3Ud" id="J3w-7y-PNz"/>
-                <outlet property="containerPageViewController" destination="uLz-Mu-ouR" id="mE0-II-KES"/>
+                <outlet property="containerPageView" destination="uLz-Mu-ouR" id="dbb-jR-Mj5"/>
                 <outlet property="emptyCircleView1" destination="a07-0q-LYe" id="lXA-8q-fte"/>
                 <outlet property="emptyCircleView2" destination="L0j-Lr-Swf" id="0rV-W2-LD8"/>
                 <outlet property="emptyCircleView3" destination="geR-3B-zv3" id="A0Z-9I-BUk"/>

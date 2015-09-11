@@ -19,7 +19,7 @@
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
-@property (weak, nonatomic) IBOutlet UIView *containerPageViewController;
+@property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*
  ** UI Elements
@@ -83,7 +83,7 @@
     [self addChildViewController:self.pagedViewController];
     
     //Set bounds of pageVC to bounds of subview in the xib
-    self.pagedViewController.view.frame = self.containerPageViewController.frame;
+    self.pagedViewController.view.frame = self.containerPageView.frame;
     
     //Add pageVC as subview to containerPageViewController
     [self.view addSubview:self.pagedViewController.view];
@@ -93,7 +93,7 @@
     
     
     [self circleInitialization];
-    
+    [self imageInitialization];
     
     //Initialize Bools
     self.didComeFromIndex0 = NO;
@@ -104,6 +104,17 @@
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
 
+
+    
+
+}
+
+- (void) imageInitialization {
+    
+    
+//    SVGKImage* newImage 
+    
+    
 }
 
 - (void) circleInitialization {
@@ -222,6 +233,8 @@
                                          self.circleView2.alpha = 0;
                                          self.didFinishAnimationAtIndex0 = YES;
                                          self.animationIsRunning = NO;
+                                         
+                                    
                                      }
                                  }
                  
@@ -309,6 +322,8 @@
                                      if (finished){
                                          self.didFinishAnimationAtIndex1 = YES;
                                          self.animationIsRunning = NO;
+                                         
+                                         NSLog (@"in completion block of animation at index 1!!");
                                      }
                                  }
                  ];
@@ -359,6 +374,7 @@
                                                   completion:^(BOOL finished) {
                                                       self.animationIsRunning = NO;
                                                       self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                                      NSLog (@"in completion block of animation at index 2!!");
                                                   }
                                                   ];
                              }];

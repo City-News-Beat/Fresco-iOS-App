@@ -28,7 +28,7 @@
         self.dataSource = self;
         
         self.view.backgroundColor = [UIColor whiteBackgroundColor];
-    
+
         OnboardPageCellController *viewController = [self viewControllerAtIndex:0];
         
         NSArray *viewControllers = @[viewController];
