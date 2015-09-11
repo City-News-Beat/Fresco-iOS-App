@@ -9,16 +9,7 @@
 /* Begin PBXBuildFile section */
 		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
 		0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */; };
-		07DC74E61BA3237A00E63720 /* onboard-1-assignment-left.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74DC1BA3237A00E63720 /* onboard-1-assignment-left.svg */; };
-		07DC74E71BA3237A00E63720 /* onboard-1-assignment-right.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74DD1BA3237A00E63720 /* onboard-1-assignment-right.svg */; };
-		07DC74E81BA3237A00E63720 /* onboard-1-earth.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74DE1BA3237A00E63720 /* onboard-1-earth.svg */; };
-		07DC74E91BA3237A00E63720 /* onboard-2-arrow.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74DF1BA3237A00E63720 /* onboard-2-arrow.svg */; };
-		07DC74EA1BA3237A00E63720 /* onboard-2-camera.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E01BA3237A00E63720 /* onboard-2-camera.svg */; };
-		07DC74EB1BA3237A00E63720 /* onboard-2-cloud.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E11BA3237A00E63720 /* onboard-2-cloud.svg */; };
-		07DC74EC1BA3237A00E63720 /* onboard-3-cash.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E21BA3237A00E63720 /* onboard-3-cash.svg */; };
-		07DC74ED1BA3237A00E63720 /* onboard-3-cloud.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E31BA3237A00E63720 /* onboard-3-cloud.svg */; };
-		07DC74EE1BA3237A00E63720 /* onboard-3-newspaper.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E41BA3237A00E63720 /* onboard-3-newspaper.svg */; };
-		07DC74EF1BA3237A00E63720 /* onboard-3-television.svg in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74E51BA3237A00E63720 /* onboard-3-television.svg */; };
+		07DC74F31BA3306700E63720 /* OnboardImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74F21BA3306700E63720 /* OnboardImages.xcassets */; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */; };
@@ -209,16 +200,7 @@
 		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
 		0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
 		0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
-		07DC74DC1BA3237A00E63720 /* onboard-1-assignment-left.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-1-assignment-left.svg"; sourceTree = "<group>"; };
-		07DC74DD1BA3237A00E63720 /* onboard-1-assignment-right.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-1-assignment-right.svg"; sourceTree = "<group>"; };
-		07DC74DE1BA3237A00E63720 /* onboard-1-earth.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-1-earth.svg"; sourceTree = "<group>"; };
-		07DC74DF1BA3237A00E63720 /* onboard-2-arrow.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-2-arrow.svg"; sourceTree = "<group>"; };
-		07DC74E01BA3237A00E63720 /* onboard-2-camera.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-2-camera.svg"; sourceTree = "<group>"; };
-		07DC74E11BA3237A00E63720 /* onboard-2-cloud.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-2-cloud.svg"; sourceTree = "<group>"; };
-		07DC74E21BA3237A00E63720 /* onboard-3-cash.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-3-cash.svg"; sourceTree = "<group>"; };
-		07DC74E31BA3237A00E63720 /* onboard-3-cloud.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-3-cloud.svg"; sourceTree = "<group>"; };
-		07DC74E41BA3237A00E63720 /* onboard-3-newspaper.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-3-newspaper.svg"; sourceTree = "<group>"; };
-		07DC74E51BA3237A00E63720 /* onboard-3-television.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "onboard-3-television.svg"; sourceTree = "<group>"; };
+		07DC74F21BA3306700E63720 /* OnboardImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OnboardImages.xcassets; sourceTree = "<group>"; };
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
@@ -512,23 +494,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		07DC74DB1BA3237A00E63720 /* Onboard SVG */ = {
-			isa = PBXGroup;
-			children = (
-				07DC74DC1BA3237A00E63720 /* onboard-1-assignment-left.svg */,
-				07DC74DD1BA3237A00E63720 /* onboard-1-assignment-right.svg */,
-				07DC74DE1BA3237A00E63720 /* onboard-1-earth.svg */,
-				07DC74DF1BA3237A00E63720 /* onboard-2-arrow.svg */,
-				07DC74E01BA3237A00E63720 /* onboard-2-camera.svg */,
-				07DC74E11BA3237A00E63720 /* onboard-2-cloud.svg */,
-				07DC74E21BA3237A00E63720 /* onboard-3-cash.svg */,
-				07DC74E31BA3237A00E63720 /* onboard-3-cloud.svg */,
-				07DC74E41BA3237A00E63720 /* onboard-3-newspaper.svg */,
-				07DC74E51BA3237A00E63720 /* onboard-3-television.svg */,
-			);
-			path = "Onboard SVG";
-			sourceTree = "<group>";
-		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -952,10 +917,10 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				07DC74DB1BA3237A00E63720 /* Onboard SVG */,
 				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
 				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
 				E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */,
+				07DC74F21BA3306700E63720 /* OnboardImages.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1318,24 +1283,15 @@
 			files = (
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
+				07DC74F31BA3306700E63720 /* OnboardImages.xcassets in Resources */,
 				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
-				07DC74E81BA3237A00E63720 /* onboard-1-earth.svg in Resources */,
-				07DC74E91BA3237A00E63720 /* onboard-2-arrow.svg in Resources */,
-				07DC74ED1BA3237A00E63720 /* onboard-3-cloud.svg in Resources */,
-				07DC74EC1BA3237A00E63720 /* onboard-3-cash.svg in Resources */,
-				07DC74EA1BA3237A00E63720 /* onboard-2-camera.svg in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
-				07DC74EE1BA3237A00E63720 /* onboard-3-newspaper.svg in Resources */,
-				07DC74EB1BA3237A00E63720 /* onboard-2-cloud.svg in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
-				07DC74EF1BA3237A00E63720 /* onboard-3-television.svg in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
-				07DC74E71BA3237A00E63720 /* onboard-1-assignment-right.svg in Resources */,
 				0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */,
 				BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */,
-				07DC74E61BA3237A00E63720 /* onboard-1-assignment-left.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
