@@ -532,10 +532,13 @@
         
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
 
+        //Grab post out of gallery array
         FRSPost *post = self.gallery.posts[i];
         
+        //Get time interval for asset creation data, in milliseconds
         NSTimeInterval postTime = round([post.createdDate timeIntervalSince1970] * 1000);
         
+        //Create post metadata
         postMetadata[filename] = @{ @"type" : post.type,
                                     @"lat" : post.image.latitude,
                                     @"lon" : post.image.longitude,

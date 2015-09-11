@@ -1179,8 +1179,8 @@ typedef enum : NSUInteger {
         }
     
         //Check if the asset has a location property
-        if ([asset valueForProperty:ALAssetPropertyLocation]) {
-            return YES;
+        if (![asset valueForProperty:ALAssetPropertyLocation]) {
+            return NO;
         }
 
         return YES;

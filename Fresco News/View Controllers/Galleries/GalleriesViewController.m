@@ -343,8 +343,8 @@
                 }];
             });
             
-            //Dispatch event to make sure the condition is true for more than .8 seconds
-            double delayInSeconds = .8;
+            //Dispatch event to make sure the condition is true for more than .4 seconds
+            double delayInSeconds = .4;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 

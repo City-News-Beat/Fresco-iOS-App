@@ -528,6 +528,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
     
     FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:self.picker.selectedAssets];
+    
     if (!gallery) {
         return;
     }
