@@ -10,5 +10,6 @@ pod 'SVPulsingAnnotationView'
 pod 'Mantle', '~> 1.3'
 pod 'Functional.m', '~> 1.0'
 pod 'GRKGradientView'
+pod 'SVGKit'
 
 inhibit_all_warnings!
