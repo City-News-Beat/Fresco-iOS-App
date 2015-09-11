@@ -47,7 +47,7 @@
                         <constraint firstAttribute="centerX" secondItem="Ium-KU-UjR" secondAttribute="centerX" constant="-0.25" id="aUp-WE-jaz"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="onboard3" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-VV-ZeP">
+                <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="onboard3" translatesAutoresizingMaskIntoConstraints="NO" id="i6r-VV-ZeP">
                     <rect key="frame" x="-75" y="121" width="450" height="200"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="200" id="R20-U3-6Ox"/>
@@ -92,6 +92,32 @@
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tan-ul-deo" userLabel="onboard3 Container View">
                     <rect key="frame" x="8" y="84" width="284" height="241"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="grey-cloud" translatesAutoresizingMaskIntoConstraints="NO" id="Bim-44-AQy">
+                            <rect key="frame" x="81" y="41" width="122" height="77"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="television" translatesAutoresizingMaskIntoConstraints="NO" id="Cgs-33-PG8">
+                            <rect key="frame" x="45" y="176" width="80" height="60"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="newspaper" translatesAutoresizingMaskIntoConstraints="NO" id="exU-3L-VA5">
+                            <rect key="frame" x="165" y="173" width="68" height="63"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="Gr9-Bh-0M7">
+                            <rect key="frame" x="95" y="135" width="25" height="22"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="i1W-1G-ZZE">
+                            <rect key="frame" x="25" y="64" width="35" height="31"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="gdP-Qd-69V">
+                            <rect key="frame" x="205" y="36" width="35" height="31"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="UGG-mN-UnJ">
+                            <rect key="frame" x="165" y="135" width="25" height="22"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="GTU-y7-xVf">
+                            <rect key="frame" x="227" y="112" width="35" height="31"/>
+                        </imageView>
+                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
@@ -110,9 +136,13 @@
         <image name="assignment-left" width="46" height="47"/>
         <image name="assignment-right" width="46" height="47"/>
         <image name="camera" width="80" height="72"/>
+        <image name="cash" width="42" height="30"/>
         <image name="cloud" width="150" height="102"/>
         <image name="earth" width="160" height="160"/>
+        <image name="grey-cloud" width="144" height="96"/>
+        <image name="newspaper" width="86" height="82"/>
         <image name="onboard3" width="302" height="252"/>
+        <image name="television" width="94" height="78"/>
         <image name="upload" width="28" height="26"/>
     </resources>
 </document>
