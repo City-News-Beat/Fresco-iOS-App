@@ -337,9 +337,9 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //update UI in main thread.
                 //Start animating the indicator
-                [postCell.videoIndicatorView startAnimating];
+                [postCell.photoIndicatorView startAnimating];
                 [UIView animateWithDuration:1.0 animations:^{
-                    postCell.videoIndicatorView.alpha = 1.0f;
+                    postCell.photoIndicatorView.alpha = 1.0f;
                 }];
             });
             

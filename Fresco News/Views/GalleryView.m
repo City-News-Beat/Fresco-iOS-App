@@ -179,9 +179,10 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     dispatch_async(dispatch_get_main_queue(), ^{
         //update UI in main thread.
         //Start animating the indicator
-        [postCell.videoIndicatorView startAnimating];
+        postCell.photoIndicatorView.color = [UIColor whiteColor];
+        [postCell.photoIndicatorView startAnimating];
         [UIView animateWithDuration:1.0 animations:^{
-            postCell.videoIndicatorView.alpha = 1.0f;
+            postCell.photoIndicatorView.alpha = 1.0f;
         }];
     });
 
@@ -198,7 +199,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
-    self.sharedPlayer.muted = NO;
+    self.sharedPlayer.muted = YES;
     
     [self.sharedPlayer play];
     
@@ -240,12 +241,12 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                 
                 [UIView animateWithDuration:1.0 animations:^{
                     
-                    postCell.videoIndicatorView.alpha = 0.0f;
+                    postCell.photoIndicatorView.alpha = 0.0f;
                     
                 } completion:^(BOOL finished){
                     
-                    [postCell.videoIndicatorView stopAnimating];
-                    postCell.videoIndicatorView.hidden = YES;
+                    [postCell.photoIndicatorView stopAnimating];
+                    postCell.photoIndicatorView.hidden = YES;
                     
                 }];
                 
@@ -345,36 +346,54 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell has a video
     if(cell.post.isVideo && cell.playingVideo){
         
-        if(self.sharedPlayer.rate > 0){
+        dispatch_async(dispatch_get_main_queue(), ^{
+        
+            //Check if the player is muted, then set it to play audio
+            if(self.sharedPlayer.muted){
+                
+                self.sharedPlayer.muted = NO;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.mutedImage.alpha = 0.0f;
+                }];
+                
+            }
+            //Check if the player is playing
+            else if(self.sharedPlayer.rate > 0){
+                
+                [self.sharedPlayer pause];
+                cell.playPause.image = [UIImage imageNamed:@"pause"];
+                cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+                [cell bringSubviewToFront:cell.playPause];
+                
+                cell.playPause.alpha = 1.0f;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.playPause.alpha = 0.0f;
+                    cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+                }];
+                
+            }
+            //If it's not playing
+            else{
+                
+                [self.sharedPlayer play];
+                if(cell.mutedImage.alpha == 1.0f) cell.playPause.alpha = 0.0f;
+                cell.playPause.image = [UIImage imageNamed:@"play"];
+                cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+                [cell bringSubviewToFront:cell.playPause];
+                
+                cell.playPause.alpha = 1.0f;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.playPause.alpha = 0.0f;
+                    cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+                }];
+                
+            }
             
-            [self.sharedPlayer pause];
-            cell.playPause.image = [UIImage imageNamed:@"pause"];
-            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
-            [cell bringSubviewToFront:cell.playPause];
-            
-            cell.playPause.alpha = 1.0f;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                cell.playPause.alpha = 0.0f;
-                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }];
-            
-        }
-        else{
-            
-            [self.sharedPlayer play];
-            cell.playPause.image = [UIImage imageNamed:@"play"];
-            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
-            [cell bringSubviewToFront:cell.playPause];
-            
-            cell.playPause.alpha = 1.0f;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                cell.playPause.alpha = 0.0f;
-                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }];
-            
-        }
+        });
+        
     }
     //Post is a picture, not a video
     else if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
