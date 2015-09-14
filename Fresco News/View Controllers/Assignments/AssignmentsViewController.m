@@ -49,8 +49,6 @@
     */
     @property (strong, nonatomic) CLLocation *lastLoc;
 
-    @property (assign, nonatomic) BOOL centeredAssignment;
-
     @property (assign, nonatomic) BOOL navigateTo;
 
     @property (assign, nonatomic) BOOL updating;
@@ -93,6 +91,10 @@
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
+    
+    if([CLLocationManager locationServicesEnabled]){
+        self.centeredUserLocation = YES;
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
@@ -117,7 +119,7 @@
     
     [self updateAssignments];
     
-    if(self.currentAssignment && self.scrollView.alpha == 0.0f){
+    if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
     
         [self presentCurrentAssignmentWithAnimation:YES];
         
@@ -153,14 +155,14 @@
        self.storyBreaksView.hidden = YES;
    }
    else
-    self.storyBreaksView.hidden = YES;
+       self.storyBreaksView.hidden = YES;
     
-    self.scrollView.alpha = 0;
     
+    self.detailViewWrapper.hidden = YES;
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-    
+
     NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
                                                                       attribute:NSLayoutAttributeLeading
                                                                       relatedBy:0
@@ -169,7 +171,7 @@
                                                                      multiplier:1.0
                                                                        constant:0];
     [self.view addConstraint:leftConstraint];
-    
+
     NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
                                                                        attribute:NSLayoutAttributeTrailing
                                                                        relatedBy:0
@@ -256,15 +258,19 @@
             
             [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius withAnimation:animate];
             
+            self.detailViewWrapper.hidden = NO;
+            
+            CGRect newFrame = CGRectMake(0, 0, self.detailViewWrapper.frame.size.width, self.detailViewWrapper.frame.size.height);
+            
             [UIView animateWithDuration:.4 animations:^(void) {
-                [self.scrollView setAlpha:1];
+                
+                [self.detailViewWrapper setFrame:newFrame];
+                
             }];
             
             if(self.navigateTo) [self.navigationSheet showInView:self.view];
             
             self.navigateTo = false;
-            
-            [self selectCurrentAssignmentAnnotation];
             
         });
     }
@@ -279,6 +285,7 @@
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
+                if(self.assignmentsMap)
                 [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
@@ -438,7 +445,7 @@
         }
         
         // Run this after populating map with assignments, this ensures we have the annotation to select
-        if(self.currentAssignment){
+        if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
             
             [self selectCurrentAssignmentAnnotation];
             
@@ -634,10 +641,22 @@
     
     self.currentAssignment = nil;
     
-    [UIView animateWithDuration:.4 animations:^(void) {
-        self.scrollView.alpha = 0.0f;
-        self.centeredAssignment = NO;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGRect newFrame = CGRectMake(0,
+                                     0 + self.detailViewWrapper.frame.size.height,
+                                     self.detailViewWrapper.frame.size.width,
+                                     self.detailViewWrapper.frame.size.height);
+        
+        [UIView animateWithDuration:.4 animations:^(void) {
+            
+            [self.detailViewWrapper setFrame:newFrame];
+            
+        } completion:^(BOOL finished) {
+//            self.detailViewWrapper.hidden = YES;
+        }];
+
+    });
 
 }
 
