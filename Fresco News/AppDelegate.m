@@ -215,6 +215,9 @@
                     //Retreieve Gallery View Controller from storyboard
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     
+                    //Set the tab bar to the first tab
+                    tabBarController.selectedIndex = 0;
+                    
                     HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
                     
                     //Retreieve Notifications View Controller from storyboard
