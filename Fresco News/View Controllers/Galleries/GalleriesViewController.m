@@ -78,14 +78,7 @@
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
 
-    /* Set up status bar background for nav/tab slide away */
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    
-    self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
-    self.statusBarBackground.backgroundColor = [UIColor goldStatusBarColor];
-    self.statusBarBackground.alpha = 0.0f;
-    
-    [self.view addSubview:self.statusBarBackground];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGalleryHeaderForPost:) name:NOTIF_UPDATE_GALLERY_HEADER object:nil];
     
 }
 
@@ -199,9 +192,7 @@
     // since there is a section for every story
     // and just one story per section
     // the section will tell us the "row"
-    NSUInteger index = indexPath.section;
-    
-    FRSGallery *gallery = [self.galleries objectAtIndex:index];
+    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.section];
     
     GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
     
