@@ -55,7 +55,7 @@
     
     //Make paged view controller cell
     self.pagedCellController = [[OnboardPageCellController alloc] init];
-    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
+//    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
     
     self.pagedCellController.onboard1EarthImageView.alpha = 1;
     self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;

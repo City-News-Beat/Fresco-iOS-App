@@ -33,6 +33,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomTextContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomLogo;
 
+@property (strong, nonatomic) IBOutlet UIView *onboard1View;
+@property (strong, nonatomic) IBOutlet UIView *onboard2View;
+@property (strong, nonatomic) IBOutlet UIView *onboard3View;
+
+
 @end
 
 @implementation OnboardPageCellController
@@ -69,8 +74,12 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     [self setUpViews];
+    [self setUpOnboard1];
+    [self setUpOnboard2];
+    [self setUpOnboard3];
+
+    
     
     self.mainHeader.text = [self.mainHeaders objectAtIndex:self.index];
     
@@ -108,5 +117,98 @@
     }
     
 }
+
+- (void) setUpOnboard1 {
+    
+    // Create earth image view
+    UIImageView *earth =[[UIImageView alloc] initWithFrame:CGRectMake(59,47,173,173)];
+    earth.image = [UIImage imageNamed:@"earth"];
+    [earth setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard1View addSubview:earth];
+    
+    // Create top left assignment image view
+    UIImageView *assignmentTopLeft = [[UIImageView alloc] initWithFrame:CGRectMake(53, 51, 50, 50)];
+    assignmentTopLeft.image = [UIImage imageNamed:@"assignment-left"];
+    [assignmentTopLeft setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard1View addSubview:assignmentTopLeft];
+    
+    // Create bottom left assignment image view
+    UIImageView *assignmentBottomLeft = [[UIImageView alloc] initWithFrame:CGRectMake(92, 127, 50, 50)];
+    assignmentBottomLeft.image = [UIImage imageNamed:@"assignment-left"];
+    [assignmentBottomLeft setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard1View addSubview:assignmentBottomLeft];
+    
+    // Create top right assignment image view with transform
+    UIImageView *assignmentTopRight = [[UIImageView alloc] initWithFrame:CGRectMake(145, 22, 50, 50)];
+    assignmentTopRight.image = [UIImage imageNamed:@"assignment-left"];
+    [assignmentTopRight setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard1View addSubview:assignmentTopRight];
+    assignmentTopRight.transform = CGAffineTransformScale(assignmentTopRight.transform, 1.0 , 1.0);
+    assignmentTopRight.transform = CGAffineTransformScale(assignmentTopRight.transform, -1.0 , 1.0);
+    
+    // Create bottom right assignment image view with transform
+    UIImageView *assignmentBottomRight = [[UIImageView alloc] initWithFrame:CGRectMake(179, 140, 50, 50)];
+    assignmentBottomRight.image = [UIImage imageNamed:@"assignment-left"];
+    [assignmentBottomRight setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard1View addSubview:assignmentBottomRight];
+    assignmentBottomRight.transform = CGAffineTransformScale(assignmentBottomLeft.transform, 1.0 , -1.0);
+    assignmentBottomRight.transform = CGAffineTransformScale(assignmentBottomLeft.transform, -1.0 , 1.0);
+ 
+}
+
+- (void) setUpOnboard2 {
+    
+    
+    
+}
+
+- (void) setUpOnboard3 {
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
