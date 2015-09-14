@@ -526,66 +526,61 @@
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
-        self.pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+        self.pinView = [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.assignmentsMap];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
-        if(!self.pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:self.pinView];
+        return self.pinView;
             
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
   
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:ASSIGNMENT_IDENTIFIER];
-    
-        if (annotationView == nil) {
-          
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
-            
-            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-            
-            /* Callout */
-            
-                UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            
-                [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
-                
-                caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
-                
-                caret.contentMode = UIViewContentModeScaleAspectFit;
-                
-                annotationView.rightCalloutAccessoryView = caret;
-                
-            /* End Callout */
-            
-        }
-        else {
-            annotationView.annotation = annotation;
-        }
-        
-        return annotationView;
-    
+//        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:ASSIGNMENT_IDENTIFIER];
+//    
+//        if (annotationView == nil) {
+//
+//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
+//            
+//            [annotationView setImage:[UIImage imageNamed:@"dot-assignment"]];
+//            annotationView.enabled = YES;
+//            
+//            annotationView.canShowCallout = YES;
+//            
+//            /* Callout */
+//            
+//            annotationView.rightCalloutAccessoryView = [MKMapView caret];
+//                
+//            /* End Callout */
+//        
+//        }
+//        else {
+//          
+//            annotationView.annotation = annotation;
+//        }
+//        
+//        return annotationView;
+//
+        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSAssignmentAnnotation];
     }
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
         
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:CLUSTER_IDENTIFIER];
-        
-        if (annotationView == nil) {
-            
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
-            annotationView.enabled = YES;
-            
-            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
-            
-        }
-        else {
-            annotationView.annotation = annotation;
-        }
-        
-        return annotationView;
-    
+//        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:CLUSTER_IDENTIFIER];
+//        
+//        if (annotationView == nil) {
+//            
+//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
+//            annotationView.enabled = YES;
+//            
+//            [annotationView setImage:[UIImage imageNamed:@"dot-assignment"]];
+//            
+//        }
+//        else {
+//            annotationView.annotation = annotation;
+//        }
+//        
+//        return annotationView;
+        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSClusterAnnotation];
     
     }
 
