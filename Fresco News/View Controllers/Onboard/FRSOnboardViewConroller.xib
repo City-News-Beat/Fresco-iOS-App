@@ -77,7 +77,9 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="bHS-O9-Wz7"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="vO8-Oh-9UU"/>
                         <constraint firstAttribute="height" constant="25" id="w20-Q3-Mhf"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="25" id="yGy-B9-LwB"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Lr-Swf" userLabel="Empty Circle View 2">
