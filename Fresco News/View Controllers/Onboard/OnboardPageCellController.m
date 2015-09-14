@@ -121,7 +121,7 @@
 - (void) setUpOnboard1 {
     
     // Create earth image view
-    UIImageView *earth =[[UIImageView alloc] initWithFrame:CGRectMake(59,47,173,173)];
+    UIImageView *earth = [[UIImageView alloc] initWithFrame:CGRectMake(59, 47, 173, 173)];
     earth.image = [UIImage imageNamed:@"earth"];
     [earth setContentMode:UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:earth];
@@ -153,18 +153,100 @@
     [self.onboard1View addSubview:assignmentBottomRight];
     assignmentBottomRight.transform = CGAffineTransformScale(assignmentBottomLeft.transform, 1.0 , -1.0);
     assignmentBottomRight.transform = CGAffineTransformScale(assignmentBottomLeft.transform, -1.0 , 1.0);
- 
+    
+    // Init images with alpha of 0
+    earth.alpha = 0;
+    assignmentTopLeft.alpha = 0;
+    assignmentBottomLeft.alpha = 0;
+    assignmentTopRight.alpha = 0;
+    assignmentBottomRight.alpha = 0;
+
 }
 
 - (void) setUpOnboard2 {
     
+    // Create cloud image view
+    UIImageView *cloud = [[UIImageView alloc] initWithFrame:CGRectMake(81, 33, 122, 80)];
+    cloud.image = [UIImage imageNamed:@"cloud"];
+    [cloud setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard2View addSubview:cloud];
     
+    // Create upload image view
+    UIImageView *upload = [[UIImageView alloc] initWithFrame:CGRectMake(130, 130, 24, 24)];
+    upload.image = [UIImage imageNamed:@"upload"];
+    [upload setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard2View addSubview:upload];
+    
+    // Create camera image view
+    UIImageView *camera = [[UIImageView alloc] initWithFrame:CGRectMake(109, 173, 66, 60)];
+    camera.image = [UIImage imageNamed:@"camera"];
+    [camera setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard2View addSubview:camera];
+    
+    // Init images with alpha of 0
+    cloud.alpha = 0;
+    upload.alpha = 0;
+    camera.alpha = 0;
     
 }
 
 - (void) setUpOnboard3 {
     
+    // Create cloud image view
+    UIImageView *cloud = [[UIImageView alloc] initWithFrame:CGRectMake(85, 37, 115, 78)];
+    cloud.image = [UIImage imageNamed:@"grey-cloud"];
+    [cloud setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:cloud];
+
+    // Create television image view
+    UIImageView *television = [[UIImageView alloc] initWithFrame:CGRectMake(48, 173, 72, 60)];
+    television.image = [UIImage imageNamed:@"television"];
+    [cloud setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:television];
+    
+    // Create newspaper image view
+    UIImageView *newspaper = [[UIImageView alloc] initWithFrame:CGRectMake(165, 173, 68, 60)];
+    newspaper.image = [UIImage imageNamed:@"newspaper"];
+    [newspaper setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:newspaper];
+    
+    // Create upload left image view
+    UIImageView *uploadLeft = [[UIImageView alloc] initWithFrame:CGRectMake(165, 135, 24, 24)];
+    uploadLeft.image = [UIImage imageNamed:@"upload"];
+    [uploadLeft setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:uploadLeft];
+    uploadLeft.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
+
+    // Create upload right image view
+    UIImageView *uploadRight = [[UIImageView alloc] initWithFrame:CGRectMake(95, 135, 24, 24)];
+    uploadRight.image = [UIImage imageNamed:@"upload"];
+    [uploadRight setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:uploadRight];
+    uploadRight.transform = CGAffineTransformMakeRotation(M_PI_2 - 1);
+
+    // Create cash1 image view
+    UIImageView *cash1 = [[UIImageView alloc] initWithFrame:CGRectMake(205, 36, 35, 24)];
+    cash1.image = [UIImage imageNamed:@"cash"];
+    [cash1 setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:cash1];
+    cash1.transform = CGAffineTransformMakeRotation(.13);
+
+    // Create cash2 image view
+    UIImageView *cash2 = [[UIImageView alloc] initWithFrame:CGRectMake(25, 60, 35, 24)];
+    cash2.image = [UIImage imageNamed:@"cash"];
+    [cash2 setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:cash2];
+    cash2.transform = CGAffineTransformMakeRotation(-.785);
+
+    // Create cash3 image view
+    UIImageView *cash3 = [[UIImageView alloc] initWithFrame:CGRectMake(228, 114, 35, 24)];
+    cash3.image = [UIImage imageNamed:@"cash"];
+    [cash3 setContentMode:UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:cash3];
+    cash3.transform = CGAffineTransformMakeRotation(.785);
+
 }
+
 
 
 

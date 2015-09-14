@@ -8,24 +8,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardPageCellController">
             <connections>
                 <outlet property="mainHeader" destination="Ium-KU-UjR" id="Hak-z5-3yP"/>
-                <outlet property="onboard1AssignmentBottomLeft" destination="5w7-H3-KCx" id="vDC-xz-gmL"/>
-                <outlet property="onboard1AssignmentBottomRight" destination="asr-D8-TFC" id="AFx-DQ-nyA"/>
-                <outlet property="onboard1AssignmentTopLeft" destination="Vyr-4b-MQW" id="l7L-Vp-uOu"/>
-                <outlet property="onboard1AssignmentTopRight" destination="RIS-PG-OBj" id="AOI-E4-r1W"/>
-                <outlet property="onboard1EarthImageView" destination="thk-6u-OL4" id="fAJ-1O-6RF"/>
                 <outlet property="onboard1View" destination="YqP-W2-zIL" id="FPy-eo-rKk"/>
-                <outlet property="onboard2Camera" destination="fdy-YN-Qp2" id="Z3h-hb-hUz"/>
-                <outlet property="onboard2Cloud" destination="mLj-U0-pzG" id="QzX-Ip-AjZ"/>
-                <outlet property="onboard2Upload" destination="D6k-qF-c3A" id="Aho-nx-GaQ"/>
                 <outlet property="onboard2View" destination="3IA-Dc-RzZ" id="Xtm-0J-F6F"/>
-                <outlet property="onboard3Cash1" destination="i1W-1G-ZZE" id="gEc-nt-NUk"/>
-                <outlet property="onboard3Cash2" destination="gdP-Qd-69V" id="I59-fC-Z5h"/>
-                <outlet property="onboard3Cash3" destination="GTU-y7-xVf" id="pHJ-M5-9pj"/>
-                <outlet property="onboard3GreyCloud" destination="Bim-44-AQy" id="2av-Fw-Rpj"/>
-                <outlet property="onboard3Newspaper" destination="exU-3L-VA5" id="xG3-m5-MLD"/>
-                <outlet property="onboard3Television" destination="Cgs-33-PG8" id="TFj-va-0Ja"/>
-                <outlet property="onboard3UploadLeft" destination="Gr9-Bh-0M7" id="fi4-Vv-9zS"/>
-                <outlet property="onboard3UploadRight" destination="UGG-mN-UnJ" id="nwe-hp-1tN"/>
                 <outlet property="onboard3View" destination="tan-ul-deo" id="e60-hU-GQ5"/>
                 <outlet property="onboardImage" destination="i6r-VV-ZeP" id="H9x-7V-b37"/>
                 <outlet property="subHeader" destination="R4G-pC-xgT" id="fKX-mp-pe3"/>
@@ -75,23 +59,6 @@
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YqP-W2-zIL" userLabel="onboard1 Container View">
                     <rect key="frame" x="8" y="95" width="284" height="241"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="earth" translatesAutoresizingMaskIntoConstraints="NO" id="thk-6u-OL4">
-                            <rect key="frame" x="59" y="47" width="173" height="173"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="Vyr-4b-MQW" userLabel="assignment-top-left">
-                            <rect key="frame" x="53" y="51" width="50" height="50"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="RIS-PG-OBj" userLabel="assignment-top-right">
-                            <rect key="frame" x="145" y="22" width="50" height="50"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-right" translatesAutoresizingMaskIntoConstraints="NO" id="asr-D8-TFC" userLabel="assignment-bottom-right">
-                            <rect key="frame" x="179" y="140" width="50" height="50"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="assignment-left" translatesAutoresizingMaskIntoConstraints="NO" id="5w7-H3-KCx" userLabel="assignment-bottom-left">
-                            <rect key="frame" x="92" y="127" width="50" height="50"/>
-                        </imageView>
-                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="241" id="2Vb-ow-rLH"/>
@@ -100,69 +67,14 @@
                 </view>
                 <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3IA-Dc-RzZ" userLabel="onboard2 Container View">
                     <rect key="frame" x="8" y="96" width="284" height="241"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="mLj-U0-pzG">
-                            <rect key="frame" x="81" y="37" width="122" height="102"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="D6k-qF-c3A">
-                            <rect key="frame" x="128" y="121" width="28" height="26"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera" translatesAutoresizingMaskIntoConstraints="NO" id="fdy-YN-Qp2">
-                            <rect key="frame" x="109" y="153" width="66" height="72"/>
-                        </imageView>
-                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="centerX" secondItem="D6k-qF-c3A" secondAttribute="centerX" id="04b-NR-0cv"/>
-                        <constraint firstAttribute="centerX" secondItem="fdy-YN-Qp2" secondAttribute="centerX" id="2S9-zK-V4c"/>
-                        <constraint firstAttribute="trailing" secondItem="fdy-YN-Qp2" secondAttribute="trailing" constant="109" id="94j-fS-FBD"/>
-                        <constraint firstAttribute="centerY" secondItem="D6k-qF-c3A" secondAttribute="centerY" multiplier="0.9" id="9rN-Ni-iYw"/>
-                        <constraint firstItem="mLj-U0-pzG" firstAttribute="top" secondItem="3IA-Dc-RzZ" secondAttribute="top" constant="37" id="ULf-Sy-Rqw"/>
-                        <constraint firstAttribute="bottom" secondItem="fdy-YN-Qp2" secondAttribute="bottom" constant="16" id="d3q-qc-ELg"/>
-                        <constraint firstItem="fdy-YN-Qp2" firstAttribute="leading" secondItem="3IA-Dc-RzZ" secondAttribute="leading" constant="109" id="dBD-cR-Dtc"/>
-                        <constraint firstItem="mLj-U0-pzG" firstAttribute="leading" secondItem="3IA-Dc-RzZ" secondAttribute="leading" constant="81" id="dxq-LE-P0E"/>
-                        <constraint firstAttribute="width" constant="284" id="hEO-q6-05T"/>
-                        <constraint firstAttribute="trailing" secondItem="mLj-U0-pzG" secondAttribute="trailing" constant="81" id="k0u-WO-aL0"/>
-                        <constraint firstItem="fdy-YN-Qp2" firstAttribute="bottom" secondItem="mLj-U0-pzG" secondAttribute="bottom" constant="98" id="paZ-jl-T9p"/>
-                        <constraint firstAttribute="centerX" secondItem="mLj-U0-pzG" secondAttribute="centerX" id="siC-bf-WDx"/>
-                        <constraint firstAttribute="height" constant="241" id="t3h-Kj-hla"/>
+                        <constraint firstAttribute="height" constant="241" id="3Ah-nK-lWs"/>
+                        <constraint firstAttribute="width" constant="284" id="bWX-8W-w2E"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="hEO-q6-05T"/>
-                            <exclude reference="t3h-Kj-hla"/>
-                            <exclude reference="paZ-jl-T9p"/>
-                        </mask>
-                    </variation>
                 </view>
-                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tan-ul-deo" userLabel="onboard3 Container View">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tan-ul-deo" userLabel="onboard3 Container View">
                     <rect key="frame" x="8" y="95" width="284" height="241"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="grey-cloud" translatesAutoresizingMaskIntoConstraints="NO" id="Bim-44-AQy">
-                            <rect key="frame" x="81" y="41" width="122" height="77"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="television" translatesAutoresizingMaskIntoConstraints="NO" id="Cgs-33-PG8">
-                            <rect key="frame" x="45" y="176" width="80" height="60"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="newspaper" translatesAutoresizingMaskIntoConstraints="NO" id="exU-3L-VA5">
-                            <rect key="frame" x="165" y="173" width="68" height="63"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="Gr9-Bh-0M7" userLabel="upload-left">
-                            <rect key="frame" x="95" y="135" width="25" height="22"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="i1W-1G-ZZE">
-                            <rect key="frame" x="25" y="64" width="35" height="31"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="gdP-Qd-69V">
-                            <rect key="frame" x="205" y="36" width="35" height="31"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="upload" translatesAutoresizingMaskIntoConstraints="NO" id="UGG-mN-UnJ" userLabel="upload-right">
-                            <rect key="frame" x="165" y="135" width="25" height="22"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cash" translatesAutoresizingMaskIntoConstraints="NO" id="GTU-y7-xVf">
-                            <rect key="frame" x="227" y="112" width="35" height="31"/>
-                        </imageView>
-                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="284" id="Tvf-qc-oEx"/>
@@ -177,6 +89,7 @@
                 <constraint firstItem="3IA-Dc-RzZ" firstAttribute="top" secondItem="4VZ-Gc-rOE" secondAttribute="bottom" constant="16" id="Hle-ui-cES"/>
                 <constraint firstAttribute="centerY" secondItem="4VZ-Gc-rOE" secondAttribute="centerY" multiplier="1.5" constant="98" id="MP9-n5-QBr"/>
                 <constraint firstAttribute="centerY" secondItem="tan-ul-deo" secondAttribute="centerY" multiplier="0.8" id="O56-uk-rte"/>
+                <constraint firstAttribute="centerY" secondItem="3IA-Dc-RzZ" secondAttribute="centerY" multiplier="0.8" id="VDf-CQ-DGz"/>
                 <constraint firstAttribute="centerX" secondItem="YqP-W2-zIL" secondAttribute="centerX" id="Zfx-Qa-YSf"/>
                 <constraint firstAttribute="centerY" secondItem="YqP-W2-zIL" secondAttribute="centerY" multiplier="0.8" id="b8z-WJ-1qN"/>
                 <constraint firstItem="3IA-Dc-RzZ" firstAttribute="leading" secondItem="UBw-4J-zX1" secondAttribute="leading" constant="8" id="dpa-QI-Faw"/>
@@ -191,22 +104,16 @@
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="9vQ-4k-Lgc"/>
+                    <exclude reference="Hle-ui-cES"/>
+                    <exclude reference="dpa-QI-Faw"/>
+                    <exclude reference="fba-eT-1lP"/>
+                    <exclude reference="o3I-dH-99n"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="1192" y="-14.5"/>
         </view>
     </objects>
     <resources>
-        <image name="assignment-left" width="46" height="47"/>
-        <image name="assignment-right" width="46" height="47"/>
-        <image name="camera" width="80" height="72"/>
-        <image name="cash" width="42" height="30"/>
-        <image name="cloud" width="150" height="102"/>
-        <image name="earth" width="160" height="160"/>
-        <image name="grey-cloud" width="144" height="96"/>
-        <image name="newspaper" width="86" height="82"/>
         <image name="onboard3" width="302" height="252"/>
-        <image name="television" width="94" height="78"/>
-        <image name="upload" width="28" height="26"/>
     </resources>
 </document>
