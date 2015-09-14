@@ -14,6 +14,9 @@
 
 @interface OnboardPageViewController()
 
+@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
+
+
 @property (nonatomic, assign) BOOL runningNextPage;
 
 @end
@@ -48,6 +51,17 @@
     
     self.delegate = self;
     self.dataSource = self;
+    
+    
+    //Make paged view controller cell
+    self.pagedCellController = [[OnboardPageCellController alloc] init];
+    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
+    
+    self.pagedCellController.onboard1EarthImageView.alpha = 1;
+    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
+    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
+    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
+    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
     
 }
 

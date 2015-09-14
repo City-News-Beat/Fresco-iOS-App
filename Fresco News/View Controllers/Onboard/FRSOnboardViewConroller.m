@@ -19,7 +19,7 @@
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
-@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
+//@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
@@ -106,16 +106,16 @@
     self.didFinishAnimationAtIndex2 = NO;
     
     
-    //Make paged view controller cell
-    self.pagedCellController = [[OnboardPageCellController alloc] init];
-    self.pagedCellController.view.frame = self.pagedViewController.view.frame;
-    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
-    
-    self.pagedCellController.onboard1EarthImageView.alpha = 1;
-    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
-    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
-    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
-    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
+//    //Make paged view controller cell
+//    self.pagedCellController = [[OnboardPageCellController alloc] init];
+//    self.pagedCellController.view.frame = self.pagedViewController.view.frame;
+//    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
+//    
+//    self.pagedCellController.onboard1EarthImageView.alpha = 1;
+//    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
+//    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
+//    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
+//    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
     
 }
 
@@ -167,11 +167,11 @@
         if (self.pagedViewController.currentIndex == 0){
             
             
-            self.pagedCellController.onboard1EarthImageView.alpha = 1;
-            self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
-            self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
-            self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
-            self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
+//            self.pagedCellController.onboard1EarthImageView.alpha = 1;
+//            self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
+//            self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
+//            self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
+//            self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
             
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
