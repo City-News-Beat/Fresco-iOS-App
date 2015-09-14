@@ -586,9 +586,11 @@
                 else {
                     
                     ALAssetRepresentation *rep = [post.image.asset defaultRepresentation];
+                    
                     Byte *buffer = (Byte*)malloc(rep.size);
                     
-                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0 length:rep.size error:nil];
+                    
                     data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
                     
                     mimeType = @"image/jpeg";
