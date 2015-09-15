@@ -773,7 +773,7 @@
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                       alertControllerWithTitle:LOC_DISABLED
+                                       alertControllerWithTitle:CASUAL_LOC_DISABLED
                                        message:ENABLE_LOC_SETTINGS
                                        action:DISMISS handler:nil];
         

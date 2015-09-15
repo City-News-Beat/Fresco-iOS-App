@@ -218,7 +218,8 @@ enum FRSAnnotationType {
 
 #define LOC_ENABLED                         NSLocalizedString(@"Location Enabled", nil)
 #define LOC_DISABLED                        NSLocalizedString(@"Location Disabled", nil)
-#define ENABLE_LOC_SETTINGS                 NSLocalizedString(@"It seems like your location isn't enabled. Please go to teh settings fro Fresco to enable your location.", nil)
+#define CASUAL_LOC_DISABLED                 NSLocalizedString(@"Where did you go?", nil)
+#define ENABLE_LOC_SETTINGS                 NSLocalizedString(@"We need your location to show you nearby assignments. Please go to Settings to enable location.", nil)
 
 #define NOTIF_PENDING                       NSLocalizedString(@"Notifications Pending", nil)
 #define NOTIF_ENABLED                       NSLocalizedString(@"Notifications Enabled", nil)

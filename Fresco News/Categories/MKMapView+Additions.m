@@ -144,7 +144,7 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
         
-        annotationView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 heigh and 3 y
+        annotationView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 height and 3 y
         
         UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
         
@@ -170,7 +170,7 @@
     
     UIImageView *customPinView = [[UIImageView alloc] init];
     
-    CGRect frame = CGRectMake(5, 3, 18, 18);
+    CGRect frame = CGRectMake(5, 4, 18, 18);
     
     if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
         
