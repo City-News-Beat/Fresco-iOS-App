@@ -120,6 +120,15 @@
     [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
+/* Uncomment to disable custom keyboards
+- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
+    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
+        return NO;
+    }
+    return YES;
+}
+*/
+
 - (void)setupBarButtonItemAppearance
 {
     [UIBarButtonItem appearance].tintColor = [UIColor darkGoldBarButtonColor];
