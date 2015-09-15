@@ -496,13 +496,20 @@
             MKAnnotationView *view = [self.assignmentsMap viewForAnnotation:annotation];
             
             if (view) {
-                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                    view.alpha = 0.0;
-                } completion:^(BOOL finished) {
-                    [self.assignmentsMap removeAnnotation:annotation];
-                    view.alpha = 1.0;
-                }];
-            } else {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                
+                    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                        view.alpha = 0.0;
+                    }completion:^(BOOL finished) {
+                        [self.assignmentsMap removeAnnotation:annotation];
+                        view.alpha = 1.0;
+                    }];
+                        
+                });
+                
+            }
+            else {
                 [self.assignmentsMap removeAnnotation:annotation];
             }
             

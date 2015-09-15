@@ -108,10 +108,8 @@
     return caret;
 }
 
-+ (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation
-                                           ForMapView: (MKMapView *)mapView
-                                              AndType: (NSInteger)type
-{
++ (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation ForMapView: (MKMapView *)mapView AndType: (NSInteger)type{
+    
     NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
    
     MKAnnotationView *annotationView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -169,13 +167,15 @@
 + (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type {
     
     UIImageView *customPinView = [[UIImageView alloc] init];
+    
     CGRect frame = CGRectMake(5, 3, 18, 18);
     
     if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
         
         [customPinView setImage:[UIImage imageNamed:@"dot-assignment"]];
         
-    } else if (type == FRSUserAnnotation) { // is User annotation view
+    }
+    else if (type == FRSUserAnnotation) { // is User annotation view
         
         if ([FRSDataManager sharedManager].currentUser.avatar) {
             
@@ -194,28 +194,6 @@
     return customPinView;
 }
 
-/*
- ** Houses imageview created above in a container and adds shadow to it
- */
-//
-//+ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment {
-//    
-//    [MKMapView setPinImageViewForAssignmentType:isAssignment];
-//    
-//    UIView *container = [[UIView alloc] initWithFrame:customPinView.frame];
-//    container.layer.shadowColor = [UIColor blackColor].CGColor;
-//    container.layer.shadowOffset = CGSizeMake(0, 1);
-//    container.layer.shadowOpacity = .52;
-//    container.layer.shadowRadius = 2;
-//    container.layer.cornerRadius = customPinView.frame.size.width / 2;
-//    container.clipsToBounds = NO;
-//    [container addSubview:customPinView];
-//    
-//    
-//    [annotationView addSubview:container];
-//    [annotationView bringSubviewToFront:container];
-//    
-//}
 
 + (void)updateUserPinViewForMapView:(MKMapView *)mapView WithImage: (UIImage *)image
 {

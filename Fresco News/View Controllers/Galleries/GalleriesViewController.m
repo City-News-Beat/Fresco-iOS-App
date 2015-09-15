@@ -78,7 +78,6 @@
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGalleryHeaderForPost:) name:NOTIF_UPDATE_GALLERY_HEADER object:nil];
     
 }
 
