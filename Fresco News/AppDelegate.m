@@ -26,10 +26,7 @@
 #import "FRSRootViewController.h"
 #import "UIColor+Additions.h"
 
-//static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
-//static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
-
-@interface AppDelegate () <CLLocationManagerDelegate>
+@interface AppDelegate ()
 
 @property (strong, nonatomic) FRSRootViewController *frsRootViewController;
 
