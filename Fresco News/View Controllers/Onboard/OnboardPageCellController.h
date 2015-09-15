@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OnboardPageViewController.h"
 
 @interface OnboardPageCellController : UIViewController
 
@@ -16,29 +17,33 @@
 
 @property (assign, nonatomic) NSInteger index;
 
-// Onboard page one image views
-@property (strong, nonatomic) IBOutlet UIImageView *onboard1EarthImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard1AssignmentTopLeft;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard1AssignmentTopRight;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard1AssignmentBottomRight;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard1AssignmentBottomLeft;
+// Onboard 1 assets
+@property (strong, nonatomic) UIImageView *earth;
+@property (strong, nonatomic) UIImageView *assignmentTopLeft;
+@property (strong, nonatomic) UIImageView *assignmentBottomLeft;
+@property (strong, nonatomic) UIImageView *assignmentTopRight;
+@property (strong, nonatomic) UIImageView *assignmentBottomRight;
+
+// Onboard 2 assets
+@property (strong, nonatomic) UIImageView *cloud;
+@property (strong, nonatomic) UIImageView *upload;
+@property (strong, nonatomic) UIImageView *camera;
+
+// Onboard 3 assets
+@property (strong, nonatomic) UIImageView *greyCloud;
+@property (strong, nonatomic) UIImageView *television;
+@property (strong, nonatomic) UIImageView *newspaper;
+@property (strong, nonatomic) UIImageView *uploadLeft;
+@property (strong, nonatomic) UIImageView *uploadRight;
+@property (strong, nonatomic) UIImageView *cash1;
+@property (strong, nonatomic) UIImageView *cash2;
+@property (strong, nonatomic) UIImageView *cash3;
 
 
-// Onboard page two image views
-@property (strong, nonatomic) IBOutlet UIImageView *onboard2Cloud;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard2Upload;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard2Camera;
 
 
-// Onboard page three image views
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3GreyCloud;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3Television;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3Newspaper;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3Cash1;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3Cash2;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3Cash3;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3UploadRight;
-@property (strong, nonatomic) IBOutlet UIImageView *onboard3UploadLeft;
+
+- (void) onboardAnimation;
 
 
 @end

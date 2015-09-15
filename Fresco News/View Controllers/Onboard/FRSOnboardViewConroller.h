@@ -16,10 +16,6 @@
 
 @interface FRSOnboardViewConroller : UIViewController
 
-//@property (strong, nonatomic) id <FRSOnboardVCDelegate> frsTableViewCellDelegate;
-
-//@property (assign, nonatomic) NSInteger index;
-
 - (void)updateStateWithIndex:(NSInteger)index;
 
 @end

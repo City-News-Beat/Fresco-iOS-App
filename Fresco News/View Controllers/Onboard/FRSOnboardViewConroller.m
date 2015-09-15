@@ -19,8 +19,6 @@
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
-//@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
-
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*

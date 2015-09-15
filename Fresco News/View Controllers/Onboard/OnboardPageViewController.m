@@ -46,6 +46,7 @@
 
 - (void)viewDidLoad {
     
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -55,15 +56,11 @@
     
     //Make paged view controller cell
     self.pagedCellController = [[OnboardPageCellController alloc] init];
-//    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
-    
-    self.pagedCellController.onboard1EarthImageView.alpha = 1;
-    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
-    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
-    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
-    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
+    [self onboardAnimation];
+
     
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -125,13 +122,16 @@
     NSUInteger index = ((OnboardPageCellController*) viewController).index;
     
     if (index == 0 || (index == NSNotFound)) {
+        
         return nil;
     }
     
     index--;
     
-    return [self viewControllerAtIndex:index];
     
+    
+    return [self viewControllerAtIndex:index];
+
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
@@ -143,6 +143,7 @@
     if (index == 3) {
         return nil;
     }
+    
     
     return [self viewControllerAtIndex:index];
     
@@ -161,8 +162,11 @@
         FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
         
         [parentVC updateStateWithIndex:self.currentIndex];
+        
+        [self onboardAnimation];
     
     }
+
 }
 
 
@@ -171,7 +175,6 @@
 
 - (OnboardPageCellController *)viewControllerAtIndex:(NSUInteger)index
 {
-    
     if (index == 3) {
         return nil;
     }
@@ -179,19 +182,58 @@
     OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithNibName:@"OnboardPageCellController" bundle:nil];
     
     viewController.index = index;
-        
+    
+    
     return viewController;
-
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+- (void) onboardAnimation {
+    
+    if (self.currentIndex == 0) {
+        
+        self.pagedCellController.earth.alpha = 1;
+        self.pagedCellController.assignmentTopLeft.alpha = 1;
+        self.pagedCellController.assignmentBottomLeft.alpha = 1;
+        self.pagedCellController.assignmentTopRight.alpha = 1;
+        self.pagedCellController.assignmentBottomRight.alpha = 1;
+        
+        NSLog (@"0");
+    }
+    
+    if (self.currentIndex == 1) {
+        
+        self.pagedCellController.earth.alpha = 0;
+        self.pagedCellController.assignmentTopLeft.alpha = 0;
+        self.pagedCellController.assignmentBottomLeft.alpha = 0;
+        self.pagedCellController.assignmentTopRight.alpha = 0;
+        self.pagedCellController.assignmentBottomRight.alpha = 0;
+        
+        NSLog (@"1");
+    }
+    
+    if (self.currentIndex == 2) {
+        
+        self.pagedCellController.earth.alpha = 0;
+        self.pagedCellController.assignmentTopLeft.alpha = 0;
+        self.pagedCellController.assignmentBottomLeft.alpha = 0;
+        self.pagedCellController.assignmentTopRight.alpha = 0;
+        self.pagedCellController.assignmentBottomRight.alpha = 0;
+        
+        NSLog (@"2");
+    }
+    
 }
-*/
+
+
+
+
+
+
+
+
+
+
 
 @end
