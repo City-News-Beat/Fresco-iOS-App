@@ -534,52 +534,13 @@
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
-  
-//        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:ASSIGNMENT_IDENTIFIER];
-//    
-//        if (annotationView == nil) {
-//
-//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
-//            
-//            [annotationView setImage:[UIImage imageNamed:@"dot-assignment"]];
-//            annotationView.enabled = YES;
-//            
-//            annotationView.canShowCallout = YES;
-//            
-//            /* Callout */
-//            
-//            annotationView.rightCalloutAccessoryView = [MKMapView caret];
-//                
-//            /* End Callout */
-//        
-//        }
-//        else {
-//          
-//            annotationView.annotation = annotation;
-//        }
-//        
-//        return annotationView;
-//
+
         return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSAssignmentAnnotation];
+        
     }
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
-        
-//        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:CLUSTER_IDENTIFIER];
-//        
-//        if (annotationView == nil) {
-//            
-//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
-//            annotationView.enabled = YES;
-//            
-//            [annotationView setImage:[UIImage imageNamed:@"dot-assignment"]];
-//            
-//        }
-//        else {
-//            annotationView.annotation = annotation;
-//        }
-//        
-//        return annotationView;
+
         return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSClusterAnnotation];
     
     }

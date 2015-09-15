@@ -43,6 +43,7 @@
 //}
 
 - (CALayer *)addPulsingAnimation {
+    
     CAMediaTimingFunction *defaultCurve = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
     
     CAAnimationGroup *animationGroup = [CAAnimationGroup animation];

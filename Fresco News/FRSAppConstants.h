@@ -95,8 +95,6 @@ enum FRSAnnotationType {
 #define MAX_POST_COUNT                      8
 
 
-
-
 #pragma mark - User Defaults
 
 #define UD_FIRSTNAME                        @"firstname"

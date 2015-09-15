@@ -137,56 +137,29 @@
 
 + (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation
                                      ForMapView: (MKMapView *)mapView {
-    //Check if the user has a profile image
-//    if ([FRSDataManager sharedManager].currentUser.avatar) { // if they have a pic
+
+    MKAnnotationView *pinnedView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
     
-        MKAnnotationView *pinnedView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+    if (!pinnedView) {
         
-        if (!pinnedView) {
-            
-            pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
-            
-            pinnedView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 heigh and 3 y
-            
-            UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
-            
-            UIImageView *whiteLayerImageView = [[UIImageView alloc] initWithImage:whiteLayerImage];
-            UIImageView *profileImageView = [MKMapView imagePinViewForAnnotationType:FRSUserAnnotation];
-
-            [profileImageView.layer addPulsingAnimation];
-            
-            [whiteLayerImageView addSubview:profileImageView];
-            
-            [pinnedView addSubview:whiteLayerImageView];
-        }
+        pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
         
-        return pinnedView;
-//        
-//    } else { // they don't have a pic
-//        
-//        MKAnnotationView *pulsingView = (MKAnnotationView *)annotationView;
-//        
-//        if (!pulsingView) {
-//            pulsingView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
-//            
-//            pulsingView.centerOffset = CGPointMake(-12, -12);
-//            
-//            UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
-//            
-//            UIImageView *whiteLayerImageView = [[UIImageView alloc] initWithImage:whiteLayerImage];
-//            UIImageView *profileImageView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"dot-assignment-active"]];
-//            
-//            [profileImageView.layer addPulsingAnimation];
-//            
-//            [whiteLayerImageView addSubview:profileImageView];
-//            
-//            [pulsingView addSubview:whiteLayerImageView];
-////            pulsingView.annotationColor = [UIColor redColor];
-//        }
-//        
-//        return pulsingView;
-//    }
+        pinnedView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 heigh and 3 y
+        
+        UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
+        
+        UIImageView *whiteLayerImageView = [[UIImageView alloc] initWithImage:whiteLayerImage];
+        
+        UIImageView *profileImageView = [MKMapView imagePinViewForAnnotationType:FRSUserAnnotation];
 
+        [profileImageView.layer addPulsingAnimation];
+        
+        [whiteLayerImageView addSubview:profileImageView];
+        
+        [pinnedView addSubview:whiteLayerImageView];
+    }
+    
+    return pinnedView;
 }
 
 /*
@@ -202,7 +175,7 @@
         
         [customPinView setImage:[UIImage imageNamed:@"dot-assignment"]];
         
-    } else if (type == FRSUserAnnotation) {           // is User annotation view
+    } else if (type == FRSUserAnnotation) { // is User annotation view
         
         if ([FRSDataManager sharedManager].currentUser.avatar) {
             
