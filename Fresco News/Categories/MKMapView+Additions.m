@@ -108,10 +108,8 @@
     return caret;
 }
 
-+ (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation
-                                           ForMapView: (MKMapView *)mapView
-                                              AndType: (NSInteger)type
-{
++ (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation ForMapView: (MKMapView *)mapView AndType: (NSInteger)type{
+    
     NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
    
     MKAnnotationView *annotationView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -169,13 +167,15 @@
 + (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type {
     
     UIImageView *customPinView = [[UIImageView alloc] init];
+    
     CGRect frame = CGRectMake(5, 3, 18, 18);
     
     if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
         
         [customPinView setImage:[UIImage imageNamed:@"dot-assignment"]];
         
-    } else if (type == FRSUserAnnotation) { // is User annotation view
+    }
+    else if (type == FRSUserAnnotation) { // is User annotation view
         
         if ([FRSDataManager sharedManager].currentUser.avatar) {
             

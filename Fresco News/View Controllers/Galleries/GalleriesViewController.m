@@ -77,6 +77,7 @@
     
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
+
     
 }
 
