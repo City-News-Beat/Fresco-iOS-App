@@ -41,7 +41,4 @@ typedef enum {
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
 
-
-//+ (void)addShadowToAnnotationView: (MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment;
-
 @end

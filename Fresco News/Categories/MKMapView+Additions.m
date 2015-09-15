@@ -194,28 +194,6 @@
     return customPinView;
 }
 
-/*
- ** Houses imageview created above in a container and adds shadow to it
- */
-//
-//+ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment {
-//    
-//    [MKMapView setPinImageViewForAssignmentType:isAssignment];
-//    
-//    UIView *container = [[UIView alloc] initWithFrame:customPinView.frame];
-//    container.layer.shadowColor = [UIColor blackColor].CGColor;
-//    container.layer.shadowOffset = CGSizeMake(0, 1);
-//    container.layer.shadowOpacity = .52;
-//    container.layer.shadowRadius = 2;
-//    container.layer.cornerRadius = customPinView.frame.size.width / 2;
-//    container.clipsToBounds = NO;
-//    [container addSubview:customPinView];
-//    
-//    
-//    [annotationView addSubview:container];
-//    [annotationView bringSubviewToFront:container];
-//    
-//}
 
 + (void)updateUserPinViewForMapView:(MKMapView *)mapView WithImage: (UIImage *)image
 {
