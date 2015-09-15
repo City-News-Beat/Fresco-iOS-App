@@ -26,6 +26,11 @@ enum FRSErrorCodes {
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
 
+enum FRSAnnotationType {
+    FRSAssignmentAnnotation = 0,
+    FRSUserAnnotation = 1,
+    FRSClusterAnnotation = 2
+} frsAnnotationType;
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
@@ -88,8 +93,6 @@ enum FRSErrorCodes {
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
 #define MAX_POST_COUNT                      8
-
-
 
 
 #pragma mark - User Defaults
