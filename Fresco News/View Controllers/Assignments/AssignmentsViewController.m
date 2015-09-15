@@ -18,6 +18,7 @@
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "AssignmentOnboardViewController.h"
+#import "FRSLocationManager.h"
 
 #define kSCROLL_VIEW_INSET 75
 
@@ -72,6 +73,8 @@
     [self setFrescoNavigationBar];
     
     [self tweakUI];
+    
+    [self requestAlwaysAuthorization];
     
     self.assignmentsMap.delegate = self;
     self.scrollView.delegate = self;
@@ -758,6 +761,37 @@
     
     self.operatingRadius = 0;
     
+}
+
+#pragma mark - Authorization 
+
+- (void)requestAlwaysAuthorization
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    
+    // If the status is denied or only granted for when in use, display an alert
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:LOC_DISABLED
+                                       message:ENABLE_LOC_SETTINGS
+                                       action:DISMISS handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+
+    }
+    // The user has not enabled any location services. Request background authorization.
+    else if (status == kCLAuthorizationStatusNotDetermined) {
+        
+        [[FRSLocationManager sharedManager] requestAlwaysAuthorization];
+        
+    }
 }
 
 #pragma mark - Action Sheet Delegate

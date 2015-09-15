@@ -218,12 +218,13 @@ enum FRSAnnotationType {
 
 #define LOC_ENABLED                         NSLocalizedString(@"Location Enabled", nil)
 #define LOC_DISABLED                        NSLocalizedString(@"Location Disabled", nil)
+#define ENABLE_LOC_SETTINGS                 NSLocalizedString(@"It seems like your location isn't enabled. Please go to teh settings fro Fresco to enable your location.", nil)
 
 #define NOTIF_PENDING                       NSLocalizedString(@"Notifications Pending", nil)
 #define NOTIF_ENABLED                       NSLocalizedString(@"Notifications Enabled", nil)
 
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
-#define GO_TO_SETTINGS                      NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
+#define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
 
 #pragma mark - First Run Radius
 

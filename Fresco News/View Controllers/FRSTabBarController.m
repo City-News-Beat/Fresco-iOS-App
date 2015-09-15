@@ -192,7 +192,7 @@
             
             UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                            alertControllerWithTitle:ENABLE_CAMERA_TITLE
-                                           message:GO_TO_SETTINGS
+                                           message:ENABLE_CAMERA_SETTINGS
                                            action:DISMISS handler:nil];
             
             [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
