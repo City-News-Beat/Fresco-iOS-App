@@ -105,7 +105,7 @@ typedef enum : NSUInteger {
 
 - (BOOL)shouldAutorotate
 {
-    return YES;
+    return NO;
 }
 
 - (NSUInteger)supportedInterfaceOrientations

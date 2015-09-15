@@ -37,15 +37,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
-
 @property (weak, nonatomic) IBOutlet UIImageView *socialTipView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 
 // Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
@@ -58,12 +54,14 @@
 
 #pragma Orientation
 
--(BOOL)shouldAutorotate {
-    return YES;
+- (BOOL)shouldAutorotate {
+    return NO;
 }
+
 - (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationPortrait;
 }
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
@@ -74,8 +72,8 @@
 {
     [super viewDidLoad];
 
-    [self setupButtons];
     
+    [self setupButtons];
     self.title = @"Create a Gallery";
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     [self.galleryView setGallery:self.gallery isInList:YES];
@@ -94,8 +92,9 @@
 {
     [super viewWillAppear:animated];
 
+    
     [self.locationManager startUpdatingLocation];
-
+    
     socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
     [self.socialTipView addGestureRecognizer:socialTipTap];
     
@@ -138,6 +137,14 @@
                                                object:nil];
     
     [self toggleToolbarAppearance];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     
 }
 
@@ -760,31 +767,58 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     
-    
-    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
+                            
                             CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            CGRect frame = self.navigationController.toolbar.frame;
-
+                            
+                            CGRect viewFrame = self.view.frame;
+                            CGRect toolBarFrame = self.navigationController.toolbar.frame;
+                            
+                            CGRect viewFrameWhenKeyboardHides = CGRectMake(viewFrame.origin.x,
+                                                                           viewFrame.origin.y + height,
+                                                                           viewFrame.size.width,
+                                                                           viewFrame.size.height);
+                            
+                            CGRect viewFrameWhenKeyboardShows = CGRectMake(viewFrame.origin.x,
+                                                                           viewFrame.origin.y - height,
+                                                                           viewFrame.size.width,
+                                                                           viewFrame.size.height);
+                            
+                            
+                            CGRect toolBarFrameWhenKeyboardHides = CGRectMake(toolBarFrame.origin.x,
+                                                                              toolBarFrame.origin.y + height,
+                                                                              toolBarFrame.size.width,
+                                                                              toolBarFrame.size.height);
+                            
+                            CGRect toolBarFrameWhenKeyboardShows = CGRectMake(toolBarFrame.origin.x,
+                                                                              toolBarFrame.origin.y - height,
+                                                                              toolBarFrame.size.width,
+                                                                              toolBarFrame.size.height);
+                            
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height *= -1;
-                                frame.origin.y += height;
-                                self.navigationController.toolbar.frame = frame;
+                                
+                                self.view.frame = viewFrameWhenKeyboardShows;
+                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardShows;
+                                
+                                [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+                                
                             }
-                            else {
-                                frame.origin.y += height;
-                                self.navigationController.toolbar.frame = frame;
-                                height = 0;
+                            if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
+                                self.view.frame = viewFrameWhenKeyboardHides;
+                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardHides;
+                                
+                                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                         selector:@selector(keyboardWillShowOrHide:)
+                                                                             name:UIKeyboardWillShowNotification
+                                                                           object:nil];
                             }
-
-                            self.topVerticalSpaceConstraint.constant = height;
-                            self.bottomVerticalSpaceConstraint.constant = height;
-                            self.twitterVerticalConstraint.constant = -2 * height;
+                            
                             [self.view layoutIfNeeded];
-    } completion:nil];
+                        } completion:nil];
 }
+
 
 #pragma mark - Alert View Delegate
 
