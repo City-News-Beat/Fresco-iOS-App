@@ -41,9 +41,4 @@
 
 
 
-
-
-- (void) onboardAnimation;
-
-
 @end

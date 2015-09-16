@@ -103,18 +103,7 @@
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
     
-    
-//    //Make paged view controller cell
-//    self.pagedCellController = [[OnboardPageCellController alloc] init];
-//    self.pagedCellController.view.frame = self.pagedViewController.view.frame;
-//    NSLog (@"Page view controll subviews: %@", self.pagedCellController.view.subviews);
-//    
-//    self.pagedCellController.onboard1EarthImageView.alpha = 1;
-//    self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
-//    self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
-//    self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
-//    self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
-    
+
 }
 
 - (void) circleInitialization {
@@ -164,12 +153,6 @@
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
             
-            
-//            self.pagedCellController.onboard1EarthImageView.alpha = 1;
-//            self.pagedCellController.onboard1AssignmentTopLeft.alpha = 1;
-//            self.pagedCellController.onboard1AssignmentTopRight.alpha = 1;
-//            self.pagedCellController.onboard1AssignmentBottomLeft.alpha = 1;
-//            self.pagedCellController.onboard1AssignmentBottomRight.alpha = 1;
             
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];

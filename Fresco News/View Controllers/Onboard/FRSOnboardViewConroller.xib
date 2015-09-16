@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -135,6 +135,8 @@
                 <constraint firstItem="5JP-6l-Eib" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Cen-78-OMb"/>
                 <constraint firstAttribute="centerX" secondItem="a07-0q-LYe" secondAttribute="centerX" multiplier="2" id="Fg4-0p-edS"/>
                 <constraint firstItem="uLz-Mu-ouR" firstAttribute="leading" secondItem="DFD-9b-t5h" secondAttribute="leading" id="Gcm-Mc-LHk"/>
+                <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="top" constant="88" id="Gpb-OA-l3K"/>
+                <constraint firstAttribute="centerY" secondItem="wz5-13-deN" secondAttribute="centerY" multiplier="3.8" id="Htj-tc-qud"/>
                 <constraint firstItem="geR-3B-zv3" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="1.5" id="Idd-99-qxR"/>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="PVY-n1-TVF" secondAttribute="bottom" id="Opt-Yf-S0b"/>
                 <constraint firstItem="Mtl-hC-3Ud" firstAttribute="centerX" secondItem="DFD-9b-t5h" secondAttribute="centerX" multiplier="1.5" id="PyC-NR-ORC"/>
@@ -156,6 +158,11 @@
                 <constraint firstItem="PVY-n1-TVF" firstAttribute="leading" secondItem="geR-3B-zv3" secondAttribute="leading" constant="12" id="usH-FC-O4P"/>
                 <constraint firstItem="qT9-es-J43" firstAttribute="leading" secondItem="a07-0q-LYe" secondAttribute="leading" constant="12" id="zfu-nh-20j"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="cgf-uD-6lZ"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="1417" y="-1371"/>
         </view>
     </objects>

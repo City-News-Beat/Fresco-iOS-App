@@ -14,9 +14,6 @@
 
 @interface OnboardPageViewController()
 
-@property (strong, nonatomic) OnboardPageCellController *pagedCellController;
-
-
 @property (nonatomic, assign) BOOL runningNextPage;
 
 @end
@@ -53,11 +50,7 @@
     self.delegate = self;
     self.dataSource = self;
     
-    
-    //Make paged view controller cell
-    self.pagedCellController = [[OnboardPageCellController alloc] init];
     [self onboardAnimation];
-
     
 }
 
@@ -179,54 +172,195 @@
         return nil;
     }
 
-    OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithNibName:@"OnboardPageCellController" bundle:nil];
+    OnboardPageCellController *viewController = [[OnboardPageCellController alloc] init];
     
     viewController.index = index;
-    
     
     return viewController;
 }
 
 
 
-- (void) onboardAnimation {
+- (void)onboardAnimation {
     
-    if (self.currentIndex == 0) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.pagedCellController.earth.alpha = 1;
-        self.pagedCellController.assignmentTopLeft.alpha = 1;
-        self.pagedCellController.assignmentBottomLeft.alpha = 1;
-        self.pagedCellController.assignmentTopRight.alpha = 1;
-        self.pagedCellController.assignmentBottomRight.alpha = 1;
+        if (self.currentIndex == 0) {
+            
+            [self animateOnboard1];
+            
+            NSLog (@"index: 0");
+        }
         
-        NSLog (@"0");
-    }
-    
-    if (self.currentIndex == 1) {
+        if (self.currentIndex == 1) {
+            //reset assignments to 0 here
+            
+            
+            
+//            OnboardPageCellController *onBoadPageCellController = [self.viewControllers objectAtIndex:1];
+//
+//            onBoadPageCellController.cloud.alpha = 1;
+//            onBoadPageCellController.upload.alpha = 1;
+//            onBoadPageCellController.camera.alpha = 1;
+
+            NSLog (@"index: 1");
+        }
         
-        self.pagedCellController.earth.alpha = 0;
-        self.pagedCellController.assignmentTopLeft.alpha = 0;
-        self.pagedCellController.assignmentBottomLeft.alpha = 0;
-        self.pagedCellController.assignmentTopRight.alpha = 0;
-        self.pagedCellController.assignmentBottomRight.alpha = 0;
         
-        NSLog (@"1");
-    }
-    
-    if (self.currentIndex == 2) {
+        if (self.currentIndex == 2) {
+            
+//            OnboardPageCellController *onBoadPageCellController = [self.viewControllers objectAtIndex:2];
+//            
+//            onBoadPageCellController.greyCloud.alpha = 1;
+//            onBoadPageCellController.television.alpha = 1;
+//            onBoadPageCellController.newspaper.alpha = 1;
+//            onBoadPageCellController.uploadLeft.alpha = 1;
+//            onBoadPageCellController.uploadRight.alpha = 1;
+//            onBoadPageCellController.cash1.alpha = 1;
+//            onBoadPageCellController.cash2.alpha = 1;
+//            onBoadPageCellController.cash3.alpha = 1;
+            
+            NSLog (@"index: 2");
+        }
         
-        self.pagedCellController.earth.alpha = 0;
-        self.pagedCellController.assignmentTopLeft.alpha = 0;
-        self.pagedCellController.assignmentBottomLeft.alpha = 0;
-        self.pagedCellController.assignmentTopRight.alpha = 0;
-        self.pagedCellController.assignmentBottomRight.alpha = 0;
-        
-        NSLog (@"2");
-    }
-    
+    });
 }
 
 
+
+- (void)animateOnboard1 {
+    
+    OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
+    
+    onBoardPageCellController.assignmentTopLeft.alpha = 1;
+    onBoardPageCellController.assignmentBottomLeft.alpha = 1;
+    onBoardPageCellController.assignmentTopRight.alpha = 1;
+    onBoardPageCellController.assignmentBottomRight.alpha = 1;
+    
+    onBoardPageCellController.assignmentTopLeft.transform = CGAffineTransformMakeScale(0, 0);
+    onBoardPageCellController.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
+    onBoardPageCellController.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
+    onBoardPageCellController.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
+    
+    
+    [UIView animateWithDuration:0.35
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         onBoardPageCellController.earth.alpha = 1;
+                         onBoardPageCellController.earth.transform = CGAffineTransformMakeTranslation(0, 0);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         
+                         [UIView animateWithDuration:0.25
+                                               delay:-0.1
+                          
+                                             options:UIViewAnimationOptionCurveEaseInOut
+                                          animations:^{
+                                              onBoardPageCellController.assignmentTopLeft.alpha = 1;
+                                              onBoardPageCellController.assignmentTopLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                              [UIView animateWithDuration:0.15
+                                                                    delay:0.0
+                                               
+                                                                  options:UIViewAnimationOptionCurveEaseOut
+                                                               animations:^{
+                                                                   onBoardPageCellController.assignmentTopLeft.transform = CGAffineTransformMakeScale(1, 1);
+                                                                   
+                                                                   
+                                                               }
+                                               
+                                                               completion:^(BOOL finished) {
+                                                                   
+                                                               }];
+                                              
+                                          }];
+                         
+                     }];
+    
+    // BUBBLE 2
+    
+    [UIView animateWithDuration:0.35
+                          delay:0.45
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         onBoardPageCellController.assignmentTopRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              onBoardPageCellController.assignmentTopRight.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+    
+    
+    // BUBBLE 3
+    
+    [UIView animateWithDuration:0.35
+                          delay:0.7
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         onBoardPageCellController.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              onBoardPageCellController.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+    
+    
+    // BUBBLE 4
+    
+    [UIView animateWithDuration:0.35
+                          delay:1.05
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         onBoardPageCellController.assignmentBottomRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              onBoardPageCellController.assignmentBottomRight.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+}
 
 
 

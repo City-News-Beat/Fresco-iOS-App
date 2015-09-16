@@ -81,12 +81,17 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    [self setUpViews];
-    [self setUpOnboard1];
-    [self setUpOnboard2];
-    [self setUpOnboard3];
-
     
+    [self setUpViews];
+    
+    //if onboard 1
+        [self setUpOnboard1];
+    //if onboard 2
+        [self setUpOnboard2];
+    //if onboard 3
+        [self setUpOnboard3];
+
+    /** Always run */
     
     self.mainHeader.text = [self.mainHeaders objectAtIndex:self.index];
     
@@ -95,6 +100,8 @@
     self.onboardImage.image = [UIImage imageNamed:[self.images objectAtIndex:self.index]];
     
     self.progressImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"progress-3-%li", (long)(self.index +1)]];
+    
+    /** **/
     
     //Show "Done" on the last view
     if(self.index == 2){
@@ -105,7 +112,7 @@
 
 
 
-- (void) setUpOnboard1 {
+- (void)setUpOnboard1 {
     
     // Create earth image view
     self.earth = [[UIImageView alloc] initWithFrame:CGRectMake(59, 47, 173, 173)];
@@ -114,32 +121,46 @@
     [self.onboard1View addSubview:self.earth];
     
     // Create top left assignment image view
-    self.assignmentTopLeft = [[UIImageView alloc] initWithFrame:CGRectMake(53, 51, 50, 50)];
+    self.assignmentTopLeft = [[UIImageView alloc] initWithFrame:CGRectMake(73, 71, 50, 50)];
     self.assignmentTopLeft.image = [UIImage imageNamed:@"assignment-left"];
+    self.assignmentTopLeft.layer.anchorPoint = CGPointMake(1, 1);
     [self.assignmentTopLeft setContentMode: UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:self.assignmentTopLeft];
     
     // Create bottom left assignment image view
-    self.assignmentBottomLeft = [[UIImageView alloc] initWithFrame:CGRectMake(92, 127, 50, 50)];
+    self.assignmentBottomLeft = [[UIImageView alloc] initWithFrame:CGRectMake(102, 147, 50, 50)];
     self.assignmentBottomLeft.image = [UIImage imageNamed:@"assignment-left"];
+    self.assignmentBottomLeft.layer.anchorPoint = CGPointMake(1, 1);
     [self.assignmentBottomLeft setContentMode: UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:self.assignmentBottomLeft];
     
+    
     // Create top right assignment image view with transform
-    self.assignmentTopRight = [[UIImageView alloc] initWithFrame:CGRectMake(145, 22, 50, 50)];
-    self.assignmentTopRight.image = [UIImage imageNamed:@"assignment-left"];
+    self.assignmentTopRight = [[UIImageView alloc] initWithFrame:CGRectMake(175, 50, 50, 50)];
+    self.assignmentTopRight.image = [UIImage imageNamed:@"assignment-right"];
+    self.assignmentTopRight.layer.anchorPoint = CGPointMake(-.01, 1);
     [self.assignmentTopRight setContentMode: UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:self.assignmentTopRight];
-    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, 1.0 , 1.0);
-    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, -1.0 , 1.0);
+    
+//    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, 1.0 , 1.0);
+//    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, -1.0 , 1.0);
+    
     
     // Create bottom right assignment image view with transform
-    self.assignmentBottomRight = [[UIImageView alloc] initWithFrame:CGRectMake(179, 140, 50, 50)];
-    self.assignmentBottomRight.image = [UIImage imageNamed:@"assignment-left"];
+    self.assignmentBottomRight = [[UIImageView alloc] initWithFrame:CGRectMake(165, 160, 50, 50)];
+    self.assignmentBottomRight.image = [UIImage imageNamed:@"assignment-right"];
+    self.assignmentBottomRight.layer.anchorPoint = CGPointMake(-.01, 1);
     [self.assignmentBottomRight setContentMode: UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:self.assignmentBottomRight];
-    self.assignmentBottomRight.transform = CGAffineTransformScale(self.assignmentBottomLeft.transform, 1.0 , -1.0);
-    self.assignmentBottomRight.transform = CGAffineTransformScale(self.assignmentBottomLeft.transform, -1.0 , 1.0);
+//    self.assignmentBottomRight.transform = CGAffineTransformScale(self.assignmentBottomLeft.transform, 1.0 , -1.0);
+//    self.assignmentBottomRight.transform = CGAffineTransformScale(self.assignmentBottomLeft.transform, -1.0 , 1.0);
+    
+    // Init images with alpha of 0
+    self.earth.alpha = 0;
+    self.assignmentTopLeft.alpha = 0;
+    self.assignmentBottomLeft.alpha = 0;
+    self.assignmentTopRight.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
 
 }
 
@@ -233,7 +254,7 @@
     self.cash1.alpha = 0;
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
-    
+        
 }
 
 - (void) setUpViews {
