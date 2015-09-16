@@ -26,12 +26,6 @@ enum FRSErrorCodes {
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
 
-enum FRSAnnotationType {
-    FRSAssignmentAnnotation = 0,
-    FRSUserAnnotation = 1,
-    FRSClusterAnnotation = 2
-} frsAnnotationType;
-
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]

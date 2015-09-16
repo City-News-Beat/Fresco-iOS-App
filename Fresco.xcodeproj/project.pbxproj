@@ -99,6 +99,7 @@
 		BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */; };
 		BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
+		BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
 		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
@@ -364,6 +365,8 @@
 		BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisabledViewController.m; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
+		BCB74A5E1BA9FDE1002B18A6 /* FRSMKCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMKCircle.h; sourceTree = "<group>"; };
+		BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMKCircle.m; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
 		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
@@ -611,6 +614,8 @@
 				BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */,
 				BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */,
 				BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */,
+				BCB74A5E1BA9FDE1002B18A6 /* FRSMKCircle.h */,
+				BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -1531,6 +1536,7 @@
 				32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
+				BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */,
 				E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,
 			);

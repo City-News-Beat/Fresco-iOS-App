@@ -16,6 +16,12 @@ typedef enum {
     MKMapViewLegalLabelPositionBottomRight = 2,
 } MKMapViewLegalLabelPosition;
 
+typedef enum : NSInteger {
+    FRSAssignmentAnnotation = 0,
+    FRSUserAnnotation = 1,
+    FRSClusterAnnotation = 2
+} FRSAnnotationType;
+
 @property (nonatomic, readonly) UILabel *legalLabel;
 
 // Actions
@@ -29,14 +35,15 @@ typedef enum {
 // Annotation Views
 + (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
                                            ForMapView: (MKMapView *)mapView
-                                              AndType: (NSInteger)type;
+                                              AndType: (FRSAnnotationType)type;
+
 + (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation
                                      ForMapView: (MKMapView *)mapView;
 
 // Annotation additional views
 + (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
 + (UIButton *)caret;
-+ (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type;
++ (UIImageView *)imagePinViewForAnnotationType:(FRSAnnotationType)type;
 
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;

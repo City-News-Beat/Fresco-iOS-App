@@ -19,6 +19,7 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "AssignmentOnboardViewController.h"
 #import "FRSLocationManager.h"
+#import "FRSMKCircle.h"
 
 #define kSCROLL_VIEW_INSET 75
 
@@ -104,7 +105,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIF_IMAGE_SET object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_PROFILE_PIC_RESET object:nil];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -409,7 +409,7 @@
 */
 
 - (void)populateMapWithAnnotations{
-    
+
     NSUInteger count = 0;
     
     if(_viewingClusters){
@@ -425,7 +425,7 @@
     }
     else{
         
-        if(self.assignmentsMap.annotations != nil){
+        if (self.assignmentsMap.annotations != nil) {
         
             for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
                 
@@ -447,6 +447,8 @@
             count++;
         }
         
+        [self.assignmentsMap addOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
+
         // Run this after populating map with assignments, this ensures we have the annotation to select
         if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
             
@@ -472,6 +474,24 @@
     
     [self.assignmentsMap addAnnotation:annotation];
     
+}
+
+
++ (FRSMKCircle *)userRadiusForMap: (MKMapView *)mapView {
+    
+//    CGFloat userLat = [FRSLocationManager sharedManager].location.coordinate.latitude;
+//    CGFloat userLon = [FRSLocationManager sharedManager].location.coordinate.longitude;
+    
+    MKUserLocation *userLocation = mapView.userLocation;
+
+    FRSMKCircle *circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:100];
+    circle.identifier = FRSUserCircle;
+    
+//    CLLocationAccuracy horizontalAccuracy = userLocation.location.horizontalAccuracy;
+    
+//    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake(userLat, userLon) radius:100];
+    
+    return circle;
 }
 
 /*
@@ -542,7 +562,6 @@
 
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
-        
         self.pinView = [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.assignmentsMap];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
@@ -566,11 +585,19 @@
 
 }
 
--(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
     
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
-    [circleView setFillColor:[UIColor radiusGoldColor]];
+    if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+        
+        FRSMKCircle *circleForUserRadius = (FRSMKCircle *)overlay;
+        
+        if (circleForUserRadius.identifier == FRSUserCircle)
+            [circleView setFillColor:[UIColor frescoBlueColor]];
+ 
+    } else
+        [circleView setFillColor:[UIColor radiusGoldColor]];
     
     circleView.alpha = .26;
     
@@ -638,8 +665,10 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
-    if(self.centeredUserLocation)
+    if(self.centeredUserLocation) {
         [self updateAssignments];
+    }
+    
     
 }
 
@@ -651,6 +680,28 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [self zoomToCurrentLocation];
+    
+//    if ([self.assignmentsMap.overlays containsObject:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]]) {
+
+//        [self.assignmentsMap removeOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
+//    }
+
+    
+//    [self.assignmentsMap addOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
+    
+//    for (MKCircle *circle in self.assignmentsMap.overlays) {
+//        
+//        CLLocationDegrees userLon = self.assignmentsMap.userLocation.coordinate.longitude;
+//        CLLocationDegrees circleLon = circle.coordinate.longitude;
+//        
+//        CLLocationDegrees userLat = self.assignmentsMap.userLocation.coordinate.latitude;
+//        CLLocationDegrees circleLat = circle.coordinate.latitude;
+//        
+//        if (circleLon == userLon && circleLat == userLat) {
+//            [self.assignmentsMap removeOverlay:circle];
+//        }
+//    }
+    
 }
 
 #pragma mark - Location Zoom/View Methods
