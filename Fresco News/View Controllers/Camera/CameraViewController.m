@@ -108,7 +108,7 @@ typedef enum : NSUInteger {
     return NO;
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscapeRight;
 }
