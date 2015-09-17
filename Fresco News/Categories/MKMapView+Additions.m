@@ -118,6 +118,8 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
         
+        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
+        
         [annotationView setImage:[MKMapView imagePinViewForAnnotationType:FRSAssignmentAnnotation].image];
         
         annotationView.enabled = YES;
@@ -136,13 +138,13 @@
 + (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation
                                      ForMapView: (MKMapView *)mapView {
 
-    MKAnnotationView *pinnedView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+    MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
     
-    if (!pinnedView) {
+    if (!annotationView) {
         
-        pinnedView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
         
-        pinnedView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 heigh and 3 y
+        annotationView.centerOffset = CGPointMake(-13, -15); // math is account for 18 width and 5 x, 18 height and 3 y
         
         UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
         
@@ -154,10 +156,10 @@
         
         [whiteLayerImageView addSubview:profileImageView];
         
-        [pinnedView addSubview:whiteLayerImageView];
+        [annotationView addSubview:whiteLayerImageView];
     }
     
-    return pinnedView;
+    return annotationView;
 }
 
 /*
@@ -168,7 +170,7 @@
     
     UIImageView *customPinView = [[UIImageView alloc] init];
     
-    CGRect frame = CGRectMake(5, 3, 18, 18);
+    CGRect frame = CGRectMake(5, 4, 18, 18);
     
     if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
         
