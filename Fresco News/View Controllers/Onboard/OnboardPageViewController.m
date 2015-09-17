@@ -228,7 +228,7 @@
 
 
 
-- (void)animateOnboard1 {gstgst
+- (void)animateOnboard1 {
     
     OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
     
