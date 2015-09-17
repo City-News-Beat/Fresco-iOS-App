@@ -228,7 +228,7 @@
 
 
 
-- (void)animateOnboard1 {
+- (void)animateOnboard1 {gstgst
     
     OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
     
@@ -286,8 +286,8 @@
     
     // BUBBLE 2
     
-    [UIView animateWithDuration:0.35
-                          delay:0.45
+    [UIView animateWithDuration:0.25
+                          delay:0.15
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          onBoardPageCellController.assignmentTopRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
@@ -312,8 +312,8 @@
     
     // BUBBLE 3
     
-    [UIView animateWithDuration:0.35
-                          delay:0.7
+    [UIView animateWithDuration:0.25
+                          delay:0.4
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          onBoardPageCellController.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
@@ -338,8 +338,8 @@
     
     // BUBBLE 4
     
-    [UIView animateWithDuration:0.35
-                          delay:1.05
+    [UIView animateWithDuration:0.25
+                          delay:0.65
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          onBoardPageCellController.assignmentBottomRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
@@ -347,7 +347,7 @@
                      }
      
                      completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15
+                         [UIView animateWithDuration:0.2
                                                delay:0.0
                                              options:UIViewAnimationOptionCurveEaseOut
                                           animations:^{

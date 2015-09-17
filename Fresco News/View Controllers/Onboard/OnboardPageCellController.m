@@ -136,15 +136,12 @@
     
     
     // Create top right assignment image view with transform
-    self.assignmentTopRight = [[UIImageView alloc] initWithFrame:CGRectMake(175, 50, 50, 50)];
+    self.assignmentTopRight = [[UIImageView alloc] initWithFrame:CGRectMake(135, 50, 50, 50)];
     self.assignmentTopRight.image = [UIImage imageNamed:@"assignment-right"];
     self.assignmentTopRight.layer.anchorPoint = CGPointMake(-.01, 1);
     [self.assignmentTopRight setContentMode: UIViewContentModeScaleToFill];
     [self.onboard1View addSubview:self.assignmentTopRight];
-    
-//    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, 1.0 , 1.0);
-//    self.assignmentTopRight.transform = CGAffineTransformScale(self.assignmentTopRight.transform, -1.0 , 1.0);
-    
+
     
     // Create bottom right assignment image view with transform
     self.assignmentBottomRight = [[UIImageView alloc] initWithFrame:CGRectMake(165, 160, 50, 50)];
