@@ -47,6 +47,8 @@ enum FRSAnnotationType {
 #define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
+#define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
+
 
 
 #pragma mark - Keys Plist
@@ -132,6 +134,7 @@ enum FRSAnnotationType {
 #define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
 #define USER_IDENTIFIER                     @"currentLocation"
 #define kMetersInAMile                      1609.34
+#define kDegreesInAMile                     69.0
 
 
 #pragma mark - Segue Identifiers
