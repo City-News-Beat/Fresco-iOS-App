@@ -759,14 +759,7 @@ typedef enum : NSUInteger {
     
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
-        
-        MKAnnotationView *pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
-        
-        if(!pinView){
-            
-            return [MKMapView setupPinForAnnotation:annotation withAnnotationView:pinView];
-            
-        }
+            return [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.mapView];
     }
     
     return nil;

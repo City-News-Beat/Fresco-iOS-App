@@ -37,10 +37,9 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     [[self imageView] cancelImageRequestOperation];
 
-    [self.videoIndicatorView removeFromSuperview];
     [self.photoIndicatorView removeFromSuperview];
     
-    [self removeTranscodePlaceHolder];
+    [self.mutedImage removeFromSuperview];
     
 }
 
@@ -52,64 +51,59 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
     if (_post.postID) {
 
-        CGRect spinnerFrame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
-        CGPoint spinnerCenter = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+        CGRect spinnerFrame = CGRectMake(weakSelf.frame.size.width/2, weakSelf.frame.size.height/2, 0, 0);
         
         self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.photoIndicatorView.frame = spinnerFrame;
-        [self addSubview:self.photoIndicatorView];
-        [self bringSubviewToFront:self.photoIndicatorView];
+        [self addSubview:weakSelf.photoIndicatorView];
+        [self bringSubviewToFront:weakSelf.photoIndicatorView];
 
-        if(self.post.isVideo) {
+        if(weakSelf.post.isVideo) {
             
             //Set up for play/pause button
-            self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 132/2, 132/2)];
-            self.playPause.center = CGPointMake(weakSelf.frame.size.width / 2 , weakSelf.center.y);
-            self.playPause.contentMode = UIViewContentModeScaleAspectFit;
-            self.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
-            self.playPause.layer.shadowOffset = CGSizeMake(0, 1);
-            self.playPause.layer.shadowOpacity = 1;
-            self.playPause.layer.shadowRadius = 1.0;
-            self.playPause.clipsToBounds = NO;
-            self.playPause.alpha = 0;
-            self.playPause.image = [UIImage imageNamed:@"pause"];
+            weakSelf.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 66, 66)];
+            weakSelf.playPause.center = CGPointMake(weakSelf.frame.size.width / 2 , weakSelf.center.y);
+            weakSelf.playPause.contentMode = UIViewContentModeScaleAspectFit;
+            weakSelf.playPause.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.20].CGColor;
+            weakSelf.playPause.layer.shadowOffset = CGSizeMake(0, 1);
+            weakSelf.playPause.layer.shadowOpacity = 1;
+            weakSelf.playPause.layer.shadowRadius = 1.0;
+            weakSelf.playPause.clipsToBounds = NO;
+            weakSelf.playPause.alpha = 0;
+            weakSelf.playPause.image = [UIImage imageNamed:@"pause"];
             
-            //Set up for indicator view
-            self.videoIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-            self.videoIndicatorView.center = spinnerCenter;
-            self.videoIndicatorView.transform = CGAffineTransformMakeScale(1.25, 1.25);
-            self.videoIndicatorView.alpha = 0;
-            self.videoIndicatorView.hidden = YES;
-            
+            //Set up for muted icon button
+            weakSelf.mutedImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+            weakSelf.mutedImage.center = CGPointMake(weakSelf.frame.size.width - 24 , 20);
+            weakSelf.mutedImage.contentMode = UIViewContentModeScaleAspectFit;
+            weakSelf.mutedImage.clipsToBounds = NO;
+            weakSelf.mutedImage.alpha = 1;
+            weakSelf.mutedImage.image = [UIImage imageNamed:@"volume-off"];
+    
            
             //Add subviews and bring to the front so they don't get hidden
-            [self addSubview:self.playPause];
-            [self addSubview:self.videoIndicatorView];
-            [self bringSubviewToFront:self.videoIndicatorView];
-            [self bringSubviewToFront:self.playPause];
+            [weakSelf addSubview:weakSelf.playPause];
+            [weakSelf addSubview:weakSelf.mutedImage];
+            [weakSelf bringSubviewToFront:weakSelf.playPause];
+            [weakSelf bringSubviewToFront:weakSelf.mutedImage];
 
         }
     
         
         //back to the main thread for the UI call
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.photoIndicatorView startAnimating];
+            [weakSelf.photoIndicatorView startAnimating];
         });
     
-        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            
-            self.processingVideo = false;
+        [weakSelf.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             weakSelf.imageView.image = image;
             
             weakSelf.imageView.alpha = 1.0f;
             
-            [weakSelf removeTranscodePlaceHolder];
-            
             //back to the main thread for the UI call
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.photoIndicatorView stopAnimating];
-                [self.photoIndicatorView removeFromSuperview];
+                [weakSelf.photoIndicatorView stopAnimating];
             });
 
         } failure:nil];
@@ -117,7 +111,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     }
     else {
         // local
-        self.imageView.image = [UIImage imageFromAsset:post.image.asset];
+        weakSelf.imageView.image = [UIImage imageFromAsset:post.image.asset];
     }
 }
 

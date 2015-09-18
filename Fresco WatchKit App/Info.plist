@@ -21,14 +21,14 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>78</string>
+	<string>82</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.fresconews.Fresco</string>
+	<string>com.fresconews.Fresco$(BUNDLE_ID_SUFFIX)</string>
 	<key>WKWatchKitApp</key>
 	<true/>
 </dict>

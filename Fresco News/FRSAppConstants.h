@@ -26,8 +26,15 @@ enum FRSErrorCodes {
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
 
+enum FRSAnnotationType {
+    FRSAssignmentAnnotation = 0,
+    FRSUserAnnotation = 1,
+    FRSClusterAnnotation = 2
+} frsAnnotationType;
 
+#define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
+#define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
 
 #pragma mark - Notification Strings
 
@@ -83,11 +90,9 @@ enum FRSErrorCodes {
 #pragma mark - Float/Int Values
 
 #define MAX_VIDEO_LENGTH                    60.0f
-#define MAX_ASSET_AGE                       -3600 * 6
+#define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
 #define MAX_POST_COUNT                      8
-
-
 
 
 #pragma mark - User Defaults
@@ -213,14 +218,14 @@ enum FRSErrorCodes {
 
 #define LOC_ENABLED                         NSLocalizedString(@"Location Enabled", nil)
 #define LOC_DISABLED                        NSLocalizedString(@"Location Disabled", nil)
+#define CASUAL_LOC_DISABLED                 NSLocalizedString(@"Where did you go?", nil)
+#define ENABLE_LOC_SETTINGS                 NSLocalizedString(@"We need your location to show you nearby assignments. Please go to Settings to enable location.", nil)
 
 #define NOTIF_PENDING                       NSLocalizedString(@"Notifications Pending", nil)
 #define NOTIF_ENABLED                       NSLocalizedString(@"Notifications Enabled", nil)
 
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
-#define ENABLE_CAMERA_MSG                   NSLocalizedString(@"needs permission to access the camera to continue.", nil)
-
-#define GO_TO_SETTINGS                      NSLocalizedString(@"It seems like your camera isn't enabled. Please go to settings for Fresco to enable the camera.", nil)
+#define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
 
 #pragma mark - First Run Radius
 

@@ -22,13 +22,11 @@
 #import "GalleryViewController.h"
 #import "AssignmentsViewController.h"
 #import "HighlightsViewController.h"
+#import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
 #import "UIColor+Additions.h"
 
-//static NSString *assignmentIdentifier = @"ASSIGNMENT_CATEGORY"; // Notification Categories
-//static NSString *navigateIdentifier = @"NAVIGATE_IDENTIFIER"; // Notification Actions
-
-@interface AppDelegate () <CLLocationManagerDelegate>
+@interface AppDelegate ()
 
 @property (strong, nonatomic) FRSRootViewController *frsRootViewController;
 
@@ -122,6 +120,15 @@
     [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
+/* Uncomment to disable custom keyboards
+- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
+    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
+        return NO;
+    }
+    return YES;
+}
+*/
+
 - (void)setupBarButtonItemAppearance
 {
     [UIBarButtonItem appearance].tintColor = [UIColor darkGoldBarButtonColor];
@@ -196,6 +203,11 @@
 
     [PFPush handlePush:userInfo];
     
+    //Check that the user is not in the onboard screen, otherwise break the method call
+    if([self.frsRootViewController.viewController isKindOfClass:[FRSOnboardViewConroller class]]){
+        return;
+    }
+    
     // Check the type of the notifications
     
     //Breaking News
@@ -208,6 +220,9 @@
                     
                     //Retreieve Gallery View Controller from storyboard
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+                    
+                    //Set the tab bar to the first tab
+                    tabBarController.selectedIndex = 0;
                     
                     HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
                     
@@ -234,7 +249,7 @@
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
                     [tabBarController setSelectedIndex:3];
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:NO];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:YES withAnimation:NO];
                 }
             }];
         }
@@ -280,8 +295,8 @@
                 if (!error) {
                     UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
                     AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:NO];
                     [tabBarController setSelectedIndex:3];
+                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:YES withAnimation:NO];
                 }
             }];
         }

@@ -57,6 +57,7 @@
 - (instancetype)initWithAssets:(NSArray *)assets
 {
     self = [super init];
+    
     if (!self) {
         return nil;
     }
@@ -78,7 +79,7 @@
             image.longitude = @(-74.1);
         #else
             CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
-            if (location || [assetType isEqualToString:ALAssetTypeVideo] /* Location temporarily not required for video */) {
+            if (location) {
                 image.latitude = @(location.coordinate.latitude);
                 image.longitude = @(location.coordinate.longitude);
             }

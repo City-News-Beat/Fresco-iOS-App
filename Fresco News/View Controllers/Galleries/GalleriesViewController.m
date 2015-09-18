@@ -78,14 +78,6 @@
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
 
-    /* Set up status bar background for nav/tab slide away */
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    
-    self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
-    self.statusBarBackground.backgroundColor = [UIColor goldStatusBarColor];
-    self.statusBarBackground.alpha = 0.0f;
-    
-    [self.view addSubview:self.statusBarBackground];
     
 }
 
@@ -199,9 +191,7 @@
     // since there is a section for every story
     // and just one story per section
     // the section will tell us the "row"
-    NSUInteger index = indexPath.section;
-    
-    FRSGallery *gallery = [self.galleries objectAtIndex:index];
+    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.section];
     
     GalleryTableViewCell *galleryTableViewCell = [tableView dequeueReusableCellWithIdentifier:[GalleryTableViewCell identifier] forIndexPath:indexPath];
     
@@ -337,14 +327,14 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //update UI in main thread.
                 //Start animating the indicator
-                [postCell.videoIndicatorView startAnimating];
+                [postCell.photoIndicatorView startAnimating];
                 [UIView animateWithDuration:1.0 animations:^{
-                    postCell.videoIndicatorView.alpha = 1.0f;
+                    postCell.photoIndicatorView.alpha = 1.0f;
                 }];
             });
             
-            //Dispatch event to make sure the condition is true for more than .8 seconds
-            double delayInSeconds = .8;
+            //Dispatch event to make sure the condition is true for more than .4 seconds
+            double delayInSeconds = .4;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 

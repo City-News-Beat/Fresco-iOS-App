@@ -189,7 +189,7 @@
                 
                 [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
 
-                    if(self.currentUser != nil){
+                    if(self.currentUser != nil && responseObject != nil){
                     
                         [Answers logSignUpWithMethod:@"Fresco"
                                              success:@YES
@@ -227,7 +227,8 @@
     //Construct params to create user
     NSDictionary *params = @{
                              @"email" : [PFUser currentUser].email ?: [NSNull null],
-                             @"parse_id" : [PFUser currentUser].objectId};
+                             @"parse_id" : [PFUser currentUser].objectId
+                             };
     
     //Run the API call to create the user on the database side
     [self POST:@"user/create" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -1246,14 +1247,17 @@
         
         [params addEntriesFromDictionary:inputParams];
         
-        [self POST:@"user/locate" parameters:params constructingBodyWithBlock:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-                
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-              
-            }failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                NSLog(@"Error: %@", error);
-            }];
+        [self POST:@"user/locate" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            NSLog(@"Error: %@", error);
+
+        }];
+        
     }
 }
 

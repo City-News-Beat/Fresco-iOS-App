@@ -238,13 +238,20 @@
             //Failed signup
             if (error || !succeeded) {
                 
-                 [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                              alertControllerWithTitle:ERROR
-                                              message:SIGNUP_ERROR action:STR_TRY_AGAIN]
-                                    animated:YES
-                                  completion:nil];
-                 
-                 self.emailField.textColor = [UIColor redColor];
+                NSString *errorResponse;
+                
+                if(error.code == 202)
+                    errorResponse = SIGNUP_EXISTS;
+                else
+                    errorResponse = SIGNUP_ERROR;
+                
+                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                 alertControllerWithTitle:ERROR
+                                                 message:errorResponse action:STR_TRY_AGAIN]
+                                       animated:YES
+                                     completion:nil];
+                
+                    self.emailField.textColor = [UIColor redColor];
              
             }
             //Successfully signed up

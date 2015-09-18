@@ -22,11 +22,12 @@
 #import "CrossPostButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
-#import "MKMapView+Additions.h"
-#import "UIViewController+Additions.h"
 #import "FRSRootViewController.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate> {
+    UITapGestureRecognizer *socialTipTap;
+    UITapGestureRecognizer *submitTap;
+}
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
@@ -36,15 +37,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomVerticalSpaceConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterVerticalConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
-
 @property (weak, nonatomic) IBOutlet UIImageView *socialTipView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 
 // Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
@@ -55,14 +52,30 @@
 
 @implementation GalleryPostViewController
 
+#pragma Orientation
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    [self setFrescoNavigationBar];
-    [self setupButtons];
     
+    [self setupButtons];
     self.title = @"Create a Gallery";
+    self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -73,18 +86,21 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.socialTipView setUserInteractionEnabled:YES];
-    
-    UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
-    
-    [self.socialTipView addGestureRecognizer:singleTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
+    
     [self.locationManager startUpdatingLocation];
-
+    
+    socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    [self.socialTipView addGestureRecognizer:socialTipTap];
+    
+    submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:submitTap];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
     self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
@@ -124,9 +140,22 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.locationManager stopUpdatingLocation];
+    
+    [self.socialTipView removeGestureRecognizer:socialTipTap];
+    [self.navigationController.toolbar removeGestureRecognizer:submitTap];
     
     //Turn off any video
     [self disableVideo];
@@ -136,8 +165,8 @@
 }
 
 /*
- ** Disable any playing video
- */
+** Disable any playing video
+*/
 
 - (void)disableVideo{
     
@@ -375,12 +404,16 @@
 {
     // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        
         self.assignments = responseObject;
 
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
+            
             CLLocation *location = [post.image.asset valueForProperty:ALAssetPropertyLocation];
+            
             if(location != nil){
+                
                 for (FRSAssignment *assignment in self.assignments) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.defaultAssignment = assignment;
@@ -466,7 +499,7 @@
         return;
     }
     
-
+    //Check if there are less than the max amount of posts
     if([self.gallery.posts count] > MAX_POST_COUNT){
     
         [self presentViewController:[[FRSAlertViewManager sharedManager]
@@ -478,6 +511,7 @@
     
     }
     
+    //Run the spinner animation to indicate that upload has started
     dispatch_async(dispatch_get_main_queue(), ^{
         
         CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
@@ -505,10 +539,13 @@
         
         NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
 
+        //Grab post out of gallery array
         FRSPost *post = self.gallery.posts[i];
         
+        //Get time interval for asset creation data, in milliseconds
         NSTimeInterval postTime = round([post.createdDate timeIntervalSince1970] * 1000);
         
+        //Create post metadata
         postMetadata[filename] = @{ @"type" : post.type,
                                     @"lat" : post.image.latitude,
                                     @"lon" : post.image.longitude,
@@ -525,35 +562,55 @@
                                   @"posts" : jsonData,
                                   @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
 
+    
+    //Form the request
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
                                                                                              parameters:parameters
                                                                               constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
-        
-      for (FRSPost *post in self.gallery.posts) {
-          
-            NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSData *data;
-            NSString *mimeType;
+                                                                  
+        @autoreleasepool {
+            
+            for (FRSPost *post in self.gallery.posts) {
+              
+                NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
+                NSData *data;
+                NSString *mimeType;
 
-            if (post.image.asset.isVideo) {
-                ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
-                UInt8 *buffer = malloc((unsigned long)representation.size);
-                NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
-                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-                mimeType = @"video/mp4";
-            }
-            else {
-                data = UIImageJPEGRepresentation([UIImage fullResImageFromAsset:post.image.asset], 1.0);
-                mimeType = @"image/jpeg";
-            }
+                if (post.image.asset.isVideo) {
+                    
+                    ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
+                    
+                    UInt8 *buffer = malloc((unsigned long)representation.size);
+                    
+                    NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
+                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                    
+                    mimeType = @"video/mp4";
+                    
+                }
+                else {
+                    
+                    ALAssetRepresentation *rep = [post.image.asset defaultRepresentation];
+                    
+                    Byte *buffer = (Byte*)malloc(rep.size);
+                    
+                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0 length:rep.size error:nil];
+                    
+                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                    
+                    mimeType = @"image/jpeg";
+                    
+                }
 
-            [formData appendPartWithFileData:data
-                                        name:filename
-                                    fileName:filename
-                                    mimeType:mimeType];
-            count++;
+                [formData appendPartWithFileData:data
+                                            name:filename
+                                        fileName:filename
+                                        mimeType:mimeType];
+                count++;
+            }
+            
         }
                                                                                   
     } error:nil];
@@ -710,31 +767,58 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     
-    
-    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
+                            
                             CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            CGRect frame = self.navigationController.toolbar.frame;
-
+                            
+                            CGRect viewFrame = self.view.frame;
+                            CGRect toolBarFrame = self.navigationController.toolbar.frame;
+                            
+                            CGRect viewFrameWhenKeyboardHides = CGRectMake(viewFrame.origin.x,
+                                                                           viewFrame.origin.y + height,
+                                                                           viewFrame.size.width,
+                                                                           viewFrame.size.height);
+                            
+                            CGRect viewFrameWhenKeyboardShows = CGRectMake(viewFrame.origin.x,
+                                                                           viewFrame.origin.y - height,
+                                                                           viewFrame.size.width,
+                                                                           viewFrame.size.height);
+                            
+                            
+                            CGRect toolBarFrameWhenKeyboardHides = CGRectMake(toolBarFrame.origin.x,
+                                                                              toolBarFrame.origin.y + height,
+                                                                              toolBarFrame.size.width,
+                                                                              toolBarFrame.size.height);
+                            
+                            CGRect toolBarFrameWhenKeyboardShows = CGRectMake(toolBarFrame.origin.x,
+                                                                              toolBarFrame.origin.y - height,
+                                                                              toolBarFrame.size.width,
+                                                                              toolBarFrame.size.height);
+                            
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-                                height *= -1;
-                                frame.origin.y += height;
-                                self.navigationController.toolbar.frame = frame;
+                                
+                                self.view.frame = viewFrameWhenKeyboardShows;
+                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardShows;
+                                
+                                [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+                                
                             }
-                            else {
-                                frame.origin.y += height;
-                                self.navigationController.toolbar.frame = frame;
-                                height = 0;
+                            if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
+                                self.view.frame = viewFrameWhenKeyboardHides;
+                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardHides;
+                                
+                                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                         selector:@selector(keyboardWillShowOrHide:)
+                                                                             name:UIKeyboardWillShowNotification
+                                                                           object:nil];
                             }
-
-                            self.topVerticalSpaceConstraint.constant = height;
-                            self.bottomVerticalSpaceConstraint.constant = height;
-                            self.twitterVerticalConstraint.constant = -2 * height;
+                            
                             [self.view layoutIfNeeded];
-    } completion:nil];
+                        } completion:nil];
 }
+
 
 #pragma mark - Alert View Delegate
 
@@ -753,10 +837,28 @@
     [self configureAssignmentForLocation:[locations lastObject]];
 }
 
+
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // Undefined behavior
-    [self.locationManager stopUpdatingLocation];
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Access to Location Disabled"
+                                       message:@"Fresco uses your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
+                                       action:DISMISS handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
+        [self.locationManager stopUpdatingLocation];
+    }
 }
+
 
 @end

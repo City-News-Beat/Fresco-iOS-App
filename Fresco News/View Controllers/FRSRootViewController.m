@@ -31,13 +31,14 @@
 
 #pragma mark - Orientation Delegate
 
-- (NSUInteger)supportedInterfaceOrientations
-{
+-(BOOL)shouldAutorotate {
+    return YES;
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
 }
-
-- (BOOL)shouldAutorotate {
-    return NO;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)viewDidLoad{

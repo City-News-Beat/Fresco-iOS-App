@@ -22,13 +22,16 @@
 
 @implementation FRSTabBarController
 
-- (BOOL)shouldAutorotate {
-    return NO;
+-(BOOL)shouldAutorotate {
+    return YES;
 }
 
-- (NSUInteger)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
@@ -122,94 +125,95 @@
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
     
-    //Check if the user is not logged in (we check PFUser here, instead of the datamanger, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
+    //Check if the user is not logged in (we check PFUser here, instead of the datamanager, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
+
+    UIViewController *vc = [viewController.childViewControllers firstObject];
     
-    if ([viewController isMemberOfClass:[TemplateCameraViewController class]]) {
+    if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
+        
+        if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
+            
+            [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            
+        }
+        else{
+            [vc.navigationController popViewControllerAnimated:YES];
+        }
+
+        return NO;
+    }
+    else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
+        
+        if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
+            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+        }
+        else{
+            [vc.navigationController popViewControllerAnimated:YES];
+        }
+        
+        return NO;
+    }
+    else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
+        //Zoom to location
+        [((AssignmentsViewController *)vc) setCenteredUserLocation:NO];
+        [((AssignmentsViewController *)vc) zoomToCurrentLocation];
+        return NO;
+    }
+    else if ([vc isMemberOfClass:[ProfileViewController class]]) {
+    
+        if(tabBarController.selectedIndex == 4){
+        
+            if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
+                
+                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                
+            }
+            else{
+                [vc.navigationController popViewControllerAnimated:YES];
+            }
+            
+            return NO;
+            
+        }
+        else{
+        
+            if(![[FRSDataManager sharedManager] isLoggedIn]){
+                
+                FRSRootViewController *rvc = (FRSRootViewController *)self.parentViewController;
+                
+                [rvc presentFirstRunViewController:self];
+                
+                return NO;
+            }
+        }
+    }
+    else if(vc == nil){
+    
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             
             UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
                                            alertControllerWithTitle:ENABLE_CAMERA_TITLE
-                                           message:GO_TO_SETTINGS
+                                           message:ENABLE_CAMERA_SETTINGS
                                            action:DISMISS handler:nil];
             
             [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-            
+                
             }]];
             
             [self presentViewController:alertCon animated:YES completion:nil];
             
-        }
-        return NO;
-    }
-    else {
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
-
-        UIViewController *vc = [viewController.childViewControllers firstObject];
-        
-        if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
-            
-            if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
-                
-                [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-                
-            }
-            else{
-                [vc.navigationController popViewControllerAnimated:YES];
-            }
-
             return NO;
-        }
-        else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
             
-            if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
-                [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
-            }
-            else{
-                [vc.navigationController popViewControllerAnimated:YES];
-            }
             
-            return NO;
         }
-        else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
-            //Zoom to location
-            [((AssignmentsViewController *)vc) setCenteredUserLocation:NO];
-            [((AssignmentsViewController *)vc) zoomToCurrentLocation];
-            return NO;
-        }
-        else if ([vc isMemberOfClass:[ProfileViewController class]]) {
         
-            if(tabBarController.selectedIndex == 4){
-            
-                if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
-                    
-                    [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-                    
-                }
-                else{
-                    [vc.navigationController popViewControllerAnimated:YES];
-                }
-                
-                return NO;
-                
-            }
-            else{
-            
-                if(![[FRSDataManager sharedManager] isLoggedIn]){
-                    
-                    FRSRootViewController *rvc = (FRSRootViewController *)self.parentViewController;
-                    
-                    [rvc presentFirstRunViewController:self];
-                    
-                    return NO;
-                }
-            }
-        }
     }
     
     return YES;
+    
 }
 
 #pragma mark - UIAlertViewDelegate

@@ -179,9 +179,10 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     dispatch_async(dispatch_get_main_queue(), ^{
         //update UI in main thread.
         //Start animating the indicator
-        [postCell.videoIndicatorView startAnimating];
+        postCell.photoIndicatorView.color = [UIColor whiteColor];
+        [postCell.photoIndicatorView startAnimating];
         [UIView animateWithDuration:1.0 animations:^{
-            postCell.videoIndicatorView.alpha = 1.0f;
+            postCell.photoIndicatorView.alpha = 1.0f;
         }];
     });
 
@@ -198,7 +199,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
-    self.sharedPlayer.muted = NO;
+    self.sharedPlayer.muted = YES;
     
     [self.sharedPlayer play];
     
@@ -234,16 +235,18 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             //Get the collection view cell of the playing item
             PostCollectionViewCell *postCell = (PostCollectionViewCell *)[self.collectionPosts cellForItemAtIndexPath:self.playingIndex];
             
+            postCell.playingVideo = YES;
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [UIView animateWithDuration:1.0 animations:^{
                     
-                    postCell.videoIndicatorView.alpha = 0.0f;
+                    postCell.photoIndicatorView.alpha = 0.0f;
                     
                 } completion:^(BOOL finished){
                     
-                    [postCell.videoIndicatorView stopAnimating];
-                    postCell.videoIndicatorView.hidden = YES;
+                    [postCell.photoIndicatorView stopAnimating];
+                    postCell.photoIndicatorView.hidden = YES;
                     
                 }];
                 
@@ -310,23 +313,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
-
     [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
-    
-    UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processDoubleTap:)];
-    doubleTapGesture.delaysTouchesBegan = NO;
-    [doubleTapGesture setNumberOfTapsRequired:2];
-    [doubleTapGesture setNumberOfTouchesRequired:1];
-    
-    [cell addGestureRecognizer:doubleTapGesture];
-    
-    UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processSingleTap:)];
-    singleTapGesture.delaysTouchesBegan = NO;
-    [singleTapGesture setNumberOfTapsRequired:1];
-    [singleTapGesture setNumberOfTouchesRequired:1];
-    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
-    
-    [cell addGestureRecognizer:singleTapGesture];
         
     return cell;
 }
@@ -352,64 +339,72 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     return 0.0f;
 }
 
-#pragma mark - UITapGesture Functions
-
-- (void)processSingleTap:(UITapGestureRecognizer *)sender {
-   
-    PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    PostCollectionViewCell *cell = (PostCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
     //If the cell has a video
-    if(cell.post.isVideo && !cell.processingVideo){
+    if(cell.post.isVideo && cell.playingVideo){
         
-        if(self.sharedPlayer.rate > 0){
-            
-            [self.sharedPlayer pause];
-            cell.playPause.image = [UIImage imageNamed:@"pause"];
-            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
-            [cell bringSubviewToFront:cell.playPause];
-            
-            cell.playPause.alpha = 1.0f;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                cell.playPause.alpha = 0.0f;
-                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }];
-            
-        }
-        else{
-            
-            [self.sharedPlayer play];
-            cell.playPause.image = [UIImage imageNamed:@"play"];
-            cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
-            [cell bringSubviewToFront:cell.playPause];
-            
-            cell.playPause.alpha = 1.0f;
-            
-            [UIView animateWithDuration:.5 animations:^{
-                cell.playPause.alpha = 0.0f;
-                cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
-            }];
-            
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
         
+            //Check if the player is muted, then set it to play audio
+            if(self.sharedPlayer.muted){
+                
+                self.sharedPlayer.muted = NO;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.mutedImage.alpha = 0.0f;
+                }];
+                
+            }
+            //Check if the player is playing
+            else if(self.sharedPlayer.rate > 0){
+                
+                [self.sharedPlayer pause];
+                cell.playPause.image = [UIImage imageNamed:@"pause"];
+                cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+                [cell bringSubviewToFront:cell.playPause];
+                
+                cell.playPause.alpha = 1.0f;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.playPause.alpha = 0.0f;
+                    cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+                }];
+                
+            }
+            //If it's not playing
+            else{
+                
+                [self.sharedPlayer play];
+                if(cell.mutedImage.alpha == 1.0f) cell.playPause.alpha = 0.0f;
+                cell.playPause.image = [UIImage imageNamed:@"play"];
+                cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
+                [cell bringSubviewToFront:cell.playPause];
+                
+                cell.playPause.alpha = 1.0f;
+                
+                [UIView animateWithDuration:.5 animations:^{
+                    cell.playPause.alpha = 0.0f;
+                    cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
+                }];
+                
+            }
+            
+        });
         
     }
-    
-}
-
-- (void)processDoubleTap:(UITapGestureRecognizer *)sender {
-    
-    PostCollectionViewCell *cell = (PostCollectionViewCell *)sender.view;
-    
-    if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
-    
+    //Post is a picture, not a video
+    else if(!cell.post.isVideo && [cell.post largeImageURL] != nil){
+        
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         
         FRSPhotoBrowserView *browserView = [[FRSPhotoBrowserView alloc] initWithFrame:[window bounds]];
         [self setPhotoBrowserView:browserView];
         
         [[self photoBrowserView] setImages:@[cell.post.largeImageURL] withInitialIndex:0];
-
+        
         [window addSubview:[self photoBrowserView]];
         [[self photoBrowserView] setAlpha:0.f];
         

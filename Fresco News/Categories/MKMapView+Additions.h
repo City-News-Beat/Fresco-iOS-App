@@ -18,19 +18,27 @@ typedef enum {
 
 @property (nonatomic, readonly) UILabel *legalLabel;
 
+// Actions
 - (void)offsetLegalLabel:(CGSize)distance;
 - (void)setLegalLabelCenter:(CGPoint)point;
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius;
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate;
 - (void)zoomToCurrentLocation;
-+ (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
-+ (MKAnnotationView *)setupPinForAnnotation:(id <MKAnnotation>)annotation withAnnotationView:(MKAnnotationView *)annotationView;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
+- (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
+
+// Annotation Views
++ (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
+                                           ForMapView: (MKMapView *)mapView
+                                              AndType: (NSInteger)type;
++ (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation
+                                     ForMapView: (MKMapView *)mapView;
+
+// Annotation additional views
++ (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
++ (UIButton *)caret;
++ (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type;
 
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
-
-+ (void)updateUserPinViewForMapView: (MKMapView *)mapView WithImage: (UIImage *)image;
-+ (void)setPinImageView:(UIImageView *)customPinView forAssignment:(BOOL)isAssignment;
-+ (void)addShadowToAnnotationView:(MKAnnotationView *)annotationView forAssignment: (BOOL)isAssignment;
 
 @end

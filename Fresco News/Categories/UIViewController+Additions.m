@@ -16,7 +16,7 @@
 {
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbar-frescoimage"]];
     
-    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.54];
+    self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
     
@@ -179,13 +179,15 @@
     
     NSUInteger count = 0;
     
-    for (UIViewController *vc in self.childViewControllers) {
-        if ([vc isKindOfClass:[NotificationsViewController class]]) {
-            exists = YES;
-            break;
+
+        for (UIViewController *vc in self.childViewControllers) {
+            if ([vc isKindOfClass:[NotificationsViewController class]]) {
+                exists = YES;
+                break;
+            }
+            count ++;
         }
-        count ++;
-    }
+    
     
     if (exists) {
     

@@ -18,6 +18,7 @@
 #import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "AssignmentOnboardViewController.h"
+#import "FRSLocationManager.h"
 
 #define kSCROLL_VIEW_INSET 75
 
@@ -47,8 +48,7 @@
     /*
     ** Conditioning Variables
     */
-
-    @property (assign, nonatomic) BOOL centeredAssignment;
+    @property (strong, nonatomic) CLLocation *lastLoc;
 
     @property (assign, nonatomic) BOOL navigateTo;
 
@@ -74,6 +74,12 @@
     
     [self tweakUI];
     
+    //Check for location permission
+    [self requestAlwaysAuthorization];
+    
+    self.assignmentsMap.delegate = self;
+    self.scrollView.delegate = self;
+    
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:NAVIGATE_TO_ASSIGNMENT
                             delegate:self
@@ -89,12 +95,7 @@
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
-    
-    if(self.currentAssignment == nil)
-        [self updateAssignments];
-    else
-        [self presentCurrentAssignment];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIF_IMAGE_SET object:nil];
@@ -103,40 +104,11 @@
 
 }
 
-- (void)resetPin:(NSNotification *)notification {
-    self.assignmentsMap.delegate = self;
+- (void)viewWillAppear:(BOOL)animated{
     
-    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
-    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
-    
-    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
-    [self.assignmentsMap setRegion:newRegion animated:NO];
-    
-    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
-    [self.assignmentsMap setRegion:oldRegion animated:NO];
-
-    self.assignmentsMap.delegate = nil;
-}
-
-/*
- ** Prevents scroll and map delegates from being called outside controller
- */
-
--(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.assignmentsMap.delegate = self;
-}
 
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    self.scrollView.delegate = nil;
-    self.assignmentsMap.delegate = nil;
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-    
-    [super viewDidAppear:animated];
-    
+    //Configure radius banner
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
             self.storyBreaksView.hidden = NO;
@@ -146,14 +118,33 @@
         }
     }
     
-    if(self.currentAssignment == nil)
-        [self updateAssignments];
-    else
-        [self presentCurrentAssignment];
+    //Run updates for assignments
+    [self updateAssignments];
+    
+    //If we have an assignment set, present it
+    if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
+    
+        [self presentCurrentAssignmentWithAnimation:YES];
+        
+    }
+    
+}
 
+
+- (void)resetPin:(NSNotification *)notification {
+    
+    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
+    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
+    
+    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
+    [self.assignmentsMap setRegion:newRegion animated:NO];
+    
+    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
+    [self.assignmentsMap setRegion:oldRegion animated:NO];
 }
 
 - (void)viewDidLayoutSubviews{
+    
     self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
 }
 
@@ -167,32 +158,12 @@
        self.storyBreaksView.hidden = YES;
    }
    else
-    self.storyBreaksView.hidden = YES;
+       self.storyBreaksView.hidden = YES;
     
-    self.scrollView.alpha = 0;
-    
+    self.detailViewWrapper.hidden = YES;
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-    
-    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                      attribute:NSLayoutAttributeLeading
-                                                                      relatedBy:0
-                                                                         toItem:self.view
-                                                                      attribute:NSLayoutAttributeLeft
-                                                                     multiplier:1.0
-                                                                       constant:0];
-    [self.view addConstraint:leftConstraint];
-    
-    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                       attribute:NSLayoutAttributeTrailing
-                                                                       relatedBy:0
-                                                                          toItem:self.view
-                                                                       attribute:NSLayoutAttributeRight
-                                                                      multiplier:1.0
-                                                                        constant:0];
-    [self.view addConstraint:rightConstraint];
-
 }
 
 /*
@@ -225,10 +196,8 @@
 */
 
 - (void)updateUserPin:(NSNotification *)notification {
-    [MKMapView updateUserPinViewForMapView:self.assignmentsMap WithImage:notification.object];
+    [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:notification.object];
 }
-
-//create function
 
 
 #pragma mark - Assignment Management
@@ -237,7 +206,7 @@
 ** Sets current assignment of view controller, with conditioning variables and checks for expiration
 */
 
--(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present{
+-(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present withAnimation:(BOOL)animate{
     
     if(([currentAssignment.expirationTime timeIntervalSince1970] - [[NSDate date] timeIntervalSince1970]) > 0) {
         
@@ -247,7 +216,7 @@
         
         if(navigate) self.navigateTo = YES;
         
-        if(present) [self presentCurrentAssignment];
+        if(present) [self presentCurrentAssignmentWithAnimation:animate];
     
     }
 }
@@ -256,26 +225,38 @@
 ** Presents current assignment of view controller, fades in view
 */
 
--(void)presentCurrentAssignment{
+- (void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
     
-    self.assignmentTitle.text= self.currentAssignment.title;
+    if(self.isViewLoaded){
     
-    self.assignmentDescription.text = self.currentAssignment.caption;
-    
-    self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
-    
-    [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius];
-    
-    [UIView animateWithDuration:.4 animations:^(void) {
-        [self.scrollView setAlpha:1];
-    }];
-    
-    if(self.navigateTo) [self.navigationSheet showInView:self.view];
-    
-    self.navigateTo = false;
-    
-    [self selectCurrentAssignmentAnnotation];
-
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.assignmentTitle.text= self.currentAssignment.title;
+            
+            self.assignmentDescription.text = self.currentAssignment.caption;
+            
+            self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
+            
+            [self.assignmentsMap zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius withAnimation:animate];
+            
+            self.operatingRadius = 0;
+            
+            self.detailViewWrapper.hidden = NO;
+            
+            CGRect newFrame = CGRectMake(0, 0, self.detailViewWrapper.frame.size.width, self.detailViewWrapper.frame.size.height);
+            
+            [UIView animateWithDuration:.4 animations:^(void) {
+                
+                [self.detailViewWrapper setFrame:newFrame];
+                
+            }];
+            
+            if(self.navigateTo) [self.navigationSheet showInView:self.view];
+            
+            self.navigateTo = false;
+            
+        });
+    }
 }
 
 - (void)selectCurrentAssignmentAnnotation{
@@ -287,6 +268,7 @@
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
+                if(self.assignmentsMap)
                 [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
@@ -305,7 +287,7 @@
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
     
         //Check if the user moves at least a difference greater than .4
-        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4 && ([radius floatValue] > [self.operatingRadius floatValue]))){
+        if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4)){
             
             self.updating = true;
         
@@ -317,8 +299,7 @@
             
             if([radius integerValue] < 500){
 
-                [[FRSDataManager sharedManager]
-                 getAssignmentsWithinRadius:[radius floatValue]
+                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue]
                  ofLocation:CLLocationCoordinate2DMake(
                                                        self.assignmentsMap.centerCoordinate.latitude,
                                                        self.assignmentsMap.centerCoordinate.longitude)
@@ -353,6 +334,12 @@
                                 [self populateMapWithAnnotations];
                             
                             }
+                            else if(([self.assignments count] +1) > [self.assignmentsMap.annotations count]){
+                            
+                                [self populateMapWithAnnotations];
+                                
+                            }
+                            
                         }
                         else{
                         
@@ -369,8 +356,7 @@
             }
             else{
                 
-                [[FRSDataManager sharedManager]
-                 getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
+                [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
                  lon:self.assignmentsMap.centerCoordinate.longitude
                  radius:[radius floatValue]
                  withResponseBlock:^(id responseObject, NSError *error) {
@@ -442,7 +428,7 @@
         }
         
         // Run this after populating map with assignments, this ensures we have the annotation to select
-        if(self.currentAssignment){
+        if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
             
             [self selectCurrentAssignmentAnnotation];
             
@@ -493,13 +479,20 @@
             MKAnnotationView *view = [self.assignmentsMap viewForAnnotation:annotation];
             
             if (view) {
-                [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
-                    view.alpha = 0.0;
-                } completion:^(BOOL finished) {
-                    [self.assignmentsMap removeAnnotation:annotation];
-                    view.alpha = 1.0;
-                }];
-            } else {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                
+                    [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+                        view.alpha = 0.0;
+                    }completion:^(BOOL finished) {
+                        [self.assignmentsMap removeAnnotation:annotation];
+                        view.alpha = 1.0;
+                    }];
+                        
+                });
+                
+            }
+            else {
                 [self.assignmentsMap removeAnnotation:annotation];
             }
             
@@ -530,66 +523,22 @@
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
         
-        self.pinView = [mapView dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+        self.pinView = [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.assignmentsMap];
         
         //Check to see if the annotation is dequeued and set already, if not, make one
-        if(!self.pinView) return [MKMapView setupPinForAnnotation:annotation withAnnotationView:self.pinView];
+        return self.pinView;
             
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
-  
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:ASSIGNMENT_IDENTIFIER];
-    
-        if (annotationView == nil) {
-          
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:ASSIGNMENT_IDENTIFIER];
-            
-            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-            
-            /* Callout */
-            
-                UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            
-                [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
-                
-                caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
-                
-                caret.contentMode = UIViewContentModeScaleAspectFit;
-                
-                annotationView.rightCalloutAccessoryView = caret;
-                
-            /* End Callout */
-            
-        }
-        else {
-            annotationView.annotation = annotation;
-        }
+
+        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSAssignmentAnnotation];
         
-        return annotationView;
-    
     }
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
-        
-        MKAnnotationView *annotationView = (MKAnnotationView *) [self.assignmentsMap dequeueReusableAnnotationViewWithIdentifier:CLUSTER_IDENTIFIER];
-        
-        if (annotationView == nil) {
-            
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:CLUSTER_IDENTIFIER];
-            annotationView.enabled = YES;
-            
-            [annotationView setImage:[UIImage imageNamed:@"assignment-dot"]];
-            
-        }
-        else {
-            annotationView.annotation = annotation;
-        }
-        
-        return annotationView;
-    
+
+        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSClusterAnnotation];
     
     }
 
@@ -613,18 +562,24 @@
     
     if ([view.annotation isKindOfClass:[AssignmentAnnotation class]]){
         
-        [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES];
+        //Check if we have an assignment at this index
+        if([self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] != nil){
+        
+            //Set the current assignment
+            [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES withAnimation:YES];
+            
+        }
         
     }
     else if ([view.annotation isKindOfClass:[ClusterAnnotation class]]){
         
         FRSCluster *cluster = [self.clusters objectAtIndex:((ClusterAnnotation *) view.annotation).clusterIndex];
         
-        [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius];
+        [self.assignmentsMap zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius withAnimation:YES];
+        
+        self.operatingRadius = 0;
         
     }
-    
-    [mapView selectAnnotation:view.annotation animated:YES];
     
 }
 
@@ -634,10 +589,22 @@
     
     self.currentAssignment = nil;
     
-    [UIView animateWithDuration:.4 animations:^(void) {
-        self.scrollView.alpha = 0.0f;
-        self.centeredAssignment = NO;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGRect newFrame = CGRectMake(0,
+                                     0 + self.detailViewWrapper.frame.size.height,
+                                     self.detailViewWrapper.frame.size.width,
+                                     self.detailViewWrapper.frame.size.height);
+        
+        [UIView animateWithDuration:.4 animations:^(void) {
+            
+            [self.detailViewWrapper setFrame:newFrame];
+            
+        } completion:^(BOOL finished) {
+            self.detailViewWrapper.hidden = YES;
+        }];
+
+    });
 
 }
 
@@ -653,7 +620,8 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
-    [self updateAssignments];
+    if(self.centeredUserLocation)
+        [self updateAssignments];
     
 }
 
@@ -664,31 +632,10 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    if(self.currentAssignment == nil) {
-        [self zoomToCurrentLocation];
-    }
+    [self zoomToCurrentLocation];
 }
 
 #pragma mark - Location Zoom/View Methods
-
-/*
- ** Zoom to specified coordinates
- */
-
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius{
-    
-    //Span uses degrees, 1 degree = 69 miles
-    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
-    
-    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-    
-    self.operatingRadius = 0;
-    
-}
 
 
 /*
@@ -697,17 +644,20 @@
 
 - (void)zoomToCurrentLocation {
     
-    //center on the current location
-    if (!self.centeredUserLocation){
-        
-        __block BOOL runUserLocation = true;
-        
+    __block BOOL runUserLocation = true;
+    
+    //Check if we're already centered
+    if (self.centeredUserLocation)
+        return;
+    
+    if ([self.lastLoc distanceFromLocation:self.assignmentsMap.userLocation.location] > 0 || self.lastLoc == nil){
+    
         //Find nearby assignments in a 20 mile radius
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10.f ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count]){
+                if([responseObject count] > 0){
                     
                     //Don't zoom to uer location
                     runUserLocation = false;
@@ -749,29 +699,62 @@
             
         }];
         
-        if(runUserLocation){
+    }
+
+    if(runUserLocation){
+        
+        if(self.assignmentsMap.userLocation.location != nil){
             
-            if(self.assignmentsMap.userLocation.location != nil){
-                
-                // Zooming map after delay for effect
-                MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
-                
-                MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
-                
-                MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                
-                [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                
-            }
+            // Zooming map after delay for effect
+            MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
+            
+            MKCoordinateRegion region = {self.assignmentsMap.userLocation.location.coordinate, span};
+            
+            MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+            
+            [self.assignmentsMap setRegion:regionThatFits animated:YES];
+            
+            self.lastLoc = self.assignmentsMap.userLocation.location;
             
         }
         
-        self.centeredUserLocation = YES;
-        
-        self.operatingRadius = 0;
-        
     }
     
+    self.centeredUserLocation = YES;
+    
+    self.operatingRadius = 0;
+    
+}
+
+#pragma mark - Authorization 
+
+- (void)requestAlwaysAuthorization
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    
+    // If the status is denied or only granted for when in use, display an alert
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+        
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:CASUAL_LOC_DISABLED
+                                       message:ENABLE_LOC_SETTINGS
+                                       action:DISMISS handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+
+    }
+    // The user has not enabled any location services. Request background authorization.
+    else if (status == kCLAuthorizationStatusNotDetermined) {
+        
+        [[FRSLocationManager sharedManager] requestAlwaysAuthorization];
+        
+    }
 }
 
 #pragma mark - Action Sheet Delegate
