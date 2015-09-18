@@ -12,9 +12,6 @@
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import <MapKit/MapKit.h>
-#import "MapViewOverlayBottom.h"
-#import "MapOverlayTop.h"
 #import "UISocialButton.h"
 #import "NSString+Validation.h"
 #import <SVPulsingAnnotationView.h>
@@ -66,9 +63,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-
-@property (weak, nonatomic) IBOutlet MapOverlayTop *topMapOverlay;
-@property (weak, nonatomic) IBOutlet MapViewOverlayBottom *bottomMapOverlay;
 
 /*
  ** UI Constraints

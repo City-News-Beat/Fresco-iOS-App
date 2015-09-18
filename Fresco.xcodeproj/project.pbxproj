@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0709003D1BA88B7D0038A616 /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0709003C1BA88B7D0038A616 /* OnboardPageViewController.m */; };
-		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
-		0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */; };
+		07C365BF1BAC876800AE31C2 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */; };
+		07C365C01BAC876800AE31C2 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */; };
+		07C365C11BAC876800AE31C2 /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */; };
+		07C365C21BAC876800AE31C2 /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */; };
+		07C365C31BAC876800AE31C2 /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */; };
 		07DC74F31BA3306700E63720 /* OnboardImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74F21BA3306700E63720 /* OnboardImages.xcassets */; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
@@ -101,8 +103,6 @@
 		BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
-		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
-		BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
 		E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
@@ -135,8 +135,6 @@
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
-		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
-		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E786ED371BA74F7C00816A06 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
@@ -201,10 +199,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0709003C1BA88B7D0038A616 /* OnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageViewController.m; sourceTree = "<group>"; };
-		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
-		0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
-		0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
+		07C365B71BAC876800AE31C2 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
+		07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
+		07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
+		07C365BA1BAC876800AE31C2 /* OnboardPageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageCellController.h; sourceTree = "<group>"; };
+		07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageCellController.m; sourceTree = "<group>"; };
+		07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnboardPageCellController.xib; sourceTree = "<group>"; };
+		07C365BD1BAC876800AE31C2 /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
+		07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageViewController.m; sourceTree = "<group>"; };
 		07DC74F21BA3306700E63720 /* OnboardImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OnboardImages.xcassets; sourceTree = "<group>"; };
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
@@ -362,8 +364,6 @@
 		BC47F6FC1B94A9AB00969034 /* TOSViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TOSViewController.xib; path = "First Run/TOSViewController.xib"; sourceTree = "<group>"; };
 		BC4D2DED1B9754ED00E6026B /* FRSMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSMotionManager.h; path = Singletons/FRSMotionManager.h; sourceTree = "<group>"; };
 		BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSMotionManager.m; path = Singletons/FRSMotionManager.m; sourceTree = "<group>"; };
-		BC7190EB1B7C01B400E72BE5 /* FRSDisabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDisabledViewController.h; sourceTree = "<group>"; };
-		BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisabledViewController.m; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
@@ -427,10 +427,6 @@
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
-		E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
-		E784280F1B57F4010090DFCC /* OnboardPageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageCellController.h; sourceTree = "<group>"; };
-		E78428101B57F4010090DFCC /* OnboardPageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageCellController.m; sourceTree = "<group>"; };
-		E78428111B57F4010090DFCC /* OnboardPageCellController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnboardPageCellController.xib; sourceTree = "<group>"; };
 		E786ED351BA74F7C00816A06 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
 		E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
@@ -506,6 +502,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07C365B61BAC876800AE31C2 /* Onboard */ = {
+			isa = PBXGroup;
+			children = (
+				07C365B71BAC876800AE31C2 /* FRSOnboardViewConroller.h */,
+				07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */,
+				07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */,
+				07C365BA1BAC876800AE31C2 /* OnboardPageCellController.h */,
+				07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */,
+				07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */,
+				07C365BD1BAC876800AE31C2 /* OnboardPageViewController.h */,
+				07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */,
+			);
+			name = Onboard;
+			path = Stories/Onboard;
+			sourceTree = "<group>";
+		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -744,10 +756,8 @@
 				1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */,
 				424323D91AB3D64900646278 /* FRSTabBarController.h */,
 				424323DA1AB3D64900646278 /* FRSTabBarController.m */,
-				BC7190EB1B7C01B400E72BE5 /* FRSDisabledViewController.h */,
-				BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */,
-				E784280E1B57F3E30090DFCC /* Onboard */,
 				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
+				07C365B61BAC876800AE31C2 /* Onboard */,
 				E7CF7ED61B96743200C28E5C /* TOS */,
 				E7BFA2E21B18CF8100B820C0 /* Galleries */,
 				E73E100A1B0F958D00763240 /* Highlights */,
@@ -1064,21 +1074,6 @@
 			name = Notifications;
 			sourceTree = "<group>";
 		};
-		E784280E1B57F3E30090DFCC /* Onboard */ = {
-			isa = PBXGroup;
-			children = (
-				0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */,
-				0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */,
-				0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */,
-				E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */,
-				0709003C1BA88B7D0038A616 /* OnboardPageViewController.m */,
-				E784280F1B57F4010090DFCC /* OnboardPageCellController.h */,
-				E78428101B57F4010090DFCC /* OnboardPageCellController.m */,
-				E78428111B57F4010090DFCC /* OnboardPageCellController.xib */,
-			);
-			path = Onboard;
-			sourceTree = "<group>";
-		};
 		E796FA151B0E5244002B30C4 /* Assignment */ = {
 			isa = PBXGroup;
 			children = (
@@ -1312,14 +1307,14 @@
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
 				07DC74F31BA3306700E63720 /* OnboardImages.xcassets in Resources */,
-				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
+				07C365C01BAC876800AE31C2 /* FRSOnboardViewConroller.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
-				0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */,
 				BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */,
+				07C365C21BAC876800AE31C2 /* OnboardPageCellController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1449,8 +1444,6 @@
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */,
-				0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */,
-				E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
@@ -1483,12 +1476,12 @@
 				4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */,
 				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
-				BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
+				07C365BF1BAC876800AE31C2 /* FRSOnboardViewConroller.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
@@ -1507,7 +1500,6 @@
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
-				BCDD2CE31B66EC24001A301F /* MapOverlayTop.m in Sources */,
 				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
@@ -1515,6 +1507,7 @@
 				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */,
 				E720DEA21B8BA7F400855C3F /* UISocialButton.m in Sources */,
+				07C365C11BAC876800AE31C2 /* OnboardPageCellController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
 				420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */,
@@ -1528,7 +1521,7 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */,
 				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
-				0709003D1BA88B7D0038A616 /* OnboardPageViewController.m in Sources */,
+				07C365C31BAC876800AE31C2 /* OnboardPageViewController.m in Sources */,
 				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
