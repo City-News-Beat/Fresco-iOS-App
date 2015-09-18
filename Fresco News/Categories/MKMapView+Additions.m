@@ -38,7 +38,7 @@
 #pragma mark - Zooming
 // Zoom to specified coordinates
 // Note: All values passed into these functions are in meters
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate
 {
     // Span uses degrees, 1 degree = 69 miles
     MKCoordinateSpan span = MKCoordinateSpanMake(
@@ -47,7 +47,8 @@
                                                  );
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     MKCoordinateRegion regionThatFits = [self regionThatFits:region];
-    [self setRegion:regionThatFits animated:YES];
+    
+    [self setRegion:regionThatFits animated:animate];
 }
 
 // Zooms to user location
@@ -79,7 +80,7 @@
     
     [self zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
                                       lon:[NSNumber numberWithDouble:coordinate.longitude]
-                               withRadius:[NSNumber numberWithDouble:radius]];
+                               withRadius:[NSNumber numberWithDouble:radius] withAnimation:YES];
     
     [self addRadiusCircle:radius];
 }
@@ -170,7 +171,7 @@
 }
 
 /*
- ** Helper method to set image for pin view
+** Helper method to set image for pin view
 */
 
 + (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type {
@@ -204,8 +205,8 @@
 }
 
 
-+ (void)updateUserPinViewForMapView:(MKMapView *)mapView WithImage: (UIImage *)image
-{
+- (void)updateUserPinViewForMapView:(MKMapView *)mapView withImage: (UIImage *)image{
+    
     for (id<MKAnnotation> annotation in mapView.annotations){
         
         if (annotation == mapView.userLocation){
@@ -225,4 +226,5 @@
         }
     }
 }
+
 @end

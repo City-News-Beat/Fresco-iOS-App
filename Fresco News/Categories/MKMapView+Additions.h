@@ -21,10 +21,10 @@ typedef enum {
 // Actions
 - (void)offsetLegalLabel:(CGSize)distance;
 - (void)setLegalLabelCenter:(CGPoint)point;
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius;
+- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate;
 - (void)zoomToCurrentLocation;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
-+ (void)updateUserPinViewForMapView: (MKMapView *)mapView WithImage: (UIImage *)image;
+- (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
 
 // Annotation Views
 + (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
