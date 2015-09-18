@@ -370,7 +370,56 @@
     onBoardPageCellController.cash2.alpha = 1;
     onBoardPageCellController.cash3.alpha = 1;
         
+    onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(.5,.5);
+    onBoardPageCellController.greyCloud.alpha = 0;
+
         
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                         onBoardPageCellController.greyCloud.alpha = 1;
+                         
+                         
+                         
+                         // create a CGPath that implements two arcs (a bounce)
+                         CGMutablePathRef thePath = CGPathCreateMutable();
+                         CGPathMoveToPoint(thePath,NULL,200.0,70.0);
+                         CGPathAddCurveToPoint(thePath,NULL,
+                                               400.0, 36.0,
+                                               300.0,100.0,
+                                               320.0,100.0);
+
+                         CAKeyframeAnimation * theAnimation;
+                         
+                         // Create the animation object, specifying the position property as the key path.
+                         theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+                         theAnimation.path=thePath;
+                         theAnimation.duration=2.0;
+                         
+                         // Add the animation to the layer.
+                         [onBoardPageCellController.cash1.layer addAnimation:theAnimation forKey:@"position"];
+
+                         
+                         
+                         
+                         
+                         
+                     }
+                     completion:^(BOOL finished) {
+                         
+                         [UIView animateWithDuration:0.25 animations:^{
+                             
+                             onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(1, 1);
+                             
+                         }];
+                         
+                    
+
+                     }];
+
     
     });
 }
