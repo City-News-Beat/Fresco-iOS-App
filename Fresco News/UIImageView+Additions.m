@@ -15,6 +15,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = contentMode;
+
     
     return imageView;
     

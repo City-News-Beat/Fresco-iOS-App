@@ -370,9 +370,6 @@
     onBoardPageCellController.cash2.alpha = 1;
     onBoardPageCellController.cash3.alpha = 1;
         
-    
-    onBoardPageCellController.cash2.transform = CGAffineTransformMakeScale(0, 0);
-    
         
     
     });
