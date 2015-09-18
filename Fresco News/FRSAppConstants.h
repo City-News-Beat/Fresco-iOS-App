@@ -47,6 +47,8 @@ enum FRSAnnotationType {
 #define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
+#define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
+
 
 
 #pragma mark - Keys Plist
@@ -132,6 +134,7 @@ enum FRSAnnotationType {
 #define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
 #define USER_IDENTIFIER                     @"currentLocation"
 #define kMetersInAMile                      1609.34
+#define kDegreesInAMile                     69.0
 
 
 #pragma mark - Segue Identifiers
@@ -188,6 +191,9 @@ enum FRSAnnotationType {
 #define LOGIN_PROMPT                        NSLocalizedString(@"Please enter a valid email and password", nil)
 
 #define SIGNUP_ERROR                        NSLocalizedString(@"It seems there was an error signing you up. Please try again in a bit.", nil)
+#define SIGNUP_EXISTS                       NSLocalizedString(@"Looks like that email is taken! Please use a different one", nil)
+
+
 
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
