@@ -153,8 +153,7 @@
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
             
-            
-            
+
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
             self.circleView1.transform = CGAffineTransformMakeScale(0, 0);

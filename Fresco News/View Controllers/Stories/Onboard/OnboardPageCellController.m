@@ -8,6 +8,7 @@
 
 #import "OnboardPageCellController.h"
 #import "OnboardPageViewController.h"
+#import "UIImageView+Additions.h"
 
 @interface OnboardPageCellController ()
 
@@ -127,11 +128,21 @@
 
 - (void)setUpOnboard1 {
     
-    // Create earth image view
-    self.earth = [[UIImageView alloc] initWithFrame:CGRectMake(59, 47, 173, 173)];
-    self.earth.image = [UIImage imageNamed:@"earth"];
-    [self.earth setContentMode:UIViewContentModeScaleToFill];
+    self.earth = [UIImageView UIImageViewWithName:@"earth"
+                                         andFrame:CGRectMake(59, 47, 173, 173)
+                                   andContentMode: UIViewContentModeScaleToFill ];
+    
+    self.earth.transform = CGAffineTransformMakeRotation(M_PI_2 - 1);
+    
+    
     [self.onboard1View addSubview:self.earth];
+
+    
+//    // Create earth image view
+//    self.earth = [[UIImageView alloc] initWithFrame:CGRectMake(59, 47, 173, 173)];
+//    self.earth.image = [UIImage imageNamed:@"earth"];
+//    [self.earth setContentMode:UIViewContentModeScaleToFill];
+//    [self.onboard1View addSubview:self.earth];
     
     // Create top left assignment image view
     self.assignmentTopLeft = [[UIImageView alloc] initWithFrame:CGRectMake(73, 71, 50, 50)];
@@ -201,23 +212,20 @@
 
 - (void)setUpOnboard3 {
     
-    // Create cloud image view
-    self.greyCloud = [[UIImageView alloc] initWithFrame:CGRectMake(85, 37, 115, 78)];
-    self.greyCloud.image = [UIImage imageNamed:@"grey-cloud"];
-    [self.greyCloud setContentMode: UIViewContentModeScaleToFill];
-    [self.onboard3View addSubview:self.greyCloud];
-
-    // Create television image view
-    self.television = [[UIImageView alloc] initWithFrame:CGRectMake(48, 173, 72, 60)];
-    self.television.image = [UIImage imageNamed:@"television"];
-    [self.television setContentMode: UIViewContentModeScaleToFill];
-    [self.onboard3View addSubview:self.television];
     
-    // Create newspaper image view
-    self.newspaper = [[UIImageView alloc] initWithFrame:CGRectMake(165, 173, 68, 60)];
-    self.newspaper.image = [UIImage imageNamed:@"newspaper"];
-    [self.newspaper setContentMode:UIViewContentModeScaleToFill];
-    [self.onboard3View addSubview:self.newspaper];
+//    // Create television image view
+//    self.television = [UIImageView UIImageViewWithName:@"television"
+//                       andFrame:CGRectMake(48, 173, 72, 60)
+//                       andContentMode:UIViewContentModeScaleToFill];
+//    
+//    [self.onboard3View addSubview:self.television];
+//    
+//    
+//    // Create newspaper image view
+//    self.newspaper = [UIImageView UIImageViewWithName:@"newspaper" andFrame:CGRectMake(165, 173, 68, 60) andContentMode:UIViewContentModeScaleToFill andTransform:nil];
+//    
+//    [self.onboard3View addSubview:self.newspaper];
+    
     
     // Create upload left image view
     self.uploadLeft = [[UIImageView alloc] initWithFrame:CGRectMake(165, 135, 24, 24)];
@@ -237,11 +245,11 @@
     self.cash1 = [[UIImageView alloc] initWithFrame:CGRectMake(205, 36, 35, 24)];
     self.cash1.image = [UIImage imageNamed:@"cash"];
     [self.cash1 setContentMode:UIViewContentModeScaleToFill];
-    [self.onboard3View addSubview:self.cash1];
     self.cash1.transform = CGAffineTransformMakeRotation(.13);
-
+    [self.onboard3View addSubview:self.cash1];
+    
     // Create cash2 image view
-    self.cash2 = [[UIImageView alloc] initWithFrame:CGRectMake(25, 60, 35, 24)];
+    self.cash2 = [[UIImageView alloc] initWithFrame:CGRectMake(70, 60, 35, 24)];
     self.cash2.image = [UIImage imageNamed:@"cash"];
     [self.cash2 setContentMode:UIViewContentModeScaleToFill];
     [self.onboard3View addSubview:self.cash2];
@@ -254,6 +262,12 @@
     [self.onboard3View addSubview:self.cash3];
     self.cash3.transform = CGAffineTransformMakeRotation(.785);
     
+    // Create cloud image view
+    self.greyCloud = [[UIImageView alloc] initWithFrame:CGRectMake(85, 37, 115, 78)];
+    self.greyCloud.image = [UIImage imageNamed:@"grey-cloud"];
+    [self.greyCloud setContentMode: UIViewContentModeScaleToFill];
+    [self.onboard3View addSubview:self.greyCloud];
+    
     self.greyCloud.alpha = 0;
     self.television.alpha = 0;
     self.newspaper.alpha = 0;
@@ -264,6 +278,24 @@
     self.cash3.alpha = 0;
         
 }
+
+//+ (UIImageView *)createUIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode andTransform:(CGAffineTransform *)transform{
+//
+//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+//    imageView.image = [UIImage imageNamed:imageName];
+//    imageView.contentMode = contentMode;
+//    imageView.transform = *(transform);
+//    
+//    return imageView;
+//
+//
+//}
+//
+//+ (UIImageView *)createUIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode{
+//
+//   return [self createUIImageViewWithName:imageName andFrame:frame andContentMode:contentMode andTransform:nil];
+//
+//}
 
 - (void)setUpViews {
     

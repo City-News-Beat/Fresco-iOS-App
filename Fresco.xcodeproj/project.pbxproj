@@ -12,6 +12,7 @@
 		07C365C11BAC876800AE31C2 /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */; };
 		07C365C21BAC876800AE31C2 /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */; };
 		07C365C31BAC876800AE31C2 /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */; };
+		07C365C61BAC9A9900AE31C2 /* UIImageView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365C51BAC9A9900AE31C2 /* UIImageView+Additions.m */; };
 		07DC74F31BA3306700E63720 /* OnboardImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07DC74F21BA3306700E63720 /* OnboardImages.xcassets */; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
@@ -207,6 +208,8 @@
 		07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnboardPageCellController.xib; sourceTree = "<group>"; };
 		07C365BD1BAC876800AE31C2 /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
 		07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageViewController.m; sourceTree = "<group>"; };
+		07C365C41BAC9A9900AE31C2 /* UIImageView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Additions.h"; sourceTree = "<group>"; };
+		07C365C51BAC9A9900AE31C2 /* UIImageView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Additions.m"; sourceTree = "<group>"; };
 		07DC74F21BA3306700E63720 /* OnboardImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OnboardImages.xcassets; sourceTree = "<group>"; };
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
@@ -508,11 +511,11 @@
 				07C365B71BAC876800AE31C2 /* FRSOnboardViewConroller.h */,
 				07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */,
 				07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */,
-				07C365BA1BAC876800AE31C2 /* OnboardPageCellController.h */,
-				07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */,
 				07C365BC1BAC876800AE31C2 /* OnboardPageCellController.xib */,
 				07C365BD1BAC876800AE31C2 /* OnboardPageViewController.h */,
 				07C365BE1BAC876800AE31C2 /* OnboardPageViewController.m */,
+				07C365BA1BAC876800AE31C2 /* OnboardPageCellController.h */,
+				07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */,
 			);
 			name = Onboard;
 			path = Stories/Onboard;
@@ -843,6 +846,8 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				07C365C41BAC9A9900AE31C2 /* UIImageView+Additions.h */,
+				07C365C51BAC9A9900AE31C2 /* UIImageView+Additions.m */,
 				42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */,
 				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
 				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
@@ -1453,6 +1458,7 @@
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
+				07C365C61BAC9A9900AE31C2 /* UIImageView+Additions.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,

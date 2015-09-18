@@ -12,6 +12,7 @@
 #import "FRSDataManager.h"
 #import "FRSOnboardViewConroller.h"
 
+
 @interface OnboardPageViewController()
 
 @property (nonatomic, assign) BOOL runningNextPage;
@@ -181,6 +182,12 @@
 
 - (void)onboardAnimation {
     
+    
+    //First onboard cell = [self.viewcontrollers firstObject];
+    //Second onboard cell = [self.viewControllers ?????];
+    //Third onboard cell = [self.viewControllers lastObject];
+    
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (self.currentIndex == 0) {
@@ -197,13 +204,6 @@
             onBoardPageCellController.cloud.alpha = 1;
             onBoardPageCellController.upload.alpha = 1;
             onBoardPageCellController.camera.alpha = 1;
-            
-//            onBoardPageCellController.assignmentBottomLeft.alpha = 0;
-//            onBoardPageCellController.assignmentBottomRight.alpha = 0;
-//            onBoardPageCellController.assignmentTopLeft.alpha = 0;
-//            onBoardPageCellController.assignmentTopRight.alpha = 0;
-            
-
 
             NSLog (@"index: 1");
         }
@@ -211,16 +211,7 @@
         
         if (self.currentIndex == 2) {
             
-            OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
-
-            onBoardPageCellController.greyCloud.alpha = 1;
-            onBoardPageCellController.television.alpha = 1;
-            onBoardPageCellController.newspaper.alpha = 1;
-            onBoardPageCellController.uploadLeft.alpha = 1;
-            onBoardPageCellController.uploadRight.alpha = 1;
-            onBoardPageCellController.cash1.alpha = 1;
-            onBoardPageCellController.cash2.alpha = 1;
-            onBoardPageCellController.cash3.alpha = 1;
+            [self animateOnboard2];
             
             NSLog (@"index: 2");
         }
@@ -365,6 +356,26 @@
 }
 
 - (void)animateOnboard2 {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+    OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
+    
+    onBoardPageCellController.greyCloud.alpha = 1;
+    onBoardPageCellController.television.alpha = 1;
+    onBoardPageCellController.newspaper.alpha = 1;
+    onBoardPageCellController.uploadLeft.alpha = 1;
+    onBoardPageCellController.uploadRight.alpha = 1;
+    onBoardPageCellController.cash1.alpha = 1;
+    onBoardPageCellController.cash2.alpha = 1;
+    onBoardPageCellController.cash3.alpha = 1;
+        
+    
+    onBoardPageCellController.cash2.transform = CGAffineTransformMakeScale(0, 0);
+    
+        
+    
+    });
 }
 
 
