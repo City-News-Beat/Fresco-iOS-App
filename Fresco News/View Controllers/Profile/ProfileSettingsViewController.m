@@ -713,7 +713,7 @@ typedef enum : NSUInteger {
     
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
     
-    [self.mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    [self.mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 #pragma mark - UITextField Delegate
@@ -747,7 +747,7 @@ typedef enum : NSUInteger {
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
@@ -759,7 +759,7 @@ typedef enum : NSUInteger {
     
     //If the annotiation is for the user location
     if (annotation == mapView.userLocation) {
-            return [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.mapView];
+        return [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.mapView];
     }
     
     return nil;
@@ -791,8 +791,7 @@ typedef enum : NSUInteger {
     
 }
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
 
     self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
     
@@ -800,7 +799,7 @@ typedef enum : NSUInteger {
     
     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
-    [MKMapView updateUserPinViewForMapView:self.mapView WithImage:self.selectedImage];
+    [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
     
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
