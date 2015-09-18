@@ -13,6 +13,7 @@
 - (void)setUpSocialIcon:(SocialNetwork)network{
     
     self.layer.cornerRadius = 4;
+    self.clipsToBounds = YES;
     
     if(network == SocialNetworkFacebook){
     

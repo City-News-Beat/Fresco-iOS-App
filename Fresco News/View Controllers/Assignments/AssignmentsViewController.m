@@ -160,30 +160,10 @@
    else
        self.storyBreaksView.hidden = YES;
     
-    
     self.detailViewWrapper.hidden = YES;
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-
-    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                      attribute:NSLayoutAttributeLeading
-                                                                      relatedBy:0
-                                                                         toItem:self.view
-                                                                      attribute:NSLayoutAttributeLeft
-                                                                     multiplier:1.0
-                                                                       constant:0];
-    [self.view addConstraint:leftConstraint];
-
-    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                       attribute:NSLayoutAttributeTrailing
-                                                                       relatedBy:0
-                                                                          toItem:self.view
-                                                                       attribute:NSLayoutAttributeRight
-                                                                      multiplier:1.0
-                                                                        constant:0];
-    [self.view addConstraint:rightConstraint];
-
 }
 
 /*
@@ -619,7 +599,7 @@
             [self.detailViewWrapper setFrame:newFrame];
             
         } completion:^(BOOL finished) {
-//            self.detailViewWrapper.hidden = YES;
+            self.detailViewWrapper.hidden = YES;
         }];
 
     });
@@ -669,7 +649,7 @@
     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
     
     [self.assignmentsMap setRegion:regionThatFits animated:animate];
-    
+
     self.operatingRadius = 0;
     
 }

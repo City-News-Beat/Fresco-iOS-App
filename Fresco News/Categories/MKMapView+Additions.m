@@ -40,11 +40,14 @@
 // Note: All values passed into these functions are in meters
 - (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius
 {
-    // Span uses degrees, 1 degree = 69 miles (very sort of)
-    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / (30.0 * kMetersInAMile)), ([radius floatValue] / (30.0 * kMetersInAMile)));
+    // Span uses degrees, 1 degree = 69 miles
+    MKCoordinateSpan span = MKCoordinateSpanMake(
+                                                 ([radius floatValue] / 30),
+                                                 ([radius floatValue] / 30)
+                                                 );
     MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
     MKCoordinateRegion regionThatFits = [self regionThatFits:region];
-    [self setRegion:regionThatFits animated:NO];
+    [self setRegion:regionThatFits animated:YES];
 }
 
 // Zooms to user location
@@ -53,6 +56,7 @@
     MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
     MKCoordinateRegion region = {self.userLocation.location.coordinate, span};
     MKCoordinateRegion regionThatFits = [self regionThatFits:region];
+    
     [self setRegion:regionThatFits animated:YES];
 }
 
@@ -72,16 +76,19 @@
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
+    
     [self zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
                                       lon:[NSNumber numberWithDouble:coordinate.longitude]
                                withRadius:[NSNumber numberWithDouble:radius]];
+    
     [self addRadiusCircle:radius];
 }
 
 - (void)addRadiusCircle:(CGFloat)radius
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:radius];
+    
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:(radius * kMetersInAMile)];
     
     [self removeOverlays:self.overlays];
     [self addOverlay:circle];
@@ -99,7 +106,7 @@
     
     UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     
-    [caret setImage:[UIImage imageNamed:@"forwardCaret"] forState:UIControlStateNormal];
+    [caret setImage:[UIImage imageNamed:@"disclosure"] forState:UIControlStateNormal];
     
     caret.frame = CGRectMake(caret.frame.origin.x, caret.frame.origin.x, 10.0f, 15.0f);
     
@@ -170,7 +177,7 @@
     
     UIImageView *customPinView = [[UIImageView alloc] init];
     
-    CGRect frame = CGRectMake(5, 4, 18, 18);
+    CGRect frame = CGRectMake(5, 3, 18, 18);
     
     if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
         

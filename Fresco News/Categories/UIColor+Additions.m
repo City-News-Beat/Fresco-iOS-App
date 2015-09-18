@@ -89,4 +89,8 @@
       return [UIColor colorWithRed:242/255.0 green:242/255.0 blue:237/255.0 alpha:1];
 }
 
++ (UIColor *)fieldBorderColor {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.08];
+}
+
 @end
