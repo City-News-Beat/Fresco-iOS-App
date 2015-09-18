@@ -88,7 +88,7 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay

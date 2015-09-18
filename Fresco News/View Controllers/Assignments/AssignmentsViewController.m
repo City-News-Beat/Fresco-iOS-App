@@ -75,6 +75,7 @@
     
     [self tweakUI];
     
+    //Check for location permission
     [self requestAlwaysAuthorization];
     
     self.assignmentsMap.delegate = self;
@@ -95,10 +96,6 @@
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
-    
-    if([CLLocationManager locationServicesEnabled]){
-        self.centeredUserLocation = YES;
-    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
@@ -111,6 +108,7 @@
     
     [super viewWillAppear:animated];
 
+    //Configure radius banner
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
             self.storyBreaksView.hidden = NO;
@@ -120,8 +118,10 @@
         }
     }
     
+    //Run updates for assignments
     [self updateAssignments];
     
+    //If we have an assignment set, present it
     if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
     
         [self presentCurrentAssignmentWithAnimation:YES];
@@ -160,30 +160,10 @@
    else
        self.storyBreaksView.hidden = YES;
     
-    
     self.detailViewWrapper.hidden = YES;
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-
-    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                      attribute:NSLayoutAttributeLeading
-                                                                      relatedBy:0
-                                                                         toItem:self.view
-                                                                      attribute:NSLayoutAttributeLeft
-                                                                     multiplier:1.0
-                                                                       constant:0];
-    [self.view addConstraint:leftConstraint];
-
-    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                       attribute:NSLayoutAttributeTrailing
-                                                                       relatedBy:0
-                                                                          toItem:self.view
-                                                                       attribute:NSLayoutAttributeRight
-                                                                      multiplier:1.0
-                                                                        constant:0];
-    [self.view addConstraint:rightConstraint];
-
 }
 
 /*
@@ -216,10 +196,8 @@
 */
 
 - (void)updateUserPin:(NSNotification *)notification {
-    [MKMapView updateUserPinViewForMapView:self.assignmentsMap WithImage:notification.object];
+    [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:notification.object];
 }
-
-//create function
 
 
 #pragma mark - Assignment Management
@@ -259,7 +237,9 @@
             
             self.assignmentTimeElapsed.text = [NSString stringWithFormat:@"Expires %@", [MTLModel futureDateStringFromDate:self.currentAssignment.expirationTime]];
             
-            [self zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius withAnimation:animate];
+            [self.assignmentsMap zoomToCoordinates:self.currentAssignment.lat lon:self.currentAssignment.lon withRadius:self.currentAssignment.radius withAnimation:animate];
+            
+            self.operatingRadius = 0;
             
             self.detailViewWrapper.hidden = NO;
             
@@ -622,7 +602,9 @@
         
         FRSCluster *cluster = [self.clusters objectAtIndex:((ClusterAnnotation *) view.annotation).clusterIndex];
         
-        [self zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius withAnimation:YES];
+        [self.assignmentsMap zoomToCoordinates:cluster.lat lon:cluster.lon withRadius:cluster.radius withAnimation:YES];
+        
+        self.operatingRadius = 0;
         
     }
     
@@ -646,7 +628,7 @@
             [self.detailViewWrapper setFrame:newFrame];
             
         } completion:^(BOOL finished) {
-//            self.detailViewWrapper.hidden = YES;
+            self.detailViewWrapper.hidden = YES;
         }];
 
     });
@@ -705,25 +687,6 @@
 }
 
 #pragma mark - Location Zoom/View Methods
-
-/*
-** Zoom to specified coordinates
-*/
-
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate{
-    
-    //Span uses degrees, 1 degree = 69 miles
-    MKCoordinateSpan span = MKCoordinateSpanMake(([radius floatValue] / 30.0), ([radius floatValue] / 30.0));
-    
-    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
-    
-    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-    
-    [self.assignmentsMap setRegion:regionThatFits animated:animate];
-    
-    self.operatingRadius = 0;
-    
-}
 
 
 /*

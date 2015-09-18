@@ -42,4 +42,6 @@
 
 + (UIColor *)frescoGreyBackgroundColor;
 
++ (UIColor *)fieldBorderColor;
+
 @end
