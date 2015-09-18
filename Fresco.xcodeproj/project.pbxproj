@@ -99,7 +99,6 @@
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC47F6FC1B94A9AB00969034 /* TOSViewController.xib */; };
 		BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */; };
-		BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7190EC1B7C01B400E72BE5 /* FRSDisabledViewController.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		BCDD2CE01B66DBEB001A301F /* MapViewOverlayBottom.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */; };
@@ -1455,7 +1454,6 @@
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
-				BC7190ED1B7C01B500E72BE5 /* FRSDisabledViewController.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
