@@ -320,7 +320,6 @@
     
 }
 
-
 - (void)setUpViews {
     
     if (IS_STANDARD_IPHONE_6) {
