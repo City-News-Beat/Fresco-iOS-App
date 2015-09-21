@@ -139,72 +139,71 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 - (void)updateGalleryHeader:(NSNotification *)notif{
     
     //Check if the notification is in a valid format
-    if(!notif.object[@"path"] || !notif.object[@"postIndex"]) return;
+    if(notif.object[@"postIndex"] && notif.object[@"gallery"]){
     
-    if([self.superview isKindOfClass:[UITableView class]]){
-        
-        UITableView *tableView = (UITableView *)self.superview;
-        
-        NSIndexPath *path = (NSIndexPath *)notif.object[@"path"];
-        
-        GalleryTableViewCell *cell = (GalleryTableViewCell *)[tableView cellForRowAtIndexPath:path];
-        
-        if([cell.gallery.galleryID isEqualToString:self.gallery.galleryID]){
+        if([notif.object[@"gallery"] isEqualToString:self.gallery.galleryID]){
+         
+            [self galleryHeaderUpdateAnimationWithIndex:[(NSNumber *)notif.object[@"postIndex"] integerValue]];
             
-            FRSPost *post = (FRSPost *)self.gallery.posts[[(NSNumber *)notif.object[@"postIndex"] integerValue]];
-            
-            NSString *bylineAndTime = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
-            
-            if(![self.labelPlace.text isEqual:post.address]){
-            
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                    
-                        self.labelPlace.alpha = 0;
-                    
-                    } completion:^(BOOL finished) {
-
-                        self.labelPlace.text = post.address;
-                        
-                        [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                            
-                            self.labelPlace.alpha = 1;
-                            
-                        } completion:nil];
-                        
-                    }];
-                    
-                });
-            
-            }
-            if(![self.labelByLineAndTime.text isEqual:bylineAndTime]){
-            
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                
-                        self.labelByLineAndTime.alpha = 0;
-                        
-                    } completion:^(BOOL finished) {
-                        
-                        self.labelByLineAndTime.text = bylineAndTime;
-                        
-                        [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                            
-                            self.labelByLineAndTime.alpha = 1;
-                            
-                        } completion:nil];
-                        
-                    }];
-                    
-                });
-                
-            }
-            
-
         }
     }
+}
+
+- (void)galleryHeaderUpdateAnimationWithIndex:(NSInteger)postIndex{
+
+    FRSPost *post = (FRSPost *)self.gallery.posts[postIndex];
+    
+    if(!post) return;
+    
+    NSString *bylineAndTime = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
+    
+    if(![self.labelPlace.text isEqual:post.address]){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                
+                self.labelPlace.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                
+                self.labelPlace.text = post.address;
+                
+                [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    
+                    self.labelPlace.alpha = 1;
+                    
+                } completion:nil];
+                
+            }];
+            
+        });
+        
+    }
+    if(![self.labelByLineAndTime.text isEqual:bylineAndTime]){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                
+                self.labelByLineAndTime.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                
+                self.labelByLineAndTime.text = bylineAndTime;
+                
+                [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    
+                    self.labelByLineAndTime.alpha = 1;
+                    
+                } completion:nil];
+                
+            }];
+            
+        });
+        
+    }
+
 }
 
 /*

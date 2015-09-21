@@ -502,16 +502,12 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
     
-    UITableViewCell *cell = (UITableViewCell *)self.superview.superview;
-    
-    UITableView *tableView =  (UITableView *)cell.superview.superview;
-    
-    NSIndexPath *path = [tableView indexPathForCell:cell];
     
     NSDictionary *dict = @{
-                           @"path" : path,
-                           @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row]
-                           };
+                          @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                          @"gallery" : self.gallery.galleryID
+                          };
+    
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
     
