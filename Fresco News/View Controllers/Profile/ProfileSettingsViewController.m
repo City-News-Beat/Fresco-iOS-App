@@ -128,11 +128,16 @@ typedef enum : NSUInteger {
         || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
        && [FRSDataManager sharedManager].currentUser.email == nil){
         
+        
+        [[self.view viewWithTag:100] setHidden:YES];
+        [[self.view viewWithTag:101] setHidden:YES];
         [[self.view viewWithTag:100] removeFromSuperview];
         [[self.view viewWithTag:101] removeFromSuperview];
         
-        self.constraintAccountVerticalTop.constant = 0;
+        CGFloat y = -self.view.frame.size.height/8;
+        self.constraintAccountVerticalTop.constant = y;
         self.constraintAccountVerticalBottom.constant = 0;
+        
         
     }
     
@@ -199,7 +204,7 @@ typedef enum : NSUInteger {
     UILabel *version = [[UILabel alloc] init];
     version.numberOfLines = 0;
     version.frame = CGRectMake(0, 0, 65, 70);
-    version.center = CGPointMake(self.view.bounds.size.width/2 , self.scrollView.contentSize.height + 100);
+    version.center = CGPointMake(self.view.bounds.size.width/2 , self.scrollView.frame.size.height + 100);
     version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
     version.text = [NSString
                     stringWithFormat:@"Build %@\n\nVersion %@",
@@ -686,10 +691,11 @@ typedef enum : NSUInteger {
 }
 
 - (IBAction)addCard:(id)sender {
-    
-    ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
-    
-    [self.navigationController pushViewController:paymentSettings animated:YES];
+
+    //Not in this version
+//    ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
+//    
+//    [self.navigationController pushViewController:paymentSettings animated:YES];
     
 }
 
