@@ -136,7 +136,6 @@
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
 		E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
-		E771DF9C1BACACB800CC795A /* ProfilePaymentSettingsViewControllerTemp.xib in Resources */ = {isa = PBXBuildFile; fileRef = E771DF9B1BACACB800CC795A /* ProfilePaymentSettingsViewControllerTemp.xib */; settings = {ASSET_TAGS = (); }; };
 		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
 		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
@@ -431,7 +430,6 @@
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
 		E771DF981BACACB000CC795A /* ProfilePaymentSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePaymentSettingsViewController.h; sourceTree = "<group>"; };
 		E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePaymentSettingsViewController.m; sourceTree = "<group>"; };
-		E771DF9B1BACACB800CC795A /* ProfilePaymentSettingsViewControllerTemp.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfilePaymentSettingsViewControllerTemp.xib; sourceTree = "<group>"; };
 		E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
 		E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageViewController.m; sourceTree = "<group>"; };
 		E784280F1B57F4010090DFCC /* OnboardPageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageCellController.h; sourceTree = "<group>"; };
@@ -1069,7 +1067,6 @@
 				E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */,
 				E771DF981BACACB000CC795A /* ProfilePaymentSettingsViewController.h */,
 				E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */,
-				E771DF9B1BACACB800CC795A /* ProfilePaymentSettingsViewControllerTemp.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1340,7 +1337,6 @@
 				0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */,
 				E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */,
 				BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */,
-				E771DF9C1BACACB800CC795A /* ProfilePaymentSettingsViewControllerTemp.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
