@@ -6,18 +6,22 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
+@import Parse;
+@import FBSDKCoreKit;
+@import FBSDKLoginKit;
+
+@class FRSUser;
+
 #import "ProfileSettingsViewController.h"
-#import "FRSUser.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
-#import "MapViewOverlayBottom.h"
-#import "MapOverlayTop.h"
 #import "UISocialButton.h"
 #import "NSString+Validation.h"
-#import <SVPulsingAnnotationView.h>
+#import "ProfilePaymentSettingsViewController.h"
 
 typedef enum : NSUInteger {
     SocialExists,
@@ -33,8 +37,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 /*
- ** Profile Picture
- */
+** Profile Picture
+*/
 
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) UIImage *selectedImage;
@@ -55,6 +59,7 @@ typedef enum : NSUInteger {
 
 @property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
+@property (weak, nonatomic) IBOutlet UIView *addCardButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
@@ -67,22 +72,14 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
-@property (weak, nonatomic) IBOutlet MapOverlayTop *topMapOverlay;
-@property (weak, nonatomic) IBOutlet MapViewOverlayBottom *bottomMapOverlay;
-
 /*
- ** UI Constraints
- */
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterIconCenterXConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *facebookIconCenterXConstraint;
+** UI Constraints
+*/
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalTop;
 
-/* Spinner */
-
-//@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsWithShadows;
 
 @end
 
@@ -92,58 +89,7 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
-    self.saveChangesbutton.alpha = 0;
-
-    //Checks if the user's primary login is through social, then disable the email and password fields
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
-        || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-       && [FRSDataManager sharedManager].currentUser.email == nil){
-        
-        [self.view viewWithTag:100].hidden = YES;
-        [self.view viewWithTag:101].hidden = YES;
-        [self.view viewWithTag:102].hidden = YES;
-        
-        CGFloat y = -self.view.frame.size.height/5;
-        self.constraintAccountVerticalTop.constant = y;
-        self.constraintAccountVerticalBottom.constant = 0;
-        
-        self.textfieldEmail.userInteractionEnabled = NO;
-        self.textfieldNewPassword.userInteractionEnabled = NO;
-        self.textfieldConfirmPassword.userInteractionEnabled = NO;
-        
-    } else {
-        self.constraintAccountVerticalTop.constant = [self.view viewWithTag:100].frame.size.height;
-        self.constraintAccountVerticalBottom.constant = 0;
-    }
-    
-    [self.scrollView setNeedsLayout];
-    [self.scrollView layoutIfNeeded];
-    
-    //Update the profile image
-    if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
-        [self.profileImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]] placeholderImage:[UIImage imageNamed:@"user"]
-                                              success:nil failure:nil];
-    }
-    
-    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
-    singleTap.numberOfTapsRequired = 1;
-    
-    //Make the profile image interactive
-    [self.profileImageView setUserInteractionEnabled:YES];
-    [self.profileImageView addGestureRecognizer:singleTap];
-    self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-    self.profileImageView.clipsToBounds = YES;
-    
-    //Round the buttons
-    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter];
-    self.connectTwitterButton.layer.cornerRadius = 4;
-    self.connectTwitterButton.clipsToBounds = YES;
-    
-    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook];
-    self.connectFacebookButton.layer.cornerRadius = 4;
-    self.connectFacebookButton.clipsToBounds = YES;
+    [self configureViews];
     
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
@@ -159,10 +105,77 @@ typedef enum : NSUInteger {
     [self updateLinkingStatus];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+- (void)configureViews{
     
+    self.saveChangesbutton.alpha = 0;
     [self setSaveButtonStateEnabled:NO];
     
+    
+    for (UIView *view in self.viewsWithShadows) {
+        
+        CGFloat borderWidth = 1.0f;
+        
+        view.frame = CGRectInset(view.frame, -borderWidth, -borderWidth);
+        view.layer.borderColor = [UIColor fieldBorderColor].CGColor;
+        view.layer.borderWidth = borderWidth;
+        
+    }
+    
+    //Checks if the user's primary login is through social, then disable the email and password fields
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
+        || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+       && [FRSDataManager sharedManager].currentUser.email == nil){
+        
+        [[self.view viewWithTag:100] removeFromSuperview];
+        [[self.view viewWithTag:101] removeFromSuperview];
+        
+        self.constraintAccountVerticalTop.constant = 0;
+        self.constraintAccountVerticalBottom.constant = 0;
+        
+    }
+    
+    [self.scrollView setNeedsLayout];
+    [self.scrollView layoutIfNeeded];
+    
+    //Update the profile image
+    if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+        [self.profileImageView
+         setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
+         placeholderImage:[UIImage imageNamed:@"user"]
+         success:nil failure:nil];
+    }
+    
+    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    singleTap.numberOfTapsRequired = 1;
+    
+    //Make the profile image interactive
+    [self.profileImageView setUserInteractionEnabled:YES];
+    [self.profileImageView addGestureRecognizer:singleTap];
+    self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+    self.profileImageView.clipsToBounds = YES;
+    
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter];
+    
+    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook];
+    
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
+    caret.contentMode = UIViewContentModeScaleAspectFit;
+    caret.frame = CGRectMake(
+                             self.addCardButton.frame.size.width - 30,
+                             (self.addCardButton.frame.size.height / 2) - 7.5,
+                             15,
+                             15
+                             );
+    
+    [self.addCardButton addSubview:caret];
+    
     [self getYolked];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -335,8 +348,8 @@ typedef enum : NSUInteger {
 }
 
 /*
- ** Triggers a response based on the passed Error
- */
+** Triggers a response based on the passed Error
+*/
 
 - (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
     
@@ -387,39 +400,37 @@ typedef enum : NSUInteger {
 
 - (void)updateLinkingStatus {
     
-    if (![PFUser currentUser]) {
-        [self.connectTwitterButton setHidden:YES];
-        [self.connectFacebookButton setHidden:YES];
-    }
-    else {
-        
-        [self.connectTwitterButton setHidden:NO];
-        [self.connectFacebookButton setHidden:NO];
-        
-        //Twitter
-        if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
-            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            self.twitterIconCenterXConstraint.constant = 45;
+    dispatch_async(dispatch_get_main_queue(), ^{
+            
+        if (![PFUser currentUser]) {
+            [self.connectTwitterButton setHidden:YES];
+            [self.connectFacebookButton setHidden:YES];
         }
         else {
-            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
-            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
-            self.twitterIconCenterXConstraint.constant = 35;
+            
+            [self.connectTwitterButton setHidden:NO];
+            [self.connectFacebookButton setHidden:NO];
+            
+            //Twitter
+            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+                [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+                [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            }
+            else {
+                [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+                [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+            }
+            
+            //Facebook
+            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+                [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+                [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+            } else {
+                [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+            }
         }
         
-        //Facebook
-        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
-            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            self.facebookIconCenterXConstraint.constant = 45;
-        } else {
-            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
-            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
-            self.facebookIconCenterXConstraint.constant = 35;
-        }
-    }
-    
+    });
 }
 
 
@@ -669,10 +680,17 @@ typedef enum : NSUInteger {
         
         [self.navigationController popViewControllerAnimated:NO];
         
-    
     }]];
     
     [self presentViewController:logOutAlertController animated:YES completion:nil];
+}
+
+- (IBAction)addCard:(id)sender {
+    
+    ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:paymentSettings animated:YES];
+    
 }
 
 - (IBAction)disableAccount:(id)sender {
@@ -680,7 +698,7 @@ typedef enum : NSUInteger {
     [self disableAcctWithSocialNetwork:nil];
 }
 
-- (IBAction)saveChangeClicked:(id)sender
+- (IBAction)saveChangeClicked:(id)ender
 {
     [self saveChanges];
 }
@@ -694,7 +712,7 @@ typedef enum : NSUInteger {
     if(roundedValue > 0){
         
         NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
-        
+    
         NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
         
         // only update changes
