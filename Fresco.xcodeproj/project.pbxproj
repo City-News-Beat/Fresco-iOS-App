@@ -874,11 +874,11 @@
 		1EFD22931B2B1C370049B940 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				E771DF971BACAC9900CC795A /* Settings */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				1EBC7FCF1AD6DED000DE5301 /* ProfileHeaderViewController.h */,
 				1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */,
+				E771DF971BACAC9900CC795A /* Settings */,
 			);
 			path = Profile;
 			sourceTree = "<group>";

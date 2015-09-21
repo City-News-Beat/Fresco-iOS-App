@@ -97,29 +97,29 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         /* Horizontal Space */
         NSLayoutConstraint *horizontalSpaceBetween = [NSLayoutConstraint
                                               constraintWithItem:self.labelByLineAndTime
-                                              attribute:NSLayoutAttributeLeading
+                                              attribute:NSLayoutAttributeLeft
                                               relatedBy:NSLayoutRelationGreaterThanOrEqual
                                               toItem:self.labelPlace
-                                              attribute:NSLayoutAttributeTrailing
+                                              attribute:NSLayoutAttributeRight
                                               multiplier:1.0
                                               constant:4.0];
         
         /* Horizontal Space */
-        NSLayoutConstraint *horizontalSpaceBetweenSecond = [NSLayoutConstraint
-                                                      constraintWithItem:self.labelPlace
-                                                      attribute:NSLayoutAttributeLeading
-                                                      relatedBy:NSLayoutRelationEqual
-                                                      toItem:self.labelByLineAndTime
-                                                      attribute:NSLayoutAttributeTrailing
-                                                      multiplier:1.0
-                                                      constant:40.0];
+//        NSLayoutConstraint *horizontalSpaceBetweenSecond = [NSLayoutConstraint
+//                                                      constraintWithItem:self.labelPlace
+//                                                      attribute:NSLayoutAttributeRight
+//                                                      relatedBy:NSLayoutRelationGreaterThanOrEqual
+//                                                      toItem:self.labelByLineAndTime
+//                                                      attribute:NSLayoutAttributeLeft
+//                                                      multiplier:1.0
+//                                                      constant:2.0];
         
 //        [self addConstraint:horizontalSpaceBetween];
-        [self addConstraint:horizontalSpaceBetweenSecond];
-        [self addConstraint:trailingSpaceByline];
         [self addConstraint:leadingSpaceForPlace];
+        [self addConstraint:trailingSpaceByline];
         [self addConstraint:topSpaceByline];
         [self addConstraint:topSpaceTime];
+        [self addConstraint:horizontalSpaceBetween];
         
         
     }
