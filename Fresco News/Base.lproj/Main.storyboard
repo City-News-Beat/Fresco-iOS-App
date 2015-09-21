@@ -1867,7 +1867,7 @@
                                                     <constraint firstAttribute="width" constant="100" id="fxY-Dj-ijH"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
                                                     <mask key="constraints">
@@ -1888,21 +1888,21 @@
                                                             <constraint firstAttribute="height" constant="280" id="zrb-de-ryc"/>
                                                         </constraints>
                                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Q0C-HF-Jhk">
-                                                            <size key="itemSize" width="600" height="350"/>
+                                                            <size key="itemSize" width="600" height="257"/>
                                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         </collectionViewFlowLayout>
                                                         <cells>
                                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PostCollectionViewCell" id="FOH-GY-qg9" customClass="PostCollectionViewCell">
-                                                                <rect key="frame" x="0.0" y="-35" width="600" height="350"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="600" height="280"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="350"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="280"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cQw-XC-BsH">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="350"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="280"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" secondItem="cQw-XC-BsH" secondAttribute="height" multiplier="602:299" id="Kvc-Qz-5U8"/>
@@ -1930,6 +1930,7 @@
                                                                     <constraint firstItem="cQw-XC-BsH" firstAttribute="top" secondItem="FOH-GY-qg9" secondAttribute="top" id="ZbD-64-SMs"/>
                                                                     <constraint firstAttribute="trailing" secondItem="cQw-XC-BsH" secondAttribute="trailing" id="fIH-9W-Xrv"/>
                                                                 </constraints>
+                                                                <size key="customSize" width="600" height="280"/>
                                                                 <connections>
                                                                     <outlet property="imageView" destination="cQw-XC-BsH" id="Bap-F2-Gwj"/>
                                                                 </connections>
@@ -1995,14 +1996,14 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <label opaque="NO" multipleTouchEnabled="YES" tag="100" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dq9-PO-mkI">
-                                                                    <rect key="frame" x="55" y="0.0" width="510" height="44"/>
+                                                                    <rect key="frame" x="59" y="0.0" width="506" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="5FFB1A9D-5076-496B-96CC-3DBD890936A8" id="zi1-gE-XhI">
-                                                                    <rect key="frame" x="15" y="10" width="25" height="24"/>
+                                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="200" contentMode="scaleToFill" image="article" id="zi1-gE-XhI">
+                                                                    <rect key="frame" x="15" y="7" width="29" height="29"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </imageView>
                                                             </subviews>
@@ -2099,7 +2100,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JNg-JO-kpb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2822" y="1914"/>
+            <point key="canvasLocation" x="2809" y="1864"/>
         </scene>
         <!--First Run Permissions View Controller-->
         <scene sceneID="yfU-8B-Iaj">
@@ -3297,7 +3298,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="5FFB1A9D-5076-496B-96CC-3DBD890936A8" width="25" height="24"/>
+        <image name="article" width="29" height="29"/>
         <image name="assignmentWarningIcon" width="20" height="20"/>
         <image name="cameraOffIcon" width="48" height="48"/>
         <image name="facebook-b" width="20" height="20"/>
