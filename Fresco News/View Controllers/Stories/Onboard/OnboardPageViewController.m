@@ -22,24 +22,24 @@
 @implementation OnboardPageViewController
 
 -(id)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options{
-
-    if(self = [super initWithTransitionStyle:style navigationOrientation:navigationOrientation options:options]){
     
+    if(self = [super initWithTransitionStyle:style navigationOrientation:navigationOrientation options:options]){
+        
         // Create page view controller
         self.dataSource = self;
         
         self.view.backgroundColor = [UIColor whiteBackgroundColor];
-
+        
         OnboardPageCellController *viewController = [self viewControllerAtIndex:0];
         
         NSArray *viewControllers = @[viewController];
-
+        
         [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
         
     }
     
     return self;
-
+    
 }
 
 - (void)viewDidLoad {
@@ -86,7 +86,7 @@
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
             if(finished) _runningNextPage = NO;
-        
+            
         }];
     }
     
@@ -95,12 +95,12 @@
         //put into parent vc that handles everything
         
         if(![[FRSDataManager sharedManager] isLoggedIn]){
-        
+            
             [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToFirstRun];
             
         }
         else{
-        
+            
             [((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController) setRootViewControllerToTabBar];
             
         }
@@ -112,7 +112,7 @@
 #pragma mark - UIPageViewController Delegate
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-
+    
     NSUInteger index = ((OnboardPageCellController*) viewController).animationState;
     
     if (index == 0 || (index == NSNotFound)) {
@@ -125,7 +125,7 @@
     
     
     return [self viewControllerAtIndex:index];
-
+    
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
@@ -144,7 +144,7 @@
 }
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed{
-
+    
     if(!completed) return;
     
     NSUInteger index = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
@@ -152,15 +152,15 @@
     self.currentIndex = index;
     
     if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
-    
+        
         FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
         
         [parentVC updateStateWithIndex:self.currentIndex];
         
         [self onboardAnimation];
-    
+        
     }
-
+    
 }
 
 
@@ -172,7 +172,7 @@
     if (index == 3) {
         return nil;
     }
-
+    
     OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithAnimationState:index];
     
     return viewController;
@@ -199,14 +199,8 @@
         
         if (self.currentIndex == 1) {
             
-//            [self animateOnboard2];
+            [self animateOnboard2];
             
-            OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
-            
-            onBoardPageCellController.cloud.alpha = 1;
-            onBoardPageCellController.upload.alpha = 1;
-            onBoardPageCellController.camera.alpha = 1;
-
             NSLog (@"current index: %ld", (long)self.currentIndex);
             
         }
@@ -226,12 +220,15 @@
 
 - (void) animateOnboard1 {
     
-    OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
+    OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
     
     onBoardPageCellController.assignmentTopLeft.alpha = 1;
     onBoardPageCellController.assignmentBottomLeft.alpha = 1;
     onBoardPageCellController.assignmentTopRight.alpha = 1;
     onBoardPageCellController.assignmentBottomRight.alpha = 1;
+    
+    onBoardPageCellController.earth.alpha = 1;
+    
     
     onBoardPageCellController.assignmentTopLeft.transform = CGAffineTransformMakeScale(0, 0);
     onBoardPageCellController.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
@@ -243,7 +240,6 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         onBoardPageCellController.earth.alpha = 1;
                          onBoardPageCellController.earth.transform = CGAffineTransformMakeTranslation(0, 0);
                          
                      }
@@ -360,35 +356,49 @@
 
 - (void) animateOnboard2 {
     
-
+    OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
+    
+    onBoardPageCellController.cloud.alpha = 1;
+    onBoardPageCellController.upload.alpha = 1;
+    onBoardPageCellController.camera.alpha = 1;
+    
+    // Post animation for pages 1 and 3
+    onBoardPageCellController.assignmentBottomLeft.alpha = 0;
+    onBoardPageCellController.assignmentBottomRight.alpha = 0;
+    onBoardPageCellController.assignmentTopLeft.alpha = 0;
+    onBoardPageCellController.assignmentTopRight.alpha = 0;
+    
     
 }
 
 - (void) animateOnboard3 {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-    
-    OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
-    
-    onBoardPageCellController.greyCloud.alpha = 1;
-    onBoardPageCellController.television.alpha = 1;
-    onBoardPageCellController.newspaper.alpha = 1;
-    onBoardPageCellController.uploadLeft.alpha = 1;
-    onBoardPageCellController.uploadRight.alpha = 1;
-    onBoardPageCellController.cash1.alpha = 1;
-    onBoardPageCellController.cash2.alpha = 1;
-    onBoardPageCellController.cash3.alpha = 1;
         
-    onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(.5,.5);
-    onBoardPageCellController.greyCloud.alpha = 0;
+        OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
+        
+        onBoardPageCellController.earth.alpha = 1;
+        
+        
+        onBoardPageCellController.greyCloud.alpha = 1;
+        onBoardPageCellController.television.alpha = 1;
+        onBoardPageCellController.newspaper.alpha = 1;
+        onBoardPageCellController.uploadLeft.alpha = 1;
+        onBoardPageCellController.uploadRight.alpha = 1;
+        onBoardPageCellController.cash1.alpha = 1;
+        onBoardPageCellController.cash2.alpha = 1;
+        onBoardPageCellController.cash3.alpha = 1;
+        
+        onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(.96,.96);
+        onBoardPageCellController.greyCloud.alpha = 1;
         
         [self animateCash1];
         
         [self animateCash2];
         
         [self animateCash3];
-
-    
+        
+        
     });
 }
 
@@ -402,7 +412,7 @@
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          
-                         onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                         onBoardPageCellController.greyCloud.transform = CGAffineTransformMakeScale(1.03, 1.03);
                          onBoardPageCellController.greyCloud.alpha = 1;
                          
                          CGMutablePathRef cash1Path1 = CGPathCreateMutable();
@@ -521,7 +531,7 @@
                          [onBoardPageCellController.cash2.layer addAnimation:theAnimation forKey:@"position"];
                      }
                      completion:^(BOOL finished) {
-                    
+                         
                      }];
     
     
@@ -568,7 +578,7 @@
                              onBoardPageCellController.cash3.transform = CGAffineTransformMakeRotation(-.13);
                              
                          }];
-
+                         
                          CAKeyframeAnimation * cash3Animation;
                          
                          // Create the animation object, specifying the position property as the key path.
@@ -580,7 +590,7 @@
                          [onBoardPageCellController.cash3.layer addAnimation:cash3Animation forKey:@"position"];
                      }
                      completion:^(BOOL finished) {
-
+                         
                      }];
     
 }

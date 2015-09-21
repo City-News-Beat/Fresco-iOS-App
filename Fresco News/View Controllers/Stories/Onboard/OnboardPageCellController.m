@@ -182,7 +182,7 @@
     
     
     // Init images with alpha of 0
-    self.earth.alpha = 0;
+    self.earth.alpha = 1;
     self.assignmentTopLeft.alpha = 0;
     self.assignmentBottomLeft.alpha = 0;
     self.assignmentTopRight.alpha = 0;
@@ -198,7 +198,7 @@
                                          andFrame:CGRectMake(81, 33, 122, 80)
                                    andContentMode: UIViewContentModeScaleToFill ];
     
-    [self.onboard2View addSubview:self.cloud];
+    [self.onboard1View addSubview:self.cloud];
     
 
     
@@ -207,7 +207,7 @@
                                          andFrame:CGRectMake(130, 130, 24, 24)
                                    andContentMode: UIViewContentModeScaleToFill ];
     
-    [self.onboard2View addSubview:self.upload];
+    [self.onboard1View addSubview:self.upload];
     
     
 
@@ -216,13 +216,18 @@
                                           andFrame:CGRectMake(109, 173, 66, 60)
                                     andContentMode: UIViewContentModeScaleToFill ];
     
-    [self.onboard2View addSubview:self.camera];
+    [self.onboard1View addSubview:self.camera];
     
     
     // Init images with alpha of 0
-    self.cloud.alpha = 0;
-    self.upload.alpha = 0;
-    self.camera.alpha = 0;
+    self.cloud.alpha = 1;
+    self.upload.alpha = 1;
+    self.camera.alpha = 1;
+    
+    self.assignmentTopRight.alpha = 0;
+    self.assignmentTopLeft.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
+    self.assignmentBottomLeft.alpha = 0;
     
 }
 
@@ -291,7 +296,6 @@
     
     self.cash3.transform = CGAffineTransformMakeRotation(.785);
     [self.onboard3View addSubview:self.cash3];
-
     
     
     /** Create grey cloud image view */
@@ -300,18 +304,20 @@
                                    andContentMode:UIViewContentModeScaleToFill];
     
     [self.onboard3View addSubview:self.greyCloud];
-    
 
-    
-    self.greyCloud.alpha = 0;
-    self.television.alpha = 0;
-    self.newspaper.alpha = 0;
-    self.uploadLeft.alpha = 0;
-    self.uploadRight.alpha = 0;
+    self.greyCloud.alpha = 1;
+    self.television.alpha = 1;
+    self.newspaper.alpha = 1;
+    self.uploadLeft.alpha = 1;
+    self.uploadRight.alpha = 1;
     self.cash1.alpha = 0;
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
-        
+    
+
+
+
+    
 }
 
 

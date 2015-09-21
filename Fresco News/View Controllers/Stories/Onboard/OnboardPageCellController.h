@@ -30,7 +30,6 @@ typedef enum : NSUInteger {
 
 @property (assign, nonatomic) AnimationState animationState;
 
-
 // Onboard 1 assets
 @property (strong, nonatomic) UIImageView *earth;
 @property (strong, nonatomic) UIImageView *assignmentTopLeft;
