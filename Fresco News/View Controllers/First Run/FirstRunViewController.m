@@ -50,8 +50,8 @@
         button.clipsToBounds = YES;
     }
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
