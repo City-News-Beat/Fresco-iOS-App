@@ -744,6 +744,8 @@
                     
                     [self.assignmentsMap setRegion:regionThatFits animated:YES];
                     
+                    self.centeredUserLocation = YES;
+                    
                 }
                 
             }
@@ -767,11 +769,11 @@
             
             self.lastLoc = self.assignmentsMap.userLocation.location;
             
+            self.centeredUserLocation = YES;
+            
         }
         
     }
-    
-    self.centeredUserLocation = YES;
     
     self.operatingRadius = 0;
     

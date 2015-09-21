@@ -11,6 +11,7 @@
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "ProfileHeaderViewController.h"
+#import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FRSDataManager.h"
@@ -108,9 +109,12 @@
     
     //Make sure we're connected first
     if([[FRSDataManager sharedManager] connected]){
-    
-        [self performSegueWithIdentifier:SEG_SETTINGS sender:self];
         
+        ProfileSettingsViewController *pVC = [[ProfileSettingsViewController alloc] initWithNibName:@"ProfileSettingsViewController" bundle:nil];
+        pVC.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:pVC animated:YES];
+
     }
 }
 

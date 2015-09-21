@@ -8,9 +8,9 @@
 
 @import Foundation;
 @import CoreLocation;
+@import Parse;
 
 #import <AFNetworking/AFNetworking.h>
-@import Parse;
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"

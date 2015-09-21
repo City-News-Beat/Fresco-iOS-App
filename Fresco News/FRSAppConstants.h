@@ -11,9 +11,11 @@
 #import "FRSAlertViewManager.h"
 
 /*
- ** Add four spaces in between sections
+** Add four spaces in between sections
 */
 
+
+/* Enums */
 
 #pragma mark - Enums
 
@@ -30,7 +32,9 @@ enum FRSErrorCodes {
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
 
-#pragma mark - Notification Strings
+/*  NotificationCenter Strings */
+
+#pragma mark - NotificationCenter Strings
 
 #define NOTIF_API_KEY_AVAILABLE             @"NotificationAPIKeyAvailable"
 #define NOTIF_VIEW_DISMISS                  @"DismissNotificationsView"
@@ -44,6 +48,7 @@ enum FRSErrorCodes {
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
 
 
+/* Keys Plist */
 
 #pragma mark - Keys Plist
 
@@ -52,7 +57,10 @@ enum FRSErrorCodes {
 
 
 
-#pragma mark - Base URL/API & Parse
+
+/* Base URL/API */
+
+#pragma mark - Base URL/API
 
 #define ERROR_DOMAIN                        @"com.fresconews"
 
@@ -73,6 +81,8 @@ enum FRSErrorCodes {
 
 
 
+/* Twitter Auth */
+
 #pragma mark - Twitter Auth
 
 #define TWITTER_CONSUMER_KEY                [KEYS_DICTIONARY objectForKey:@"TwitterConsumerKey"]
@@ -82,6 +92,7 @@ enum FRSErrorCodes {
 
 
 
+/* Float/Int Values */
 
 #pragma mark - Float/Int Values
 
@@ -89,7 +100,12 @@ enum FRSErrorCodes {
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
 #define MAX_POST_COUNT                      8
+#define kMetersInAMile                      1609.34
+#define kDegreesInAMile                     69.0
 
+
+
+/* User Defaults */
 
 #pragma mark - User Defaults
 
@@ -111,6 +127,7 @@ enum FRSErrorCodes {
 
 
 
+/* Fonts */
 
 #pragma mark - Fonts
 
@@ -121,15 +138,7 @@ enum FRSErrorCodes {
 
 
 
-
-#pragma mark - MapView Identifiers
-
-#define ASSIGNMENT_IDENTIFIER               @"AssignmentAnnotation"
-#define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
-#define USER_IDENTIFIER                     @"currentLocation"
-#define kMetersInAMile                      1609.34
-#define kDegreesInAMile                     69.0
-
+/* Segue Identifiers */
 
 #pragma mark - Segue Identifiers
 
@@ -143,6 +152,8 @@ enum FRSErrorCodes {
 
 
 
+/* Notification Categories/Actions */
+
 #pragma mark - Notification Categories/Actions
 
 #define ASSIGNMENT_CATEGORY                 @"ASSIGNMENT_CATEGORY"
@@ -150,9 +161,13 @@ enum FRSErrorCodes {
 
 
 
-#pragma mark - User-facing Strings -
+/* User-facing Strings */
+
+#pragma mark - User-facing Strings
 
 
+
+/* Brand Names / Trademarks */
 
 #pragma mark - Brand Names / Trademarks
 
@@ -160,6 +175,9 @@ enum FRSErrorCodes {
 #define FACEBOOK                            @"Facebook"
 #define TWITTER                             @"Twitter"
 
+
+
+/* Global */
 
 #pragma mark - Global Macros
 
@@ -178,6 +196,8 @@ enum FRSErrorCodes {
 
 
 
+/* First Run Log in / Sign up */
+
 #pragma mark - First Run Log in / Sign up
 
 #define LOGIN                               NSLocalizedString(@"Login", nil)
@@ -186,8 +206,6 @@ enum FRSErrorCodes {
 
 #define SIGNUP_ERROR                        NSLocalizedString(@"It seems there was an error signing you up. Please try again in a bit.", nil)
 #define SIGNUP_EXISTS                       NSLocalizedString(@"Looks like that email is taken! Please use a different one", nil)
-
-
 
 #define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
@@ -211,6 +229,8 @@ enum FRSErrorCodes {
 
 
 
+/* First Run Permissions */
+
 #pragma mark - First Run Permissions
 
 #define CAMERA_ENABLED                      NSLocalizedString(@"Camera Enabled", nil)
@@ -227,6 +247,10 @@ enum FRSErrorCodes {
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
 #define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
 
+
+
+/*  First Run Radius */
+
 #pragma mark - First Run Radius
 
 #define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)
@@ -237,6 +261,7 @@ enum FRSErrorCodes {
 
 
 
+/* Profile Settings */
 
 #pragma mark - Profile Settings
 
@@ -256,16 +281,12 @@ enum FRSErrorCodes {
 #define NOTHING_HERE_YET                    NSLocalizedString(@"Nothing here yet!", nil)
 #define OPEN_CAMERA                         NSLocalizedString(@"Open your camera to get started", nil)
 
+#define PAYMENT_MESSSAGE                    NSLocalizedString(@"When a news outlet uses your content we’ll pay you directly.", nil)
 
+#define CARD_MAX_LENGTH                     19
+#define CCV_MAX_LENGTH                      3
 
-
-#pragma mark - Unused
-
-#define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)
-#define NAVIGATE_TO_ASSIGNMENT              NSLocalizedString(@"Navigate to the assignment", nil)
-
-
-
+/* Onboarding */
 #pragma mark - Onboarding
 
 #define MAIN_HEADER_1                       NSLocalizedString(@"Find breaking news around you", nil)
@@ -277,15 +298,23 @@ enum FRSErrorCodes {
 #define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
 
 
+
+/* Highlights */
+
 #pragma mark - Highlights
 
 #define HIGHLIGHTS                          NSLocalizedString(@"Highlights", nil)
 
 
+
+/* Stories */
 #pragma mark - Stories
 
 #define STORIES                             NSLocalizedString(@"Stories", nil)
 
+
+
+/* Notifications */
 
 #pragma mark - Notifications
 
@@ -303,9 +332,24 @@ enum FRSErrorCodes {
 
 
 
+/* Assignments - MapView */
+
+#pragma mark - Assignments
+
+#define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)
+#define NAVIGATE_TO_ASSIGNMENT              NSLocalizedString(@"Navigate to the assignment", nil)
+
+#pragma mark - MapView Identifiers
+
+#define ASSIGNMENT_IDENTIFIER               @"AssignmentAnnotation"
+#define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
+#define USER_IDENTIFIER                     @"currentLocation"
+
+
+
+/* Device Macros */
 
 #pragma mark - Device Macros
-
 
 #define IS_OS_8_OR_LATER                    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 

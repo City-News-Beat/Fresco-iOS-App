@@ -77,7 +77,6 @@
     
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
-
     
 }
 
@@ -136,7 +135,7 @@
 - (void)reloadData{
 
     [self.tableView reloadData];
-//    [self checkForVideo];
+
 }
 
 /*
@@ -205,13 +204,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 36;
+    return 32;
 }
 
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    GalleryHeader *galleryHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
-
+    GalleryHeader *galleryHeader = [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, tableView.rowHeight)];
+        
     galleryHeader.gallery = [self.galleries objectAtIndex:section];
     
     return galleryHeader;
@@ -267,7 +266,6 @@
 }
 
 #pragma mark - Video Conditioning
-
 
 /*
 ** Video Conditioning
@@ -365,7 +363,6 @@
 
 }
 
-
 #pragma mark - Gallery Table View Cell Delegate
 
 - (void)readMoreTapped:(FRSGallery *)gallery{
@@ -431,12 +428,11 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
+{    if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
 
-            ProfileHeaderViewController *phvc = [segue destinationViewController];
-            self.profileHeaderViewController = phvc;
-            self.tableView.tableHeaderView.frame = phvc.view.bounds;
+        ProfileHeaderViewController *phvc = [segue destinationViewController];
+        self.profileHeaderViewController = phvc;
+        self.tableView.tableHeaderView.frame = phvc.view.bounds;
     }
 }
 

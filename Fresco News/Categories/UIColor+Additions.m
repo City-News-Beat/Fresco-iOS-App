@@ -86,7 +86,7 @@
 }
 
 + (UIColor *)disabledBackgroundColor {
-      return [UIColor colorWithRed:242/255.0 green:242/255.0 blue:237/255.0 alpha:1];
+    return [UIColor cellSeparatorBlackColor];
 }
 
 + (UIColor *)fieldBorderColor {
