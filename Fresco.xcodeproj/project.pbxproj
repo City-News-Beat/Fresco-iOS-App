@@ -116,7 +116,7 @@
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
 		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
 		E71F0E4F1B0B936200186BAD /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
+		E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */; };
 		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
 		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
 		E71F0E6A1B0B948200186BAD /* WKGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */; };
@@ -397,8 +397,8 @@
 		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlanceInterfaceController.h; sourceTree = "<group>"; };
-		E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlanceInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGlanceInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGlanceInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E591B0B948200186BAD /* FRSInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSInterfaceController.h; sourceTree = "<group>"; };
 		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
@@ -965,8 +965,8 @@
 			children = (
 				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
 				E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */,
-				E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */,
-				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
+				E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */,
+				E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */,
 				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
 				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
 				E71F0E701B0B99F100186BAD /* Stories */,
@@ -1562,7 +1562,7 @@
 			files = (
 				E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */,
 				E71F0E6D1B0B948200186BAD /* WKStoryRowController.m in Sources */,
-				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
+				E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */,
 				E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */,
 				E71F0E6E1B0B948200186BAD /* WKGalleryDetailController.m in Sources */,
 				E70F4BE21B9F958400A765E0 /* WKImagePath.m in Sources */,

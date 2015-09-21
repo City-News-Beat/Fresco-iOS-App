@@ -9,7 +9,7 @@
 @import WatchKit;
 @import Foundation;
 
-@interface FRSGlanceInterfaceController : WKInterfaceController
+@interface WKGlanceInterfaceController : WKInterfaceController
 
 @property (nonatomic, strong) NSArray *posts;
 
