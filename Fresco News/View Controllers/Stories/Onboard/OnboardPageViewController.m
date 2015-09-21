@@ -180,13 +180,7 @@
 
 
 
-- (void)onboardAnimation {
-    
-    
-    //First onboard cell = [self.viewcontrollers firstObject];
-    //Second onboard cell = [self.viewControllers ?????];
-    //Third onboard cell = [self.viewControllers lastObject];
-    
+- (void) onboardAnimation {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -194,23 +188,18 @@
             
             [self animateOnboard1];
             
-            NSLog (@"current index: %ld", (long)self.currentIndex);
         }
         
         if (self.currentIndex == 1) {
             
             [self animateOnboard2];
             
-            NSLog (@"current index: %ld", (long)self.currentIndex);
-            
         }
-        
         
         if (self.currentIndex == 2) {
             
             [self animateOnboard3];
             
-            NSLog (@"current index: %ld", (long)self.currentIndex);
         }
         
     });
@@ -372,8 +361,6 @@
 }
 
 - (void) animateOnboard3 {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
         
         OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
         
@@ -397,9 +384,7 @@
         [self animateCash2];
         
         [self animateCash3];
-        
-        
-    });
+
 }
 
 
@@ -538,7 +523,7 @@
     
 }
 
--(void) animateCash3 {
+- (void) animateCash3 {
     
     OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
     

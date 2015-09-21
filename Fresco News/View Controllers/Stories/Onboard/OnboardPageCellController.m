@@ -98,12 +98,20 @@
     
     [self setUpViews];
     
-    if(self.animationState == AnimationStateOne)
+    if(self.animationState == AnimationStateOne){
         [self setUpOnboard1];
-    else if(self.animationState == AnimationStateTwo)
+        [self animateOnboard1];
+    }
+    
+    if(self.animationState == AnimationStateTwo){
         [self setUpOnboard2];
-    else if(self.animationState == AnimationStateThree)
+        [self animateOnboard2];
+    }
+    
+    if(self.animationState == AnimationStateThree){
         [self setUpOnboard3];
+        [self animateOnboard3];
+    }
 
     /** Always run */
     
@@ -190,7 +198,7 @@
 
 }
 
-- (void) setUpOnboard2 {
+- (void)setUpOnboard2 {
     
     
     /** Create cloud image view */
@@ -341,5 +349,19 @@
     }
     
 }
+
+
+- (void)animateOnboard1 {
+    NSLog(@"should be animating onboard 1, actually animating: %lu", (unsigned long)self.animationState);
+}
+
+- (void)animateOnboard2 {
+    NSLog(@"should be animating onboard 2, actually animating: %lu", (unsigned long)self.animationState);
+}
+
+- (void)animateOnboard3 {
+    NSLog(@"should be animating onboard 3, actually animating: %lu", (unsigned long)self.animationState);
+}
+
 
 @end
