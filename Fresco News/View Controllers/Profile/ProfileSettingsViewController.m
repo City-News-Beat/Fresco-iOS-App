@@ -191,6 +191,18 @@ typedef enum : NSUInteger {
 
 }
 
+/*
+** Automatic save when user goes back to Profile Screen
+*/
+
+- (void)willMoveToParentViewController:(UIViewController *)parent{
+    
+    [super willMoveToParentViewController:parent];
+    
+    [self saveChanges];
+    
+}
+
 
 - (void)getYolked{
 
