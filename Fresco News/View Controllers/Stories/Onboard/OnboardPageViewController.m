@@ -194,18 +194,21 @@
             
             [self animateOnboard1];
             
-            NSLog (@"index: 0");
+            NSLog (@"current index: %ld", (long)self.currentIndex);
         }
         
         if (self.currentIndex == 1) {
             
-            OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
-
+//            [self animateOnboard2];
+            
+            OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
+            
             onBoardPageCellController.cloud.alpha = 1;
             onBoardPageCellController.upload.alpha = 1;
             onBoardPageCellController.camera.alpha = 1;
 
-            NSLog (@"index: 1");
+            NSLog (@"current index: %ld", (long)self.currentIndex);
+            
         }
         
         
@@ -213,7 +216,7 @@
             
             [self animateOnboard3];
             
-            NSLog (@"index: 2");
+            NSLog (@"current index: %ld", (long)self.currentIndex);
         }
         
     });
@@ -221,7 +224,7 @@
 
 
 
-- (void)animateOnboard1 {
+- (void) animateOnboard1 {
     
     OnboardPageCellController *onBoardPageCellController = [self.viewControllers objectAtIndex:0];
     
@@ -355,7 +358,13 @@
                      }];
 }
 
-- (void)animateOnboard3 {
+- (void) animateOnboard2 {
+    
+
+    
+}
+
+- (void) animateOnboard3 {
     
     dispatch_async(dispatch_get_main_queue(), ^{
     
@@ -376,6 +385,8 @@
         [self animateCash1];
         
         [self animateCash2];
+        
+        [self animateCash3];
 
     
     });
@@ -514,6 +525,63 @@
                      }];
     
     
+    
+}
+
+-(void) animateCash3 {
+    
+    OnboardPageCellController *onBoardPageCellController = [self.viewControllers lastObject];
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         CGMutablePathRef cash3Path = CGPathCreateMutable();
+                         CGPathMoveToPoint(cash3Path,NULL,200.0,120.0);
+                         
+                         [UIView animateWithDuration:2.0 animations:^{
+                             
+                             CGPathAddCurveToPoint(cash3Path,NULL,
+                                                   400.0, 100.0,
+                                                   230.0,100.0,
+                                                   150.0,200.0
+                                                   );
+                             
+                             [UIView animateWithDuration:1.0 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                 
+                                 onBoardPageCellController.cash3.transform = CGAffineTransformMakeRotation(-0.3);
+                                 
+                             } completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                     
+                                     onBoardPageCellController.cash3.transform = CGAffineTransformMakeRotation(0.3);
+                                     
+                                     onBoardPageCellController.cash3.alpha = 0;
+                                     
+                                 } completion:nil];
+                             }];
+                         } completion:^(BOOL finished) {
+                             
+                             //reset
+                             onBoardPageCellController.cash3.transform = CGAffineTransformMakeRotation(-.13);
+                             
+                         }];
+
+                         CAKeyframeAnimation * cash3Animation;
+                         
+                         // Create the animation object, specifying the position property as the key path.
+                         cash3Animation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+                         cash3Animation.path=cash3Path;
+                         cash3Animation.duration=2.0;
+                         
+                         // Add the animation to the layer.
+                         [onBoardPageCellController.cash3.layer addAnimation:cash3Animation forKey:@"position"];
+                     }
+                     completion:^(BOOL finished) {
+
+                     }];
     
 }
 
