@@ -63,7 +63,9 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     [self removeKeyValueObserver];
 }
 
-
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
 #pragma mark - Setup Navigation Controller
 

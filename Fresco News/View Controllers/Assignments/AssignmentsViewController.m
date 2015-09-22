@@ -268,8 +268,7 @@
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
-                if(self.assignmentsMap)
-                [self.assignmentsMap selectAnnotation:annotation animated:YES];
+               [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
     }

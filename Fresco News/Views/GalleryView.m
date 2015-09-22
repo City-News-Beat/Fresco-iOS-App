@@ -487,8 +487,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - Scroll View Delegate
 
-#warning make this for didScroll and use current index to check for same cell
-
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
     CGFloat pageWidth = self.collectionPosts.frame.size.width;

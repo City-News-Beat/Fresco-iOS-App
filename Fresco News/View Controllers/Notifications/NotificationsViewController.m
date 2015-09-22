@@ -348,7 +348,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         }];
         
     }
-    else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:@"breaking"] ){
+    else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:NOTIF_BREAKING] ){
         
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
