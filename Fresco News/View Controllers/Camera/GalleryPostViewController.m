@@ -179,9 +179,8 @@
 
 - (void)setupButtons
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                                           target:self
-                                                                                           action:@selector(returnToCamera:)];
+
+ self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(cancelProcess)];
 }
 
 - (void)configureControlsForUpload:(BOOL)upload
@@ -195,11 +194,23 @@
 
 #pragma mark - Navigational Methods
 
-- (void)returnToTabBar{
+- (void)cancelProcess {
+    [self returnToTabBarViaCancel:YES];
+}
+
+- (void)returnToTabAfterSubmission {
+    
+    [self returnToTabBarViaCancel:NO];
+}
+
+-(void)returnToTabBarViaCancel: (BOOL)didCancel {
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
-    
-    tabBarController.selectedIndex = 4;
+    if (didCancel) {
+        tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    } else {
+        tabBarController.selectedIndex = 4;
+    }
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -656,7 +667,7 @@
                 
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
-                [self returnToTabBar];
+                [self returnToTabAfterSubmission];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
