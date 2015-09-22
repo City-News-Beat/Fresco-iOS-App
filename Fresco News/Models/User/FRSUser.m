@@ -51,28 +51,8 @@
 - (NSURL *)avatarUrl
 {
     if (self.avatar != nil) {
-       
-        NSString *urlString = self.avatar;
         
-        if (!([urlString rangeOfString:@"cloudfront"].location == NSNotFound)){
-            
-            NSMutableString *mu = [NSMutableString stringWithString:urlString];
-            
-            NSRange range = [mu rangeOfString:@"/images/"];
-            
-            if (!(range.location == NSNotFound)) {
-                
-                [mu insertString:@"" atIndex:(range.location + range.length)];
-                
-                return [NSURL URLWithString:mu];
-                
-            }
-            else
-                return [NSURL URLWithString:self.avatar];
-            
-        }
-        else
-            return [NSURL URLWithString:self.avatar];
+        return [NSURL URLWithString:self.avatar];
         
     }
     
