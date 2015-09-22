@@ -101,9 +101,8 @@
 
 - (IBAction)backButtonTapped:(id)sender {
     
-    NSLog(@"Back button tapped!");
-    
     [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 #pragma mark - UITextViewDelegate
@@ -277,6 +276,7 @@
 }
 
 - (void)initBackButton {
+    
     // Create back button
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
@@ -289,12 +289,17 @@
     [self.view addSubview:backButton];
     
     
+    // FRSBackButton *backButton = [[FRSBackButton alloc] init]
+    // [self.view addSubview:[[FRSBackButton alloc] new]];
+    
+    
     // Create back carret
     UIImageView *backCaret = [[UIImageView alloc] initWithFrame:CGRectMake(8, 32, 12, 15)];
     backCaret.image = [UIImage imageNamed:@"backCaret"];
     [backCaret setContentMode:UIViewContentModeScaleAspectFill];
     
     [self.view addSubview:backCaret];
+    
 }
 
 

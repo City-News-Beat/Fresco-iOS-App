@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072996171BB1E8160010EDC9 /* FRSBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 072996161BB1E8160010EDC9 /* FRSBackButton.m */; };
 		07C365BF1BAC876800AE31C2 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */; };
 		07C365C01BAC876800AE31C2 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */; };
 		07C365C11BAC876800AE31C2 /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C365BB1BAC876800AE31C2 /* OnboardPageCellController.m */; };
@@ -200,6 +201,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		072996151BB1E8160010EDC9 /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBackButton.h; path = ../Views/FRSBackButton.h; sourceTree = "<group>"; };
+		072996161BB1E8160010EDC9 /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBackButton.m; path = ../Views/FRSBackButton.m; sourceTree = "<group>"; };
 		07C365B71BAC876800AE31C2 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
 		07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
 		07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
@@ -759,6 +762,8 @@
 				1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */,
 				424323D91AB3D64900646278 /* FRSTabBarController.h */,
 				424323DA1AB3D64900646278 /* FRSTabBarController.m */,
+				072996151BB1E8160010EDC9 /* FRSBackButton.h */,
+				072996161BB1E8160010EDC9 /* FRSBackButton.m */,
 				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
 				07C365B61BAC876800AE31C2 /* Onboard */,
 				E7CF7ED61B96743200C28E5C /* TOS */,
@@ -1456,6 +1461,7 @@
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
+				072996171BB1E8160010EDC9 /* FRSBackButton.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				07C365C61BAC9A9900AE31C2 /* UIImageView+Additions.m in Sources */,
