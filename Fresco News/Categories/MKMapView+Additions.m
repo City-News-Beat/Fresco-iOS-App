@@ -74,6 +74,22 @@
 
 #pragma mark - Map utility methods
 
+
+/*
+ ** Adds radius to user annotation view
+ */
+
++ (FRSMKCircle *)userRadiusForMap: (MKMapView *)mapView {
+    
+    MKUserLocation *userLocation = mapView.userLocation;
+    
+    FRSMKCircle *circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:mapView.userLocation.location.horizontalAccuracy];
+    
+    circle.identifier = FRSUserCircle;
+    
+    return circle;
+}
+
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
@@ -89,19 +105,64 @@
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
     
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coordinate radius:(radius * kMetersInAMile)];
+    FRSMKCircle *circle = [FRSMKCircle circleWithCenterCoordinate:coordinate radius:(radius * kMetersInAMile)];
     
     [self removeOverlays:self.overlays];
     [self addOverlay:circle];
 }
 
-+ (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay
-{
-    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
-    [circleView setFillColor:color];
-    circleView.alpha = .3;
-    return circleView;
++ (DBImageColorPicker *)createDBImageColorPicker {
+
+    NSData *userProfileImageData = [[NSData alloc] initWithContentsOfURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
+
+    UIImage *userProfileImage = [UIImage imageWithData:userProfileImageData];
+
+    return [[DBImageColorPicker alloc] initFromImage:userProfileImage withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
 }
+
++ (MKCircleRenderer *)customRendererForOverlay:(id<MKOverlay>)overlay forColorPicker:(DBImageColorPicker *)picker
+{
+
+    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
+    
+    if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+        
+        FRSMKCircle *circleForUserRadius = (FRSMKCircle *)overlay;
+        
+        if (circleForUserRadius.identifier == FRSUserCircle) { // making sure it's a user
+            
+            if ([FRSDataManager sharedManager].currentUser.avatar) { // if they have a profile pic
+                
+                [circleView setFillColor:picker.secondaryTextColor];
+                
+            } else { // use default fresco blue
+                
+                [circleView setFillColor:[UIColor frescoBlueColor]];
+            }
+        }
+        
+    } else // it's an assignment
+        [circleView setFillColor:[UIColor radiusGoldColor]];
+    
+    circleView.alpha = .26;
+    
+    return circleView;
+
+
+}
+
+- (void)updateRadiusColor {
+    
+    for (id<MKOverlay>overlay in self.overlays) {
+        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+            FRSMKCircle *circle = (FRSMKCircle *)overlay;
+            [self removeOverlay:circle];
+            [self addOverlay:circle];
+        }
+    }
+    
+}
+
 
 + (UIButton *)caret {
     
@@ -152,7 +213,7 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
         
-        annotationView.centerOffset = CGPointMake(-13, -15 + 1.5); // math is account for 18 width and 5 x, 18 height and 3 y
+        annotationView.centerOffset = CGPointMake(-13, -15 + 3); // math is account for 18 width and 5 x, 18 height and 3 y w, 3 pts shadow
         
         UIImage *whiteLayerImage = [UIImage imageNamed:@"dot-user-blank"];
         
@@ -184,47 +245,67 @@
         
         [customPinView setImage:[UIImage imageNamed:@"dot-assignment"]];
         
-    }
-    else if (type == FRSUserAnnotation) { // is User annotation view
+    } else if (type == FRSUserAnnotation) { // is User annotation view
         
-        if ([FRSDataManager sharedManager].currentUser.avatar) {
+        if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
             
-            [customPinView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
-        
+            [customPinView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl] placeholderImage:[UIImage imageNamed:@"dot-user-fill"]];
+   
         } else {
-        
             [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
+            
         }
-        
-        customPinView.frame = frame;
-        customPinView.layer.masksToBounds = YES;
-        customPinView.layer.cornerRadius = customPinView.frame.size.width / 2;
+       
+    } else {
+        [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
+
     }
+    
+    customPinView.frame = frame;
+    customPinView.layer.masksToBounds = YES;
+    customPinView.layer.cornerRadius = customPinView.frame.size.width / 2;
     
     return customPinView;
 }
 
 
-- (void)updateUserPinViewForMapView:(MKMapView *)mapView withImage: (UIImage *)image{
+- (void)updateUserPinViewForMapView:(MKMapView *)mapView withImage: (UIImage *)image {
     
-    for (id<MKAnnotation> annotation in mapView.annotations){
+    if (image != nil) {
         
-        if (annotation == mapView.userLocation){
+        for (id<MKAnnotation> annotation in mapView.annotations){
             
-            MKAnnotationView *profileAnnotation = [mapView viewForAnnotation:annotation];
-            
-            if ([profileAnnotation.subviews count] > 0){
+            if (annotation == mapView.userLocation){
                 
-                if ([(UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]) isKindOfClass:[UIImageView class]]) {
-                    UIImageView *profileImageView = (UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]);
-                    [profileImageView setImage:image];
+                MKAnnotationView *profileAnnotation = [mapView viewForAnnotation:annotation];
+                
+                if ([profileAnnotation.subviews count] > 0){
+                    
+                    if ([(UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]) isKindOfClass:[UIImageView class]]) {
+                        UIImageView *profileImageView = (UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]);
+                        [profileImageView setImage:image];
+                        
+                    }
                     
                 }
                 
             }
-            
         }
     }
+}
+
+- (void)userLocationUpdated {
+    
+    for (id<MKOverlay>overlay in self.overlays) {
+        
+        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+            
+            FRSMKCircle *userCircleRadius = (FRSMKCircle *)overlay;
+            [self removeOverlay:userCircleRadius];
+        }
+    }
+    
+    [self addOverlay:[MKMapView userRadiusForMap:self]];
 }
 
 @end

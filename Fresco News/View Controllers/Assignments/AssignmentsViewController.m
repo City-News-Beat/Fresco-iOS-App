@@ -20,6 +20,7 @@
 #import "AssignmentOnboardViewController.h"
 #import "FRSLocationManager.h"
 #import "FRSMKCircle.h"
+#import <DBImageColorPicker.h>
 
 #define kSCROLL_VIEW_INSET 75
 
@@ -45,6 +46,7 @@
     @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
     @property (nonatomic) MKAnnotationView *pinView;
+@property (nonatomic) DBImageColorPicker *colorPicker;
 
     /*
     ** Conditioning Variables
@@ -99,12 +101,13 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserPin:) name:NOTIF_IMAGE_SET object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
+       
+    self.colorPicker = [MKMapView createDBImageColorPicker];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_PROFILE_PIC_RESET object:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
 
@@ -130,17 +133,33 @@
     
 }
 
-
 - (void)resetPin:(NSNotification *)notification {
     
-    CLLocationDegrees lat = self.assignmentsMap.userLocation.coordinate.latitude;
-    CLLocationDegrees lon = self.assignmentsMap.userLocation.coordinate.longitude;
+    self.colorPicker = nil;
     
-    MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat + .01, lon + .01), 0, 0);
-    [self.assignmentsMap setRegion:newRegion animated:NO];
+    if ([notification.object isKindOfClass:[NSString class]]) {
+        
+        NSString *notificationString = (NSString *)notification.object;
+        
+        if ([notificationString isEqualToString:@"Login"]) {
+            
+            NSURL *profileImageUrl = [FRSDataManager sharedManager].currentUser.avatarUrl;
+            NSData *profileImageData = [NSData dataWithContentsOfURL:profileImageUrl];
+            UIImage *profileImage = [UIImage imageWithData:profileImageData];
+            [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:profileImage];
+            
+        } else if ([notificationString isEqualToString:@"Logout"]) {
+            
+            UIImage *defaultPinImage = [UIImage imageNamed:@"dot-user-fill"];
+            [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:defaultPinImage];
+        }
+        
+        self.colorPicker = [MKMapView createDBImageColorPicker];
+        
+    }
     
-    MKCoordinateRegion oldRegion = MKCoordinateRegionMakeWithDistance (CLLocationCoordinate2DMake(lat, lon), 300, 300);
-    [self.assignmentsMap setRegion:oldRegion animated:NO];
+ [self.assignmentsMap updateRadiusColor];
+
 }
 
 - (void)viewDidLayoutSubviews{
@@ -164,20 +183,40 @@
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
+
+
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
+                                                                      attribute:NSLayoutAttributeLeft
+                                                                      relatedBy:0
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeLeft
+                                                                     multiplier:1.0
+                                                                       constant:0];
+    [self.view addConstraint:leftConstraint];
+
+    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
+                                                                       attribute:NSLayoutAttributeRight
+                                                                       relatedBy:0
+                                                                          toItem:self.view
+                                                                       attribute:NSLayoutAttributeRight
+                                                                      multiplier:1.0
+                                                                        constant:0];
+    [self.view addConstraint:rightConstraint];
+
+
 }
+
 
 /*
 ** Action for clicking radius banner
 */
 
 - (IBAction)clickedRadiusNotificationButton:(id)sender {
+        
+    ProfileSettingsViewController *pVC = [[ProfileSettingsViewController alloc] initWithNibName:@"ProfileSettingsViewController" bundle:nil];
+    pVC.hidesBottomBarWhenPushed = YES;
     
-    //Retreieve Notifications View Controller from storyboard
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    
-    ProfileSettingsViewController *profileSettings = [storyboard instantiateViewControllerWithIdentifier:@"ProfileSettingsViewController"];
-    
-    [self.navigationController pushViewController:profileSettings animated:YES];
+    [self.navigationController pushViewController:pVC animated:YES];
     
 }
 
@@ -188,15 +227,6 @@
 - (IBAction)openInCamera:(id)sender {
     
     [self navigateToCamera];
-}
-
-
-/*
-** Listener checking if user has set or changed profile picture
-*/
-
-- (void)updateUserPin:(NSNotification *)notification {
-    [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:notification.object];
 }
 
 
@@ -402,8 +432,7 @@
             count++;
         }
     
-    }
-    else{
+    } else {
         
         if (self.assignmentsMap.annotations != nil) {
         
@@ -427,7 +456,7 @@
             count++;
         }
         
-        [self.assignmentsMap addOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
+        [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap]];
 
         // Run this after populating map with assignments, this ensures we have the annotation to select
         if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
@@ -454,24 +483,6 @@
     
     [self.assignmentsMap addAnnotation:annotation];
     
-}
-
-
-+ (FRSMKCircle *)userRadiusForMap: (MKMapView *)mapView {
-    
-//    CGFloat userLat = [FRSLocationManager sharedManager].location.coordinate.latitude;
-//    CGFloat userLon = [FRSLocationManager sharedManager].location.coordinate.longitude;
-    
-    MKUserLocation *userLocation = mapView.userLocation;
-
-    FRSMKCircle *circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:100];
-    circle.identifier = FRSUserCircle;
-    
-//    CLLocationAccuracy horizontalAccuracy = userLocation.location.horizontalAccuracy;
-    
-//    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake(userLat, userLon) radius:100];
-    
-    return circle;
 }
 
 /*
@@ -540,11 +551,10 @@
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
 
-    //If the annotiation is for the user location
+    //If the annotiation is for the user's location
     if (annotation == mapView.userLocation) {
         self.pinView = [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.assignmentsMap];
-        
-        //Check to see if the annotation is dequeued and set already, if not, make one
+
         return self.pinView;
             
     }
@@ -562,27 +572,11 @@
     }
 
     return nil;
-
+    
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
-    
-    MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
-    
-    if ([overlay isKindOfClass:[FRSMKCircle class]]) {
-        
-        FRSMKCircle *circleForUserRadius = (FRSMKCircle *)overlay;
-        
-        if (circleForUserRadius.identifier == FRSUserCircle)
-            [circleView setFillColor:[UIColor frescoBlueColor]];
- 
-    } else
-        [circleView setFillColor:[UIColor radiusGoldColor]];
-    
-    circleView.alpha = .26;
-    
-    return circleView;
-    
+    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
@@ -662,28 +656,16 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [self zoomToCurrentLocation];
+    [self.assignmentsMap userLocationUpdated];
     
-//    if ([self.assignmentsMap.overlays containsObject:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]]) {
-
-//        [self.assignmentsMap removeOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
-//    }
-
-    
-//    [self.assignmentsMap addOverlay:[AssignmentsViewController userRadiusForMap:self.assignmentsMap]];
-    
-//    for (MKCircle *circle in self.assignmentsMap.overlays) {
-//        
-//        CLLocationDegrees userLon = self.assignmentsMap.userLocation.coordinate.longitude;
-//        CLLocationDegrees circleLon = circle.coordinate.longitude;
-//        
-//        CLLocationDegrees userLat = self.assignmentsMap.userLocation.coordinate.latitude;
-//        CLLocationDegrees circleLat = circle.coordinate.latitude;
-//        
-//        if (circleLon == userLon && circleLat == userLat) {
-//            [self.assignmentsMap removeOverlay:circle];
+//    for (id<MKOverlay>overlay in self.assignmentsMap.overlays) {
+//        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+//            FRSMKCircle *userCircleRadius = (FRSMKCircle *)overlay;
+//            [self.assignmentsMap removeOverlay:userCircleRadius];
 //        }
 //    }
-    
+//    
+//   [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap]];
 }
 
 #pragma mark - Location Zoom/View Methods
@@ -702,15 +684,17 @@
         return;
     
     if ([self.lastLoc distanceFromLocation:self.assignmentsMap.userLocation.location] > 0 || self.lastLoc == nil){
-    
+        
         //Find nearby assignments in a 20 mile radius
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:CLLocationCoordinate2DMake(self.assignmentsMap.userLocation.location.coordinate.latitude, self.assignmentsMap.userLocation.location.coordinate.longitude) withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:self.assignmentsMap.userLocation.coordinate
+                                                 withResponseBlock:^(id responseObject, NSError *error)
+        {
             if (!error) {
                 
                 //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count] > 0){
+                if([responseObject count] > 0) {
                     
-                    //Don't zoom to uer location
+                    //Don't zoom to user location
                     runUserLocation = false;
                     
                     float avgLat = 0;
@@ -737,7 +721,6 @@
                                                                                 (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
                                                                                 );
                     
-                    
                     MKCoordinateRegion region = {avgLoc, span};
                     
                     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
@@ -754,9 +737,9 @@
         
     }
 
-    if(runUserLocation){
+    if (runUserLocation) {
         
-        if(self.assignmentsMap.userLocation.location != nil){
+        if (self.assignmentsMap.userLocation.location != nil) {
             
             // Zooming map after delay for effect
             MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
@@ -778,6 +761,7 @@
     self.operatingRadius = 0;
     
 }
+
 
 #pragma mark - Authorization 
 

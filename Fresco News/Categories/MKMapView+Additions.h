@@ -7,6 +7,8 @@
 //
 
 @import MapKit;
+#import <DBImageColorPicker.h>
+#import "FRSMKCircle.h"
 
 @interface MKMapView (Additions)
 
@@ -31,6 +33,10 @@ typedef enum : NSInteger {
 - (void)zoomToCurrentLocation;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
 - (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
++ (DBImageColorPicker *)createDBImageColorPicker;
+- (void)userLocationUpdated;
++ (MKCircleRenderer *)customRendererForOverlay:(id<MKOverlay>)overlay forColorPicker:(DBImageColorPicker *)picker;
+- (void)updateRadiusColor;
 
 // Annotation Views
 + (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
@@ -41,11 +47,11 @@ typedef enum : NSInteger {
                                      ForMapView: (MKMapView *)mapView;
 
 // Annotation additional views
-+ (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
 + (UIButton *)caret;
 + (UIImageView *)imagePinViewForAnnotationType:(FRSAnnotationType)type;
 
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
++ (FRSMKCircle *)userRadiusForMap: (MKMapView *)mapView ;
 
 @end

@@ -22,6 +22,7 @@
 #import "UISocialButton.h"
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
+#import <DBImageColorPicker.h>
 
 typedef enum : NSUInteger {
     SocialExists,
@@ -71,6 +72,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (nonatomic) DBImageColorPicker *colorPicker;
 
 /*
 ** UI Constraints
@@ -105,6 +107,10 @@ typedef enum : NSUInteger {
     [self updateLinkingStatus];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    
+    if ([FRSDataManager sharedManager].currentUser.avatarUrl != nil) {
+        self.colorPicker = [MKMapView createDBImageColorPicker];
+    }
 }
 
 - (void)configureViews{
@@ -616,7 +622,7 @@ typedef enum : NSUInteger {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
             if (self.selectedImage){
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:self.profileImageView.image];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:@"Login"];
             }
             
             //If they are set, reset them via parse
@@ -771,12 +777,13 @@ typedef enum : NSUInteger {
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    [mapView userLocationUpdated];
     [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView circleRenderWithColor:[UIColor frescoBlueColor] forOverlay:overlay];
+    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -824,6 +831,10 @@ typedef enum : NSUInteger {
     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
     [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
+    self.colorPicker = nil;
+    self.colorPicker = [[DBImageColorPicker alloc] initFromImage:self.selectedImage withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
+    
+    [self.mapView updateRadiusColor];
     
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];

@@ -13,6 +13,7 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
+#import <DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
@@ -20,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) NSArray *stepperSteps;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (nonatomic) DBImageColorPicker *colorPicker;
 
 - (IBAction)doneButtonTapped:(id)sender;
 
@@ -52,7 +54,8 @@
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
-    
+    self.colorPicker = [MKMapView createDBImageColorPicker];
+
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
@@ -88,12 +91,18 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    [mapView userLocationUpdated];
     [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView circleRenderWithColor:[UIColor frescoBlueColor] forOverlay:overlay];
+    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
+}
+
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    return [MKMapView setupUserPinForAnnotation:annotation ForMapView:mapView];
+    
 }
 
 #pragma mark - Utility methods
@@ -120,6 +129,7 @@
                 [self navigateToMainApp];
             else{
                 [self dismissViewControllerAnimated:YES completion:nil];
+                
             }
         
         }
@@ -129,5 +139,7 @@
 
 - (IBAction)doneButtonTapped:(id)sender {
     [self save];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadAssignments" object:nil];
 }
 @end

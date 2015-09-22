@@ -42,7 +42,6 @@ enum FRSErrorCodes {
 #define NOTIF_IMAGE_SET                     @"UserProfileImageChanged"
 #define NOTIF_REACHABILITY_MONITORING       @"ReachabilityManagerIsMonitoring"
 #define NOTIF_ONBOARD                       @"Onboard"
-#define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"

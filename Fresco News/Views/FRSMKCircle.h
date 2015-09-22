@@ -17,6 +17,6 @@ typedef enum : NSInteger {
 
 @property (nonatomic) FRSCircleType identifier;
 
-- (instancetype)initWithIdentifier: (FRSCircleType)identifier;
+//- (instancetype)initWithIdentifier: (FRSCircleType)identifier;
 
 @end
