@@ -75,19 +75,16 @@ static CGFloat const kInterImageGap = 1.0f;
     
     [self setFrescoNavigationBar];
     
+    /* Table View Setup */
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 96;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
     
-    /* Instantiating table view controller because of its refresh control property.
-     Instead of adding refresh control as a subview, we create it then assign it
-     to our table view controller's refresh control property
-     */
-    
+    //Create the refresh control
     self.refreshControl = [[FRSRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refresh)
-                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
 
     [self performNecessaryFetch:NO withResponseBlock:nil];
     

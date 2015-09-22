@@ -71,11 +71,11 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     /* Refresh Control Setup */
     self.refreshControl = [[FRSRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refresh)
-                  forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     self.tableViewController.refreshControl = self.refreshControl;
 
     // YES by default, but needs to be the only such visible UIScrollView
@@ -102,9 +102,6 @@
     
     //Turn off any video
     [self disableVideo];
-    
-    //Disable delegate, turned back on in `viewWillAppear`
-    self.tableView.delegate = nil;
     
 }
 
