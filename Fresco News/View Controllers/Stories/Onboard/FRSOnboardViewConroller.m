@@ -147,7 +147,6 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
 
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // INDEX 0

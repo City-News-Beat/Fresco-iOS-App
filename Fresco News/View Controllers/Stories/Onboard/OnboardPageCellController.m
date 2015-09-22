@@ -170,7 +170,7 @@
     self.earth = [UIImageView UIImageViewWithName:@"earth"
                                          andFrame:CGRectMake(59, 47, 173, 173)
                                    andContentMode: UIViewContentModeScaleToFill ];
-    
+
     [self.onboard1View addSubview:self.earth];
     
     
@@ -179,7 +179,6 @@
     self.assignmentTopLeft = [UIImageView UIImageViewWithName:@"assignment-left"
                                                      andFrame:CGRectMake(73, 71, 50, 50)
                                                andContentMode:UIViewContentModeScaleToFill];
-    
     self.assignmentTopLeft.layer.anchorPoint = CGPointMake(1, 1);
     
     [self.onboard1View addSubview:self.assignmentTopLeft];
@@ -190,7 +189,6 @@
     self.assignmentBottomLeft = [UIImageView UIImageViewWithName:@"assignment-left"
                                                         andFrame:CGRectMake(102, 147, 50, 50)
                                                   andContentMode:UIViewContentModeScaleToFill];
-    
     self.assignmentBottomLeft.layer.anchorPoint = CGPointMake(1, 1);
     
     [self.onboard1View addSubview:self.assignmentBottomLeft];
@@ -201,7 +199,6 @@
     self.assignmentTopRight = [UIImageView UIImageViewWithName:@"assignment-right"
                                                         andFrame:CGRectMake(135, 50, 50, 50)
                                                   andContentMode:UIViewContentModeScaleToFill];
-    
     self.assignmentTopRight.layer.anchorPoint = CGPointMake(-.01, 1);
     
     [self.onboard1View addSubview:self.assignmentTopRight];
@@ -212,7 +209,6 @@
     self.assignmentBottomRight = [UIImageView UIImageViewWithName:@"assignment-right"
                                                       andFrame:CGRectMake(165, 160, 50, 50)
                                                 andContentMode:UIViewContentModeScaleToFill];
-    
     self.assignmentBottomRight.layer.anchorPoint = CGPointMake(-.01, 1);
     
     [self.onboard1View addSubview:self.assignmentBottomRight];
@@ -262,6 +258,7 @@
     self.upload.alpha = 1;
     self.camera.alpha = 1;
     
+    // Reset onboard 1 images
     self.assignmentTopLeft.alpha = 0;
     self.assignmentBottomLeft.alpha = 0;
     self.assignmentTopRight.alpha = 0;
@@ -294,8 +291,8 @@
     self.uploadLeft = [UIImageView UIImageViewWithName:@"upload"
                                              andFrame:CGRectMake(165, 135, 24, 24)
                                        andContentMode:UIViewContentModeScaleToFill];
-    
     self.uploadLeft.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
+    
     [self.onboard3View addSubview:self.uploadLeft];
     
     
@@ -304,8 +301,8 @@
     self.uploadRight = [UIImageView UIImageViewWithName:@"upload"
                                               andFrame:CGRectMake(95, 135, 24, 24)
                                         andContentMode:UIViewContentModeScaleToFill];
-    
     self.uploadRight.transform = CGAffineTransformMakeRotation(M_PI_2 - 1);
+    
     [self.onboard3View addSubview:self.uploadRight];
     
     
@@ -313,8 +310,8 @@
     self.cash1 = [UIImageView UIImageViewWithName:@"cash"
                                                andFrame:CGRectMake(205, 36, 35, 24)
                                          andContentMode:UIViewContentModeScaleToFill];
-    
     self.cash1.transform = CGAffineTransformMakeRotation(.13);
+    
     [self.onboard3View addSubview:self.cash1];
     
 
@@ -322,8 +319,8 @@
     self.cash2 = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(45, 60, 35, 24)
                                    andContentMode:UIViewContentModeScaleToFill];
-    
     self.cash2.transform = CGAffineTransformMakeRotation(-.785);
+    
     [self.onboard3View addSubview:self.cash2];
     
 
@@ -331,8 +328,8 @@
     self.cash3 = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(228, 114, 35, 24)
                                    andContentMode:UIViewContentModeScaleToFill];
-    
     self.cash3.transform = CGAffineTransformMakeRotation(.785);
+    
     [self.onboard3View addSubview:self.cash3];
     
     
@@ -353,6 +350,7 @@
     self.cash3.alpha = 0;
     
     
+    // Reset onboard 1
     self.assignmentTopLeft.alpha = 0;
     self.assignmentBottomLeft.alpha = 0;
     self.assignmentTopRight.alpha = 0;
@@ -515,7 +513,7 @@
                          
                      }];
     
-    NSLog(@"0 animation state: %lu", (unsigned long)self.animationState);
+//    NSLog(@"0 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard2 {
@@ -524,13 +522,12 @@
     self.upload.alpha = 1;
     self.camera.alpha = 1;
     
-    // Post animation for pages 1 and 3
     self.assignmentBottomLeft.alpha = 0;
     self.assignmentBottomRight.alpha = 0;
     self.assignmentTopLeft.alpha = 0;
     self.assignmentTopRight.alpha = 0;
 
-    NSLog(@"1 animation state: %lu", (unsigned long)self.animationState);
+//    NSLog(@"1 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard3 {
@@ -547,6 +544,7 @@
     self.cash2.alpha = 1;
     self.cash3.alpha = 1;
     
+    
     self.greyCloud.transform = CGAffineTransformMakeScale(.96,.96);
     self.greyCloud.alpha = 1;
     
@@ -556,7 +554,7 @@
     
     [self animateCash3];
     
-    NSLog(@"2 animation state: %lu", (unsigned long)self.animationState);
+//    NSLog(@"2 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateCash1 {
