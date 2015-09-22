@@ -97,6 +97,7 @@
     [super viewDidLoad];
     
     [self setUpViews];
+    [self animateOnboard1];
     
     if(self.animationState == AnimationStateOne){
         [self setUpOnboard1];
@@ -128,6 +129,35 @@
     //Show "Done" on the last view
     if(self.animationState == 2){
         [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
+    }
+    
+}
+
+
+
+- (void)performAnimation{
+    
+    switch (self.animationState)
+    
+    {
+        case AnimationStateOne:
+            
+            [self animateOnboard1];
+            
+            break;
+            
+        case AnimationStateTwo:
+            
+            [self animateOnboard2];
+            
+            break;
+            
+        case AnimationStateThree:
+            
+            [self animateOnboard3];
+            
+            break;
+            
     }
     
 }
@@ -232,10 +262,10 @@
     self.upload.alpha = 1;
     self.camera.alpha = 1;
     
-    self.assignmentTopRight.alpha = 0;
     self.assignmentTopLeft.alpha = 0;
-    self.assignmentBottomRight.alpha = 0;
     self.assignmentBottomLeft.alpha = 0;
+    self.assignmentTopRight.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
     
 }
 
@@ -322,10 +352,12 @@
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
     
-
-
-
     
+    self.assignmentTopLeft.alpha = 0;
+    self.assignmentBottomLeft.alpha = 0;
+    self.assignmentTopRight.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
+
 }
 
 - (void)setUpViews {
@@ -350,17 +382,367 @@
     
 }
 
-
 - (void)animateOnboard1 {
-    NSLog(@"should be animating onboard 1, actually animating: %lu", (unsigned long)self.animationState);
+    
+    self.assignmentTopLeft.alpha = 1;
+    self.assignmentBottomLeft.alpha = 1;
+    self.assignmentTopRight.alpha = 1;
+    self.assignmentBottomRight.alpha = 1;
+    
+    self.earth.alpha = 1;
+    
+    
+    self.assignmentTopLeft.transform = CGAffineTransformMakeScale(0, 0);
+    self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
+    self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
+    self.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
+    
+    
+    [UIView animateWithDuration:0.35
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.earth.transform = CGAffineTransformMakeTranslation(0, 0);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         
+                         [UIView animateWithDuration:0.25
+                                               delay:-0.1
+                          
+                                             options:UIViewAnimationOptionCurveEaseInOut
+                                          animations:^{
+                                              self.assignmentTopLeft.alpha = 1;
+                                              self.assignmentTopLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                              [UIView animateWithDuration:0.15
+                                                                    delay:0.0
+                                               
+                                                                  options:UIViewAnimationOptionCurveEaseOut
+                                                               animations:^{
+                                                                   self.assignmentTopLeft.transform = CGAffineTransformMakeScale(1, 1);
+                                                                   
+                                                                   
+                                                               }
+                                               
+                                                               completion:^(BOOL finished) {
+                                                                   
+                                                               }];
+                                              
+                                          }];
+                         
+                     }];
+    
+    // BUBBLE 2
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.15
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.assignmentTopRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              self.assignmentTopRight.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+    
+    
+    // BUBBLE 3
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.4
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+    
+    
+    // BUBBLE 4
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.65
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.assignmentBottomRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
+                         
+                     }
+     
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.2
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              self.assignmentBottomRight.transform = CGAffineTransformMakeScale(1, 1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              
+                                          }];
+                         
+                     }];
+    
+    NSLog(@"0 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard2 {
-    NSLog(@"should be animating onboard 2, actually animating: %lu", (unsigned long)self.animationState);
+    
+    self.cloud.alpha = 1;
+    self.upload.alpha = 1;
+    self.camera.alpha = 1;
+    
+    // Post animation for pages 1 and 3
+    self.assignmentBottomLeft.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
+    self.assignmentTopLeft.alpha = 0;
+    self.assignmentTopRight.alpha = 0;
+
+    NSLog(@"1 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard3 {
-    NSLog(@"should be animating onboard 3, actually animating: %lu", (unsigned long)self.animationState);
+    
+   self.earth.alpha = 1;
+    
+        
+    self.greyCloud.alpha = 1;
+    self.television.alpha = 1;
+    self.newspaper.alpha = 1;
+    self.uploadLeft.alpha = 1;
+    self.uploadRight.alpha = 1;
+    self.cash1.alpha = 1;
+    self.cash2.alpha = 1;
+    self.cash3.alpha = 1;
+    
+    self.greyCloud.transform = CGAffineTransformMakeScale(.96,.96);
+    self.greyCloud.alpha = 1;
+    
+    [self animateCash1];
+    
+    [self animateCash2];
+    
+    [self animateCash3];
+    
+    NSLog(@"2 animation state: %lu", (unsigned long)self.animationState);
+}
+
+- (void)animateCash1 {
+
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         self.greyCloud.transform = CGAffineTransformMakeScale(1.03, 1.03);
+                         self.greyCloud.alpha = 1;
+                         
+                         CGMutablePathRef cash1Path1 = CGPathCreateMutable();
+                         CGPathMoveToPoint(cash1Path1,NULL,200.0,70.0);
+                         
+                         
+                         
+                         [UIView animateWithDuration:2.0 animations:^{
+                             
+                             CGPathAddCurveToPoint(cash1Path1,NULL,
+                                                   340.0, 0.0,
+                                                   130.0,100.0,
+                                                   250.0,300.0
+                                                   );
+                             
+                             [UIView animateWithDuration:1.0 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                 
+                                 self.cash1.transform = CGAffineTransformMakeRotation(0.3);
+                                 
+                             } completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                     
+                                     self.cash1.transform = CGAffineTransformMakeRotation(-0.3);
+                                     
+                                     self.cash1.alpha = 0;
+                                     
+                                 } completion:nil];
+                             }];
+                         } completion:^(BOOL finished) {
+                             
+                             //reset
+                             self.cash1.transform = CGAffineTransformMakeRotation(.13);
+                             
+                         }];
+                         
+                         
+                         
+                         CAKeyframeAnimation * theAnimation;
+                         
+                         // Create the animation object, specifying the position property as the key path.
+                         theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+                         theAnimation.path=cash1Path1;
+                         theAnimation.duration=2.0;
+                         
+                         // Add the animation to the layer.
+                         [self.cash1.layer addAnimation:theAnimation forKey:@"position"];
+                     }
+                     completion:^(BOOL finished) {
+                         
+                         [UIView animateWithDuration:0.25 animations:^{
+                             
+                             self.greyCloud.transform = CGAffineTransformMakeScale(1, 1);
+                             
+                         }];
+                         
+                         
+                         
+                     }];
+}
+
+- (void)animateCash2 {
+
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         CGMutablePathRef cash1Path1 = CGPathCreateMutable();
+                         CGPathMoveToPoint(cash1Path1,NULL,100.0,70.0);
+                         
+                         
+                         
+                         [UIView animateWithDuration:2.0 delay:0.5  options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                             
+                             CGPathAddCurveToPoint(cash1Path1,NULL,
+                                                   -90.0, 0.0,
+                                                   130.0,100.0,
+                                                   100.0,240.0
+                                                   );
+                             
+                             [UIView animateWithDuration:1.0 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                 
+                                 self.cash2.transform = CGAffineTransformMakeRotation(-0.3);
+                                 
+                             } completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                     
+                                     self.cash2.transform = CGAffineTransformMakeRotation(0.3);
+                                     
+                                     self.cash2.alpha = 0;
+                                     
+                                 } completion:nil];
+                             }];
+                         } completion:^(BOOL finished) {
+                             
+                             //reset
+                             self.cash2.transform = CGAffineTransformMakeRotation(.13);
+                             
+                         }];
+                         
+                         
+                         
+                         CAKeyframeAnimation * theAnimation;
+                         
+                         // Create the animation object, specifying the position property as the key path.
+                         theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+                         theAnimation.path=cash1Path1;
+                         theAnimation.duration=2.0;
+                         
+                         // Add the animation to the layer.
+                         [self.cash2.layer addAnimation:theAnimation forKey:@"position"];
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
+    
+    
+    
+}
+
+- (void)animateCash3 {
+
+    
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         CGMutablePathRef cash3Path = CGPathCreateMutable();
+                         CGPathMoveToPoint(cash3Path,NULL,200.0,120.0);
+                         
+                         [UIView animateWithDuration:2.0 animations:^{
+                             
+                             CGPathAddCurveToPoint(cash3Path,NULL,
+                                                   280.0, 100.0,
+                                                   230.0,100.0,
+                                                   150.0,200.0
+                                                   );
+                             
+                             [UIView animateWithDuration:1.0 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                 
+                                 self.cash3.transform = CGAffineTransformMakeRotation(-0.3);
+                                 
+                             } completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                     
+                                     self.cash3.transform = CGAffineTransformMakeRotation(0.3);
+                                     
+                                     self.cash3.alpha = 0;
+                                     
+                                 } completion:nil];
+                             }];
+                         } completion:^(BOOL finished) {
+                             
+                             //reset
+                             self.cash3.transform = CGAffineTransformMakeRotation(-.13);
+                             
+                         }];
+                         
+                         CAKeyframeAnimation * cash3Animation;
+                         
+                         // Create the animation object, specifying the position property as the key path.
+                         cash3Animation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+                         cash3Animation.path=cash3Path;
+                         cash3Animation.duration=2.0;
+                         
+                         // Add the animation to the layer.
+                         [self.cash3.layer addAnimation:cash3Animation forKey:@"position"];
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 
 

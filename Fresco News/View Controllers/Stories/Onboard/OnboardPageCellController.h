@@ -52,6 +52,6 @@ typedef enum : NSUInteger {
 @property (strong, nonatomic) UIImageView *cash2;
 @property (strong, nonatomic) UIImageView *cash3;
 
-
+- (void)performAnimation;
 
 @end
