@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSBackButton : UIView
+@interface FRSBackButton : UIView 
 
 @end

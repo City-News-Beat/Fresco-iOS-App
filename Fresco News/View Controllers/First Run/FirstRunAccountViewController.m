@@ -11,6 +11,7 @@
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 #import "UISocialButton.h"
+#import "FRSBackButton.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
 
@@ -99,11 +100,11 @@
      [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
 
-- (IBAction)backButtonTapped:(id)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
+//- (IBAction)backButtonTapped:(id)sender {
+//    
+//    [self.navigationController popViewControllerAnimated:YES];
+//    
+//}
 
 #pragma mark - UITextViewDelegate
 
@@ -276,31 +277,14 @@
 }
 
 - (void)initBackButton {
-    
-    // Create back button
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    backButton.frame = CGRectMake(24, 28, 38, 24);
-    backButton.alpha = .54;
-    [backButton.titleLabel setFont:[UIFont systemFontOfSize:17.0]];
-    [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(0, 15, 70, 40)];
     
     [self.view addSubview:backButton];
     
-    
-    // FRSBackButton *backButton = [[FRSBackButton alloc] init]
-    // [self.view addSubview:[[FRSBackButton alloc] new]];
-    
-    
-    // Create back carret
-    UIImageView *backCaret = [[UIImageView alloc] initWithFrame:CGRectMake(8, 32, 12, 15)];
-    backCaret.image = [UIImage imageNamed:@"backCaret"];
-    [backCaret setContentMode:UIViewContentModeScaleAspectFill];
-    
-    [self.view addSubview:backCaret];
-    
 }
+
+
 
 
 
