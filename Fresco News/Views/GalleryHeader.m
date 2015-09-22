@@ -13,13 +13,13 @@
 
 @interface GalleryHeader ()
 
-@property (strong, nonatomic) IBOutlet UILabel *labelPlace;
+@property (strong, nonatomic) UILabel *labelPlace;
 
-@property (strong, nonatomic) IBOutlet UILabel *labelByLineAndTime;
+@property (strong, nonatomic) UILabel *labelByLineAndTime;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *trailingSpaceByline;
+@property (strong, nonatomic) NSLayoutConstraint *trailingSpaceByline;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leadingSpacePlace;
+@property (strong, nonatomic) NSLayoutConstraint *leadingSpacePlace;
 
 @end
 
@@ -31,7 +31,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 {
     return kCellIdentifier;
 }
-
 
 - (id)initWithFrame:(CGRect)frame{
 
@@ -48,7 +47,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         self.labelPlace.translatesAutoresizingMaskIntoConstraints = NO;
         self.labelPlace.textColor = [UIColor textHeaderBlackColor];
         self.labelPlace.lineBreakMode = NSLineBreakByTruncatingTail;
-        [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+        [self.labelPlace setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
                                                                  forAxis:UILayoutConstraintAxisHorizontal];
         
         self.labelByLineAndTime = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 12)];
@@ -56,48 +55,47 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         self.labelByLineAndTime.translatesAutoresizingMaskIntoConstraints = NO;
         self.labelByLineAndTime.textAlignment = NSTextAlignmentRight;
         self.labelByLineAndTime.textColor = [UIColor textHeaderBlackColor];
-        self.labelByLineAndTime.lineBreakMode = NSLineBreakByTruncatingTail;
-        [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+        [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh
                                                  forAxis:UILayoutConstraintAxisHorizontal];
         
-        
-        [self addSubview:self.labelPlace];
         [self addSubview:self.labelByLineAndTime];
+        [self addSubview:self.labelPlace];
         
+  
         /* Leading Space for Place */
         self.leadingSpacePlace = [NSLayoutConstraint
-                                                 constraintWithItem:self.labelPlace
-                                                 attribute:NSLayoutAttributeLeading
-                                                 relatedBy:NSLayoutRelationEqual
-                                                 toItem:self
-                                                 attribute:NSLayoutAttributeLeading
-                                                 multiplier:1.0
-                                                 constant:16.0];
-        
+                                  constraintWithItem:self.labelPlace
+                                  attribute:NSLayoutAttributeLeading
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:self
+                                  attribute:NSLayoutAttributeLeading
+                                  multiplier:1.0
+                                  constant:16.0];
+
         /* Trailing space for ByLine */
         self.trailingSpaceByline = [NSLayoutConstraint
-                                         constraintWithItem:self.labelByLineAndTime
-                                         attribute:NSLayoutAttributeTrailing
-                                         relatedBy:NSLayoutRelationEqual
-                                         toItem:self
-                                         attribute:NSLayoutAttributeTrailing
-                                         multiplier:1.0
-                                         constant:-16.0];
-        
+                                    constraintWithItem:self.labelByLineAndTime
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:self
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1.0
+                                    constant:-16.0];
+
+        /* Horizontal Space */
+        NSLayoutConstraint *horizontalSpaceBetween = [NSLayoutConstraint
+                                                      constraintWithItem:self.labelByLineAndTime
+                                                      attribute:NSLayoutAttributeLeft
+                                                      relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                      toItem:self.labelPlace
+                                                      attribute:NSLayoutAttributeRight
+                                                      multiplier:1.0
+                                                      constant:16.0];
+
         
         /* Top Space for Place Label */
         NSLayoutConstraint *topSpaceTime = [NSLayoutConstraint
-                                              constraintWithItem:self.labelPlace
-                                              attribute:NSLayoutAttributeTop
-                                              relatedBy:NSLayoutRelationEqual
-                                              toItem:self
-                                              attribute:NSLayoutAttributeTop
-                                              multiplier:1.0
-                                              constant:8.0];
-        
-        /* Top Space for Byline */
-        NSLayoutConstraint *topSpaceByline = [NSLayoutConstraint
-                                            constraintWithItem:self.labelByLineAndTime
+                                            constraintWithItem:self.labelPlace
                                             attribute:NSLayoutAttributeTop
                                             relatedBy:NSLayoutRelationEqual
                                             toItem:self
@@ -105,23 +103,22 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
                                             multiplier:1.0
                                             constant:8.0];
         
-        /* Horizontal Space */
-        NSLayoutConstraint *horizontalSpaceBetween = [NSLayoutConstraint
+        /* Top Space for Byline */
+        NSLayoutConstraint *topSpaceByline = [NSLayoutConstraint
                                               constraintWithItem:self.labelByLineAndTime
-                                              attribute:NSLayoutAttributeLeft
-                                              relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                              toItem:self.labelPlace
-                                              attribute:NSLayoutAttributeRight
+                                              attribute:NSLayoutAttributeTop
+                                              relatedBy:NSLayoutRelationEqual
+                                              toItem:self
+                                              attribute:NSLayoutAttributeTop
                                               multiplier:1.0
-                                              constant:16.0];
+                                              constant:8.0];
         
-        
-        [self addConstraint:self.trailingSpaceByline];
+    
         [self addConstraint:self.leadingSpacePlace];
+        [self addConstraint:self.trailingSpaceByline];
+        [self addConstraint:horizontalSpaceBetween];
         [self addConstraint:topSpaceTime];
         [self addConstraint:topSpaceByline];
-        [self addConstraint:horizontalSpaceBetween];
-        
         
     }
     
