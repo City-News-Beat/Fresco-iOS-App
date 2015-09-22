@@ -180,7 +180,7 @@
 - (void)setupButtons
 {
 
- self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(cancelProcess)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonItemClicked:)];
 }
 
 - (void)configureControlsForUpload:(BOOL)upload
@@ -192,23 +192,30 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
 }
 
+
+
+
 #pragma mark - Navigational Methods
 
-- (void)cancelProcess {
-    [self returnToTabBarViaCancel:YES];
+-(void)rightBarButtonItemClicked:(id)sender{
+
+    [self returnToTabBarWithPrevious:NO];
 }
 
-- (void)returnToTabAfterSubmission {
-    
-    [self returnToTabBarViaCancel:NO];
-}
+/*
+** Returns to tab bar, takes option of returning to previously selected tab
+*/
 
--(void)returnToTabBarViaCancel: (BOOL)didCancel {
+-(void)returnToTabBarWithPrevious:(BOOL)previous{
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
-    if (didCancel) {
+    
+    if (previous) {
+        
         tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-    } else {
+        
+    }
+    else {
         tabBarController.selectedIndex = 4;
     }
     
@@ -667,7 +674,7 @@
                 
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
-                [self returnToTabAfterSubmission];
+                [self returnToTabBarWithPrevious:YES];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];

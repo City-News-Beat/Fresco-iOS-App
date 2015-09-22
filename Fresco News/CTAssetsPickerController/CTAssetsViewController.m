@@ -156,13 +156,14 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 - (void)setupButtons
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self.picker action:@selector(returnToCamera:)];
-
-    [self.navigationController.navigationBar setTintColor:[UIColor darkGoldBarButtonColor]];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(returnToTabBar:)];
+    
+    [self.navigationController.navigationBar setTintColor:[UIColor darkGoldBarButtonColor]];
+    
 }
 
 - (void)returnToTabBar:(id)sender {
@@ -546,6 +547,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 
     GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Media"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:nil
