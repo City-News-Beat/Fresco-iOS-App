@@ -961,6 +961,31 @@
     
 }
 
+- (void)resolveGalleriesInList:(NSArray *)galleries withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"galleries" : galleries};
+
+    [self GET:@"gallery/resolve" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -969,9 +994,15 @@
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        FRSGallery *assignment = [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        FRSGallery *gallery;
         
-        if(responseBlock) responseBlock(assignment, nil);
+        if(!responseObject[@"err"]){
+        
+            gallery = [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        }
+        
+        if(responseBlock) responseBlock(gallery, nil);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
