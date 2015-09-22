@@ -21,7 +21,6 @@ typedef enum : NSUInteger {
 /* Spinner */
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
-@property (nonatomic) UIActivityIndicatorView *toolbarSpinner;
 
 /*
 ** Navigation Methods

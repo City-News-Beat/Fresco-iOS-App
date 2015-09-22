@@ -66,8 +66,7 @@
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
     
     //Tells rest of the app to update respective occurence of the user's profile picture
-    NSString *notificationString = @"Login";
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:notificationString];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
     
     //New user, send them to rest of the first run
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){

@@ -37,6 +37,8 @@ typedef enum : NSUInteger {
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (strong, nonatomic) UIActivityIndicatorView *toolbarSpinner;
+
 /*
 ** Profile Picture
 */
@@ -66,8 +68,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
 
 /*
- ** Radius Setting
- */
+** Radius Setting
+*/
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
@@ -82,6 +84,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalTop;
 
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsWithShadows;
+
+@property (nonatomic, assign) BOOL locationUpdated;
 
 @end
 
@@ -107,10 +111,6 @@ typedef enum : NSUInteger {
     [self updateLinkingStatus];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
-    
-    if ([FRSDataManager sharedManager].currentUser.avatarUrl != nil) {
-        self.colorPicker = [MKMapView createDBImageColorPicker];
-    }
 }
 
 - (void)configureViews{
@@ -514,31 +514,37 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
-- (void)updateStateForSpinner:(UIActivityIndicatorView *)spinner {
+- (void)updateStateForSpinner{
+
+    if (!self.toolbarSpinner){
+        
+        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
+        
+        self.toolbarSpinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
+        
+    }
     
-    CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
-    
-    if (!spinner) spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-    
-    if (!spinner.isAnimating) {
+    if (!self.toolbarSpinner.isAnimating) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            spinner.center = CGPointMake(self.saveChangesbutton.frame.size.width  / 2, self.saveChangesbutton.frame.size.height / 2);
+            self.toolbarSpinner .center = CGPointMake(self.saveChangesbutton.frame.size.width  / 2, self.saveChangesbutton.frame.size.height / 2);
             
-            spinner.color = [UIColor whiteColor];
+            self.toolbarSpinner .color = [UIColor whiteColor];
             
-            [spinner startAnimating];
+            [self.toolbarSpinner  startAnimating];
             
-            [self.saveChangesbutton addSubview:spinner];
+            [self.saveChangesbutton addSubview:self.toolbarSpinner ];
             
         });
         
-    } else {
+    }
+    else {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopAnimating];
-            [spinner removeFromSuperview];
+            [self.saveChangesbutton setTitle:@"Save Changes" forState:UIControlStateNormal];
+            [self.toolbarSpinner  stopAnimating];
+            [self.toolbarSpinner  removeFromSuperview];
         });
     }
     
@@ -590,8 +596,7 @@ typedef enum : NSUInteger {
     
     [self.saveChangesbutton setTitle:@"" forState:UIControlStateNormal];
     
-    [self updateStateForSpinner:self.toolbarSpinner];
-    
+    [self updateStateForSpinner];
     
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
@@ -606,24 +611,16 @@ typedef enum : NSUInteger {
         
         if (!success) {
             
+            [self updateStateForSpinner];
+                        
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:ERROR
-                                         message:PROFILE_SAVE_ERROR
-                                         action:DISMISS handler:^(UIAlertAction *handler){
-                                             
-                                             NSLog(@"ok");
-                                             
-                                         }]
+                                         message:PROFILE_SETTINGS_SAVE_ERROR
+                                         action:DISMISS handler:nil]
                                animated:YES
                              completion:nil];
             
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.toolbarSpinner stopAnimating];
-                [self.toolbarSpinner removeFromSuperview];
-            });
-            
-            
+        
         }
         // On success, run password check
         else {
@@ -632,38 +629,48 @@ typedef enum : NSUInteger {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE_HEADER];
             
             if (self.selectedImage){
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:@"Login"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
             }
             
-            //If they are set, reset them via parse
+            //If the password field is set, reset it via parse
             if ([self.textfieldNewPassword.text length]) {
                 
                 [PFUser currentUser].password = self.textfieldNewPassword.text;
                 
-                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
+                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                     
-                    if(success) [self.navigationController popViewControllerAnimated:YES];
+                    [self updateStateForSpinner];
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.toolbarSpinner stopAnimating];
-                        [self.toolbarSpinner removeFromSuperview];
-                    });
                     
+                    //If the save fails
+                    if(!succeeded){
+
+                        [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                     alertControllerWithTitle:ERROR
+                                                     message:PASSWORD_SAVE_ERROR
+                                                     action:DISMISS handler:nil]
+                                           animated:YES
+                                         completion:nil];
+                    
+                    }
+                    //The save is successful
+                    else{
+
+                        [self.navigationController popViewControllerAnimated:YES];
+                    
+                    }
                 }];
                 
             }
-            //If passwords are not reset, just go back
-            else {
+            //No passwords are set, pop back
+            else{
+            
+                [self updateStateForSpinner];
+                
                 [self.navigationController popViewControllerAnimated:YES];
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.toolbarSpinner stopAnimating];
-                    [self.toolbarSpinner removeFromSuperview];
-                });
             }
-            
         }
-        
     }];
     
     // send a second post to save the radius -- ignore success
@@ -787,21 +794,22 @@ typedef enum : NSUInteger {
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView userLocationUpdated];
-    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+    if(!self.locationUpdated){
+        [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+        self.locationUpdated = YES;
+    }
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:nil];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
     //If the annotiation is for the user location
-    if (annotation == mapView.userLocation) {
-        return [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.mapView];
-    }
+    if (annotation == mapView.userLocation)
+        return [self.mapView setupUserPinForAnnotation:annotation];
     
     return nil;
 }
@@ -841,11 +849,7 @@ typedef enum : NSUInteger {
     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
     [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
-    self.colorPicker = nil;
-    self.colorPicker = [[DBImageColorPicker alloc] initFromImage:self.selectedImage withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
-    
-    [self.mapView updateRadiusColor];
-    
+
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
     
