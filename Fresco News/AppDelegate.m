@@ -24,6 +24,7 @@
 #import "HighlightsViewController.h"
 #import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
+#import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
 
 @interface AppDelegate ()
@@ -64,8 +65,18 @@
     
     //Check if we've launcahed the app before or if the app is the iPhone 4s/4
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
+        
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
+        
+        NSDictionary *userInfo = @{
+                                   @"type" : NOTIF_ASSIGNMENT,
+                                   @"assignment" : @"5601b49350c2e6c854f2d499"
+                                   };
+        
+        [self handlePush:userInfo];
+        
+        
     }
     else {
         [self.frsRootViewController setRootViewControllerToOnboard];
@@ -139,7 +150,7 @@
 - (void)configureAppWithLaunchOptions:(NSDictionary *)launchOptions
 {
     
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
+//    [[AFNetworkActivityLogger sharedLogger] startLogging];
     [Fabric with:@[CrashlyticsKit]];
 
 //    //Taplytics Setup
@@ -198,65 +209,6 @@
     [currentInstallation saveInBackground];
 }
 
-- (void)handlePush:(NSDictionary *)userInfo
-{
-
-    [PFPush handlePush:userInfo];
-    
-    //Check that the user is not in the onboard screen, otherwise break the method call
-    if([self.frsRootViewController.viewController isKindOfClass:[FRSOnboardViewConroller class]]){
-        return;
-    }
-    
-    // Check the type of the notifications
-    
-    //Breaking News
-    if ([userInfo[@"type"] isEqualToString:@"breaking"] || [userInfo[@"type"] isEqualToString:@"use"]) {
-        //Check to make sure the payload has a gallery ID
-        if (userInfo[@"gallery"]) {
-            
-            [[FRSDataManager sharedManager] getGallery:userInfo[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    
-                    //Retreieve Gallery View Controller from storyboard
-                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-                    
-                    //Set the tab bar to the first tab
-                    tabBarController.selectedIndex = 0;
-                    
-                    HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
-                    
-                    //Retreieve Notifications View Controller from storyboard
-                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-                    
-                    GalleryViewController *galleryView = [storyboard instantiateViewControllerWithIdentifier:@"GalleryViewController"];
-                    
-                    [galleryView setGallery:responseObject];
-                    
-                    [homeVC.navigationController pushViewController:galleryView animated:YES];
-                }
-            }];
-            
-        }
-    }
-
-    // Assignments
-    if ([userInfo[@"type"] isEqualToString:@"assignment"]) {
-        // Check to make sure the payload has an assignment ID
-        if (userInfo[@"assignment"]) {
-            [[FRSDataManager sharedManager] getAssignment:userInfo[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
-                    [tabBarController setSelectedIndex:3];
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:NO present:YES withAnimation:NO];
-                }
-            }];
-        }
-    }
-    //Use
-    //Social
-}
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
@@ -277,29 +229,66 @@
     
     UIApplicationState state = [application applicationState];
     
+    //Check if the app is inactive to prevent taking the user away from their view
     if (state == UIApplicationStateInactive) {
+        
         [self handlePush:notification.userInfo];
+        
     }
 
 }
+
+/*
+** Catch all method for handling notification userInfo
+*/
+
+- (void)handlePush:(NSDictionary *)userInfo
+{
+    
+    [PFPush handlePush:userInfo];
+    
+    //Check that the user is not in the onboard screen, otherwise break the method call
+    if([self.frsRootViewController.viewController isKindOfClass:[FRSOnboardViewConroller class]]){
+        return;
+    }
+    
+    // Check the type of the notifications
+    
+    //Breaking News /* Check to make sure the payload has a gallery ID */
+    if (([userInfo[@"type"] isEqualToString:NOTIF_BREAKING] || [userInfo[@"type"] isEqualToString:NOTIF_USE]) && userInfo[@"gallery"]){
+        
+        [self openGalleryFromPush:userInfo[@"gallery"]];
+        
+    }
+    
+    // Assignments * Check to make sure the payload has an assignment ID
+    if ([userInfo[@"type"] isEqualToString:NOTIF_ASSIGNMENT] && userInfo[@"assignment"]) {
+        
+        [self openAssignmentFromPush:userInfo[@"assignment"] withNavigation:NO];
+        
+    }
+    //Story
+    if ([userInfo[@"type"] isEqualToString:NOTIF_LIST] && userInfo[@"galleries"]) {
+        
+        NSArray *galleryList = userInfo[@"galleries"];
+        
+        [self openGalleryListFromPush:galleryList withTitle:userInfo[@"title"]];
+        
+    }
+    
+    
+}
+
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler
 {
     // Check the identifier for the type of notification
     
-    //Assignment Action
-    if ([identifier isEqualToString: NAVIGATE_IDENTIFIER]) {
-        // Check to make sure the payload has an assignment ID
-        if (notification[@"assignment"]) {
-            [[FRSDataManager sharedManager] getAssignment:notification[@"assignment"] withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
-                    AssignmentsViewController *assignmentVC = (AssignmentsViewController *)([[tabBarController viewControllers][3] viewControllers][0]);
-                    [tabBarController setSelectedIndex:3];
-                    [assignmentVC setCurrentAssignment:responseObject navigateTo:YES present:YES withAnimation:NO];
-                }
-            }];
-        }
+    //Assignment Action /* Check to make sure the payload has an assignment ID */
+    if ([identifier isEqualToString: NAVIGATE_IDENTIFIER] && notification[@"assignment"]) {
+        
+        [self openAssignmentFromPush:notification[@"assignment"] withNavigation:YES];
+
     }
 
     // Must be called when finished

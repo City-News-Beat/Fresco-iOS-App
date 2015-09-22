@@ -160,6 +160,10 @@ enum FRSErrorCodes {
 #define ASSIGNMENT_CATEGORY                 @"ASSIGNMENT_CATEGORY"
 #define NAVIGATE_IDENTIFIER                 @"NAVIGATE_IDENTIFIER"
 
+#define NOTIF_BREAKING                      @"breaking"
+#define NOTIF_ASSIGNMENT                    @"assignment"
+#define NOTIF_USE                           @"use"
+#define NOTIF_LIST                          @"list"
 
 
 /* User-facing Strings */
@@ -301,7 +305,6 @@ enum FRSErrorCodes {
 #define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
 
 
-
 /* Highlights */
 
 #pragma mark - Highlights
@@ -318,7 +321,6 @@ enum FRSErrorCodes {
 
 
 /* Notifications */
-
 #pragma mark - Notifications
 
 #define VIEW                                NSLocalizedString(@"View", nil)
@@ -333,6 +335,7 @@ enum FRSErrorCodes {
 #define GALLERY_UNAVAILABLE_TITLE           NSLocalizedString(@"Gallery Unavailable", nil)
 #define GALLERY_UNAVAILABLE_MSG             NSLocalizedString(@"We couldn't find this gallery!", nil)
 
+#define TODAY_TITLE                         NSLocalizedString(@"Today in News", nil)
 
 
 /* Assignments - MapView */

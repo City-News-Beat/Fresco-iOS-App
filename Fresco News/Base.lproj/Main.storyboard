@@ -707,7 +707,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tuo-XR-C6r" userLabel="Galleries Container View">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="537"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <connections>
                                     <segue destination="fnN-fw-elr" kind="embed" identifier="embedGalleries" id="mbJ-dc-9zc"/>
                                 </connections>
@@ -715,7 +715,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="TLe-jA-5Rt" firstAttribute="top" secondItem="tuo-XR-C6r" secondAttribute="bottom" constant="-50" id="3qZ-Rk-zxA"/>
+                            <constraint firstItem="TLe-jA-5Rt" firstAttribute="top" secondItem="tuo-XR-C6r" secondAttribute="bottom" id="3qZ-Rk-zxA"/>
                             <constraint firstItem="tuo-XR-C6r" firstAttribute="leading" secondItem="UfZ-yA-vFS" secondAttribute="leading" id="4d9-Ti-d96"/>
                             <constraint firstAttribute="trailing" secondItem="tuo-XR-C6r" secondAttribute="trailing" id="Aap-R3-Plu"/>
                             <constraint firstItem="tuo-XR-C6r" firstAttribute="top" secondItem="UfZ-yA-vFS" secondAttribute="top" id="DP2-Pv-zvp"/>
