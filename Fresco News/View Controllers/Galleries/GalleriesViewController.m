@@ -23,6 +23,7 @@
 #import "PostCollectionViewCell.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "FRSRefreshControl.h"
 
 @interface GalleriesViewController ()
 
@@ -51,6 +52,11 @@
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
+/*
+ ** Child table view controller
+ */
+
+@property (nonatomic) UITableViewController *tableViewController;
 
 @end
 
@@ -61,20 +67,25 @@
     [super viewDidLoad];
     
     /* Table View Setup */
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     
-    /* Refresh Control Setup */
-    self.refreshControl = [[UIRefreshControl alloc] init];
+    /* Instantiating table view controller because of its refresh control property.
+       Instead of adding refresh control as a subview, we create it then assign it
+       to our table view controller's refresh control property 
+     */
     
-    self.refreshControl.alpha = .54;
+    self.tableViewController = [[UITableViewController alloc] init];
+    [self addChildViewController:self.tableViewController];
+    self.tableViewController.tableView = self.tableView;
+    
+    /* Refresh Control Setup */
+    self.refreshControl = [[FRSRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
-    [self.tableView addSubview:self.refreshControl];
-    
+    self.tableViewController.refreshControl = self.refreshControl;
+
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
     
