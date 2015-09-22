@@ -322,9 +322,7 @@ static CGFloat const kInterImageGap = 1.0f;
             
             [array addObject:post.image];
         }
-        else {
-            NSLog(@"Post ID missing URL or galery: %@", post.postID);
-        }
+        
     }
     
     return array;
