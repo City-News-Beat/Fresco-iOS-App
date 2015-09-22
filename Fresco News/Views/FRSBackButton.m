@@ -31,7 +31,7 @@
         
         // Create back button
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backButton.frame = CGRectMake(24, 8, 38, 24);
+        backButton.frame = CGRectMake(24, 8, 45, 24);
         backButton.alpha = .54;
 //        [backButton.titleLabel setFont:[UIFont systemFontOfSize:17.0]];
         [backButton.titleLabel setFont: [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:17]];
