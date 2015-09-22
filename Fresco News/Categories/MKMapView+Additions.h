@@ -33,18 +33,20 @@ typedef enum : NSInteger {
 - (void)zoomToCurrentLocation;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
 - (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
-+ (DBImageColorPicker *)createDBImageColorPicker;
-- (void)userLocationUpdated;
-+ (MKCircleRenderer *)customRendererForOverlay:(id<MKOverlay>)overlay forColorPicker:(DBImageColorPicker *)picker;
+- (void)userRadiusUpdated:(NSNumber *)radius;
+
++ (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image;
+
++ (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker;
+
 - (void)updateRadiusColor;
 
-// Annotation Views
-+ (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
-                                           ForMapView: (MKMapView *)mapView
-                                              AndType: (FRSAnnotationType)type;
+- (void)removeAllOverlaysButUser;
 
-+ (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation
-                                     ForMapView: (MKMapView *)mapView;
+// Annotation Views
+- (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type;
+
+- (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation;
 
 // Annotation additional views
 + (UIButton *)caret;
@@ -52,6 +54,7 @@ typedef enum : NSInteger {
 
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
-+ (FRSMKCircle *)userRadiusForMap: (MKMapView *)mapView ;
+
++ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius;
 
 @end

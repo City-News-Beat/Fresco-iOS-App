@@ -357,8 +357,8 @@
     //Send notifications to the rest of the app to update front-end elements
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_BADGE_RESET object:self];
-    NSString *notificationString = @"Logout";
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:notificationString];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
     
 }
 

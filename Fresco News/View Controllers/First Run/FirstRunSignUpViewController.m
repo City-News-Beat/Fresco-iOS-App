@@ -153,8 +153,11 @@
             else {
                 
                 [((UIButton *)sender) setUserInteractionEnabled:YES];
-                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:@"Login"];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
+                
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+                
             }
 
         }];

@@ -32,6 +32,8 @@ enum FRSErrorCodes {
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
 
+#define ImageWithData(data)[UIImage imageWithData:data]
+
 /*  NotificationCenter Strings */
 
 #pragma mark - NotificationCenter Strings
@@ -266,7 +268,9 @@ enum FRSErrorCodes {
 
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 
-#define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)
+#define PROFILE_SETTINGS_SAVE_ERROR         NSLocalizedString(@"We couldn't save your profile settings. Please try again in a bit.", nil)
+#define PASSWORD_SAVE_ERROR                 NSLocalizedString(@"We could successfully save your settings, but your new password wasn't saved. Please try again in a bit.", nil)
+
 
 #define DISABLE_ACCT_TITLE                  NSLocalizedString(@"Are you sure? You can recover your account up to one year from today.", nil)
 #define DISABLE_ACCT_ERROR                  NSLocalizedString(@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help.", nil)

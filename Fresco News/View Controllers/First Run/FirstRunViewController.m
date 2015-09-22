@@ -10,6 +10,7 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <DBImageColorPicker.h>
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
 #import "TOSViewController.h"
@@ -33,6 +34,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
+
+@property (strong, nonatomic) DBImageColorPicker *picker;
 
 @end
 

@@ -22,9 +22,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) NSArray *stepperSteps;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic) DBImageColorPicker *colorPicker;
 
 @property (assign, nonatomic) BOOL ranUserUpdate;
+
+@property (strong, nonatomic) DBImageColorPicker *picker;
 
 - (IBAction)doneButtonTapped:(id)sender;
 
@@ -57,8 +58,6 @@
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
-    self.colorPicker = [MKMapView createDBImageColorPicker];
-
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
@@ -95,8 +94,6 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView userLocationUpdated];
-
     if(!self.ranUserUpdate){
         [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
         self.ranUserUpdate = YES;
@@ -106,11 +103,12 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    return [MKMapView setupUserPinForAnnotation:annotation ForMapView:mapView];
+    
+    return [self.mapView setupUserPinForAnnotation:annotation];
     
 }
 

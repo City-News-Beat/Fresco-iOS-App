@@ -15,18 +15,12 @@
 #import "AssignmentAnnotation.h"
 #import "ClusterAnnotation.h"
 #import "ProfileSettingsViewController.h"
-#import <SVPulsingAnnotationView.h>
-#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "AssignmentOnboardViewController.h"
 #import "FRSLocationManager.h"
-#import "FRSMKCircle.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import <DBImageColorPicker.h>
 
 #define kSCROLL_VIEW_INSET 75
-
-//static NSString *assignmentIdentifier = @"AssignmentAnnotation";
-//static NSString *clusterIdentifier = @"ClusterAnnotation";
-//static NSString *userIdentifier = @"currentLocation";
 
 @class FRSAssignment;
 
@@ -45,8 +39,7 @@
     @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
     @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
     @property (strong, nonatomic) UIActionSheet *navigationSheet;
-    @property (nonatomic) MKAnnotationView *pinView;
-@property (nonatomic) DBImageColorPicker *colorPicker;
+    @property (strong, nonatomic) DBImageColorPicker *picker;
 
     /*
     ** Conditioning Variables
@@ -64,6 +57,7 @@
     @property (strong, nonatomic) NSNumber *operatingLat;
 
     @property (strong, nonatomic) NSNumber *operatingLon;
+
 
 @end
 
@@ -102,9 +96,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
-       
-    self.colorPicker = [MKMapView createDBImageColorPicker];
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -119,6 +111,10 @@
         else{
             self.storyBreaksView.hidden = YES;
         }
+        
+        if(!self.picker)
+            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+
     }
     
     //Run updates for assignments
@@ -135,31 +131,26 @@
 
 - (void)resetPin:(NSNotification *)notification {
     
-    self.colorPicker = nil;
-    
-    if ([notification.object isKindOfClass:[NSString class]]) {
+    if([FRSDataManager sharedManager].currentUser.avatarUrl != nil){
         
-        NSString *notificationString = (NSString *)notification.object;
+        NSData *profileImageData = [NSData dataWithContentsOfURL:[FRSDataManager sharedManager].currentUser.avatarUrl];
         
-        if ([notificationString isEqualToString:@"Login"]) {
-            
-            NSURL *profileImageUrl = [FRSDataManager sharedManager].currentUser.avatarUrl;
-            NSData *profileImageData = [NSData dataWithContentsOfURL:profileImageUrl];
-            UIImage *profileImage = [UIImage imageWithData:profileImageData];
-            [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:profileImage];
-            
-        } else if ([notificationString isEqualToString:@"Logout"]) {
-            
-            UIImage *defaultPinImage = [UIImage imageNamed:@"dot-user-fill"];
-            [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:defaultPinImage];
-        }
+        UIImage *profileImage = [UIImage imageWithData:profileImageData];
         
-        self.colorPicker = [MKMapView createDBImageColorPicker];
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:profileImage];
+
+        [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:profileImage];
+        
+        [self.assignmentsMap userRadiusUpdated:nil];
+            
+    }
+    else {
+        
+        UIImage *defaultPinImage = [UIImage imageNamed:@"dot-user-fill"];
+        
+        [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:defaultPinImage];
         
     }
-    
- [self.assignmentsMap updateRadiusColor];
-
 }
 
 - (void)viewDidLayoutSubviews{
@@ -183,27 +174,6 @@
     self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
     self.detailViewWrapper.layer.shadowOpacity = 0.26;
     self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-
-
-    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                      attribute:NSLayoutAttributeLeft
-                                                                      relatedBy:0
-                                                                         toItem:self.view
-                                                                      attribute:NSLayoutAttributeLeft
-                                                                     multiplier:1.0
-                                                                       constant:0];
-    [self.view addConstraint:leftConstraint];
-
-    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.detailViewWrapper
-                                                                       attribute:NSLayoutAttributeRight
-                                                                       relatedBy:0
-                                                                          toItem:self.view
-                                                                       attribute:NSLayoutAttributeRight
-                                                                      multiplier:1.0
-                                                                        constant:0];
-    [self.view addConstraint:rightConstraint];
-
-
 }
 
 
@@ -432,7 +402,8 @@
             count++;
         }
     
-    } else {
+    }
+    else {
         
         if (self.assignmentsMap.annotations != nil) {
         
@@ -448,15 +419,14 @@
              
          }
         
-        [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
+        [self.assignmentsMap removeAllOverlaysButUser];
         
         for(FRSAssignment *assignment in self.assignments){
             
             [self addAssignmentAnnotation:assignment index:count];
             count++;
         }
-        
-        [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap]];
+    
 
         // Run this after populating map with assignments, this ensures we have the annotation to select
         if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
@@ -470,14 +440,19 @@
 }
 
 /*
-** Adds assignment to map through annotation
+** Adds assignment to map through AssignmentAnnotation (MKAnnotation subclass)
 */
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
+    //Create AssignmentAnnotaiton for passed assignment
     AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
     
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]) radius:([assignment.radius floatValue] * 1609.34)];
+    //Create center coordinate for the assignment
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]);
+    
+    //Create MKCircle surroudning the annotation
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coord radius:([assignment.radius floatValue] * kMetersInAMile)];
 
     [self.assignmentsMap addOverlay:circle];
     
@@ -486,7 +461,7 @@
 }
 
 /*
-** Adds cluster to map through annotation
+** Adds cluster to map through ClusterAnnotion (MKAnnotation sublcass)
 */
 
 - (void)addClusterAnnotation:(FRSCluster*)cluster index:(NSInteger)index{
@@ -553,21 +528,23 @@
 
     //If the annotiation is for the user's location
     if (annotation == mapView.userLocation) {
-        self.pinView = [MKMapView setupUserPinForAnnotation:annotation ForMapView:self.assignmentsMap];
+        
+        [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap withRadius:nil]];
 
-        return self.pinView;
+        return [self.assignmentsMap setupUserPinForAnnotation:annotation];
             
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
 
-        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSAssignmentAnnotation];
+        return [self.assignmentsMap setupAssignmentPinForAnnotation:annotation withType:FRSAssignmentAnnotation];
         
     }
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
 
-        return [MKMapView setupAssignmentPinForAnnotation:annotation ForMapView:self.assignmentsMap AndType:FRSClusterAnnotation];
+        return  [self.assignmentsMap setupAssignmentPinForAnnotation:annotation withType:FRSClusterAnnotation];
+
     
     }
 
@@ -575,9 +552,6 @@
     
 }
 
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
-    return [MKMapView customRendererForOverlay:overlay forColorPicker:self.colorPicker];
-}
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
@@ -645,7 +619,6 @@
         [self updateAssignments];
     }
     
-    
 }
 
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
@@ -653,19 +626,18 @@
     NSLog(@"Failed to locate user: %@", error);
 }
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
-{
-    [self zoomToCurrentLocation];
-    [self.assignmentsMap userLocationUpdated];
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
     
-//    for (id<MKOverlay>overlay in self.assignmentsMap.overlays) {
-//        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
-//            FRSMKCircle *userCircleRadius = (FRSMKCircle *)overlay;
-//            [self.assignmentsMap removeOverlay:userCircleRadius];
-//        }
-//    }
-//    
-//   [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap]];
+    [self zoomToCurrentLocation];
+    
+    [self.assignmentsMap userRadiusUpdated:nil];
+
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
+    
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
+
 }
 
 #pragma mark - Location Zoom/View Methods
