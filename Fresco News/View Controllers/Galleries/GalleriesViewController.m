@@ -70,15 +70,7 @@
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
-    
-    /* Instantiating table view controller because of its refresh control property.
-       Instead of adding refresh control as a subview, we create it then assign it
-       to our table view controller's refresh control property 
-     */
-    
-    self.tableViewController = [[UITableViewController alloc] init];
-    [self addChildViewController:self.tableViewController];
-    self.tableViewController.tableView = self.tableView;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     /* Refresh Control Setup */
     self.refreshControl = [[FRSRefreshControl alloc] init];

@@ -28,21 +28,10 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
 
-/*
- ** Child table view controller
- */
-
-@property (nonatomic) UITableViewController *tableViewController;
 
 /*
- ** Refresh control for table view
- */
-
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
-
-/*
- ** Scroll View's Last Content Offset, for nav bar conditioning
- */
+** Scroll View's Last Content Offset, for nav bar conditioning
+*/
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
@@ -89,42 +78,39 @@ static CGFloat const kInterImageGap = 1.0f;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 96;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     /* Instantiating table view controller because of its refresh control property.
      Instead of adding refresh control as a subview, we create it then assign it
      to our table view controller's refresh control property
      */
     
-    self.tableViewController = [[UITableViewController alloc] init];
-    [self addChildViewController:self.tableViewController];
-    self.tableViewController.tableView = self.tableView;
-    
     self.refreshControl = [[FRSRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
-    self.tableViewController.refreshControl = self.refreshControl;
-    
-    
+
     [self performNecessaryFetch:NO withResponseBlock:nil];
+    
+    __weak typeof(self) weakSelf = self;
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
         
         // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
+        NSNumber *num = [NSNumber numberWithInteger:weakSelf.stories.count];
         
         [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 if ([responseObject count] > 0) {
                     
-                    [self.stories addObjectsFromArray:responseObject];
+                    [weakSelf.stories addObjectsFromArray:responseObject];
                     
-                    [self.tableView reloadData];
+                    [weakSelf.tableView reloadData];
                     
                 }
                 
-                [self.tableView.infiniteScrollingView stopAnimating];
+                [weakSelf.tableView.infiniteScrollingView stopAnimating];
                 
             }
             
@@ -153,7 +139,6 @@ static CGFloat const kInterImageGap = 1.0f;
     [super viewWillAppear:animated];
     
     self.tableView.delegate = self;
-    
     self.tableView.contentInset = UIEdgeInsetsZero;
     
 }
