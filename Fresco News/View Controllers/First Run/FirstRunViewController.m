@@ -66,6 +66,9 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
+
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,6 +86,7 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated

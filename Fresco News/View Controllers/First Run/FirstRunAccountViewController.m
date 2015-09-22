@@ -43,6 +43,8 @@
     [self setupTerms];
     
     self.signUpRunning = NO;
+    
+    [self initBackButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -95,6 +97,13 @@
 - (IBAction)twitterButtonTapped:(id)sender {
     
      [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
+}
+
+- (IBAction)backButtonTapped:(id)sender {
+    
+    NSLog(@"Back button tapped!");
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UITextViewDelegate
@@ -265,7 +274,29 @@
             
          }];
     }
-
 }
+
+- (void)initBackButton {
+    // Create back button
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    backButton.frame = CGRectMake(24, 28, 38, 24);
+    backButton.alpha = .54;
+    [backButton.titleLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:backButton];
+    
+    
+    // Create back carret
+    UIImageView *backCaret = [[UIImageView alloc] initWithFrame:CGRectMake(8, 32, 12, 15)];
+    backCaret.image = [UIImage imageNamed:@"backCaret"];
+    [backCaret setContentMode:UIViewContentModeScaleAspectFill];
+    
+    [self.view addSubview:backCaret];
+}
+
+
 
 @end

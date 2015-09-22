@@ -53,6 +53,7 @@
     
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
