@@ -106,19 +106,27 @@
 - (IBAction)enableNotificationsTapped:(UIButton *)button
 {
     button.enabled = NO;
+    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    
     [appDelegate registerForPushNotifications];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
+    
         [self.notificationsPermissionsLabel setTitle:NOTIF_PENDING forState:UIControlStateNormal];
+    
     });
+    
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(confirmPushNotifications:) userInfo:nil repeats:YES];
 }
 
 - (void)confirmPushNotifications:(NSTimer *)timer
 {
     if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+        
         [timer invalidate];
         timer = nil;
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             self.notificationsPermissionsImage.image = [UIImage imageNamed:@"notificationOnIcon"];
             [self.notificationsPermissionsLabel setTitle:NOTIF_ENABLED forState:UIControlStateNormal];
@@ -176,6 +184,7 @@
 {
     // All of camera, microphone, and camera roll authorizations must be granted for "Camera Enabled" status
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusAuthorized &&
                 // [AVAudioSession sharedInstance].recordPermission == AVAudioSessionRecordPermissionGranted && // on hold pending a good way to test
                 [ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized)
@@ -186,6 +195,7 @@
         else {
             [self.cameraPermissionsLabel setTitle:CAMERA_DISABLED forState:UIControlStateNormal];
         }
+        
     });
 }
 

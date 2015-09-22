@@ -32,7 +32,7 @@
                                                 </items>
                                             </group>
                                         </items>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="5"/>
+                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                     </group>
                                     <connections>
                                         <outlet property="galleryGroup" destination="IyN-bY-QDL" id="9D9-UK-x7r"/>
@@ -274,7 +274,7 @@
         <!--frescoGlance-->
         <scene sceneID="jFn-RZ-kCe">
             <objects>
-                <glanceController identifier="frescoGlance" id="feo-rp-dNG" customClass="FRSGlanceInterfaceController">
+                <glanceController identifier="frescoGlance" id="feo-rp-dNG" customClass="WKGlanceInterfaceController">
                     <items>
                         <group alignment="left" layout="vertical" id="5ES-wr-xco">
                             <items>

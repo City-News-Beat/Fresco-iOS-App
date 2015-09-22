@@ -19,7 +19,7 @@
 #import "CameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
-#import "CrossPostButton.h"
+#import "UISocialButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
@@ -30,8 +30,8 @@
 }
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
-@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -72,7 +72,6 @@
 {
     [super viewDidLoad];
 
-    
     [self setupButtons];
     self.title = @"Create a Gallery";
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
@@ -86,6 +85,9 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.socialTipView setUserInteractionEnabled:YES];
+    
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,7 +121,6 @@
         self.twitterButton.hidden = YES;
         self.facebookButton.hidden = YES;
         self.twitterHeightConstraint.constant = 0;
-
         self.socialTipView.hidden = YES;
     }
     
@@ -210,7 +211,7 @@
 
 #pragma mark - Outlet Actions
 
-- (IBAction)twitterButtonTapped:(CrossPostButton *)button
+- (IBAction)twitterButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -256,7 +257,7 @@
 
 }
 
-- (IBAction)facebookButtonTapped:(CrossPostButton *)button
+- (IBAction)facebookButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     

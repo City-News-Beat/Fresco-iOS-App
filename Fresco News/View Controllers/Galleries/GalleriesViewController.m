@@ -218,17 +218,6 @@
 
 #pragma mark - UIScrollViewDelegate
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-
-    if (self.refreshControl.isRefreshing) {
-        UITableView *tableView = (UITableView *)scrollView;
-        
-        [tableView setNeedsDisplay];
-        
-    }
-}
-
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     

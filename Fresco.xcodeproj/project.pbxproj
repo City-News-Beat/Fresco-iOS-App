@@ -85,7 +85,6 @@
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController.m */; };
-		425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 425790E61B1910C600C9C49C /* CrossPostButton.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
@@ -117,7 +116,7 @@
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
 		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
 		E71F0E4F1B0B936200186BAD /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
+		E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */; };
 		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
 		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
 		E71F0E6A1B0B948200186BAD /* WKGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */; };
@@ -340,8 +339,6 @@
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
-		425790E51B1910C600C9C49C /* CrossPostButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPostButton.h; sourceTree = "<group>"; };
-		425790E61B1910C600C9C49C /* CrossPostButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossPostButton.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraPreviewView.h; sourceTree = "<group>"; };
@@ -396,8 +393,8 @@
 		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlanceInterfaceController.h; sourceTree = "<group>"; };
-		E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlanceInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGlanceInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGlanceInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E591B0B948200186BAD /* FRSInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSInterfaceController.h; sourceTree = "<group>"; };
 		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
@@ -720,8 +717,6 @@
 			children = (
 				42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */,
 				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
-				425790E51B1910C600C9C49C /* CrossPostButton.h */,
-				425790E61B1910C600C9C49C /* CrossPostButton.m */,
 				E720DEA01B8BA7F400855C3F /* UISocialButton.h */,
 				E720DEA11B8BA7F400855C3F /* UISocialButton.m */,
 				E7D27AA21B5FFF5D00A08B51 /* Photo Browser */,
@@ -962,8 +957,8 @@
 			children = (
 				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
 				E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */,
-				E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */,
-				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
+				E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */,
+				E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */,
 				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
 				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
 				E71F0E701B0B99F100186BAD /* Stories */,
@@ -1505,7 +1500,6 @@
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
-				425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
@@ -1560,7 +1554,7 @@
 			files = (
 				E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */,
 				E71F0E6D1B0B948200186BAD /* WKStoryRowController.m in Sources */,
-				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
+				E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */,
 				E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */,
 				E71F0E6E1B0B948200186BAD /* WKGalleryDetailController.m in Sources */,
 				E70F4BE21B9F958400A765E0 /* WKImagePath.m in Sources */,

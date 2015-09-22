@@ -502,18 +502,16 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
     
-    UITableViewCell *cell = (UITableViewCell *)self.superview.superview;
+    if(self.gallery.galleryID){
     
-    UITableView *tableView =  (UITableView *)cell.superview.superview;
-    
-    NSIndexPath *path = [tableView indexPathForCell:cell];
-    
-    NSDictionary *dict = @{
-                           @"path" : path,
-                           @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row]
-                           };
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
+        NSDictionary *dict = @{
+                              @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                              @"gallery" : self.gallery.galleryID
+                              };
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
+        
+    }
     
     //If the cell has a video
     if([postCell.post isVideo]){

@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
-#import "FRSGlanceInterfaceController.h"
+#import "WKGlanceInterfaceController.h"
 #import "WKImagePath.h"
 #import <AFNetworking/AFNetworking.h>
 
-@implementation FRSGlanceInterfaceController
+@implementation WKGlanceInterfaceController
 
 - (instancetype)init {
     
@@ -42,10 +42,10 @@
                         [self.firstImage setImageData:[NSData
                                                        dataWithContentsOfURL:[WKImagePath CDNImageURL:gallery[@"posts"][0][@"image"] withSize:SmallImageSize]]];
                     else if(count == 1)
-                        [self.firstImage setImageData:[NSData
+                        [self.secondImage setImageData:[NSData
                                                        dataWithContentsOfURL:[WKImagePath CDNImageURL:gallery[@"posts"][0][@"image"] withSize:SmallImageSize]]];
                     else if(count == 2)
-                        [self.firstImage setImageData:[NSData
+                        [self.thirdImage setImageData:[NSData
                                                        dataWithContentsOfURL:[WKImagePath CDNImageURL:gallery[@"posts"][0][@"image"] withSize:SmallImageSize]]];
                     
                     NSLog(@"%@",[WKImagePath CDNImageURL:gallery[@"posts"][0][@"image"] withSize:SmallImageSize].absoluteString);

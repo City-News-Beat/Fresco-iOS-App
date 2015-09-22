@@ -169,9 +169,8 @@ typedef enum : NSUInteger {
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
     
-    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter];
-    
-    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook];
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
@@ -195,6 +194,18 @@ typedef enum : NSUInteger {
     
     self.saveChangesbutton.alpha = 1;
 
+}
+
+/*
+** Automatic save when user goes back to Profile Screen
+*/
+
+- (void)willMoveToParentViewController:(UIViewController *)parent{
+    
+    [super willMoveToParentViewController:parent];
+    
+    [self saveChanges];
+    
 }
 
 
@@ -283,7 +294,7 @@ typedef enum : NSUInteger {
                     
                 }
                 else{
-                    [self triggerSocialResponse:SocialNoError network:nil];
+                    [self triggerSocialResponse:SocialNoError network:@"Facebook"];
                 }
                 
                 
@@ -323,7 +334,7 @@ typedef enum : NSUInteger {
                     [self triggerSocialResponse:SocialExists network:@"Twitter"];
                 }
                 else{
-                    [self triggerSocialResponse:SocialNoError network:nil];
+                    [self triggerSocialResponse:SocialNoError network:@"Twitter"];
                 }
                 
                 
@@ -422,23 +433,22 @@ typedef enum : NSUInteger {
             [self.connectTwitterButton setHidden:NO];
             [self.connectFacebookButton setHidden:NO];
             
+            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+        
             //Twitter
-            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
-                [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]])
                 [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            }
-            else {
-                [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+            else
                 [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
-            }
-            
+
             //Facebook
-            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-                [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
                 [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            } else {
-                [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
-            }
+            else
+                [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+
+            
         }
         
     });

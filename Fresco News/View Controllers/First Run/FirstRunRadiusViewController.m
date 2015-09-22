@@ -16,12 +16,15 @@
 #import <DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) NSArray *stepperSteps;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic) DBImageColorPicker *colorPicker;
+
+@property (assign, nonatomic) BOOL ranUserUpdate;
 
 - (IBAction)doneButtonTapped:(id)sender;
 
@@ -84,7 +87,8 @@
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
-    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    
+    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -92,7 +96,12 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     [mapView userLocationUpdated];
-    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+
+    if(!self.ranUserUpdate){
+        [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+        self.ranUserUpdate = YES;
+    }
+
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay

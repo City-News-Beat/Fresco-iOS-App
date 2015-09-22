@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -14,7 +15,7 @@
                         <viewControllerLayoutGuide type="bottom" id="BG0-jH-qhe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="E2U-hh-fHo">
-                        <rect key="frame" x="0.0" y="44" width="667" height="375"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A5I-FQ-wzG">
@@ -778,7 +779,7 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="892"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening?" translatesAutoresizingMaskIntoConstraints="NO" id="Q60-io-4Rt" userLabel="Caption Text View">
-                                        <rect key="frame" x="15" y="451" width="585" height="401"/>
+                                        <rect key="frame" x="15" y="451" width="585" height="385"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -798,14 +799,14 @@
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PostCollectionViewCell" id="AAi-Mt-fyq" customClass="PostCollectionViewCell">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                        <rect key="frame" x="0.0" y="14.5" width="600" height="421"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aKo-XM-S6I">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="421"/>
                                                                     <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                                                         <rect key="frame" x="0.0" y="-2" width="50" height="50"/>
                                                                     </variation>
@@ -878,17 +879,16 @@
                                         </constraints>
                                     </view>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="860" width="600" height="3"/>
+                                        <rect key="frame" x="0.0" y="844" width="600" height="2.5"/>
                                     </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="CrossPostButton">
-                                        <rect key="frame" x="0.0" y="862" width="300" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="UISocialButton">
+                                        <rect key="frame" x="0.0" y="846" width="300" height="46"/>
                                         <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="O4K-1a-aIo"/>
+                                            <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <inset key="contentEdgeInsets" minX="26" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="Twitter">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -897,12 +897,11 @@
                                             <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="CrossPostButton">
-                                        <rect key="frame" x="300" y="862" width="300" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="UISocialButton">
+                                        <rect key="frame" x="300" y="846" width="300" height="46"/>
                                         <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <inset key="contentEdgeInsets" minX="35" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="Facebook">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -911,18 +910,6 @@
                                             <action selector="facebookButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="RfE-qu-Rd5"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="H7x-EQ-qhC">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                            <rect key="frame" x="113" y="-64" width="20" height="20"/>
-                                        </variation>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="facebook" translatesAutoresizingMaskIntoConstraints="NO" id="mlZ-6Z-a9A">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        <variation key="widthClass=compact" ambiguous="YES">
-                                            <rect key="frame" x="0.0" y="-64" width="20" height="20"/>
-                                        </variation>
-                                    </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="social-tip" translatesAutoresizingMaskIntoConstraints="NO" id="DUq-AH-QMm">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
@@ -959,7 +946,6 @@
                                     <constraint firstItem="Q60-io-4Rt" firstAttribute="centerX" secondItem="DUq-AH-QMm" secondAttribute="centerX" constant="0.5" id="1KP-Lb-rUI">
                                         <variation key="widthClass=compact" constant="0.0"/>
                                     </constraint>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="top" secondItem="mlZ-6Z-a9A" secondAttribute="top" id="4n5-8G-Q9f"/>
                                     <constraint firstAttribute="trailing" secondItem="VgT-z6-Ir7" secondAttribute="trailing" id="4uB-qa-8fa"/>
                                     <constraint firstAttribute="trailing" secondItem="Q60-io-4Rt" secondAttribute="trailing" id="5EY-ib-jfA">
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
@@ -967,25 +953,13 @@
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="width" secondItem="q6D-z2-Jzy" secondAttribute="width" id="5Fy-a4-n8s"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="leading" secondItem="Znr-ql-7SW" secondAttribute="trailing" id="7K3-kM-chZ"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="838-s7-Ypr"/>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="leading" secondItem="VgT-z6-Ir7" secondAttribute="leading" id="999-E2-mkD"/>
                                     <constraint firstItem="Q60-io-4Rt" firstAttribute="top" secondItem="ZZm-Kh-7Lh" secondAttribute="bottom" constant="1" id="CJY-kd-igk"/>
                                     <constraint firstAttribute="trailing" secondItem="2fK-sb-hAO" secondAttribute="trailing" id="Fpu-9J-yjI"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="q6D-z2-Jzy" secondAttribute="height" id="ICO-43-kSw"/>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="IXx-wy-r8k"/>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="trailing" secondItem="mlZ-6Z-a9A" secondAttribute="trailing" id="KQt-KK-wlZ"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="-2" id="Lst-7X-cnN"/>
-                                    <constraint firstItem="mlZ-6Z-a9A" firstAttribute="width" secondItem="mlZ-6Z-a9A" secondAttribute="height" multiplier="1:1" id="MXH-pw-eFS"/>
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
-                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="centerX" secondItem="mlZ-6Z-a9A" secondAttribute="centerX" constant="58" id="Tpd-Qr-zfU">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="39"/>
-                                    </constraint>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="leading" secondItem="mlZ-6Z-a9A" secondAttribute="leading" id="UiG-oW-5C5"/>
-                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="H7x-EQ-qhC" secondAttribute="height" constant="25" id="Z5L-4V-bLr"/>
-                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="height" secondItem="mlZ-6Z-a9A" secondAttribute="height" constant="25" id="ZTZ-CW-L2s"/>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="top" id="ZyY-4k-xZJ"/>
-                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="centerY" secondItem="H7x-EQ-qhC" secondAttribute="centerY" id="a9Z-8B-akS"/>
-                                    <constraint firstItem="q6D-z2-Jzy" firstAttribute="centerY" secondItem="mlZ-6Z-a9A" secondAttribute="centerY" id="cpM-wU-3h4"/>
                                     <constraint firstAttribute="trailing" secondItem="q6D-z2-Jzy" secondAttribute="trailing" id="eb2-Ut-99h"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" id="hYI-l2-WPS"/>
                                     <constraint firstItem="Q60-io-4Rt" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" constant="15" id="jXA-S5-SiW">
@@ -995,11 +969,7 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                     </constraint>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" id="qOm-qu-iOS"/>
-                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="centerX" secondItem="H7x-EQ-qhC" secondAttribute="centerX" constant="27" id="tBA-U8-pK8">
-                                        <variation key="widthClass=compact" constant="31"/>
-                                    </constraint>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="tVP-Ki-GOJ"/>
-                                    <constraint firstItem="H7x-EQ-qhC" firstAttribute="bottom" secondItem="mlZ-6Z-a9A" secondAttribute="bottom" id="trv-HJ-msd"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="DUq-AH-QMm" secondAttribute="bottom" constant="32" id="ylJ-pa-y0M">
                                         <variation key="widthClass=compact" constant="5"/>
                                     </constraint>
@@ -1009,20 +979,8 @@
                                         <exclude reference="DUq-AH-QMm"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="4n5-8G-Q9f"/>
-                                        <exclude reference="999-E2-mkD"/>
-                                        <exclude reference="KQt-KK-wlZ"/>
-                                        <exclude reference="UiG-oW-5C5"/>
-                                        <exclude reference="ZyY-4k-xZJ"/>
-                                        <exclude reference="trv-HJ-msd"/>
-                                        <exclude reference="MXH-pw-eFS"/>
                                         <exclude reference="1KP-Lb-rUI"/>
                                         <exclude reference="ylJ-pa-y0M"/>
-                                        <exclude reference="Z5L-4V-bLr"/>
-                                        <exclude reference="a9Z-8B-akS"/>
-                                        <exclude reference="Tpd-Qr-zfU"/>
-                                        <exclude reference="ZTZ-CW-L2s"/>
-                                        <exclude reference="cpM-wU-3h4"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
@@ -1032,26 +990,6 @@
                                     <mask key="constraints">
                                         <include reference="1KP-Lb-rUI"/>
                                         <include reference="ylJ-pa-y0M"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="4n5-8G-Q9f"/>
-                                        <include reference="999-E2-mkD"/>
-                                        <include reference="KQt-KK-wlZ"/>
-                                        <include reference="UiG-oW-5C5"/>
-                                        <include reference="ZyY-4k-xZJ"/>
-                                        <include reference="trv-HJ-msd"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <exclude reference="MXH-pw-eFS"/>
-                                        <include reference="Z5L-4V-bLr"/>
-                                        <include reference="a9Z-8B-akS"/>
-                                        <include reference="Tpd-Qr-zfU"/>
-                                        <include reference="ZTZ-CW-L2s"/>
-                                        <include reference="cpM-wU-3h4"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -1085,19 +1023,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yEI-re-Kqn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1545" y="0.0"/>
+            <point key="canvasLocation" x="1085" y="-62"/>
         </scene>
     </scenes>
     <resources>
         <image name="backCaret" width="25" height="41"/>
         <image name="delete-small-white" width="14" height="14"/>
-        <image name="facebook" width="20" height="20"/>
         <image name="flash-off" width="10" height="20"/>
         <image name="flash-on" width="10" height="20"/>
         <image name="rotate" width="226" height="135"/>
         <image name="shutter-1" width="118" height="118"/>
         <image name="social-tip" width="142" height="76"/>
         <image name="tab-camera" width="60" height="49"/>
-        <image name="twitter" width="20" height="20"/>
     </resources>
 </document>

@@ -11,6 +11,8 @@
 
 @interface GalleryHeader : UIView
 
+@property (nonatomic, weak) IBOutlet UIView *view;
+
 + (NSString *)identifier;
 
 - (void)setGallery:(FRSGallery *)gallery;
