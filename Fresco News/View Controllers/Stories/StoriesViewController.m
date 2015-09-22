@@ -15,6 +15,7 @@
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"
 #import "FRSImage.h"
+#import "FRSRefreshControl.h"
 
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
@@ -26,6 +27,12 @@ static CGFloat const kInterImageGap = 1.0f;
  */
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
+
+/*
+ ** Child table view controller
+ */
+
+@property (nonatomic) UITableViewController *tableViewController;
 
 /*
  ** Refresh control for table view
@@ -52,6 +59,7 @@ static CGFloat const kInterImageGap = 1.0f;
 @implementation StoriesViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self setup];
     }
@@ -78,17 +86,24 @@ static CGFloat const kInterImageGap = 1.0f;
     
     [self setFrescoNavigationBar];
     
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 96;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.alpha = .54;
+    /* Instantiating table view controller because of its refresh control property.
+     Instead of adding refresh control as a subview, we create it then assign it
+     to our table view controller's refresh control property
+     */
+    
+    self.tableViewController = [[UITableViewController alloc] init];
+    [self addChildViewController:self.tableViewController];
+    self.tableViewController.tableView = self.tableView;
+    
+    self.refreshControl = [[FRSRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh)
                   forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[UIColor blackColor]];
-    [self.tableView addSubview:self.refreshControl];
+    self.tableViewController.refreshControl = self.refreshControl;
+    
     
     [self performNecessaryFetch:NO withResponseBlock:nil];
     
