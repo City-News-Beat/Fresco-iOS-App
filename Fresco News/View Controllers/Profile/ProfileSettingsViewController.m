@@ -74,7 +74,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic) DBImageColorPicker *colorPicker;
+@property (nonatomic) DBImageColorPicker *picker;
 
 /*
 ** UI Constraints
@@ -111,6 +111,13 @@ typedef enum : NSUInteger {
     [self updateLinkingStatus];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
+    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
 }
 
 - (void)configureViews{
@@ -805,7 +812,7 @@ typedef enum : NSUInteger {
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:nil];
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -852,6 +859,8 @@ typedef enum : NSUInteger {
     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
     
     [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
+    self.picker = [MKMapView createDBImageColorPickerForUserWithImage:self.selectedImage];
+    [self.mapView userRadiusUpdated:@(self.radiusStepper.value)];
 
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
