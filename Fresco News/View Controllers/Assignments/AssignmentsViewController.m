@@ -58,7 +58,6 @@
 
     @property (strong, nonatomic) NSNumber *operatingLon;
 
-
 @end
 
 @implementation AssignmentsViewController
@@ -505,7 +504,7 @@
         
         self.assignments = nil;
         
-        [self.assignmentsMap removeOverlays:self.assignmentsMap.overlays];
+        [self.assignmentsMap removeAllOverlaysButUser];
         
     }
 }
@@ -527,9 +526,7 @@
 
     //If the annotiation is for the user's location
     if (annotation == mapView.userLocation) {
-        
-        [self.assignmentsMap addOverlay:[MKMapView userRadiusForMap:self.assignmentsMap withRadius:nil]];
-
+        	
         return [self.assignmentsMap setupUserPinForAnnotation:annotation];
             
     }

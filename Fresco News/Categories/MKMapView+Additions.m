@@ -221,6 +221,7 @@
     for (id<MKOverlay>overlay in self.overlays)
         if (![overlay isKindOfClass:[FRSMKCircle class]])
             [self removeOverlay:overlay];
+    
 }
 
 #pragma mark - Annotations

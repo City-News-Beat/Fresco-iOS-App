@@ -91,9 +91,6 @@
     //Reset playing index for a fresh load
     self.playingIndex = nil;
     
-    //Set delegate, reset in `viewWillDisappear`
-    self.tableView.delegate = self;
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

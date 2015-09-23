@@ -53,6 +53,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{

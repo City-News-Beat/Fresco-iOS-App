@@ -609,7 +609,7 @@
                                 <rect key="frame" x="0.0" y="28" width="600" height="39"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q63-7s-eVb" id="KVY-9S-kjr">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="38.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
@@ -662,7 +662,7 @@
                                 <rect key="frame" x="0.0" y="67" width="600" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BP4-ad-CmZ" id="SA0-Ix-fnD">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="69.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lF-OT-bel" userLabel="Image container">
@@ -686,6 +686,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="5fZ-dK-kQl"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="rth-VD-jLI" kind="show" identifier="showStory" id="tRv-ek-8oC"/>
                     </connections>
@@ -763,6 +764,7 @@
             <objects>
                 <tabBarController storyboardIdentifier="tabBarController" id="49e-Tb-3d3" customClass="FRSTabBarController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="t0L-i0-DVx"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
@@ -3279,7 +3281,7 @@
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="mbJ-dc-9zc"/>
+        <segue reference="mED-O3-2r9"/>
         <segue reference="BrQ-Qn-DKp"/>
     </inferredMetricsTieBreakers>
 </document>
