@@ -87,9 +87,7 @@
     
     [self switchRootViewController:self.tbc];
     
-    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-   
-    self.tbc.selectedIndex = (index == 4 ? 0 : index);
+    self.tbc.selectedIndex = 0;
     
 }
 

@@ -68,17 +68,9 @@
         
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
-        
-        NSDictionary *userInfo = @{
-                                   @"type" : NOTIF_ASSIGNMENT,
-                                   @"assignment" : @"5601b49350c2e6c854f2d499"
-                                   };
-        
-        [self handlePush:userInfo];
-        
-        
-    }
-    else {
+    
+    } else {
+    
         [self.frsRootViewController setRootViewControllerToOnboard];
         self.frsRootViewController.onboardVisited = YES;
     }
