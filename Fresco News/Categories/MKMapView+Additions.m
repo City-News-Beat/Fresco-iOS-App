@@ -319,13 +319,11 @@
     }
     else if (type == FRSUserAnnotation) { // is User annotation view
         
-        if([FRSDataManager sharedManager].currentUser.avatar != nil){
-            [customPinView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
-        }
-        else{
-            [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
-        }
+        if ([[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR] != nil)
+            [customPinView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]];
         
+        else
+            [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
     }
     
     customPinView.frame = frame;
