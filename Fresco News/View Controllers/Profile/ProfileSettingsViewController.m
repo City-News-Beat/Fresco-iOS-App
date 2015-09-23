@@ -641,16 +641,20 @@ typedef enum : NSUInteger {
                     
                     [self updateStateForSpinner];
                     
-                    
                     //If the save fails
                     if(!succeeded){
+                        
+                        //Run check in case settings are saved in pop
+                        if (self.isViewLoaded && self.view.window) {
+                            // viewController is visible
+                            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                                         alertControllerWithTitle:ERROR
+                                                         message:PASSWORD_SAVE_ERROR
+                                                         action:DISMISS handler:nil]
+                                               animated:YES
+                                             completion:nil];
+                        }
 
-                        [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                                     alertControllerWithTitle:ERROR
-                                                     message:PASSWORD_SAVE_ERROR
-                                                     action:DISMISS handler:nil]
-                                           animated:YES
-                                         completion:nil];
                     
                     }
                     //The save is successful
