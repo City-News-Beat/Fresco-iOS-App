@@ -19,7 +19,7 @@
 #import "CameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
-#import "CrossPostButton.h"
+#import "UISocialButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
@@ -30,8 +30,8 @@
 }
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
-@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -72,7 +72,6 @@
 {
     [super viewDidLoad];
 
-    
     [self setupButtons];
     self.title = @"Create a Gallery";
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
@@ -86,6 +85,9 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.socialTipView setUserInteractionEnabled:YES];
+    
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,7 +121,6 @@
         self.twitterButton.hidden = YES;
         self.facebookButton.hidden = YES;
         self.twitterHeightConstraint.constant = 0;
-
         self.socialTipView.hidden = YES;
     }
     
@@ -178,9 +179,8 @@
 
 - (void)setupButtons
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                                           target:self
-                                                                                           action:@selector(returnToCamera:)];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonItemClicked:)];
 }
 
 - (void)configureControlsForUpload:(BOOL)upload
@@ -192,13 +192,32 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
 }
 
+
+
+
 #pragma mark - Navigational Methods
 
-- (void)returnToTabBar{
+-(void)rightBarButtonItemClicked:(id)sender{
+
+    [self returnToTabBarWithPrevious:NO];
+}
+
+/*
+** Returns to tab bar, takes option of returning to previously selected tab
+*/
+
+-(void)returnToTabBarWithPrevious:(BOOL)previous{
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
     
-    tabBarController.selectedIndex = 4;
+    if (previous) {
+        
+        tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+        
+    }
+    else {
+        tabBarController.selectedIndex = 4;
+    }
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -210,7 +229,7 @@
 
 #pragma mark - Outlet Actions
 
-- (IBAction)twitterButtonTapped:(CrossPostButton *)button
+- (IBAction)twitterButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -256,7 +275,7 @@
 
 }
 
-- (IBAction)facebookButtonTapped:(CrossPostButton *)button
+- (IBAction)facebookButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -655,7 +674,7 @@
                 
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
-                [self returnToTabBar];
+                [self returnToTabBarWithPrevious:YES];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];

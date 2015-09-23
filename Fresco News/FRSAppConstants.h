@@ -28,15 +28,11 @@ enum FRSErrorCodes {
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
 
-enum FRSAnnotationType {
-    FRSAssignmentAnnotation = 0,
-    FRSUserAnnotation = 1,
-    FRSClusterAnnotation = 2
-} frsAnnotationType;
-
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
+
+#define ImageWithData(data)[UIImage imageWithData:data]
 
 /*  NotificationCenter Strings */
 
@@ -48,7 +44,6 @@ enum FRSAnnotationType {
 #define NOTIF_IMAGE_SET                     @"UserProfileImageChanged"
 #define NOTIF_REACHABILITY_MONITORING       @"ReachabilityManagerIsMonitoring"
 #define NOTIF_ONBOARD                       @"Onboard"
-#define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
@@ -165,6 +160,10 @@ enum FRSAnnotationType {
 #define ASSIGNMENT_CATEGORY                 @"ASSIGNMENT_CATEGORY"
 #define NAVIGATE_IDENTIFIER                 @"NAVIGATE_IDENTIFIER"
 
+#define NOTIF_BREAKING                      @"breaking"
+#define NOTIF_ASSIGNMENT                    @"assignment"
+#define NOTIF_USE                           @"use"
+#define NOTIF_LIST                          @"list"
 
 
 /* User-facing Strings */
@@ -273,7 +272,9 @@ enum FRSAnnotationType {
 
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 
-#define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)
+#define PROFILE_SETTINGS_SAVE_ERROR         NSLocalizedString(@"We couldn't save your profile settings. Please try again in a bit.", nil)
+#define PASSWORD_SAVE_ERROR                 NSLocalizedString(@"We could successfully save your settings, but your new password wasn't saved. Please try again in a bit.", nil)
+
 
 #define DISABLE_ACCT_TITLE                  NSLocalizedString(@"Are you sure? You can recover your account up to one year from today.", nil)
 #define DISABLE_ACCT_ERROR                  NSLocalizedString(@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help.", nil)
@@ -304,7 +305,6 @@ enum FRSAnnotationType {
 #define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
 
 
-
 /* Highlights */
 
 #pragma mark - Highlights
@@ -321,7 +321,6 @@ enum FRSAnnotationType {
 
 
 /* Notifications */
-
 #pragma mark - Notifications
 
 #define VIEW                                NSLocalizedString(@"View", nil)
@@ -336,6 +335,7 @@ enum FRSAnnotationType {
 #define GALLERY_UNAVAILABLE_TITLE           NSLocalizedString(@"Gallery Unavailable", nil)
 #define GALLERY_UNAVAILABLE_MSG             NSLocalizedString(@"We couldn't find this gallery!", nil)
 
+#define TODAY_TITLE                         NSLocalizedString(@"Today in News", nil)
 
 
 /* Assignments - MapView */

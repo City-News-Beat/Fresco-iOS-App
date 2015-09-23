@@ -23,6 +23,7 @@
 #import "PostCollectionViewCell.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "FRSRefreshControl.h"
 
 @interface GalleriesViewController ()
 
@@ -51,6 +52,11 @@
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
+/*
+ ** Child table view controller
+ */
+
+@property (nonatomic) UITableViewController *tableViewController;
 
 @end
 
@@ -61,20 +67,17 @@
     [super viewDidLoad];
     
     /* Table View Setup */
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     /* Refresh Control Setup */
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    
-    self.refreshControl.alpha = .54;
-    [self.refreshControl addTarget:self action:@selector(refresh)
-                  forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
-    [self.tableView addSubview:self.refreshControl];
-    
+    self.refreshControl = [[FRSRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    self.tableViewController.refreshControl = self.refreshControl;
+
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
     
@@ -88,9 +91,6 @@
     //Reset playing index for a fresh load
     self.playingIndex = nil;
     
-    //Set delegate, reset in `viewWillDisappear`
-    self.tableView.delegate = self;
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -99,9 +99,6 @@
     
     //Turn off any video
     [self disableVideo];
-    
-    //Disable delegate, turned back on in `viewWillAppear`
-    self.tableView.delegate = nil;
     
 }
 

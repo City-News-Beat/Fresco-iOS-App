@@ -85,7 +85,6 @@
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
 		424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController.m */; };
-		425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 425790E61B1910C600C9C49C /* CrossPostButton.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
@@ -98,7 +97,9 @@
 		BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC47F6FC1B94A9AB00969034 /* TOSViewController.xib */; };
 		BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */; };
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
+		BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
+		BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */; settings = {ASSET_TAGS = (); }; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
 		E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
@@ -116,7 +117,7 @@
 		E71F0E4A1B0B936200186BAD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E481B0B936200186BAD /* Interface.storyboard */; };
 		E71F0E4C1B0B936200186BAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E71F0E4B1B0B936200186BAD /* Images.xcassets */; };
 		E71F0E4F1B0B936200186BAD /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */; };
+		E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */; };
 		E71F0E681B0B948200186BAD /* FRSInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */; };
 		E71F0E691B0B948200186BAD /* FRSNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */; };
 		E71F0E6A1B0B948200186BAD /* WKGalleryRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E71F0E5E1B0B948200186BAD /* WKGalleryRowController.m */; };
@@ -129,13 +130,11 @@
 		E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB15F1B852BEF0017AAA5 /* Fabric.framework */; };
 		E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */; };
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
-		E74B111B1BACCC04003E01A1 /* ProfileSettingsViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */; };
-		E74B111C1BACCC0B003E01A1 /* ProfilePaymentSettingsViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = E771DF981BACACB000CC795A /* ProfilePaymentSettingsViewController.h */; };
-		E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */; settings = {ASSET_TAGS = (); }; };
-		E74B11201BACD12B003E01A1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E74B111F1BACD12B003E01A1 /* Settings.bundle */; settings = {ASSET_TAGS = (); }; };
+		E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
-		E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
+		E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */; settings = {ASSET_TAGS = (); }; };
+		E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */; };
 		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
 		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
@@ -342,8 +341,6 @@
 		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
-		425790E51B1910C600C9C49C /* CrossPostButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPostButton.h; sourceTree = "<group>"; };
-		425790E61B1910C600C9C49C /* CrossPostButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossPostButton.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraPreviewView.h; sourceTree = "<group>"; };
@@ -365,12 +362,12 @@
 		BC4D2DEE1B9754ED00E6026B /* FRSMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSMotionManager.m; path = Singletons/FRSMotionManager.m; sourceTree = "<group>"; };
 		BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentOnboardViewController.h; sourceTree = "<group>"; };
 		BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentOnboardViewController.m; sourceTree = "<group>"; };
+		BCB74A5E1BA9FDE1002B18A6 /* FRSMKCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMKCircle.h; sourceTree = "<group>"; };
+		BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMKCircle.m; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
-		BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewOverlayBottom.h; sourceTree = "<group>"; };
-		BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewOverlayBottom.m; sourceTree = "<group>"; };
-		BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOverlayTop.h; sourceTree = "<group>"; };
-		BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapOverlayTop.m; sourceTree = "<group>"; };
+		BCE22C951BB1B35600F2C07C /* FRSRefreshControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRefreshControl.h; sourceTree = "<group>"; };
+		BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRefreshControl.m; sourceTree = "<group>"; };
 		E60266C91AEA08320055A5C6 /* FirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunViewController.h; sourceTree = "<group>"; };
 		E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunViewController.m; sourceTree = "<group>"; };
 		E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunPermissionsViewController.h; sourceTree = "<group>"; };
@@ -400,8 +397,8 @@
 		E71F0E471B0B936200186BAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71F0E491B0B936200186BAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		E71F0E4B1B0B936200186BAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlanceInterfaceController.h; sourceTree = "<group>"; };
-		E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlanceInterfaceController.m; sourceTree = "<group>"; };
+		E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKGlanceInterfaceController.h; sourceTree = "<group>"; };
+		E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGlanceInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E591B0B948200186BAD /* FRSInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSInterfaceController.h; sourceTree = "<group>"; };
 		E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSInterfaceController.m; sourceTree = "<group>"; };
 		E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationController.h; sourceTree = "<group>"; };
@@ -423,11 +420,12 @@
 		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
 		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
 		E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSettingsViewController.xib; sourceTree = "<group>"; };
-		E74B111F1BACD12B003E01A1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
+		E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+Additions.h"; path = "Categories/AppDelegate+Additions.h"; sourceTree = "<group>"; };
+		E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+Additions.m"; path = "Categories/AppDelegate+Additions.m"; sourceTree = "<group>"; };
 		E771DF981BACACB000CC795A /* ProfilePaymentSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePaymentSettingsViewController.h; sourceTree = "<group>"; };
 		E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePaymentSettingsViewController.m; sourceTree = "<group>"; };
 		E77F6AC21B583839009AFF8D /* OnboardPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageViewController.h; sourceTree = "<group>"; };
@@ -614,10 +612,8 @@
 				E73E100C1B0F963800763240 /* AssignmentAnnotation.m */,
 				E76515B21B17581200AFDE1E /* ClusterAnnotation.h */,
 				E76515B31B17581200AFDE1E /* ClusterAnnotation.m */,
-				BCDD2CE11B66EC24001A301F /* MapOverlayTop.h */,
-				BCDD2CE21B66EC24001A301F /* MapOverlayTop.m */,
-				BCDD2CDE1B66DBEB001A301F /* MapViewOverlayBottom.h */,
-				BCDD2CDF1B66DBEB001A301F /* MapViewOverlayBottom.m */,
+				BCB74A5E1BA9FDE1002B18A6 /* FRSMKCircle.h */,
+				BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -696,7 +692,6 @@
 		1EDA44B31AA4CCC70082E08D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E74B111F1BACD12B003E01A1 /* Settings.bundle */,
 				1E408B761AA79A370057AC16 /* PrefixHeader.pch */,
 				1EDA44B41AA4CCC70082E08D /* Info.plist */,
 				1EDA44B51AA4CCC70082E08D /* main.m */,
@@ -728,10 +723,10 @@
 			children = (
 				42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */,
 				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
-				425790E51B1910C600C9C49C /* CrossPostButton.h */,
-				425790E61B1910C600C9C49C /* CrossPostButton.m */,
 				E720DEA01B8BA7F400855C3F /* UISocialButton.h */,
 				E720DEA11B8BA7F400855C3F /* UISocialButton.m */,
+				BCE22C951BB1B35600F2C07C /* FRSRefreshControl.h */,
+				BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */,
 				E7D27AA21B5FFF5D00A08B51 /* Photo Browser */,
 				E784280C1B57F3A60090DFCC /* Notifications */,
 				1EA27AA21AF14256003137CE /* Assignments */,
@@ -838,6 +833,8 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */,
+				E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */,
 				42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */,
 				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
 				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
@@ -874,11 +871,11 @@
 		1EFD22931B2B1C370049B940 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				E771DF971BACAC9900CC795A /* Settings */,
 				1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */,
 				1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */,
 				1EBC7FCF1AD6DED000DE5301 /* ProfileHeaderViewController.h */,
 				1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */,
+				E771DF971BACAC9900CC795A /* Settings */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -970,8 +967,8 @@
 			children = (
 				E71F0E591B0B948200186BAD /* FRSInterfaceController.h */,
 				E71F0E5A1B0B948200186BAD /* FRSInterfaceController.m */,
-				E71F0E571B0B948200186BAD /* FRSGlanceInterfaceController.h */,
-				E71F0E581B0B948200186BAD /* FRSGlanceInterfaceController.m */,
+				E71F0E571B0B948200186BAD /* WKGlanceInterfaceController.h */,
+				E71F0E581B0B948200186BAD /* WKGlanceInterfaceController.m */,
 				E71F0E5B1B0B948200186BAD /* FRSNotificationController.h */,
 				E71F0E5C1B0B948200186BAD /* FRSNotificationController.m */,
 				E71F0E701B0B99F100186BAD /* Stories */,
@@ -1327,7 +1324,6 @@
 			files = (
 				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
 				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
-				E74B11201BACD12B003E01A1 /* Settings.bundle in Resources */,
 				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
@@ -1461,14 +1457,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E74B111C1BACCC0B003E01A1 /* ProfilePaymentSettingsViewController.h in Sources */,
-				E74B111B1BACCC04003E01A1 /* ProfileSettingsViewController.h in Sources */,
 				420DC73C1ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m in Sources */,
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
 				BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */,
 				0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */,
+				E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */,
 				E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
@@ -1508,6 +1503,7 @@
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
+				BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
@@ -1516,7 +1512,6 @@
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
-				425790E71B1910C600C9C49C /* CrossPostButton.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
@@ -1551,6 +1546,7 @@
 				32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
+				BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */,
 				E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,
 			);
@@ -1570,7 +1566,7 @@
 			files = (
 				E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */,
 				E71F0E6D1B0B948200186BAD /* WKStoryRowController.m in Sources */,
-				E71F0E671B0B948200186BAD /* FRSGlanceInterfaceController.m in Sources */,
+				E71F0E671B0B948200186BAD /* WKGlanceInterfaceController.m in Sources */,
 				E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */,
 				E71F0E6E1B0B948200186BAD /* WKGalleryDetailController.m in Sources */,
 				E70F4BE21B9F958400A765E0 /* WKImagePath.m in Sources */,
@@ -1657,7 +1653,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1735,6 +1731,7 @@
 				BUNDLE_ID_SUFFIX = .dev;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1784,6 +1781,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1804,6 +1802,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1821,7 +1820,9 @@
 				BUNDLE_ID_SUFFIX = .dev;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1844,8 +1845,9 @@
 				BUNDLE_ID_SUFFIX = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Fresco WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -1864,7 +1866,9 @@
 				BUNDLE_ID_SUFFIX = .dev;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1889,8 +1893,9 @@
 				BUNDLE_ID_SUFFIX = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
@@ -1954,6 +1959,7 @@
 				BUNDLE_ID_SUFFIX = .beta;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1977,6 +1983,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1996,6 +2003,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Fresco WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -2016,6 +2024,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";

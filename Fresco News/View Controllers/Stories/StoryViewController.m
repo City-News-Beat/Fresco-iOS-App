@@ -61,9 +61,16 @@
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
 {
     
-    [[FRSDataManager sharedManager] getGalleriesFromStory:self.story.storyID
-     withOffset:[NSNumber numberWithInteger:0]
-     responseBlock:^(id responseObject, NSError *error){
+    if(self.galleries != nil){
+    
+        self.galleriesViewController.galleries = self.galleries;
+        [self.galleriesViewController.tableView reloadData];
+        
+        return;
+        
+    }
+    
+    [[FRSDataManager sharedManager] getGalleriesFromStory:self.story.storyID withOffset:[NSNumber numberWithInteger:0] responseBlock:^(id responseObject, NSError *error){
         
         if (!error) {
             

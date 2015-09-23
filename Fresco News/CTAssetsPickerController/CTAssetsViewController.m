@@ -34,6 +34,9 @@
 #import "CTAssetsViewControllerTransition.h"
 #import "GalleryPostViewController.h"
 #import "FRSGallery.h"
+#import "FRSTabBarController.h"
+#import "FRSRootViewController.h"
+#import "UIViewController+Additions.h"
 
 NSString * const CTAssetsViewCellIdentifier = @"CTAssetsViewCellIdentifier";
 NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryViewIdentifier";
@@ -152,14 +155,24 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (void)setupButtons
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self.picker
-                                                                            action:@selector(dismiss:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self.picker action:@selector(returnToCamera:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                                           target:self.picker
-                                                                                           action:@selector(returnToCamera:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(returnToTabBar:)];
+    
+    [self.navigationController.navigationBar setTintColor:[UIColor darkGoldBarButtonColor]];
+    
+}
+
+- (void)returnToTabBar:(id)sender {
+    
+    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
+    
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    
+    [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)setupToolbar
@@ -534,7 +547,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     }
 
     GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Media"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:nil
                                                                             action:nil];

@@ -16,12 +16,9 @@ typedef enum : NSUInteger {
 
 @interface FRSBaseViewController : UIViewController
 
-@property (strong, nonatomic) NSMutableArray *galleries;
-
 /* Spinner */
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
-@property (nonatomic) UIActivityIndicatorView *toolbarSpinner;
 
 /*
 ** Navigation Methods

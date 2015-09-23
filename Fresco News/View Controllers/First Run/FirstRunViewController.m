@@ -10,6 +10,7 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <DBImageColorPicker.h>
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
 #import "TOSViewController.h"
@@ -34,6 +35,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
 
+@property (strong, nonatomic) DBImageColorPicker *picker;
+
 @end
 
 @implementation FirstRunViewController
@@ -50,8 +53,8 @@
         button.clipsToBounds = YES;
     }
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];

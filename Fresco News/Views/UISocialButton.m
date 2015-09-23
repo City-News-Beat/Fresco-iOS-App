@@ -10,9 +10,11 @@
 
 @implementation UISocialButton
 
-- (void)setUpSocialIcon:(SocialNetwork)network{
+- (void)setUpSocialIcon:(SocialNetwork)network withRadius:(BOOL)radius{
     
-    self.layer.cornerRadius = 4;
+    if(radius)
+        self.layer.cornerRadius = 4;
+    
     self.clipsToBounds = YES;
     
     if(network == SocialNetworkFacebook){
@@ -30,5 +32,18 @@
     [self setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
     
 }
+
+- (void)setSelected:(BOOL)selected
+{
+    if (selected) {
+        [super setSelected:YES];
+        self.alpha = 1.0;
+    }
+    else {
+        [super setSelected:NO];
+        self.alpha = 0.4;
+    }
+}
+
 
 @end

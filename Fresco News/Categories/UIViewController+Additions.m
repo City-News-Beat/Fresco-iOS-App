@@ -179,15 +179,13 @@
     
     NSUInteger count = 0;
     
-
-        for (UIViewController *vc in self.childViewControllers) {
-            if ([vc isKindOfClass:[NotificationsViewController class]]) {
-                exists = YES;
-                break;
-            }
-            count ++;
+    for (UIViewController *vc in self.childViewControllers) {
+        if ([vc isKindOfClass:[NotificationsViewController class]]) {
+            exists = YES;
+            break;
         }
-    
+        count ++;
+    }
     
     if (exists) {
     
@@ -246,6 +244,7 @@
             
             notificationsController.view.frame = self.view.bounds;
             [self.view addSubview:notificationsController.view];
+            [self.view bringSubviewToFront:notificationsController.view];
             [notificationsController didMoveToParentViewController:self];
         
             //Commit animation by adding
@@ -303,17 +302,14 @@
         }];
         
         [self presentViewController:viewController animated:NO completion:^{
-        
-            
-            [CATransaction commit];
             
             self.view.alpha = 1;
         
         }];
         
-    
+        [CATransaction commit];
+
     }];
-    
 }
 
 - (void)dismissViewController:(UIViewController *)viewController withScale:(BOOL)scale{

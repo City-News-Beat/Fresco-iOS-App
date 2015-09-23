@@ -118,14 +118,7 @@
 
 - (void)setupButtons
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self.picker
-                                                                            action:@selector(dismiss:)];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                                           target:self
-                                                                                           action:@selector(returnToCamera:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self.picker action:@selector(returnToCamera:)];
 }
 
 - (void)setupToolbar

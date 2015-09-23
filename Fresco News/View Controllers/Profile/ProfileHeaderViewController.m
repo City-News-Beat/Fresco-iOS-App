@@ -63,8 +63,7 @@
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"] != nil){
         
-        [self.profileImageView
-         setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
+        [self.profileImageView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
          placeholderImage:[UIImage imageNamed:@"user"]];
     
     }

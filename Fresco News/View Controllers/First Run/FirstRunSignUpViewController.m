@@ -154,7 +154,10 @@
                 
                 [((UIButton *)sender) setUserInteractionEnabled:YES];
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
+                
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+                
             }
 
         }];
@@ -310,7 +313,7 @@
 {
     self.selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
     self.addPhotoImageView.image = self.selectedImage;
-
+    
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
 }

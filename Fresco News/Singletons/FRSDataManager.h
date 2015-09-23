@@ -80,6 +80,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromStory:(NSString *)storyId withOffset:(NSNumber *)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)resolveGalleriesInList:(NSArray *)galleries withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)resetDraftGalleryPost;
 
 #pragma mark - Stories

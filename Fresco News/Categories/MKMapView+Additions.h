@@ -7,6 +7,8 @@
 //
 
 @import MapKit;
+#import <DBImageColorPicker.h>
+#import "FRSMKCircle.h"
 
 @interface MKMapView (Additions)
 
@@ -15,6 +17,12 @@ typedef enum {
     MKMapViewLegalLabelPositionBottomCenter = 1,
     MKMapViewLegalLabelPositionBottomRight = 2,
 } MKMapViewLegalLabelPosition;
+
+typedef enum : NSInteger {
+    FRSAssignmentAnnotation = 0,
+    FRSUserAnnotation = 1,
+    FRSClusterAnnotation = 2
+} FRSAnnotationType;
 
 @property (nonatomic, readonly) UILabel *legalLabel;
 
@@ -25,20 +33,28 @@ typedef enum {
 - (void)zoomToCurrentLocation;
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
 - (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
+- (void)userRadiusUpdated:(NSNumber *)radius;
+
++ (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image;
+
++ (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker;
+
+- (void)updateRadiusColor;
+
+- (void)removeAllOverlaysButUser;
 
 // Annotation Views
-+ (MKAnnotationView *)setupAssignmentPinForAnnotation: (id <MKAnnotation>)annotation
-                                           ForMapView: (MKMapView *)mapView
-                                              AndType: (NSInteger)type;
-+ (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation
-                                     ForMapView: (MKMapView *)mapView;
+- (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type;
+
+- (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation;
 
 // Annotation additional views
-+ (MKCircleRenderer *)circleRenderWithColor:(UIColor *)color forOverlay:(id<MKOverlay>)overlay;
 + (UIButton *)caret;
-+ (UIImageView *)imagePinViewForAnnotationType:(NSInteger)type;
++ (UIImageView *)imagePinViewForAnnotationType:(FRSAnnotationType)type;
 
 // not a MapView method but a buddy in our interface sometimes
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
+
++ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius;
 
 @end
