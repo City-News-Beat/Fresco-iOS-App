@@ -61,7 +61,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         [self addSubview:self.labelByLineAndTime];
         [self addSubview:self.labelPlace];
         
-  
+        CGRect beforeConstraintLabelBounds = self.labelPlace.bounds;
         /* Leading Space for Place */
         self.leadingSpacePlace = [NSLayoutConstraint
                                   constraintWithItem:self.labelPlace
@@ -120,6 +120,8 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         [self addConstraint:topSpaceTime];
         [self addConstraint:topSpaceByline];
         
+        CGRect afterConstraintLabelBounds = self.labelPlace.bounds;
+
     }
     
     return self;
