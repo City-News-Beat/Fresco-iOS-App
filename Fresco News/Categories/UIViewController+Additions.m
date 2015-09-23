@@ -244,6 +244,7 @@
             
             notificationsController.view.frame = self.view.bounds;
             [self.view addSubview:notificationsController.view];
+            [self.view bringSubviewToFront:notificationsController.view];
             [notificationsController didMoveToParentViewController:self];
         
             //Commit animation by adding
