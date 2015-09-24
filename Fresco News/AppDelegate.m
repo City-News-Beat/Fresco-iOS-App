@@ -11,21 +11,22 @@
 @import FBSDKCoreKit;
 @import Parse;
 @import AVFoundation;
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
-#import <AFNetworkActivityLogger.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+@import Fabric;
+@import Crashlytics;
+
 #import "AppDelegate.h"
+#import <AFNetworkActivityLogger.h>
+#import <Stripe.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
-#import "GalleryViewController.h"
-#import "AssignmentsViewController.h"
-#import "HighlightsViewController.h"
 #import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
+
+#import "ProfilePaymentSettingsViewController.h"
 
 @interface AppDelegate ()
 
@@ -52,7 +53,7 @@
     [self setupAppearances];
     
     self.frsRootViewController = [[FRSRootViewController alloc] init];
-    
+
     self.window.rootViewController = self.frsRootViewController;
     
     //Check if we are launching through a push notification
@@ -68,14 +69,6 @@
         
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
-        
-        NSDictionary *userInfo = @{
-                                   @"type" : NOTIF_ASSIGNMENT,
-                                   @"assignment" : @"5601b49350c2e6c854f2d499"
-                                   };
-        
-        [self handlePush:userInfo];
-        
         
     }
     else {
@@ -131,15 +124,6 @@
     [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
-/* Uncomment to disable custom keyboards
-- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
-    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
-        return NO;
-    }
-    return YES;
-}
-*/
-
 - (void)setupBarButtonItemAppearance
 {
     [UIBarButtonItem appearance].tintColor = [UIColor darkGoldBarButtonColor];
@@ -153,10 +137,9 @@
 //    [[AFNetworkActivityLogger sharedLogger] startLogging];
     [Fabric with:@[CrashlyticsKit]];
 
-//    //Taplytics Setup
-//    [Taplytics startTaplyticsAPIKey:@"a7e5161cf95cac5427bb5dae0552f8256af5bf1f"];
-//
     [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
+    
+    [Stripe setDefaultPublishableKey:STRIPE_PUBLISHABLE_KEY];
     
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY

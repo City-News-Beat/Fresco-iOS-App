@@ -101,6 +101,10 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
+#pragma mark - Payments
+
+- (void)updateUserPaymentInfo:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
+
 #pragma mark - TOS
 
 - (void)getTermsOfService:(BOOL)validate withResponseBlock:(FRSAPIResponseBlock)responseBlock;

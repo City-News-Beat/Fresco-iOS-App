@@ -73,7 +73,6 @@
     
     self.pausesLocationUpdatesAutomatically = YES;
 
-    [self requestWhenInUseAuthorization];
     [self requestAlwaysAuthorization];
     
     self.desiredAccuracy = kCLLocationAccuracyBest;

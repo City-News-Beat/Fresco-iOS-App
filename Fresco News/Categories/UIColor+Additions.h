@@ -38,8 +38,6 @@
 
 + (UIColor *)textHeaderBlackColor;
 
-+ (UIColor *)disabledBackgroundColor;
-
 + (UIColor *)frescoGreyBackgroundColor;
 
 + (UIColor *)fieldBorderColor;

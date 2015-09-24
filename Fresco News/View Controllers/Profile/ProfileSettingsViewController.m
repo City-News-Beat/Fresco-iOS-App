@@ -22,6 +22,7 @@
 #import "UISocialButton.h"
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
+#import "FRSSaveButton.h"
 #import <DBImageColorPicker.h>
 
 typedef enum : NSUInteger {
@@ -57,15 +58,15 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 
 /*
- ** Buttons
- */
+** Buttons
+*/
 
 @property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIView *addCardButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *saveChangesbutton;
+@property (weak, nonatomic) IBOutlet FRSSaveButton *saveChangesbutton;
 
 /*
 ** Radius Setting
@@ -95,6 +96,10 @@ typedef enum : NSUInteger {
     
     [super viewDidLoad];
     
+    self.title = @"Edit Profile";
+    
+    [self addCard:nil];
+    
     [self configureViews];
     
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
@@ -104,21 +109,20 @@ typedef enum : NSUInteger {
     // Radius slider values
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
     
-    // update the slider label
+    // Update the slider label
     [self sliderValueChanged:self.radiusStepper];
     
     //Update social connect buttons
     [self updateLinkingStatus];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    
 }
 
 - (void)configureViews{
     
     self.saveChangesbutton.alpha = 0;
-    [self setSaveButtonStateEnabled:NO];
     
-    
+    [self.saveChangesbutton updateSaveState:SaveStateDisabled];
+     
     for (UIView *view in self.viewsWithShadows) {
         
         CGFloat borderWidth = 1.0f;
@@ -237,24 +241,6 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - Controller Methods
-
-/*
-** Sets the state of the save button
-*/
-
-- (void)setSaveButtonStateEnabled:(BOOL)enabled {
-    
-    if(enabled){
-        self.saveChangesbutton.enabled = YES;
-        self.saveChangesbutton.backgroundColor = [UIColor greenToolbarColor];
-
-    }
-    else{
-        self.saveChangesbutton.enabled = NO;
-        self.saveChangesbutton.backgroundColor = [UIColor disabledToolbarColor];
-
-    }
-}
 
 /*
 ** Runs Parse social connect based on SocialNetwork param
@@ -514,42 +500,6 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
-- (void)updateStateForSpinner{
-
-    if (!self.toolbarSpinner){
-        
-        CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
-        
-        self.toolbarSpinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-        
-    }
-    
-    if (!self.toolbarSpinner.isAnimating) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.toolbarSpinner .center = CGPointMake(self.saveChangesbutton.frame.size.width  / 2, self.saveChangesbutton.frame.size.height / 2);
-            
-            self.toolbarSpinner .color = [UIColor whiteColor];
-            
-            [self.toolbarSpinner  startAnimating];
-            
-            [self.saveChangesbutton addSubview:self.toolbarSpinner ];
-            
-        });
-        
-    }
-    else {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.saveChangesbutton setTitle:@"Save Changes" forState:UIControlStateNormal];
-            [self.toolbarSpinner  stopAnimating];
-            [self.toolbarSpinner  removeFromSuperview];
-        });
-    }
-    
-}
-
 - (void)saveChanges {
     
     //Break if the saveChangesButton is not enabled
@@ -594,9 +544,7 @@ typedef enum : NSUInteger {
        
     }
     
-    [self.saveChangesbutton setTitle:@"" forState:UIControlStateNormal];
-    
-    [self updateStateForSpinner];
+    [self.saveChangesbutton toggleSpinner];
     
     [updateParams setObject:[NSString stringWithFormat:@"%d", (int)self.radiusStepper.value] forKey:@"radius"];
     
@@ -611,7 +559,7 @@ typedef enum : NSUInteger {
         
         if (!success) {
             
-            [self updateStateForSpinner];
+            [self.saveChangesbutton toggleSpinner];
                         
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:ERROR
@@ -639,7 +587,7 @@ typedef enum : NSUInteger {
                 
                 [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                     
-                    [self updateStateForSpinner];
+                    [self.saveChangesbutton toggleSpinner];
                     
                     //If the save fails
                     if(!succeeded){
@@ -669,7 +617,7 @@ typedef enum : NSUInteger {
             //No passwords are set, pop back
             else{
             
-                [self updateStateForSpinner];
+                [self.saveChangesbutton toggleSpinner];
                 
                 [self.navigationController popViewControllerAnimated:YES];
                 
@@ -719,10 +667,10 @@ typedef enum : NSUInteger {
 
 - (IBAction)addCard:(id)sender {
 
-    //Not in this version
-//    ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
-//    
-//    [self.navigationController pushViewController:paymentSettings animated:YES];
+//    Not in this version
+    ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:paymentSettings animated:YES];
     
 }
 
@@ -760,7 +708,7 @@ typedef enum : NSUInteger {
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
+    [self.saveChangesbutton updateSaveState:SaveStateEnabled];
     
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
     
@@ -770,7 +718,9 @@ typedef enum : NSUInteger {
 #pragma mark - UITextField Delegate
 
 - (void)textFieldDidChange:(UITextField *)textField {
-     if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
+    
+    [self.saveChangesbutton updateSaveState:SaveStateEnabled];
+    
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -850,7 +800,7 @@ typedef enum : NSUInteger {
     
     self.profileImageView.image = self.selectedImage;
     
-    if(!self.saveChangesbutton.enabled) [self setSaveButtonStateEnabled:YES];
+    [self.saveChangesbutton updateSaveState:SaveStateEnabled];
     
     [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
 

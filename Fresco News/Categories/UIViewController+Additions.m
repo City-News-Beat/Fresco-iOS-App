@@ -234,6 +234,7 @@
         [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
 
         /* Setup Animation */
+        
             CATransition* transition = [CATransition animation];
             transition.duration = 0.5;
             transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];

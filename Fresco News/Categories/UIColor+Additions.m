@@ -11,11 +11,11 @@
 @implementation UIColor (Additions)
 
 /*
- ** Hex Values are comments in methods
+** Hex Values are comments in methods
 */
 
 + (UIColor *)frescoGreyBackgroundColor {
-    return [UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.00];
+    return [UIColor colorWithRed:250.0/255 green:250.0/255 blue:250.0/255 alpha:1.00];
 }
 
 + (UIColor *)greenToolbarColor {
@@ -25,7 +25,7 @@
 
 + (UIColor *)disabledToolbarColor {
 //  BDBDBD
-    return [UIColor colorWithRed:189/255.0 green:189/255.0 blue:189/255.0 alpha:1];
+    return [UIColor cellSeparatorBlackColor];
 }
 
 + (UIColor *)darkGoldBarButtonColor {
@@ -83,10 +83,6 @@
 
 + (UIColor *)cellSeparatorBlackColor {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.26];
-}
-
-+ (UIColor *)disabledBackgroundColor {
-    return [UIColor cellSeparatorBlackColor];
 }
 
 + (UIColor *)fieldBorderColor {

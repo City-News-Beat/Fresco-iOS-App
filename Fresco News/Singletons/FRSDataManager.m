@@ -1292,12 +1292,43 @@
     }
 }
 
+#pragma mark - Payments
+
+- (void)updateUserPaymentInfo:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock{
+
+    //Run check if we are logged in
+    if(![self currentUserIsLoaded]) return;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    [self POST:@"user/payment" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        if(responseBlock) responseBlock(responseObject, nil);
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+        NSLog(@"Error: %@", error);
+        
+    }];
+    
+
+}
+
 #pragma mark - TOS
 
 - (void)getTermsOfService:(BOOL)validate withResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
     
     if(validate){
         

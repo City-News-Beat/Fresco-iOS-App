@@ -58,7 +58,6 @@ enum FRSErrorCodes {
 
 
 
-
 /* Base URL/API */
 
 #pragma mark - Base URL/API
@@ -72,14 +71,14 @@ enum FRSErrorCodes {
     #define BASE_API                        @"http://staging.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
 #else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 #endif
-
-
 
 
 /* Twitter Auth */
@@ -289,6 +288,8 @@ enum FRSErrorCodes {
 #define OPEN_CAMERA                         NSLocalizedString(@"Open your camera to get started", nil)
 
 #define PAYMENT_MESSSAGE                    NSLocalizedString(@"When a news outlet uses your content we’ll pay you directly.", nil)
+#define DISABLED_CAMERA_SCAN                NSLocalizedString(@"Enable your camera to scan your debit card", nil)
+
 
 #define CARD_MAX_LENGTH                     19
 #define CCV_MAX_LENGTH                      3
