@@ -18,7 +18,7 @@
 #import <BKCardExpiryField.h>
 #import <Stripe.h>
 
-@interface ProfilePaymentSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, CardIOViewDelegate>
+@interface ProfilePaymentSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate, CardIOViewDelegate>
 
 /*
 ** Container view for card scanner
@@ -69,7 +69,6 @@
 
 @property (strong, nonatomic) NSArray *textFieldCollection;
 
-
 @property (strong, nonatomic) UIView *dobPickerContainer;
 
 @property (strong, nonatomic) UIDatePicker *dobPicker;
@@ -117,14 +116,28 @@
     self.saveCardButton = [[FRSSaveButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - 46 - 44, self.view.frame.size.width, 46) andTitle:@"Save Card"];
     
     /* DOB Picker */
-    self.dobPickerContainer = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 150)];
-    self.dobPickerContainer.backgroundColor = [UIColor whiteColor];
-    
-    self.dobPicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 150)];
+    self.dobPicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(
+                                                                    0,
+                                                                    self.view.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - 44,
+                                                                    self.view.frame.size.width,
+                                                                    150)];
     self.dobPicker.datePickerMode = UIDatePickerModeDate;
     self.dobPicker.hidden = YES;
+    self.dobPicker.backgroundColor = [UIColor whiteColor];
+    CALayer *topBorder = [CALayer layer];
+    topBorder.frame = CGRectMake(0, 0, self.dobPicker.frame.size.width, 1.0f);
+    topBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
+    [self.dobPicker.layer addSublayer:topBorder];
+    [self.dobPicker addTarget:self action:@selector(dobPickerChanged:) forControlEvents:UIControlEventValueChanged];
     
-    [self.dobPickerContainer addSubview:self.dobPicker];
+    
+    //Set the minimum date to -18 years, to allow only 18 years old to register
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    [comps setYear:-18];
+    NSDate *maxDate = [calendar dateByAddingComponents:[[NSDateComponents alloc] init] toDate:[NSDate date] options:0];
+    [self.dobPicker setMaximumDate:maxDate];
+    
     
     /* Message Label */
     UILabel *userLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 10)];
@@ -137,7 +150,7 @@
     [self.view addSubview:userLabel];
     [self.view addSubview:self.saveCardButton];
     [self.view addSubview:self.containerView];
-    [self.view addSubview:self.dobPickerContainer];
+    [self.view addSubview:self.dobPicker];
 }
 
 
@@ -283,10 +296,8 @@
 */
 
 - (void)dismissKeyboard {
-    
-    [self.cardNumberField resignFirstResponder];
-    [self.expireField resignFirstResponder];
-    [self.CCVField resignFirstResponder];
+    [self.view endEditing:YES];
+    [self togglePicker:YES];
 }
 
 /*
@@ -367,45 +378,55 @@
 
 - (void)dobTapped:(id)sender{
 
-    if(self.dobPickerContainer.hidden){
+    [self.view endEditing:YES];
+    [self togglePicker:NO];
+}
+
+- (void)togglePicker:(BOOL)alwaysHide{
+
+    //Present Picker
+    if(self.dobPicker.hidden && !alwaysHide){
         
-        self.dobPickerContainer.hidden = NO;
+        self.dobPicker.hidden = NO;
         
         CGRect newFrame = CGRectMake(
                                      0,
-                                     self.view.frame.size.height - self.dobPickerContainer.frame.size.height,
-                                     self.dobPickerContainer.frame.size.width,
-                                     self.dobPickerContainer.frame.size.height);
+                                     self.view.frame.size.height - self.dobPicker.frame.size.height,
+                                     self.dobPicker.frame.size.width,
+                                     self.dobPicker.frame.size.height);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 
-                self.dobPickerContainer.frame = newFrame;
+                self.dobPicker.frame = newFrame;
                 
             } completion:^(BOOL finished) {
+                
+                [self setDateOfBirthForPicker];
                 
             }];
             
         });
         
     }
+    //Hide Picker
     else{
         
         CGRect hiddenFrame = CGRectMake(0,
-                                     self.dobPickerContainer.frame.origin.y + self.dobPicker.frame.size.height,
-                                     self.dobPickerContainer.frame.size.width,
-                                     self.dobPickerContainer.frame.size.height);
+                                        self.dobPicker.frame.origin.y + self.dobPicker.frame.size.height,
+                                        self.dobPicker.frame.size.width,
+                                        self.dobPicker.frame.size.height);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 
-                self.dobPickerContainer.frame = hiddenFrame;
+                self.dobPicker.frame = hiddenFrame;
                 
             } completion:^(BOOL finished) {
                 
-                self.dobPickerContainer.hidden = YES;
+                self.dobPicker.hidden = YES;
                 
             }];
             
@@ -428,14 +449,20 @@
 
 #pragma mark - UIPickerDelegate/DataSource
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
-    
-    return 1;//Or return whatever as you intend
+- (void)dobPickerChanged:(id)sender{
+
+    [self setDateOfBirthForPicker];
+
 }
 
-- (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
+- (void)setDateOfBirthForPicker{
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    [dateFormatter setDateFormat:@"MMMM dd, YYYY"];
     
-    return 3;//Or, return as suitable for you...normally we use array for dynamic
+     self.dobPickerView.text = [NSString stringWithFormat:@"Date of birth: %@",  [dateFormatter stringFromDate:self.dobPicker.date]];
+
 }
 
 #pragma mark UITextField Delegate
