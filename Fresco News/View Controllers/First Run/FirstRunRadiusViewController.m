@@ -57,6 +57,17 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = nil;
+}
+
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
     // CGFloat roundedValue = [self roundedValueForSlider:slider];
