@@ -75,7 +75,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic) DBImageColorPicker *colorPicker;
+@property (nonatomic) DBImageColorPicker *picker;
 
 /*
 ** UI Constraints
@@ -115,6 +115,13 @@ typedef enum : NSUInteger {
     //Update social connect buttons
     [self updateLinkingStatus];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
+    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
 }
 
 - (void)configureViews{
@@ -225,7 +232,7 @@ typedef enum : NSUInteger {
     UILabel *version = [[UILabel alloc] init];
     version.numberOfLines = 0;
     version.frame = CGRectMake(0, 0, 65, 70);
-    version.center = CGPointMake(self.view.bounds.size.width/2 , self.scrollView.frame.size.height + 100);
+    version.center = CGPointMake(self.navigationController.toolbar.frame.size.width / 2, self.scrollView.frame.size.height + 100);
     version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
     version.text = [NSString
                     stringWithFormat:@"Build %@\n\nVersion %@",
@@ -233,7 +240,6 @@ typedef enum : NSUInteger {
                     [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
     version.textColor = [UIColor textHeaderBlackColor];
     version.textAlignment = NSTextAlignmentCenter;
-    [version sizeToFit];
     
     [self.scrollView addSubview:version];
     [self.scrollView addSubview:egg];
@@ -755,7 +761,7 @@ typedef enum : NSUInteger {
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:nil];
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -802,6 +808,8 @@ typedef enum : NSUInteger {
     [self.saveChangesbutton updateSaveState:SaveStateEnabled];
     
     [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
+    self.picker = [MKMapView createDBImageColorPickerForUserWithImage:self.selectedImage];
+    [self.mapView userRadiusUpdated:@(self.radiusStepper.value)];
 
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];

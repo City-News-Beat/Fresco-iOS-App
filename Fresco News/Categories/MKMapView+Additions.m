@@ -90,20 +90,21 @@
 ** Adds radius to user annotation view, has option of using the margin of error
 */
 
-+ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius{
++ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius {
     
     MKUserLocation *userLocation = mapView.userLocation;
     
     FRSMKCircle *circle;
 
-    if(radius){
+    if (radius) {
         
         circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:[radius doubleValue] * kMetersInAMile];
     
-    }
-    else{//Set the radius to the horizontal accuracy
-    
-        circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:mapView.userLocation.location.horizontalAccuracy];
+    } else { //Set the radius to the horizontal accuracy
+        
+       CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
+        
+        circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:accuracyRadius];
         
     }
     
@@ -155,10 +156,9 @@
 + (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image{
     
     //Check if the paramater is nil and if the user has an avatar
-    if(!image && [FRSDataManager sharedManager].currentUser.avatarUrl){
+    if(!image && [[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]){
         
-       image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[FRSDataManager sharedManager].currentUser.avatarUrl]];
-        
+        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]]];
     }
     
     //Check if image is set after first conidition, otherwise return nil
@@ -166,7 +166,6 @@
         return [[DBImageColorPicker alloc] initFromImage:image withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
     else
         return nil;
-    
 }
 
 #pragma mark - Circle Rendering
@@ -320,13 +319,11 @@
     }
     else if (type == FRSUserAnnotation) { // is User annotation view
         
-        if([FRSDataManager sharedManager].currentUser.avatar != nil){
-            [customPinView setImageWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]];
-        }
-        else{
-            [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
-        }
+        if ([[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR] != nil)
+            [customPinView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]];
         
+        else
+            [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
     }
     
     customPinView.frame = frame;

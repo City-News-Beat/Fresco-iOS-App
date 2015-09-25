@@ -41,29 +41,27 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGalleryHeader:) name:NOTIF_GALLERY_HEADER_UPDATE object:nil];
         
         self.backgroundColor = [UIColor whiteColor];
+        CGRect labelFrame = CGRectMake(0, 0, 0, 12);
         
-        self.labelPlace = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 12)];
-        self.labelPlace.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
-        self.labelPlace.translatesAutoresizingMaskIntoConstraints = NO;
-        self.labelPlace.textColor = [UIColor textHeaderBlackColor];
+        self.labelPlace = [[UILabel alloc] initWithFrame:labelFrame];
         self.labelPlace.lineBreakMode = NSLineBreakByTruncatingTail;
-        self.labelPlace.numberOfLines = 1;
         [self.labelPlace setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
                                                                  forAxis:UILayoutConstraintAxisHorizontal];
-        
-        self.labelByLineAndTime = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 12)];
-        self.labelByLineAndTime.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
-        self.labelByLineAndTime.translatesAutoresizingMaskIntoConstraints = NO;
+       
+        self.labelByLineAndTime = [[UILabel alloc] initWithFrame:labelFrame];
         self.labelByLineAndTime.textAlignment = NSTextAlignmentRight;
-        self.labelByLineAndTime.numberOfLines = 1;
-        self.labelByLineAndTime.textColor = [UIColor textHeaderBlackColor];
         [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh
                                                  forAxis:UILayoutConstraintAxisHorizontal];
         
-        [self addSubview:self.labelByLineAndTime];
-        [self addSubview:self.labelPlace];
+        for (UILabel *label in @[self.labelByLineAndTime, self.labelPlace]) {
+            
+            label.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
+            label.textColor = [UIColor textHeaderBlackColor];
+            label.translatesAutoresizingMaskIntoConstraints = NO;
+            [self addSubview:label];
+            
+        }
         
-  
         /* Leading Space for Place */
         self.leadingSpacePlace = [NSLayoutConstraint
                                   constraintWithItem:self.labelPlace
@@ -115,7 +113,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
                                               multiplier:1.0
                                               constant:8.0];
         
-    
         [self addConstraint:self.leadingSpacePlace];
         [self addConstraint:self.trailingSpaceByline];
         [self addConstraint:horizontalSpaceBetween];
