@@ -666,8 +666,7 @@ typedef enum : NSUInteger {
 }
 
 - (IBAction)addCard:(id)sender {
-
-//    Not in this version
+    
     ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
     
     [self.navigationController pushViewController:paymentSettings animated:YES];

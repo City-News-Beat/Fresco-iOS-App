@@ -85,9 +85,21 @@
     self = [super init];
     
     if(self){
-    
+        
+        self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
         self.view.frame = [[UIScreen mainScreen] bounds];
+        self.hidesBottomBarWhenPushed = YES;
         self.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShowOrHide:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShowOrHide:)
+                                                     name:UIKeyboardWillHideNotification
+                                                   object:nil];
         
     }
     
@@ -373,6 +385,34 @@
     }];
     
 }
+
+#pragma mark - UIKeyboard Notificaitons
+
+- (void)keyboardWillShowOrHide:(NSNotification *)notification
+{
+    
+    NSDictionary* info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          delay:0.3
+                        options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
+                            
+                            CGRect viewFrame = self.view.frame;
+                            
+                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]){
+                                viewFrame.origin.y = -kbSize.height /4;
+                                [self togglePicker:YES];
+                            }
+                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification]){
+                                viewFrame.origin.y = 64;
+                            }
+
+                            self.view.frame = viewFrame;
+                            
+                        } completion:nil];
+}
+
 
 #pragma mark - UIGestureRecognizer delegate
 

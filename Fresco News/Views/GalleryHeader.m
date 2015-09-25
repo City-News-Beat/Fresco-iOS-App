@@ -47,6 +47,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         self.labelPlace.translatesAutoresizingMaskIntoConstraints = NO;
         self.labelPlace.textColor = [UIColor textHeaderBlackColor];
         self.labelPlace.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.labelPlace.numberOfLines = 1;
         [self.labelPlace setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
                                                                  forAxis:UILayoutConstraintAxisHorizontal];
         
@@ -54,6 +55,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         self.labelByLineAndTime.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
         self.labelByLineAndTime.translatesAutoresizingMaskIntoConstraints = NO;
         self.labelByLineAndTime.textAlignment = NSTextAlignmentRight;
+        self.labelByLineAndTime.numberOfLines = 1;
         self.labelByLineAndTime.textColor = [UIColor textHeaderBlackColor];
         [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh
                                                  forAxis:UILayoutConstraintAxisHorizontal];

@@ -326,6 +326,7 @@ enum FRSErrorCodes {
 
 #define VIEW                                NSLocalizedString(@"View", nil)
 #define VIEW_ASSIGNMENT                     NSLocalizedString(@"View Assignment", nil)
+#define ADD_CARD                            NSLocalizedString(@"Add my debit card", nil)
 
 #define ASSIGNMENT_EXPIRED_TITLE            NSLocalizedString(@"Assignment Expired", nil)
 #define ASSIGNMENT_EXPIRED_MSG              NSLocalizedString(@"This assignment has expired already!", nil)

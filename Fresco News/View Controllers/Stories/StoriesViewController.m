@@ -81,6 +81,7 @@ static CGFloat const kInterImageGap = 1.0f;
     self.tableView.estimatedRowHeight = 96;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.allowsSelection = NO;
     
     //Create the refresh control
     self.refreshControl = [[FRSRefreshControl alloc] init];

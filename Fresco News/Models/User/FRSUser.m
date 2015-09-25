@@ -20,7 +20,8 @@
              @"email" : @"email",
              @"notificationRadius" : @"settings.radius",
              @"userID" : @"_id",
-             @"avatar" : @"avatar"
+             @"avatar" : @"avatar",
+             @"payable" : @"payable"
              };
 }
 

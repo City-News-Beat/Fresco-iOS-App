@@ -188,29 +188,30 @@
     }
     
     if (exists) {
-    
+        
         NotificationsViewController *notificationsController = [self.childViewControllers objectAtIndex:count];
         
         //Data call to set the notification status as 'seen'
         [notificationsController setAllNotificaitonsSeen];
         
         /* Animation Setup */
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.3f;
-            transition.type = kCATransitionReveal;
-            transition.subtype = kCATransitionFromTop;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        [UIView animateWithDuration:.3f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) - 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
             
-            [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
-        /* End */
-        
-        [notificationsController willMoveToParentViewController:self];
-        
-        [notificationsController removeFromParentViewController];
-
+        } completion:^(BOOL finished) {
+            [notificationsController.view removeFromSuperview];
+            [notificationsController willMoveToParentViewController:self];
+            [notificationsController removeFromParentViewController];
+        }];
+    
     }
+    
+    //Running this check because we have to present the view on top of a UITableViewController in the stories tab
+    if([self isKindOfClass:[UITableViewController class]]){
+        ((UITableViewController *)self).tableView.scrollEnabled = YES;
+    }
+    
 
 }
 
@@ -229,29 +230,23 @@
         
         NotificationsViewController *notificationsController = [storyboard instantiateViewControllerWithIdentifier:@"Notifications"];
         
+        if([self isKindOfClass:[UITableViewController class]]){
+            ((UITableViewController *)self).tableView.scrollEnabled = NO;
+        }
+        
         [self addChildViewController:notificationsController];
         
-        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height) + 100, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-
-        /* Setup Animation */
+        //Preset frame higher to slide down
+        [notificationsController.view setFrame:CGRectMake(0, -(notificationsController.view.frame.size.height), notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
+        [self.view addSubview:notificationsController.view];
         
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.5;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromBottom;
-            
-            [notificationsController.view setFrame:CGRectMake(0, 0, notificationsController.view.frame.size.width,notificationsController.view.frame.size.height)];
-            
+        [UIView animateWithDuration:.5f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        
             notificationsController.view.frame = self.view.bounds;
-            [self.view addSubview:notificationsController.view];
             [self.view bringSubviewToFront:notificationsController.view];
             [notificationsController didMoveToParentViewController:self];
         
-            //Commit animation by adding
-            [notificationsController.view.layer addAnimation:transition forKey:kCATransition];
-        /* End */
-        
+        } completion:nil];
     }
 }
 

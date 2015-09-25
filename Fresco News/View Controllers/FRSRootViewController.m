@@ -143,16 +143,13 @@
     // we'll always be replacing our whole view
     destination.view.frame = self.view.bounds;
     
-    NSTimeInterval duration = 0.0;
-    
     if (source) {
         [source willMoveToParentViewController:nil];
         [container transitionFromViewController:source
                                toViewController:destination
-                                       duration:duration
+                                       duration:0
                                         options:UIViewAnimationOptionTransitionCrossDissolve
-                                     animations:^{
-                                     }
+                                     animations:nil
                                      completion:^(BOOL finished) {
                                          [source removeFromParentViewController];
                                          [destination didMoveToParentViewController:container];

@@ -128,7 +128,6 @@
                             CGRect viewFrame = self.view.frame;
 
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]){
-                                
                                 viewFrame.origin.y = -130;
                             }
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
