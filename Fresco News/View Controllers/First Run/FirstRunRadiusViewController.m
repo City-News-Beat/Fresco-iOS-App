@@ -14,7 +14,7 @@
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
 
-@interface FirstRunRadiusViewController () <MKMapViewDelegate>
+@interface FirstRunRadiusViewController () <MKMapViewDelegate, FRSBackButtonDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
@@ -52,6 +52,8 @@
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
+    
+    [self initBackButton];
     
 }
 
@@ -129,5 +131,26 @@
 
 - (IBAction)doneButtonTapped:(id)sender {
     [self save];
+}
+
+
+
+- (void)initBackButton {
+    
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+    
+    [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
+    
+}
+
+
+- (void)backButtonTapped {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 @end

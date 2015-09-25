@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSBackButton : UIView 
+@protocol FRSBackButtonDelegate <NSObject>
+
+@required
+- (void)backButtonTapped;
+@end
+
+
+@interface FRSBackButton : UIButton
+
+@property id<FRSBackButtonDelegate> delegate;
 
 @end

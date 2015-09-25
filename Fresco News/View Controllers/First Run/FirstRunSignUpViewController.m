@@ -10,10 +10,11 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
+#import "FRSBackButton.h"
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
@@ -54,6 +55,8 @@
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
     
+    [self initBackButton];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,7 +89,6 @@
 {
     return NO;
 }
-
 
 #pragma mark - Text Field Delegate
 
@@ -326,5 +328,24 @@
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }
 }
+
+- (void)initBackButton {
+    
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+    
+    [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
+    
+}
+
+- (void)backButtonTapped{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
 
 @end

@@ -13,7 +13,7 @@
 #import "UISocialButton.h"
 #import "FRSBackButton.h"
 
-@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
+@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
@@ -52,6 +52,8 @@
     
     [super viewWillAppear:animated];
     
+
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
 
@@ -75,12 +77,16 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = nil;
 }
 
 #pragma mark - UI Actions
@@ -99,12 +105,6 @@
     
      [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
-
-//- (IBAction)backButtonTapped:(id)sender {
-//    
-//    [self.navigationController popViewControllerAnimated:YES];
-//    
-//}
 
 #pragma mark - UITextViewDelegate
 
@@ -278,13 +278,22 @@
 
 - (void)initBackButton {
 
-    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(0, 15, 70, 40)];
-    
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+        
     [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
     
 }
 
 
+- (void)backButtonTapped {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
 
 
 

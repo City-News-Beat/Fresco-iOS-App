@@ -49,7 +49,6 @@
     [rvc presentFirstRunViewController:self];
 }
 
-
 #pragma mark - Login / Signup Methods
 
 /*

@@ -201,8 +201,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		072996151BB1E8160010EDC9 /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBackButton.h; path = ../Views/FRSBackButton.h; sourceTree = "<group>"; };
-		072996161BB1E8160010EDC9 /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBackButton.m; path = ../Views/FRSBackButton.m; sourceTree = "<group>"; };
+		072996151BB1E8160010EDC9 /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBackButton.h; sourceTree = "<group>"; };
+		072996161BB1E8160010EDC9 /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBackButton.m; sourceTree = "<group>"; };
 		07C365B71BAC876800AE31C2 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
 		07C365B81BAC876800AE31C2 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
 		07C365B91BAC876800AE31C2 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
@@ -743,6 +743,8 @@
 				425790E61B1910C600C9C49C /* CrossPostButton.m */,
 				E720DEA01B8BA7F400855C3F /* UISocialButton.h */,
 				E720DEA11B8BA7F400855C3F /* UISocialButton.m */,
+				072996151BB1E8160010EDC9 /* FRSBackButton.h */,
+				072996161BB1E8160010EDC9 /* FRSBackButton.m */,
 				E7D27AA21B5FFF5D00A08B51 /* Photo Browser */,
 				E784280C1B57F3A60090DFCC /* Notifications */,
 				1EA27AA21AF14256003137CE /* Assignments */,
@@ -762,8 +764,6 @@
 				1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */,
 				424323D91AB3D64900646278 /* FRSTabBarController.h */,
 				424323DA1AB3D64900646278 /* FRSTabBarController.m */,
-				072996151BB1E8160010EDC9 /* FRSBackButton.h */,
-				072996161BB1E8160010EDC9 /* FRSBackButton.m */,
 				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
 				07C365B61BAC876800AE31C2 /* Onboard */,
 				E7CF7ED61B96743200C28E5C /* TOS */,
