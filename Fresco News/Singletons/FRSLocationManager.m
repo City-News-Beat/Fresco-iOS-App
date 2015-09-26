@@ -105,12 +105,12 @@
         }
         
 //        Uncomment for local notifications while testing
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = [self.location description];
-        notification.soundName = UILocalNotificationDefaultSoundName;
-        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-        notification.timeZone = [NSTimeZone defaultTimeZone];
-        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+//        UILocalNotification *notification = [[UILocalNotification alloc] init];
+//        notification.alertBody = [self.location description];
+//        notification.soundName = UILocalNotificationDefaultSoundName;
+//        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+//        notification.timeZone = [NSTimeZone defaultTimeZone];
+//        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
         
         
     }
