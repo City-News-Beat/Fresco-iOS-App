@@ -1207,7 +1207,7 @@
 
 #pragma mark - Location
 
-- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -1221,7 +1221,11 @@
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
+            if(responseBlock) responseBlock(YES, nil);
+            
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            if(responseBlock) responseBlock(NO, nil);
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             NSLog(@"Error: %@", error);

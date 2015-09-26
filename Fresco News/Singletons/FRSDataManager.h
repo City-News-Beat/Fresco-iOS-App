@@ -72,7 +72,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
 - (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
 - (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock;
-- (void)updateUserLocation:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
+- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock;
 
 #pragma mark - Galleries
 

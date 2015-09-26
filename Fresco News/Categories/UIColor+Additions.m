@@ -23,7 +23,11 @@
     return [UIColor colorWithRed:0.22 green:0.84 blue:0.45 alpha:1.00];
 }
 
-+ (UIColor *)disabledToolbarColor {
++ (UIColor *)disabledToolbarColor{
+    return [UIColor colorWithRed:189/255.0 green:189/255.0 blue:189/255.0 alpha:1];
+}
+
++ (UIColor *)disabledSaveColor {
 //  BDBDBD
     return [UIColor cellSeparatorBlackColor];
 }

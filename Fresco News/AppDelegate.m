@@ -61,9 +61,6 @@
         [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     
-    //Reset the previously selected tab on launch
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:UD_PREVIOUSLY_SELECTED_TAB];
-    
     //Check if we've launcahed the app before or if the app is the iPhone 4s/4
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         
@@ -84,6 +81,7 @@
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
+    
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                           openURL:url
                                                 sourceApplication:sourceApplication
@@ -98,7 +96,10 @@
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    //Method will refresh current user and beging background location updates
+    [[FRSDataManager sharedManager] refreshUser:nil];
+    
 }
 
 #pragma mark - Apperance Delegate Methods

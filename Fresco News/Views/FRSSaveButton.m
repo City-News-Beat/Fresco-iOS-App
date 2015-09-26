@@ -27,7 +27,7 @@
         self.title = passedTitle;
         self.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
         self.titleLabel.textColor = [UIColor whiteColor];
-        self.backgroundColor = [UIColor disabledToolbarColor];
+        self.backgroundColor = [UIColor disabledSaveColor];
         [self setTitle:passedTitle forState:UIControlStateNormal];
     }
     
@@ -91,11 +91,11 @@
         
         self.enabled = NO;
         
-        if(self.backgroundColor != [UIColor disabledToolbarColor]){
+        if(self.backgroundColor != [UIColor disabledSaveColor]){
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                self.backgroundColor = [UIColor disabledToolbarColor];
+                self.backgroundColor = [UIColor disabledSaveColor];
                 
             });
             
