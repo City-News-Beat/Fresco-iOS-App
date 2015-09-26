@@ -58,6 +58,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
             label.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
             label.textColor = [UIColor textHeaderBlackColor];
             label.translatesAutoresizingMaskIntoConstraints = NO;
+            label.numberOfLines = 1;
             [self addSubview:label];
             
         }

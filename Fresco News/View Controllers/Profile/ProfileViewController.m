@@ -97,7 +97,6 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_PROFILE];
     }
-
     if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
         [self performNecessaryFetch:YES withResponseBlock:nil];
@@ -105,7 +104,6 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_USER_GALLERIES];
     
     }
-
 }
 
 /*

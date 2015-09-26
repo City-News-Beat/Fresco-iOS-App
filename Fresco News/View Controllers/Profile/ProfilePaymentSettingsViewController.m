@@ -69,11 +69,11 @@
 
 @property (strong, nonatomic) NSArray *textFieldCollection;
 
-@property (strong, nonatomic) UIView *dobPickerContainer;
+@property (strong, nonatomic) UIDatePicker *dobbyPicker;
 
-@property (strong, nonatomic) UIDatePicker *dobPicker;
+@property (strong, nonatomic) FRSLabel *dobbyPickerLabel;
 
-@property (strong, nonatomic) FRSLabel *dobPickerView;
+@property (assign, nonatomic) BOOL pickerSelected;
 
 @end
 
@@ -109,7 +109,7 @@
 - (void)loadView{
 
     [super loadView];
-    
+
     self.title = @"Add a debit card";
 
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 256)];
@@ -128,41 +128,43 @@
     self.saveCardButton = [[FRSSaveButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - 46 - 44, self.view.frame.size.width, 46) andTitle:@"Save Card"];
     
     /* DOB Picker */
-    self.dobPicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(
+    self.dobbyPicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(
                                                                     0,
                                                                     self.view.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - 44,
                                                                     self.view.frame.size.width,
                                                                     150)];
-    self.dobPicker.datePickerMode = UIDatePickerModeDate;
-    self.dobPicker.hidden = YES;
-    self.dobPicker.backgroundColor = [UIColor whiteColor];
+    self.dobbyPicker.datePickerMode = UIDatePickerModeDate;
+    self.dobbyPicker.hidden = YES;
+    self.dobbyPicker.backgroundColor = [UIColor whiteColor];
     CALayer *topBorder = [CALayer layer];
-    topBorder.frame = CGRectMake(0, 0, self.dobPicker.frame.size.width, 1.0f);
+    topBorder.frame = CGRectMake(0, 0, self.dobbyPicker.frame.size.width, 1.0f);
     topBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
-    [self.dobPicker.layer addSublayer:topBorder];
-    [self.dobPicker addTarget:self action:@selector(dobPickerChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.dobbyPicker.layer addSublayer:topBorder];
+    [self.dobbyPicker addTarget:self action:@selector(dobbyPickerChanged:) forControlEvents:UIControlEventValueChanged];
     
-    
-    //Set the minimum date to -18 years, to allow only 18 years old to register
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    [comps setYear:-18];
-    NSDate *maxDate = [calendar dateByAddingComponents:[[NSDateComponents alloc] init] toDate:[NSDate date] options:0];
-    [self.dobPicker setMaximumDate:maxDate];
-    
+    //Set the minimum date to 18 years, to allow only 18 years old to register
+    NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDate * currentDate = [NSDate date];
+    NSDateComponents * comps = [[NSDateComponents alloc] init];
+    [comps setYear: -18];
+    NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
+    [comps setYear: -100];
+    NSDate * minDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
+    [self.dobbyPicker setMaximumDate:maxDate];
+    [self.dobbyPicker setMinimumDate:minDate];
     
     /* Message Label */
-    UILabel *userLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 10)];
+    UILabel *userLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x, CGRectGetMaxY(self.dobbyPickerLabel.frame) + 20, 0, 10)];
     userLabel.text = PAYMENT_MESSSAGE;
     userLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
     userLabel.textColor = [UIColor textHeaderBlackColor];
+    userLabel.textAlignment = NSTextAlignmentCenter;
     [userLabel sizeToFit];
-    userLabel.center = CGPointMake(self.view.center.x,  CGRectGetMaxY(self.dobPickerView.frame) + 20);
 
     [self.view addSubview:userLabel];
     [self.view addSubview:self.saveCardButton];
     [self.view addSubview:self.containerView];
-    [self.view addSubview:self.dobPicker];
+    [self.view addSubview:self.dobbyPicker];
 }
 
 
@@ -170,12 +172,14 @@
     
     [super viewDidLoad];
     
-    [self.saveCardButton addTarget:self action:@selector(saveCardAction:) forControlEvents:UIControlEventTouchUpOutside];
+    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
-    UITapGestureRecognizer *recg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    recg.delegate = self;
+    [self.saveCardButton addTarget:self action:@selector(saveCardAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addGestureRecognizer:recg];
+//    UITapGestureRecognizer *recg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+//    recg.delegate = self;
+//    
+//    [self.view addGestureRecognizer:recg];
     
     // Do any additional setup after loading the view.
     if (![CardIOUtilities canReadCardWithCamera]) {
@@ -196,12 +200,11 @@
         
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated{
 
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     
     [CardIOUtilities preload];
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -242,23 +245,23 @@
     self.CCVField.tag = 102;
     
     
-    self.dobPickerView = [[FRSLabel alloc] initWithFrame:CGRectMake(
+    self.dobbyPickerLabel = [[FRSLabel alloc] initWithFrame:CGRectMake(
                                                                  0,
-                                                                 CGRectGetMaxY(self.CCVField.frame),
+                                                                 CGRectGetMaxY(self.CCVField.frame) + 12,
                                                                  self.view.frame.size.width,
                                                                   44)];
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dobTapped:)];
     tapGestureRecognizer.numberOfTapsRequired = 1;
-    [self.dobPickerView addGestureRecognizer:tapGestureRecognizer];
-    self.dobPickerView.userInteractionEnabled = YES;
-    self.dobPickerView.text = @"Add date of birth";
+    [self.dobbyPickerLabel addGestureRecognizer:tapGestureRecognizer];
+    self.dobbyPickerLabel.userInteractionEnabled = YES;
+    self.dobbyPickerLabel.text = @"Add date of birth";
     
     self.textFieldCollection = @[
                                  self.cardNumberField,
                                  self.expireField,
                                  self.CCVField,
-                                 self.dobPickerView
+                                 self.dobbyPickerLabel
                                  ];
     
     //Loop through text field collection and add text fields
@@ -322,12 +325,26 @@
 
 }
 
+/*
+** Runs check on form, and updates save button for respective state
+*/
+
+- (void)checkPaymentForm{
+    
+    if(self.cardNumberField.text.length >= 18 && self.expireField.text.length == 7 && self.CCVField.text.length >= 2 && self.pickerSelected)
+        [self.saveCardButton updateSaveState:SaveStateEnabled];
+    else
+        [self.saveCardButton updateSaveState:SaveStateDisabled];
+
+}
+
 #pragma mark UI Actions
 
 - (void)saveCardAction:(id)sender {
     
     [self.saveCardButton toggleSpinner];
     
+    //Create the STPCard Object
     STPCard *card = [[STPCard alloc] init];
     card.number = self.cardNumberField.cardNumber;
     card.expMonth = self.expireField.dateComponents.month;
@@ -335,26 +352,32 @@
     card.cvc = self.CCVField.text;
     card.currency = @"usd";
     
-    NSString *day;
-    NSString *year;
-    NSString *month;
+    //Create the DOB values
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDateComponents* components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self.dobbyPicker.date]; // Get necessary date components
+
+    NSNumber *day = [NSNumber numberWithInteger:[components day]];
+    NSNumber *year = [NSNumber numberWithInteger:[components year]];
+    NSNumber *month =[NSNumber numberWithInteger:[components month]];
 
     [[STPAPIClient sharedClient] createTokenWithCard:card completion:^(STPToken *token, NSError *error) {
-        
-        [self.saveCardButton toggleSpinner];
-        
+
         if (!error && token) {
             
             NSDictionary *params = @{
                                      @"token" : token.tokenId,
-                                     @"dob_d" : day,
-                                     @"dob_y" : year,
-                                     @"dob_m" : month
+                                     @"dob_day" : day,
+                                     @"dob_year" : year,
+                                     @"dob_month" : month
                                      };
             
             [[FRSDataManager sharedManager] updateUserPaymentInfo:params block:^(id responseObject, NSError *error) {
             
-                if(!responseObject[@"err"] && !error){//Succeeded
+                [self.saveCardButton toggleSpinner];
+                
+                if([responseObject valueForKeyPath:@"data.last4"] != nil){//Succeeded
+                    
+                    [[NSUserDefaults standardUserDefaults] setValue:[responseObject valueForKeyPath:@"data.last4"] forKey:UD_LAST4];
                     
                     [self.navigationController popViewControllerAnimated:YES];
                 
@@ -363,7 +386,7 @@
                 
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
                                                  alertControllerWithTitle:@"Error saving payment info"
-                                                 message:@"We couldn't save your card info. Please try again later." action:DISMISS]
+                                                 message:@"We couldn't save your payment info. Please try again later." action:DISMISS]
                                        animated:YES
                                      completion:nil];
                 
@@ -373,13 +396,14 @@
         }
         else {
             
+            [self.saveCardButton toggleSpinner];
+            
             [self presentViewController:[[FRSAlertViewManager sharedManager]
                                          alertControllerWithTitle:@"Error saving payment info"
                                          message:error.localizedDescription action:DISMISS]
                                animated:YES
                              completion:nil];
 
-        
         }
         
     }];
@@ -417,7 +441,6 @@
 #pragma mark - UIGestureRecognizer delegate
 
 - (void)dobTapped:(id)sender{
-
     [self.view endEditing:YES];
     [self togglePicker:NO];
 }
@@ -425,25 +448,27 @@
 - (void)togglePicker:(BOOL)alwaysHide{
 
     //Present Picker
-    if(self.dobPicker.hidden && !alwaysHide){
+    if(self.dobbyPicker.hidden && !alwaysHide){
         
-        self.dobPicker.hidden = NO;
+        self.dobbyPicker.hidden = NO;
         
         CGRect newFrame = CGRectMake(
                                      0,
-                                     self.view.frame.size.height - self.dobPicker.frame.size.height,
-                                     self.dobPicker.frame.size.width,
-                                     self.dobPicker.frame.size.height);
+                                     self.view.frame.size.height - self.dobbyPicker.frame.size.height,
+                                     self.dobbyPicker.frame.size.width,
+                                     self.dobbyPicker.frame.size.height);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 
-                self.dobPicker.frame = newFrame;
+                self.dobbyPicker.frame = newFrame;
                 
             } completion:^(BOOL finished) {
                 
                 [self setDateOfBirthForPicker];
+                
+                if(!self.pickerSelected) self.pickerSelected = YES;
                 
             }];
             
@@ -453,20 +478,23 @@
     //Hide Picker
     else{
         
+        //Run check when hiding picker to see if form is ready
+        [self checkPaymentForm];
+        
         CGRect hiddenFrame = CGRectMake(0,
-                                        self.dobPicker.frame.origin.y + self.dobPicker.frame.size.height,
-                                        self.dobPicker.frame.size.width,
-                                        self.dobPicker.frame.size.height);
+                                        self.dobbyPicker.frame.origin.y + self.dobbyPicker.frame.size.height,
+                                        self.dobbyPicker.frame.size.width,
+                                        self.dobbyPicker.frame.size.height);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 
-                self.dobPicker.frame = hiddenFrame;
+                self.dobbyPicker.frame = hiddenFrame;
                 
             } completion:^(BOOL finished) {
                 
-                self.dobPicker.hidden = YES;
+                self.dobbyPicker.hidden = YES;
                 
             }];
             
@@ -489,10 +517,10 @@
 
 #pragma mark - UIPickerDelegate/DataSource
 
-- (void)dobPickerChanged:(id)sender{
+- (void)dobbyPickerChanged:(id)sender{
 
     [self setDateOfBirthForPicker];
-
+    
 }
 
 - (void)setDateOfBirthForPicker{
@@ -501,7 +529,7 @@
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     [dateFormatter setDateFormat:@"MMMM dd, YYYY"];
     
-     self.dobPickerView.text = [NSString stringWithFormat:@"Date of birth: %@",  [dateFormatter stringFromDate:self.dobPicker.date]];
+     self.dobbyPickerLabel.text = [NSString stringWithFormat:@"Date of birth: %@",  [dateFormatter stringFromDate:self.dobbyPicker.date]];
 
 }
 
@@ -509,16 +537,7 @@
 
 - (BOOL)textField:(UITextField * _Nonnull)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString * _Nonnull)string{
     
-    if(self.cardNumberField.text.length >= 16 && self.expireField.text.length == 7 && self.CCVField.text.length >= 22){
-        
-        [self.saveCardButton updateSaveState:SaveStateEnabled];
-
-    }
-    else{
-    
-        [self.saveCardButton updateSaveState:SaveStateDisabled];
-    
-    }
+    [self checkPaymentForm];
     
     if(textField == self.cardNumberField && textField.text.length >= 18 && range.length == 0){
         
@@ -620,11 +639,10 @@
         self.cardNumberField.text = info.cardNumber;
 
         self.CCVField.text = info.cvv;
-    
-//        self.expireField.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)info.expiryMonth, (unsigned long)info.expiryYear];
-
-        // Use the card info..
+        
     }
+    
+    cardIOView.hidden = YES;
 
 }
 

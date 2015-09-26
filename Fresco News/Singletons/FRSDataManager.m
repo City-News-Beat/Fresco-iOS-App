@@ -81,7 +81,7 @@
                 
                 dispatch_once(&onceToken, ^{
                 
-                    [self refreshUser:^(BOOL succeeded, NSError *error) {}];
+                    [self refreshUser:nil];
             
                 });
             
@@ -101,68 +101,6 @@
             [NSURL URLWithString:BASE_API],
             [NSURL URLWithString:BASE_PATH],
             endpoint];
-}
-
-#pragma mark - AFHTTPSessionManager overrides
-
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLResponse *, id, NSError *))completionHandler
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-
-    if (self.frescoAPIToken) [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super dataTaskWithRequest:req completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                         progress:(NSProgress * __autoreleasing *)progress
-                                completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken) [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithRequest:req fromFile:fileURL progress:progress completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                         progress:(NSProgress * __autoreleasing *)progress
-                                completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithRequest:req fromData:bodyData progress:progress completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithStreamedRequest:(NSURLRequest *)request
-                                                 progress:(NSProgress * __autoreleasing *)progress
-                                        completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
-
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithStreamedRequest:req progress:progress completionHandler:completionHandler];
-    
-}
-
-
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                             progress:(NSProgress * __autoreleasing *)progress
-                                          destination:(NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
-                                    completionHandler:(void (^)(NSURLResponse *response, NSURL *filePath, NSError *error))completionHandler;
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super downloadTaskWithRequest:req progress:progress destination:destination completionHandler:completionHandler];
 }
 
 #pragma mark - User Methods
@@ -349,8 +287,6 @@
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_TOKEN];
     
-    [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
-    
     //Sync Defaults
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -494,7 +430,7 @@
                 //Successful refresh and log in
                 if(success){
                     
-                    block(YES, nil);
+                    if(block) block(YES, nil);
                     
                     //Validate Terms Here
                     [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
@@ -517,7 +453,8 @@
                     
                     [[FRSDataManager sharedManager] logout];
                     
-                    block(NO, nil);
+                    if(block) block(NO, nil);
+                    
                 }
 
                 _loggingIn = NO;
@@ -553,6 +490,8 @@
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:UD_LASTNAME];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:UD_AVATAR];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:@"Visa-3689" forKey:UD_LAST4];
                 
                 [[NSUserDefaults standardUserDefaults] synchronize];
 
@@ -1308,7 +1247,7 @@
     [self POST:@"user/payment" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         if(responseBlock) responseBlock(responseObject, nil);
-        
+
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -1323,6 +1262,40 @@
     
 
 }
+
+- (void)getUserPaymentInfo:(FRSAPIResponseBlock)responseBlock{
+    
+    //Run check if we are logged in
+    if(![self currentUserIsLoaded]) return;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    [self GET:@"user/payment" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        if([responseObject objectForKey:@"data.last4"] != (id)[NSNull null]){
+            
+            if(responseBlock) responseBlock(responseObject[@"data"], nil);
+        }
+
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+        NSLog(@"Error: %@", error);
+        
+    }];
+    
+    
+}
+
 
 #pragma mark - TOS
 

@@ -21,7 +21,7 @@
              @"notificationRadius" : @"settings.radius",
              @"userID" : @"_id",
              @"avatar" : @"avatar",
-             @"payable" : @"payable"
+             @"payable" : @"payment_status.card"
              };
 }
 

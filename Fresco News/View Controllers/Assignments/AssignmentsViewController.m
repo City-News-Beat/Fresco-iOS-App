@@ -68,14 +68,20 @@
     
     [self setFrescoNavigationBar];
     
-    [self tweakUI];
+    //Configure the assignment detail view
+    self.detailViewWrapper.hidden = YES;
+    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.detailViewWrapper.layer.shadowOpacity = 0.26;
+    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
     
     //Check for location permission
     [self requestAlwaysAuthorization];
     
+    //Set delegates
     self.assignmentsMap.delegate = self;
     self.scrollView.delegate = self;
     
+    //Set up action sheet for navigation
     self.navigationSheet = [[UIActionSheet alloc]
                             initWithTitle:NAVIGATE_TO_ASSIGNMENT
                             delegate:self
@@ -84,10 +90,9 @@
                             otherButtonTitles:OPEN_IN_GOOG_MAPS, OPEN_IN_MAPS, nil];
     
     
-    //Navigation Sheet Tag
     self.navigationSheet.tag = 100;
 
-    //Set all values to 0 to reset controller
+    //Set all values to 0 to reset controller conditioning
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
@@ -114,7 +119,8 @@
 
     }
     
-    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+//    if (!self.picker)
+//        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
     
     //Run updates for assignments
     [self updateAssignments];
@@ -155,24 +161,6 @@
 - (void)viewDidLayoutSubviews{
     
     self.scrollView.contentInset = UIEdgeInsetsMake(self.assignmentsMap.frame.size.height - kSCROLL_VIEW_INSET, 0, 0, 0);
-}
-
-/*
-** Perform neccessary tweaks on views, called on viewDidLoad
-*/
-
-- (void)tweakUI {
-   
-   if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] != 0){
-       self.storyBreaksView.hidden = YES;
-   }
-   else
-       self.storyBreaksView.hidden = YES;
-    
-    self.detailViewWrapper.hidden = YES;
-    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.detailViewWrapper.layer.shadowOpacity = 0.26;
-    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
 }
 
 

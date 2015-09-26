@@ -120,20 +120,9 @@
                             if(!notif.seen) badgeCount ++;
                         }
                         
-                        [[NSUserDefaults standardUserDefaults]setInteger:badgeCount forKey:UD_NOTIFICATIONS_COUNT];
-                        
-                    }
-                    else{
-                        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
                     }
                 }
             }];
-        }
-        //The notifications have been updated, and use the stored count
-        else{
-            
-            badgeCount = [[NSUserDefaults standardUserDefaults] integerForKey:UD_NOTIFICATIONS_COUNT];
-
         }
         
         //Make sure the notification count is actually greater than 0, before we set it

@@ -12,20 +12,23 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *saveProgressView;
 
+@property (nonatomic, strong) NSString *title;
+
 @end
 
 @implementation FRSSaveButton
 
-- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title{
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)passedTitle{
 
     self = [super initWithFrame:frame];
     
     if(self){
     
+        self.title = passedTitle;
         self.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
         self.titleLabel.textColor = [UIColor whiteColor];
         self.backgroundColor = [UIColor disabledToolbarColor];
-        [self setTitle:title forState:UIControlStateNormal];
+        [self setTitle:passedTitle forState:UIControlStateNormal];
     }
     
     return self;
@@ -73,7 +76,8 @@
                 self.saveProgressView.alpha = 0;
             }completion:^(BOOL finished) {
                 [self.saveProgressView stopAnimating];
-                [self setTitle:@"Save Changes" forState:UIControlStateNormal];
+                [self.saveProgressView removeFromSuperview];
+                [self setTitle:self.title forState:UIControlStateNormal];
             }];
 
         });

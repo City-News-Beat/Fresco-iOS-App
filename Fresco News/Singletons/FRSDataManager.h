@@ -104,6 +104,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 #pragma mark - Payments
 
 - (void)updateUserPaymentInfo:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
+- (void)getUserPaymentInfo:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - TOS
 

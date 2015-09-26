@@ -63,17 +63,18 @@
         
         [self.image setImage:[UIImage imageNamed:@"currency"]];
         
-        if([FRSDataManager sharedManager].currentUser.payable){
+        //Check if the user hsa payment info
+        if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
             
             self.secondButton.hidden = YES;
             self.firstButton.hidden = YES;
             //            self.constraintDescriptionBottom.priority = 1000;
+            
         }
-        else{
+        else{//Set button to "Add Card" to take them to the payment info view
             
             self.secondButton.hidden = YES;
             [self.firstButton setTitle:ADD_CARD forState:UIControlStateNormal];
-        
         }
   
     }

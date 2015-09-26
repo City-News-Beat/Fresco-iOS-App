@@ -10,14 +10,6 @@
 
 @implementation FRSLabel
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 - (id)initWithFrame:(CGRect)frame{
 
 
@@ -33,6 +25,10 @@
         bottomBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
         [self.layer addSublayer:bottomBorder];
         
+        CALayer *topBorder = [CALayer layer];
+        topBorder.frame = CGRectMake(0, 0, frame.size.width, 1.0f);
+        topBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
+        [self.layer addSublayer:topBorder];
     }
     
     return self;

@@ -48,8 +48,8 @@ typedef enum : NSUInteger {
 @property (strong, nonatomic) UIImage *selectedImage;
 
 /*
- ** Text Fields
- */
+** Text Fields
+*/
 
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
@@ -63,7 +63,7 @@ typedef enum : NSUInteger {
 
 @property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
-@property (weak, nonatomic) IBOutlet UIView *addCardButton;
+@property (weak, nonatomic) IBOutlet UIButton *addCardButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
 @property (weak, nonatomic) IBOutlet FRSSaveButton *saveChangesbutton;
@@ -97,14 +97,16 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     self.title = @"Edit Profile";
-    
-    [self addCard:nil];
-    
+
     [self configureViews];
     
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
+    [self.textfieldFirst addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.textfieldLast addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.textfieldEmail addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.textfieldNewPassword addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     // Radius slider values
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
@@ -121,7 +123,11 @@ typedef enum : NSUInteger {
     
     [super viewWillAppear:animated];
     
-    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    if (!self.picker)
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    
+    [self updateAddCardButton];
+    
 }
 
 - (void)configureViews{
@@ -141,20 +147,15 @@ typedef enum : NSUInteger {
     }
     
     //Checks if the user's primary login is through social, then disable the email and password fields
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]
-        || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
        && [FRSDataManager sharedManager].currentUser.email == nil){
         
-        
-        [[self.view viewWithTag:100] setHidden:YES];
-        [[self.view viewWithTag:101] setHidden:YES];
         [[self.view viewWithTag:100] removeFromSuperview];
         [[self.view viewWithTag:101] removeFromSuperview];
         
         CGFloat y = -self.view.frame.size.height/8;
         self.constraintAccountVerticalTop.constant = y;
         self.constraintAccountVerticalBottom.constant = 0;
-        
         
     }
     
@@ -163,6 +164,7 @@ typedef enum : NSUInteger {
     
     //Update the profile image
     if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+        
         [self.profileImageView
          setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
          placeholderImage:[UIImage imageNamed:@"user"]
@@ -174,9 +176,7 @@ typedef enum : NSUInteger {
     singleTap.numberOfTapsRequired = 1;
     
     //Make the profile image interactive
-    [self.profileImageView setUserInteractionEnabled:YES];
     [self.profileImageView addGestureRecognizer:singleTap];
-    self.profileImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
     
@@ -187,13 +187,15 @@ typedef enum : NSUInteger {
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
     caret.contentMode = UIViewContentModeScaleAspectFit;
     caret.frame = CGRectMake(
-                             self.addCardButton.frame.size.width - 30,
+                             CGRectGetMaxX(self.addCardButton.frame) - 30,
                              (self.addCardButton.frame.size.height / 2) - 7.5,
                              15,
                              15
                              );
     
     [self.addCardButton addSubview:caret];
+    
+    [self updateAddCardButton];
     
     [self getYolked];
     
@@ -506,6 +508,64 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
+/*
+** Updates state of "Add Card" button
+*/
+
+- (void)updateAddCardButton{
+    
+    if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
+        
+        //If we already have the last 4
+        if([[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4]){
+            
+            [self.addCardButton setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4] forState:UIControlStateNormal];
+            
+        }
+        //We don't have the last 4
+        else{
+            
+            //Retrieve the last 4 fromt the API
+            [[FRSDataManager sharedManager] getUserPaymentInfo:^(id responseObject, NSError *error) {
+                
+                [[NSUserDefaults standardUserDefaults] setObject:[responseObject objectForKey:@"last4"] forKey:UD_LAST4];
+                
+                [self.addCardButton setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4] forState:UIControlStateNormal];
+                
+            }];
+            
+        }
+        
+        static dispatch_once_t onceToken;
+        
+        dispatch_once(&onceToken, ^{
+            
+            self.addCardButton.titleLabel.textColor = [UIColor textHeaderBlackColor];
+            self.addCardButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15.5];
+            
+            UILabel *newCardLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                              (self.addCardButton.frame.size.height / 2) - 10.5,
+                                                                              0,
+                                                                              15
+                                                                              )];
+            newCardLabel.text = @"New card";
+            newCardLabel.textAlignment = NSTextAlignmentRight;
+            newCardLabel.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:15.5];
+            [newCardLabel sizeToFit];
+            [newCardLabel setFrame:CGRectOffset(newCardLabel.frame,
+                                                CGRectGetMaxX(self.addCardButton.frame) - 110,
+                                                0)];
+            
+            [self.addCardButton addSubview:newCardLabel];
+            
+        });
+    }
+}
+
+/*
+** Catch all save method
+*/
+
 - (void)saveChanges {
     
     //Break if the saveChangesButton is not enabled
@@ -626,7 +686,6 @@ typedef enum : NSUInteger {
                 [self.saveChangesbutton toggleSpinner];
                 
                 [self.navigationController popViewControllerAnimated:YES];
-                
             }
         }
     }];
@@ -640,16 +699,12 @@ typedef enum : NSUInteger {
 
 - (IBAction)connectFacebook:(id)sender
 {
-    
     [self socialConnect:SocialNetworkFacebook networkButton:self.connectFacebookButton];
-    
 }
 
 - (IBAction)connectTwitter:(id)sender
 {
-    
     [self socialConnect:SocialNetworkTwitter networkButton:self.connectTwitterButton];
-    
 }
 
 - (IBAction)logOut:(id)sender {
