@@ -773,11 +773,11 @@
                         <viewControllerLayoutGuide type="bottom" id="P05-Zw-hfb"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ocG-9i-vaO">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="887"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FHD-iC-fKo" userLabel="Enclosing View">
-                                <rect key="frame" x="0.0" y="64" width="600" height="892"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="823"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VgT-z6-Ir7" customClass="GalleryView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="450"/>
@@ -827,7 +827,7 @@
                                                 <rect key="frame" x="281" y="416" width="39" height="37"/>
                                             </pageControl>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.81568627449999997" green="0.0078431372550000003" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="BqO-qn-wL2" firstAttribute="height" secondItem="VgT-z6-Ir7" secondAttribute="height" id="6b2-fY-KED"/>
                                             <constraint firstItem="BqO-qn-wL2" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="top" id="9MB-8Y-LLB"/>
@@ -897,7 +897,7 @@
                                         </variation>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="What's happening" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RnX-Qn-qK1">
-                                        <rect key="frame" x="0.0" y="450" width="600" height="396"/>
+                                        <rect key="frame" x="0.0" y="452" width="600" height="315"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -935,10 +935,10 @@
                                         </variation>
                                     </imageView>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="844" width="600" height="2.5"/>
+                                        <rect key="frame" x="0.0" y="888" width="600" height="2.5"/>
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="UISocialButton">
-                                        <rect key="frame" x="0.0" y="846" width="300" height="46"/>
+                                        <rect key="frame" x="0.0" y="777" width="300" height="46"/>
                                         <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
@@ -954,7 +954,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="UISocialButton">
-                                        <rect key="frame" x="300" y="846" width="300" height="46"/>
+                                        <rect key="frame" x="300" y="777" width="300" height="46"/>
                                         <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -976,13 +976,13 @@
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="leading" secondItem="Znr-ql-7SW" secondAttribute="trailing" id="7K3-kM-chZ"/>
                                     <constraint firstItem="2fK-sb-hAO" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="838-s7-Ypr"/>
                                     <constraint firstAttribute="trailing" secondItem="2fK-sb-hAO" secondAttribute="trailing" id="Fpu-9J-yjI"/>
-                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="RnX-Qn-qK1" secondAttribute="bottom" id="GWU-e1-LoY"/>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="RnX-Qn-qK1" secondAttribute="bottom" constant="10" id="GWU-e1-LoY"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="q6D-z2-Jzy" secondAttribute="height" id="ICO-43-kSw"/>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="IXx-wy-r8k"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="-2" id="Lst-7X-cnN"/>
+                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="111" id="Lst-7X-cnN"/>
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
-                                    <constraint firstItem="RnX-Qn-qK1" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" id="V01-ps-NAN"/>
+                                    <constraint firstItem="RnX-Qn-qK1" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" constant="2" id="V01-ps-NAN"/>
                                     <constraint firstAttribute="trailing" secondItem="RnX-Qn-qK1" secondAttribute="trailing" id="X25-X8-Vi8"/>
                                     <constraint firstAttribute="trailing" secondItem="q6D-z2-Jzy" secondAttribute="trailing" id="eb2-Ut-99h"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" id="hYI-l2-WPS"/>
@@ -1013,19 +1013,26 @@
                                 </variation>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="FHD-iC-fKo" firstAttribute="leading" secondItem="ocG-9i-vaO" secondAttribute="leading" id="DGF-C6-yAL"/>
                             <constraint firstItem="FHD-iC-fKo" firstAttribute="top" secondItem="KRX-zr-IVi" secondAttribute="bottom" id="Gat-oT-xKz"/>
                             <constraint firstAttribute="trailing" secondItem="FHD-iC-fKo" secondAttribute="trailing" id="Q5c-oE-QHs"/>
+                            <constraint firstItem="P05-Zw-hfb" firstAttribute="top" secondItem="FHD-iC-fKo" secondAttribute="bottom" id="Qyb-iH-R35"/>
                             <constraint firstItem="P05-Zw-hfb" firstAttribute="top" secondItem="FHD-iC-fKo" secondAttribute="bottom" id="V0e-TJ-nrw"/>
+                            <constraint firstItem="FHD-iC-fKo" firstAttribute="top" secondItem="KRX-zr-IVi" secondAttribute="bottom" id="XV5-jq-Z99"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Gat-oT-xKz"/>
+                                <exclude reference="V0e-TJ-nrw"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="1000"/>
+                    <size key="freeformSize" width="600" height="887"/>
                     <connections>
                         <outlet property="assignmentLabel" destination="oz9-5U-NeN" id="4qQ-pF-gKI"/>
                         <outlet property="assignmentView" destination="ZZm-Kh-7Lh" id="E1h-AE-f26"/>
@@ -1035,13 +1042,12 @@
                         <outlet property="linkAssignmentButton" destination="1pe-Up-bZs" id="HKN-iX-LpS"/>
                         <outlet property="socialTipView" destination="DUq-AH-QMm" id="7lT-17-1ub"/>
                         <outlet property="twitterButton" destination="Znr-ql-7SW" id="D3D-HZ-uvR"/>
-                        <outlet property="twitterHeightConstraint" destination="O4K-1a-aIo" id="Jmu-mT-zzg"/>
                         <outlet property="uploadProgressView" destination="2fK-sb-hAO" id="VK0-gU-EOw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yEI-re-Kqn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1085" y="-61"/>
+            <point key="canvasLocation" x="1085" y="-61.5"/>
         </scene>
     </scenes>
     <resources>

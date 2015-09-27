@@ -24,10 +24,7 @@
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate> {
-    UITapGestureRecognizer *socialTipTap;
-    UITapGestureRecognizer *submitTap;
-}
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
@@ -47,6 +44,9 @@
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) UITapGestureRecognizer *socialTipTap;
+@property (strong, nonatomic) UITapGestureRecognizer *submitTap;
 
 @end
 
@@ -79,6 +79,7 @@
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.captionTextView setTextContainerInset:UIEdgeInsetsMake(5, 5, 0, 0)];
+    self.captionTextView.returnKeyType = UIReturnKeyDone;
     
     // TODO: Confirm permissions
     self.locationManager = [[CLLocationManager alloc] init];
@@ -98,11 +99,11 @@
     
     [self.locationManager startUpdatingLocation];
     
-    socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
-    [self.socialTipView addGestureRecognizer:socialTipTap];
+    self.socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    [self.socialTipView addGestureRecognizer:self.socialTipTap];
     
-    submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
-    [self.navigationController.toolbar addGestureRecognizer:submitTap];
+    self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
@@ -159,8 +160,8 @@
     
     [self.locationManager stopUpdatingLocation];
     
-    [self.socialTipView removeGestureRecognizer:socialTipTap];
-    [self.navigationController.toolbar removeGestureRecognizer:submitTap];
+    [self.socialTipView removeGestureRecognizer:self.socialTipTap];
+    [self.navigationController.toolbar removeGestureRecognizer:self.submitTap];
     
     //Turn off any video
     [self disableVideo];
@@ -471,14 +472,14 @@
         
         if(show){
             self.assignmentView.alpha = show ? 0 : 1;
-            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, -10);
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, -3);
             self.assignmentView.hidden = !show;
         }
         
-        [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 
             self.assignmentView.alpha = show ? 1 : 0;
-            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, 10);
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, 3);
        
         } completion:nil];
         
@@ -816,29 +817,27 @@
                             
                             CGRect toolBarFrame = self.navigationController.toolbar.frame;
                             
-                            CGFloat kBHeight = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-
-                                viewFrame.origin.y = -kBHeight;
                                 
-                                toolBarFrame.origin.y = 524 -kBHeight;
+                                viewFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                                 
-//                                self.navigationController.toolbar.frame = toolBarFrame;
+                                toolBarFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                
+                                self.navigationController.toolbar.frame = toolBarFrame;
                                 
                                 self.view.frame = viewFrame;
                                 
                             }
-                            if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
+                            else if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
                                 
                                 viewFrame.origin.y = 64;
                                 
-                                toolBarFrame.origin.y = 524;
+                                toolBarFrame.origin.y = [[UIScreen mainScreen] bounds].size.height - 44;
                                 
-//                                self.navigationController.toolbar.frame = toolBarFrame;
+                                self.navigationController.toolbar.frame = toolBarFrame;
                                 
                                 self.view.frame = viewFrame;
-
+                                
                             }
                             
                         } completion:nil];
@@ -851,7 +850,6 @@
     [self.locationManager stopUpdatingLocation];
     [self configureAssignmentForLocation:[locations lastObject]];
 }
-
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
