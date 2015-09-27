@@ -78,6 +78,7 @@
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
+    [self.captionTextView setTextContainerInset:UIEdgeInsetsMake(5, 5, 0, 0)];
     
     // TODO: Confirm permissions
     self.locationManager = [[CLLocationManager alloc] init];
@@ -108,13 +109,15 @@
     self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
 
     if ([PFUser currentUser]) {
+        
         self.twitterButton.hidden = NO;
         self.facebookButton.hidden = NO;
+        
         self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
         self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
-        self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
-
+        
         BOOL hideCrosspostingHelp = [defaults boolForKey:@"galleryPreviouslyPosted"];
+        
         self.socialTipView.hidden = hideCrosspostingHelp;
     }
     else {
@@ -125,7 +128,6 @@
     }
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
-    
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -142,9 +144,11 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
     [super viewDidAppear:animated];
     
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+   
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     
 }
@@ -193,13 +197,11 @@
 }
 
 
-
-
 #pragma mark - Navigational Methods
 
 -(void)rightBarButtonItemClicked:(id)sender{
 
-    [self returnToTabBarWithPrevious:NO];
+    [self returnToTabBarWithPrevious:YES];
 }
 
 /*
@@ -327,13 +329,21 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.defaultAssignment) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
-                                                        message:@"Are you sure you want remove this assignment?"
-                                                       delegate:self
-                                              cancelButtonTitle:CANCEL
-                                              otherButtonTitles:@"Remove", nil];
         
-        [alert show];
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Remove Assignment"
+                                       message:@"Are you sure you want remove this assignment?"
+                                       action:CANCEL handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Remove" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+            
+            [self showAssignment:NO];
+            
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+
     }
     else {
         [self showAssignment:NO];
@@ -404,19 +414,18 @@
 - (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
     _defaultAssignment = defaultAssignment;
-    [self configureAssignmentLabelForAssignment:defaultAssignment];
-}
-
-- (void)configureAssignmentLabelForAssignment:(FRSAssignment *)assignment
-{
+    
     self.linkAssignmentButton.hidden = NO;
-    if (assignment) {
-        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", assignment.title]];
-        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
-                             range:(NSRange){10, [titleString length] - 10}];
-        self.assignmentLabel.attributedText = titleString;
-        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
-    }
+    
+    NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", _defaultAssignment.title]];
+    
+    [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                         range:(NSRange){10, [titleString length] - 10}];
+    
+    self.assignmentLabel.attributedText = titleString;
+    
+    [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+
 }
 
 - (void)configureAssignmentForLocation:(CLLocation *)location
@@ -424,8 +433,10 @@
     // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         
-        self.assignments = responseObject;
-
+        /* */
+         self.defaultAssignment = responseObject[0];
+         [self showAssignment:YES];
+         /**/
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
             
@@ -433,7 +444,7 @@
             
             if(location != nil){
                 
-                for (FRSAssignment *assignment in self.assignments) {
+                for (FRSAssignment *assignment in responseObject) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.defaultAssignment = assignment;
                         [self showAssignment:YES];
@@ -443,23 +454,35 @@
             }
         }
 
+        #warning Turn back on
         // No matching assignment found
-        self.defaultAssignment = nil;
+//        self.defaultAssignment = nil;
+        
     }];
 }
 
-- (void)showAssignment:(BOOL)show
-{
+- (void)showAssignment:(BOOL)show{
+    
     if (!show) {
         self.defaultAssignment = nil;
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if(show){
+            self.assignmentView.alpha = show ? 0 : 1;
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, -10);
+            self.assignmentView.hidden = !show;
+        }
+        
+        [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 
-    [UIView animateWithDuration:0.25 animations:^{
-        self.assignmentViewHeightConstraint.constant = show ? 40 : 0;
-        self.assignmentView.hidden = !show;
-        self.assignmentLabel.hidden = !show;
-        [self.view layoutIfNeeded];
-    }];
+            self.assignmentView.alpha = show ? 1 : 0;
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, 10);
+       
+        } completion:nil];
+        
+    });
 }
 
 #pragma mark - Toolbar Items
@@ -674,7 +697,7 @@
                 
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
-                [self returnToTabBarWithPrevious:YES];
+                [self returnToTabBarWithPrevious:NO];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
@@ -727,7 +750,6 @@
 }
 
 #pragma mark - UITextViewDelegate methods
-
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -790,62 +812,36 @@
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
-                            CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            
                             CGRect viewFrame = self.view.frame;
+                            
                             CGRect toolBarFrame = self.navigationController.toolbar.frame;
                             
-                            CGRect viewFrameWhenKeyboardHides = CGRectMake(viewFrame.origin.x,
-                                                                           viewFrame.origin.y + height,
-                                                                           viewFrame.size.width,
-                                                                           viewFrame.size.height);
-                            
-                            CGRect viewFrameWhenKeyboardShows = CGRectMake(viewFrame.origin.x,
-                                                                           viewFrame.origin.y - height,
-                                                                           viewFrame.size.width,
-                                                                           viewFrame.size.height);
-                            
-                            
-                            CGRect toolBarFrameWhenKeyboardHides = CGRectMake(toolBarFrame.origin.x,
-                                                                              toolBarFrame.origin.y + height,
-                                                                              toolBarFrame.size.width,
-                                                                              toolBarFrame.size.height);
-                            
-                            CGRect toolBarFrameWhenKeyboardShows = CGRectMake(toolBarFrame.origin.x,
-                                                                              toolBarFrame.origin.y - height,
-                                                                              toolBarFrame.size.width,
-                                                                              toolBarFrame.size.height);
+                            CGFloat kBHeight = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+
+                                viewFrame.origin.y = -kBHeight;
                                 
-                                self.view.frame = viewFrameWhenKeyboardShows;
-                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardShows;
+                                toolBarFrame.origin.y = 524 -kBHeight;
                                 
-                                [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+//                                self.navigationController.toolbar.frame = toolBarFrame;
+                                
+                                self.view.frame = viewFrame;
                                 
                             }
                             if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
-                                self.view.frame = viewFrameWhenKeyboardHides;
-                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardHides;
                                 
-                                [[NSNotificationCenter defaultCenter] addObserver:self
-                                                                         selector:@selector(keyboardWillShowOrHide:)
-                                                                             name:UIKeyboardWillShowNotification
-                                                                           object:nil];
+                                viewFrame.origin.y = 64;
+                                
+                                toolBarFrame.origin.y = 524;
+                                
+//                                self.navigationController.toolbar.frame = toolBarFrame;
+                                
+                                self.view.frame = viewFrame;
+
                             }
                             
-                            [self.view layoutIfNeeded];
                         } completion:nil];
-}
-
-
-#pragma mark - Alert View Delegate
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        [self showAssignment:NO];
-    }
 }
 
 #pragma mark - CLLocationManagerDelegate methods

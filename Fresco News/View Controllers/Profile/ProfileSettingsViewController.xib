@@ -542,11 +542,11 @@
                                     <exclude reference="VZB-NR-Y7C"/>
                                 </mask>
                                 <mask key="constraints">
+                                    <exclude reference="rNb-Nm-M56"/>
+                                    <exclude reference="vlT-3P-YoA"/>
                                     <exclude reference="UTx-1E-C0u"/>
                                     <exclude reference="h0X-2P-qPw"/>
                                     <exclude reference="Omb-ML-tXF"/>
-                                    <exclude reference="rNb-Nm-M56"/>
-                                    <exclude reference="vlT-3P-YoA"/>
                                 </mask>
                             </variation>
                             <variation key="heightClass=compact-widthClass=regular" misplaced="YES">

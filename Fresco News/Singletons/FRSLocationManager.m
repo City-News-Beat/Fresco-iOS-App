@@ -112,7 +112,6 @@
 //        notification.timeZone = [NSTimeZone defaultTimeZone];
 //        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
         
-        
     }
     
     //Stop updating location, will be turned back on `restartLocationUpdates` on the interval

@@ -110,14 +110,14 @@
     //Configure radius banner
     if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
         
-        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0){
+        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
             self.storyBreaksView.hidden = NO;
-        }
-        else{
+        else
             self.storyBreaksView.hidden = YES;
-        }
-
     }
+    else
+        self.storyBreaksView.hidden = YES;
+    
     
 //    if (!self.picker)
 //        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];

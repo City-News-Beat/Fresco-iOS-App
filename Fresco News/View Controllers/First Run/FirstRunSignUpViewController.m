@@ -109,7 +109,7 @@
                             CGRect viewFrame = self.view.frame;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-                                viewFrame.origin.y = -100;
+                                viewFrame.origin.y = -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
                                 viewFrame.origin.y = 0;
                             
