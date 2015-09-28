@@ -19,6 +19,8 @@
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
+@property (strong, nonatomic) OnboardPageCellController *onboardCell;
+
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*
@@ -103,6 +105,8 @@
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
 
+    
+
 }
 
 - (void) circleInitialization {
@@ -151,7 +155,6 @@
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
             
-
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
             self.circleView1.transform = CGAffineTransformMakeScale(0, 0);

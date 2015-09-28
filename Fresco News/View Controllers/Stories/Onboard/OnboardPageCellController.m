@@ -99,21 +99,6 @@
     [self setUpViews];
     [self animateOnboard1];
     
-    if(self.animationState == AnimationStateOne){
-        [self setUpOnboard1];
-        [self animateOnboard1];
-    }
-    
-    if(self.animationState == AnimationStateTwo){
-        [self setUpOnboard2];
-        [self animateOnboard2];
-    }
-    
-    if(self.animationState == AnimationStateThree){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-    }
-
     /** Always run */
     
     self.mainHeader.text = [self.mainHeaders objectAtIndex:self.animationState];
@@ -126,10 +111,46 @@
     
     /** **/
     
+    if(self.animationState == AnimationStateOne){
+        [self setUpOnboard1];
+        [self animateOnboard1];
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
+    }
+    
+    if(self.animationState == AnimationStateTwo){
+        [self setUpOnboard2];
+        [self animateOnboard2];
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
+
+    }
+    
+    if(self.animationState == AnimationStateThree){
+        [self setUpOnboard3];
+        [self animateOnboard3];
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
+    }
+
+
+    
     //Show "Done" on the last view
     if(self.animationState == 2){
         [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
     }
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    
+    self.assignmentTopLeft.alpha = 0;
+    self.assignmentBottomLeft.alpha = 0;
+    self.assignmentTopRight.alpha = 0;
+    self.assignmentBottomRight.alpha = 0;
+    
+    self.cash1.alpha = 0;
+    self.cash2.alpha = 0;
+    self.cash3.alpha = 0;
     
 }
 
@@ -155,7 +176,7 @@
         case AnimationStateThree:
             
             [self animateOnboard3];
-            
+
             break;
             
     }
@@ -257,11 +278,7 @@
     self.upload.alpha = 1;
     self.camera.alpha = 1;
     
-    // Reset onboard 1 images
-    self.assignmentTopLeft.alpha = 0;
-    self.assignmentBottomLeft.alpha = 0;
-    self.assignmentTopRight.alpha = 0;
-    self.assignmentBottomRight.alpha = 0;
+
     
 }
 
@@ -348,13 +365,6 @@
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
     
-    
-    // Reset onboard 1
-    self.assignmentTopLeft.alpha = 0;
-    self.assignmentBottomLeft.alpha = 0;
-    self.assignmentTopRight.alpha = 0;
-    self.assignmentBottomRight.alpha = 0;
-
 }
 
 - (void)setUpViews {
@@ -380,11 +390,6 @@
 }
 
 - (void)animateOnboard1 {
-    
-    self.assignmentTopLeft.alpha = 1;
-    self.assignmentBottomLeft.alpha = 1;
-    self.assignmentTopRight.alpha = 1;
-    self.assignmentBottomRight.alpha = 1;
     
     self.earth.alpha = 1;
     
@@ -441,6 +446,7 @@
                           delay:0.15
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
+                         self.assignmentTopRight.alpha = 1;
                          self.assignmentTopRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
                          
                      }
@@ -467,6 +473,8 @@
                           delay:0.4
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
+                         
+                         self.assignmentBottomLeft.alpha = 1;
                          self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(1.15, 1.15);
                          
                      }
@@ -493,6 +501,7 @@
                           delay:0.65
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
+                         self.assignmentBottomRight.alpha = 1;
                          self.assignmentBottomRight.transform = CGAffineTransformMakeScale(1.15, 1.15);
                          
                      }
@@ -512,7 +521,6 @@
                          
                      }];
     
-//    NSLog(@"0 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard2 {
@@ -520,18 +528,12 @@
     self.cloud.alpha = 1;
     self.upload.alpha = 1;
     self.camera.alpha = 1;
-    
-    self.assignmentBottomLeft.alpha = 0;
-    self.assignmentBottomRight.alpha = 0;
-    self.assignmentTopLeft.alpha = 0;
-    self.assignmentTopRight.alpha = 0;
 
 }
 
 - (void)animateOnboard3 {
     
-   self.earth.alpha = 1;
-    
+    self.earth.alpha = 1;
         
     self.greyCloud.alpha = 1;
     self.television.alpha = 1;

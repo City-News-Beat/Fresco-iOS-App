@@ -30,7 +30,6 @@
 
 
 
-
 - (void)setUpBackButton {
     
     // Create back button
@@ -51,7 +50,6 @@
     [self setImage:[UIImage imageNamed:@"backCaretLight"] forState:UIControlStateHighlighted];
 
  
-    
     [self setTitleColor:[UIColor colorWithRed:0.73 green:0.73 blue:0.73 alpha:1] forState:UIControlStateHighlighted];
     [self setTitleColor:[UIColor colorWithRed:0.46 green:0.46 blue:0.46 alpha:1] forState:UIControlStateNormal];
 }
