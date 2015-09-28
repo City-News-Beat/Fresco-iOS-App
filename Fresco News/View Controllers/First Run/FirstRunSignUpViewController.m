@@ -14,7 +14,7 @@
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, FRSBackButtonDelegate>
+@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
@@ -74,8 +74,6 @@
     [self setTwitterInfo];
     [self setFacebookInfo];
     
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = self;
     
 }
 
@@ -83,9 +81,7 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = nil;
+
 }
 
 #pragma mark - UIGestureRecognizerDelegate
