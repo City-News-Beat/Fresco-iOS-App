@@ -9,12 +9,12 @@
 @import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <NSArray+F.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSFileManager+Additions.h"
 #import "FRSStory.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import "FRSAlertViewManager.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
@@ -490,8 +490,6 @@
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.last forKey:UD_LASTNAME];
                 
                 [[NSUserDefaults standardUserDefaults] setObject:dM.currentUser.avatar forKey:UD_AVATAR];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:@"Visa-3689" forKey:UD_LAST4];
                 
                 [[NSUserDefaults standardUserDefaults] synchronize];
 
