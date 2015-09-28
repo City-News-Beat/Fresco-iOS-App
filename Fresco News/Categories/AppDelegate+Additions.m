@@ -24,7 +24,7 @@
         if (!error && responseObject) {
             
             //Retreieve Gallery View Controller from storyboard
-            UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+            UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
             
             //Set the tab bar to the first tab
             tabBarController.selectedIndex = 0;
@@ -51,7 +51,8 @@
         
         if (!error) {
         
-            UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);
+            UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
+
             
             AssignmentsViewController *assignmentVC = (AssignmentsViewController *) ([[tabBarController viewControllers][3] viewControllers][0]);
             
@@ -67,8 +68,28 @@
 
 - (void)openStoryFromPush:(NSString *)storyId{
 
-    
+    [[FRSDataManager sharedManager] getStory:storyId withResponseBlock:^(id responseObject, NSError *error) {
+        
+        if (!error && responseObject){
+            
+            //Retreieve Notifications View Controller from storyboard
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+            
+            UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
 
+            HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
+
+            StoryViewController *svc = [storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
+            
+            svc.story = responseObject;
+            
+            //Set the tab bar to the first tab
+            tabBarController.selectedIndex = 0;
+            
+            [homeVC.navigationController pushViewController:svc animated:YES];
+            
+        }
+    }];
 }
 
 - (void)openGalleryListFromPush:(NSArray *)galleries withTitle:(NSString *)navTitle{

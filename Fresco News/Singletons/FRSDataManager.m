@@ -815,10 +815,21 @@
        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if([responseObject objectForKey:@"data"] != (id)[NSNull null]){
         
-        if(responseBlock) responseBlock(story, nil);
-        
+            FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+            
+            if(responseBlock) responseBlock(story, nil);
+        }
+        else{
+            
+            responseBlock(
+                          nil,
+                          [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{NSLocalizedDescriptionKey : @"Story not found!"}]
+                        );
+
+        }
+    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];

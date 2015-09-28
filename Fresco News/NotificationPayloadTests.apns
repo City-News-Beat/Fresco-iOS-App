@@ -51,6 +51,21 @@
                    ]
 }
 
+//For opening a story
+
+{
+    "aps": {
+        "alert": {
+            "body": "Reports of a severe Tornado in Little Falls, Minnesota",
+            "title": "Fresco News"
+        },
+        "category": "ASSIGNMENT_CATEGORY",
+        "sound" : "chime.aiff"
+    },
+    "type" : "story",
+    "story" : "120410204321"
+}
+
 //For opening a single gallery, type can be 'breaking' or 'use'
 
 {

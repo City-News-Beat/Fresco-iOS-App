@@ -1151,7 +1151,6 @@ typedef enum : NSUInteger {
 #pragma mark - NSTimer Delegate and Selectors
 
 - (void)videoEnded:(NSTimer *)timer{
-    
     //End movie recording
     [self toggleMovieRecording];
 }
