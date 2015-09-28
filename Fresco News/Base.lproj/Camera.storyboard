@@ -935,7 +935,7 @@
                                         </variation>
                                     </imageView>
                                     <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="888" width="600" height="2.5"/>
+                                        <rect key="frame" x="0.0" y="775" width="600" height="2.5"/>
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="UISocialButton">
                                         <rect key="frame" x="0.0" y="777" width="300" height="46"/>
@@ -979,7 +979,7 @@
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="RnX-Qn-qK1" secondAttribute="bottom" constant="10" id="GWU-e1-LoY"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="q6D-z2-Jzy" secondAttribute="height" id="ICO-43-kSw"/>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="IXx-wy-r8k"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="111" id="Lst-7X-cnN"/>
+                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="-2" id="Lst-7X-cnN"/>
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
                                     <constraint firstItem="RnX-Qn-qK1" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" constant="2" id="V01-ps-NAN"/>
