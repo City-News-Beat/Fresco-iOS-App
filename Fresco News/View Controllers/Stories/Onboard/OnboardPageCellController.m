@@ -214,7 +214,6 @@
     [self.onboard1View addSubview:self.assignmentBottomRight];
     
     
-    
     // Init images with alpha of 0
     self.earth.alpha = 1;
     self.assignmentTopLeft.alpha = 0;
@@ -527,7 +526,6 @@
     self.assignmentTopLeft.alpha = 0;
     self.assignmentTopRight.alpha = 0;
 
-//    NSLog(@"1 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateOnboard3 {
@@ -554,7 +552,6 @@
     
     [self animateCash3];
     
-//    NSLog(@"2 animation state: %lu", (unsigned long)self.animationState);
 }
 
 - (void)animateCash1 {

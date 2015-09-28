@@ -44,9 +44,7 @@
 
 - (void)viewDidLoad {
     
-    
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.delegate = self;
     self.dataSource = self;
@@ -64,7 +62,10 @@
 - (void)movedToViewAtIndex:(NSInteger)index{
     
     if (index < 2 && !self.runningNextPage) {
+
         
+        NSLog (@"Run animation");
+    
         _runningNextPage = YES;
         
         self.currentIndex ++;
@@ -75,6 +76,7 @@
         
         NSArray *controllers = @[viewController];
         
+        //Update the dots on the next button
         if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
             
             FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
@@ -83,7 +85,10 @@
             
         }
         
+        
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
+            
+            [viewController performAnimation];
             
             if(finished) _runningNextPage = NO;
             
@@ -91,8 +96,6 @@
     }
     
     else{
-        
-        //put into parent vc that handles everything
         
         if(![[FRSDataManager sharedManager] isLoggedIn]){
             
@@ -189,8 +192,5 @@
     
     });
 }
-
-
-
 
 @end

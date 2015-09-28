@@ -102,7 +102,6 @@
     self.didFinishAnimationAtIndex0 = NO;
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
-    
 
 }
 
@@ -186,7 +185,6 @@
                                                       [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
                                                   }];
-                                 
                              }];
             
             if ((self.didComeFromIndex1 = YES)) {
@@ -283,7 +281,7 @@
                 } else {
                     
                     self.delay = 0.0f;
-                    
+    
                 }
                 
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
