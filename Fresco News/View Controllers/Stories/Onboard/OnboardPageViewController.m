@@ -63,9 +63,6 @@
     
     if (index < 2 && !self.runningNextPage) {
 
-        
-        NSLog (@"Run animation");
-    
         _runningNextPage = YES;
         
         self.currentIndex ++;

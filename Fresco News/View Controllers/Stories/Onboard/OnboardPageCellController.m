@@ -234,14 +234,6 @@
     
     [self.onboard1View addSubview:self.assignmentBottomRight];
     
-    
-    // Init images with alpha of 0
-    self.earth.alpha = 1;
-    self.assignmentTopLeft.alpha = 0;
-    self.assignmentBottomLeft.alpha = 0;
-    self.assignmentTopRight.alpha = 0;
-    self.assignmentBottomRight.alpha = 0;
-
 }
 
 - (void)setUpOnboard2 {
@@ -271,14 +263,6 @@
                                     andContentMode: UIViewContentModeScaleToFill ];
     
     [self.onboard1View addSubview:self.camera];
-    
-    
-    // Init images with alpha of 0
-    self.cloud.alpha = 1;
-    self.upload.alpha = 1;
-    self.camera.alpha = 1;
-    
-
     
 }
 
@@ -355,15 +339,6 @@
                                    andContentMode:UIViewContentModeScaleToFill];
     
     [self.onboard3View addSubview:self.greyCloud];
-
-    self.greyCloud.alpha = 1;
-    self.television.alpha = 1;
-    self.newspaper.alpha = 1;
-    self.uploadLeft.alpha = 1;
-    self.uploadRight.alpha = 1;
-    self.cash1.alpha = 0;
-    self.cash2.alpha = 0;
-    self.cash3.alpha = 0;
     
 }
 
@@ -557,7 +532,7 @@
 }
 
 - (void)animateCash1 {
-
+    
     [UIView animateWithDuration:0.25
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -620,13 +595,11 @@
                              
                          }];
                          
-                         
-                         
                      }];
+    
 }
 
 - (void)animateCash2 {
-
     
     [UIView animateWithDuration:0.25
                           delay:0.0
@@ -684,11 +657,9 @@
                      }];
     
     
-    
 }
 
 - (void)animateCash3 {
-
     
     [UIView animateWithDuration:0.25
                           delay:0.0
