@@ -11,12 +11,6 @@
 
 @interface FRSBackButton ()
 
-//@property (strong, nonatomic) UIButton *backButton;
-//
-//@property (strong, nonatomic) UIImage *backCaret;
-
-//@property (strong, nonatomic) UINavigationController *navigationController;
-
 @end
 
 @implementation FRSBackButton
