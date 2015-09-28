@@ -19,12 +19,25 @@
     
     _notification = notif;
     
-    //Set Values from notificaiton
-    self.title.text = _notification.title;
     self.eventName.text = _notification.event;
     self.notificationDescription.text = _notification.body;
     self.timeElapsed.text = [MTLModel relativeDateStringFromDate:_notification.date];
-
+    
+    //Set Values from notificaiton
+    if([_notification.type isEqual:@"payment"]){
+        
+        //Check if the user has payment info
+        if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
+            self.title.text = @"You just got paid!";
+        }
+        else{
+            self.title.text = [NSString stringWithFormat:@"You have $%i waiting for you!", 10];
+        }
+            
+    }
+    else
+        self.title.text = _notification.title;
+    
     if(_notification.seen == false){
         self.contentView.backgroundColor = [UIColor lightGoldCellColor];
     }
@@ -48,6 +61,8 @@
         
         //Hide the second button
         self.secondButton.hidden = YES;
+        
+        [self.firstButton setTitle:@"View Content" forState:UIControlStateNormal];
     
         if (!_notification.meta[@"icon"]) {
             [self.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
@@ -68,11 +83,11 @@
             
             self.secondButton.hidden = YES;
             self.firstButton.hidden = YES;
-            //            self.constraintDescriptionBottom.priority = 1000;
             
         }
         else{//Set button to "Add Card" to take them to the payment info view
             
+            self.notificationDescription.text = @"";
             self.secondButton.hidden = YES;
             [self.firstButton setTitle:ADD_CARD forState:UIControlStateNormal];
         }
