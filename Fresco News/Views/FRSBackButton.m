@@ -20,7 +20,7 @@
     self = [super initWithFrame:frame];
     
     if(self) {
-    
+   
         [self setUpBackButton];
 
     }
@@ -29,13 +29,16 @@
 }
 
 
+
+
 - (void)setUpBackButton {
     
     // Create back button
+    
     self.frame = CGRectMake(4, 24, 70, 24);
-    self.alpha = .54;
     [self.titleLabel setFont: [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:17]];
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
     [self addTarget:self.delegate action:@selector(backButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
     [self setTitle:@"Back" forState:UIControlStateNormal];
@@ -47,7 +50,16 @@
     [self setImage:[UIImage imageNamed:@"backCaretDark"] forState:UIControlStateNormal];
     [self setImage:[UIImage imageNamed:@"backCaretLight"] forState:UIControlStateHighlighted];
 
-
+ 
+    
+    [self setTitleColor:[UIColor colorWithRed:0.73 green:0.73 blue:0.73 alpha:1] forState:UIControlStateHighlighted];
+    [self setTitleColor:[UIColor colorWithRed:0.46 green:0.46 blue:0.46 alpha:1] forState:UIControlStateNormal];
 }
+
+
+
+
+
+
 
 @end
