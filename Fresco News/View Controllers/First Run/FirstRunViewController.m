@@ -66,8 +66,7 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
-
-    
+    [self setupLoginButton];
     
 }
 
@@ -121,7 +120,7 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
-
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
@@ -146,6 +145,13 @@
 /*
 ** Login
 */
+
+- (void)setupLoginButton {
+    
+    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:.1] forState:UIControlStateHighlighted];
+    
+}
 
 - (IBAction)loginButtonAction:(id)sender {
     
