@@ -119,8 +119,8 @@
         self.storyBreaksView.hidden = YES;
     
     
-//    if (!self.picker)
-//        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    if (!self.picker)
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
     
     //Run updates for assignments
     [self updateAssignments];

@@ -8,7 +8,6 @@
 
 #import "MKMapView+Additions.h"
 #import "FRSDataManager.h"
-#import <SVPulsingAnnotationView.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "CALayer+Additions.h"
 

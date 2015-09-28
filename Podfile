@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '7.0'
+platform :ios, '8.0'
 
 link_with 'Fresco WatchKit Extension', 'Fresco'
 
@@ -9,13 +9,10 @@ pod 'SVPullToRefresh'
 pod 'AFNetworking'
 pod 'AFNetworkActivityLogger'
 pod 'BTBadgeView'
-pod 'SVPulsingAnnotationView'
-pod 'Mantle'
+pod 'Mantle', '~>1.5.1'
 pod 'Functional.m'
 pod 'GRKGradientView'
-pod 'DBImageColorPicker', :git => 'https://github.com/d0ping/DBImageColorPicker.git'
-pod 'CardIO', :git => 'https://github.com/card-io/card.io-iOS-SDK.git'
-pod 'Stripe', :git => 'https://github.com/stripe/stripe-ios.git'
+pod 'DBImageColorPicker'
+pod 'CardIO'
+pod 'Stripe'
 pod 'BKMoneyKit'
-
-inhibit_all_warnings!

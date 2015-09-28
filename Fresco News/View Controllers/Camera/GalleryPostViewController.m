@@ -434,10 +434,6 @@
     // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         
-        /* */
-         self.defaultAssignment = responseObject[0];
-         [self showAssignment:YES];
-         /**/
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
             
@@ -455,9 +451,8 @@
             }
         }
 
-        #warning Turn back on
         // No matching assignment found
-//        self.defaultAssignment = nil;
+        self.defaultAssignment = nil;
         
     }];
 }

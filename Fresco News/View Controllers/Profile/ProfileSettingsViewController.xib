@@ -13,7 +13,7 @@
                 <outlet property="connectFacebookButton" destination="WDN-lK-Lzo" id="swf-Em-yha"/>
                 <outlet property="connectTwitterButton" destination="jO7-Ji-S4q" id="aQw-Dd-Q2U"/>
                 <outlet property="constraintAccountVerticalBottom" destination="NNu-uL-vQi" id="bYi-AH-YzQ"/>
-                <outlet property="constraintAccountVerticalTop" destination="vlT-3P-YoA" id="lzt-yY-TZb"/>
+                <outlet property="constraintAccountVerticalTop" destination="rvH-yI-Uvt" id="wq5-hh-RnW"/>
                 <outlet property="logoutButton" destination="I13-kp-8KN" id="RAd-v2-0c9"/>
                 <outlet property="mapView" destination="0xX-5N-JCQ" id="VP8-8v-mZl"/>
                 <outlet property="profileImageView" destination="MIq-BL-ysT" id="weL-hR-Cu7"/>

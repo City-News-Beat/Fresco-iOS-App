@@ -251,7 +251,10 @@ static CGFloat const kInterImageGap = 1.0f;
     
     NSUInteger index = indexPath.section;
     
-    self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+    if(index < [self.stories count])
+        self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+    else
+        return 96.0;
 
     CGFloat width = 0;
     BOOL flag = NO;
@@ -309,7 +312,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     for (FRSPost *post in story.thumbnails) {
         
-        //Check if the post is valid i.e. has a parent gallery id and an URL
+        //Check if the post is valid i.e. has a parent gallery id and a URL
         if (post.image.URL && post.galleryID) {
             
             //Fall back if the image is missing it's meta width and height

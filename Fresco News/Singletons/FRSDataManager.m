@@ -672,6 +672,8 @@
             
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
+        [self.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey] forHTTPHeaderField:@"authToken"];
+        
         [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
             if (imageData != nil) {

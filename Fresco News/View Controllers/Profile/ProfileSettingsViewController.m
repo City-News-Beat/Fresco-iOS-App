@@ -150,6 +150,8 @@ typedef enum : NSUInteger {
     if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
        && [FRSDataManager sharedManager].currentUser.email == nil){
         
+        [self.view viewWithTag:100].hidden = YES;
+        [self.view viewWithTag:101].hidden = YES;
         [[self.view viewWithTag:100] removeFromSuperview];
         [[self.view viewWithTag:101] removeFromSuperview];
         
