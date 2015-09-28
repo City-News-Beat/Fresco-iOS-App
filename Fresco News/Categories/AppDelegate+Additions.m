@@ -65,6 +65,12 @@
 
 }
 
+- (void)openStoryFromPush:(NSString *)storyId{
+
+    
+
+}
+
 - (void)openGalleryListFromPush:(NSArray *)galleries withTitle:(NSString *)navTitle{
 
     [[FRSDataManager sharedManager] resolveGalleriesInList:galleries withResponseBlock:^(id responseObject, NSError *error) {

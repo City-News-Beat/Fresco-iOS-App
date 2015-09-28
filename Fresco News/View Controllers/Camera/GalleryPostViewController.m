@@ -459,10 +459,6 @@
 
 - (void)showAssignment:(BOOL)show{
     
-    if (!show) {
-        self.defaultAssignment = nil;
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if(show){
@@ -474,9 +470,15 @@
         [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 
             self.assignmentView.alpha = show ? 1 : 0;
-            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, 3);
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, (show ? 3 : -3));
        
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            
+            if (!show) {
+                self.defaultAssignment = nil;
+            }
+            
+        }];
         
     });
 }

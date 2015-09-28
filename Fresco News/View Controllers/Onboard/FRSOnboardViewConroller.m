@@ -13,8 +13,8 @@
 @interface FRSOnboardViewConroller ()
 
 /*
- ** Views and Viewcontrollers
- */
+** Views and Viewcontrollers
+*/
 
 @property (strong, nonatomic) OnboardPageCellController *onboardViewController;
 
@@ -23,8 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIView *containerPageViewController;
 
 /*
- ** UI
- */
+** UI
+*/
 
 @property (strong, nonatomic) IBOutlet UIImageView *progressImage;
 
@@ -35,7 +35,6 @@
 - (IBAction)nextButtonTapped:(id)sender;
 
 @end
-
 
 @implementation FRSOnboardViewConroller
 
@@ -52,11 +51,16 @@
     }
     
     return self;
-    
+
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+
     
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];

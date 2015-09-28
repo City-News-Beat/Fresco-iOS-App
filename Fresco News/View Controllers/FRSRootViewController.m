@@ -34,11 +34,13 @@
 -(BOOL)shouldAutorotate {
     return YES;
 }
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
-}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle {
@@ -76,9 +78,7 @@
 
 
 - (void)setRootViewControllerToTabBar{
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
+
     [[UITabBar appearance] setTintColor:[UIColor brandDarkColor]]; // setTintColor:
     
     if(!self.tbc){
@@ -120,9 +120,7 @@
 }
 
 - (void)setRootViewControllerToOnboard{
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
+
     FRSOnboardViewConroller *onboardVC = [[FRSOnboardViewConroller alloc] init];
 
     [self switchRootViewController:onboardVC];

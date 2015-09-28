@@ -35,4 +35,13 @@
  */
 - (void)openGalleryListFromPush:(NSArray *)galleries withTitle:(NSString *)navTitle;
 
+
+/**
+ *  Opens a story from a push notificaiton
+ *
+ *  @param storyId The passed story id
+ */
+
+- (void)openStoryFromPush:(NSString *)storyId;
+
 @end

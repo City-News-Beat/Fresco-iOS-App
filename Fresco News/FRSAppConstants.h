@@ -161,6 +161,7 @@ enum FRSErrorCodes {
 #define NOTIF_BREAKING                      @"breaking"
 #define NOTIF_ASSIGNMENT                    @"assignment"
 #define NOTIF_USE                           @"use"
+#define NOTIF_STORY                         @"story"
 #define NOTIF_LIST                          @"list"
 
 

@@ -16,7 +16,6 @@
 
 #import "AppDelegate.h"
 #import <AFNetworkActivityLogger.h>
-#import <Stripe.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSUser.h"
 #import "FRSDataManager.h"
@@ -25,8 +24,6 @@
 #import "FRSRootViewController.h"
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
-
-#import "ProfilePaymentSettingsViewController.h"
 
 @interface AppDelegate ()
 
@@ -62,7 +59,7 @@
     }
     
     //Check if we've launcahed the app before or if the app is the iPhone 4s/4
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
+    if (NO){ // [[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
@@ -139,8 +136,6 @@
     [Fabric with:@[CrashlyticsKit]];
 
     [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
-    
-    [Stripe setDefaultPublishableKey:STRIPE_PUBLISHABLE_KEY];
     
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
@@ -244,19 +239,24 @@
         [self openGalleryFromPush:userInfo[@"gallery"]];
         
     }
-    
     // Assignments * Check to make sure the payload has an assignment ID
-    if ([userInfo[@"type"] isEqualToString:NOTIF_ASSIGNMENT] && userInfo[@"assignment"]) {
+    else if ([userInfo[@"type"] isEqualToString:NOTIF_ASSIGNMENT] && userInfo[@"assignment"]) {
         
         [self openAssignmentFromPush:userInfo[@"assignment"] withNavigation:NO];
         
     }
     //Story
-    if ([userInfo[@"type"] isEqualToString:NOTIF_LIST] && userInfo[@"galleries"]) {
+    else if ([userInfo[@"type"] isEqualToString:NOTIF_LIST] && userInfo[@"galleries"]) {
         
         NSArray *galleryList = userInfo[@"galleries"];
         
         [self openGalleryListFromPush:galleryList withTitle:userInfo[@"title"]];
+        
+    }
+    //List of galleries
+    else if ([userInfo[@"type"] isEqualToString:NOTIF_STORY] && userInfo[@"story"]) {
+
+        [self openStoryFromPush:userInfo[@"story"]];
         
     }
     

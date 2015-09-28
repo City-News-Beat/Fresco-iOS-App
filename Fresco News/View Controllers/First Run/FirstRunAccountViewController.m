@@ -49,9 +49,6 @@
     
     [super viewWillAppear:animated];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
-
     // we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
