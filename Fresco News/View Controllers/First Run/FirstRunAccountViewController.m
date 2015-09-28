@@ -53,7 +53,6 @@
     [super viewWillAppear:animated];
     
 
-    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
 

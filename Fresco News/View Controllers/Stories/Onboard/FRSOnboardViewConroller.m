@@ -250,7 +250,7 @@
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0 //self.delay
+                                  delay: 0.0
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  self.animationIsRunning = YES;
@@ -289,7 +289,7 @@
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
                 [UIView animateWithDuration: 0.2
-                                      delay: 0.0 //self.delay
+                                      delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
                                      
@@ -332,7 +332,7 @@
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0 //self.delay
+                                  delay: 0.0
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  

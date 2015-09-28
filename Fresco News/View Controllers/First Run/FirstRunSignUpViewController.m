@@ -55,8 +55,6 @@
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
     
-    [self initBackButton];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -334,24 +332,6 @@
         navigationController.navigationBar.tintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.54];
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }
-}
-
-- (void)initBackButton {
-    
-    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
-    
-    [self.view addSubview:backButton];
-    
-    backButton.delegate = self;
-    
-    backButton.tag = 10;
-    
-}
-
-- (void)backButtonTapped{
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
 }
 
 
