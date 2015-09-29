@@ -104,7 +104,7 @@
     self.didFinishAnimationAtIndex2 = NO;
     
 
-}
+    }
 
 - (void) circleInitialization {
     

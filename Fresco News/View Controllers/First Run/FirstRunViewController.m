@@ -69,7 +69,7 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
-    [self setupLoginButton];
+    [self setupButtons];
     
 }
 
@@ -148,10 +148,13 @@
 ** Login
 */
 
-- (void)setupLoginButton {
+- (void)setupButtons {
     
     [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
     [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:.1] forState:UIControlStateHighlighted];
+    
+    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:.15] forState:UIControlStateHighlighted];
     
 }
 
