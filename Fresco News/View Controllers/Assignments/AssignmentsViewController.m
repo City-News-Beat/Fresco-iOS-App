@@ -107,27 +107,12 @@
     
     [super viewWillAppear:animated];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        //Configure radius banner
-        if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-            
-            if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
-                self.storyBreaksView.hidden = NO;
-            else
-                self.storyBreaksView.hidden = YES;
-        }
-        else
-            self.storyBreaksView.hidden = YES;
-        
-    });
-    
-    
-    if (!self.picker)
-        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
-    
     //Run updates for assignments
     [self updateAssignments];
+    
+    [self updateNotificationBanner];
+    
+    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
     
     //If we have an assignment set, present it
     if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
@@ -135,6 +120,21 @@
         [self presentCurrentAssignmentWithAnimation:YES];
         
     }
+    
+}
+
+- (void)updateNotificationBanner{
+    
+    //Configure radius banner
+    if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+        
+        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
+            self.storyBreaksView.hidden = NO;
+        else
+            self.storyBreaksView.hidden = YES;
+    }
+    else
+        self.storyBreaksView.hidden = YES;
     
 }
 
@@ -240,7 +240,7 @@
                                          self.detailViewWrapper.frame.size.width,
                                          self.detailViewWrapper.frame.size.height);
             
-            [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
+            [UIView animateWithDuration:.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
                 
                 [self.detailViewWrapper setFrame:newFrame];
                 
@@ -579,7 +579,7 @@
                                      self.detailViewWrapper.frame.size.width,
                                      self.detailViewWrapper.frame.size.height);
         
-        [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
+        [UIView animateWithDuration:.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
             
             [self.detailViewWrapper setFrame:newFrame];
             
