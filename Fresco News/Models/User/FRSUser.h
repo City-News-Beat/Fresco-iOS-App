@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *last;
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *avatar;
+@property (nonatomic, assign) NSNumber *payable;
 @property (nonatomic, copy) NSNumber *notificationRadius;
 
 - (NSString *)displayName;

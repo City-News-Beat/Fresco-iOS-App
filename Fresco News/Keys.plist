@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>StagingStripeKey</key>
+	<string>pk_test_o4pMXyj95Vqe5NgV3hb7qmdo</string>
+	<key>ProductionStripeKey</key>
+	<string>pk_live_saSjliYnCbjFwYfriTzhTQiO</string>
 	<key>ProductionParseAppID</key>
 	<string>XYBXNv2HLxukd5JGbE6bK4vXy1JlwUVjeTKQEzZU</string>
 	<key>ProductionParseClientKey</key>

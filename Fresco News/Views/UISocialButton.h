@@ -15,6 +15,6 @@ typedef enum : NSUInteger {
 
 @interface UISocialButton : UIButton
 
-- (void)setUpSocialIcon:(SocialNetwork)network;
+- (void)setUpSocialIcon:(SocialNetwork)network withRadius:(BOOL)radius;
 
 @end

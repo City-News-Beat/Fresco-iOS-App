@@ -34,11 +34,17 @@
 -(BOOL)shouldAutorotate {
     return YES;
 }
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
 }
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
-    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidLoad{
@@ -72,9 +78,7 @@
 
 
 - (void)setRootViewControllerToTabBar{
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
+
     [[UITabBar appearance] setTintColor:[UIColor brandDarkColor]]; // setTintColor:
     
     if(!self.tbc){
@@ -83,9 +87,7 @@
     
     [self switchRootViewController:self.tbc];
     
-    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-   
-    self.tbc.selectedIndex = (index == 4 ? 0 : index);
+    self.tbc.selectedIndex = 0;
     
 }
 
@@ -118,9 +120,7 @@
 }
 
 - (void)setRootViewControllerToOnboard{
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
+
     FRSOnboardViewConroller *onboardVC = [[FRSOnboardViewConroller alloc] init];
 
     [self switchRootViewController:onboardVC];
@@ -139,16 +139,13 @@
     // we'll always be replacing our whole view
     destination.view.frame = self.view.bounds;
     
-    NSTimeInterval duration = 0.0;
-    
     if (source) {
         [source willMoveToParentViewController:nil];
         [container transitionFromViewController:source
                                toViewController:destination
-                                       duration:duration
+                                       duration:0
                                         options:UIViewAnimationOptionTransitionCrossDissolve
-                                     animations:^{
-                                     }
+                                     animations:nil
                                      completion:^(BOOL finished) {
                                          [source removeFromParentViewController];
                                          [destination didMoveToParentViewController:container];

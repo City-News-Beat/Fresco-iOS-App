@@ -113,7 +113,7 @@
                             CGRect viewFrame = self.view.frame;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-                                viewFrame.origin.y = -100;
+                                viewFrame.origin.y = -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
                                 viewFrame.origin.y = 0;
                             
@@ -158,7 +158,10 @@
                 
                 [((UIButton *)sender) setUserInteractionEnabled:YES];
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
+                
                 [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+                
             }
 
         }];
@@ -314,7 +317,7 @@
 {
     self.selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
     self.addPhotoImageView.image = self.selectedImage;
-
+    
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
 }

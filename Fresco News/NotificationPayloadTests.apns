@@ -8,14 +8,17 @@
     },
     
     "WatchKit Simulator Actions": [
-        {
-            "title": "First Button",
-            "identifier": "firstButtonAction"
-        }
-    ],
+                                   {
+                                   "title": "First Button",
+                                   "identifier": "firstButtonAction"
+                                   }
+                                   ],
     
     "customKey": "Use this file to define a testing payload for your notifications. The aps dictionary specifies the category, alert text and title. The WatchKit Simulator Actions array can provide info for one or more action buttons in addition to the standard Dismiss button. Any other top level keys are custom payload. If you have multiple such JSON files in your project, you'll be able to select them when choosing to debug the notification interface of your Watch App."
 }
+
+
+//For opening a specific assignment
 
 {
     "aps": {
@@ -27,5 +30,53 @@
         "sound" : "chime.aiff"
     },
     "type" : "assignment",
-    "assignment" : "55944eaf72aa69e2401f5c7f"
+    "assignment" : "123213213213213123"
+}
+
+//For opening a list of galleries, 'galleries' is an array of gallery ids
+
+{
+    "aps": {
+        "alert": {
+            "body": "Reports of a severe Tornado in Little Falls, Minnesota",
+            "title": "Fresco News"
+        },
+        "category": "ASSIGNMENT_CATEGORY",
+        "sound" : "chime.aiff"
+    },
+    "type" : "list",
+    "galleries" : [
+                   "123445512321312",
+                   "123213213123123"
+                   ]
+}
+
+//For opening a story
+
+{
+    "aps": {
+        "alert": {
+            "body": "Reports of a severe Tornado in Little Falls, Minnesota",
+            "title": "Fresco News"
+        },
+        "category": "ASSIGNMENT_CATEGORY",
+        "sound" : "chime.aiff"
+    },
+    "type" : "story",
+    "story" : "120410204321"
+}
+
+//For opening a single gallery, type can be 'breaking' or 'use'
+
+{
+    "aps": {
+        "alert": {
+            "body": "Reports of a severe Tornado in Little Falls, Minnesota",
+            "title": "Fresco News"
+        },
+        "category": "ASSIGNMENT_CATEGORY",
+        "sound" : "chime.aiff"
+    },
+    "type" : "breaking",
+    "gallery" : "234324324324234"
 }

@@ -15,6 +15,7 @@
 #import "StoryCellMosaicHeader.h"
 #import "StoryViewController.h"
 #import "FRSImage.h"
+#import "FRSRefreshControl.h"
 
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
@@ -27,15 +28,10 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @property (strong, nonatomic) NSMutableArray *imageArrays;
 
-/*
- ** Refresh control for table view
- */
-
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 /*
- ** Scroll View's Last Content Offset, for nav bar conditioning
- */
+** Scroll View's Last Content Offset, for nav bar conditioning
+*/
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
@@ -52,6 +48,7 @@ static CGFloat const kInterImageGap = 1.0f;
 @implementation StoriesViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [self setup];
     }
@@ -78,38 +75,40 @@ static CGFloat const kInterImageGap = 1.0f;
     
     [self setFrescoNavigationBar];
     
-    self.tableView.delegate = self;
+    /* Table View Setup */
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 96;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.allowsSelection = NO;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.alpha = .54;
-    [self.refreshControl addTarget:self action:@selector(refresh)
-                  forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[UIColor blackColor]];
-    [self.tableView addSubview:self.refreshControl];
-    
+    //Create the refresh control
+    self.refreshControl = [[FRSRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+
     [self performNecessaryFetch:NO withResponseBlock:nil];
+    
+    __weak typeof(self) weakSelf = self;
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
         
         // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
+        NSNumber *num = [NSNumber numberWithInteger:weakSelf.stories.count];
         
         [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 if ([responseObject count] > 0) {
                     
-                    [self.stories addObjectsFromArray:responseObject];
+                    [weakSelf.stories addObjectsFromArray:responseObject];
                     
-                    [self.tableView reloadData];
+                    [weakSelf.tableView reloadData];
                     
                 }
                 
-                [self.tableView.infiniteScrollingView stopAnimating];
+                [weakSelf.tableView.infiniteScrollingView stopAnimating];
                 
             }
             
@@ -138,7 +137,6 @@ static CGFloat const kInterImageGap = 1.0f;
     [super viewWillAppear:animated];
     
     self.tableView.delegate = self;
-    
     self.tableView.contentInset = UIEdgeInsetsZero;
     
 }
@@ -253,7 +251,10 @@ static CGFloat const kInterImageGap = 1.0f;
     
     NSUInteger index = indexPath.section;
     
-    self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+    if(index < [self.stories count])
+        self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
+    else
+        return 96.0;
 
     CGFloat width = 0;
     BOOL flag = NO;
@@ -311,7 +312,7 @@ static CGFloat const kInterImageGap = 1.0f;
     
     for (FRSPost *post in story.thumbnails) {
         
-        //Check if the post is valid i.e. has a parent gallery id and an URL
+        //Check if the post is valid i.e. has a parent gallery id and a URL
         if (post.image.URL && post.galleryID) {
             
             //Fall back if the image is missing it's meta width and height
@@ -322,9 +323,7 @@ static CGFloat const kInterImageGap = 1.0f;
             
             [array addObject:post.image];
         }
-        else {
-            NSLog(@"Post ID missing URL or galery: %@", post.postID);
-        }
+        
     }
     
     return array;

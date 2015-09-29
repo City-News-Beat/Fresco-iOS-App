@@ -835,31 +835,39 @@ typedef enum : NSUInteger {
         
         if (![[self movieFileOutput] isRecording]) {
             
-            AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
-            item.keySpace = AVMetadataKeySpaceCommon;
-            item.key = AVMetadataCommonKeyLocation;
-            item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", self.location.coordinate.latitude, self.location.coordinate.longitude];
-            self.movieFileOutput.metadata = @[item];
-
-            if ([[UIDevice currentDevice] isMultitaskingSupported]) {
-                // Setup background task. This is needed because the captureOutput:didFinishRecordingToOutputFileAtURL: callback is not received until AVCam returns to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error: after the recorded file has been saved.
-                [self setBackgroundRecordingID:[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil]];
-            }
-
-            // Update the orientation on the movie file output video connection before starting recording.
-            [[[self movieFileOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
-
-            // Turning OFF flash for video recording
-            [self setTorchMode:(self.flashButton.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
-
-            NSError *writeError = nil;
-            NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
+            AVCaptureConnection *movieConnection = [self.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
             
-            if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
-                [[NSFileManager defaultManager] removeItemAtPath:outputFilePath error:&writeError];
-            }
+            if (movieConnection.active) {
+            
+                AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+                item.keySpace = AVMetadataKeySpaceCommon;
+                item.key = AVMetadataCommonKeyLocation;
+                item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", self.location.coordinate.latitude, self.location.coordinate.longitude];
+                self.movieFileOutput.metadata = @[item];
 
-            [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                if ([[UIDevice currentDevice] isMultitaskingSupported]) {
+                    // Setup background task. This is needed because the captureOutput:didFinishRecordingToOutputFileAtURL: callback is not received until AVCam returns to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error: after the recorded file has been saved.
+                    [self setBackgroundRecordingID:[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil]];
+                }
+
+                // Update the orientation on the movie file output video connection before starting recording.
+                [[[self movieFileOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
+
+                // Turning OFF flash for video recording
+                [self setTorchMode:(self.flashButton.selected ? AVCaptureTorchModeOn : AVCaptureTorchModeOff)];
+
+                NSError *writeError = nil;
+                NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
+                    [[NSFileManager defaultManager] removeItemAtPath:outputFilePath error:&writeError];
+                }
+                
+                
+
+                [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                
+            }
             
         }
         else {
@@ -1143,7 +1151,6 @@ typedef enum : NSUInteger {
 #pragma mark - NSTimer Delegate and Selectors
 
 - (void)videoEnded:(NSTimer *)timer{
-    
     //End movie recording
     [self toggleMovieRecording];
 }

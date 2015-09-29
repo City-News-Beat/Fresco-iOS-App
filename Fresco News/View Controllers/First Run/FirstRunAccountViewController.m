@@ -2,7 +2,7 @@
 //  FirstRunAccountViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 4/27/15.
+//  Created by Fresco News 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -36,8 +36,8 @@
 
     self.tosTextView.delegate = self;
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter];
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     
     self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
@@ -54,7 +54,6 @@
     
 
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
 
     // we may prepopulate these either during pushing or backing
     if (self.email)

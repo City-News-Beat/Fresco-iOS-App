@@ -1,15 +1,18 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '7.0'
+
+platform :ios, '8.0'
+
 link_with 'Fresco WatchKit Extension', 'Fresco'
+
 pod 'STKWebKitViewController'
 pod 'SVPullToRefresh'
-pod 'AFNetworking', '~> 2.1'
+pod 'AFNetworking'
 pod 'AFNetworkActivityLogger'
 pod 'BTBadgeView'
-pod 'SVPulsingAnnotationView'
-pod 'Mantle', '~> 1.3'
-pod 'Functional.m', '~> 1.0'
+pod 'Mantle', '~>1.5.1'
+pod 'Functional.m'
 pod 'GRKGradientView'
+pod 'DBImageColorPicker'
 pod 'CardIO'
-
-inhibit_all_warnings!
+pod 'Stripe'
+pod 'BKMoneyKit'

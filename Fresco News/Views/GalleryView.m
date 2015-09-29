@@ -13,6 +13,7 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "PostCollectionViewCell.h"
+#import "GalleriesViewController.h"
 #import "FRSPhotoBrowserView.h"
 
 static CGFloat const kImageInitialScaleAmt = 0.9f;
@@ -28,6 +29,12 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 @property (nonatomic) NSIndexPath *playingIndex;
 
 @property (nonatomic, strong) FRSPhotoBrowserView *photoBrowserView;
+
+/*
+** Index of cell in gallery view that is playing
+*/
+
+@property (nonatomic, assign) NSUInteger index;
 
 @end
 
@@ -480,8 +487,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - Scroll View Delegate
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
     CGFloat pageWidth = self.collectionPosts.frame.size.width;
     self.pageControl.currentPage = self.collectionPosts.contentOffset.x / pageWidth;
     
@@ -493,14 +500,26 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
     
+    if(self.gallery.galleryID){
+    
+        NSDictionary *dict = @{
+                              @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                              @"gallery" : self.gallery.galleryID
+                              };
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
+        
+    }
     
     //If the cell has a video
     if([postCell.post isVideo]){
+        
         if(!postCell.post.video){
             [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
         }
         else
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+        
     }
     //If the cell doesn't have a video
     else{

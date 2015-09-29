@@ -14,6 +14,8 @@
 
 + (UIColor *)disabledToolbarColor;
 
++ (UIColor *)disabledSaveColor;
+
 + (UIColor *)darkGoldBarButtonColor;
 
 + (UIColor *)frescoBlueColor;
@@ -37,8 +39,6 @@
 + (UIColor *)textInputBlackColor;
 
 + (UIColor *)textHeaderBlackColor;
-
-+ (UIColor *)disabledBackgroundColor;
 
 + (UIColor *)frescoGreyBackgroundColor;
 

@@ -8,7 +8,18 @@
 
 @import UIKit;
 
+#import "FRSNotification.h"
+
 @interface NotificationCell : UITableViewCell
+
+typedef enum : NSUInteger {
+    NotificationTypeContent,
+    NotificationTypeAssignment,
+    NotificationTypePayment
+} NotificationType;
+
+
+@property (strong, nonatomic) FRSNotification *notification;
 
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *notificationDescription;
@@ -17,8 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *firstButton;
 @property (weak, nonatomic) IBOutlet UIButton *secondButton;
 @property (weak, nonatomic) IBOutlet UIImageView *image;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintNotificationDescription;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButton1Width;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTimeElapsedTrailing;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintDescriptionBottom;
 
 @end

@@ -11,9 +11,11 @@
 #import "FRSAlertViewManager.h"
 
 /*
- ** Add four spaces in between sections
+** Add four spaces in between sections
 */
 
+
+/* Enums */
 
 #pragma mark - Enums
 
@@ -26,17 +28,15 @@ enum FRSErrorCodes {
     ErrorSignupNoUserFromParseUser,
 } frsErrorCodes;
 
-enum FRSAnnotationType {
-    FRSAssignmentAnnotation = 0,
-    FRSUserAnnotation = 1,
-    FRSClusterAnnotation = 2
-} frsAnnotationType;
-
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
 
-#pragma mark - Notification Strings
+#define ImageWithData(data)[UIImage imageWithData:data]
+
+/*  NotificationCenter Strings */
+
+#pragma mark - NotificationCenter Strings
 
 #define NOTIF_API_KEY_AVAILABLE             @"NotificationAPIKeyAvailable"
 #define NOTIF_VIEW_DISMISS                  @"DismissNotificationsView"
@@ -44,12 +44,12 @@ enum FRSAnnotationType {
 #define NOTIF_IMAGE_SET                     @"UserProfileImageChanged"
 #define NOTIF_REACHABILITY_MONITORING       @"ReachabilityManagerIsMonitoring"
 #define NOTIF_ONBOARD                       @"Onboard"
-#define NOTIF_PROFILE_PIC_RESET             @"ProfilePicReset"
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
 
 
+/* Keys Plist */
 
 #pragma mark - Keys Plist
 
@@ -58,7 +58,9 @@ enum FRSAnnotationType {
 
 
 
-#pragma mark - Base URL/API & Parse
+/* Base URL/API */
+
+#pragma mark - Base URL/API
 
 #define ERROR_DOMAIN                        @"com.fresconews"
 
@@ -69,15 +71,17 @@ enum FRSAnnotationType {
     #define BASE_API                        @"http://staging.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
 #else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
     #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 #endif
 
 
-
+/* Twitter Auth */
 
 #pragma mark - Twitter Auth
 
@@ -88,6 +92,7 @@ enum FRSAnnotationType {
 
 
 
+/* Float/Int Values */
 
 #pragma mark - Float/Int Values
 
@@ -95,7 +100,12 @@ enum FRSAnnotationType {
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
 #define MAX_POST_COUNT                      8
+#define kMetersInAMile                      1609.34
+#define kDegreesInAMile                     69.0
 
+
+
+/* User Defaults */
 
 #pragma mark - User Defaults
 
@@ -103,11 +113,10 @@ enum FRSAnnotationType {
 #define UD_LASTNAME                         @"lastname"
 #define UD_AVATAR                           @"avatar"
 #define UD_TOKEN                            @"frescoAPIToken"
-#define UD_NOTIF_SETTINGS                   @"notificationSetting"
+#define UD_LAST4                            @"last4"
 #define UD_CAPTION_STRING_IN_PROGRESS       @"captionStringInProgress"
 #define UD_DEFAULT_ASSIGNMENT_ID            @"defaultAssignmentID"
 #define UD_SELECTED_ASSETS                  @"selectedAssets"
-#define UD_NOTIFICATIONS_COUNT              @"notificationsCount"
 #define UD_PREVIOUSLY_SELECTED_TAB          @"previouslySelectedTab"
 #define UD_HAS_LAUNCHED_BEFORE              @"hasLaunchedBefore"
 #define UD_ASSIGNMENTS_ONBOARDING           @"assignmentsOnboarding"
@@ -117,6 +126,7 @@ enum FRSAnnotationType {
 
 
 
+/* Fonts */
 
 #pragma mark - Fonts
 
@@ -127,15 +137,7 @@ enum FRSAnnotationType {
 
 
 
-
-#pragma mark - MapView Identifiers
-
-#define ASSIGNMENT_IDENTIFIER               @"AssignmentAnnotation"
-#define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
-#define USER_IDENTIFIER                     @"currentLocation"
-#define kMetersInAMile                      1609.34
-#define kDegreesInAMile                     69.0
-
+/* Segue Identifiers */
 
 #pragma mark - Segue Identifiers
 
@@ -149,16 +151,27 @@ enum FRSAnnotationType {
 
 
 
+/* Notification Categories/Actions */
+
 #pragma mark - Notification Categories/Actions
 
 #define ASSIGNMENT_CATEGORY                 @"ASSIGNMENT_CATEGORY"
 #define NAVIGATE_IDENTIFIER                 @"NAVIGATE_IDENTIFIER"
 
+#define NOTIF_BREAKING                      @"breaking"
+#define NOTIF_ASSIGNMENT                    @"assignment"
+#define NOTIF_USE                           @"use"
+#define NOTIF_STORY                         @"story"
+#define NOTIF_LIST                          @"list"
 
 
-#pragma mark - User-facing Strings -
+/* User-facing Strings */
+
+#pragma mark - User-facing Strings
 
 
+
+/* Brand Names / Trademarks */
 
 #pragma mark - Brand Names / Trademarks
 
@@ -166,6 +179,9 @@ enum FRSAnnotationType {
 #define FACEBOOK                            @"Facebook"
 #define TWITTER                             @"Twitter"
 
+
+
+/* Global */
 
 #pragma mark - Global Macros
 
@@ -183,6 +199,8 @@ enum FRSAnnotationType {
 #define WHATS_HAPPENING                     NSLocalizedString(@"What's happening?", nil)
 
 
+
+/* First Run Log in / Sign up */
 
 #pragma mark - First Run Log in / Sign up
 
@@ -215,6 +233,8 @@ enum FRSAnnotationType {
 
 
 
+/* First Run Permissions */
+
 #pragma mark - First Run Permissions
 
 #define CAMERA_ENABLED                      NSLocalizedString(@"Camera Enabled", nil)
@@ -231,6 +251,10 @@ enum FRSAnnotationType {
 #define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
 #define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
 
+
+
+/*  First Run Radius */
+
 #pragma mark - First Run Radius
 
 #define NOTIF_RADIUS_ERROR_MSG              NSLocalizedString(@"Could not save notification radius", nil)
@@ -241,12 +265,15 @@ enum FRSAnnotationType {
 
 
 
+/* Profile Settings */
 
 #pragma mark - Profile Settings
 
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)
 
-#define PROFILE_SAVE_ERROR                  NSLocalizedString(@"Could not save Profile settings", nil)
+#define PROFILE_SETTINGS_SAVE_ERROR         NSLocalizedString(@"We couldn't save your profile settings. Please try again in a bit.", nil)
+#define PASSWORD_SAVE_ERROR                 NSLocalizedString(@"We could successfully save your settings, but your new password wasn't saved. Please try again in a bit.", nil)
+
 
 #define DISABLE_ACCT_TITLE                  NSLocalizedString(@"Are you sure? You can recover your account up to one year from today.", nil)
 #define DISABLE_ACCT_ERROR                  NSLocalizedString(@"It seems we couldn't successfully disable your account. Please contact support@fresconews.com for help.", nil)
@@ -260,16 +287,14 @@ enum FRSAnnotationType {
 #define NOTHING_HERE_YET                    NSLocalizedString(@"Nothing here yet!", nil)
 #define OPEN_CAMERA                         NSLocalizedString(@"Open your camera to get started", nil)
 
+#define PAYMENT_MESSSAGE                    NSLocalizedString(@"When a news outlet uses your content we’ll pay you directly.", nil)
+#define DISABLED_CAMERA_SCAN                NSLocalizedString(@"Enable your camera to scan your debit card", nil)
 
 
+#define CARD_MAX_LENGTH                     19
+#define CCV_MAX_LENGTH                      3
 
-#pragma mark - Unused
-
-#define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)
-#define NAVIGATE_TO_ASSIGNMENT              NSLocalizedString(@"Navigate to the assignment", nil)
-
-
-
+/* Onboarding */
 #pragma mark - Onboarding
 
 #define MAIN_HEADER_1                       NSLocalizedString(@"Find breaking news around you", nil)
@@ -281,20 +306,27 @@ enum FRSAnnotationType {
 #define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
 
 
+/* Highlights */
+
 #pragma mark - Highlights
 
 #define HIGHLIGHTS                          NSLocalizedString(@"Highlights", nil)
 
 
+
+/* Stories */
 #pragma mark - Stories
 
 #define STORIES                             NSLocalizedString(@"Stories", nil)
 
 
+
+/* Notifications */
 #pragma mark - Notifications
 
 #define VIEW                                NSLocalizedString(@"View", nil)
 #define VIEW_ASSIGNMENT                     NSLocalizedString(@"View Assignment", nil)
+#define ADD_CARD                            NSLocalizedString(@"Add my debit card", nil)
 
 #define ASSIGNMENT_EXPIRED_TITLE            NSLocalizedString(@"Assignment Expired", nil)
 #define ASSIGNMENT_EXPIRED_MSG              NSLocalizedString(@"This assignment has expired already!", nil)
@@ -305,11 +337,27 @@ enum FRSAnnotationType {
 #define GALLERY_UNAVAILABLE_TITLE           NSLocalizedString(@"Gallery Unavailable", nil)
 #define GALLERY_UNAVAILABLE_MSG             NSLocalizedString(@"We couldn't find this gallery!", nil)
 
+#define TODAY_TITLE                         NSLocalizedString(@"Today in News", nil)
 
 
+/* Assignments - MapView */
+
+#pragma mark - Assignments
+
+#define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)
+#define NAVIGATE_TO_ASSIGNMENT              NSLocalizedString(@"Navigate to the assignment", nil)
+
+#pragma mark - MapView Identifiers
+
+#define ASSIGNMENT_IDENTIFIER               @"AssignmentAnnotation"
+#define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
+#define USER_IDENTIFIER                     @"currentLocation"
+
+
+
+/* Device Macros */
 
 #pragma mark - Device Macros
-
 
 #define IS_OS_8_OR_LATER                    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 

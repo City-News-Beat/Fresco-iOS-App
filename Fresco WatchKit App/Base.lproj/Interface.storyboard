@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="8121.17" systemVersion="14E46" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JVU-BA-K8h">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JVU-BA-K8h">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.14"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="8066.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="8092"/>
     </dependencies>
     <scenes>
         <!--Galleries-->
@@ -32,7 +32,7 @@
                                                 </items>
                                             </group>
                                         </items>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="5"/>
+                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                     </group>
                                     <connections>
                                         <outlet property="galleryGroup" destination="IyN-bY-QDL" id="9D9-UK-x7r"/>
@@ -271,10 +271,10 @@
             </objects>
             <point key="canvasLocation" x="-190" y="635"/>
         </scene>
-        <!--Glance Interface Controller-->
+        <!--frescoGlance-->
         <scene sceneID="jFn-RZ-kCe">
             <objects>
-                <glanceController id="feo-rp-dNG" customClass="FRSGlanceInterfaceController">
+                <glanceController identifier="frescoGlance" id="feo-rp-dNG" customClass="WKGlanceInterfaceController">
                     <items>
                         <group alignment="left" layout="vertical" id="5ES-wr-xco">
                             <items>
@@ -315,7 +315,7 @@
                     </connections>
                 </glanceController>
             </objects>
-            <point key="canvasLocation" x="388" y="390"/>
+            <point key="canvasLocation" x="388" y="377"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="Gsw-eC-X1M">

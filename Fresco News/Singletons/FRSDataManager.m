@@ -9,12 +9,12 @@
 @import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <NSArray+F.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSFileManager+Additions.h"
 #import "FRSStory.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import "FRSAlertViewManager.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
@@ -81,7 +81,7 @@
                 
                 dispatch_once(&onceToken, ^{
                 
-                    [self refreshUser:^(BOOL succeeded, NSError *error) {}];
+                    [self refreshUser:nil];
             
                 });
             
@@ -101,68 +101,6 @@
             [NSURL URLWithString:BASE_API],
             [NSURL URLWithString:BASE_PATH],
             endpoint];
-}
-
-#pragma mark - AFHTTPSessionManager overrides
-
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLResponse *, id, NSError *))completionHandler
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-
-    if (self.frescoAPIToken) [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super dataTaskWithRequest:req completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromFile:(NSURL *)fileURL
-                                         progress:(NSProgress * __autoreleasing *)progress
-                                completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken) [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithRequest:req fromFile:fileURL progress:progress completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request
-                                         fromData:(NSData *)bodyData
-                                         progress:(NSProgress * __autoreleasing *)progress
-                                completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithRequest:req fromData:bodyData progress:progress completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadTaskWithStreamedRequest:(NSURLRequest *)request
-                                                 progress:(NSProgress * __autoreleasing *)progress
-                                        completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
-
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super uploadTaskWithStreamedRequest:req progress:progress completionHandler:completionHandler];
-    
-}
-
-
-- (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-                                             progress:(NSProgress * __autoreleasing *)progress
-                                          destination:(NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
-                                    completionHandler:(void (^)(NSURLResponse *response, NSURL *filePath, NSError *error))completionHandler;
-{
-    NSMutableURLRequest *req = (NSMutableURLRequest *)request;
-    
-    if (self.frescoAPIToken)
-        [req setValue:self.frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    return [super downloadTaskWithRequest:req progress:progress destination:destination completionHandler:completionHandler];
 }
 
 #pragma mark - User Methods
@@ -349,17 +287,15 @@
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_TOKEN];
     
-    [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:UD_NOTIFICATIONS_COUNT];
-    
     //Sync Defaults
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     //Send notifications to the rest of the app to update front-end elements
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_BADGE_RESET object:self];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_PROFILE_PIC_RESET object:self];
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
+    
 }
 
 /*
@@ -494,7 +430,7 @@
                 //Successful refresh and log in
                 if(success){
                     
-                    block(YES, nil);
+                    if(block) block(YES, nil);
                     
                     //Validate Terms Here
                     [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
@@ -517,7 +453,8 @@
                     
                     [[FRSDataManager sharedManager] logout];
                     
-                    block(NO, nil);
+                    if(block) block(NO, nil);
+                    
                 }
 
                 _loggingIn = NO;
@@ -733,6 +670,8 @@
             
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
+        [self.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey] forHTTPHeaderField:@"authToken"];
+        
         [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
             if (imageData != nil) {
@@ -876,10 +815,21 @@
        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        if([responseObject objectForKey:@"data"] != (id)[NSNull null]){
         
-        if(responseBlock) responseBlock(story, nil);
-        
+            FRSStory *story = [MTLJSONAdapter modelOfClass:[FRSStory class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+            
+            if(responseBlock) responseBlock(story, nil);
+        }
+        else{
+            
+            responseBlock(
+                          nil,
+                          [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{NSLocalizedDescriptionKey : @"Story not found!"}]
+                        );
+
+        }
+    
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -961,6 +911,31 @@
     
 }
 
+- (void)resolveGalleriesInList:(NSArray *)galleries withResponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSDictionary *params = @{@"galleries" : galleries};
+
+    [self GET:@"gallery/resolve" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        NSArray *galleries = [[responseObject objectForKey:@"data"] map:^id(id obj) {
+            return [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:obj error:NULL];
+        }];
+        
+        if(responseBlock) responseBlock(galleries, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+    }];
+    
+}
+
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -969,9 +944,15 @@
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        FRSGallery *assignment = [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        FRSGallery *gallery;
         
-        if(responseBlock) responseBlock(assignment, nil);
+        if(!responseObject[@"err"]){
+        
+            gallery = [MTLJSONAdapter modelOfClass:[FRSGallery class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+        
+        }
+        
+        if(responseBlock) responseBlock(gallery, nil);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -1237,7 +1218,7 @@
 
 #pragma mark - Location
 
-- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPIResponseBlock)responseBlock
+- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -1251,7 +1232,11 @@
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             
+            if(responseBlock) responseBlock(YES, nil);
+            
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            if(responseBlock) responseBlock(NO, nil);
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             NSLog(@"Error: %@", error);
@@ -1261,12 +1246,77 @@
     }
 }
 
+#pragma mark - Payments
+
+- (void)updateUserPaymentInfo:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock{
+
+    //Run check if we are logged in
+    if(![self currentUserIsLoaded]) return;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    [self POST:@"user/payment" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        if(responseBlock) responseBlock(responseObject, nil);
+
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+        NSLog(@"Error: %@", error);
+        
+    }];
+    
+
+}
+
+- (void)getUserPaymentInfo:(FRSAPIResponseBlock)responseBlock{
+    
+    //Run check if we are logged in
+    if(![self currentUserIsLoaded]) return;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey];
+    
+    [self.requestSerializer setValue:token forHTTPHeaderField:@"authToken"];
+    
+    [self GET:@"user/payment" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        
+        if([responseObject objectForKey:@"data.last4"] != (id)[NSNull null]){
+            
+            if(responseBlock) responseBlock(responseObject[@"data"], nil);
+        }
+
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+        
+        NSLog(@"Error: %@", error);
+        
+    }];
+    
+    
+}
+
+
 #pragma mark - TOS
 
 - (void)getTermsOfService:(BOOL)validate withResponseBlock:(FRSAPIResponseBlock)responseBlock
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
     
     if(validate){
         

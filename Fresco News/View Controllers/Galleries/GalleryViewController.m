@@ -12,6 +12,7 @@
 #import "FRSDataManager.h"
 #import "FRSPost.h"
 #import "GalleryView.h"
+#import "GalleryHeader.h"
 #import "FRSArticle.h"
 #import "GalleryViewController.h"
 #import "PostCollectionViewCell.h"
@@ -38,11 +39,10 @@ static CGFloat kCellHeight = 44.0f;
 ** Gallery Outlets, in order of appearance
 */
 
-@property (weak, nonatomic) IBOutlet UILabel *timeAndPlace;
-@property (weak, nonatomic) IBOutlet UILabel *byline;
 @property (weak, nonatomic) IBOutlet UILabel *caption;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UITableView *galleryTable;
+@property (weak, nonatomic) IBOutlet UIView *galleryHeader;
 
 @end
 
@@ -123,17 +123,12 @@ static CGFloat kCellHeight = 44.0f;
     [self.galleryView setGallery:self.gallery isInList:NO];
     
     self.caption.text = self.gallery.caption;
+
+    GalleryHeader *galleryHeader = [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 32)];
     
-    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
-    
-    if([post.address isKindOfClass:[NSString class]]){
-    
-        self.timeAndPlace.text =  post.address;
-        [self.timeAndPlace sizeToFit];
-        
-    }
-    
-    self.byline.text = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
+    galleryHeader.gallery = self.gallery;
+
+    [self.galleryHeader addSubview:galleryHeader];
 }
 
 /*

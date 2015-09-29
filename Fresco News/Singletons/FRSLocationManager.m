@@ -73,7 +73,6 @@
     
     self.pausesLocationUpdatesAutomatically = YES;
 
-    [self requestWhenInUseAuthorization];
     [self requestAlwaysAuthorization];
     
     self.desiredAccuracy = kCLLocationAccuracyBest;
@@ -94,10 +93,14 @@
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
         
-        [[FRSDataManager sharedManager] updateUserLocation:params block:nil];
+        [[FRSDataManager sharedManager] updateUserLocation:params block:^(BOOL sucess, NSError *error) {
+            
+            if(sucess)  NSLog(@"Successfully updated location");
+            
+        }];
         
         //Check if we're inactive, then send the local push for the assignment
-        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive){
+        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground){
             [self sendLocalPushForAssignment];
         }
         
@@ -108,8 +111,6 @@
 //        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
 //        notification.timeZone = [NSTimeZone defaultTimeZone];
 //        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
-        
-        NSLog(@"Successfully updated location");
         
     }
     

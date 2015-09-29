@@ -8,9 +8,9 @@
 
 @import Foundation;
 @import CoreLocation;
+@import Parse;
 
 #import <AFNetworking/AFNetworking.h>
-@import Parse;
 #import "FRSStory.h"
 #import "FRSPost.h"
 #import "FRSUser.h"
@@ -60,19 +60,79 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 #pragma mark - Users
 
+/**
+ *  Refreshes the current logged in user for their latest info
+ *
+ *  @param block Parse response block
+ */
 - (void)refreshUser:(PFBooleanResultBlock)block;
+
+/**
+ *  Logs the user out of the app, and resets associated user defaults
+ */
+
 - (void)logout;
+
+/**
+ *  Tells us if the current user has been loading from the DB
+ *
+ *  @return YES = is Loaded, NO = notLaoded
+ */
 - (BOOL)currentUserIsLoaded;
+
+/**
+ *  Tells us if the a user is logged into the app
+ *
+ *  @return BOOL repsresents login state
+ */
 - (BOOL)isLoggedIn;
+
+/**
+ *  Determines if the current user logged in is valid i.e. has a first & last name
+ *
+ *  @return BOOL repsresents valid state
+ */
 - (BOOL)currentUserValid;
+
+/**
+ *  Sets the current logged in user to the passed user id
+ *
+ *  @param frescoUserId  The user id to set the current user to
+ *  @param responseBlock Success block
+ */
+
 - (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock;
+
+/**
+ *  Runs updated on user object with passed params
+ *
+ *  @param inputParams   User paramaters to update
+ *  @param imageData     Optional image data for the user avatar
+ *  @param responseBlock Success block
+ */
+
 - (void)updateFrescoUserWithParams:(NSDictionary *)inputParams withImageData:(NSData *)imageData block:(FRSAPISuccessBlock)responseBlock;
+
+/**
+ *  Runs Parse sign up, and creates a User on Fresco backend
+ *
+ *  @param username Username
+ *  @param email    Email to sign up with
+ *  @param password Password to sign up with
+ *  @param block    Result block
+ */
+
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
+
 - (void)loginViaFacebookWithBlock:(PFUserResultBlock)block;
+
 - (void)loginViaTwitterWithBlock:(PFUserResultBlock)block;
+
 - (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock;
-- (void)updateUserLocation:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
+
+- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock;
 
 #pragma mark - Galleries
 
@@ -80,6 +140,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromStory:(NSString *)storyId withOffset:(NSNumber *)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)resolveGalleriesInList:(NSArray *)galleries withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)resetDraftGalleryPost;
 
 #pragma mark - Stories
@@ -99,6 +160,25 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 - (void)setNotificationSeen:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 - (void)deleteNotification:(NSString *)notificationId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
+
+#pragma mark - Payments
+
+/**
+ *  Updates user payment info with passed params
+ *
+ *  @param params        Fields to update
+ *  @param responseBlock API Response Block
+ */
+
+- (void)updateUserPaymentInfo:(NSDictionary *)params block:(FRSAPIResponseBlock)responseBlock;
+
+/**
+ *  Returns logged in user's payment info
+ *
+ *  @param responseBlock API Response Block
+ */
+
+- (void)getUserPaymentInfo:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - TOS
 

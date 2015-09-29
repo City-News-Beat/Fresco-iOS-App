@@ -22,6 +22,8 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @property (nonatomic, assign) NSString *selectedGallery;
 
+@property (strong, nonatomic) NSMutableArray *galleries;
+
 - (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
 
 @end

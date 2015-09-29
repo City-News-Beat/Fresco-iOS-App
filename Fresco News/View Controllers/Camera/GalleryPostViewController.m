@@ -19,19 +19,16 @@
 #import "CameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
-#import "CrossPostButton.h"
+#import "UISocialButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate> {
-    UITapGestureRecognizer *socialTipTap;
-    UITapGestureRecognizer *submitTap;
-}
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-@property (weak, nonatomic) IBOutlet CrossPostButton *twitterButton;
-@property (weak, nonatomic) IBOutlet CrossPostButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -47,6 +44,9 @@
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) UITapGestureRecognizer *socialTipTap;
+@property (strong, nonatomic) UITapGestureRecognizer *submitTap;
 
 @end
 
@@ -72,13 +72,14 @@
 {
     [super viewDidLoad];
 
-    
     [self setupButtons];
     self.title = @"Create a Gallery";
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     [self.galleryView setGallery:self.gallery isInList:YES];
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
+    [self.captionTextView setTextContainerInset:UIEdgeInsetsMake(5, 5, 0, 0)];
+    self.captionTextView.returnKeyType = UIReturnKeyDone;
     
     // TODO: Confirm permissions
     self.locationManager = [[CLLocationManager alloc] init];
@@ -86,6 +87,9 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
     [self.socialTipView setUserInteractionEnabled:YES];
+    
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -95,36 +99,36 @@
     
     [self.locationManager startUpdatingLocation];
     
-    socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
-    [self.socialTipView addGestureRecognizer:socialTipTap];
+    self.socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    [self.socialTipView addGestureRecognizer:self.socialTipTap];
     
-    submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
-    [self.navigationController.toolbar addGestureRecognizer:submitTap];
+    self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
     self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
 
     if ([PFUser currentUser]) {
+        
         self.twitterButton.hidden = NO;
         self.facebookButton.hidden = NO;
+        
         self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
         self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
-        self.twitterHeightConstraint.constant = self.navigationController.toolbar.frame.size.height;
-
+        
         BOOL hideCrosspostingHelp = [defaults boolForKey:@"galleryPreviouslyPosted"];
+        
         self.socialTipView.hidden = hideCrosspostingHelp;
     }
     else {
         self.twitterButton.hidden = YES;
         self.facebookButton.hidden = YES;
         self.twitterHeightConstraint.constant = 0;
-
         self.socialTipView.hidden = YES;
     }
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
-    
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -141,9 +145,11 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
     [super viewDidAppear:animated];
     
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+   
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     
 }
@@ -154,8 +160,8 @@
     
     [self.locationManager stopUpdatingLocation];
     
-    [self.socialTipView removeGestureRecognizer:socialTipTap];
-    [self.navigationController.toolbar removeGestureRecognizer:submitTap];
+    [self.socialTipView removeGestureRecognizer:self.socialTipTap];
+    [self.navigationController.toolbar removeGestureRecognizer:self.submitTap];
     
     //Turn off any video
     [self disableVideo];
@@ -178,9 +184,8 @@
 
 - (void)setupButtons
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                                                                                           target:self
-                                                                                           action:@selector(returnToCamera:)];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonItemClicked:)];
 }
 
 - (void)configureControlsForUpload:(BOOL)upload
@@ -192,13 +197,30 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
 }
 
+
 #pragma mark - Navigational Methods
 
-- (void)returnToTabBar{
+-(void)rightBarButtonItemClicked:(id)sender{
+
+    [self returnToTabBarWithPrevious:YES];
+}
+
+/*
+** Returns to tab bar, takes option of returning to previously selected tab
+*/
+
+-(void)returnToTabBarWithPrevious:(BOOL)previous{
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
     
-    tabBarController.selectedIndex = 4;
+    if (previous) {
+        
+        tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+        
+    }
+    else {
+        tabBarController.selectedIndex = 4;
+    }
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -210,7 +232,7 @@
 
 #pragma mark - Outlet Actions
 
-- (IBAction)twitterButtonTapped:(CrossPostButton *)button
+- (IBAction)twitterButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -256,7 +278,7 @@
 
 }
 
-- (IBAction)facebookButtonTapped:(CrossPostButton *)button
+- (IBAction)facebookButtonTapped:(UISocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -308,13 +330,21 @@
 - (IBAction)linkAssignmentButtonTapped:(id)sender
 {
     if (self.defaultAssignment) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Remove Assignment"
-                                                        message:@"Are you sure you want remove this assignment?"
-                                                       delegate:self
-                                              cancelButtonTitle:CANCEL
-                                              otherButtonTitles:@"Remove", nil];
         
-        [alert show];
+        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+                                       alertControllerWithTitle:@"Remove Assignment"
+                                       message:@"Are you sure you want remove this assignment?"
+                                       action:CANCEL handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Remove" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
+            
+            [self showAssignment:NO];
+            
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+
     }
     else {
         [self showAssignment:NO];
@@ -385,19 +415,18 @@
 - (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
     _defaultAssignment = defaultAssignment;
-    [self configureAssignmentLabelForAssignment:defaultAssignment];
-}
-
-- (void)configureAssignmentLabelForAssignment:(FRSAssignment *)assignment
-{
+    
     self.linkAssignmentButton.hidden = NO;
-    if (assignment) {
-        NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", assignment.title]];
-        [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
-                             range:(NSRange){10, [titleString length] - 10}];
-        self.assignmentLabel.attributedText = titleString;
-        [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
-    }
+    
+    NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", _defaultAssignment.title]];
+    
+    [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
+                         range:(NSRange){10, [titleString length] - 10}];
+    
+    self.assignmentLabel.attributedText = titleString;
+    
+    [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+
 }
 
 - (void)configureAssignmentForLocation:(CLLocation *)location
@@ -405,8 +434,6 @@
     // TODO: Add support for expiring/expired assignments
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
         
-        self.assignments = responseObject;
-
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
             
@@ -414,7 +441,7 @@
             
             if(location != nil){
                 
-                for (FRSAssignment *assignment in self.assignments) {
+                for (FRSAssignment *assignment in responseObject) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.defaultAssignment = assignment;
                         [self showAssignment:YES];
@@ -426,21 +453,34 @@
 
         // No matching assignment found
         self.defaultAssignment = nil;
+        
     }];
 }
 
-- (void)showAssignment:(BOOL)show
-{
-    if (!show) {
-        self.defaultAssignment = nil;
-    }
+- (void)showAssignment:(BOOL)show{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if(show){
+            self.assignmentView.alpha = show ? 0 : 1;
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, -3);
+            self.assignmentView.hidden = !show;
+        }
+        
+        [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 
-    [UIView animateWithDuration:0.25 animations:^{
-        self.assignmentViewHeightConstraint.constant = show ? 40 : 0;
-        self.assignmentView.hidden = !show;
-        self.assignmentLabel.hidden = !show;
-        [self.view layoutIfNeeded];
-    }];
+            self.assignmentView.alpha = show ? 1 : 0;
+            self.assignmentView.frame = CGRectOffset(self.assignmentView.frame, 0, (show ? 3 : -3));
+       
+        } completion:^(BOOL finished) {
+            
+            if (!show) {
+                self.defaultAssignment = nil;
+            }
+            
+        }];
+        
+    });
 }
 
 #pragma mark - Toolbar Items
@@ -655,7 +695,7 @@
                 
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
-                [self returnToTabBar];
+                [self returnToTabBarWithPrevious:NO];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
@@ -708,7 +748,6 @@
 }
 
 #pragma mark - UITextViewDelegate methods
-
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -771,62 +810,34 @@
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
-                            CGFloat height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            
                             CGRect viewFrame = self.view.frame;
+                            
                             CGRect toolBarFrame = self.navigationController.toolbar.frame;
-                            
-                            CGRect viewFrameWhenKeyboardHides = CGRectMake(viewFrame.origin.x,
-                                                                           viewFrame.origin.y + height,
-                                                                           viewFrame.size.width,
-                                                                           viewFrame.size.height);
-                            
-                            CGRect viewFrameWhenKeyboardShows = CGRectMake(viewFrame.origin.x,
-                                                                           viewFrame.origin.y - height,
-                                                                           viewFrame.size.width,
-                                                                           viewFrame.size.height);
-                            
-                            
-                            CGRect toolBarFrameWhenKeyboardHides = CGRectMake(toolBarFrame.origin.x,
-                                                                              toolBarFrame.origin.y + height,
-                                                                              toolBarFrame.size.width,
-                                                                              toolBarFrame.size.height);
-                            
-                            CGRect toolBarFrameWhenKeyboardShows = CGRectMake(toolBarFrame.origin.x,
-                                                                              toolBarFrame.origin.y - height,
-                                                                              toolBarFrame.size.width,
-                                                                              toolBarFrame.size.height);
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 
-                                self.view.frame = viewFrameWhenKeyboardShows;
-                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardShows;
+                                viewFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                                 
-                                [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+                                toolBarFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                
+                                self.navigationController.toolbar.frame = toolBarFrame;
+                                
+                                self.view.frame = viewFrame;
                                 
                             }
-                            if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
-                                self.view.frame = viewFrameWhenKeyboardHides;
-                                self.navigationController.toolbar.frame = toolBarFrameWhenKeyboardHides;
+                            else if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
                                 
-                                [[NSNotificationCenter defaultCenter] addObserver:self
-                                                                         selector:@selector(keyboardWillShowOrHide:)
-                                                                             name:UIKeyboardWillShowNotification
-                                                                           object:nil];
+                                viewFrame.origin.y = 64;
+                                
+                                toolBarFrame.origin.y = [[UIScreen mainScreen] bounds].size.height - 44;
+                                
+                                self.navigationController.toolbar.frame = toolBarFrame;
+                                
+                                self.view.frame = viewFrame;
+                                
                             }
                             
-                            [self.view layoutIfNeeded];
                         } completion:nil];
-}
-
-
-#pragma mark - Alert View Delegate
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        [self showAssignment:NO];
-    }
 }
 
 #pragma mark - CLLocationManagerDelegate methods
@@ -836,7 +847,6 @@
     [self.locationManager stopUpdatingLocation];
     [self configureAssignmentForLocation:[locations lastObject]];
 }
-
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {

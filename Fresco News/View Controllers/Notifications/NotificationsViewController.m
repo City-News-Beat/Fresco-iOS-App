@@ -18,7 +18,7 @@
 #import <UIScrollView+SVInfiniteScrolling.h>
 #import "NotificationCell.h"
 #import "UIViewController+Additions.h"
-#import "MTLModel+Additions.h"
+#import "ProfilePaymentSettingsViewController.h"
 
 static NSString *NotificationCellIdentifier = @"NotificationCell";
 
@@ -53,6 +53,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 119;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     //Endless scroll handler
     [self.tableView addInfiniteScrollingWithActionHandler:^{
@@ -155,103 +156,16 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // since there is a section for every story
-    // and just one story per section
-    // the section will tell us the "row"
-    // NSUInteger index = indexPath.section;
-    
+
     //Get the notification from the data with index
     FRSNotification *notification = [[self notifications] objectAtIndex:[indexPath item]];
     
     NotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:NotificationCellIdentifier forIndexPath:indexPath];
     
-    //Set Values from notificaiton
-    cell.title.text = notification.title;
-    cell.eventName.text = notification.event;
-    cell.notificationDescription.text = notification.body;
-    cell.timeElapsed.text = [MTLModel relativeDateStringFromDate:notification.date];
-    
-    CGFloat timeTrailingConstant = 17.0;
-    
-    if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S)
-         timeTrailingConstant = 16.5;
-    
-    
-    if (IS_STANDARD_IPHONE_6_PLUS)
-        timeTrailingConstant = 20.0;
-    
-    cell.constraintTimeElapsedTrailing.constant = timeTrailingConstant;
-    
-    if(notification.seen == false){
-        cell.contentView.backgroundColor = [UIColor lightGoldCellColor];
-    }
-    
-//    //Check if assignment, then check if the assignment has expired
-    if([notification.type isEqualToString:@"assignment"]) {
-        
-        CGFloat button1Width = 147.5;
-        NSString *button1Title = VIEW_ASSIGNMENT;
-        
-        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S) {
-            button1Width = 120.72;
-            button1Title = VIEW;
-        }
-        
-        if (IS_STANDARD_IPHONE_6_PLUS)
-            button1Width = 165.0;
-        
-        cell.constraintButton1Width.constant = button1Width;
-        
-        [cell.firstButton setTitle:button1Title forState:UIControlStateNormal];
-        
-        [cell.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
-        
-        //Constant MUST BE SAME AS IN STORYBOARD CONSTRAINT
-        cell.constraintNotificationDescription.constant = 23.0f;
-        [cell updateConstraints];
-        
-    } else if ([notification.type isEqualToString:@"use"]) {
-
-        //3.0f is the space between the title and description
-        cell.constraintNotificationDescription.constant = 3.0f;
-        [cell updateConstraints];
-        
-        cell.secondButton.hidden = YES;
-        
-        CGFloat multiplier = 1.22;
-        
-        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6 || IS_IPHONE_4S)
-            multiplier = 1.263;
-        
-        if (IS_STANDARD_IPHONE_6_PLUS)
-            multiplier = 1.20;
-        
-        cell.constraintButton1Width.constant = self.view.frame.size.width / multiplier;
-        
-        if (!notification.meta[@"icon"]) {
-            [cell.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
-        }
-        
-        if([notification.meta[@"icon"] isKindOfClass:[NSString class]]) {
-            //FIXME: change string of imageNamed and change ifkindofclass to whether or not it's set
-            [cell.image setImageWithURL:[NSURL URLWithString:notification.meta[@"icon"]] placeholderImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
-        }
-    
-    }
-    
-    //UI Styling
-    cell.firstButton.layer.cornerRadius = 4;
-    cell.secondButton.layer.cornerRadius = 4;
-    
-    cell.firstButton.clipsToBounds = YES;
-    cell.secondButton.clipsToBounds = YES;
-
-    cell.firstButton.layer.borderWidth = 1.0;
-    cell.firstButton.layer.borderColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:.08].CGColor;
-    cell.secondButton.layer.borderWidth = 1.0;
-    cell.secondButton.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.08].CGColor;
+    [cell setNotification:notification];
     
     return cell;
+    
 }
 
 #pragma mark - UITableViewDelegate and Actions
@@ -261,7 +175,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 // for some items. By default, all items are editable.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 // Override to support editing the table view.
@@ -348,7 +262,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         }];
         
     }
-    else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:@"breaking"] ){
+    else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:NOTIF_BREAKING] ){
         
         //Get assignment and navigate to on assignments view
         [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery"] WithResponseBlock:^(id responseObject, NSError *error) {
@@ -382,7 +296,11 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
         }];
         
     }
-    else if([notification.type isEqualToString:@"social"]){
+    else if([notification.type isEqualToString:@"payment"]){
+        
+        ProfilePaymentSettingsViewController *paymentSettings = [[ProfilePaymentSettingsViewController alloc] init];
+        
+        [self.navigationController pushViewController:paymentSettings animated:YES];
         
     }
 

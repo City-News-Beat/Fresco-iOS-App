@@ -9,10 +9,14 @@
 @import UIKit;
 @class FRSGallery;
 
-@interface GalleryHeader : UITableViewCell
+@interface GalleryHeader : UIView
+
+@property (nonatomic, weak) IBOutlet UIView *view;
 
 + (NSString *)identifier;
 
 - (void)setGallery:(FRSGallery *)gallery;
+
+@property (nonatomic, strong) FRSGallery *gallery;
 
 @end

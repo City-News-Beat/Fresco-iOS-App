@@ -23,6 +23,7 @@
 #import "PostCollectionViewCell.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import "FRSRefreshControl.h"
 
 @interface GalleriesViewController ()
 
@@ -51,6 +52,11 @@
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
 
+/*
+ ** Child table view controller
+ */
+
+@property (nonatomic) UITableViewController *tableViewController;
 
 @end
 
@@ -61,23 +67,19 @@
     [super viewDidLoad];
     
     /* Table View Setup */
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     /* Refresh Control Setup */
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    
-    self.refreshControl.alpha = .54;
-    [self.refreshControl addTarget:self action:@selector(refresh)
-                  forControlEvents:UIControlEventValueChanged];
-    [self.refreshControl setTintColor:[[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:0.54]];
-    [self.tableView addSubview:self.refreshControl];
-    
+    self.refreshControl = [[FRSRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    self.tableViewController.refreshControl = self.refreshControl;
+
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
-
     
 }
 
@@ -89,9 +91,6 @@
     //Reset playing index for a fresh load
     self.playingIndex = nil;
     
-    //Set delegate, reset in `viewWillDisappear`
-    self.tableView.delegate = self;
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -100,9 +99,6 @@
     
     //Turn off any video
     [self disableVideo];
-    
-    //Disable delegate, turned back on in `viewWillAppear`
-    self.tableView.delegate = nil;
     
 }
 
@@ -136,7 +132,7 @@
 - (void)reloadData{
 
     [self.tableView reloadData];
-//    [self checkForVideo];
+
 }
 
 /*
@@ -205,13 +201,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 36;
+    return 32;
 }
 
--(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    GalleryHeader *galleryHeader = [tableView dequeueReusableCellWithIdentifier:[GalleryHeader identifier]];
-
+    GalleryHeader *galleryHeader = [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, tableView.rowHeight)];
+        
     galleryHeader.gallery = [self.galleries objectAtIndex:section];
     
     return galleryHeader;
@@ -267,7 +263,6 @@
 }
 
 #pragma mark - Video Conditioning
-
 
 /*
 ** Video Conditioning
@@ -365,7 +360,6 @@
 
 }
 
-
 #pragma mark - Gallery Table View Cell Delegate
 
 - (void)readMoreTapped:(FRSGallery *)gallery{
@@ -431,12 +425,11 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
+{    if ([[segue identifier] isEqualToString:@"embedProfileHeader"]) {
 
-            ProfileHeaderViewController *phvc = [segue destinationViewController];
-            self.profileHeaderViewController = phvc;
-            self.tableView.tableHeaderView.frame = phvc.view.bounds;
+        ProfileHeaderViewController *phvc = [segue destinationViewController];
+        self.profileHeaderViewController = phvc;
+        self.tableView.tableHeaderView.frame = phvc.view.bounds;
     }
 }
 

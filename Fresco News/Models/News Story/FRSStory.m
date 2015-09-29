@@ -21,7 +21,6 @@
              @"title" : @"title",
              @"caption" : @"caption",
              @"tags" : @"tags",
-             @"galleryIds" : @"galleries",
              @"articleIds" : @"articles",
              @"thumbnails" : @"thumbnails",
              @"createdTime" : @"time_created",

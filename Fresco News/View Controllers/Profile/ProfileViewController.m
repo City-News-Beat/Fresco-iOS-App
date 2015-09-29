@@ -48,7 +48,7 @@
         if(self.disableEndlessScroll){
         
             // append data to data source, insert new cells at the end of table view
-            NSNumber *num = [NSNumber numberWithInteger:[[self galleries] count]];
+            NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
             
             [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
                 if (!error) {
@@ -97,7 +97,6 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_PROFILE];
     }
-
     if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
         [self performNecessaryFetch:YES withResponseBlock:nil];
@@ -105,7 +104,6 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_USER_GALLERIES];
     
     }
-
 }
 
 /*
@@ -234,9 +232,7 @@
             [self.view addSubview:self.noContentLabelSmall];
             
         }
-
     }
-
 }
 
 #pragma mark - UITapGestureRecognizer
@@ -256,7 +252,6 @@
     {
         // Get reference to the destination view controller
         self.galleriesViewController = [segue destinationViewController];
-        self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:self.galleries];
         self.galleriesViewController.containingViewController = self;
     }
 }

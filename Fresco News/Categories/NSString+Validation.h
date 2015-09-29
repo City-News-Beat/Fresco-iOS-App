@@ -14,4 +14,8 @@
 
 - (BOOL)isValidPassword;
 
++ (NSString *)formatCreditCard:(NSString *)input;
+
++ (NSString *)formatCreditCardExpiry:(NSString *)input;
+
 @end

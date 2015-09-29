@@ -13,13 +13,19 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
+#import <DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate, FRSBackButtonDelegate>
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
 @property (nonatomic) NSArray *stepperSteps;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
+@property (assign, nonatomic) BOOL ranUserUpdate;
+
+@property (strong, nonatomic) DBImageColorPicker *picker;
 
 - (IBAction)doneButtonTapped:(id)sender;
 
@@ -66,6 +72,7 @@
 {
     FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
     backButton.delegate = nil;
+
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
@@ -94,19 +101,30 @@
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
-    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value * kMetersInAMile];
+    
+    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value];
 }
 
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+    if(!self.ranUserUpdate){
+        [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
+        self.ranUserUpdate = YES;
+    }
+
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
-    return [MKMapView circleRenderWithColor:[UIColor frescoBlueColor] forOverlay:overlay];
+    return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
+}
+
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    
+    return [self.mapView setupUserPinForAnnotation:annotation];
+    
 }
 
 #pragma mark - Utility methods
@@ -133,6 +151,7 @@
                 [self navigateToMainApp];
             else{
                 [self dismissViewControllerAnimated:YES completion:nil];
+                
             }
         
         }
@@ -142,6 +161,8 @@
 
 - (IBAction)doneButtonTapped:(id)sender {
     [self save];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadAssignments" object:nil];
 }
 
 

@@ -4,7 +4,7 @@
 
 - (void)setFrescoNavigationBar;
 
-- (void)goToNotifications:(UIBarButtonItem *)sender;
+- (void)showNotifications;
 
 - (void)hideNotifications:(NSNotification *)notification;
 
