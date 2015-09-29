@@ -29,6 +29,7 @@
         self.titleLabel.textColor = [UIColor whiteColor];
         self.backgroundColor = [UIColor disabledSaveColor];
         [self setTitle:passedTitle forState:UIControlStateNormal];
+        [self configureSpinner];
     }
     
     return self;
@@ -55,15 +56,10 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            // CATransition defaults to fade
-            CATransition *fade = [CATransition animation];
-            fade.duration = .2;
-            
-            [self.layer addAnimation:fade forKey:@"titleFade"];
-            
             [self setTitle:@"" forState:UIControlStateNormal];
             
             [self.saveProgressView startAnimating];
+            self.saveProgressView.alpha = 1;
 
         });
         
@@ -76,7 +72,7 @@
                 self.saveProgressView.alpha = 0;
             }completion:^(BOOL finished) {
                 [self.saveProgressView stopAnimating];
-                [self.saveProgressView removeFromSuperview];
+                self.saveProgressView.alpha = 0;
                 [self setTitle:self.title forState:UIControlStateNormal];
             }];
 

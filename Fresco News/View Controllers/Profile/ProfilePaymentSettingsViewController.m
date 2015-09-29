@@ -86,7 +86,6 @@
     
     if(self){
         
-        self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
         self.view.frame = [[UIScreen mainScreen] bounds];
         self.hidesBottomBarWhenPushed = YES;
         self.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
@@ -117,8 +116,7 @@
     self.containerView.clipsToBounds = YES;
     
     /* CardIO View */
-    self.cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -120, self.view.frame.size.width, 500)];
-    self.cardIOView.backgroundColor = [UIColor clearColor];
+    self.cardIOView = [self createCardIOView];
     [self.containerView  addSubview:self.cardIOView];
     
     /* Text Fields */
@@ -154,12 +152,13 @@
     [self.dobbyPicker setMinimumDate:minDate];
     
     /* Message Label */
-    UILabel *userLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x, CGRectGetMaxY(self.dobbyPickerLabel.frame) + 20, 0, 10)];
+    UILabel *userLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 10)];
     userLabel.text = PAYMENT_MESSSAGE;
     userLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
     userLabel.textColor = [UIColor textHeaderBlackColor];
     userLabel.textAlignment = NSTextAlignmentCenter;
     [userLabel sizeToFit];
+    userLabel.center = CGPointMake(self.view.center.x, CGRectGetMaxY(self.dobbyPickerLabel.frame) + 20);
 
     [self.view addSubview:userLabel];
     [self.view addSubview:self.saveCardButton];
@@ -172,14 +171,11 @@
     
     [super viewDidLoad];
     
-    self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
-    
     [self.saveCardButton addTarget:self action:@selector(saveCardAction:) forControlEvents:UIControlEventTouchUpInside];
     
-//    UITapGestureRecognizer *recg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-//    recg.delegate = self;
-//    
-//    [self.view addGestureRecognizer:recg];
+    UITapGestureRecognizer *recg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:recg];
     
     // Do any additional setup after loading the view.
     if (![CardIOUtilities canReadCardWithCamera]) {
@@ -200,11 +196,11 @@
         
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
 
-    [super viewDidAppear:animated];
-    
     [CardIOUtilities preload];
+    
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -213,6 +209,16 @@
 }
 
 #pragma mark - UI Functions
+
+- (CardIOView *)createCardIOView{
+
+    /* CardIO View */
+    CardIOView *cardView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -120, self.view.frame.size.width, 500)];
+    cardView.backgroundColor = [UIColor clearColor];
+    
+    return cardView;
+    
+}
 
 /*
 ** Configures all text fields
@@ -331,8 +337,14 @@
 
 - (void)checkPaymentForm{
     
-    if(self.cardNumberField.text.length >= 18 && self.expireField.text.length == 7 && self.CCVField.text.length >= 2 && self.pickerSelected)
+    //Removing white space in case the number isn't formatted with spaces
+    if([self.cardNumberField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length >= 16
+       && self.expireField.text.length == 7
+       && self.CCVField.text.length >= 2
+       && self.pickerSelected
+       ){
         [self.saveCardButton updateSaveState:SaveStateEnabled];
+    }
     else
         [self.saveCardButton updateSaveState:SaveStateDisabled];
 
@@ -341,8 +353,6 @@
 #pragma mark UI Actions
 
 - (void)saveCardAction:(id)sender {
-    
-    [self.saveCardButton toggleSpinner];
     
     //Create the STPCard Object
     STPCard *card = [[STPCard alloc] init];
@@ -364,6 +374,8 @@
 
         if (!error && token) {
             
+            [self.saveCardButton toggleSpinner];
+    
             NSDictionary *params = @{
                                      @"token" : token.tokenId,
                                      @"dob_day" : day,
@@ -373,23 +385,36 @@
             
             [[FRSDataManager sharedManager] updateUserPaymentInfo:params block:^(id responseObject, NSError *error) {
             
-                [self.saveCardButton toggleSpinner];
-                
-                if([responseObject valueForKeyPath:@"data.last4"] != nil){//Succeeded
+                if([responseObject valueForKeyPath:@"data.last4"] != nil && !error){//Succeeded
                     
                     [[NSUserDefaults standardUserDefaults] setValue:[responseObject valueForKeyPath:@"data.last4"] forKey:UD_LAST4];
                     
+                    //Update current user to set as payable
+                    [FRSDataManager sharedManager].currentUser.payable = [NSNumber numberWithInteger:1];
+                    
                     [self.navigationController popViewControllerAnimated:YES];
+                    
+                    [self.saveCardButton toggleSpinner];
+                    
                 
                 }
                 else{ //Failed to update
+                    
+                    NSString *errorMsg;
+                    
+                    //Check if we have a localzied error from the DB
+                    if([((NSDictionary *)responseObject[@"err"]) objectForKey:@"message"] != nil)
+                        errorMsg = [((NSDictionary *)responseObject[@"err"]) objectForKey:@"message"];
+                    else
+                        errorMsg = @"We couldn't save your payment info. Please try again later.";
                 
                     [self presentViewController:[[FRSAlertViewManager sharedManager]
                                                  alertControllerWithTitle:@"Error saving payment info"
-                                                 message:@"We couldn't save your payment info. Please try again later." action:DISMISS]
+                                                 message:errorMsg action:DISMISS]
                                        animated:YES
                                      completion:nil];
                 
+                    [self.saveCardButton toggleSpinner];
                 }
                 
             }];
@@ -419,7 +444,7 @@
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0.3
+                          delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
                             CGRect viewFrame = self.view.frame;
@@ -506,7 +531,6 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if ([touch.view isKindOfClass:[UIButton class]]){ //It can work for any class you do not want to receive touch
-        [self saveCardAction:nil];
         return NO;
     }
     else
@@ -640,9 +664,15 @@
 
         self.CCVField.text = info.cvv;
         
+        [self checkPaymentForm];
+        
+        [self.cardIOView removeFromSuperview];
+        self.cardIOView = [self createCardIOView];
+        [self.containerView addSubview:self.cardIOView];
+        self.cardIOView.delegate = self;
+        self.cardIOView.hidden = NO;
+        
     }
-    
-    cardIOView.hidden = YES;
 
 }
 
