@@ -207,8 +207,8 @@
 
 /* Begin PBXFileReference section */
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
-		07535A491BBB03A500AD604C /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBackButton.h; path = Views/FRSBackButton.h; sourceTree = "<group>"; };
-		07535A4A1BBB03A500AD604C /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBackButton.m; path = Views/FRSBackButton.m; sourceTree = "<group>"; };
+		07535A491BBB03A500AD604C /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBackButton.h; sourceTree = "<group>"; };
+		07535A4A1BBB03A500AD604C /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBackButton.m; sourceTree = "<group>"; };
 		07535A4C1BBB054600AD604C /* UIImageView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Additions.h"; sourceTree = "<group>"; };
 		07535A4D1BBB054600AD604C /* UIImageView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Additions.m"; sourceTree = "<group>"; };
 		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
@@ -862,8 +862,6 @@
 				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
 				BC1CA8B91BA72F3300DDB9FB /* CALayer+Additions.h */,
 				BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */,
-				07535A491BBB03A500AD604C /* FRSBackButton.h */,
-				07535A4A1BBB03A500AD604C /* FRSBackButton.m */,
 				07535A4C1BBB054600AD604C /* UIImageView+Additions.h */,
 				07535A4D1BBB054600AD604C /* UIImageView+Additions.m */,
 			);
@@ -1127,6 +1125,8 @@
 				E79ACC601BB45586005EF7E6 /* FRSSaveButton.m */,
 				E79ACC631BB46DD5005EF7E6 /* FRSLabel.h */,
 				E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */,
+				07535A491BBB03A500AD604C /* FRSBackButton.h */,
+				07535A4A1BBB03A500AD604C /* FRSBackButton.m */,
 			);
 			name = FRSKit;
 			sourceTree = "<group>";

@@ -41,10 +41,6 @@
 @property (strong, nonatomic) IBOutlet UIView *onboard2View;
 @property (strong, nonatomic) IBOutlet UIView *onboard3View;
 
-
-
-
-
 @end
 
 @implementation OnboardPageCellController
@@ -114,26 +110,20 @@
     if(self.animationState == AnimationStateOne){
         [self setUpOnboard1];
         [self animateOnboard1];
-        //        NSLog (@"%lu", (unsigned long)self.animationState);
         
     }
     
     if(self.animationState == AnimationStateTwo){
         [self setUpOnboard2];
         [self animateOnboard2];
-        //        NSLog (@"%lu", (unsigned long)self.animationState);
-        
         
     }
     
     if(self.animationState == AnimationStateThree){
         [self setUpOnboard3];
         [self animateOnboard3];
-        //        NSLog (@"%lu", (unsigned long)self.animationState);
         
     }
-    
-    
     
     //Show "Done" on the last view
     if(self.animationState == 2){
@@ -236,6 +226,7 @@
     
 }
 
+
 - (void)setUpOnboard2 {
     
     
@@ -265,6 +256,7 @@
     [self.onboard1View addSubview:self.camera];
     
 }
+
 
 - (void)setUpOnboard3 {
     
@@ -342,6 +334,7 @@
     
 }
 
+
 - (void)setUpViews {
     
     if (IS_STANDARD_IPHONE_6) {
@@ -367,8 +360,6 @@
 - (void)animateOnboard1 {
     
     self.earth.alpha = 1;
-    
-    
     self.assignmentTopLeft.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
@@ -500,6 +491,7 @@
 
 - (void)animateOnboard2 {
     
+    //Animation pending
     self.cloud.alpha = 1;
     self.upload.alpha = 1;
     self.camera.alpha = 1;
@@ -508,8 +500,7 @@
 
 - (void)animateOnboard3 {
     
-    self.earth.alpha = 1;
-    
+//    self.earth.alpha = 1;
     self.greyCloud.alpha = 1;
     self.television.alpha = 1;
     self.newspaper.alpha = 1;

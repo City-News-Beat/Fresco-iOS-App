@@ -19,8 +19,6 @@ typedef enum : NSUInteger {
 
 @property (strong, nonatomic) NSMutableArray *galleries;
 
-//@property (strong, nonatomic) FRSBackButton *back;
-
 /* Spinner */
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
