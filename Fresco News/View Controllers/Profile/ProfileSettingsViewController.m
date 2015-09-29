@@ -107,6 +107,7 @@ typedef enum : NSUInteger {
     [self.textfieldLast addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.textfieldEmail addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.textfieldNewPassword addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.addCardButton setTitleColor:[UIColor textInputBlackColor] forState:UIControlStateHighlighted];
     
     // Radius slider values
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
@@ -189,7 +190,7 @@ typedef enum : NSUInteger {
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
     caret.contentMode = UIViewContentModeScaleAspectFit;
     caret.frame = CGRectMake(
-                             CGRectGetMaxX(self.addCardButton.frame) - 30,
+                             [[UIScreen mainScreen] bounds].size.width - 30,
                              (self.addCardButton.frame.size.height / 2) - 7.5,
                              15,
                              15
@@ -510,9 +511,10 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
-/*
-** Updates state of "Add Card" button
-*/
+
+/**
+ *  Updates the state of the card button
+ */
 
 - (void)updateAddCardButton{
     
@@ -546,7 +548,7 @@ typedef enum : NSUInteger {
             self.addCardButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15.5];
             
             UILabel *newCardLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                              (self.addCardButton.frame.size.height / 2) - 10.5,
+                                                                              0,
                                                                               0,
                                                                               15
                                                                               )];
@@ -555,8 +557,8 @@ typedef enum : NSUInteger {
             newCardLabel.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:15.5];
             [newCardLabel sizeToFit];
             [newCardLabel setFrame:CGRectOffset(newCardLabel.frame,
-                                                CGRectGetMaxX(self.addCardButton.frame) - 110,
-                                                0)];
+                                                [[UIScreen mainScreen] bounds].size.width  - (newCardLabel.frame.size.width * 1.6),
+                                                (self.addCardButton.frame.size.height / 2) - 10.5)];
             
             [self.addCardButton addSubview:newCardLabel];
             
