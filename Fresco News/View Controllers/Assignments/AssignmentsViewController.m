@@ -229,14 +229,18 @@
             self.operatingRadius = 0;
             
             self.detailViewWrapper.hidden = NO;
+     
+            CGRect newFrame = CGRectMake(
+                                         0,
+                                         0,
+                                         self.detailViewWrapper.frame.size.width,
+                                         self.detailViewWrapper.frame.size.height);
             
-            CGRect newFrame = CGRectMake(0, 0, self.detailViewWrapper.frame.size.width, self.detailViewWrapper.frame.size.height);
-            
-            [UIView animateWithDuration:.4 animations:^(void) {
+            [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
                 
                 [self.detailViewWrapper setFrame:newFrame];
                 
-            }];
+            } completion:nil];
             
             if(self.navigateTo) [self.navigationSheet showInView:self.view];
             
@@ -313,17 +317,16 @@
                                 
                             }
                             
-                            if(copy.count > 0 || copy == nil || self.assignments.count == 0 || self.assignments == nil){
+                            if(copy.count > 0
+                               || self.assignments.count == 0
+                               || self.assignments == nil
+                               || ([self.assignments count] +1) > [self.assignmentsMap.annotations count])
+                            {
                                 
                                 self.assignments = responseObject;
                                 
                                 [self populateMapWithAnnotations];
                             
-                            }
-                            else if(([self.assignments count] +1) > [self.assignmentsMap.annotations count]){
-                            
-                                [self populateMapWithAnnotations];
-                                
                             }
                             
                         }
@@ -378,7 +381,7 @@
 
     NSUInteger count = 0;
     
-    if(_viewingClusters){
+    if(self.viewingClusters){
         
         [self clearMapAnnotations];
         
@@ -395,11 +398,7 @@
         
             for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
                 
-                if ([annotation isKindOfClass:[ClusterAnnotation class]]){
-                    
-                    [self.assignmentsMap removeAnnotation:annotation];
-                    
-                }
+                [self.assignmentsMap removeAnnotation:annotation];
                 
             }
              
@@ -545,7 +544,10 @@
         if([self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] != nil){
         
             //Set the current assignment
-            [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] navigateTo:NO present:YES withAnimation:YES];
+            [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex]
+                            navigateTo:NO
+                               present:YES
+                         withAnimation:YES];
             
         }
         
@@ -564,8 +566,6 @@
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
 
-    [mapView deselectAnnotation:view.annotation animated:YES];
-    
     self.currentAssignment = nil;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -575,7 +575,7 @@
                                      self.detailViewWrapper.frame.size.width,
                                      self.detailViewWrapper.frame.size.height);
         
-        [UIView animateWithDuration:.4 animations:^(void) {
+        [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
             
             [self.detailViewWrapper setFrame:newFrame];
             
@@ -608,6 +608,9 @@
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
     NSLog(@"Failed to locate user: %@", error);
+    
+    //Set to YES because user location can't be found
+    self.centeredUserLocation = YES;
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
@@ -656,9 +659,7 @@
                     float avgLat = 0;
                     
                     float avgLng = 0;
-                    
-                    self.assignments = responseObject;
-                    
+
                     //Add up lat/lng
                     for(FRSAssignment *assignment in self.assignments){
                         
@@ -684,6 +685,10 @@
                     [self.assignmentsMap setRegion:regionThatFits animated:YES];
                     
                     self.centeredUserLocation = YES;
+                    
+                    self.assignments = responseObject;
+                    
+                    [self populateMapWithAnnotations];
                     
                 }
                 
