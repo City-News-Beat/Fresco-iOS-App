@@ -24,6 +24,7 @@
 #import "FRSRootViewController.h"
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
+#import <Stripe.h>
 
 @interface AppDelegate ()
 
@@ -131,14 +132,18 @@
 - (void)configureAppWithLaunchOptions:(NSDictionary *)launchOptions
 {
     
-//    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
     [Fabric with:@[CrashlyticsKit]];
+    
+    [Stripe setDefaultPublishableKey:STRIPE_PUBLISHABLE_KEY];
 
     [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
     
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
                                consumerSecret:TWITTER_CONSUMER_SECRET];
+    
 }
 
 - (void)registerForPushNotifications
