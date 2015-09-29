@@ -107,16 +107,20 @@
     
     [super viewWillAppear:animated];
 
-    //Configure radius banner
-    if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
-            self.storyBreaksView.hidden = NO;
+        //Configure radius banner
+        if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+            
+            if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
+                self.storyBreaksView.hidden = NO;
+            else
+                self.storyBreaksView.hidden = YES;
+        }
         else
             self.storyBreaksView.hidden = YES;
-    }
-    else
-        self.storyBreaksView.hidden = YES;
+        
+    });
     
     
     if (!self.picker)

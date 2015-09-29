@@ -172,7 +172,7 @@
     }
     else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
         //Zoom to location
-        [((AssignmentsViewController *)vc) setCenteredUserLocation:NO];
+        ((AssignmentsViewController *)vc).centeredUserLocation = NO;
         [((AssignmentsViewController *)vc) zoomToCurrentLocation];
         return NO;
     }
