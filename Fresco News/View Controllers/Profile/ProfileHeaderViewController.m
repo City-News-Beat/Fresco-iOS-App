@@ -107,7 +107,7 @@
 -(void)handleSingleTap {
     
     //Make sure we're connected first
-    if([[FRSDataManager sharedManager] connected]){
+    if([[FRSDataManager sharedManager] connected] && [[FRSDataManager sharedManager] currentUserIsLoaded]){
         
         ProfileSettingsViewController *pVC = [[ProfileSettingsViewController alloc] initWithNibName:@"ProfileSettingsViewController" bundle:nil];
         pVC.hidesBottomBarWhenPushed = YES;
