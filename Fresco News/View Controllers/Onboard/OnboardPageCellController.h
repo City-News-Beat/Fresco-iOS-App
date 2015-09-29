@@ -19,31 +19,34 @@ typedef enum : NSUInteger {
 @interface OnboardPageCellController : UIViewController
 
 /*
-** Custom initializer for animation state property
-*/
+ ** Custom initializer for animation state property
+ */
 
 -(id)initWithAnimationState:(AnimationState)state;
-    
+
 /*
-** Current animation state
-*/
+ ** Current animation state
+ */
 
 @property (assign, nonatomic) AnimationState animationState;
 
+/*
+ ** Onboard Assets
+ */
 
-// Onboard 1 assets
+// Page 1
 @property (strong, nonatomic) UIImageView *earth;
 @property (strong, nonatomic) UIImageView *assignmentTopLeft;
 @property (strong, nonatomic) UIImageView *assignmentBottomLeft;
 @property (strong, nonatomic) UIImageView *assignmentTopRight;
 @property (strong, nonatomic) UIImageView *assignmentBottomRight;
 
-// Onboard 2 assets
+// Page 2
 @property (strong, nonatomic) UIImageView *cloud;
 @property (strong, nonatomic) UIImageView *upload;
 @property (strong, nonatomic) UIImageView *camera;
 
-// Onboard 3 assets
+// Page 3
 @property (strong, nonatomic) UIImageView *greyCloud;
 @property (strong, nonatomic) UIImageView *television;
 @property (strong, nonatomic) UIImageView *newspaper;
@@ -54,5 +57,6 @@ typedef enum : NSUInteger {
 @property (strong, nonatomic) UIImageView *cash3;
 
 
+- (void)performAnimation;
 
 @end

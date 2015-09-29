@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07535A4B1BBB03A500AD604C /* FRSBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4A1BBB03A500AD604C /* FRSBackButton.m */; };
+		07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4D1BBB054600AD604C /* UIImageView+Additions.m */; };
 		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
 		0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
@@ -99,7 +101,7 @@
 		BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */; };
 		BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = BCB74A5F1BA9FDE1002B18A6 /* FRSMKCircle.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
-		BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */; settings = {ASSET_TAGS = (); }; };
+		BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */; };
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
 		E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
@@ -133,15 +135,15 @@
 		E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
-		E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */; settings = {ASSET_TAGS = (); }; };
+		E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */; };
 		E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */; };
 		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
 		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E786ED371BA74F7C00816A06 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
-		E79ACC611BB45586005EF7E6 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC601BB45586005EF7E6 /* FRSSaveButton.m */; settings = {ASSET_TAGS = (); }; };
-		E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */; settings = {ASSET_TAGS = (); }; };
+		E79ACC611BB45586005EF7E6 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC601BB45586005EF7E6 /* FRSSaveButton.m */; };
+		E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
@@ -205,6 +207,10 @@
 
 /* Begin PBXFileReference section */
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
+		07535A491BBB03A500AD604C /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBackButton.h; path = Views/FRSBackButton.h; sourceTree = "<group>"; };
+		07535A4A1BBB03A500AD604C /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBackButton.m; path = Views/FRSBackButton.m; sourceTree = "<group>"; };
+		07535A4C1BBB054600AD604C /* UIImageView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Additions.h"; sourceTree = "<group>"; };
+		07535A4D1BBB054600AD604C /* UIImageView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Additions.m"; sourceTree = "<group>"; };
 		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
 		0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
 		0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
@@ -856,6 +862,10 @@
 				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
 				BC1CA8B91BA72F3300DDB9FB /* CALayer+Additions.h */,
 				BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */,
+				07535A491BBB03A500AD604C /* FRSBackButton.h */,
+				07535A4A1BBB03A500AD604C /* FRSBackButton.m */,
+				07535A4C1BBB054600AD604C /* UIImageView+Additions.h */,
+				07535A4D1BBB054600AD604C /* UIImageView+Additions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1515,6 +1525,7 @@
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
+				07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
@@ -1522,6 +1533,7 @@
 				1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */,
 				BC4D2DEF1B9754ED00E6026B /* FRSMotionManager.m in Sources */,
 				1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */,
+				07535A4B1BBB03A500AD604C /* FRSBackButton.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
