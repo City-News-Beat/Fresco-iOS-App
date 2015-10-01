@@ -19,7 +19,7 @@
 #import "CameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
@@ -237,7 +237,7 @@
 
 #pragma mark - Outlet Actions
 
-- (IBAction)twitterButtonTapped:(UISocialButton *)button
+- (IBAction)twitterButtonTapped:(FRSSocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -283,7 +283,7 @@
 
 }
 
-- (IBAction)facebookButtonTapped:(UISocialButton *)button
+- (IBAction)facebookButtonTapped:(FRSSocialButton *)button
 {
     [self updateSocialTipView];
     

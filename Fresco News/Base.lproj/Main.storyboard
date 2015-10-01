@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fw0-52-MVd">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -128,7 +127,7 @@
                             <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sp5-6N-XZe" customClass="ScrollViewWithPassthrough">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ure-nI-UMR" userLabel="Detail View">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="109"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Title" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
@@ -145,7 +144,7 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" misplaced="YES" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" text="Assignment Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7y8-HL-DmS">
                                                 <rect key="frame" x="16" y="53" width="576" height="19"/>
                                                 <animations/>
                                                 <constraints>
@@ -344,7 +343,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isw-ZN-cA3">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="6DA7D839-1D8B-41E0-9466-D649A7432F67" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="7D2354D9-BEFE-4FB6-B335-86CC59E33431" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
                                                             <rect key="frame" x="19" y="11" width="20" height="20"/>
                                                             <animations/>
                                                             <constraints>
@@ -1030,7 +1029,7 @@
                                             <constraint firstAttribute="height" constant="1" id="HkO-vg-YzR"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ho-7Z-PBc" userLabel="Facebook" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ho-7Z-PBc" userLabel="Facebook" customClass="FRSSocialButton">
                                         <rect key="frame" x="193" y="9" width="167" height="46.5"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
@@ -1053,7 +1052,7 @@
                                             <action selector="facebookLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="pWf-Oh-k4K"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5E-sx-gRe" userLabel="Twitter" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s5E-sx-gRe" userLabel="Twitter" customClass="FRSSocialButton">
                                         <rect key="frame" x="15" y="9" width="167" height="47"/>
                                         <color key="backgroundColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -1618,7 +1617,7 @@
                                                 <outlet property="pageControl" destination="eEX-m1-oJQ" id="0Sn-ch-g6A"/>
                                             </connections>
                                         </view>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-f3-yoP" userLabel="Gallery Button">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-f3-yoP" userLabel="Gallery Button">
                                             <rect key="frame" x="0.0" y="372" width="600" height="45"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbc-jU-PKd" userLabel="Read More">
@@ -2556,10 +2555,10 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWC-lh-H2g" userLabel="Twitter" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWC-lh-H2g" userLabel="Twitter" customClass="FRSSocialButton">
                                         <rect key="frame" x="15" y="9" width="166" height="46"/>
-                                        <color key="backgroundColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                         <animations/>
+                                        <color key="backgroundColor" red="0.33333333333333331" green="0.67450980392156867" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="83:23" id="3T7-Da-0PY"/>
                                             <constraint firstAttribute="width" secondItem="bWC-lh-H2g" secondAttribute="height" multiplier="83:23" id="DtD-G8-CJv"/>
@@ -2585,7 +2584,7 @@
                                             <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dyy-Xz-2TG" userLabel="Facebook" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dyy-Xz-2TG" userLabel="Facebook" customClass="FRSSocialButton">
                                         <rect key="frame" x="192" y="9" width="166" height="46"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -2706,7 +2705,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="253" misplaced="YES" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="JKE-q2-wd3">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="253" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="JKE-q2-wd3">
                                 <rect key="frame" x="86" y="53" width="204" height="71"/>
                                 <animations/>
                                 <constraints>
@@ -3310,10 +3309,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="6DA7D839-1D8B-41E0-9466-D649A7432F67" width="20" height="20">
+        <image name="7D2354D9-BEFE-4FB6-B335-86CC59E33431" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
-YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
-GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
+YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
+GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
 c1dOU0NvbG9ygAKADRIgwAAAgAOAC1h7MjAsIDIwfdIVChYYWk5TLm9iamVjdHOhF4AEgArSFQoaHaIb
 HIAFgAaACRAA0iAKISJfEBROU1RJRkZSZXByZXNlbnRhdGlvboAHgAhPEQ6uTU0AKgAABkgQDAMRsYEg
 sv66MP/+uzD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//rsw
@@ -3379,12 +3378,12 @@ ZQBsAHMAZXRleHQAAAAAQ29weXJpZ2h0IDIwMDcgQXBwbGUgSW5jLiwgYWxsIHJpZ2h0cyByZXNlcnZl
 ZC4AWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAdE0AAD3uAAAD0FhZWiAAAAAAAABadQAArHMA
 ABc0WFlaIAAAAAAAACgaAAAVnwAAuDZjdXJ2AAAAAAAAAAEBzQAAc2YzMgAAAAAAAQxCAAAF3v//8yYA
 AAeSAAD9kf//+6L///2jAAAD3AAAwGzSJSYnKFokY2xhc3NuYW1lWCRjbGFzc2VzXxAQTlNCaXRtYXBJ
-bWFnZVJlcKMnKSpaTlNJbWFnZVJlcFhOU09iamVjdNIlJiwtV05TQXJyYXmiLCrSJSYvMF5OU011dGFi
-bGVBcnJheaMvLCrTMjMKNDU2V05TV2hpdGVcTlNDb2xvclNwYWNlRDAgMAAQA4AM0iUmODlXTlNDb2xv
-cqI4KtIlJjs8V05TSW1hZ2WiOypfEA9OU0tleWVkQXJjaGl2ZXLRP0BUcm9vdIABAAgAEQAaACMALQAy
-ADcARgBMAFcAXgBlAHIAeQCBAIMAhQCKAIwAjgCXAJwApwCpAKsArQCyALUAtwC5ALsAvQDCANkA2wDd
-D48PlA+fD6gPuw+/D8oP0w/YD+AP4w/oD/cP+xACEAoQFxAcEB4QIBAlEC0QMBA1ED0QQBBSEFUQWgAA
-AAAAAAIBAAAAAAAAAEEAAAAAAAAAAAAAAAAAABBcA
+bWFnZVJlcKMpKitfEBBOU0JpdG1hcEltYWdlUmVwWk5TSW1hZ2VSZXBYTlNPYmplY3TSJSYtLldOU0Fy
+cmF5oi0r0iUmMDFeTlNNdXRhYmxlQXJyYXmjMC0r0zM0CjU2N1dOU1doaXRlXE5TQ29sb3JTcGFjZUQw
+IDAAEAOADNIlJjk6V05TQ29sb3KiOSvSJSY8PVdOU0ltYWdlojwrXxAPTlNLZXllZEFyY2hpdmVy0UBB
+VHJvb3SAAQAIABEAGgAjAC0AMgA3AEYATABXAF4AZQByAHkAgQCDAIUAigCMAI4AlwCcAKcAqQCrAK0A
+sgC1ALcAuQC7AL0AwgDZANsA3Q+PD5QPnw+oD7sPvw/SD90P5g/rD/MP9g/7EAoQDhAVEB0QKhAvEDEQ
+MxA4EEAQQxBIEFAQUxBlEGgQbQAAAAAAAAIBAAAAAAAAAEIAAAAAAAAAAAAAAAAAABBvA
 </mutableData>
         </image>
         <image name="article" width="29" height="29"/>

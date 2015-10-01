@@ -17,7 +17,7 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 

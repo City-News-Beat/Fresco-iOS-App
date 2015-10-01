@@ -10,7 +10,7 @@
 #import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "FRSBackButton.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
