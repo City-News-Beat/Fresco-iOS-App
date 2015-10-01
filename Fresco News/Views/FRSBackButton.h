@@ -12,12 +12,20 @@
 
 @required
 
-    - (void)backButtonTapped;
+- (void)backButtonTapped;
 
 @end
 
 @interface FRSBackButton : UIButton
 
 @property id<FRSBackButtonDelegate> delegate;
+
+/**
+ *  Creates an FRSBackButton
+ *
+ *  @return returns the back button
+ */
+
++ (FRSBackButton *)createBackButton;
 
 @end

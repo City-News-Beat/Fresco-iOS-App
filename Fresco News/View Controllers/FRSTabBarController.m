@@ -50,7 +50,7 @@
         [self setupTabBarAppearances];
         
         self.delegate = self;
-    
+
     }
     
     return self;

@@ -151,21 +151,18 @@
 - (IBAction)doneButtonTapped:(id)sender {
     
     [self save];
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadAssignments" object:nil];
+
 }
 
 
 
 - (void)initBackButton {
     
-    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+    FRSBackButton *backButton = [FRSBackButton createBackButton];
     
     [self.view addSubview:backButton];
     
     backButton.delegate = self;
-    
-    backButton.tag = 10;
     
 }
 

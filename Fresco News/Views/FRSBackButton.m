@@ -10,19 +10,14 @@
 
 @implementation FRSBackButton
 
-- (id)initWithFrame:(CGRect)frame {
-    
-    self = [super initWithFrame:frame];
-    
-    if(self) {
-   
-        [self setUpBackButton];
++ (FRSBackButton *)createBackButton{
 
-    }
+    FRSBackButton *button = [FRSBackButton buttonWithType:UIButtonTypeSystem];
     
-    return self;
+    [button setUpBackButton];
+    
+    return button;
 }
-
 
 
 - (void)setUpBackButton {
@@ -36,7 +31,7 @@
     [self addTarget:self.delegate action:@selector(backButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
     [self setTitle:@"Back" forState:UIControlStateNormal];
-    
+
 
     [self setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
     [self setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
@@ -44,13 +39,9 @@
     [self setImage:[UIImage imageNamed:@"backCaretDark"] forState:UIControlStateNormal];
     [self setImage:[UIImage imageNamed:@"backCaretLight"] forState:UIControlStateHighlighted];
 
- 
-    [self setTitleColor:[UIColor colorWithRed:0.73 green:0.73 blue:0.73 alpha:1] forState:UIControlStateHighlighted];
     [self setTitleColor:[UIColor colorWithRed:0.46 green:0.46 blue:0.46 alpha:1] forState:UIControlStateNormal];
-    
-//    self.buttonType = [UIButton buttonWithType:UIButtonTypeSystem];
-}
 
+}
 
 
 
