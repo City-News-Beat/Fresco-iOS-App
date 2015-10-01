@@ -365,7 +365,6 @@
     self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
     
-    
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
@@ -631,8 +630,6 @@
                              
                          }];
                          
-                         
-                         
                          CAKeyframeAnimation * theAnimation;
                          
                          // Create the animation object, specifying the position property as the key path.
@@ -642,10 +639,9 @@
                          
                          // Add the animation to the layer.
                          [self.cash2.layer addAnimation:theAnimation forKey:@"position"];
-                     }
-                     completion:^(BOOL finished) {
                          
-                     }];
+                     }
+                     completion:nil];
     
     
 }
@@ -699,9 +695,7 @@
                          // Add the animation to the layer.
                          [self.cash3.layer addAnimation:cash3Animation forKey:@"position"];
                      }
-                     completion:^(BOOL finished) {
-                         
-                     }];
+                     completion:nil];
 }
 
 

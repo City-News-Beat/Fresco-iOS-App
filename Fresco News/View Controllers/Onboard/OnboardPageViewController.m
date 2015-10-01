@@ -82,7 +82,6 @@
             
         }
         
-        
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
             [viewController performAnimation];
@@ -122,8 +121,6 @@
     
     index--;
     
-    
-    
     return [self viewControllerAtIndex:index];
     
 }
@@ -137,7 +134,6 @@
     if (index == 3) {
         return nil;
     }
-    
     
     return [self viewControllerAtIndex:index];
     

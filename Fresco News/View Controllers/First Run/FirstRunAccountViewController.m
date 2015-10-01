@@ -43,9 +43,10 @@
     
     [self setupTerms];
     
+    [self initBackButton];
+    
     self.signUpRunning = NO;
     
-    [self initBackButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

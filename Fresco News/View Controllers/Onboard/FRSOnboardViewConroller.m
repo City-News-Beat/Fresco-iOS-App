@@ -14,16 +14,16 @@
 @interface FRSOnboardViewConroller ()
 
 /*
- ** Views and Viewcontrollers
- */
+** Views and Viewcontrollers
+*/
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*
- ** UI Elements
- */
+** UI Elements
+*/
 
 - (IBAction)nextButtonTapped:(id)sender;
 
@@ -48,8 +48,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
 
 /*
- ** Misc.
- */
+** Misc.
+*/
 
 @property (assign) BOOL didComeFromIndex0;
 
@@ -74,10 +74,14 @@
 @implementation FRSOnboardViewConroller
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     //First make the paged view controller
-    self.pagedViewController = [[OnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    self.pagedViewController = [[OnboardPageViewController alloc]
+                                initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+                                navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                options:nil];
     
     //Add onboard view controller to parent view controller
     [self addChildViewController:self.pagedViewController];
@@ -152,7 +156,6 @@
         
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
-            
             
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
@@ -232,6 +235,7 @@
         // INDEX 1
         
         if ((self.didFinishAnimationAtIndex1 = YES)){
+            
         if (self.pagedViewController.currentIndex == 1){
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
