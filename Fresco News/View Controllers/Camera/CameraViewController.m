@@ -98,11 +98,6 @@ typedef enum : NSUInteger {
 
 #pragma mark - Orientation
 
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
 - (BOOL)shouldAutorotate
 {
     return NO;
@@ -237,9 +232,9 @@ typedef enum : NSUInteger {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-        
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
     
     dispatch_async([self sessionQueue], ^{
@@ -296,9 +291,7 @@ typedef enum : NSUInteger {
 - (void)viewDidDisappear:(BOOL)animated{
 
     [super viewDidDisappear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_ORIENTATION_CHANGE object:nil];
     
     [self.locationManager stopUpdatingLocation];
@@ -321,6 +314,7 @@ typedef enum : NSUInteger {
     });
     
 }
+
 
 -(void)configureUIElements{
     
@@ -428,7 +422,9 @@ typedef enum : NSUInteger {
     picker.autoSubmit = (sender ? NO : YES);
     picker.createdAssetURLs = self.createdAssetURLs;
     
-    [self presentViewController:picker withScale:YES];
+    picker.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self presentViewController:picker animated:YES completion:nil];
     
 }
 

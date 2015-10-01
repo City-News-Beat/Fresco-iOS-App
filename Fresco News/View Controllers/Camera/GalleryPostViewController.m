@@ -222,11 +222,16 @@
         tabBarController.selectedIndex = 4;
     }
     
+    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)returnToCamera:(id)sender
 {
+    
+    self.presentingViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

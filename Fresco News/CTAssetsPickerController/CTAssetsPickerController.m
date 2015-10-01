@@ -67,6 +67,14 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     return UIStatusBarStyleLightContent;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
+}
+
 #pragma mark - Setup Navigation Controller
 
 - (void)setupNavigationController
@@ -395,12 +403,16 @@ NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPic
     if ([self.delegate respondsToSelector:@selector(assetsPickerControllerDidCancel:)]) {
         [self.delegate assetsPickerControllerDidCancel:self];
     }
+    
+    self.presentingViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)returnToCamera:(id)sender
-{
+- (void)returnToCamera:(id)sender{
+   
+    self.presentingViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

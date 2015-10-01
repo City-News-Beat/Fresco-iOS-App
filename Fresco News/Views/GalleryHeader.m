@@ -44,11 +44,13 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         CGRect labelFrame = CGRectMake(0, 0, 0, 12);
         
         self.labelPlace = [[UILabel alloc] initWithFrame:labelFrame];
+        self.labelPlace.numberOfLines = 1;
         self.labelPlace.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.labelPlace setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
                                                                  forAxis:UILayoutConstraintAxisHorizontal];
        
         self.labelByLineAndTime = [[UILabel alloc] initWithFrame:labelFrame];
+        self.labelByLineAndTime.numberOfLines = 1;
         self.labelByLineAndTime.textAlignment = NSTextAlignmentRight;
         [self.labelByLineAndTime setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh
                                                  forAxis:UILayoutConstraintAxisHorizontal];
@@ -58,7 +60,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
             label.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
             label.textColor = [UIColor textHeaderBlackColor];
             label.translatesAutoresizingMaskIntoConstraints = NO;
-            label.numberOfLines = 1;
             [self addSubview:label];
             
         }

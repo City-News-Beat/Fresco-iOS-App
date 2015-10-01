@@ -2,7 +2,7 @@
 //  CameraPreviewView.m
 //  FrescoNews
 //
-//  Created by Joshua C. Lerner on 3/15/15.
+//  Created by Fresco News on 3/15/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 

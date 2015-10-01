@@ -263,8 +263,6 @@
     
     [UIView animateWithDuration:.2 animations:^{
         
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-        
         self.view.alpha = 0;
     
     } completion:^(BOOL finished){
