@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Fresco News, Inc. All rights reserved.
 //
 
+@import UIKit;
+
 #import "FRSNotificationController.h"
 
 @implementation FRSNotificationController

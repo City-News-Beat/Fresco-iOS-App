@@ -26,7 +26,7 @@ PODS:
   - BKMoneyKit (0.0.5)
   - BTBadgeView (1.2)
   - CardIO (5.1.1)
-  - DBImageColorPicker (1.0.6)
+  - DBImageColorPicker (1.0.5)
   - Functional.m (1.0.0)
   - GRKGradientView (1.0.2)
   - Mantle (1.5.1):
@@ -37,55 +37,33 @@ PODS:
     - Stripe/Core (= 5.1.4)
   - Stripe/Core (5.1.4)
   - SVPullToRefresh (0.4.1)
-  - SVPulsingAnnotationView (0.3.0)
 
 DEPENDENCIES:
   - AFNetworkActivityLogger
   - AFNetworking
   - BKMoneyKit
   - BTBadgeView
-  - CardIO (from `https://github.com/card-io/card.io-iOS-SDK.git`)
-  - DBImageColorPicker (from `https://github.com/d0ping/DBImageColorPicker.git`)
+  - CardIO
+  - DBImageColorPicker
   - Functional.m
   - GRKGradientView
-  - Mantle
+  - Mantle (~> 1.5.1)
   - STKWebKitViewController
-  - Stripe (from `https://github.com/stripe/stripe-ios.git`)
+  - Stripe
   - SVPullToRefresh
-  - SVPulsingAnnotationView
-
-EXTERNAL SOURCES:
-  CardIO:
-    :git: https://github.com/card-io/card.io-iOS-SDK.git
-  DBImageColorPicker:
-    :git: https://github.com/d0ping/DBImageColorPicker.git
-  Stripe:
-    :git: https://github.com/stripe/stripe-ios.git
-
-CHECKOUT OPTIONS:
-  CardIO:
-    :commit: 3beb06250cf1b5a7cef4fecd2cccde5aa37cf15d
-    :git: https://github.com/card-io/card.io-iOS-SDK.git
-  DBImageColorPicker:
-    :commit: 9fdeb549fccdccf0a5b453d6df671eba5d7f5a35
-    :git: https://github.com/d0ping/DBImageColorPicker.git
-  Stripe:
-    :commit: df754da4c8d80905485e541a872842cb34c00c75
-    :git: https://github.com/stripe/stripe-ios.git
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: d6a2d2755fada3a1fbf1f490ec0dd92224e092a4
-  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  BKMoneyKit: 4859d910a3ec4447fe799d890ceff33d57aaa1f6
-  BTBadgeView: aa392d7b71c0248b0d766ffc0a1dc7103b72f3ec
-  CardIO: f7e7680b81087964129b3d2f52040a25b2e26090
-  DBImageColorPicker: 9e1b68da26c48a3e965b310181080cb3b49044a0
-  Functional.m: e01ad5fc30324b63273af1f37284ac609192caa4
-  GRKGradientView: 678cb40f60c95424d6cd78c6e6b15833ef6a861d
-  Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
-  STKWebKitViewController: 30f6640db11822af3365c2875c9988c4bda43ddc
-  Stripe: f590e8e628c9343e1cdcb909b43b9b075471a1e1
-  SVPullToRefresh: d5161ebc833a38b465364412e5e307ca80bbb190
-  SVPulsingAnnotationView: 92364bec02160f481d1b603afc904183d385c3e6
+  AFNetworkActivityLogger: e82c9ba285b37042d86729bff5b14036c4312cd7
+  AFNetworking: 96ac9bf3eda33582701cb1fcc5b896aa1e20311e
+  BKMoneyKit: acd201075dae1e99d146ea97bf3b756152b519fd
+  BTBadgeView: 9d9988b9bb6997c31b0ffd4c45a26afd129e3b98
+  CardIO: 2c3a8ef9b9add4bd664c83bb653b83b2f32d9d7f
+  DBImageColorPicker: b0b419b0653338544d766ed2008f2558b899fc60
+  Functional.m: 072ea6a57954f7792a3aaf19042ed6d3258e3026
+  GRKGradientView: 90d0d0047fab490c3c6ad058d9e9c7af26476967
+  Mantle: 1ec9076f091f3a2f95cb2c94939e92dba35c97e1
+  STKWebKitViewController: 679e9f6ceff88572eb5596f0662b992e9ebb55e3
+  Stripe: 6864be95b09092f05526bc2e0a50804bc556aa0d
+  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
 
 COCOAPODS: 0.35.0

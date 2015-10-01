@@ -2,7 +2,7 @@
 //  FRSRefreshControl.h
 //  Fresco
 //
-//  Created by Nicolas Rizk on 9/22/15.
+//  Created by Fresco News on 9/22/15.
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 

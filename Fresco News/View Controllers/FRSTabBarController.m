@@ -19,6 +19,7 @@
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "UIViewController+Additions.h"
+#import "FRSAlertViewManager.h"
 
 @implementation FRSTabBarController
 

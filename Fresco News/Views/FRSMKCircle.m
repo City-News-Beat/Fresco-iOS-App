@@ -2,7 +2,7 @@
 //  FRSMKCircle.m
 //  Fresco
 //
-//  Created by Nicolas Rizk on 9/16/15.
+//  Created by Fresco News on 9/16/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
