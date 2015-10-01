@@ -7,6 +7,7 @@
 //
 
 @import UIKit;
+#import "FRSBackButton.h"
 
 typedef enum : NSUInteger {
     LoginFresco,
@@ -15,6 +16,8 @@ typedef enum : NSUInteger {
 } LoginType;
 
 @interface FRSBaseViewController : UIViewController
+
+@property (strong, nonatomic) NSMutableArray *galleries;
 
 /* Spinner */
 

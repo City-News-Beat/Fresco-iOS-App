@@ -69,6 +69,8 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
+    [self setupButtons];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,6 +88,7 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -120,7 +123,7 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
-
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.3
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
@@ -144,6 +147,22 @@
 /*
 ** Login
 */
+
+- (void)setupButtons {
+    
+//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
+  
+//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
+    
+//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
+    
+//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
+//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
+    
+}
 
 - (IBAction)loginButtonAction:(id)sender {
     

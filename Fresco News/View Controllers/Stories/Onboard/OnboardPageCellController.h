@@ -19,14 +19,14 @@ typedef enum : NSUInteger {
 @interface OnboardPageCellController : UIViewController
 
 /*
- ** Custom initializer for animation state property
- */
+** Custom initializer for animation state property
+*/
 
 -(id)initWithAnimationState:(AnimationState)state;
-
+    
 /*
- ** Current animation state
- */
+** Current animation state
+*/
 
 @property (assign, nonatomic) AnimationState animationState;
 

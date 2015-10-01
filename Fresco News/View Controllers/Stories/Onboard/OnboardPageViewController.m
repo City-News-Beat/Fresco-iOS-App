@@ -62,7 +62,7 @@
 - (void)movedToViewAtIndex:(NSInteger)index{
     
     if (index < 2 && !self.runningNextPage) {
-        
+
         _runningNextPage = YES;
         
         self.currentIndex ++;
@@ -81,6 +81,7 @@
             [parentVC updateStateWithIndex:self.currentIndex];
             
         }
+        
         
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
@@ -121,6 +122,8 @@
     
     index--;
     
+    
+    
     return [self viewControllerAtIndex:index];
     
 }
@@ -134,6 +137,7 @@
     if (index == 3) {
         return nil;
     }
+    
     
     return [self viewControllerAtIndex:index];
     
@@ -182,9 +186,8 @@
         OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
         
         [onBoardPageCellController performAnimation];
-        
+    
     });
 }
 
 @end
-

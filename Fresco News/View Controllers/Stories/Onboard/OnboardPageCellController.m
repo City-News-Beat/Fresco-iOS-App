@@ -15,8 +15,8 @@
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
 /*
- ** Dictionary Values
- */
+** Dictionary Values
+*/
 
 @property (nonatomic, strong) NSArray *mainHeaders;
 
@@ -25,8 +25,8 @@
 @property (nonatomic, strong) NSArray *images;
 
 /*
- ** UI Elements
- */
+** UI Elements
+*/
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UILabel *mainHeader;
@@ -41,26 +41,30 @@
 @property (strong, nonatomic) IBOutlet UIView *onboard2View;
 @property (strong, nonatomic) IBOutlet UIView *onboard3View;
 
+
+
+
+
 @end
 
 @implementation OnboardPageCellController
 
 -(id)initWithAnimationState:(AnimationState)state{
-    
+
     self = [super init];
     
     if(self){
-        
+    
         self.animationState = state;
-        
+    
     }
     
     return self;
-    
+
 }
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
-    
+
     if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]){
         
         // Create the data model
@@ -77,15 +81,15 @@
                             ];
         
         self.images = @[
-                        @"onboard1.png",
-                        @"onboard2.png",
-                        @"onboard3.png"
-                        ];
+                            @"onboard1.png",
+                            @"onboard2.png",
+                            @"onboard3.png"
+                            ];
         
     }
     
     return self;
-    
+
 }
 
 - (void)viewDidLoad {
@@ -110,20 +114,26 @@
     if(self.animationState == AnimationStateOne){
         [self setUpOnboard1];
         [self animateOnboard1];
-        
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
     }
     
     if(self.animationState == AnimationStateTwo){
         [self setUpOnboard2];
         [self animateOnboard2];
-        
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
+
     }
     
     if(self.animationState == AnimationStateThree){
         [self setUpOnboard3];
         [self animateOnboard3];
-        
+//        NSLog (@"%lu", (unsigned long)self.animationState);
+
     }
+
+
     
     //Show "Done" on the last view
     if(self.animationState == 2){
@@ -166,7 +176,7 @@
         case AnimationStateThree:
             
             [self animateOnboard3];
-            
+
             break;
             
     }
@@ -181,7 +191,7 @@
     self.earth = [UIImageView UIImageViewWithName:@"earth"
                                          andFrame:CGRectMake(59, 47, 173, 173)
                                    andContentMode: UIViewContentModeScaleToFill ];
-    
+
     [self.onboard1View addSubview:self.earth];
     
     
@@ -193,7 +203,7 @@
     self.assignmentTopLeft.layer.anchorPoint = CGPointMake(1, 1);
     
     [self.onboard1View addSubview:self.assignmentTopLeft];
-    
+
     
     
     /** Create bottom left assignment image view */
@@ -203,13 +213,13 @@
     self.assignmentBottomLeft.layer.anchorPoint = CGPointMake(1, 1);
     
     [self.onboard1View addSubview:self.assignmentBottomLeft];
-    
-    
+
+
     
     /** Create bottom left assignment image view */
     self.assignmentTopRight = [UIImageView UIImageViewWithName:@"assignment-right"
-                                                      andFrame:CGRectMake(135, 50, 50, 50)
-                                                andContentMode:UIViewContentModeScaleToFill];
+                                                        andFrame:CGRectMake(135, 50, 50, 50)
+                                                  andContentMode:UIViewContentModeScaleToFill];
     self.assignmentTopRight.layer.anchorPoint = CGPointMake(-.01, 1);
     
     [self.onboard1View addSubview:self.assignmentTopRight];
@@ -218,14 +228,13 @@
     
     /** Create bottom right assignment image view */
     self.assignmentBottomRight = [UIImageView UIImageViewWithName:@"assignment-right"
-                                                         andFrame:CGRectMake(165, 160, 50, 50)
-                                                   andContentMode:UIViewContentModeScaleToFill];
+                                                      andFrame:CGRectMake(165, 160, 50, 50)
+                                                andContentMode:UIViewContentModeScaleToFill];
     self.assignmentBottomRight.layer.anchorPoint = CGPointMake(-.01, 1);
     
     [self.onboard1View addSubview:self.assignmentBottomRight];
     
 }
-
 
 - (void)setUpOnboard2 {
     
@@ -237,17 +246,17 @@
     
     [self.onboard1View addSubview:self.cloud];
     
-    
+
     
     /** Create cloud image view */
     self.upload = [UIImageView UIImageViewWithName:@"upload"
-                                          andFrame:CGRectMake(130, 130, 24, 24)
-                                    andContentMode: UIViewContentModeScaleToFill ];
+                                         andFrame:CGRectMake(130, 130, 24, 24)
+                                   andContentMode: UIViewContentModeScaleToFill ];
     
     [self.onboard1View addSubview:self.upload];
     
     
-    
+
     /** Create camera image view */
     self.camera = [UIImageView UIImageViewWithName:@"camera"
                                           andFrame:CGRectMake(109, 173, 66, 60)
@@ -257,14 +266,13 @@
     
 }
 
-
 - (void)setUpOnboard3 {
     
     
     /** Create television image view */
     self.television = [UIImageView UIImageViewWithName:@"television"
-                                              andFrame:CGRectMake(48, 173, 72, 60)
-                                        andContentMode:UIViewContentModeScaleToFill];
+                       andFrame:CGRectMake(48, 173, 72, 60)
+                       andContentMode:UIViewContentModeScaleToFill];
     
     [self.onboard3View addSubview:self.television];
     
@@ -272,8 +280,8 @@
     
     /** Create camera image view */
     self.newspaper = [UIImageView UIImageViewWithName:@"newspaper"
-                                             andFrame:CGRectMake(165, 173, 68, 60)
-                                       andContentMode:UIViewContentModeScaleToFill];
+                                              andFrame:CGRectMake(165, 173, 68, 60)
+                                        andContentMode:UIViewContentModeScaleToFill];
     
     [self.onboard3View addSubview:self.newspaper];
     
@@ -281,8 +289,8 @@
     
     /** Create upload left image view */
     self.uploadLeft = [UIImageView UIImageViewWithName:@"upload"
-                                              andFrame:CGRectMake(165, 135, 24, 24)
-                                        andContentMode:UIViewContentModeScaleToFill];
+                                             andFrame:CGRectMake(165, 135, 24, 24)
+                                       andContentMode:UIViewContentModeScaleToFill];
     self.uploadLeft.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
     
     [self.onboard3View addSubview:self.uploadLeft];
@@ -291,8 +299,8 @@
     
     /** Create upload right image view */
     self.uploadRight = [UIImageView UIImageViewWithName:@"upload"
-                                               andFrame:CGRectMake(95, 135, 24, 24)
-                                         andContentMode:UIViewContentModeScaleToFill];
+                                              andFrame:CGRectMake(95, 135, 24, 24)
+                                        andContentMode:UIViewContentModeScaleToFill];
     self.uploadRight.transform = CGAffineTransformMakeRotation(M_PI_2 - 1);
     
     [self.onboard3View addSubview:self.uploadRight];
@@ -300,13 +308,13 @@
     
     /** Create cash1 image view */
     self.cash1 = [UIImageView UIImageViewWithName:@"cash"
-                                         andFrame:CGRectMake(205, 36, 35, 24)
-                                   andContentMode:UIViewContentModeScaleToFill];
+                                               andFrame:CGRectMake(205, 36, 35, 24)
+                                         andContentMode:UIViewContentModeScaleToFill];
     self.cash1.transform = CGAffineTransformMakeRotation(.13);
     
     [self.onboard3View addSubview:self.cash1];
     
-    
+
     /** Create cash2 image view */
     self.cash2 = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(45, 60, 35, 24)
@@ -315,7 +323,7 @@
     
     [self.onboard3View addSubview:self.cash2];
     
-    
+
     /** Create cash3 image view */
     self.cash3 = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(228, 114, 35, 24)
@@ -327,13 +335,12 @@
     
     /** Create grey cloud image view */
     self.greyCloud = [UIImageView UIImageViewWithName:@"grey-cloud"
-                                             andFrame:CGRectMake(85, 37, 115, 78)
-                                       andContentMode:UIViewContentModeScaleToFill];
+                                         andFrame:CGRectMake(85, 37, 115, 78)
+                                   andContentMode:UIViewContentModeScaleToFill];
     
     [self.onboard3View addSubview:self.greyCloud];
     
 }
-
 
 - (void)setUpViews {
     
@@ -360,10 +367,13 @@
 - (void)animateOnboard1 {
     
     self.earth.alpha = 1;
+    
+    
     self.assignmentTopLeft.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
+    
     
     [UIView animateWithDuration:0.35
                           delay:0.0
@@ -490,16 +500,16 @@
 
 - (void)animateOnboard2 {
     
-    //Animation pending
     self.cloud.alpha = 1;
     self.upload.alpha = 1;
     self.camera.alpha = 1;
-    
+
 }
 
 - (void)animateOnboard3 {
     
-//    self.earth.alpha = 1;
+    self.earth.alpha = 1;
+        
     self.greyCloud.alpha = 1;
     self.television.alpha = 1;
     self.newspaper.alpha = 1;
@@ -630,6 +640,8 @@
                              
                          }];
                          
+                         
+                         
                          CAKeyframeAnimation * theAnimation;
                          
                          // Create the animation object, specifying the position property as the key path.
@@ -639,9 +651,10 @@
                          
                          // Add the animation to the layer.
                          [self.cash2.layer addAnimation:theAnimation forKey:@"position"];
-                         
                      }
-                     completion:nil];
+                     completion:^(BOOL finished) {
+                         
+                     }];
     
     
 }
@@ -695,7 +708,9 @@
                          // Add the animation to the layer.
                          [self.cash3.layer addAnimation:cash3Animation forKey:@"position"];
                      }
-                     completion:nil];
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 
 

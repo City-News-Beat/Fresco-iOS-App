@@ -14,16 +14,18 @@
 @interface FRSOnboardViewConroller ()
 
 /*
-** Views and Viewcontrollers
-*/
+ ** Views and Viewcontrollers
+ */
 
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
+
+@property (strong, nonatomic) OnboardPageCellController *onboardCell;
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
 /*
-** UI Elements
-*/
+ ** UI Elements
+ */
 
 - (IBAction)nextButtonTapped:(id)sender;
 
@@ -48,8 +50,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
 
 /*
-** Misc.
-*/
+ ** Misc.
+ */
 
 @property (assign) BOOL didComeFromIndex0;
 
@@ -74,14 +76,10 @@
 @implementation FRSOnboardViewConroller
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     //First make the paged view controller
-    self.pagedViewController = [[OnboardPageViewController alloc]
-                                initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
-                                navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                options:nil];
+    self.pagedViewController = [[OnboardPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     
     //Add onboard view controller to parent view controller
     [self addChildViewController:self.pagedViewController];
@@ -106,9 +104,10 @@
     self.didFinishAnimationAtIndex0 = NO;
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
+
     
 
-    }
+}
 
 - (void) circleInitialization {
     
@@ -151,12 +150,10 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
 
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
-            
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
             
@@ -191,7 +188,6 @@
                                                       [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
                                                   }];
-                                 
                              }];
             
             if ((self.didComeFromIndex1 = YES)) {
@@ -235,7 +231,6 @@
         // INDEX 1
         
         if ((self.didFinishAnimationAtIndex1 = YES)){
-            
         if (self.pagedViewController.currentIndex == 1){
             
             [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
@@ -256,7 +251,7 @@
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0 //self.delay
+                                  delay: 0.0
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  self.animationIsRunning = YES;
@@ -289,13 +284,13 @@
                 } else {
                     
                     self.delay = 0.0f;
-                    
+    
                 }
                 
                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 
                 [UIView animateWithDuration: 0.2
-                                      delay: 0.0 //self.delay
+                                      delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
                                      
@@ -338,7 +333,7 @@
                              completion:nil];
             
             [UIView animateWithDuration: 0.2
-                                  delay: 0.0 //self.delay
+                                  delay: 0.0
                                 options: UIViewAnimationOptionCurveLinear
                              animations:^{
                                  

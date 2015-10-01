@@ -15,7 +15,7 @@
 #import "TOSViewController.h"
 #import <DBImageColorPicker.h>
 
-@interface FirstRunRadiusViewController () <MKMapViewDelegate>
+@interface FirstRunRadiusViewController () <MKMapViewDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
@@ -58,6 +58,21 @@
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
+    
+    [self initBackButton];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = nil;
+
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
@@ -148,5 +163,26 @@
     [self save];
     
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadAssignments" object:nil];
+}
+
+
+
+- (void)initBackButton {
+    
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+    
+    [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
+    
+}
+
+
+- (void)backButtonTapped {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 @end

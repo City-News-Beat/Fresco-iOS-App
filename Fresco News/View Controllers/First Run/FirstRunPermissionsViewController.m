@@ -13,7 +13,7 @@
 @import AssetsLibrary;
 #import "AppDelegate.h"
 
-@interface FirstRunPermissionsViewController () <CLLocationManagerDelegate>
+@interface FirstRunPermissionsViewController () <CLLocationManagerDelegate, FRSBackButtonDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *locationPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *notificationsPermissionsImage;
@@ -36,6 +36,14 @@
     self.cameraPermissionsImage.alpha = 0.54;
     self.locationPermissionsImage.alpha = 0.54;
     self.notificationsPermissionsImage.alpha = 0.54;
+    
+    [self initBackButton];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -44,6 +52,9 @@
     [self.timer invalidate];
     self.timer = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = nil;
 }
 
 - (IBAction)tempToggle:(id)sender
@@ -197,6 +208,27 @@
         }
         
     });
+}
+
+
+
+- (void)initBackButton {
+    
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+    
+    [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
+    
+}
+
+
+- (void)backButtonTapped {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 @end

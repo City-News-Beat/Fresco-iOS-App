@@ -11,8 +11,9 @@
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
 #import "UISocialButton.h"
+#import "FRSBackButton.h"
 
-@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
+@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
@@ -42,13 +43,19 @@
     
     [self setupTerms];
     
+    [self initBackButton];
+    
     self.signUpRunning = NO;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
+
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+
     // we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
@@ -69,12 +76,16 @@
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
+    backButton.delegate = nil;
 }
 
 #pragma mark - UI Actions
@@ -262,7 +273,27 @@
             
          }];
     }
+}
+
+- (void)initBackButton {
+
+    FRSBackButton *backButton = [[FRSBackButton alloc] initWithFrame:CGRectMake(12, 24, 70, 40)];
+        
+    [self.view addSubview:backButton];
+    
+    backButton.delegate = self;
+    
+    backButton.tag = 10;
+    
+}
+
+
+- (void)backButtonTapped {
+    
+    [self.navigationController popViewControllerAnimated:YES];
 
 }
+
+
 
 @end

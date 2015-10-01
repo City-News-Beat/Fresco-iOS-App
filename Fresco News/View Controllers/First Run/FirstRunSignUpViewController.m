@@ -10,6 +10,7 @@
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FirstRunSignUpViewController.h"
 #import "FRSDataManager.h"
+#import "FRSBackButton.h"
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
@@ -53,6 +54,7 @@
     
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,12 +73,15 @@
 
     [self setTwitterInfo];
     [self setFacebookInfo];
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -85,7 +90,6 @@
 {
     return NO;
 }
-
 
 #pragma mark - Text Field Delegate
 
@@ -328,5 +332,6 @@
         [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar-background"] forBarMetrics:UIBarMetricsDefault];
     }
 }
+
 
 @end
