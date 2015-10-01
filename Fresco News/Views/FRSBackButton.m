@@ -8,11 +8,6 @@
 
 #import "FRSBackButton.h"
 
-
-@interface FRSBackButton ()
-
-@end
-
 @implementation FRSBackButton
 
 - (id)initWithFrame:(CGRect)frame {

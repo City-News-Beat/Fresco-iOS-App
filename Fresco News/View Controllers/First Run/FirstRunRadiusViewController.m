@@ -63,17 +63,6 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = self;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = nil;
-
-}
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
@@ -160,6 +149,7 @@
 }
 
 - (IBAction)doneButtonTapped:(id)sender {
+    
     [self save];
     
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadAssignments" object:nil];

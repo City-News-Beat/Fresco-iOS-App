@@ -41,20 +41,15 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = self;
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
     [self.timer invalidate];
     self.timer = nil;
+   
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    FRSBackButton *backButton = (FRSBackButton *)[self.view viewWithTag:10];
-    backButton.delegate = nil;
+
 }
 
 - (IBAction)tempToggle:(id)sender

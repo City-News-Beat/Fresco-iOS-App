@@ -11,9 +11,10 @@
 @protocol FRSBackButtonDelegate <NSObject>
 
 @required
-- (void)backButtonTapped;
-@end
 
+    - (void)backButtonTapped;
+
+@end
 
 @interface FRSBackButton : UIButton
 
