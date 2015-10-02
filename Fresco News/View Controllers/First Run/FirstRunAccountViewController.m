@@ -10,13 +10,13 @@
 #import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "FRSBackButton.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
-@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 
 @property (weak, nonatomic) IBOutlet UITextField *emailField;

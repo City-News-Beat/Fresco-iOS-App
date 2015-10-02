@@ -19,7 +19,7 @@
 #import "CameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "UIImage+ALAsset.h"
 #import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
@@ -27,8 +27,8 @@
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
-@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
 
 @property (weak, nonatomic) IBOutlet UIView *assignmentView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -237,7 +237,7 @@
 
 #pragma mark - Outlet Actions
 
-- (IBAction)twitterButtonTapped:(UISocialButton *)button
+- (IBAction)twitterButtonTapped:(FRSSocialButton *)button
 {
     [self updateSocialTipView];
     
@@ -283,7 +283,7 @@
 
 }
 
-- (IBAction)facebookButtonTapped:(UISocialButton *)button
+- (IBAction)facebookButtonTapped:(FRSSocialButton *)button
 {
     [self updateSocialTipView];
     

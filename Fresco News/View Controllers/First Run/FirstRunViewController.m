@@ -17,14 +17,14 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
 
-@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 
@@ -152,13 +152,13 @@
     
 //    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
 //    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-  
+//  
 //    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
 //    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-    
+//    
 //    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
 //    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
-    
+//    
 //    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
 //    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
     

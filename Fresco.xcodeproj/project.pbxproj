@@ -141,12 +141,11 @@
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E786ED371BA74F7C00816A06 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
-		E79ACC611BB45586005EF7E6 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC601BB45586005EF7E6 /* FRSSaveButton.m */; };
 		E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
-		E7AD1CC61BBB35D000F940D5 /* UISocialButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AD1CC51BBB35D000F940D5 /* UISocialButton.m */; settings = {ASSET_TAGS = (); }; };
+		E7AD1CC61BBB35D000F940D5 /* FRSSocialButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AD1CC51BBB35D000F940D5 /* FRSSocialButton.m */; settings = {ASSET_TAGS = (); }; };
 		E7AD1CC91BBB35D900F940D5 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AD1CC81BBB35D900F940D5 /* FRSSaveButton.m */; settings = {ASSET_TAGS = (); }; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
@@ -450,8 +449,8 @@
 		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKRelativeDate.m; sourceTree = "<group>"; };
 		E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterImages.xcassets; sourceTree = "<group>"; };
-		E7AD1CC41BBB35D000F940D5 /* UISocialButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISocialButton.h; sourceTree = "<group>"; };
-		E7AD1CC51BBB35D000F940D5 /* UISocialButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISocialButton.m; sourceTree = "<group>"; };
+		E7AD1CC41BBB35D000F940D5 /* FRSSocialButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSocialButton.h; sourceTree = "<group>"; };
+		E7AD1CC51BBB35D000F940D5 /* FRSSocialButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocialButton.m; sourceTree = "<group>"; };
 		E7AD1CC71BBB35D900F940D5 /* FRSSaveButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSaveButton.h; sourceTree = "<group>"; };
 		E7AD1CC81BBB35D900F940D5 /* FRSSaveButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSaveButton.m; sourceTree = "<group>"; };
 		E7B733211B13E3F2009C26D0 /* FRSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSNotification.h; path = Notification/FRSNotification.h; sourceTree = "<group>"; };
@@ -1124,8 +1123,8 @@
 				E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */,
 				E7AD1CC71BBB35D900F940D5 /* FRSSaveButton.h */,
 				E7AD1CC81BBB35D900F940D5 /* FRSSaveButton.m */,
-				E7AD1CC41BBB35D000F940D5 /* UISocialButton.h */,
-				E7AD1CC51BBB35D000F940D5 /* UISocialButton.m */,
+				E7AD1CC41BBB35D000F940D5 /* FRSSocialButton.h */,
+				E7AD1CC51BBB35D000F940D5 /* FRSSocialButton.m */,
 				07535A491BBB03A500AD604C /* FRSBackButton.h */,
 				07535A4A1BBB03A500AD604C /* FRSBackButton.m */,
 			);
@@ -1486,7 +1485,7 @@
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
-				E7AD1CC61BBB35D000F940D5 /* UISocialButton.m in Sources */,
+				E7AD1CC61BBB35D000F940D5 /* FRSSocialButton.m in Sources */,
 				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,

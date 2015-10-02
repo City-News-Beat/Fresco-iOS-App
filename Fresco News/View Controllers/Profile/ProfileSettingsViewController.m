@@ -19,7 +19,7 @@
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
 #import "FRSSaveButton.h"
@@ -61,8 +61,8 @@ typedef enum : NSUInteger {
 ** Buttons
 */
 
-@property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *connectTwitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *addCardButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
