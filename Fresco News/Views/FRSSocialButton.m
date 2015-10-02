@@ -10,6 +10,17 @@
 
 @implementation FRSSocialButton
 
++ (FRSSocialButton *)createSocialButton:(SocialNetwork)network{
+    
+    FRSSocialButton *button = [FRSSocialButton buttonWithType:UIButtonTypeSystem];
+    
+    [button setUpSocialIcon:network withRadius:YES];
+    
+    return button;
+    
+}
+
+
 - (void)setUpSocialIcon:(SocialNetwork)network withRadius:(BOOL)radius{
     
     if(radius)
@@ -31,18 +42,6 @@
     [self setImageEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
     [self setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
     
-}
-
-- (void)setSelected:(BOOL)selected
-{
-    if (selected) {
-        [super setSelected:YES];
-        self.alpha = 1.0;
-    }
-    else {
-        [super setSelected:NO];
-        self.alpha = 0.4;
-    }
 }
 
 

@@ -53,9 +53,6 @@
         button.clipsToBounds = YES;
     }
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-    
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
     shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
@@ -69,8 +66,9 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
-    [self setupButtons];
-    
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -148,22 +146,6 @@
 ** Login
 */
 
-- (void)setupButtons {
-    
-//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-//  
-//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-//    
-//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
-//    
-//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
-    
-}
-
 - (IBAction)loginButtonAction:(id)sender {
     
     //Check fields first
@@ -186,13 +168,7 @@
 
 }
 
-- (IBAction)facebookLogin:(id)sender{
-    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
-}
 
-- (IBAction)twitterLogin:(id)sender {
-    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
-}
 
 /*
 ** Signup Button
@@ -256,6 +232,15 @@
         fracvc.email = self.emailField.text;
         fracvc.password = self.passwordField.text;
     }
+}
+
+
+- (IBAction)facebookLogin:(id)sender{
+    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
+}
+
+- (IBAction)twitterLogin:(id)sender {
+    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
 
 @end

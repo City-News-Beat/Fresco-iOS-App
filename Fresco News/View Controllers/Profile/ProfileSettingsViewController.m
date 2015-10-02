@@ -183,8 +183,8 @@ typedef enum : NSUInteger {
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
     
-    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];

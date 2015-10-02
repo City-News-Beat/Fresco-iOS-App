@@ -36,15 +36,15 @@
 
     self.tosTextView.delegate = self;
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     
     self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
     [self setupTerms];
     
     [self initBackButton];
-    
+        
     self.signUpRunning = NO;
     
 }
@@ -93,15 +93,6 @@
     [self hitNext];
 }
 
-- (IBAction)facebookButtonTapped:(id)sender {
-    
-     [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
-}
-
-- (IBAction)twitterButtonTapped:(id)sender {
-    
-     [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
-}
 
 #pragma mark - UITextViewDelegate
 
@@ -289,6 +280,15 @@
     [self.navigationController popViewControllerAnimated:YES];
 
 }
+
+- (IBAction)facebookLogin:(id)sender{
+    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
+}
+
+- (IBAction)twitterLogin:(id)sender {
+    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
+}
+
 
 
 

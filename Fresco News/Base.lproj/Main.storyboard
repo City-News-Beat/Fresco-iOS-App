@@ -344,7 +344,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isw-ZN-cA3">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="D125CDD4-587E-48D2-9DCB-2C67F9B99C55" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="4BCA7714-139D-48BD-AE31-EA4851882DFF" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
                                                             <rect key="frame" x="19" y="11" width="20" height="20"/>
                                                             <animations/>
                                                             <constraints>
@@ -2588,7 +2588,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="twitterButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="Jqs-GQ-UP9"/>
+                                            <action selector="twitterLogin:" destination="APe-K0-XGS" eventType="touchUpInside" id="YZk-UL-6QT"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dyy-Xz-2TG" userLabel="Facebook" customClass="FRSSocialButton">
@@ -2612,7 +2612,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="facebookButtonTapped:" destination="APe-K0-XGS" eventType="touchUpInside" id="2NU-RO-SVU"/>
+                                            <action selector="facebookLogin:" destination="APe-K0-XGS" eventType="touchUpInside" id="T8t-WR-x4h"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -3316,7 +3316,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="D125CDD4-587E-48D2-9DCB-2C67F9B99C55" width="20" height="20">
+        <image name="4BCA7714-139D-48BD-AE31-EA4851882DFF" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
