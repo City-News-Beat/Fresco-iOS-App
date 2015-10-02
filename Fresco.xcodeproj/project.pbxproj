@@ -11,6 +11,7 @@
 		07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4D1BBB054600AD604C /* UIImageView+Additions.m */; };
 		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
 		0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */; };
+		07CC58B81BBEF53D007DC0C7 /* FRSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC58B71BBEF53D007DC0C7 /* FRSProgressView.m */; settings = {ASSET_TAGS = (); }; };
 		1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */; };
 		1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592821AC2FF3C00F60348 /* GalleriesViewController.m */; };
 		1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3592851AC30E7300F60348 /* GalleryTableViewCell.m */; };
@@ -214,6 +215,8 @@
 		0766F4B01B97494A00B7CBB4 /* FRSOnboardViewConroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardViewConroller.h; sourceTree = "<group>"; };
 		0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardViewConroller.m; sourceTree = "<group>"; };
 		0766F4B21B97494A00B7CBB4 /* FRSOnboardViewConroller.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSOnboardViewConroller.xib; sourceTree = "<group>"; };
+		07CC58B61BBEF53D007DC0C7 /* FRSProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSProgressView.h; path = "Fresco News/Views/FRSProgressView.h"; sourceTree = SOURCE_ROOT; };
+		07CC58B71BBEF53D007DC0C7 /* FRSProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSProgressView.m; path = "Fresco News/Views/FRSProgressView.m"; sourceTree = SOURCE_ROOT; };
 		1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRootViewController.h; sourceTree = "<group>"; };
 		1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRootViewController.m; sourceTree = "<group>"; };
 		1E3592811AC2FF3C00F60348 /* GalleriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleriesViewController.h; sourceTree = "<group>"; };
@@ -733,6 +736,8 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				07CC58B61BBEF53D007DC0C7 /* FRSProgressView.h */,
+				07CC58B71BBEF53D007DC0C7 /* FRSProgressView.m */,
 				42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */,
 				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
 				E79ACC621BB4558C005EF7E6 /* FRSKit */,
@@ -1477,6 +1482,7 @@
 				BC77FE821B6AC74100EF6135 /* AssignmentOnboardViewController.m in Sources */,
 				0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */,
 				E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */,
+				07CC58B81BBEF53D007DC0C7 /* FRSProgressView.m in Sources */,
 				E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,

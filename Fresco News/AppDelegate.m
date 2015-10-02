@@ -60,7 +60,7 @@
     }
     
     //Check if we've launcahed the app before or if the app is the iPhone 4s/4
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
+    if (NO){
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
         

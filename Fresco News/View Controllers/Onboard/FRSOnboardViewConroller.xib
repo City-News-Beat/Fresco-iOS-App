@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -29,12 +29,14 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wz5-13-deN">
                     <rect key="frame" x="198" y="43" width="204" height="80"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="K6m-8q-fLR"/>
                     </constraints>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SUl-58-8YB">
+                <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SUl-58-8YB">
                     <rect key="frame" x="0.0" y="555" width="600" height="45"/>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="Tsi-lV-EJb"/>
@@ -50,31 +52,36 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uLz-Mu-ouR" userLabel="Page View Controller">
                     <rect key="frame" x="0.0" y="131" width="600" height="404"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5JP-6l-Eib" userLabel="Filled Progress View 1">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5JP-6l-Eib" userLabel="Filled Progress View 1">
                     <rect key="frame" x="0.0" y="552" width="600" height="3"/>
+                    <animations/>
                     <color key="backgroundColor" red="1" green="0.77647058823529413" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="3" id="VPo-bH-T1w"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qT9-es-J43" userLabel="Empty Progress View 1">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qT9-es-J43" userLabel="Empty Progress View 1">
                     <rect key="frame" x="150" y="552" width="451" height="3"/>
+                    <animations/>
                     <color key="backgroundColor" red="0.70980392156862748" green="0.71372549019607845" blue="0.70980392156862748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="3" id="exm-Cv-lMj"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVY-n1-TVF" userLabel="End Cover Progress View">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVY-n1-TVF" userLabel="End Cover Progress View">
                     <rect key="frame" x="450" y="552" width="150" height="3"/>
+                    <animations/>
                     <color key="backgroundColor" red="0.70980392156862748" green="0.71372549019607845" blue="0.70980392156862748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="3" id="g1u-qF-834"/>
                     </constraints>
                 </view>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a07-0q-LYe" userLabel="Empty Circle View 1">
+                <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a07-0q-LYe" userLabel="Empty Circle View 1">
                     <rect key="frame" x="138" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="bHS-O9-Wz7"/>
@@ -83,40 +90,45 @@
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="25" id="yGy-B9-LwB"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Lr-Swf" userLabel="Empty Circle View 2">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Lr-Swf" userLabel="Empty Circle View 2">
                     <rect key="frame" x="288" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="Kj2-Ra-5aL"/>
                         <constraint firstAttribute="height" constant="25" id="dDg-G5-E8J"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geR-3B-zv3" userLabel="Empty Circle View 3">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geR-3B-zv3" userLabel="Empty Circle View 3">
                     <rect key="frame" x="438" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="1BF-YI-B1C"/>
                         <constraint firstAttribute="height" constant="25" id="93e-Ya-WlI"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trM-0q-Cax" userLabel="Filled Circle View 1">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trM-0q-Cax" userLabel="Filled Circle View 1">
                     <rect key="frame" x="138" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="jWO-4z-0eK"/>
                         <constraint firstAttribute="width" constant="25" id="pEr-aG-2Cv"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xiZ-dA-7zx" userLabel="Filled Circle View 2">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xiZ-dA-7zx" userLabel="Filled Circle View 2">
                     <rect key="frame" x="288" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="ACw-aZ-v3b"/>
                         <constraint firstAttribute="width" constant="25" id="m3p-CO-lsH"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mtl-hC-3Ud" userLabel="Filled Circle View 3">
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mtl-hC-3Ud" userLabel="Filled Circle View 3">
                     <rect key="frame" x="438" y="541" width="25" height="25"/>
+                    <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="L5O-Ym-H0T"/>
@@ -124,6 +136,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <animations/>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="SUl-58-8YB" firstAttribute="top" secondItem="L0j-Lr-Swf" secondAttribute="bottom" constant="-11" id="0PL-9J-0bo"/>

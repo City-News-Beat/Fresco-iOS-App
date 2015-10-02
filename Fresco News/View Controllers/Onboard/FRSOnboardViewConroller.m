@@ -10,6 +10,7 @@
 #import "OnboardPageViewController.h"
 #import "OnboardPageCellController.h"
 #import "UIColor+Additions.h"
+#import "FRSProgressView.h"
 
 @interface FRSOnboardViewConroller ()
 
@@ -47,6 +48,8 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
 
+@property (strong, nonatomic) FRSProgressView *frsProgressView;
+
 /*
 ** Misc.
 */
@@ -77,6 +80,23 @@
     
     [super viewDidLoad];
     
+    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
+                                                                             0,
+                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
+                                                                             [[UIScreen mainScreen] bounds].size.width,
+                                                                             65)];
+    
+    
+    /*
+     
+     self.FRSProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(0, self.view.height - (heightofprogressview), self.view.frame.size.width, 60)]
+     
+     [self.view addSubView:progressView];
+     
+     
+     */
+    
+
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc]
                                 initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
@@ -108,9 +128,14 @@
     self.didFinishAnimationAtIndex2 = NO;
     
 
-    }
+    [self.view addSubview:self.frsProgressView];
+    
+    
+}
 
 - (void) circleInitialization {
+
+    
     
     self.circleView2.alpha = 0;
     self.circleView3.alpha = 0;
@@ -151,6 +176,8 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
 
+    
+   // [self.progressView updateStateWithIndex:index];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
