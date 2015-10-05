@@ -20,9 +20,6 @@
 @property (strong, nonatomic) OnboardPageViewController *pagedViewController;
 
 
-
-
-
 /*
  ** UI Elements
  */
@@ -31,17 +28,7 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
 
-@property (strong, nonatomic) IBOutlet UIView *circleView1;
-
-@property (strong, nonatomic) IBOutlet UIView *circleView2;
-
-@property (strong, nonatomic) IBOutlet UIView *circleView3;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView1;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView2;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView3;
+@property (strong, nonatomic) IBOutlet UIView *circleView;
 
 @property (strong, nonatomic) IBOutlet UIView *progressView;
 
@@ -106,21 +93,23 @@
     [self addSubview:self.progressView];
     
     
+    
+    
 
     
-    [self createCircleView:self.circleView1
+    [self createCircleView:self.circleView
                 withRadius:24
              withXPosition:85
              withFillColor:YES];
     
-    [self createCircleView:self.circleView2
+    [self createCircleView:self.circleView
                 withRadius:24
-             withXPosition:85
+             withXPosition:175
              withFillColor:NO];
     
-    [self createCircleView:self.circleView3
+    [self createCircleView:self.circleView
                 withRadius:24
-             withXPosition:85
+             withXPosition:270
              withFillColor:NO];
 
     
@@ -154,16 +143,13 @@
 }
 
 
-
-
-//return type is void, but creates a UIView?
 - (UIView *)createCircleView:(UIView *)view
                   withRadius:(CGFloat)radius
                withXPosition:(CGFloat)xPosition
                withFillColor:(BOOL)isFilled {
+    
 
     UIView *circleView = [UIView new];
-    
     
     circleView.frame = CGRectMake(
                                   xPosition,
@@ -185,6 +171,7 @@
     
     
     [self addSubview:circleView];
+    
 
     return circleView;
 }
