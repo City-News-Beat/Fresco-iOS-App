@@ -50,9 +50,10 @@
     if(self){
 
         
-        [self createProgressBar:self.progressBar withCircles:3];
+        [self createProgressBar:self.progressBar withCircles:5];
 
 //        for(NSInterger i = 0; i < pageCount ; i++){
+        
 //         }
         
     }
@@ -62,6 +63,7 @@
 
 - (void) initProgressBar {
     
+    // Empty progress view does not animate
     self.emptyProgressView = [[UIView alloc] initWithFrame:CGRectMake(
                                                                       0,
                                                                       self.nextButton.frame.origin.y - 3,
@@ -75,11 +77,10 @@
     
     
     
-    // set right bounds to center of first circle view
     self.progressView = [[UIView alloc] initWithFrame:CGRectMake(
                                                                       0,
                                                                       self.nextButton.frame.origin.y - 3,
-                                                                      self.frame.size.width,
+                                                                      self.frame.size.width, //trailing needs to be dynamic
                                                                       3
                                                                       )];
     self.progressView.backgroundColor = [UIColor radiusGoldColor];
@@ -115,7 +116,7 @@
 
 
 
-- (UIView *)createCircleView:(UIView *)view //1.
+- (UIView *)createCircleView:(UIView *)view
                   withRadius:(CGFloat)radius
                withXPosition:(CGFloat)xPosition
                     withFill:(BOOL)isFilled {
@@ -146,9 +147,6 @@
     
     return circleView;
 }
-//  Questions for Elmir
-//  1. Why do we need .CGColor here but not in other places where [UIColor ___] is used?
-
 
 
 
@@ -233,12 +231,47 @@
     
     
     return view;
+    
 }
 
-// -(UIAnimation????)animateCircle:(animation*)animation withFill:
+
+
+//- (CAAnimation *)animateCirclefromView:(UIView *)view {
+//    
+//    
+//    [UIView animateWithDuration:0.2
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveEaseIn
+//                     animations:^{
+//                         //code
+//                     }
+//                     completion:^(BOOL finished) {
+//                         //completion
+//                     }];
+//    return animation?
+//}
+
+
+
+//  Questions for Elmir
+//  1. Why do we need .CGColor here but not in other places where [UIColor ___] is used?
+//  2. How can a method return void but still return animation/UIViews/etc?
+
+
+
+
+
 
 
 @end
+
+
+
+
+
+
+
+
 
 
 
