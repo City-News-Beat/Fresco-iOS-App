@@ -26,15 +26,16 @@
 
 - (IBAction)nextButtonTapped:(id)sender;
 
-@property (strong, nonatomic) IBOutlet UIButton *nextButton;
+@property (strong, nonatomic) UIButton *nextButton;
 
-@property (strong, nonatomic) IBOutlet UIView *circleView;
 
-@property (strong, nonatomic) IBOutlet UIView *progressView;
+@property (strong, nonatomic) UIView *circleView;
 
-@property (strong, nonatomic) IBOutlet UIView *emptyProgressView;
+@property (strong, nonatomic) UIView *progressView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
+@property (strong, nonatomic) UIView *emptyProgressView;
+
+@property (strong, nonatomic) UIView *progressBar;
 
 @end
 
@@ -47,19 +48,12 @@
     self = [super initWithFrame:frame];
     
     if(self){
+
         
-        self.backgroundColor = [UIColor clearColor];
-        
-        [self initNextButton];
-        [self initProgressBar];
-        
-        /*
-         
-         for(NSInterger i = 0; i < pageCount ; i++){
-         
-         }
-         
-        */
+        [self createProgressBar:self.progressBar withCircles:3];
+
+//        for(NSInterger i = 0; i < pageCount ; i++){
+//         }
         
     }
     
@@ -74,7 +68,7 @@
                                                                       self.frame.size.width,
                                                                       3
                                                                       )];
-    self.emptyProgressView.backgroundColor = [UIColor colorWithRed:0.71 green:0.71 blue:0.71 alpha:1];
+    self.emptyProgressView.backgroundColor = [UIColor frescoLightGreyColor];
     
     [self addSubview:self.emptyProgressView];
     
@@ -91,28 +85,6 @@
     self.progressView.backgroundColor = [UIColor radiusGoldColor];
 
     [self addSubview:self.progressView];
-    
-    
-    
-    
-
-    
-    [self createCircleView:self.circleView
-                withRadius:24
-             withXPosition:85
-             withFillColor:YES];
-    
-    [self createCircleView:self.circleView
-                withRadius:24
-             withXPosition:175
-             withFillColor:NO];
-    
-    [self createCircleView:self.circleView
-                withRadius:24
-             withXPosition:270
-             withFillColor:NO];
-
-    
 }
 
 - (void)initNextButton {
@@ -139,14 +111,14 @@
 - (void)nextButtonTapped:(id)sender {
     
     NSLog(@"Next button tapped");
-    
 }
 
 
-- (UIView *)createCircleView:(UIView *)view
+
+- (UIView *)createCircleView:(UIView *)view //1.
                   withRadius:(CGFloat)radius
                withXPosition:(CGFloat)xPosition
-               withFillColor:(BOOL)isFilled {
+                    withFill:(BOOL)isFilled {
     
 
     UIView *circleView = [UIView new];
@@ -166,15 +138,104 @@
         circleView.layer.borderColor = [UIColor radiusDarkGoldColor].CGColor;
     } else {
         circleView.backgroundColor = [UIColor whiteColor];
-        circleView.layer.borderColor = [UIColor frescoLightGreyColor].CGColor;
+        circleView.layer.borderColor = [UIColor frescoLightGreyColor].CGColor; // 1.
     }
     
     
     [self addSubview:circleView];
     
-
     return circleView;
 }
+//  Questions for Elmir
+//  1. Why do we need .CGColor here but not in other places where [UIColor ___] is used?
+
+
+
+
+- (UIView *)createProgressBar:(UIView *)view
+                  withCircles:(CGFloat)circles {
+    
+    [self initNextButton];
+    [self initProgressBar];
+    
+    if (circles < 3 || circles > 6) {
+        NSLog (@"Value of CGFloat 'circles' in progress bar must be greater 2 and less than 6.");
+    }
+    
+    if (circles == 3) {
+
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 5
+                      withFill:YES];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 2.13
+                      withFill:NO];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 1.35
+                      withFill:NO];
+    }
+    
+    if (circles == 4) {
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 8
+                      withFill:YES];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 2.85
+                      withFill:NO];
+     
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 1.7
+                      withFill:NO];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 1.25
+                      withFill:NO];
+    }
+    
+    if (circles == 5) {
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 8
+                      withFill:YES];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 3.4
+                      withFill:NO];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 2.13
+                      withFill:NO];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 1.575
+                      withFill:NO];
+        
+        [self createCircleView:self.circleView
+                    withRadius:24
+                 withXPosition:self.frame.size.width / 1.25
+                      withFill:NO];
+    }
+    
+    
+    return view;
+}
+
+// -(UIAnimation????)animateCircle:(animation*)animation withFill:
 
 
 @end
