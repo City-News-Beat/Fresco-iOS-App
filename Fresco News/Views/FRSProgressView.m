@@ -8,8 +8,20 @@
 
 
 #import "FRSProgressView.h"
+#import "OnboardPageViewController.h"
 
 @interface FRSProgressView ()
+
+
+/*
+ ** Views and Viewcontrollers
+ */
+
+@property (strong, nonatomic) OnboardPageViewController *pagedViewController;
+
+
+
+
 
 /*
  ** UI Elements
@@ -49,7 +61,7 @@
     
     if(self){
         
-        self.backgroundColor = [UIColor redCircleStrokeColor];
+        self.backgroundColor = [UIColor clearColor];
         
         [self initNextButton];
         [self initProgressBar];
@@ -75,22 +87,42 @@
                                                                       self.frame.size.width,
                                                                       3
                                                                       )];
-    self.emptyProgressView.backgroundColor = [UIColor frescoGreyBackgroundColor];
+    self.emptyProgressView.backgroundColor = [UIColor colorWithRed:0.71 green:0.71 blue:0.71 alpha:1];
     
     [self addSubview:self.emptyProgressView];
     
-    //Filled circle view 1
-    self.circleView1 = [[UIView alloc] initWithFrame:CGRectMake(
-                                                                10,
-                                                                self.emptyProgressView.frame.origin.y  - 24 / 2,
-                                                                24,
-                                                                24
-                                                                )];
-    self.circleView1.layer.cornerRadius = 12;
-    self.circleView1.layer.borderWidth = 3;
-    self.circleView1.backgroundColor = [UIColor radiusGoldColor];
-    self.circleView1.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self addSubview:self.circleView1];
+    
+    
+    
+    // set right bounds to center of first circle view
+    self.progressView = [[UIView alloc] initWithFrame:CGRectMake(
+                                                                      0,
+                                                                      self.nextButton.frame.origin.y - 3,
+                                                                      self.frame.size.width,
+                                                                      3
+                                                                      )];
+    self.progressView.backgroundColor = [UIColor radiusGoldColor];
+
+    [self addSubview:self.progressView];
+    
+    
+
+    
+    [self createCircleView:self.circleView1
+                withRadius:24
+             withXPosition:85
+             withFillColor:YES];
+    
+    [self createCircleView:self.circleView2
+                withRadius:24
+             withXPosition:85
+             withFillColor:NO];
+    
+    [self createCircleView:self.circleView3
+                withRadius:24
+             withXPosition:85
+             withFillColor:NO];
+
     
 }
 
@@ -104,14 +136,12 @@
                                        45
                                        );
     
-    [self.nextButton.titleLabel setFont: [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:17]];
+    [self.nextButton.titleLabel setFont: [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.nextButton setTitleColor:[UIColor radiusGoldColor] forState:UIControlStateNormal];
-//    self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-
     
     [self.nextButton addTarget:self action:@selector(nextButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.nextButton.backgroundColor = [UIColor frescoBlueColor];
+    self.nextButton.backgroundColor = [UIColor whiteColor];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self addSubview:self.nextButton];
 
@@ -120,7 +150,45 @@
 - (void)nextButtonTapped:(id)sender {
     
     NSLog(@"Next button tapped");
+    
 }
+
+
+
+
+//return type is void, but creates a UIView?
+- (UIView *)createCircleView:(UIView *)view
+                  withRadius:(CGFloat)radius
+               withXPosition:(CGFloat)xPosition
+               withFillColor:(BOOL)isFilled {
+
+    UIView *circleView = [UIView new];
+    
+    
+    circleView.frame = CGRectMake(
+                                  xPosition,
+                                  self.emptyProgressView.frame.origin.y  - 20 / 2,
+                                  radius,
+                                  radius
+                                  );
+    
+    circleView.layer.cornerRadius = radius / 2;
+    circleView.layer.borderWidth = 1;
+
+    if (isFilled) {
+        circleView.backgroundColor = [UIColor radiusGoldColor];
+        circleView.layer.borderColor = [UIColor radiusDarkGoldColor].CGColor;
+    } else {
+        circleView.backgroundColor = [UIColor whiteColor];
+        circleView.layer.borderColor = [UIColor frescoLightGreyColor].CGColor;
+    }
+    
+    
+    [self addSubview:circleView];
+
+    return circleView;
+}
+
 
 @end
 

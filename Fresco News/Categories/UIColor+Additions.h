@@ -44,4 +44,8 @@
 
 + (UIColor *)fieldBorderColor;
 
++ (UIColor *)radiusDarkGoldColor;
+
++ (UIColor *)frescoLightGreyColor;
+
 @end

@@ -344,7 +344,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isw-ZN-cA3">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="4BCA7714-139D-48BD-AE31-EA4851882DFF" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="9752B699-C989-4153-A54A-27792CD78D68" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
                                                             <rect key="frame" x="19" y="11" width="20" height="20"/>
                                                             <animations/>
                                                             <constraints>
@@ -573,7 +573,7 @@
                                 <rect key="frame" x="0.0" y="28" width="600" height="39"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q63-7s-eVb" id="KVY-9S-kjr">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="38.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
@@ -631,7 +631,7 @@
                                 <rect key="frame" x="0.0" y="67" width="600" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BP4-ad-CmZ" id="SA0-Ix-fnD">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="69.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lF-OT-bel" userLabel="Image container">
@@ -1513,7 +1513,7 @@
                                 <rect key="frame" x="0.0" y="182" width="600" height="417"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tV2-re-oGj" id="yBd-fd-gXC">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="417"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="416.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RZ9-cr-fws" customClass="GalleryView">
@@ -1539,13 +1539,13 @@
                                                     </collectionViewFlowLayout>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PostCollectionViewCell" id="gWC-ak-9LB" customClass="PostCollectionViewCell">
-                                                            <rect key="frame" x="0.0" y="-1" width="600" height="349"/>
+                                                            <rect key="frame" x="0.0" y="-0.5" width="600" height="348"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                                <rect key="frame" x="0.0" y="0.0" width="600" height="349"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="600" height="348"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hMC-XK-Pgg">
                                                                         <rect key="frame" x="0.0" y="0.0" width="600" height="348"/>
                                                                         <animations/>
                                                                         <constraints>
@@ -3316,7 +3316,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="4BCA7714-139D-48BD-AE31-EA4851882DFF" width="20" height="20">
+        <image name="9752B699-C989-4153-A54A-27792CD78D68" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
