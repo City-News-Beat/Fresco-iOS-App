@@ -63,6 +63,8 @@ static const CGFloat CircleWidth = 24.0f;
                           withFill:YES];
             
         }
+        
+        [self animateProgressViewAtPercent:1/((float)count +1)];
 
     }
     
@@ -154,7 +156,7 @@ static const CGFloat CircleWidth = 24.0f;
 
 - (void)animateProgressViewAtPercent:(CGFloat)percent{
 
-    [UIView animateWithDuration:.4 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
         CGRect newFrame = self.progressView.frame;
         newFrame.size.width = self.frame.size.width * percent;
