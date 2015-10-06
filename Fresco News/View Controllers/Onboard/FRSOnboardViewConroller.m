@@ -72,6 +72,8 @@
 
 @property (nonatomic, assign) NSTimeInterval delay;
 
+@property (nonatomic, assign) int pageCount;
+
 @end
 
 @implementation FRSOnboardViewConroller
@@ -79,17 +81,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
-    
-    /*
-     
-     self.FRSProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(0, self.view.height - (heightofprogressview), self.view.frame.size.width, 60)]
-     
-     [self.view addSubView:progressView];
-     
-     
-     */
-    
+
 
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc]
@@ -110,7 +102,6 @@
     [self.pagedViewController didMoveToParentViewController:self];
     
 
-//    [self circleInitialization];
     
     //Initialize Bools
     self.didComeFromIndex0 = NO;
@@ -122,14 +113,10 @@
     self.didFinishAnimationAtIndex2 = NO;
     
     
-    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
-                                                                             0,
-                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
-                                                                             [[UIScreen mainScreen] bounds].size.width,
-                                                                             65)];
-
-    [self.view addSubview:self.frsProgressView];
     
+
+    
+
     
 }
 
@@ -137,7 +124,14 @@
 
     [super viewDidAppear:animated];
     
-    [self.frsProgressView animateProgressViewAtPercent:.14];
+    self.pageCount = 4;
+    
+    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
+                                                                             0,
+                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
+                                                                             [[UIScreen mainScreen] bounds].size.width,
+                                                                             65) andPageCount:self.pageCount];
+    [self.view addSubview:self.frsProgressView];
     
     
 }
@@ -148,52 +142,18 @@
     
 }
 
+
+
+
 - (void)updateStateWithIndex:(NSInteger)index{
 
-    
-   // [self.progressView updateStateWithIndex:index];
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // INDEX 0
         if (self.pagedViewController.currentIndex == 0){
             
-            
-            [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-            
-            self.circleView1.transform = CGAffineTransformMakeScale(0, 0);
-            
-            [UIView animateWithDuration: 0.2
-                                  delay: 0.0
-                                options: UIViewAnimationOptionCurveLinear
-                             animations:^{
-                                 
-                                 self.emptyProgressViewLeadingConstraint.constant = 0;
-                                 [self.view layoutIfNeeded];
-                    
-                                 self.emptyCircleView1.alpha = 0.0;
-                                 self.circleView1.alpha = 1.0;
-                                 self.circleView1.transform = CGAffineTransformMakeScale(1.3, 1.3);
-                                 
-                                 [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-                                 
-                             }
-                             completion:^(BOOL finished) {
-                                 [UIView animateWithDuration: 0.2
-                                                       delay: 0.0
-                                                     options: UIViewAnimationOptionCurveEaseOut
-                                                  animations:^{
-                                                      
-                                                      self.circleView1.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                                      
-                                                  }
-                                                  completion:^(BOOL finished) {
-    
-                                                      [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-
-                                                  }];
-                                 
-                             }];
+            [self.frsProgressView animateProgressViewAtPercent: (1 / self.pageCount)];
             
             if ((self.didComeFromIndex1 = YES)) {
                 
@@ -206,7 +166,7 @@
                     self.delay = 0.0f;
                     
                 }
-
+                
                 [UIView animateWithDuration: 0.2
                                       delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
@@ -223,12 +183,12 @@
                                          self.didFinishAnimationAtIndex0 = YES;
                                          self.animationIsRunning = NO;
                                          
-                                    
+                                         
                                      }
                                  }
                  
                  ];
-            
+                
             }
         }
         
@@ -237,89 +197,89 @@
         
         if ((self.didFinishAnimationAtIndex1 = YES)){
             
-        if (self.pagedViewController.currentIndex == 1){
-            
-            [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-            self.circleView2.transform = CGAffineTransformMakeScale(0, 0);
-            
-            self.didComeFromIndex1 = YES;
-            
-            [UIView animateWithDuration: 0.2
-                                  delay: 0.0
-                                options: UIViewAnimationOptionCurveEaseIn
-                             animations:^{
-
-                                 self.emptyProgressViewLeadingConstraint.constant = 105;
-                                 [self.view layoutIfNeeded];
-                                 
-                                 self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                             }
-                             completion:nil];
-            
-            [UIView animateWithDuration: 0.2
-                                  delay: 0.0 //self.delay
-                                options: UIViewAnimationOptionCurveLinear
-                             animations:^{
-                                 self.animationIsRunning = YES;
-                                 
-                                 self.emptyCircleView3.alpha = 1.0;
-                                 self.circleView2.alpha = 1.0;
-                                 self.circleView2.transform = CGAffineTransformMakeScale(1.3, 1.3);
-
-                             }
-                             completion:^(BOOL finished) {
-                                 [UIView animateWithDuration: 0.2
-                                                       delay: 0.0
-                                                     options: UIViewAnimationOptionCurveEaseOut
-                                                  animations:^{
-                            
-                                                      self.circleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
-
-                                                  }
-                                                  completion:^(BOOL finished) {
-                                                      self.animationIsRunning = NO;
-                                                  }];
-                             }];
-            
-            if ((self.didComeFromIndex2 = YES)) {
-
-                if ((self.animationIsRunning = YES)){
-                    
-                    self.delay = 0.2f;
-                    
-                } else {
-                    
-                    self.delay = 0.0f;
-                    
-                }
+            if (self.pagedViewController.currentIndex == 1){
                 
-                self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+                self.circleView2.transform = CGAffineTransformMakeScale(0, 0);
+                
+                self.didComeFromIndex1 = YES;
                 
                 [UIView animateWithDuration: 0.2
-                                      delay: 0.0 //self.delay
+                                      delay: 0.0
                                     options: UIViewAnimationOptionCurveEaseIn
                                  animations:^{
                                      
+                                     self.emptyProgressViewLeadingConstraint.constant = 105;
+                                     [self.view layoutIfNeeded];
+                                     
+                                     self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                 }
+                                 completion:nil];
+                
+                [UIView animateWithDuration: 0.2
+                                      delay: 0.0 //self.delay
+                                    options: UIViewAnimationOptionCurveLinear
+                                 animations:^{
                                      self.animationIsRunning = YES;
                                      
-                                     self.emptyCircleView3.alpha = 1;
-                                     self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                     self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                                     self.circleView3.alpha = 0;
-
+                                     self.emptyCircleView3.alpha = 1.0;
+                                     self.circleView2.alpha = 1.0;
+                                     self.circleView2.transform = CGAffineTransformMakeScale(1.3, 1.3);
+                                     
                                  }
                                  completion:^(BOOL finished) {
-                                     if (finished){
-                                         self.didFinishAnimationAtIndex1 = YES;
-                                         self.animationIsRunning = NO;
+                                     [UIView animateWithDuration: 0.2
+                                                           delay: 0.0
+                                                         options: UIViewAnimationOptionCurveEaseOut
+                                                      animations:^{
+                                                          
+                                                          self.circleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                          
+                                                      }
+                                                      completion:^(BOOL finished) {
+                                                          self.animationIsRunning = NO;
+                                                      }];
+                                 }];
+                
+                if ((self.didComeFromIndex2 = YES)) {
+                    
+                    if ((self.animationIsRunning = YES)){
+                        
+                        self.delay = 0.2f;
+                        
+                    } else {
+                        
+                        self.delay = 0.0f;
+                        
+                    }
+                    
+                    self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                    
+                    [UIView animateWithDuration: 0.2
+                                          delay: 0.0 //self.delay
+                                        options: UIViewAnimationOptionCurveEaseIn
+                                     animations:^{
+                                         
+                                         self.animationIsRunning = YES;
+                                         
+                                         self.emptyCircleView3.alpha = 1;
+                                         self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                         self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+                                         self.circleView3.alpha = 0;
                                          
                                      }
-                                 }
-                 ];
+                                     completion:^(BOOL finished) {
+                                         if (finished){
+                                             self.didFinishAnimationAtIndex1 = YES;
+                                             self.animationIsRunning = NO;
+                                             
+                                         }
+                                     }
+                     ];
+                }
             }
         }
-        }
-
+        
         // INDEX 2
         if (self.pagedViewController.currentIndex == 2){
             [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -334,7 +294,7 @@
                                  
                                  self.emptyProgressViewLeadingConstraint.constant = 230;
                                  [self.view layoutIfNeeded];
-
+                                 
                              }
                              completion:nil];
             
@@ -345,7 +305,7 @@
                                  
                                  self.animationIsRunning = YES;
                                  self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
-
+                                 
                                  self.emptyCircleView3.alpha = 1.0;
                                  self.circleView3.alpha = 1.0;
                                  self.circleView3.transform = CGAffineTransformMakeScale(1.3, 1.3);
@@ -356,19 +316,248 @@
                                                        delay: 0.0
                                                      options: UIViewAnimationOptionCurveEaseOut
                                                   animations:^{
-                                                     
-
+                                                      
+                                                      
                                                       self.circleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }
                                                   completion:^(BOOL finished) {
                                                       self.animationIsRunning = NO;
                                                       self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
-
+                                                      
                                                   }
-                                                  ];
+                                  ];
                              }];
         }
     });
 }
+
+
+
+
+
+
+
+//- (void)updateStateWithIndex:(NSInteger)index{
+//
+//    
+//   // [self.progressView updateStateWithIndex:index];
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        
+//        // INDEX 0
+//        if (self.pagedViewController.currentIndex == 0){
+//            
+//            
+//            [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+//            
+//            self.circleView1.transform = CGAffineTransformMakeScale(0, 0);
+//            
+//            [UIView animateWithDuration: 0.2
+//                                  delay: 0.0
+//                                options: UIViewAnimationOptionCurveLinear
+//                             animations:^{
+//                                 
+//                                 self.emptyProgressViewLeadingConstraint.constant = 0;
+//                                 [self.view layoutIfNeeded];
+//                    
+//                                 self.emptyCircleView1.alpha = 0.0;
+//                                 self.circleView1.alpha = 1.0;
+//                                 self.circleView1.transform = CGAffineTransformMakeScale(1.3, 1.3);
+//                                 
+//                                 [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+//                                 
+//                             }
+//                             completion:^(BOOL finished) {
+//                                 [UIView animateWithDuration: 0.2
+//                                                       delay: 0.0
+//                                                     options: UIViewAnimationOptionCurveEaseOut
+//                                                  animations:^{
+//                                                      
+//                                                      self.circleView1.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                                                      
+//                                                  }
+//                                                  completion:^(BOOL finished) {
+//    
+//                                                      [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+//
+//                                                  }];
+//                                 
+//                             }];
+//            
+//            if ((self.didComeFromIndex1 = YES)) {
+//                
+//                if ((self.animationIsRunning = YES)){
+//                    
+//                    self.delay = 0.2f;
+//                    
+//                } else {
+//                    
+//                    self.delay = 0.0f;
+//                    
+//                }
+//
+//                [UIView animateWithDuration: 0.2
+//                                      delay: 0.0
+//                                    options: UIViewAnimationOptionCurveEaseIn
+//                                 animations:^{
+//                                     self.animationIsRunning = YES;
+//                                     self.emptyCircleView2.alpha = 1;
+//                                     self.emptyCircleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                                     self.circleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//                                     
+//                                 }
+//                                 completion:^(BOOL finished) {
+//                                     if (finished){
+//                                         self.circleView2.alpha = 0;
+//                                         self.didFinishAnimationAtIndex0 = YES;
+//                                         self.animationIsRunning = NO;
+//                                         
+//                                    
+//                                     }
+//                                 }
+//                 
+//                 ];
+//            
+//            }
+//        }
+//        
+//        
+//        // INDEX 1
+//        
+//        if ((self.didFinishAnimationAtIndex1 = YES)){
+//            
+//        if (self.pagedViewController.currentIndex == 1){
+//            
+//            [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+//            self.circleView2.transform = CGAffineTransformMakeScale(0, 0);
+//            
+//            self.didComeFromIndex1 = YES;
+//            
+//            [UIView animateWithDuration: 0.2
+//                                  delay: 0.0
+//                                options: UIViewAnimationOptionCurveEaseIn
+//                             animations:^{
+//
+//                                 self.emptyProgressViewLeadingConstraint.constant = 105;
+//                                 [self.view layoutIfNeeded];
+//                                 
+//                                 self.emptyCircleView2.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//                             }
+//                             completion:nil];
+//            
+//            [UIView animateWithDuration: 0.2
+//                                  delay: 0.0 //self.delay
+//                                options: UIViewAnimationOptionCurveLinear
+//                             animations:^{
+//                                 self.animationIsRunning = YES;
+//                                 
+//                                 self.emptyCircleView3.alpha = 1.0;
+//                                 self.circleView2.alpha = 1.0;
+//                                 self.circleView2.transform = CGAffineTransformMakeScale(1.3, 1.3);
+//
+//                             }
+//                             completion:^(BOOL finished) {
+//                                 [UIView animateWithDuration: 0.2
+//                                                       delay: 0.0
+//                                                     options: UIViewAnimationOptionCurveEaseOut
+//                                                  animations:^{
+//                            
+//                                                      self.circleView2.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//
+//                                                  }
+//                                                  completion:^(BOOL finished) {
+//                                                      self.animationIsRunning = NO;
+//                                                  }];
+//                             }];
+//            
+//            if ((self.didComeFromIndex2 = YES)) {
+//
+//                if ((self.animationIsRunning = YES)){
+//                    
+//                    self.delay = 0.2f;
+//                    
+//                } else {
+//                    
+//                    self.delay = 0.0f;
+//                    
+//                }
+//                
+//                self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                
+//                [UIView animateWithDuration: 0.2
+//                                      delay: 0.0 //self.delay
+//                                    options: UIViewAnimationOptionCurveEaseIn
+//                                 animations:^{
+//                                     
+//                                     self.animationIsRunning = YES;
+//                                     
+//                                     self.emptyCircleView3.alpha = 1;
+//                                     self.emptyCircleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                                     self.circleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//                                     self.circleView3.alpha = 0;
+//
+//                                 }
+//                                 completion:^(BOOL finished) {
+//                                     if (finished){
+//                                         self.didFinishAnimationAtIndex1 = YES;
+//                                         self.animationIsRunning = NO;
+//                                         
+//                                     }
+//                                 }
+//                 ];
+//            }
+//        }
+//        }
+//
+//        // INDEX 2
+//        if (self.pagedViewController.currentIndex == 2){
+//            [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
+//            self.circleView3.transform = CGAffineTransformMakeScale(0, 0);
+//            
+//            self.didComeFromIndex2 = YES;
+//            
+//            [UIView animateWithDuration: 0.2
+//                                  delay: 0.0
+//                                options: UIViewAnimationOptionCurveEaseIn
+//                             animations:^{
+//                                 
+//                                 self.emptyProgressViewLeadingConstraint.constant = 230;
+//                                 [self.view layoutIfNeeded];
+//
+//                             }
+//                             completion:nil];
+//            
+//            [UIView animateWithDuration: 0.2
+//                                  delay: 0.0 //self.delay
+//                                options: UIViewAnimationOptionCurveLinear
+//                             animations:^{
+//                                 
+//                                 self.animationIsRunning = YES;
+//                                 self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//
+//                                 self.emptyCircleView3.alpha = 1.0;
+//                                 self.circleView3.alpha = 1.0;
+//                                 self.circleView3.transform = CGAffineTransformMakeScale(1.3, 1.3);
+//                                 
+//                             }
+//                             completion:^(BOOL finished) {
+//                                 [UIView animateWithDuration: 0.2
+//                                                       delay: 0.0
+//                                                     options: UIViewAnimationOptionCurveEaseOut
+//                                                  animations:^{
+//                                                     
+//
+//                                                      self.circleView3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                                                  }
+//                                                  completion:^(BOOL finished) {
+//                                                      self.animationIsRunning = NO;
+//                                                      self.emptyCircleView3.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//
+//                                                  }
+//                                                  ];
+//                             }];
+//        }
+//    });
+//}
 
 @end

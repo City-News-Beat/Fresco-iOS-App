@@ -13,4 +13,9 @@
 
 - (void)animateProgressViewAtPercent:(CGFloat)percent;
 
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
+
+@property CGFloat *progressPercent;
+
+
 @end

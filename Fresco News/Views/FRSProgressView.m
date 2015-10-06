@@ -31,7 +31,6 @@ static const CGFloat CircleWidth = 24.0f;
 
 @property (strong, nonatomic) UIButton *nextButton;
 
-
 @property (strong, nonatomic) UIView *circleView;
 
 @property (strong, nonatomic) UIView *progressView;
@@ -45,20 +44,26 @@ static const CGFloat CircleWidth = 24.0f;
 
 @implementation FRSProgressView
 
-
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count{
 
     self = [super initWithFrame:frame];
     
     if(self){
+        
+        [self initNextButton];
+        [self initProgressBar];
+        
+        for (NSInteger i = 0;  i < count; i++) {
+            
+            NSLog (@"%li",(long)i);
+            
+            [self createCircleView:self.circleView
+                        withRadius:CircleWidth
+                     withXPosition:([[UIScreen mainScreen]bounds].size.width * ((i + 1) / (float)(count + 1))) - CircleWidth / 2
+                          withFill:YES];
+            
+        }
 
-        
-        [self createProgressBar:self.progressBar withCircles:8];
-
-//        for(NSInterger i = 0; i < pageCount ; i++){
-        
-//         }
-        
     }
     
     return self;
@@ -66,7 +71,6 @@ static const CGFloat CircleWidth = 24.0f;
 
 - (void) initProgressBar {
     
-    // Empty progress view does not animate
     self.emptyProgressView = [[UIView alloc] initWithFrame:CGRectMake(
                                                                       0,
                                                                       self.nextButton.frame.origin.y - 3,
@@ -114,6 +118,7 @@ static const CGFloat CircleWidth = 24.0f;
 - (void)nextButtonTapped:(id)sender {
     
     NSLog(@"Next button tapped");
+    
 }
 
 
@@ -136,139 +141,14 @@ static const CGFloat CircleWidth = 24.0f;
         circleView.layer.borderColor = [UIColor radiusDarkGoldColor].CGColor;
     } else {
         circleView.backgroundColor = [UIColor whiteColor];
-        circleView.layer.borderColor = [UIColor frescoLightGreyColor].CGColor; // 1.
+        circleView.layer.borderColor = [UIColor frescoLightGreyColor].CGColor;
     }
-    
     
     [self addSubview:circleView];
     
     return circleView;
 }
 
-
-
-//- (UIView *)createProgressBar:(UIView *)view
-//                  withCircles:(CGFloat)circles {
-//    
-//    [self initNextButton];
-//    [self initProgressBar];
-//    
-//    if (circles < 3 || circles > 6) {
-//        NSLog (@"Value of CGFloat 'circles' in progress bar must be greater 2 and less than 6.");
-//    }
-//    
-//    if (circles == 3) {
-//
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 5
-//                      withFill:YES];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 2.13
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.35
-//                      withFill:NO];
-//    }
-//    
-//    if (circles == 4) {
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 8
-//                      withFill:YES];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 2.85
-//                      withFill:NO];
-//     
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.7
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.25
-//                      withFill:NO];
-//    }
-//    
-//    if (circles == 5) {
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 8
-//                      withFill:YES];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 3.4
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 2.13
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.575
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.25
-//                      withFill:NO];
-//    }
-//    
-//    return view;
-//    
-//}
-
-
-
-
-- (UIView *)createProgressBar:(UIView *)view withCircles:(NSInteger)circles {
-    
-    [self initNextButton];
-    [self initProgressBar];
-    
-    
-    
-    for (NSInteger i = 0;  i < circles; i++) {
-        
-        NSLog (@"%li",(long)i);
-
-        [self createCircleView:self.circleView
-                    withRadius:CircleWidth
-                 withXPosition:(375 * ((i + 1) / (float)(circles + 1))) - CircleWidth / 2
-                      withFill:YES];
-        
-    }
-
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 5
-//                      withFill:YES];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 2.13
-//                      withFill:NO];
-//        
-//        [self createCircleView:self.circleView
-//                    withRadius:24
-//                 withXPosition:self.frame.size.width / 1.35
-//                      withFill:NO];
-    
-    return view;
-    
-}
 
 
 
