@@ -10,4 +10,7 @@
 
 @interface FRSProgressView : UIView
 
+
+- (void)animateProgressViewAtPercent:(CGFloat)percent;
+
 @end

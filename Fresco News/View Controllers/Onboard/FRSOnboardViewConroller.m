@@ -80,12 +80,6 @@
     
     [super viewDidLoad];
     
-    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
-                                                                             0,
-                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
-                                                                             [[UIScreen mainScreen] bounds].size.width,
-                                                                             65)];
-    
     
     /*
      
@@ -127,46 +121,26 @@
     self.didFinishAnimationAtIndex1 = NO;
     self.didFinishAnimationAtIndex2 = NO;
     
+    
+    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
+                                                                             0,
+                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
+                                                                             [[UIScreen mainScreen] bounds].size.width,
+                                                                             65)];
 
     [self.view addSubview:self.frsProgressView];
     
     
 }
 
-//- (void) circleInitialization {
-//
-//    
-//    
-//    self.circleView2.alpha = 0;
-//    self.circleView3.alpha = 0;
-//
-//    NSArray *circleViews = @[self.emptyCircleView1,
-//                             self.emptyCircleView2,
-//                             self.emptyCircleView3,
-//                             self.circleView1,
-//                             self.circleView2,
-//                             self.circleView3];
-//    
-//    NSArray *emptyCircleViews = [circleViews subarrayWithRange:NSMakeRange(0, 3)];
-//
-//    NSArray *fullCircleViews = [circleViews subarrayWithRange:NSMakeRange(3, 3)];
-//    
-//    for (UIView *circleView in circleViews) {
-//        circleView.layer.cornerRadius = 12;
-//        circleView.layer.borderWidth = 3;
-//    }
-//    
-//    for (UIView *emptyCircleView in emptyCircleViews) {
-//        emptyCircleView.backgroundColor = [UIColor whiteColor];
-//        emptyCircleView.layer.borderColor = [[UIColor colorWithRed:0.882 green:0.882 blue:0.882 alpha:1] CGColor];
-//    }
-//    
-//    for (UIView *fullCircleView in fullCircleViews) {
-//        fullCircleView.backgroundColor = [UIColor radiusGoldColor];
-//        fullCircleView.layer.borderColor = [UIColor whiteColor].CGColor;
-//    }
-//    
-//}
+- (void)viewDidAppear:(BOOL)animated{
+
+    [super viewDidAppear:animated];
+    
+    [self.frsProgressView animateProgressViewAtPercent:.14];
+    
+    
+}
 
 - (IBAction)nextButtonTapped:(id)sender {
     
