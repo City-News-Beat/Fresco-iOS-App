@@ -62,6 +62,14 @@ static const CGFloat CircleWidth = 24.0f;
                      withXPosition:([[UIScreen mainScreen]bounds].size.width * ((i + 1) / (float)(count + 1))) - CircleWidth / 2
                           withFill:YES];
             
+            self.pagedViewController = [[OnboardPageViewController alloc]
+                                        initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+                                        navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                        options:nil];
+            
+            
+            
+            
         }
         
         [self animateProgressViewAtPercent:1/((float)count +1)];
@@ -119,7 +127,9 @@ static const CGFloat CircleWidth = 24.0f;
 
 - (void)nextButtonTapped:(id)sender {
     
-    NSLog(@"Next button tapped");
+    NSLog(@"Current Index: %lu", self.pagedViewController.currentIndex);
+    
+    [self.pagedViewController movedToViewAtIndex:self.pagedViewController.currentIndex];
     
 }
 

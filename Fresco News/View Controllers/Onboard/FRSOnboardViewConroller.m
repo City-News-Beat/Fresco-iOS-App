@@ -22,6 +22,9 @@
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
+@property (strong, nonatomic) FRSProgressView *frsProgressView;
+
+
 /*
 ** UI Elements
 */
@@ -30,47 +33,10 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
 
-@property (strong, nonatomic) IBOutlet UIView *circleView1;
-
-@property (strong, nonatomic) IBOutlet UIView *circleView2;
-
-@property (strong, nonatomic) IBOutlet UIView *circleView3;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView1;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView2;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyCircleView3;
-
-@property (strong, nonatomic) IBOutlet UIView *progressView;
-
-@property (strong, nonatomic) IBOutlet UIView *emptyProgressView;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *emptyProgressViewLeadingConstraint;
-
-@property (strong, nonatomic) FRSProgressView *frsProgressView;
 
 /*
 ** Misc.
 */
-
-@property (assign) BOOL didComeFromIndex0;
-
-@property (assign) BOOL didComeFromIndex1;
-
-@property (assign) BOOL didComeFromIndex2;
-
-
-@property (assign) BOOL didFinishAnimationAtIndex0;
-
-@property (assign) BOOL didFinishAnimationAtIndex1;
-
-@property (assign) BOOL didFinishAnimationAtIndex2;
-
-
-@property (nonatomic, assign) BOOL animationIsRunning;
-
-@property (nonatomic, assign) NSTimeInterval delay;
 
 @property (nonatomic, assign) int pageCount;
 
@@ -101,16 +67,6 @@
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
     
-
-    
-    //Initialize Bools
-    self.didComeFromIndex0 = NO;
-    self.didComeFromIndex1 = NO;
-    self.didComeFromIndex2 = NO;
-
-    self.didFinishAnimationAtIndex0 = NO;
-    self.didFinishAnimationAtIndex1 = NO;
-    self.didFinishAnimationAtIndex2 = NO;
 
 }
 
