@@ -12,7 +12,7 @@
 #import "UIColor+Additions.h"
 #import "FRSProgressView.h"
 
-@interface FRSOnboardViewConroller ()
+@interface FRSOnboardViewConroller () <FRSProgressViewDelegate>
 
 /*
 ** Views and Viewcontrollers
@@ -29,14 +29,7 @@
 ** UI Elements
 */
 
-- (IBAction)nextButtonTapped:(id)sender;
-
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
-
-
-/*
-** Misc.
-*/
 
 @property (nonatomic, assign) int pageCount;
 
@@ -54,18 +47,19 @@
                                 initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
                                 navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                 options:nil];
-    
+
     //Add onboard view controller to parent view controller
     [self addChildViewController:self.pagedViewController];
     
     //Set bounds of paged view controller to bounds of subview in the xib
     self.pagedViewController.view.frame = self.containerPageView.frame;
-    
+
     //Add paged view controller as subview to containerPageViewController
     [self.view addSubview:self.pagedViewController.view];
-    
+
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
+
     
 
 }
@@ -86,10 +80,12 @@
     
 }
 
-- (IBAction)nextButtonTapped:(id)sender {
+#pragma mark - FRSProgressView Delegate
+
+-(void)nextButtonTapped{
     
     [self.pagedViewController movedToViewAtIndex:self.pagedViewController.currentIndex];
-    
+
 }
 
 
@@ -104,3 +100,4 @@
 
 
 @end
+

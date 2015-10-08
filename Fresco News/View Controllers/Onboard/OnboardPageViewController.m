@@ -61,6 +61,8 @@
 
 - (void)movedToViewAtIndex:(NSInteger)index{
     
+    NSLog(@"%ld",index);
+    
     if (index < 2 && !self.runningNextPage) {
         
         _runningNextPage = YES;
@@ -74,14 +76,14 @@
         NSArray *controllers = @[viewController];
         
         //Update the dots on the next button
-        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
-            
-            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
+        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]) {
+        
+            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *) self.parentViewController;
             
             [parentVC updateStateWithIndex:self.currentIndex];
             
         }
-        
+    
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
             [viewController performAnimation];

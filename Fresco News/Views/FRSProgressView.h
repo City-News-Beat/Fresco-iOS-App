@@ -8,14 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSProgressView : UIView
+@protocol FRSProgressViewDelegate <NSObject>
 
+@required
+
+- (void)nextButtonTapped;
+
+@end
+
+@interface FRSProgressView : UIView
 
 - (void)animateProgressViewAtPercent:(CGFloat)percent;
 
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
 @property CGFloat *progressPercent;
+
+@property id<FRSProgressViewDelegate> delegate;
 
 
 @end

@@ -8,12 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol FRSOnboardVCDelegate
-
-- (void)movedToViewAtIndex:(NSInteger)index;
-
-@end
-
 @interface FRSOnboardViewConroller : UIViewController
 
 - (void)updateStateWithIndex:(NSInteger)index;
