@@ -29,7 +29,6 @@ static const CGFloat CircleWidth = 24.0f;
 @property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
 @property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
-
 @end
 
 @implementation FRSProgressView
@@ -43,11 +42,11 @@ static const CGFloat CircleWidth = 24.0f;
         [self initNextButton];
         [self initLine];
         
-        //init arrays
+        //Init arrays
         self.arrayOfEmptyCircles = [[NSMutableArray alloc] init];
         self.arrayOfFilledCircles = [[NSMutableArray alloc] init];
         
-        //create circles
+        //Create circles
         for (NSInteger i = 0;  i < count; i++) {
             
             UIView *filledCircles = [self createFilledCircleViewWithRadius:CircleWidth
@@ -56,21 +55,26 @@ static const CGFloat CircleWidth = 24.0f;
             UIView *emptyCircles = [self createEmptyCircleViewWithRadius:CircleWidth
                                     withXPosition:([[UIScreen mainScreen]bounds].size.width * ((i + 1) / (float)(count + 1))) - CircleWidth / 2 ];
             
-        //add circles to array
-            [self.arrayOfFilledCircles addObject:emptyCircles];
-            [self.arrayOfEmptyCircles addObject:filledCircles];
-
-
+        //Add circles to array
+            [self.arrayOfFilledCircles addObject:filledCircles];
+            [self.arrayOfEmptyCircles addObject:emptyCircles];
+            
+            
         }
-        
         [self animateProgressViewAtPercent:1/((float)count +1)];
-        
-        NSLog (@"Empty circle array: %@", self.arrayOfEmptyCircles);
-        NSLog (@"Filled circle array: %@", self.arrayOfFilledCircles);
+    
+
+
 
     }
-
-
+    
+    //Init first circle
+    UIView *firstCircle = [self.arrayOfEmptyCircles objectAtIndex:0];
+    firstCircle.alpha = 0;
+    
+    
+    [self animateCircles];
+    
     return self;
     
 }
@@ -100,7 +104,6 @@ static const CGFloat CircleWidth = 24.0f;
     
 
 }
-
 
 - (void)initNextButton {
     
@@ -174,7 +177,7 @@ static const CGFloat CircleWidth = 24.0f;
 
 - (void)animateProgressViewAtPercent:(CGFloat)percent{
 
-    [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
         CGRect newFrame = self.progressView.frame;
         newFrame.size.width = self.frame.size.width * percent;
@@ -184,6 +187,19 @@ static const CGFloat CircleWidth = 24.0f;
     } completion:nil];
 }
 
+- (void)animateCircles {
+    
+    [UIView animateWithDuration:0.3
+                          delay:0.3
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         //animation
+                     }
+                     completion:^(BOOL finished) {
+                         //completion
+                     }];
+    
+}
 
 
 @end
