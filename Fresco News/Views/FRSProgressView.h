@@ -24,9 +24,11 @@
 
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count andIndex:(NSInteger)index;
+
 - (void)animateProgressViewAtPercent:(CGFloat)percent;
 
-- (void)animateCirclesWithPageCount:(NSInteger)count;
+- (void)animateCirclesFromIndex:(NSInteger)index;
 
 
 @end

@@ -33,7 +33,7 @@ static const CGFloat CircleWidth = 24.0f;
 
 @implementation FRSProgressView
 
-- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count{
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count {
 
     self = [super initWithFrame:frame];
     
@@ -67,19 +67,7 @@ static const CGFloat CircleWidth = 24.0f;
     
     //Init first circle
     UIView *firstCircle = [self.arrayOfEmptyCircles objectAtIndex:0];
-    firstCircle.alpha = 0;
-    
-    //Init animation
-    UIView *secondEmptyCircle = [self.arrayOfEmptyCircles objectAtIndex:1];
-    UIView *secondFilledCircle = [self.arrayOfFilledCircles objectAtIndex:1];
-
-    secondFilledCircle.transform = CGAffineTransformMakeScale(0, 0);
-
-    
-
-    
-    
-    [self animateCirclesWithPageCount:count];
+    firstCircle.alpha = 0;    
     
     return self;
     
@@ -180,7 +168,7 @@ static const CGFloat CircleWidth = 24.0f;
 }
 
 
-- (void)animateProgressViewAtPercent:(CGFloat)percent{
+- (void)animateProgressViewAtPercent:(CGFloat)percent {
 
     [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
@@ -192,61 +180,30 @@ static const CGFloat CircleWidth = 24.0f;
     } completion:nil];
 }
 
-- (void)animateCirclesWithPageCount:(NSInteger)count {
+- (void)animateCirclesFromIndex:(NSInteger)index {
     
-    UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:1];
-    UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:1];
-
+    //Init animation
+    UIView *secondFilledCircle = [self.arrayOfFilledCircles objectAtIndex:index];
+    
+    secondFilledCircle.transform = CGAffineTransformMakeScale(0, 0);
+    
+    
+    //Init Arrays
+    UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:index];
+    UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
 
 /*
 ** Empty > Filled
 */
     
-//    [UIView animateWithDuration:0.25
-//                          delay:1.0
-//                        options:UIViewAnimationOptionCurveEaseInOut
-//                     animations:^{
-//
-//                         emptyCircleView.alpha = 0;
-//                         emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
-//                         filledCircleView.transform = CGAffineTransformMakeScale(1.2, 1.2);
-//                         
-//                     }
-//     
-//                     completion:^(BOOL finished) {
-//                         [UIView animateWithDuration:0.15
-//                                               delay:0.0
-//                                             options:UIViewAnimationOptionCurveEaseOut
-//                                          animations:^{
-//
-//                                              filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
-//                                              
-//                                          }
-//                          
-//                                          completion:^(BOOL finished) {
-//                                              //completion
-//                                          }];
-//                     }];
-    
-    
-    
-/*
- ** Filled > Empty
- */
-    
-    emptyCircleView.alpha = 0;
-    emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
-    filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
-    
-    //Filled > Empty
     [UIView animateWithDuration:0.25
-                          delay:1.0
+                          delay:0.175
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                        
-                         filledCircleView.transform = CGAffineTransformMakeScale(.001, .001);
-                         emptyCircleView.alpha = 1;
-                         emptyCircleView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+
+                         emptyCircleView.alpha = 0;
+                         emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+                         filledCircleView.transform = CGAffineTransformMakeScale(1.2, 1.2);
                          
                      }
      
@@ -255,8 +212,8 @@ static const CGFloat CircleWidth = 24.0f;
                                                delay:0.0
                                              options:UIViewAnimationOptionCurveEaseOut
                                           animations:^{
-                                              
-                                              emptyCircleView.transform = CGAffineTransformMakeScale (1,1);
+
+                                              filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
                                               
                                           }
                           
@@ -264,6 +221,44 @@ static const CGFloat CircleWidth = 24.0f;
                                               //completion
                                           }];
                      }];
+    
+    
+    
+/*
+ ** Filled > Empty
+ */
+    
+//    emptyCircleView.alpha = 0;
+//    emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+//    filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
+//    
+//    //Filled > Empty
+//    [UIView animateWithDuration:0.25
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                        
+//                         filledCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+//                         emptyCircleView.alpha = 1;
+//                         emptyCircleView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+//                         
+//                     }
+//     
+//                     completion:^(BOOL finished) {
+//                         [UIView animateWithDuration:0.15
+//                                               delay:0.0
+//                                             options:UIViewAnimationOptionCurveEaseOut
+//                                          animations:^{
+//                                              
+//                                              emptyCircleView.transform = CGAffineTransformMakeScale (1,1);
+//                                              
+//                                          }
+//                          
+//                                          completion:^(BOOL finished) {
+//                                              //completion
+//                                          }];
+//                     }];
+    
     
 }
 

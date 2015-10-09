@@ -74,8 +74,7 @@
                                                                              0,
                                                                              [[UIScreen mainScreen] bounds].size.height - 65,
                                                                              [[UIScreen mainScreen] bounds].size.width,
-                                                                             65) andPageCount:self.pageCount];
-    
+                                                                             65) andPageCount:self.pageCount];    
     [self.view addSubview:self.frsProgressView];
     
 }
@@ -94,6 +93,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.frsProgressView animateProgressViewAtPercent: ((float)(index+1) / (self.pageCount + 1))];
+              
+        [self.frsProgressView animateCirclesFromIndex:self.pagedViewController.currentIndex];
+
+        
+        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
         
     });
 }
