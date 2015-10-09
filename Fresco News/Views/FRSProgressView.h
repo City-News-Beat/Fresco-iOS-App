@@ -28,7 +28,9 @@
 
 - (void)animateProgressViewAtPercent:(CGFloat)percent;
 
-- (void)animateCirclesFromIndex:(NSInteger)index;
+- (void)animateFilledCirclesFromIndex:(NSInteger)index;
+
+- (void)animateEmptyCirclesFromIndex:(NSInteger)index;
 
 
 @end

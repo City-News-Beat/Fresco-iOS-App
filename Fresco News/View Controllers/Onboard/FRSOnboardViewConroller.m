@@ -93,11 +93,39 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.frsProgressView animateProgressViewAtPercent: ((float)(index+1) / (self.pageCount + 1))];
-              
-        [self.frsProgressView animateCirclesFromIndex:self.pagedViewController.currentIndex];
 
         
-        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
+        if (self.pagedViewController.currentIndex == UIPageViewControllerNavigationDirectionReverse){
+            
+            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex - 1;
+            
+            [self.frsProgressView animateFilledCirclesFromIndex:self.pagedViewController.currentIndex];
+   
+            NSLog(@"reverse called");
+        }
+        
+        if (self.pagedViewController.currentIndex == UIPageViewControllerNavigationDirectionForward){
+            NSLog(@"forward called");
+            
+            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex +1];
+ 
+            
+        }
+
+        
+        
+
+        
+        if (self.pagedViewController.previousIndex > self.pagedViewController.currentIndex) {
+            
+            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex];
+            
+        }
+
+        
+        
+//        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
+//        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
         
     });
 }
