@@ -94,7 +94,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.frsProgressView animateProgressViewAtPercent: ((float)(index+1) / (self.pageCount + 1))];
-   
+        
     });
 }
 

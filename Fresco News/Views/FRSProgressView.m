@@ -62,9 +62,6 @@ static const CGFloat CircleWidth = 24.0f;
             
         }
         [self animateProgressViewAtPercent:1/((float)count +1)];
-    
-
-
 
     }
     
@@ -72,13 +69,21 @@ static const CGFloat CircleWidth = 24.0f;
     UIView *firstCircle = [self.arrayOfEmptyCircles objectAtIndex:0];
     firstCircle.alpha = 0;
     
+    //Init animation
+    UIView *secondEmptyCircle = [self.arrayOfEmptyCircles objectAtIndex:1];
+    UIView *secondFilledCircle = [self.arrayOfFilledCircles objectAtIndex:1];
+
+    secondFilledCircle.transform = CGAffineTransformMakeScale(0, 0);
+
     
-    [self animateCircles];
+
+    
+    
+    [self animateCirclesWithPageCount:count];
     
     return self;
     
 }
-
 
 
 - (void)initLine {
@@ -187,16 +192,77 @@ static const CGFloat CircleWidth = 24.0f;
     } completion:nil];
 }
 
-- (void)animateCircles {
+- (void)animateCirclesWithPageCount:(NSInteger)count {
     
-    [UIView animateWithDuration:0.3
-                          delay:0.3
-                        options:UIViewAnimationOptionCurveEaseOut
+    UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:1];
+    UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:1];
+
+
+/*
+** Empty > Filled
+*/
+    
+//    [UIView animateWithDuration:0.25
+//                          delay:1.0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//
+//                         emptyCircleView.alpha = 0;
+//                         emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+//                         filledCircleView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+//                         
+//                     }
+//     
+//                     completion:^(BOOL finished) {
+//                         [UIView animateWithDuration:0.15
+//                                               delay:0.0
+//                                             options:UIViewAnimationOptionCurveEaseOut
+//                                          animations:^{
+//
+//                                              filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
+//                                              
+//                                          }
+//                          
+//                                          completion:^(BOOL finished) {
+//                                              //completion
+//                                          }];
+//                     }];
+    
+    
+    
+/*
+ ** Filled > Empty
+ */
+    
+    emptyCircleView.alpha = 0;
+    emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+    filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
+    
+    //Filled > Empty
+    [UIView animateWithDuration:0.25
+                          delay:1.0
+                        options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         //animation
+                        
+                         filledCircleView.transform = CGAffineTransformMakeScale(.001, .001);
+                         emptyCircleView.alpha = 1;
+                         emptyCircleView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                         
                      }
+     
                      completion:^(BOOL finished) {
-                         //completion
+                         [UIView animateWithDuration:0.15
+                                               delay:0.0
+                                             options:UIViewAnimationOptionCurveEaseOut
+                                          animations:^{
+                                              
+                                              emptyCircleView.transform = CGAffineTransformMakeScale (1,1);
+                                              
+                                          }
+                          
+                                          completion:^(BOOL finished) {
+                                              //completion
+                                          }];
                      }];
     
 }

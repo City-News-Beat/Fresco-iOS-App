@@ -18,13 +18,15 @@
 
 @interface FRSProgressView : UIView
 
-- (void)animateProgressViewAtPercent:(CGFloat)percent;
-
-- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
+@property id<FRSProgressViewDelegate> delegate;
 
 @property CGFloat *progressPercent;
 
-@property id<FRSProgressViewDelegate> delegate;
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
+
+- (void)animateProgressViewAtPercent:(CGFloat)percent;
+
+- (void)animateCirclesWithPageCount:(NSInteger)count;
 
 
 @end
