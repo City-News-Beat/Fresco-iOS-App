@@ -191,6 +191,7 @@ static const CGFloat CircleWidth = 24.0f;
     //Init Arrays
     UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:index];
     UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
+    
 
 /*
 ** Empty > Filled
@@ -261,6 +262,7 @@ static const CGFloat CircleWidth = 24.0f;
                                           animations:^{
                                               
                                               emptyCircleView.transform = CGAffineTransformMakeScale (1,1);
+
                                               
                                           }
                           

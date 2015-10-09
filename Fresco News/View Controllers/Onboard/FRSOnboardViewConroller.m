@@ -92,40 +92,44 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        //Animate progress bar
         [self.frsProgressView animateProgressViewAtPercent: ((float)(index+1) / (self.pageCount + 1))];
-
         
-        if (self.pagedViewController.currentIndex == UIPageViewControllerNavigationDirectionReverse){
-            
-            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex - 1;
-            
-            [self.frsProgressView animateFilledCirclesFromIndex:self.pagedViewController.currentIndex];
-   
-            NSLog(@"reverse called");
-        }
-        
-        if (self.pagedViewController.currentIndex == UIPageViewControllerNavigationDirectionForward){
-            NSLog(@"forward called");
-            
-            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex +1];
- 
-            
-        }
-
         
         
 
-        
-        if (self.pagedViewController.previousIndex > self.pagedViewController.currentIndex) {
-            
+        if (self.pagedViewController.currentIndex < self.pagedViewController.previousIndex){
+            NSLog(@"<<<<reverse called");
+
+//            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex - 1;
+          
             [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex];
-            
-        }
 
+        }
         
         
-//        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
-//        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
+        
+        if (self.pagedViewController.currentIndex > self.pagedViewController.previousIndex){
+            NSLog(@">>>>forward called");
+            
+//            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex + 1;
+            [self.frsProgressView animateFilledCirclesFromIndex:self.pagedViewController.currentIndex];
+
+
+        }
+        
+        
+//        NSLog(@"current index: %ld", self.pagedViewController.currentIndex);
+        
+ 
+//        if (self.pagedViewController.currentIndex < self.pagedViewController.previousIndex) {
+//            
+//            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex];
+//        
+//        }
+  
+        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
+        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
         
     });
 }

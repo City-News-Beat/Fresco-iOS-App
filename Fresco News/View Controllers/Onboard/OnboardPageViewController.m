@@ -149,6 +149,8 @@
     
     self.currentIndex = index;
     
+    self.previousIndex = index-1;
+    
     if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
         
         FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
