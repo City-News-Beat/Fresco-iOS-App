@@ -34,4 +34,5 @@
 
 @property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
+- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(int)count withFirstTitle:(NSString *)firstTitle andSecondTitle:(NSString *)secondTitle;
 @end

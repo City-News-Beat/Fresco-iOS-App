@@ -67,7 +67,7 @@
 
     [super viewDidAppear:animated];
     
-    self.pageCount = 3;
+    self.pageCount = 7;
     
     self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
                                                                              0,
@@ -76,8 +76,6 @@
                                                                              65) andPageCount:self.pageCount];    
     [self.view addSubview:self.frsProgressView];
     
-    
-
     
 }
 
@@ -100,36 +98,44 @@
 
 
         if (self.pagedViewController.currentIndex < self.pagedViewController.previousIndex){
-            NSLog(@"<<<<reverse called");
 
             [self.frsProgressView emptyingCircleAtIndex:self.pagedViewController.previousIndex];
 
         }
         
         if (self.pagedViewController.currentIndex > self.pagedViewController.previousIndex){
-            NSLog(@">>>>forward called");
             
             [self.frsProgressView fillingCircleAtIndex:self.pagedViewController.currentIndex];
         }
         
                 
-        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
-        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
+//        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
+//        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
         
         if (self.pagedViewController.currentIndex == 0) {
             UIView *firstFilledCircle = [self.frsProgressView.arrayOfFilledCircles objectAtIndex:0];
             firstFilledCircle.alpha = 1;
         }
         
+        //////*****////////
+//        [self.frsProgressView updateNextButtonAtIndex:index withString:@"Done"];
+//
+//        [self.frsProgressView updateNextButtonFromArray];
+        
+        
+//        [self.frsProgressView updateNextButtonAtIndex:index fromArray: [self.frsProgressView.arrayOfEmptyCircles lastObject] ];
+        
+        
+//        [self.frsProgressView updateNextButtonAtIndex:index withFirstTitle:@"Done" andSecondTitle:@"Next"];
+        
+        
+        [self.frsProgressView updateNextButtonAtIndex:index fromPageCount:self.pageCount withFirstTitle:@"Next" andSecondTitle:@"Done"];
+        
+        //////*****////////
+
     });
-
-
+    
 }
-
-
-
-
-
 
 
 

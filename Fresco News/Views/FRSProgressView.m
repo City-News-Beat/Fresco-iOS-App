@@ -26,8 +26,6 @@ static const CGFloat CircleWidth = 24.0f;
 
 @property (strong, nonatomic) UIView *progressBar;
 
-//@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
-//@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
 @end
 
@@ -119,7 +117,6 @@ static const CGFloat CircleWidth = 24.0f;
     
 }
 
-
 - (UIView *)createFilledCircleViewWithRadius:(CGFloat)radius withXPosition:(CGFloat)xPosition {
     
     
@@ -182,10 +179,9 @@ static const CGFloat CircleWidth = 24.0f;
     } completion:nil];
 }
 
+
 - (void)fillingCircleAtIndex:(NSInteger)index {
 
-    
-    
     //Init animation
     UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
     
@@ -271,6 +267,22 @@ static const CGFloat CircleWidth = 24.0f;
     
 }
 
+- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(int)count withFirstTitle:(NSString *)firstTitle andSecondTitle:(NSString *)secondTitle {
+    
+    int newCount = count -1;
+    
+    if (index == newCount){
+    
+        [self.nextButton setTitle:[NSString stringWithFormat:@"%@", secondTitle] forState:UIControlStateNormal];
+    }
+    if (index < newCount){
+        
+        [self.nextButton setTitle:[NSString stringWithFormat:@"%@", firstTitle] forState:UIControlStateNormal];
+    }
+    
+    NSLog(@"newCount: %d", newCount);
+    NSLog(@"index: %ld", (long)index);
+}
 
 @end
 

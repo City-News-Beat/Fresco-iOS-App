@@ -60,10 +60,8 @@
 }
 
 - (void)movedToViewAtIndex:(NSInteger)index{
-    
-    NSLog(@"%ld",index);
-    
-    if (index < 2 && !self.runningNextPage) {
+        
+    if (index < 6 && !self.runningNextPage) {
         
         _runningNextPage = YES;
         
@@ -133,7 +131,7 @@
     
     index++;
     
-    if (index == 3) {
+    if (index == 10) {
         return nil;
     }
     
@@ -171,7 +169,7 @@
 
 - (OnboardPageCellController *)viewControllerAtIndex:(NSUInteger)index
 {
-    if (index == 3) {
+    if (index == 10) {
         return nil;
     }
 
@@ -191,6 +189,8 @@
         
     });
 }
+
+
 
 @end
 
