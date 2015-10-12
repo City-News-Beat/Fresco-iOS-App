@@ -145,11 +145,14 @@
     
     if(!completed) return;
     
-    NSUInteger index = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+    NSUInteger newCurrentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
     
-    self.currentIndex = index;
+    // current index default = 0, always < current index.
+    self.previousIndex = self.currentIndex;
     
-    self.previousIndex = index-1;
+    
+    self.currentIndex = newCurrentIndex;
+    
     
     if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
         
@@ -171,12 +174,11 @@
     if (index == 3) {
         return nil;
     }
-    
+
     OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithAnimationState:index];
     
     return viewController;
 }
-
 
 
 - (void)onboardAnimation {
@@ -191,4 +193,15 @@
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
 

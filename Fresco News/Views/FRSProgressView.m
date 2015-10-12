@@ -26,8 +26,8 @@ static const CGFloat CircleWidth = 24.0f;
 
 @property (strong, nonatomic) UIView *progressBar;
 
-@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
-@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
+//@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
+//@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
 @end
 
@@ -122,6 +122,7 @@ static const CGFloat CircleWidth = 24.0f;
 
 - (UIView *)createFilledCircleViewWithRadius:(CGFloat)radius withXPosition:(CGFloat)xPosition {
     
+    
     UIView *circleView = [UIView new];
     
     circleView.frame = CGRectMake(
@@ -172,6 +173,7 @@ static const CGFloat CircleWidth = 24.0f;
 
     [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
+        
         CGRect newFrame = self.progressView.frame;
         newFrame.size.width = self.frame.size.width * percent;
         
@@ -180,17 +182,18 @@ static const CGFloat CircleWidth = 24.0f;
     } completion:nil];
 }
 
-- (void)animateFilledCirclesFromIndex:(NSInteger)index {
+- (void)fillingCircleAtIndex:(NSInteger)index {
+
+    
     
     //Init animation
-    UIView *secondFilledCircle = [self.arrayOfFilledCircles objectAtIndex:index];
+    UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
     
-    secondFilledCircle.transform = CGAffineTransformMakeScale(0, 0);
+    filledCircleView.transform = CGAffineTransformMakeScale(0, 0);
     
     
     //Init Arrays
     UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:index];
-    UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
     
 
 /*
@@ -214,7 +217,7 @@ static const CGFloat CircleWidth = 24.0f;
                                              options:UIViewAnimationOptionCurveEaseOut
                                           animations:^{
 
-                                              filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
+                                              filledCircleView.transform =CGAffineTransformMakeScale(1, 1);
                                               
                                           }
                           
@@ -225,23 +228,17 @@ static const CGFloat CircleWidth = 24.0f;
     
     
 }
-- (void)animateEmptyCirclesFromIndex:(NSInteger)index {
 
+- (void)emptyingCircleAtIndex:(NSInteger)index {
     
 /*
  ** Filled > Empty
  */
-    
+
     //Init Arrays
     UIView *emptyCircleView = [self.arrayOfEmptyCircles objectAtIndex:index];
+    
     UIView *filledCircleView = [self.arrayOfFilledCircles objectAtIndex:index];
-    
-//    emptyCircleView.alpha = 0;
-//    emptyCircleView.transform = CGAffineTransformMakeScale(.001, .001);
-//    filledCircleView.transform = CGAffineTransformMakeScale(1, 1);
-    
-
-
     
     //Filled > Empty
     [UIView animateWithDuration:0.25
@@ -262,7 +259,7 @@ static const CGFloat CircleWidth = 24.0f;
                                           animations:^{
                                               
                                               emptyCircleView.transform = CGAffineTransformMakeScale (1,1);
-
+                                            
                                               
                                           }
                           

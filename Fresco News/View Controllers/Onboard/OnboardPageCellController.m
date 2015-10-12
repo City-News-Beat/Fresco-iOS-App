@@ -112,14 +112,12 @@
         [self animateOnboard1];
         
     }
-    
-    if(self.animationState == AnimationStateTwo){
+    else if(self.animationState == AnimationStateTwo){
         [self setUpOnboard2];
         [self animateOnboard2];
         
     }
-    
-    if(self.animationState == AnimationStateThree){
+    else if(self.animationState == AnimationStateThree){
         [self setUpOnboard3];
         [self animateOnboard3];
         
@@ -141,6 +139,7 @@
     self.cash1.alpha = 0;
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
+ 
     
 }
 
@@ -364,6 +363,7 @@
     self.assignmentBottomLeft.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
+    
     
     [UIView animateWithDuration:0.35
                           delay:0.0

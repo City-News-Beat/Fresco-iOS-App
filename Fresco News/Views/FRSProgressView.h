@@ -24,13 +24,14 @@
 
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
-- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count andIndex:(NSInteger)index;
-
 - (void)animateProgressViewAtPercent:(CGFloat)percent;
 
-- (void)animateFilledCirclesFromIndex:(NSInteger)index;
+- (void)fillingCircleAtIndex:(NSInteger)index;
 
-- (void)animateEmptyCirclesFromIndex:(NSInteger)index;
+- (void)emptyingCircleAtIndex:(NSInteger)index;
 
+@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
 @end

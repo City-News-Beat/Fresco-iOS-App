@@ -41,7 +41,6 @@
     
     [super viewDidLoad];
 
-
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc]
                                 initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
@@ -59,8 +58,8 @@
 
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
-
     
+
 
 }
 
@@ -77,6 +76,9 @@
                                                                              65) andPageCount:self.pageCount];    
     [self.view addSubview:self.frsProgressView];
     
+    
+
+    
 }
 
 #pragma mark - FRSProgressView Delegate
@@ -90,49 +92,45 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
     
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         //Animate progress bar
-        [self.frsProgressView animateProgressViewAtPercent: ((float)(index+1) / (self.pageCount + 1))];
-        
-        
-        
+        [self.frsProgressView animateProgressViewAtPercent: ((float)(index + 1) / (self.pageCount + 1))];
+
 
         if (self.pagedViewController.currentIndex < self.pagedViewController.previousIndex){
             NSLog(@"<<<<reverse called");
 
-//            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex - 1;
-          
-            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex];
+            [self.frsProgressView emptyingCircleAtIndex:self.pagedViewController.previousIndex];
 
         }
-        
-        
         
         if (self.pagedViewController.currentIndex > self.pagedViewController.previousIndex){
             NSLog(@">>>>forward called");
             
-//            self.pagedViewController.previousIndex = self.pagedViewController.currentIndex + 1;
-            [self.frsProgressView animateFilledCirclesFromIndex:self.pagedViewController.currentIndex];
-
-
+            [self.frsProgressView fillingCircleAtIndex:self.pagedViewController.currentIndex];
         }
         
-        
-//        NSLog(@"current index: %ld", self.pagedViewController.currentIndex);
-        
- 
-//        if (self.pagedViewController.currentIndex < self.pagedViewController.previousIndex) {
-//            
-//            [self.frsProgressView animateEmptyCirclesFromIndex:self.pagedViewController.currentIndex];
-//        
-//        }
-  
+                
         NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
         NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
         
+        if (self.pagedViewController.currentIndex == 0) {
+            UIView *firstFilledCircle = [self.frsProgressView.arrayOfFilledCircles objectAtIndex:0];
+            firstFilledCircle.alpha = 1;
+        }
+        
     });
+
+
 }
+
+
+
+
+
+
 
 
 @end
