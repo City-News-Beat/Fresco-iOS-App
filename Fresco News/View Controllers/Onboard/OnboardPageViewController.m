@@ -79,7 +79,7 @@
             FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *) self.parentViewController;
             
             [parentVC updateStateWithIndex:self.currentIndex];
-            
+             
         }
     
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
@@ -90,7 +90,6 @@
             
         }];
     }
-    
     else{
         
         if(![[FRSDataManager sharedManager] isLoggedIn]){
@@ -143,11 +142,11 @@
     
     if(!completed) return;
     
+    
     NSUInteger newCurrentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
     
     // current index default = 0, always < current index.
     self.previousIndex = self.currentIndex;
-    
     
     self.currentIndex = newCurrentIndex;
     
@@ -186,6 +185,12 @@
         OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
         
         [onBoardPageCellController performAnimation];
+        
+        NSUInteger newCurrentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+        
+        self.previousIndex = self.currentIndex;
+        
+        self.currentIndex = newCurrentIndex;
         
     });
 }

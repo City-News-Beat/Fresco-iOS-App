@@ -84,6 +84,8 @@
 -(void)nextButtonTapped{
     
     [self.pagedViewController movedToViewAtIndex:self.pagedViewController.currentIndex];
+    
+    
 
 }
 
@@ -103,12 +105,12 @@
 
         }
         
-        if (self.pagedViewController.currentIndex > self.pagedViewController.previousIndex){
+        else if (self.pagedViewController.currentIndex > self.pagedViewController.previousIndex){
             
             [self.frsProgressView fillingCircleAtIndex:self.pagedViewController.currentIndex];
         }
         
-        if (self.pagedViewController.currentIndex == 0) {
+        else if (self.pagedViewController.currentIndex == 0) {
             UIView *firstFilledCircle = [self.frsProgressView.arrayOfFilledCircles objectAtIndex:0];
             firstFilledCircle.alpha = 1;
         }
