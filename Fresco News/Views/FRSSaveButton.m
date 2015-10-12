@@ -20,21 +20,26 @@
 
 - (id)initWithFrame:(CGRect)frame andTitle:(NSString *)passedTitle{
 
-    self = [super initWithFrame:frame];
-    
+    self = [FRSSaveButton buttonWithType:UIButtonTypeSystem];
+            
     if(self){
     
         self.title = passedTitle;
+        self.frame = frame;
         self.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
-        self.titleLabel.textColor = [UIColor whiteColor];
         self.backgroundColor = [UIColor disabledSaveColor];
         [self setTitle:passedTitle forState:UIControlStateNormal];
+        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self configureSpinner];
     }
     
     return self;
 
 }
+
+/**
+ *  Sets up the spinner indicator inside the button
+ */
 
 - (void)configureSpinner{
 
@@ -50,35 +55,29 @@
 
 - (void)toggleSpinner{
     
-    if(!self.saveProgressView) [self configureSpinner];
-    
-    if (!self.saveProgressView.isAnimating) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if(!self.saveProgressView) [self configureSpinner];
+        
+        if (!self.saveProgressView.isAnimating) {
             
             [self setTitle:@"" forState:UIControlStateNormal];
             
             [self.saveProgressView startAnimating];
             self.saveProgressView.alpha = 1;
 
-        });
-        
-    }
-    else {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        }
+        else {
             
             [UIView animateWithDuration:.2 animations:^{
                 self.saveProgressView.alpha = 0;
             }completion:^(BOOL finished) {
                 [self.saveProgressView stopAnimating];
-                self.saveProgressView.alpha = 0;
                 [self setTitle:self.title forState:UIControlStateNormal];
             }];
-
-        });
-        
-    }
+        }
+    
+    });
 }
 
 - (void)updateSaveState:(SaveState)state{

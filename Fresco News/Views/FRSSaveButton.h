@@ -17,8 +17,16 @@ typedef enum : NSUInteger {
 
 - (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
 
+/**
+ *  Update the state of the button to either disabled or enabled
+ *
+ *  @param state The state othe button
+ */
 - (void)updateSaveState:(SaveState)state;
 
+/**
+ *  Toggles the state of the spinner between animation / not-animating
+ */
 - (void)toggleSpinner;
     
 @end

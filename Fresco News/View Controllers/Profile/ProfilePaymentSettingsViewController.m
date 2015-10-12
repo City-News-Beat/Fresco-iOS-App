@@ -369,13 +369,13 @@
     NSNumber *day = [NSNumber numberWithInteger:[components day]];
     NSNumber *year = [NSNumber numberWithInteger:[components year]];
     NSNumber *month =[NSNumber numberWithInteger:[components month]];
+    
+    [self.saveCardButton toggleSpinner];
 
     [[STPAPIClient sharedClient] createTokenWithCard:card completion:^(STPToken *token, NSError *error) {
 
         if (!error && token) {
             
-            [self.saveCardButton toggleSpinner];
-    
             NSDictionary *params = @{
                                      @"token" : token.tokenId,
                                      @"dob_day" : day,
