@@ -122,10 +122,7 @@
         [self animateOnboard3];
         
     }
-
-
-    
-    
+ 
     
 }
 
@@ -166,13 +163,7 @@
             
             [self animateOnboard3];
             
-            break;
-            
-        case AnimationStateThreee:
-            
-            [self animateOnboard3];
-            
-            break;
+            break; 
             
     }
     

@@ -61,7 +61,7 @@
 
 - (void)movedToViewAtIndex:(NSInteger)index{
         
-    if (index < 3 && !self.runningNextPage) {
+    if (index < 2 && !self.runningNextPage) {
         
         _runningNextPage = YES;
         

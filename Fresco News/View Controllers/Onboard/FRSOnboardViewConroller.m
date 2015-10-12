@@ -108,30 +108,14 @@
             [self.frsProgressView fillingCircleAtIndex:self.pagedViewController.currentIndex];
         }
         
-                
-//        NSLog(@"current index: %ld", (long)self.pagedViewController.currentIndex);
-//        NSLog(@"previous index: %ld", (long)self.pagedViewController.previousIndex);
-        
         if (self.pagedViewController.currentIndex == 0) {
             UIView *firstFilledCircle = [self.frsProgressView.arrayOfFilledCircles objectAtIndex:0];
             firstFilledCircle.alpha = 1;
         }
-        
-        //////*****////////
-//        [self.frsProgressView updateNextButtonAtIndex:index withString:@"Done"];
-//
-//        [self.frsProgressView updateNextButtonFromArray];
-        
-        
-//        [self.frsProgressView updateNextButtonAtIndex:index fromArray: [self.frsProgressView.arrayOfEmptyCircles lastObject] ];
-        
-        
-//        [self.frsProgressView updateNextButtonAtIndex:index withFirstTitle:@"Done" andSecondTitle:@"Next"];
-        
+
         
         [self.frsProgressView updateNextButtonAtIndex:index fromPageCount:self.pageCount withFirstTitle:@"Next" andSecondTitle:@"Done"];
-        
-        //////*****////////
+
 
     });
     
