@@ -67,35 +67,18 @@
         self.mainHeaders = @[
                              MAIN_HEADER_1,
                              MAIN_HEADER_2,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
-                             MAIN_HEADER_3,
+                             MAIN_HEADER_3
                              ];
         
         self.subHeaders = @[
                             SUB_HEADER_1,
                             SUB_HEADER_2,
-                            SUB_HEADER_3,
-                            SUB_HEADER_3,
-                            SUB_HEADER_3,
-                            SUB_HEADER_3,
-                            SUB_HEADER_3,
-                            SUB_HEADER_3,
                             SUB_HEADER_3
                             ];
         
         self.images = @[
                         @"onboard1.png",
                         @"onboard2.png",
-                        @"onboard3.png",
-                        @"onboard3.png",
-                        @"onboard3.png",
-                        @"onboard3.png",
-                        @"onboard3.png",
                         @"onboard3.png"
                         ];
         
@@ -139,36 +122,8 @@
         [self animateOnboard3];
         
     }
-    else if(self.animationState == AnimationStateThreee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
-    else if(self.animationState == AnimationStateThreeee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
-    else if(self.animationState == AnimationStateThreeeee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
-    else if(self.animationState == AnimationStateThreeeeee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
-    else if(self.animationState == AnimationStateThreeeeeee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
-    else if(self.animationState == AnimationStateThreeeeeeee){
-        [self setUpOnboard3];
-        [self animateOnboard3];
-        
-    }
+
+
     
     
     
@@ -214,33 +169,6 @@
             break;
             
         case AnimationStateThreee:
-            
-            [self animateOnboard3];
-            
-            break;
-            
-        case AnimationStateThreeee:
-            
-            [self animateOnboard3];
-            
-            break;
-            
-        case AnimationStateThreeeee:
-            
-            [self animateOnboard3];
-            
-            break;
-        case AnimationStateThreeeeee:
-            
-            [self animateOnboard3];
-            
-            break;
-        case AnimationStateThreeeeeee:
-            
-            [self animateOnboard3];
-            
-            break;
-        case AnimationStateThreeeeeeee:
             
             [self animateOnboard3];
             

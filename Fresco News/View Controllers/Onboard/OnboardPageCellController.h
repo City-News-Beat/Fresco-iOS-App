@@ -13,12 +13,7 @@ typedef enum : NSUInteger {
     AnimationStateOne,
     AnimationStateTwo,
     AnimationStateThree,
-    AnimationStateThreee,
-    AnimationStateThreeee,
-    AnimationStateThreeeee,
-    AnimationStateThreeeeee,
-    AnimationStateThreeeeeee,
-    AnimationStateThreeeeeeee
+    AnimationStateThreee
 } AnimationState;
 
 

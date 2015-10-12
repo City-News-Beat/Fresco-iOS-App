@@ -67,7 +67,7 @@
 
     [super viewDidAppear:animated];
     
-    self.pageCount = 7;
+    self.pageCount = 3;
     
     self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
                                                                              0,

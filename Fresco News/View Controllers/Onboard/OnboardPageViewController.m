@@ -61,7 +61,7 @@
 
 - (void)movedToViewAtIndex:(NSInteger)index{
         
-    if (index < 6 && !self.runningNextPage) {
+    if (index < 3 && !self.runningNextPage) {
         
         _runningNextPage = YES;
         
@@ -131,7 +131,7 @@
     
     index++;
     
-    if (index == 10) {
+    if (index == 3) {
         return nil;
     }
     
@@ -169,7 +169,7 @@
 
 - (OnboardPageCellController *)viewControllerAtIndex:(NSUInteger)index
 {
-    if (index == 10) {
+    if (index == 3) {
         return nil;
     }
 
