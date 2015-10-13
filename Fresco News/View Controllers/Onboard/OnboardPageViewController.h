@@ -15,6 +15,8 @@
 
 @property (assign, nonatomic) NSInteger previousIndex;
 
+@property (assign, nonatomic) NSInteger newCurrentIndex;
+
 - (void)movedToViewAtIndex:(NSInteger)index;
 
 @end

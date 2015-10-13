@@ -109,6 +109,7 @@
                 <constraint firstAttribute="centerX" secondItem="3IA-Dc-RzZ" secondAttribute="centerX" id="ud4-qs-yvy"/>
                 <constraint firstAttribute="centerY" secondItem="i6r-VV-ZeP" secondAttribute="centerY" multiplier="0.8" constant="-10" id="zFk-wf-x7b"/>
             </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">

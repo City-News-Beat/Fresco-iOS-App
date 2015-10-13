@@ -36,6 +36,9 @@
         
         [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
         
+        //
+        self.view.clipsToBounds = YES;
+        
     }
     
     return self;
@@ -60,7 +63,16 @@
 }
 
 - (void)movedToViewAtIndex:(NSInteger)index{
-        
+    
+    ///
+    NSUInteger newCurrentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+    
+    self.previousIndex = self.currentIndex;
+    
+    self.currentIndex = newCurrentIndex;
+    ///
+
+    
     if (index < 2 && !self.runningNextPage) {
         
         _runningNextPage = YES;
@@ -174,11 +186,15 @@
 
     OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithAnimationState:index];
     
+    
+    
     return viewController;
 }
 
 
 - (void)onboardAnimation {
+
+    
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -186,13 +202,9 @@
         
         [onBoardPageCellController performAnimation];
         
-        NSUInteger newCurrentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
-        
-        self.previousIndex = self.currentIndex;
-        
-        self.currentIndex = newCurrentIndex;
-        
     });
+
+    
 }
 
 

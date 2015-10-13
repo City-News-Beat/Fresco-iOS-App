@@ -16,11 +16,18 @@
 
 @end
 
+
 @interface FRSProgressView : UIView
 
 @property id<FRSProgressViewDelegate> delegate;
 
 @property CGFloat *progressPercent;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
+
+@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
+
+
 
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
@@ -30,9 +37,8 @@
 
 - (void)emptyingCircleAtIndex:(NSInteger)index;
 
-@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
+- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(NSInteger)count;
 
-@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
 
-- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(int)count withFirstTitle:(NSString *)firstTitle andSecondTitle:(NSString *)secondTitle;
+
 @end

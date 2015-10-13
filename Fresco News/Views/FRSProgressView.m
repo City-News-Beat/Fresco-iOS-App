@@ -193,10 +193,10 @@ static const CGFloat CircleWidth = 24.0f;
     
 
 /*
-** Empty > Filled
+** Animate Empty > Filled
 */
     
-    [UIView animateWithDuration:0.25
+    [UIView animateWithDuration:0.2
                           delay:0.175
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -267,17 +267,17 @@ static const CGFloat CircleWidth = 24.0f;
     
 }
 
-- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(NSInteger)count withFirstTitle:(NSString *)firstTitle andSecondTitle:(NSString *)secondTitle {
+- (void)updateNextButtonAtIndex:(NSInteger)index fromPageCount:(NSInteger)count {
     
     NSInteger newCount = count -1;
     
     if (index == newCount){
     
-        [self.nextButton setTitle:[NSString stringWithFormat:@"%@", secondTitle] forState:UIControlStateNormal];
+        [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
     }
     else if (index < newCount){
         
-        [self.nextButton setTitle:[NSString stringWithFormat:@"%@", firstTitle] forState:UIControlStateNormal];
+        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     }
     
     NSLog(@"index: %ld", (long)index);

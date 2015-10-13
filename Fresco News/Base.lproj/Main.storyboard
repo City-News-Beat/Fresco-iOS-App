@@ -344,7 +344,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isw-ZN-cA3">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="9752B699-C989-4153-A54A-27792CD78D68" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="814E5D16-8287-4AF2-A61F-5A164935CB51" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
                                                             <rect key="frame" x="19" y="11" width="20" height="20"/>
                                                             <animations/>
                                                             <constraints>
@@ -866,29 +866,6 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9OB-GS-ra8">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="9OB-GS-ra8" secondAttribute="height" multiplier="25:3" id="L2P-GH-RHK"/>
-                                    <constraint firstAttribute="width" secondItem="9OB-GS-ra8" secondAttribute="height" multiplier="15:2" id="QEC-D2-rRD"/>
-                                    <constraint firstAttribute="height" constant="50" id="dqj-it-Ggh"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="No thanks, I'll sign up later">
-                                    <color key="titleColor" red="0.97254901960784312" green="0.67843137254901964" blue="0.090196078431372548" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="L2P-GH-RHK"/>
-                                        <exclude reference="dqj-it-Ggh"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <action selector="buttonWontLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Wq7-BO-zRH"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4d-vE-jMc">
                                 <rect key="frame" x="180" y="357" width="16" height="22"/>
                                 <animations/>
@@ -1214,6 +1191,29 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9OB-GS-ra8">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="9OB-GS-ra8" secondAttribute="height" multiplier="25:3" id="L2P-GH-RHK"/>
+                                    <constraint firstAttribute="width" secondItem="9OB-GS-ra8" secondAttribute="height" multiplier="15:2" id="QEC-D2-rRD"/>
+                                    <constraint firstAttribute="height" constant="50" id="dqj-it-Ggh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="No thanks, I'll sign up later">
+                                    <color key="titleColor" red="0.97254901960784312" green="0.67843137254901964" blue="0.090196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="L2P-GH-RHK"/>
+                                        <exclude reference="dqj-it-Ggh"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="buttonWontLogin:" destination="3S1-xO-1aC" eventType="touchUpInside" id="Wq7-BO-zRH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
@@ -3316,7 +3316,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="9752B699-C989-4153-A54A-27792CD78D68" width="20" height="20">
+        <image name="814E5D16-8287-4AF2-A61F-5A164935CB51" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3419,6 +3419,6 @@ AAAAAAIBAAAAAAAAAEEAAAAAAAAAAAAAAAAAABBcA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="mED-O3-2r9"/>
-        <segue reference="6TG-Ef-MS9"/>
+        <segue reference="BrQ-Qn-DKp"/>
     </inferredMetricsTieBreakers>
 </document>

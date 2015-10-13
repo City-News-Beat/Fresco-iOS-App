@@ -84,14 +84,11 @@
 -(void)nextButtonTapped{
     
     [self.pagedViewController movedToViewAtIndex:self.pagedViewController.currentIndex];
-    
-    
 
 }
 
 
 - (void)updateStateWithIndex:(NSInteger)index{
-    
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -115,12 +112,15 @@
             firstFilledCircle.alpha = 1;
         }
 
+        [self.frsProgressView updateNextButtonAtIndex:index fromPageCount:self.pageCount];
         
-        [self.frsProgressView updateNextButtonAtIndex:index fromPageCount:self.pageCount withFirstTitle:@"Next" andSecondTitle:@"Done"];
-
-
     });
     
+}
+
+
+- (BOOL)prefersStatusBarHidden{
+    return YES;
 }
 
 

@@ -39,6 +39,7 @@
                 <constraint firstItem="uLz-Mu-ouR" firstAttribute="top" secondItem="wz5-13-deN" secondAttribute="bottom" constant="8" symbolic="YES" id="rtK-at-yyo"/>
                 <constraint firstItem="wz5-13-deN" firstAttribute="top" secondItem="DFD-9b-t5h" secondAttribute="top" constant="43" id="sWa-of-0Pz"/>
             </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="1417" y="-1371"/>
         </view>
     </objects>
