@@ -12,7 +12,7 @@
 #import "FRSGallery.h"
 #import "GalleryHeader.h"
 #import "FRSDataManager.h"
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "AppDelegate.h"
 
 @implementation FRSBaseViewController

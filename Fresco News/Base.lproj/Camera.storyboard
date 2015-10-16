@@ -935,7 +935,7 @@
                                         <rect key="frame" x="0.0" y="775" width="600" height="2.5"/>
                                         <animations/>
                                     </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="FRSSocialButton">
                                         <rect key="frame" x="0.0" y="777" width="300" height="46"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -952,7 +952,7 @@
                                             <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="UISocialButton">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="FRSSocialButton">
                                         <rect key="frame" x="300" y="777" width="300" height="46"/>
                                         <animations/>
                                         <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1053,7 +1053,6 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="qOm-qu-iOS"/>
                                         <exclude reference="6TH-J8-SM8"/>
                                         <exclude reference="DX4-Oh-Ihs"/>
                                         <exclude reference="IlT-sd-mh1"/>
@@ -1062,6 +1061,7 @@
                                         <exclude reference="cdf-eO-Ew9"/>
                                         <exclude reference="iJ8-M4-cjv"/>
                                         <exclude reference="pVI-Q1-yds"/>
+                                        <exclude reference="qOm-qu-iOS"/>
                                         <exclude reference="AkC-fb-Vkz"/>
                                         <exclude reference="ylJ-pa-y0M"/>
                                     </mask>

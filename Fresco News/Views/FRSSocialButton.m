@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 
-@implementation UISocialButton
+@implementation FRSSocialButton
 
 + (UISocialButton *)createSocialButton{
 

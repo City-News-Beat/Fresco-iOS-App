@@ -13,7 +13,7 @@ typedef enum : NSUInteger {
     SocialNetworkTwitter
 } SocialNetwork;
 
-@interface UISocialButton : UIButton
+@interface FRSSocialButton : UIButton
 
 - (void)setUpSocialIcon:(SocialNetwork)network withRadius:(BOOL)radius;
 

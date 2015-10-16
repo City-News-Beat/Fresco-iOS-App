@@ -18,15 +18,15 @@
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
 #import "UIView+Border.h"
-#import "UISocialButton.h"
 #import "FirstRunPageViewController.h"
+#import "FRSSocialButton.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
 
-@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
 

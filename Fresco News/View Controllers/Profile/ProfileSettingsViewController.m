@@ -19,7 +19,7 @@
 #import "MKMapView+Additions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import <MapKit/MapKit.h>
-#import "UISocialButton.h"
+#import "FRSSocialButton.h"
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
 #import "FRSSaveButton.h"
