@@ -9,5 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface CALayer (Additions)
+
 - (CALayer *)addPulsingAnimation;
+
 @end

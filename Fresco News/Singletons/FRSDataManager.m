@@ -13,7 +13,6 @@
 #import <Crashlytics/Crashlytics.h>
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
-#import "NSFileManager+Additions.h"
 #import "FRSStory.h"
 #import "FRSAlertViewManager.h"
 
@@ -122,16 +121,14 @@
         
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             
-            //Now that we're signed up with Parse create the Fresco user
             if (succeeded) {
                 
+                //Now that we're signed up with Parse create the Fresco user
                 [self createFrescoUserWithResponseBlock:^(id responseObject, NSError *error) {
 
                     if(self.currentUser != nil && responseObject != nil){
                     
-                        [Answers logSignUpWithMethod:@"Fresco"
-                                             success:@YES
-                                    customAttributes:@{}];
+                        [Answers logSignUpWithMethod:@"Fresco" success:@YES customAttributes:nil];
                         
                         block(YES, nil);
  
@@ -149,7 +146,12 @@
         }];
     }
     else {
-        NSError *error = [NSError errorWithDomain:ERROR_DOMAIN code:ErrorSignupCantCreateUser userInfo:@{@"error" : @"User has no email"}];
+  
+        NSError *error = [NSError
+                          errorWithDomain:ERROR_DOMAIN
+                          code:ErrorSignupCantCreateUser
+                          userInfo:@{@"error" : @"User has no email"}];
+        
         block(NO, error);
     }
 }
@@ -410,69 +412,71 @@
     self.loggingIn = YES;
     
     //Check if we have a Parse User set
-    if([PFUser currentUser] != nil){
+    if([PFUser currentUser] == nil)
+        return;
     
-        //Check to make sure we already have the fresco user id in the PFUser, if not, delete the user from parse as it's invalid
-        if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
-            
-            [[PFUser currentUser] deleteInBackground];
-            
-            self.loggingIn = NO;
+    //Check to make sure we already have the fresco user id in the PFUser, if not, delete the user from parse as it's invalid
+    if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
         
-        }
-        //The fresco user id exists and proceed normally
-        else{
+        [[PFUser currentUser] deleteInBackground];
         
-            NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
-            
-            [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
-            
-                //Successful refresh and log in
-                if(success){
-                    
-                    if(block) block(YES, nil);
-                    
-                    //Validate Terms Here
-                    [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
-                        
-                        //Check if not latest terms, if  error and data field has terms inside
-                        if(![responseObject[@"data"] isEqual:[NSNull null]]){
-                        
-                            //Send notif to app to present TOS update flow
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPDATED_TOS object:nil];
- 
-                        }
-                     
-                    }];
-                    
-                    [[FRSLocationManager sharedManager] setupLocationMonitoring];
-                    
-                }
-                //Failed refresh and log in
-                else{
-                    
-                    [[FRSDataManager sharedManager] logout];
-                    
-                    if(block) block(NO, nil);
-                    
-                }
-
-                _loggingIn = NO;
-            
-            }];
-            
-        }
+        self.loggingIn = NO;
+        
     }
-}
+    //The fresco user id exists and proceed normally
+    else{
+        
+        NSString *userId = [[PFUser currentUser] objectForKey:kFrescoUserIdKey];
+        
+        [self setCurrentUser:userId withResponseBlock:^(BOOL success, NSError *error) {
+            
+            //Successful refresh and log in
+            if(success){
+                
+                if(block) block(YES, nil);
+                
+                //Validate Terms Here
+                [weakSelf getTermsOfService:YES withResponseBlock:^(id responseObject, NSError *error) {
+                    
+                    //Check if not latest terms, if  error and data field has terms inside
+                    if(![responseObject[@"data"] isEqual:[NSNull null]]){
+                        
+                        //Send notif to app to present TOS update flow
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPDATED_TOS object:nil];
+                        
+                    }
+                    
+                }];
+                
+                [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+                
+            }
+            //Failed refresh and log in
+            else{
+                
+                [[FRSDataManager sharedManager] logout];
+                
+                if(block) block(NO, nil);
+                
+            }
+            
+            _loggingIn = NO;
+            
+        }];
+        
+    }
 
-/*
-** Runs a check on the current userId to make sure everything is valid, otherwise cleans up and removes it
-*/
+}
 
 - (void)setCurrentUser:(NSString *)frescoUserId withResponseBlock:(FRSAPISuccessBlock)responseBlock
 {
     
     __block FRSDataManager *dM = self;
+    
+    if(dM.currentUser != nil){
+        responseBlock(YES, nil);
+        return;
+    }
     
     [self setNewTokenWithSession:[PFUser currentUser].sessionToken withResonseBlock:^(FRSUser *user, NSError *error) {
         

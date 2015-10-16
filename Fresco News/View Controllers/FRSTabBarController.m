@@ -10,7 +10,7 @@
 
 #import "FRSTabBarController.h"
 #import "UIViewController+Additions.h"
-#import "CameraViewController.h"
+#import "FRSCamViewController.h"
 #import "HighlightsViewController.h"
 #import "AssignmentsViewController.h"
 #import "ProfileViewController.h"
@@ -81,7 +81,7 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-    CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
     //Custom addition
     [self presentViewController:vc withScale:YES];
@@ -90,7 +90,7 @@
 
 - (void)returnToGalleryPost
 {
-    CameraViewController *vc = (CameraViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
     [self presentViewController:vc animated:NO completion:^{
         [vc doneButtonTapped:nil];

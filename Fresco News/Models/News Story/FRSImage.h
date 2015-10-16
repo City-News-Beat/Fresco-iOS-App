@@ -10,14 +10,14 @@
 
 #import <Mantle/Mantle.h>
 
-@class ALAsset;
+@class PHAsset;
 
 @interface FRSImage : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, copy) NSURL *URL;
 @property (nonatomic, copy) NSNumber *width;
 @property (nonatomic, copy) NSNumber *height;
-@property (strong, nonatomic) ALAsset *asset;
+@property (strong, nonatomic) PHAsset *asset;
 @property (strong, nonatomic) NSNumber *latitude;
 @property (strong, nonatomic) NSNumber *longitude;
 

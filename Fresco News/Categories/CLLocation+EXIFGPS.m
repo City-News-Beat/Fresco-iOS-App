@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "CLLocation+EXIFGPS.h"
 @import ImageIO;
+
+#import "CLLocation+EXIFGPS.h"
 #import "NSDate+ISO.h"
 
 @implementation CLLocation (EXIFGPS)
@@ -32,7 +33,8 @@
     [metadata setValue:[self.timestamp ISOTime] forKey:(NSString *)kCGImagePropertyGPSTimeStamp];
     [metadata setValue:[self.timestamp ISODate] forKey:(NSString *)kCGImagePropertyGPSDateStamp];
     
-    return @{@"{GPS}" : [metadata copy]};
+    //Should be saved into dictionary under key forKey:(NSString *)kCGImagePropertyGPSDictionary
+    return [metadata copy];
 }
 
 @end

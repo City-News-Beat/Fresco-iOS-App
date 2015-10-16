@@ -7,7 +7,6 @@
 //
 
 
-#import "ALAsset+isEqual.h"
 #import "GalleryView.h"
 #import "FRSGallery.h"
 #import "FRSPost.h"
@@ -89,12 +88,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                     //If the cell has a video
                     if([postCell.post isVideo]){
                 
-                        if(!postCell.post.video){
-  
-                            [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
-                            
-                        }
-                        else
+                        if(postCell.post.video)
                             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
                 
                     }
@@ -297,9 +291,13 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         //Check if the player is actually playing
         if(self.sharedPlayer != nil){
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
             [self.sharedLayer removeFromSuperlayer];
             [self.sharedPlayer pause];
-            [self removeObserverForPlayer];  
+            [self removeObserverForPlayer];
+                
+            });
         }
         
     }
@@ -385,7 +383,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             else{
                 
                 [self.sharedPlayer play];
-                if(cell.mutedImage.alpha == 1.0f) cell.playPause.alpha = 0.0f;
+                if(cell.mutedImage.alpha == 1.0f)
+                    cell.playPause.alpha = 0.0f;
                 cell.playPause.image = [UIImage imageNamed:@"play"];
                 cell.playPause.transform = CGAffineTransformMakeScale(1, 1);
                 [cell bringSubviewToFront:cell.playPause];
@@ -514,10 +513,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell has a video
     if([postCell.post isVideo]){
         
-        if(!postCell.post.video){
-            [self setUpPlayerWithUrl:[[((ALAsset *)postCell.post.image.asset) defaultRepresentation] url] cell:postCell];
-        }
-        else
+        if(postCell.post.video)
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
         
     }

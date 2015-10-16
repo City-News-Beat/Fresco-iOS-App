@@ -59,11 +59,10 @@
         [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     
-    //Check if we've launcahed the app before or if the app is the iPhone 4s/4
+    //Check if we've launched the app before or if the app is the iPhone 4s/4
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         [self registerForPushNotifications];
         [self.frsRootViewController setRootViewControllerToTabBar];
-        
     }
     else {
         [self.frsRootViewController setRootViewControllerToOnboard];
@@ -119,7 +118,6 @@
 {
     NSDictionary *attributes = @{NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor]};
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [UIToolbar appearance].barTintColor = [UIColor greenToolbarColor];
 }
 
 - (void)setupBarButtonItemAppearance
@@ -131,17 +129,22 @@
 
 - (void)configureAppWithLaunchOptions:(NSDictionary *)launchOptions
 {
-    
+    //AFNetworking Logging
 //    [[AFNetworkActivityLogger sharedLogger] startLogging];
     
+    //Fabric
     [Fabric with:@[CrashlyticsKit]];
     
+    //Stripe
     [Stripe setDefaultPublishableKey:STRIPE_PUBLISHABLE_KEY];
 
+    //Parse
     [Parse setApplicationId:PARSE_APP_ID clientKey:PARSE_CLIENT_KEY];
     
+    //Facebook Utilities
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     
+    //Twitter Utilities
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
                                consumerSecret:TWITTER_CONSUMER_SECRET];
     
@@ -183,6 +186,7 @@
 {
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+   
     PFUser *user = [PFUser currentUser];
     
     if (user) {

@@ -8,14 +8,35 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+typedef enum : NSUInteger {
+    LocationManagerStateBackground,
+    LocationManagerStateForeground
+} LocationManagerState;
+
 @interface FRSLocationManager : CLLocationManager <CLLocationManagerDelegate>
 
 + (FRSLocationManager *)sharedManager;
 
-/*
-** Sets up location monitoring
-*/
-- (void)setupLocationMonitoring;
+/**
+ *  Runs set up for location monitoring for respetive state
+ *
+ *  @param state LocationManagerState (background/foreground)
+ */
 
+- (void)setupLocationMonitoringForState:(LocationManagerState)state;
+
+/**
+ *  The Location Manager state
+ */
+
+@property (assign, nonatomic) LocationManagerState managerState;
+
+/**
+ *  Current location of the manager
+ */
+
+@property (strong, nonatomic) CLLocation *currentLocation;
+
+@property (assign, nonatomic) BOOL stopLocationUpdates;
 
 @end

@@ -18,13 +18,15 @@
 
 - (AVCaptureSession *)session
 {
-    return ((AVCaptureVideoPreviewLayer *)self.layer).session;
+    AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.layer;
+    return previewLayer.session;
 }
 
 - (void)setSession:(AVCaptureSession *)session
 {
-    ((AVCaptureVideoPreviewLayer *)self.layer).videoGravity = AVLayerVideoGravityResizeAspectFill;
-    ((AVCaptureVideoPreviewLayer *)self.layer).session = session;
+    AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.layer;
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    previewLayer.session = session;
 }
 
 @end

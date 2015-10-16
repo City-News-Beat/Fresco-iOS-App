@@ -19,12 +19,12 @@
 }
 
 + (UIColor *)greenToolbarColor {
-//  39D673
-    return [UIColor colorWithRed:0.22 green:0.84 blue:0.45 alpha:1.00];
+//  4CD764
+    return [UIColor colorWithRed:0.28 green:0.86 blue:0.49 alpha:1];
 }
 
 + (UIColor *)disabledToolbarColor{
-    return [UIColor colorWithRed:189/255.0 green:189/255.0 blue:189/255.0 alpha:1];
+    return [UIColor colorWithRed:224/255.0 green:224/255.0 blue:224/255.0 alpha:1];
 }
 
 + (UIColor *)disabledSaveColor {
@@ -39,17 +39,17 @@
 
 + (UIColor *)frescoBlueColor {
 //  0077FF
-    return [UIColor colorWithRed:0.00 green:0.47 blue:1.00 alpha:1.00];
+    return [UIColor colorWithRed:0.00 green:0.47 blue:1.0 alpha:1.00];
 }
 
 + (UIColor *)radiusGoldColor {
 //  ffc600
-    return [UIColor colorWithRed:1.00 green:0.78 blue:0.00 alpha:1.00];
+    return [UIColor colorWithRed:1.00 green:0.78 blue:0.0 alpha:1.00];
 }
 
 + (UIColor *)goldApertureColor {
 //  FFBD00
-    return [UIColor colorWithRed:1.00 green:0.74 blue:0.00 alpha:1.00];
+    return [UIColor colorWithRed:1.00 green:0.74 blue:0.0 alpha:1.00];
 }
 
 + (UIColor *)redCircleStrokeColor {
@@ -92,5 +92,10 @@
 + (UIColor *)fieldBorderColor {
     return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.08];
 }
+
++ (UIColor *)assetOverlayColor {
+    return [UIColor colorWithRed:0 green:.47 blue:1.0 alpha:0.26];
+}
+
 
 @end

@@ -14,6 +14,17 @@
 
 @property (nonatomic) UIInterfaceOrientation lastOrientation;
 
+
+/**
+*  Begins Accelerometer updates
+*/
+
 - (void)startTrackingMovement;
+
+/**
+*  Stops Accelerometer updates
+*/
+
 - (void)stopTrackingMovement;
+
 @end

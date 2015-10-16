@@ -45,8 +45,6 @@
         
     if (acceleration.z > -2 && acceleration.z < 2) {
         
-   
-        
         if (acceleration.x >= 0.75) {
             orientationNew = UIInterfaceOrientationLandscapeLeft;
             

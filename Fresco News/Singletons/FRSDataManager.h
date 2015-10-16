@@ -26,33 +26,43 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 @interface FRSDataManager : AFHTTPSessionManager
 
+/**
+*  Current user in session
+*/
+
 @property (nonatomic, strong) FRSUser *currentUser;
+
+/**
+*  Current API Token
+*/
 
 @property (nonatomic, strong) NSString *frescoAPIToken;
 
-/*
-** Tells us if notifications have been updated already
+/**
+*  Tells us if notifications have been updated already
 */
 
 @property (nonatomic, assign) BOOL updatedNotifications;
 
-/*
-** Tells us if login is in process
+/**
+*  Tells us if login is in process
 */
 
 @property (nonatomic, assign) BOOL loggingIn;
 
-/*
-** Tells us if login is in process
+/**
+*  Tells us if login is in process
 */
 
 @property (nonatomic, assign) BOOL tokenValidatedForSession;
 
 + (FRSDataManager *)sharedManager;
 
-/*
-** Reachability checker
-*/
+/**
+ *  Reachability checker
+ *
+ *  @return Current reachability state
+ */
 
 - (BOOL)connected;
 
@@ -76,7 +86,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 /**
  *  Tells us if the current user has been loading from the DB
  *
- *  @return YES = is Loaded, NO = notLaoded
+ *  @return YES = is Loaded, NO = notLoaded
  */
 - (BOOL)currentUserIsLoaded;
 
@@ -123,6 +133,14 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
  */
 
 - (void)signupUser:(NSString *)username email:(NSString *)email password:(NSString *)password block:(PFBooleanResultBlock)block;
+
+/**
+ *  Logs in user with needed params
+ *
+ *  @param username The username of the user
+ *  @param password The password of the user
+ *  @param block    User response block
+ */
 
 - (void)loginUser:(NSString *)username password:(NSString *)password block:(PFUserResultBlock)block;
 

@@ -12,27 +12,16 @@
 
 @interface FRSLocationManager ()
 
-/*
-** Current location of the manager
-*/
-
-@property (strong, nonatomic) CLLocation *currentLocation;
-
-/*
-** Timer for location update interval
-*/
-
-@property (strong, nonatomic) NSTimer *timer;
-
-/*
-** Condition var to tell if the interval is already set
+/**
+*  Timer for location update interval
 */
 
 @property (strong, nonatomic) NSTimer *locationTimer;
 
-/*
-** Current assignment of the location manager
-*/
+
+/**
+ *  Current assignment of the location manager
+ */
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 
@@ -47,16 +36,12 @@
     static FRSLocationManager *manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (![CLLocationManager locationServicesEnabled]) {
-            // User has disabled location services on this device
-            return;
-        }
         manager = [[FRSLocationManager alloc] init];
     });
     return manager;
 }
 
-- (void)setupLocationMonitoring
+- (void)setupLocationMonitoringForState:(LocationManagerState)state
 {
     /* How to debug background location updates, in the simulator
      1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
@@ -71,13 +56,26 @@
     // NSLog(@"Background launch via UIApplicationLaunchOptionsLocationKey");
     self.delegate = self;
     
-    self.pausesLocationUpdatesAutomatically = YES;
+    if(state == LocationManagerStateBackground){
+        
+        self.pausesLocationUpdatesAutomatically = YES;
 
-    [self requestAlwaysAuthorization];
+        self.desiredAccuracy = kCLLocationAccuracyBest;
+        
+        [self requestAlwaysAuthorization];
+        
+        [self startMonitoringSignificantLocationChanges];
+            
+    }
+    else if(state == LocationManagerStateForeground){
+        
+        self.desiredAccuracy = kCLLocationAccuracyBest;
     
-    self.desiredAccuracy = kCLLocationAccuracyBest;
+        [self requestAlwaysAuthorization];
+        
+        [self startUpdatingLocation];
     
-    [self startMonitoringSignificantLocationChanges];
+    }
     
 }
 
@@ -85,9 +83,53 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    
+    if(self.managerState == LocationManagerStateBackground){
+    
+        [self pingUserLocationToServer:locations];
+    }
 
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+                
+//        [self presentViewController:[[FRSAlertViewManager sharedManager]
+//                                     alertControllerWithTitle:@"Access to Location Disabled"
+//                                     message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
+//                                     action:DISMISS]
+//                           animated:YES
+//                         completion:nil];
+//        
+//        [self.locationManager stopUpdatingLocation];
+
+    }
+}
+
+
+/**
+ *  Simply restarts location updates, used with timer to automatically restart
+ */
+
+- (void)restartLocationUpdates
+{
+    [self startUpdatingLocation];
+}
+
+
+/**
+ *  Sends location data to server
+ *
+ *  @param locations Array of locations from manager's didUpdateLocations
+ */
+
+- (void)pingUserLocationToServer:(NSArray *)locations{
+    
     if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
-
+        
         self.currentLocation = [locations lastObject];
         
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
@@ -104,13 +146,13 @@
             [self sendLocalPushForAssignment];
         }
         
-//        Uncomment for local notifications while testing
-//        UILocalNotification *notification = [[UILocalNotification alloc] init];
-//        notification.alertBody = [self.location description];
-//        notification.soundName = UILocalNotificationDefaultSoundName;
-//        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-//        notification.timeZone = [NSTimeZone defaultTimeZone];
-//        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+        //        Uncomment for local notifications while testing
+        //        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        //        notification.alertBody = [self.location description];
+        //        notification.soundName = UILocalNotificationDefaultSoundName;
+        //        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+        //        notification.timeZone = [NSTimeZone defaultTimeZone];
+        //        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
         
     }
     
@@ -119,17 +161,16 @@
     
     //Set interval for location update every `locationUpdateInterval` seconds
     if (self.locationTimer == nil) {
-          // NSLog(@"Starting timer...");
-       self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
+        // NSLog(@"Starting timer...");
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
         
     }
-    
+
 }
 
-- (void)restartLocationUpdates
-{
-    [self startUpdatingLocation];
-}
+/**
+ *  Sends out local push for nearest assignment within range of the user
+ */
 
 - (void)sendLocalPushForAssignment{
 
@@ -140,8 +181,7 @@
             FRSAssignment *retrievedAssignment = (FRSAssignment *)[responseObject firstObject];
             
             //Check if the current assignment is nil, or if the current assignment and the fethced one are different
-            if(self.currentAssignment == nil
-               || !([retrievedAssignment.assignmentId isEqualToString:self.currentAssignment.assignmentId])){
+            if(self.currentAssignment == nil || !([retrievedAssignment.assignmentId isEqualToString:self.currentAssignment.assignmentId])){
                 
                 CGFloat distanceInMiles = [self.location distanceFromLocation:retrievedAssignment.locationObject] / kMetersInAMile;
                 
@@ -153,8 +193,8 @@
                     UILocalNotification *notification = [[UILocalNotification alloc] init];
                     notification.alertBody = [NSString stringWithFormat:@"In range of %@", self.currentAssignment.title];
                     notification.userInfo = @{
-                                              @"type" : @"assignment",
-                                              @"assignment" : self.currentAssignment.assignmentId};
+                                              @"type" : NOTIF_ASSIGNMENT,
+                                              NOTIF_ASSIGNMENT : self.currentAssignment.assignmentId};
                     
                     notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
                     notification.soundName = UILocalNotificationDefaultSoundName;
@@ -167,6 +207,8 @@
         }
     }];
 }
+
+
 
 
 

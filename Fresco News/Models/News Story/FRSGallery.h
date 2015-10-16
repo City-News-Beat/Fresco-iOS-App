@@ -14,17 +14,25 @@
 
 @interface FRSGallery : MTLModel <MTLJSONSerializing>
 
+@property (nonatomic, strong) FRSUser *owner;
 @property (nonatomic, copy) NSString *galleryID;
 @property (nonatomic, copy) NSString *visibility;
 @property (nonatomic, copy) NSDate *createTime;
 @property (nonatomic, copy) NSDate *modifiedTime;
-@property (nonatomic, strong) FRSUser *owner;
 @property (nonatomic, copy) NSString *caption;
 @property (nonatomic, copy) NSString *byline;
 @property (nonatomic, strong) NSArray *tags;
 @property (nonatomic, strong) NSArray *articles;
 @property (nonatomic, strong) NSArray *relatedStories;
 @property (nonatomic, strong) NSArray *posts;
+
+/**
+ *  Initializes Gallery with an array of PHASsets
+ *
+ *  @param assets List of assets to initialize with
+ *
+ *  @return A gallery with posts that containt PHAssets
+ */
 
 - (instancetype)initWithAssets:(NSArray *)assets;
 

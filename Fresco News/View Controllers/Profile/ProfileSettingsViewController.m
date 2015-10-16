@@ -2,7 +2,7 @@
 //  ProfileSettingsViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 5/12/15.
+//  Created by Fresco News on 5/12/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -23,6 +23,7 @@
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
 #import "FRSSaveButton.h"
+#import "UIView+Border.h"
 #import <DBImageColorPicker.h>
 
 typedef enum : NSUInteger {
@@ -139,11 +140,7 @@ typedef enum : NSUInteger {
      
     for (UIView *view in self.viewsWithShadows) {
         
-        CGFloat borderWidth = 1.0f;
-        
-        view.frame = CGRectInset(view.frame, -borderWidth, -borderWidth);
-        view.layer.borderColor = [UIColor fieldBorderColor].CGColor;
-        view.layer.borderWidth = borderWidth;
+        [view addBorderWithWidth:1.0f];
         
     }
     
@@ -185,7 +182,6 @@ typedef enum : NSUInteger {
     
     [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-    
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
     caret.contentMode = UIViewContentModeScaleAspectFit;

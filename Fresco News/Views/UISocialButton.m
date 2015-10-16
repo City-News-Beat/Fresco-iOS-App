@@ -10,12 +10,21 @@
 
 @implementation UISocialButton
 
++ (UISocialButton *)createSocialButton{
+
+    UISocialButton *button = [UISocialButton buttonWithType:UIButtonTypeSystem];
+
+    return button;
+
+}
+
 - (void)setUpSocialIcon:(SocialNetwork)network withRadius:(BOOL)radius{
     
     if(radius)
         self.layer.cornerRadius = 4;
     
     self.clipsToBounds = YES;
+    self.tintColor = [UIColor whiteColor];
     
     if(network == SocialNetworkFacebook){
     

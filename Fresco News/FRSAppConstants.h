@@ -96,7 +96,7 @@ enum FRSErrorCodes {
 
 #pragma mark - Float/Int Values
 
-#define MAX_VIDEO_LENGTH                    60.0f
+#define MAX_VIDEO_LENGTH                    30.0
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
 #define MAX_POST_COUNT                      8
@@ -353,6 +353,15 @@ enum FRSErrorCodes {
 #define CLUSTER_IDENTIFIER                  @"ClusterAnnotation"
 #define USER_IDENTIFIER                     @"currentLocation"
 
+/* Gallery Post */
+
+#pragma mark - Gallery Post
+
+#define GALLERY_TOOLBAR                    NSLocalizedString(@"Send to Fresco", nil)
+#define MAX_POST_ERROR                     NSLocalizedString(@"Galleries can only contain up to 8 photos or videos.", nil)
+
+#define UPLOAD_ERROR_TITLE                 NSLocalizedString(@"Upload Error", nil)
+#define UPLOAD_ERROR_MESSAGE               NSLocalizedString(@"We ran into an issue uploading your cotent. Please try again in a bit.", nil)
 
 
 /* Device Macros */

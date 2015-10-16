@@ -44,4 +44,7 @@
 
 + (UIColor *)fieldBorderColor;
 
++ (UIColor *)assetOverlayColor;
+
+
 @end

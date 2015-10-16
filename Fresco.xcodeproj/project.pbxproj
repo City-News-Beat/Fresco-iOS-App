@@ -62,35 +62,16 @@
 		1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FC1AA4D0730082E08D /* FRSArticle.m */; };
 		1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44FF1AA4D0730082E08D /* FRSUser.m */; };
 		1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45151AA500EE0082E08D /* FRSDataManager.m */; };
-		1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA45191AA506360082E08D /* NSFileManager+Additions.m */; };
 		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
 		32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CA6FF41B45974F00242E1E /* TOSViewController.m */; };
-		3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
-		420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */; };
-		420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F51ADB875000157762 /* ALAsset+assetType.m */; };
-		420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F71ADB875000157762 /* ALAsset+isEqual.m */; };
-		420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6F91ADB875000157762 /* ALAssetsGroup+isEqual.m */; };
-		420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6FB1ADB875000157762 /* CTAssetItemViewController.m */; };
-		420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6FD1ADB875000157762 /* CTAssetScrollView.m */; };
-		420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC6FF1ADB875000157762 /* CTAssetsGroupViewCell.m */; };
-		420DC7341ADB875000157762 /* CTAssetsGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7011ADB875000157762 /* CTAssetsGroupViewController.m */; };
-		420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7031ADB875000157762 /* CTAssetsPageViewController.m */; };
-		420DC7361ADB875000157762 /* CTAssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7061ADB875000157762 /* CTAssetsPickerController.m */; };
-		420DC7371ADB875000157762 /* CTAssetsSupplementaryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7081ADB875000157762 /* CTAssetsSupplementaryView.m */; };
-		420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC70A1ADB875000157762 /* CTAssetsViewCell.m */; };
-		420DC7391ADB875000157762 /* CTAssetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC70C1ADB875000157762 /* CTAssetsViewController.m */; };
-		420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC70E1ADB875000157762 /* CTAssetsViewControllerTransition.m */; };
-		420DC73C1ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 420DC7121ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m */; };
-		420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420DC7161ADB875000157762 /* CTAssetsPickerController.strings */; };
-		420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */; };
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
-		423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* CameraViewController.m */; };
+		423A14551AB327CA0030DAF4 /* FRSCamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* FRSCamViewController.m */; };
 		424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
-		42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */; };
+		42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		80AA49FED257B703E367D68E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96C32138EB19F136689A3D6B /* libPods.a */; };
@@ -105,7 +86,7 @@
 		E60266CB1AEA08320055A5C6 /* FirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */; };
 		E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
-		E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */; };
+		E66F176B1AEE9D150032CA71 /* FirstRunPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176A1AEE9D150032CA71 /* FirstRunPersonalViewController.m */; };
 		E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */; };
 		E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */; };
 		E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6AF8A5D1B0E3D9900CD8175 /* NotificationsViewController.m */; };
@@ -130,7 +111,9 @@
 		E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */; };
 		E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB15F1B852BEF0017AAA5 /* Fabric.framework */; };
 		E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */; };
+		E72E36FD1BBDA0AF00C7EF7D /* FirstRunPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E72E36FC1BBDA0AF00C7EF7D /* FirstRunPageViewController.m */; settings = {ASSET_TAGS = (); }; };
 		E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E73E100C1B0F963800763240 /* AssignmentAnnotation.m */; };
+		E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7446F9F1BBDE20200D0A19B /* FirstRunPermissionsViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
@@ -139,9 +122,7 @@
 		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
 		E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78428101B57F4010090DFCC /* OnboardPageCellController.m */; };
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
-		E786ED371BA74F7C00816A06 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
-		E79ACC611BB45586005EF7E6 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC601BB45586005EF7E6 /* FRSSaveButton.m */; };
 		E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
@@ -151,11 +132,20 @@
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
 		E7C112031B681C7F009C637C /* FRSAlertViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C112021B681C7F009C637C /* FRSAlertViewManager.m */; };
+		E7C43DB31BC40E550083CBF0 /* FirstRunAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7C43DB21BC40E550083CBF0 /* FirstRunAccountViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		E7C43DB51BC419CC0083CBF0 /* FurstRunRadiusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		E7C43DBB1BC597560083CBF0 /* AssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */; settings = {ASSET_TAGS = (); }; };
+		E7C43DBE1BC59BFB0083CBF0 /* AssetGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C43DBD1BC59BFB0083CBF0 /* AssetGridViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A941B5FFF5900A08B51 /* CRMotionView.m */; };
 		E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A961B5FFF5900A08B51 /* FRSMotionView.m */; };
 		E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A981B5FFF5900A08B51 /* FRSPhotoBrowserView.m */; };
 		E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */; };
 		E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */; };
+		E7E582EC1BBDA84500287324 /* FirstRunPersonalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7E582EB1BBDA84500287324 /* FirstRunPersonalViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7E582ED1BBDB55800287324 /* FirstRunViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		E7E582F31BBDC12A00287324 /* UIView+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E582F21BBDC12A00287324 /* UIView+Border.m */; settings = {ASSET_TAGS = (); }; };
+		E7E582F71BBDC30A00287324 /* FRSFirstRunWrapperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E582F51BBDC30A00287324 /* FRSFirstRunWrapperViewController.m */; settings = {ASSET_TAGS = (); }; };
+		E7E582F81BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7E582F61BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,8 +292,6 @@
 		1EDA44FF1AA4D0730082E08D /* FRSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUser.m; sourceTree = "<group>"; };
 		1EDA45141AA500EE0082E08D /* FRSDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDataManager.h; path = Singletons/FRSDataManager.h; sourceTree = "<group>"; };
 		1EDA45151AA500EE0082E08D /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDataManager.m; path = Singletons/FRSDataManager.m; sourceTree = "<group>"; };
-		1EDA45181AA506360082E08D /* NSFileManager+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+Additions.h"; path = "Categories/NSFileManager+Additions.h"; sourceTree = "<group>"; };
-		1EDA45191AA506360082E08D /* NSFileManager+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+Additions.m"; path = "Categories/NSFileManager+Additions.m"; sourceTree = "<group>"; };
 		1EDF047B1B0E902900B35858 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
 		1EDF047C1B0E902900B35858 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		32C02B7B1B0298A3000BA34A /* ProfileSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingsViewController.h; sourceTree = "<group>"; };
@@ -311,51 +299,18 @@
 		32CA6FF31B45974F00242E1E /* TOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOSViewController.h; path = "First Run/TOSViewController.h"; sourceTree = "<group>"; };
 		32CA6FF41B45974F00242E1E /* TOSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOSViewController.m; path = "First Run/TOSViewController.m"; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		420DC6F21ADB875000157762 /* ALAsset+accessibilityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+accessibilityLabel.h"; sourceTree = "<group>"; };
-		420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "ALAsset+accessibilityLabel.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC6F41ADB875000157762 /* ALAsset+assetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+assetType.h"; sourceTree = "<group>"; };
-		420DC6F51ADB875000157762 /* ALAsset+assetType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAsset+assetType.m"; sourceTree = "<group>"; };
-		420DC6F61ADB875000157762 /* ALAsset+isEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAsset+isEqual.h"; sourceTree = "<group>"; };
-		420DC6F71ADB875000157762 /* ALAsset+isEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAsset+isEqual.m"; sourceTree = "<group>"; };
-		420DC6F81ADB875000157762 /* ALAssetsGroup+isEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsGroup+isEqual.h"; sourceTree = "<group>"; };
-		420DC6F91ADB875000157762 /* ALAssetsGroup+isEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsGroup+isEqual.m"; sourceTree = "<group>"; };
-		420DC6FA1ADB875000157762 /* CTAssetItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetItemViewController.h; sourceTree = "<group>"; };
-		420DC6FB1ADB875000157762 /* CTAssetItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAssetItemViewController.m; sourceTree = "<group>"; };
-		420DC6FC1ADB875000157762 /* CTAssetScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetScrollView.h; sourceTree = "<group>"; };
-		420DC6FD1ADB875000157762 /* CTAssetScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetScrollView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC6FE1ADB875000157762 /* CTAssetsGroupViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsGroupViewCell.h; sourceTree = "<group>"; };
-		420DC6FF1ADB875000157762 /* CTAssetsGroupViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetsGroupViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7001ADB875000157762 /* CTAssetsGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsGroupViewController.h; sourceTree = "<group>"; };
-		420DC7011ADB875000157762 /* CTAssetsGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetsGroupViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7021ADB875000157762 /* CTAssetsPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPageViewController.h; sourceTree = "<group>"; };
-		420DC7031ADB875000157762 /* CTAssetsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetsPageViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7041ADB875000157762 /* CTAssetsPickerCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPickerCommon.h; sourceTree = "<group>"; };
-		420DC7051ADB875000157762 /* CTAssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPickerController.h; sourceTree = "<group>"; };
-		420DC7061ADB875000157762 /* CTAssetsPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetsPickerController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7071ADB875000157762 /* CTAssetsSupplementaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsSupplementaryView.h; sourceTree = "<group>"; };
-		420DC7081ADB875000157762 /* CTAssetsSupplementaryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CTAssetsSupplementaryView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7091ADB875000157762 /* CTAssetsViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsViewCell.h; sourceTree = "<group>"; };
-		420DC70A1ADB875000157762 /* CTAssetsViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAssetsViewCell.m; sourceTree = "<group>"; };
-		420DC70B1ADB875000157762 /* CTAssetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsViewController.h; sourceTree = "<group>"; };
-		420DC70C1ADB875000157762 /* CTAssetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAssetsViewController.m; sourceTree = "<group>"; };
-		420DC70D1ADB875000157762 /* CTAssetsViewControllerTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsViewControllerTransition.h; sourceTree = "<group>"; };
-		420DC70E1ADB875000157762 /* CTAssetsViewControllerTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAssetsViewControllerTransition.m; sourceTree = "<group>"; };
-		420DC7111ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+timeIntervalFormatter.h"; sourceTree = "<group>"; };
-		420DC7121ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSDateFormatter+timeIntervalFormatter.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CTAssetsPicker.xcassets; sourceTree = "<group>"; };
-		420DC71B1ADB875000157762 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CTAssetsPickerController.strings; sourceTree = "<group>"; };
-		4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryPostViewController.h; sourceTree = "<group>"; };
-		4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryPostViewController.m; sourceTree = "<group>"; };
-		423A14531AB327CA0030DAF4 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
-		423A14541AB327CA0030DAF4 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GalleryPostViewController.h; path = Camera/GalleryPostViewController.h; sourceTree = "<group>"; };
+		4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GalleryPostViewController.m; path = Camera/GalleryPostViewController.m; sourceTree = "<group>"; };
+		423A14531AB327CA0030DAF4 /* FRSCamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCamViewController.h; sourceTree = "<group>"; };
+		423A14541AB327CA0030DAF4 /* FRSCamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCamViewController.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42C926761B18AB1200774A37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Camera.storyboard; sourceTree = "<group>"; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraPreviewView.m; sourceTree = "<group>"; };
-		42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ALAsset.h"; path = "Categories/UIImage+ALAsset.h"; sourceTree = "<group>"; };
-		42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ALAsset.m"; path = "Categories/UIImage+ALAsset.m"; sourceTree = "<group>"; };
+		42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+PHAsset.h"; path = "Categories/UIImage+PHAsset.h"; sourceTree = "<group>"; };
+		42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+PHAsset.m"; path = "Categories/UIImage+PHAsset.m"; sourceTree = "<group>"; };
 		42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocation+EXIFGPS.h"; path = "Categories/CLLocation+EXIFGPS.h"; sourceTree = "<group>"; };
 		42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocation+EXIFGPS.m"; path = "Categories/CLLocation+EXIFGPS.m"; sourceTree = "<group>"; };
 		42D998051AEC46D900636F33 /* NSDate+ISO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+ISO.h"; path = "Categories/NSDate+ISO.h"; sourceTree = "<group>"; };
@@ -382,8 +337,8 @@
 		E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunPermissionsViewController.h; sourceTree = "<group>"; };
 		E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunPermissionsViewController.m; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunSignUpViewController.h; sourceTree = "<group>"; };
-		E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunSignUpViewController.m; sourceTree = "<group>"; };
+		E66F17691AEE9D150032CA71 /* FirstRunPersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunPersonalViewController.h; sourceTree = "<group>"; };
+		E66F176A1AEE9D150032CA71 /* FirstRunPersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunPersonalViewController.m; sourceTree = "<group>"; };
 		E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunAccountViewController.h; sourceTree = "<group>"; };
 		E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunAccountViewController.m; sourceTree = "<group>"; };
 		E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunRadiusViewController.h; sourceTree = "<group>"; };
@@ -424,8 +379,11 @@
 		E71F0E661B0B948200186BAD /* WKGalleryDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKGalleryDetailController.m; sourceTree = "<group>"; };
 		E72DB15F1B852BEF0017AAA5 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		E72E36FB1BBDA0AF00C7EF7D /* FirstRunPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstRunPageViewController.h; sourceTree = "<group>"; };
+		E72E36FC1BBDA0AF00C7EF7D /* FirstRunPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstRunPageViewController.m; sourceTree = "<group>"; };
 		E73E100B1B0F963800763240 /* AssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentAnnotation.h; sourceTree = "<group>"; };
 		E73E100C1B0F963800763240 /* AssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentAnnotation.m; sourceTree = "<group>"; };
+		E7446F9F1BBDE20200D0A19B /* FirstRunPermissionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunPermissionsViewController.xib; sourceTree = "<group>"; };
 		E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSettingsViewController.xib; sourceTree = "<group>"; };
 		E76515B21B17581200AFDE1E /* ClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterAnnotation.h; sourceTree = "<group>"; };
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
@@ -440,8 +398,6 @@
 		E784280F1B57F4010090DFCC /* OnboardPageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardPageCellController.h; sourceTree = "<group>"; };
 		E78428101B57F4010090DFCC /* OnboardPageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardPageCellController.m; sourceTree = "<group>"; };
 		E78428111B57F4010090DFCC /* OnboardPageCellController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnboardPageCellController.xib; sourceTree = "<group>"; };
-		E786ED351BA74F7C00816A06 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
-		E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E796FA161B0E54B6002B30C4 /* FRSAssignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAssignment.h; path = Assignment/FRSAssignment.h; sourceTree = "<group>"; };
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
@@ -460,6 +416,12 @@
 		E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryViewController.m; sourceTree = "<group>"; };
 		E7C112011B681C7F009C637C /* FRSAlertViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAlertViewManager.h; path = Singletons/FRSAlertViewManager.h; sourceTree = "<group>"; };
 		E7C112021B681C7F009C637C /* FRSAlertViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAlertViewManager.m; path = Singletons/FRSAlertViewManager.m; sourceTree = "<group>"; };
+		E7C43DB21BC40E550083CBF0 /* FirstRunAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunAccountViewController.xib; sourceTree = "<group>"; };
+		E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FurstRunRadiusViewController.xib; sourceTree = "<group>"; };
+		E7C43DB91BC597560083CBF0 /* AssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsPickerController.h; path = Camera/AssetsPickerController.h; sourceTree = "<group>"; };
+		E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsPickerController.m; path = Camera/AssetsPickerController.m; sourceTree = "<group>"; };
+		E7C43DBC1BC59BFB0083CBF0 /* AssetGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetGridViewCell.h; sourceTree = "<group>"; };
+		E7C43DBD1BC59BFB0083CBF0 /* AssetGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetGridViewCell.m; sourceTree = "<group>"; };
 		E7D27A931B5FFF5900A08B51 /* CRMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMotionView.h; sourceTree = "<group>"; };
 		E7D27A941B5FFF5900A08B51 /* CRMotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMotionView.m; sourceTree = "<group>"; };
 		E7D27A951B5FFF5900A08B51 /* FRSMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMotionView.h; sourceTree = "<group>"; };
@@ -470,6 +432,13 @@
 		E7D27A9A1B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoMotionCollectionViewCell.m; sourceTree = "<group>"; };
 		E7D27A9B1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+CRScrollIndicator.h"; sourceTree = "<group>"; };
 		E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRScrollIndicator.m"; sourceTree = "<group>"; };
+		E7E582EB1BBDA84500287324 /* FirstRunPersonalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunPersonalViewController.xib; sourceTree = "<group>"; };
+		E7E582ED1BBDB55800287324 /* FirstRunViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunViewController.xib; sourceTree = "<group>"; };
+		E7E582F11BBDC12A00287324 /* UIView+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Border.h"; path = "Categories/UIView+Border.h"; sourceTree = "<group>"; };
+		E7E582F21BBDC12A00287324 /* UIView+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Border.m"; path = "Categories/UIView+Border.m"; sourceTree = "<group>"; };
+		E7E582F41BBDC30A00287324 /* FRSFirstRunWrapperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFirstRunWrapperViewController.h; sourceTree = "<group>"; };
+		E7E582F51BBDC30A00287324 /* FRSFirstRunWrapperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFirstRunWrapperViewController.m; sourceTree = "<group>"; };
+		E7E582F61BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFirstRunWrapperViewController.xib; sourceTree = "<group>"; };
 		EE18B8090B82674DC8A03FD0 /* libPods-Fresco.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Fresco.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -515,7 +484,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D65A5E65EC2C3EAD0862B33 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,16 +524,16 @@
 		1E1AC1AA1B2602D5003BECE0 /* FirstRun */ = {
 			isa = PBXGroup;
 			children = (
-				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
-				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
-				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
-				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
-				E66F17691AEE9D150032CA71 /* FirstRunSignUpViewController.h */,
-				E66F176A1AEE9D150032CA71 /* FirstRunSignUpViewController.m */,
-				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
-				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
-				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
-				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
+				E7E582F41BBDC30A00287324 /* FRSFirstRunWrapperViewController.h */,
+				E7E582F51BBDC30A00287324 /* FRSFirstRunWrapperViewController.m */,
+				E7E582F61BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib */,
+				E72E36FB1BBDA0AF00C7EF7D /* FirstRunPageViewController.h */,
+				E72E36FC1BBDA0AF00C7EF7D /* FirstRunPageViewController.m */,
+				E7446FA41BBDE6E100D0A19B /* Log In */,
+				E7446FA31BBDE6CE00D0A19B /* Sign Up */,
+				E7446FA21BBDE5C900D0A19B /* Personal */,
+				E7446FA11BBDE5C300D0A19B /* Permissions */,
+				E7446FA51BBDE6EF00D0A19B /* Radius */,
 			);
 			name = FirstRun;
 			path = "First Run";
@@ -692,7 +660,6 @@
 				1EDA44F31AA4D0730082E08D /* Models */,
 				1EDA44DD1AA4CCF20082E08D /* Views */,
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
-				420DC6F11ADB875000157762 /* CTAssetsPickerController */,
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44C01AA4CCC70082E08D /* Main.storyboard */,
 				42C926751B18AB1200774A37 /* Camera.storyboard */,
@@ -736,6 +703,8 @@
 			children = (
 				42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */,
 				42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */,
+				E7C43DBC1BC59BFB0083CBF0 /* AssetGridViewCell.h */,
+				E7C43DBD1BC59BFB0083CBF0 /* AssetGridViewCell.m */,
 				E79ACC621BB4558C005EF7E6 /* FRSKit */,
 				E7D27AA21B5FFF5D00A08B51 /* Photo Browser */,
 				E784280C1B57F3A60090DFCC /* Notifications */,
@@ -762,6 +731,7 @@
 				E7BFA2E21B18CF8100B820C0 /* Galleries */,
 				E73E100A1B0F958D00763240 /* Highlights */,
 				1EFD22921B2B1C220049B940 /* Stories */,
+				E7C43DBF1BC5AA8C0083CBF0 /* Submission */,
 				1EFD22941B2B1C5E0049B940 /* Camera */,
 				E73E10091B0F957B00763240 /* Assignments */,
 				1EFD22931B2B1C370049B940 /* Profile */,
@@ -845,26 +815,8 @@
 			children = (
 				E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */,
 				E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */,
-				42D997FC1AEAF5B300636F33 /* UIImage+ALAsset.h */,
-				42D997FD1AEAF5B300636F33 /* UIImage+ALAsset.m */,
-				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
-				1E408B741AA799750057AC16 /* UIColor+Additions.m */,
-				1EDA45181AA506360082E08D /* NSFileManager+Additions.h */,
-				1EDA45191AA506360082E08D /* NSFileManager+Additions.m */,
-				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
-				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
-				1EA27AA61AF147C4003137CE /* MKMapView+Additions.h */,
-				1EA27AA71AF147C4003137CE /* MKMapView+Additions.m */,
-				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
-				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
-				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
-				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
-				BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */,
-				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
-				BC1CA8B91BA72F3300DDB9FB /* CALayer+Additions.h */,
-				BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */,
-				07535A4C1BBB054600AD604C /* UIImageView+Additions.h */,
-				07535A4D1BBB054600AD604C /* UIImageView+Additions.m */,
+				E7E582F01BBDC0CA00287324 /* Foundation */,
+				E7E582EF1BBDC0B200287324 /* UIKit */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -895,59 +847,15 @@
 		1EFD22941B2B1C5E0049B940 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				E786ED351BA74F7C00816A06 /* SDAVAssetExportSession.h */,
-				E786ED361BA74F7C00816A06 /* SDAVAssetExportSession.m */,
-				423A14531AB327CA0030DAF4 /* CameraViewController.h */,
-				423A14541AB327CA0030DAF4 /* CameraViewController.m */,
-				4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */,
-				4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */,
+				423A14531AB327CA0030DAF4 /* FRSCamViewController.h */,
+				423A14541AB327CA0030DAF4 /* FRSCamViewController.m */,
 			);
 			path = Camera;
-			sourceTree = "<group>";
-		};
-		420DC6F11ADB875000157762 /* CTAssetsPickerController */ = {
-			isa = PBXGroup;
-			children = (
-				420DC6F21ADB875000157762 /* ALAsset+accessibilityLabel.h */,
-				420DC6F31ADB875000157762 /* ALAsset+accessibilityLabel.m */,
-				420DC6F41ADB875000157762 /* ALAsset+assetType.h */,
-				420DC6F51ADB875000157762 /* ALAsset+assetType.m */,
-				420DC6F61ADB875000157762 /* ALAsset+isEqual.h */,
-				420DC6F71ADB875000157762 /* ALAsset+isEqual.m */,
-				420DC6F81ADB875000157762 /* ALAssetsGroup+isEqual.h */,
-				420DC6F91ADB875000157762 /* ALAssetsGroup+isEqual.m */,
-				420DC6FA1ADB875000157762 /* CTAssetItemViewController.h */,
-				420DC6FB1ADB875000157762 /* CTAssetItemViewController.m */,
-				420DC6FC1ADB875000157762 /* CTAssetScrollView.h */,
-				420DC6FD1ADB875000157762 /* CTAssetScrollView.m */,
-				420DC6FE1ADB875000157762 /* CTAssetsGroupViewCell.h */,
-				420DC6FF1ADB875000157762 /* CTAssetsGroupViewCell.m */,
-				420DC7001ADB875000157762 /* CTAssetsGroupViewController.h */,
-				420DC7011ADB875000157762 /* CTAssetsGroupViewController.m */,
-				420DC7021ADB875000157762 /* CTAssetsPageViewController.h */,
-				420DC7031ADB875000157762 /* CTAssetsPageViewController.m */,
-				420DC7041ADB875000157762 /* CTAssetsPickerCommon.h */,
-				420DC7051ADB875000157762 /* CTAssetsPickerController.h */,
-				420DC7061ADB875000157762 /* CTAssetsPickerController.m */,
-				420DC7071ADB875000157762 /* CTAssetsSupplementaryView.h */,
-				420DC7081ADB875000157762 /* CTAssetsSupplementaryView.m */,
-				420DC7091ADB875000157762 /* CTAssetsViewCell.h */,
-				420DC70A1ADB875000157762 /* CTAssetsViewCell.m */,
-				420DC70B1ADB875000157762 /* CTAssetsViewController.h */,
-				420DC70C1ADB875000157762 /* CTAssetsViewController.m */,
-				420DC70D1ADB875000157762 /* CTAssetsViewControllerTransition.h */,
-				420DC70E1ADB875000157762 /* CTAssetsViewControllerTransition.m */,
-				420DC7111ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.h */,
-				420DC7121ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m */,
-			);
-			path = CTAssetsPickerController;
 			sourceTree = "<group>";
 		};
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				420DC7161ADB875000157762 /* CTAssetsPickerController.strings */,
-				420DC7181ADB875000157762 /* CTAssetsPicker.xcassets */,
 				E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */,
 			);
 			path = Resources;
@@ -1068,6 +976,56 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		E7446FA11BBDE5C300D0A19B /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				E60266CC1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.h */,
+				E60266CD1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m */,
+				E7446F9F1BBDE20200D0A19B /* FirstRunPermissionsViewController.xib */,
+			);
+			name = Permissions;
+			sourceTree = "<group>";
+		};
+		E7446FA21BBDE5C900D0A19B /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				E66F17691AEE9D150032CA71 /* FirstRunPersonalViewController.h */,
+				E66F176A1AEE9D150032CA71 /* FirstRunPersonalViewController.m */,
+				E7E582EB1BBDA84500287324 /* FirstRunPersonalViewController.xib */,
+			);
+			name = Personal;
+			sourceTree = "<group>";
+		};
+		E7446FA31BBDE6CE00D0A19B /* Sign Up */ = {
+			isa = PBXGroup;
+			children = (
+				E66F176C1AEE9D430032CA71 /* FirstRunAccountViewController.h */,
+				E66F176D1AEE9D430032CA71 /* FirstRunAccountViewController.m */,
+				E7C43DB21BC40E550083CBF0 /* FirstRunAccountViewController.xib */,
+			);
+			name = "Sign Up";
+			sourceTree = "<group>";
+		};
+		E7446FA41BBDE6E100D0A19B /* Log In */ = {
+			isa = PBXGroup;
+			children = (
+				E60266C91AEA08320055A5C6 /* FirstRunViewController.h */,
+				E60266CA1AEA08320055A5C6 /* FirstRunViewController.m */,
+				E7E582ED1BBDB55800287324 /* FirstRunViewController.xib */,
+			);
+			name = "Log In";
+			sourceTree = "<group>";
+		};
+		E7446FA51BBDE6EF00D0A19B /* Radius */ = {
+			isa = PBXGroup;
+			children = (
+				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
+				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
+				E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */,
+			);
+			name = Radius;
+			sourceTree = "<group>";
+		};
 		E771DF971BACAC9900CC795A /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1171,6 +1129,17 @@
 			path = Galleries;
 			sourceTree = "<group>";
 		};
+		E7C43DBF1BC5AA8C0083CBF0 /* Submission */ = {
+			isa = PBXGroup;
+			children = (
+				4214BC221AE438E6006BEBA7 /* GalleryPostViewController.h */,
+				4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */,
+				E7C43DB91BC597560083CBF0 /* AssetsPickerController.h */,
+				E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */,
+			);
+			name = Submission;
+			sourceTree = "<group>";
+		};
 		E7CF7ED61B96743200C28E5C /* TOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1196,6 +1165,40 @@
 				E7D27A9C1B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m */,
 			);
 			name = "Photo Browser";
+			sourceTree = "<group>";
+		};
+		E7E582EF1BBDC0B200287324 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				E7E582F11BBDC12A00287324 /* UIView+Border.h */,
+				E7E582F21BBDC12A00287324 /* UIView+Border.m */,
+				BC1CA8B91BA72F3300DDB9FB /* CALayer+Additions.h */,
+				BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */,
+				07535A4C1BBB054600AD604C /* UIImageView+Additions.h */,
+				07535A4D1BBB054600AD604C /* UIImageView+Additions.m */,
+				1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */,
+				1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */,
+				1EA27AA61AF147C4003137CE /* MKMapView+Additions.h */,
+				1EA27AA71AF147C4003137CE /* MKMapView+Additions.m */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
+		E7E582F01BBDC0CA00287324 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
+				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
+				BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */,
+				BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */,
+				1E408B731AA799750057AC16 /* UIColor+Additions.h */,
+				1E408B741AA799750057AC16 /* UIColor+Additions.m */,
+				42D998021AEC458000636F33 /* CLLocation+EXIFGPS.h */,
+				42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */,
+				42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */,
+				42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */,
+			);
+			name = Foundation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1350,11 +1353,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420DC73E1ADB875000157762 /* CTAssetsPickerController.strings in Resources */,
-				420DC73F1ADB875000157762 /* CTAssetsPicker.xcassets in Resources */,
+				E7C43DB31BC40E550083CBF0 /* FirstRunAccountViewController.xib in Resources */,
 				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
+				E7E582F81BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib in Resources */,
+				E7E582EC1BBDA84500287324 /* FirstRunPersonalViewController.xib in Resources */,
 				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
+				E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */,
+				E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
+				E7C43DB51BC419CC0083CBF0 /* FurstRunRadiusViewController.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
@@ -1471,7 +1478,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */,
-				420DC73C1ADB875000157762 /* NSDateFormatter+timeIntervalFormatter.m in Sources */,
 				1EDA45001AA4D0730082E08D /* FRSPost.m in Sources */,
 				1E407ADD1AB0B458006F4965 /* MTLModel+Additions.m in Sources */,
 				1EDA44BF1AA4CCC70082E08D /* StoriesViewController.m in Sources */,
@@ -1486,23 +1492,20 @@
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
+				E7C43DBE1BC59BFB0083CBF0 /* AssetGridViewCell.m in Sources */,
 				E7AD1CC61BBB35D000F940D5 /* UISocialButton.m in Sources */,
-				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
+				E72E36FD1BBDA0AF00C7EF7D /* FirstRunPageViewController.m in Sources */,
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
+				E7E582F31BBDC12A00287324 /* UIView+Border.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
 				E66F176E1AEE9D430032CA71 /* FirstRunAccountViewController.m in Sources */,
 				E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */,
-				420DC7301ADB875000157762 /* ALAssetsGroup+isEqual.m in Sources */,
 				E6AF8A5E1B0E3D9900CD8175 /* NotificationsViewController.m in Sources */,
-				420DC72F1ADB875000157762 /* ALAsset+isEqual.m in Sources */,
 				1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */,
-				420DC7361ADB875000157762 /* CTAssetsPickerController.m in Sources */,
-				423A14551AB327CA0030DAF4 /* CameraViewController.m in Sources */,
-				420DC7341ADB875000157762 /* CTAssetsGroupViewController.m in Sources */,
+				423A14551AB327CA0030DAF4 /* FRSCamViewController.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1E3592861AC30E7300F60348 /* GalleryTableViewCell.m in Sources */,
 				E706DFC41B56B024001A6DD0 /* FRSLocationManager.m in Sources */,
-				420DC72E1ADB875000157762 /* ALAsset+assetType.m in Sources */,
 				1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */,
 				1EDA44B91AA4CCC70082E08D /* AppDelegate.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Additions.m in Sources */,
@@ -1517,11 +1520,12 @@
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
-				E66F176B1AEE9D150032CA71 /* FirstRunSignUpViewController.m in Sources */,
+				E66F176B1AEE9D150032CA71 /* FirstRunPersonalViewController.m in Sources */,
 				BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,
 				E7AD1CC91BBB35D900F940D5 /* FRSSaveButton.m in Sources */,
 				1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */,
+				E7E582F71BBDC30A00287324 /* FRSFirstRunWrapperViewController.m in Sources */,
 				1EA27AA51AF142AA003137CE /* ScrollViewWithPassthrough.m in Sources */,
 				1EDA45161AA500EE0082E08D /* FRSDataManager.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
@@ -1538,31 +1542,22 @@
 				07535A4B1BBB03A500AD604C /* FRSBackButton.m in Sources */,
 				1E407AD51AB09F2C006F4965 /* FRSImage.m in Sources */,
 				E6B8124E1AD488C200FD9936 /* FRSBaseViewController.m in Sources */,
-				42D997FE1AEAF5B300636F33 /* UIImage+ALAsset.m in Sources */,
-				420DC7381ADB875000157762 /* CTAssetsViewCell.m in Sources */,
+				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
+				E7C43DBB1BC597560083CBF0 /* AssetsPickerController.m in Sources */,
 				42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */,
 				E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */,
-				E786ED371BA74F7C00816A06 /* SDAVAssetExportSession.m in Sources */,
-				420DC7311ADB875000157762 /* CTAssetItemViewController.m in Sources */,
 				1E1AC1AE1B2771C7003BECE0 /* FRSRootViewController.m in Sources */,
 				E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
-				420DC7321ADB875000157762 /* CTAssetScrollView.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
 				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				E7C112031B681C7F009C637C /* FRSAlertViewManager.m in Sources */,
-				420DC7371ADB875000157762 /* CTAssetsSupplementaryView.m in Sources */,
-				420DC7391ADB875000157762 /* CTAssetsViewController.m in Sources */,
-				420DC72D1ADB875000157762 /* ALAsset+accessibilityLabel.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */,
-				420DC7331ADB875000157762 /* CTAssetsGroupViewCell.m in Sources */,
-				420DC7351ADB875000157762 /* CTAssetsPageViewController.m in Sources */,
 				32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
-				420DC73A1ADB875000157762 /* CTAssetsViewControllerTransition.m in Sources */,
 				BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */,
 				E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,
@@ -1622,14 +1617,6 @@
 				1EDA44C11AA4CCC70082E08D /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		420DC7161ADB875000157762 /* CTAssetsPickerController.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				420DC71B1ADB875000157762 /* en */,
-			);
-			name = CTAssetsPickerController.strings;
 			sourceTree = "<group>";
 		};
 		42C926751B18AB1200774A37 /* Camera.storyboard */ = {

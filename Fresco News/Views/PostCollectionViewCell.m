@@ -10,7 +10,8 @@
 #import "PostCollectionViewCell.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-#import "UIImage+ALAsset.h"
+
+@import Photos;
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
@@ -111,7 +112,16 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     }
     else {
         // local
-        weakSelf.imageView.image = [UIImage imageFromAsset:post.image.asset];
+        [[PHImageManager defaultManager]
+         requestImageForAsset:post.image.asset
+         targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
+         contentMode:PHImageContentModeDefault
+         options:nil
+         resultHandler:^(UIImage * result, NSDictionary * info) {
+             
+             weakSelf.imageView.image  = result;
+             
+         }];
     }
 }
 

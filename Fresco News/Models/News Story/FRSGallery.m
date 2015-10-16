@@ -13,7 +13,7 @@
 #import "MTLModel+Additions.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
-@import AssetsLibrary;
+@import Photos;
 @import CoreLocation;
 
 @implementation FRSGallery
@@ -58,59 +58,60 @@
 {
     self = [super init];
     
-    if (!self) {
-        return nil;
-    }
-    
-    NSMutableArray *posts = [NSMutableArray new];
-   
-    for (ALAsset *asset in assets) {
+    if (self) {
         
-        FRSPost *post = [[FRSPost alloc] init];
+        NSMutableArray *posts = [NSMutableArray new];
         
-        FRSImage *image = [[FRSImage alloc] init];
-        
-        image.asset = asset;
-        
-        NSString *assetType = [asset valueForProperty:ALAssetPropertyType];
-
-        #if TARGET_IPHONE_SIMULATOR
-            image.latitude = @(40.6);
-            image.longitude = @(-74.1);
-        #else
-            CLLocation *location = [asset valueForProperty:ALAssetPropertyLocation];
-            if (location) {
-                image.latitude = @(location.coordinate.latitude);
-                image.longitude = @(location.coordinate.longitude);
+        for (PHAsset *asset in assets) {
+            
+            FRSPost *post = [[FRSPost alloc] init];
+            
+            FRSImage *image = [[FRSImage alloc] init];
+            
+            image.asset = asset;
+            
+            #if TARGET_IPHONE_SIMULATOR
+                image.latitude = @(40.6);
+                image.longitude = @(-74.1);
+            #else
+            
+                CLLocation *location = asset.location;
+            
+                if (location) {
+                    image.latitude = @(location.coordinate.latitude);
+                    image.longitude = @(location.coordinate.longitude);
+                }
+                else {
+                    NSLog(@"Skipping - no location information available");
+                    continue;
+                }
+            
+            #endif
+            
+            post.image = image;
+            post.createdDate = asset.creationDate;
+            
+            if (asset.mediaType == PHAssetMediaTypeImage) {
+                post.type = @"image";
+            }
+            else if (asset.mediaType == PHAssetMediaTypeVideo) {
+                post.type = @"video";
             }
             else {
-                NSLog(@"Skipping - no location information available");
+                NSLog(@"Skipping - cannot determine asset type");
                 continue;
             }
-        #endif
+            
+            [posts addObject:post];
+        }
         
-        post.image = image;
-        post.createdDate = [asset valueForProperty:ALAssetPropertyDate];
-
-        if ([assetType isEqualToString:ALAssetTypePhoto]) {
-            post.type = @"image";
-        }
-        else if ([assetType isEqualToString:ALAssetTypeVideo]) {
-            post.type = @"video";
-        }
-        else {
-            NSLog(@"Skipping - cannot determine asset type");
-            continue;
-        }
-
-        [posts addObject:post];
+        //Check if we have any posts
+        if (posts.count == 0)
+            return nil;
+        
+        self.posts = posts;
+        
     }
-
-    if (posts.count == 0) {
-        return nil;
-    }
-    
-    _posts = posts;
     
     return self;
 }

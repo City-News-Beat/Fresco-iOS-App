@@ -9,6 +9,7 @@
 @import Parse;
 @import FBSDKCoreKit;
 @import AssetsLibrary;
+@import Photos;
 #import <AFNetworking.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "GalleryPostViewController.h"
@@ -16,12 +17,10 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "FRSTabBarController.h"
-#import "CameraViewController.h"
+#import "FRSCamViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "UISocialButton.h"
-#import "UIImage+ALAsset.h"
-#import "ALAsset+assetType.h"
 #import "FRSRootViewController.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
@@ -38,11 +37,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *socialTipView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *assignmentViewHeightConstraint;
 
-// Refactor
 @property (strong, nonatomic) FRSAssignment *defaultAssignment;
-@property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @property (strong, nonatomic) UITapGestureRecognizer *socialTipTap;
@@ -52,7 +48,7 @@
 
 @implementation GalleryPostViewController
 
-#pragma Orientation
+#pragma mark - Orientation
 
 - (BOOL)shouldAutorotate {
     return NO;
@@ -81,11 +77,6 @@
     [self.captionTextView setTextContainerInset:UIEdgeInsetsMake(5, 5, 0, 0)];
     self.captionTextView.returnKeyType = UIReturnKeyDone;
     
-    // TODO: Confirm permissions
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
     [self.socialTipView setUserInteractionEnabled:YES];
     
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
@@ -95,8 +86,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
     
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
     
     self.socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
@@ -184,8 +177,11 @@
 
 - (void)setupButtons
 {
-
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:CANCEL style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonItemClicked:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithTitle:CANCEL
+                                              style:UIBarButtonItemStylePlain
+                                              target:self
+                                              action:@selector(rightBarButtonItemClicked:)];
 }
 
 - (void)configureControlsForUpload:(BOOL)upload
@@ -197,6 +193,22 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
 }
 
+#pragma mark - Toolbar Items
+
+- (NSArray *)toolbarItems
+{
+    UIBarButtonItem *title =  [[UIBarButtonItem alloc] initWithTitle:GALLERY_TOOLBAR
+                                                               style:UIBarButtonItemStyleDone
+                                                              target:self
+                                                              action:@selector(submitGalleryPost:)];
+    
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                           target:self
+                                                                           action:@selector(submitGalleryPost:)];
+
+    return @[space, title, space];
+}
+
 
 #pragma mark - Navigational Methods
 
@@ -205,24 +217,23 @@
     [self returnToTabBarWithPrevious:YES];
 }
 
-/*
-** Returns to tab bar, takes option of returning to previously selected tab
-*/
+/**
+ *  Returns to tab bar
+ *
+ *  @return Takes option of returning to previously selected tab
+ */
 
 -(void)returnToTabBarWithPrevious:(BOOL)previous{
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
     
     if (previous) {
-        
+
         tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-        
     }
     else {
         tabBarController.selectedIndex = 4;
     }
-    
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -235,7 +246,7 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Outlet Actions
+#pragma mark - IBActions
 
 - (IBAction)twitterButtonTapped:(UISocialButton *)button
 {
@@ -337,13 +348,13 @@
     if (self.defaultAssignment) {
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
-                                       alertControllerWithTitle:@"Remove Assignment"
+                                       alertControllerWithTitle:@"Remove Assignment?"
                                        message:@"Are you sure you want remove this assignment?"
                                        action:CANCEL handler:nil];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Remove" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
             
-            [self showAssignment:NO];
+            [self toggleAssignment:NO];
             
             
         }]];
@@ -352,10 +363,11 @@
 
     }
     else {
-        [self showAssignment:NO];
+        [self toggleAssignment:NO];
     }
 }
 
+#pragma mark - Controller Methods
 
 - (void)crossPostToTwitter:(NSString *)string {
     
@@ -382,26 +394,12 @@
     }];
 }
 
-- (void)updateSocialTipView {
- 
-    if (self.socialTipView.hidden == NO) {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.socialTipView.alpha = 0;
-            
-        } completion:^(BOOL finished) {
-            
-          self.socialTipView.hidden = YES;
-        
-        }];
-    }
-}
-
 - (void)crossPostToFacebook:(NSString *)string
 {
     if (!self.facebookButton.selected) {
         return;
     }
-
+    
     if (YES /* TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] */) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
                                            parameters: @{@"message" : string}
@@ -417,39 +415,55 @@
     }
 }
 
+- (void)updateSocialTipView {
+ 
+    if (self.socialTipView.hidden == NO) {
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            self.socialTipView.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            
+          self.socialTipView.hidden = YES;
+        
+        }];
+    }
+}
+
+
+
 - (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
     _defaultAssignment = defaultAssignment;
     
     self.linkAssignmentButton.hidden = NO;
     
-    NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", _defaultAssignment.title]];
+    NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Taken for %@", self.defaultAssignment.title]];
     
     [titleString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0]}
                          range:(NSRange){10, [titleString length] - 10}];
     
     self.assignmentLabel.attributedText = titleString;
     
-    [self.linkAssignmentButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
-
 }
 
 - (void)configureAssignmentForLocation:(CLLocation *)location
 {
-    // TODO: Add support for expiring/expired assignments
+    
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-        
+
         // Find a photo that is within an assignment radius
         for (FRSPost *post in self.gallery.posts) {
             
-            CLLocation *location = [post.image.asset valueForProperty:ALAssetPropertyLocation];
+            CLLocation *location = post.image.asset.location;
             
             if(location != nil){
                 
                 for (FRSAssignment *assignment in responseObject) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.defaultAssignment = assignment;
-                        [self showAssignment:YES];
+                        [self toggleAssignment:YES];
                         return;
                     }
                 }
@@ -462,7 +476,13 @@
     }];
 }
 
-- (void)showAssignment:(BOOL)show{
+/**
+ *  Displays assignment banner
+ *
+ *  @param show Takes BOOL to hide or show assignment banner
+ */
+
+- (void)toggleAssignment:(BOOL)show{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -488,30 +508,6 @@
     });
 }
 
-#pragma mark - Toolbar Items
-
-- (UIBarButtonItem *)titleButtonItem
-{
-    // TODO: Capture all UIToolbar touches
-    return [[UIBarButtonItem alloc] initWithTitle:@"Send to Fresco"
-                                            style:UIBarButtonItemStyleDone
-                                           target:self
-                                           action:@selector(submitGalleryPost:)];
-}
-
-- (UIBarButtonItem *)spaceButtonItem
-{
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                         target:self
-                                                         action:@selector(submitGalleryPost:)];
-}
-
-- (NSArray *)toolbarItems
-{
-    UIBarButtonItem *title = [self titleButtonItem];
-    UIBarButtonItem *space = [self spaceButtonItem];
-    return @[space, title, space];
-}
 
 - (void)submitGalleryPost:(id)sender
 {
@@ -532,28 +528,26 @@
     
     }
     
-    //Check if the user is logged in before proceeding, send to sign up otherwise
-    if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
-        
-        if(self.presentingViewController.presentingViewController){
-        
-            [self navigateToFirstRun];
-        
-        }
-        
-        return;
-    }
-    
     //Check if there are less than the max amount of posts
     if([self.gallery.posts count] > MAX_POST_COUNT){
     
         [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                     alertControllerWithTitle:@"Error"
-                                     message:@"Galleries can only contain up to 8 photos or videos." action:nil]
-                           animated:YES completion:nil];
+                                     alertControllerWithTitle:ERROR
+                                     message:MAX_POST_ERROR
+                                     action:nil]
+                           animated:YES
+                         completion:nil];
         
         return;
     
+    }
+    
+    //Check if the user is logged in before proceeding, send to sign up otherwise
+    if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
+        
+        [self navigateToFirstRun];
+        
+        return;
     }
     
     //Run the spinner animation to indicate that upload has started
@@ -564,7 +558,7 @@
         self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
         self.spinner.color = [UIColor whiteColor];
         [self.spinner startAnimating];
-        self.navigationController.toolbar.items = nil;
+        self.navigationController.toolbar.items[1].title = @"";
         [self.navigationController.toolbar addSubview:self.spinner];
         
     });
@@ -609,83 +603,100 @@
 
     
     //Form the request
+    
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
                                                                                               URLString:urlString
                                                                                              parameters:parameters
                                                                               constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSInteger count = 0;
                                                                   
-        @autoreleasepool {
+        for (FRSPost *post in self.gallery.posts) {
+          
+            NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
+            NSString *mimeType;
+            __block NSData *data;
             
-            for (FRSPost *post in self.gallery.posts) {
-              
-                NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-                NSData *data;
-                NSString *mimeType;
-
-                if (post.image.asset.isVideo) {
+            if (post.image.asset.mediaType == PHAssetMediaTypeImage) {
+                
+                PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+                options.synchronous = YES;
+                
+                mimeType = @"image/jpeg";
+                
+                [[PHImageManager defaultManager] requestImageDataForAsset:post.image.asset options:options resultHandler:^(NSData * imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary * info) {
                     
-                    ALAssetRepresentation *representation = [post.image.asset defaultRepresentation];
+                    data = imageData;
                     
-                    UInt8 *buffer = malloc((unsigned long)representation.size);
-                    
-                    NSUInteger buffered = [representation getBytes:buffer fromOffset:0 length:(NSUInteger)representation.size error:nil];
-                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-                    
-                    mimeType = @"video/mp4";
-                    
-                }
-                else {
-                    
-                    ALAssetRepresentation *rep = [post.image.asset defaultRepresentation];
-                    
-                    Byte *buffer = (Byte*)malloc(rep.size);
-                    
-                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0 length:rep.size error:nil];
-                    
-                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-                    
-                    mimeType = @"image/jpeg";
-                    
-                }
-
+                }];
+                
+                
                 [formData appendPartWithFileData:data
                                             name:filename
                                         fileName:filename
                                         mimeType:mimeType];
-                count++;
+                
+            
+            }
+            else if(post.image.asset.mediaType == PHAssetMediaTypeVideo) {
+               
+                mimeType = @"video/mp4";
+                
+                __block AVURLAsset *resultAsset;
+                
+                //Need to delay the thread until the AVAsset comes back
+                dispatch_semaphore_t  semaphore = dispatch_semaphore_create(0);
+                
+                PHVideoRequestOptions *option = [PHVideoRequestOptions new];
+                option.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
+                
+                [[PHImageManager defaultManager] requestAVAssetForVideo:post.image.asset options:nil resultHandler:^(AVAsset *asset, AVAudioMix * audioMix, NSDictionary * info) {
+                    
+                   resultAsset = (AVURLAsset *)asset;
+                    
+                    dispatch_semaphore_signal(semaphore);
+                    
+                }];
+                
+                //Call dispatch_semaphore_wait to prevent thread from running
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                
+                data = [NSData dataWithContentsOfURL:resultAsset.URL];
+                
+                [formData appendPartWithFileData:data
+                                            name:filename
+                                        fileName:filename
+                                        mimeType:mimeType];
+                
+
             }
             
+            count++;
         }
                                                                                   
     } error:nil];
 
     [request setValue:[FRSDataManager sharedManager].frescoAPIToken forHTTPHeaderField:@"authtoken"];
     
-    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request
-                                                                       progress:&progress
-                                                              completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
-        if (uploadError) {
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
+                                                                  
+                                                                  
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.spinner stopAnimating];
+            [self.spinner removeFromSuperview];
+            self.navigationController.toolbar.items[1].title = GALLERY_TOOLBAR;
+        });
+    
+        if (uploadError || responseObject[@"err"] != (id)[NSNull null]) {
             
-            NSLog(@"Error posting to Fresco: %@", uploadError);
+            [self configureControlsForUpload:NO];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self.spinner stopAnimating];
-                [self.spinner removeFromSuperview];
+            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                                         alertControllerWithTitle:UPLOAD_ERROR_TITLE
+                                         message:UPLOAD_ERROR_MESSAGE action:DISMISS]
+                               animated:YES completion:nil];
             
-                [self configureControlsForUpload:NO];
-                
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
-                                             alertControllerWithTitle:@"Failed"
-                                             message:@"Please try again later" action:nil]
-                                   animated:YES completion:nil];
-                
-            });
         }
         else {
-            
-            NSLog(@"Success posting to Fresco: %@ %@", response, responseObject);
             
             @try{
                 
@@ -701,11 +712,6 @@
                 [[FRSDataManager sharedManager] resetDraftGalleryPost];
                 
                 [self returnToTabBarWithPrevious:NO];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.spinner stopAnimating];
-                    [self.spinner removeFromSuperview];
-                });
                 
             }
             @catch(NSException *exception){
@@ -752,7 +758,7 @@
     }
 }
 
-#pragma mark - UITextViewDelegate methods
+#pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
@@ -806,7 +812,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }
 
-#pragma mark - Notification methods
+#pragma mark - Notification Delegate
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
@@ -850,12 +856,12 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     [self.locationManager stopUpdatingLocation];
+    self.locationManager = nil;
     [self configureAssignmentForLocation:[locations lastObject]];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
         
         UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
