@@ -12,16 +12,15 @@
 #import "NSString+Validation.h"
 #import "UISocialButton.h"
 #import "FRSBackButton.h"
+#import "UIView+Border.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 
-@property (weak, nonatomic) IBOutlet UITextField *emailField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-@property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
 @property (weak, nonatomic) IBOutlet UITextView *tosTextView;
 
 @property (assign, nonatomic) BOOL signUpRunning;
@@ -33,7 +32,9 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-
+    
+    self.signUpRunning = NO;
+    
     self.tosTextView.delegate = self;
     
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
@@ -42,21 +43,19 @@
     self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
     [self setupTerms];
-    
-    [self initBackButton];
-    
-    self.signUpRunning = NO;
+
+    [self.fieldsWrapper addBorderWithWidth:1.0f];
+
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
-    
 
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 
-    // we may prepopulate these either during pushing or backing
+    //we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
     
@@ -135,18 +134,20 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification {
     
+    CGSize kbSize = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+
+    CGRect viewFrame = self.parentViewController.parentViewController.view.frame;
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+        viewFrame.origin.y = -kbSize.height /4;
+    else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+        viewFrame.origin.y = 0;
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0.3
+                          delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
-                            CGRect viewFrame = self.view.frame;
-                            
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-                                viewFrame.origin.y = -140;
-                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
-                                viewFrame.origin.y = 0;
-                            
-                            self.view.frame = viewFrame;
+                            self.parentViewController.parentViewController.view.frame= viewFrame;
                             
                         } completion:nil];
     
@@ -166,6 +167,7 @@
     if ([self.confirmPasswordField isFirstResponder] && [touch view] != self.confirmPasswordField) {
         [self.confirmPasswordField resignFirstResponder];
     }
+    
     [super touchesBegan:touches withEvent:event];
 }
 

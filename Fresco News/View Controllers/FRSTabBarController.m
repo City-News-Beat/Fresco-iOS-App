@@ -153,7 +153,7 @@
         
         if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
             
-            [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+            [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -((HighlightsViewController *)vc).galleriesViewController.tableView.contentInset.top) animated:YES];
             
         }
         else{

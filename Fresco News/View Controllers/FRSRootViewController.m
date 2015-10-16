@@ -11,8 +11,9 @@
 #import "FRSRootViewController.h"
 #import "FRSDataManager.h"
 #import "FRSTabBarController.h"
+#import "FRSFirstRunWrapperViewController.h"
 #import "NotificationsViewController.h"
-#import "CameraViewController.h"
+#import "FRSCamViewController.h"
 #import "OnboardPageViewController.h"
 #import "BaseNavigationController.h"
 #import "TOSViewController.h"
@@ -29,7 +30,7 @@
 
 @implementation FRSRootViewController
 
-#pragma mark - Orientation Delegate
+#pragma mark - Orientation
 
 -(BOOL)shouldAutorotate {
     return YES;
@@ -107,7 +108,11 @@
 
 - (void)presentFirstRunViewController:(UIViewController *)controller
 {
-    [controller presentViewController:[self rootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES] animated:YES completion:nil];
+    
+    FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
+    
+    [controller presentViewController:vc animated:YES completion:nil];
+    
 }
 
 /*
@@ -116,7 +121,10 @@
 
 - (void)setRootViewControllerToFirstRun{
 
-    [self switchRootViewController:[self rootViewControllerWithIdentifier:@"firstRunViewController" underNavigationController:YES]];
+    FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
+
+    [self switchRootViewController:vc];
+    
 }
 
 - (void)setRootViewControllerToOnboard{

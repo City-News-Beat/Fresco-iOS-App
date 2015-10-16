@@ -8,9 +8,10 @@
 
 #pragma mark - Utility methods
 
-/*
-** Sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
-*/
+
+/**
+ *  Sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
+ */
 
 - (void)setFrescoNavigationBar
 {
@@ -272,7 +273,7 @@
         CATransition *transition = [CATransition animation];
         transition.type = kCATransitionFade;
         transition.subtype = kCATransitionFromBottom;
-        transition.duration = 0.5f;
+        transition.duration = 0.2f;
         transition.fillMode = kCAFillModeForwards;
         transition.removedOnCompletion = YES;
         
@@ -308,7 +309,7 @@
         CATransition *transition = [CATransition animation];
         transition.type = kCATransitionFade;
         transition.subtype = kCATransitionFromBottom;
-        transition.duration = 0.5f;
+        transition.duration = 0.2f;
         transition.fillMode = kCAFillModeForwards;
         transition.removedOnCompletion = YES;
         

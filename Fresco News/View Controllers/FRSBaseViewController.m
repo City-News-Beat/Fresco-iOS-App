@@ -30,7 +30,6 @@
     
 }
 
-// good for wholesale resetting of the app
 - (void)navigateToMainApp
 {
     FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
@@ -50,10 +49,6 @@
 }
 
 #pragma mark - Login / Signup Methods
-
-/*
-** Method to send us out of view controller
-*/
 
 - (void)transferUser{
     
@@ -86,9 +81,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-/*
- ** Login Method, takes a LoginType to perform repsective login i.e. facebook, twitter, regular login (fresco)
- */
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
 
@@ -276,9 +268,6 @@
         }];
         
     });
-    
 }
-
-
 
 @end

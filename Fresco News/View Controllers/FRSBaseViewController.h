@@ -17,11 +17,14 @@ typedef enum : NSUInteger {
 
 @interface FRSBaseViewController : UIViewController
 
-@property (strong, nonatomic) NSMutableArray *galleries;
-
 /* Spinner */
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+
+/**
+ *  View controller index, for uses in a UIPageViewController
+ */
+@property (assign, nonatomic) NSInteger index;
 
 /*
 ** Navigation Methods
@@ -33,8 +36,19 @@ typedef enum : NSUInteger {
 
 - (void)navigateToCamera;
 
+/**
+ *  Method to send us out of view controller after logging in
+ */
+
 - (void)transferUser;
 
+/**
+ *  Login Method, takes a LoginType to perform repsective login i.e. facebook, twitter, regular login (fresco)
+ *
+ *  @param login  Type of login
+ *  @param button The button eing selected
+ *  @param info   The email/pass dictionairy if Fresco login
+ */
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info;
 
 @end

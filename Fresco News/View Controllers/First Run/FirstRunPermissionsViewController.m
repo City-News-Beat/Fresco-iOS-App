@@ -2,7 +2,7 @@
 //  FirstRunPermissionsViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 4/24/15.
+//  Created by Fresco News on 4/24/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -13,7 +13,8 @@
 @import AssetsLibrary;
 #import "AppDelegate.h"
 
-@interface FirstRunPermissionsViewController () <CLLocationManagerDelegate, FRSBackButtonDelegate>
+@interface FirstRunPermissionsViewController () <CLLocationManagerDelegate>
+
 @property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *locationPermissionsImage;
 @property (weak, nonatomic) IBOutlet UIImageView *notificationsPermissionsImage;
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSTimer *timer;
+
 @end
 
 @implementation FirstRunPermissionsViewController
@@ -32,13 +34,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.isSkipState = YES;
     self.cameraPermissionsImage.alpha = 0.54;
     self.locationPermissionsImage.alpha = 0.54;
     self.notificationsPermissionsImage.alpha = 0.54;
-    
-    [self initBackButton];
-    
+     
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -52,17 +51,6 @@
 
 }
 
-- (IBAction)tempToggle:(id)sender
-{
-    if (self.isSkipState == NO) {
-        [self loadAsSkipScreen];
-        self.isSkipState = YES;
-    }
-    else {
-        [self loadAsPermissionsScreen];
-        self.isSkipState = NO;
-    }
-}
 
 - (void)loadAsSkipScreen
 {
@@ -205,23 +193,5 @@
     });
 }
 
-
-
-- (void)initBackButton {
-    
-    FRSBackButton *backButton = [FRSBackButton createBackButton];
-    
-    [self.view addSubview:backButton];
-    
-    backButton.delegate = self;
-
-}
-
-
-- (void)backButtonTapped {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
 
 @end

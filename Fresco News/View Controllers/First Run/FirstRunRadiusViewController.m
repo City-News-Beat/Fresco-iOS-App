@@ -2,7 +2,7 @@
 //  FirstRunRadiusViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 4/27/15.
+//  Created by Fresco News on 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -15,19 +15,17 @@
 #import "TOSViewController.h"
 #import <DBImageColorPicker.h>
 
-@interface FirstRunRadiusViewController () <MKMapViewDelegate, FRSBackButtonDelegate>
+@interface FirstRunRadiusViewController () <MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapviewRadius;
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
+
 @property (nonatomic) NSArray *stepperSteps;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 @property (assign, nonatomic) BOOL ranUserUpdate;
 
 @property (strong, nonatomic) DBImageColorPicker *picker;
-
-- (IBAction)doneButtonTapped:(id)sender;
 
 @end
 
@@ -58,9 +56,7 @@
     self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
     
     [self sliderValueChanged:self.radiusStepper];
-    
-    [self initBackButton];
-    
+
 }
 
 
@@ -112,7 +108,7 @@
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    return [self.mapView setupUserPinForAnnotation:annotation];
+    return [self.mapviewRadius setupUserPinForAnnotation:annotation];
     
 }
 
@@ -148,28 +144,5 @@
 
 }
 
-- (IBAction)doneButtonTapped:(id)sender {
-    
-    [self save];
 
-}
-
-
-
-- (void)initBackButton {
-    
-    FRSBackButton *backButton = [FRSBackButton createBackButton];
-    
-    [self.view addSubview:backButton];
-    
-    backButton.delegate = self;
-    
-}
-
-
-- (void)backButtonTapped {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
 @end

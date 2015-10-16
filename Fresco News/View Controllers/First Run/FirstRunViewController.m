@@ -2,7 +2,7 @@
 //  FirstRunViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 4/24/15.
+//  Created by Fresco News on 4/24/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
@@ -17,7 +17,9 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
+#import "UIView+Border.h"
 #import "UISocialButton.h"
+#import "FirstRunPageViewController.h"
 
 @interface FirstRunViewController () <UITextFieldDelegate>
 
@@ -53,6 +55,8 @@
         button.clipsToBounds = YES;
     }
     
+    [self.fieldsWrapper addBorderWithWidth:1.0f];
+    
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     
@@ -69,9 +73,8 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
-    [self setupButtons];
-    
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -124,45 +127,26 @@
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
     
+    CGSize kbSize = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    CGRect viewFrame = self.parentViewController.parentViewController.view.frame;
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+        viewFrame.origin.y = -kbSize.height /4;
+    else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+        viewFrame.origin.y = 0;
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0.3
+                          delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
-
-                            CGRect viewFrame = self.view.frame;
-
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]){
-                                viewFrame.origin.y = -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            }
-                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
-                                viewFrame.origin.y = 0;
-                            
-                            self.view.frame = viewFrame;
                         
+                            self.parentViewController.parentViewController.view.frame= viewFrame;
+                            
                         } completion:nil];
 }
 
 
 #pragma mark - IBAction Listeners
-
-/*
-** Login
-*/
-
-- (void)setupButtons {
-    
-//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.loginButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-  
-//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.signUpButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:.53 alpha:1] forState:UIControlStateHighlighted];
-    
-//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.twitterButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
-    
-//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1] forState:UIControlStateNormal];
-//    [self.facebookButton setTitleColor:[UIColor colorWithHue:0 saturation:0 brightness:0.53 alpha:1] forState:UIControlStateHighlighted];
-    
-}
 
 - (IBAction)loginButtonAction:(id)sender {
     
@@ -201,28 +185,13 @@
 - (IBAction)signUpButtonAction:(id)sender
 {
     
-    [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
+    if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
     
-}
-
-/*
-** "No Thanks, I'll sign up later" Button
-*/
-
-- (IBAction)buttonWontLogin:(UIButton *)sender {
-    
-    //Set has Launched Before to prevent onboard from ocurring again
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-    
-    if(self.presentingViewController == nil){
-        [self navigateToMainApp];
-    }
-    else{
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [((FirstRunPageViewController *)self.parentViewController) shouldMoveToViewAtIndex:self.index + 1];
+        
     }
 }
+
 - (IBAction)forgotPassword:(id)sender {
     
      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/forgot",BASE_URL]]];
@@ -244,18 +213,6 @@
     }
     
     [super touchesBegan:touches withEvent:event];
-}
-
-#pragma mark - Segues
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // normal push segue for Fresco signup
-    if ([[segue identifier] isEqualToString:SEG_SHOW_ACCT_INFO]) {
-        FirstRunAccountViewController *fracvc = [segue destinationViewController];
-        fracvc.email = self.emailField.text;
-        fracvc.password = self.passwordField.text;
-    }
 }
 
 @end

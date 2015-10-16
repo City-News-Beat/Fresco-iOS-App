@@ -2,19 +2,20 @@
 //  FirstRunSignUpViewController.m
 //  FrescoNews
 //
-//  Created by Zachary Mayberry on 4/27/15.
+//  Created by Fresco News on 4/27/15.
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "FirstRunSignUpViewController.h"
+#import "FirstRunPersonalViewController.h"
 #import "FRSDataManager.h"
 #import "FRSBackButton.h"
+#import "UIView+Border.h"
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
-@interface FirstRunSignUpViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface FirstRunPersonalViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topVerticalSpaceConstraint; // not connected?
@@ -27,7 +28,7 @@
 
 @end
 
-@implementation FirstRunSignUpViewController
+@implementation FirstRunPersonalViewController
 
 - (void)viewDidLoad
 {
@@ -45,6 +46,8 @@
 
     self.textfieldFirstName.returnKeyType = UIReturnKeyNext;
     self.textfieldLastName.returnKeyType = UIReturnKeyDone;
+    
+    [self.fieldsWrapper addBorderWithWidth:1.0f];
 
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     
@@ -261,7 +264,9 @@
                                           id result,
                                           NSError *error) {
         if (!error) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
+                
                 self.firstName = [result objectForKey:@"first_name"];
                 self.lastName = [result objectForKey:@"last_name"];
 
