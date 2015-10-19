@@ -117,6 +117,7 @@
 		E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E74B111D1BACCC6E003E01A1 /* ProfileSettingsViewController.xib */; };
 		E76515B41B17581200AFDE1E /* ClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E76515B31B17581200AFDE1E /* ClusterAnnotation.m */; };
 		E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1A471B168DDF00FB0B18 /* FRSCluster.m */; };
+		E76C1DF81BD539C10073A4D6 /* FRSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E76C1DF71BD539C10073A4D6 /* FRSProgressView.m */; settings = {ASSET_TAGS = (); }; };
 		E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */; };
 		E771DF9A1BACACB000CC795A /* ProfilePaymentSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E771DF991BACACB000CC795A /* ProfilePaymentSettingsViewController.m */; };
 		E77F6AC41B583839009AFF8D /* OnboardPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E77F6AC31B583839009AFF8D /* OnboardPageViewController.m */; };
@@ -389,6 +390,8 @@
 		E76515B31B17581200AFDE1E /* ClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterAnnotation.m; sourceTree = "<group>"; };
 		E76C1A461B168DDF00FB0B18 /* FRSCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSCluster.h; path = Assignment/FRSCluster.h; sourceTree = "<group>"; };
 		E76C1A471B168DDF00FB0B18 /* FRSCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCluster.m; path = Assignment/FRSCluster.m; sourceTree = "<group>"; };
+		E76C1DF61BD539C10073A4D6 /* FRSProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSProgressView.h; sourceTree = "<group>"; };
+		E76C1DF71BD539C10073A4D6 /* FRSProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSProgressView.m; sourceTree = "<group>"; };
 		E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+Additions.h"; path = "Categories/AppDelegate+Additions.h"; sourceTree = "<group>"; };
 		E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+Additions.m"; path = "Categories/AppDelegate+Additions.m"; sourceTree = "<group>"; };
 		E771DF981BACACB000CC795A /* ProfilePaymentSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePaymentSettingsViewController.h; sourceTree = "<group>"; };
@@ -1076,6 +1079,8 @@
 		E79ACC621BB4558C005EF7E6 /* FRSKit */ = {
 			isa = PBXGroup;
 			children = (
+				E76C1DF61BD539C10073A4D6 /* FRSProgressView.h */,
+				E76C1DF71BD539C10073A4D6 /* FRSProgressView.m */,
 				BCE22C951BB1B35600F2C07C /* FRSRefreshControl.h */,
 				BCE22C961BB1B35600F2C07C /* FRSRefreshControl.m */,
 				E79ACC631BB46DD5005EF7E6 /* FRSLabel.h */,
@@ -1495,7 +1500,6 @@
 				E7C43DBE1BC59BFB0083CBF0 /* AssetGridViewCell.m in Sources */,
 				E72E36FD1BBDA0AF00C7EF7D /* FirstRunPageViewController.m in Sources */,
 				E7AD1CC61BBB35D000F940D5 /* FRSSocialButton.m in Sources */,
-				1EDA451A1AA506360082E08D /* NSFileManager+Additions.m in Sources */,
 				E7D27AA11B5FFF5900A08B51 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				E7E582F31BBDC12A00287324 /* UIView+Border.m in Sources */,
 				1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */,
@@ -1521,6 +1525,7 @@
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
+				E76C1DF81BD539C10073A4D6 /* FRSProgressView.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunPersonalViewController.m in Sources */,
 				BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */,
 				1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */,

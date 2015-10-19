@@ -62,8 +62,8 @@ typedef enum : NSUInteger {
 ** Buttons
 */
 
-@property (weak, nonatomic) IBOutlet UISocialButton *connectTwitterButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *connectFacebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *connectTwitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *connectFacebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *addCardButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 
@@ -180,8 +180,8 @@ typedef enum : NSUInteger {
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
     
-    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
     caret.contentMode = UIViewContentModeScaleAspectFit;

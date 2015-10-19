@@ -13,6 +13,7 @@
 #import "FirstRunAccountViewController.h"
 #import "FirstRunPersonalViewController.h"
 #import "FirstRunRadiusViewController.h"
+#import "FRSFirstRunWrapperViewController.h"
 #import "UIViewController+Additions.h"
 
 @implementation FirstRunPageViewController
@@ -54,11 +55,16 @@
     
     if(viewController == nil) return;
     
+    self.previousIndex = self.currentIndex;
+    
     self.currentIndex  = index;
     
     NSArray *controllers = @[viewController];
                                         
     [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+    
+    [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
+
     
 }
 
@@ -86,12 +92,24 @@
     
     NSUInteger index = ((FRSBaseViewController *)[self.viewControllers firstObject]).index;
     
+    self.previousIndex = self.currentIndex;
+    
     self.currentIndex = index;
+
+    [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
     
 }
 
 
 #pragma mark - UIPageViewController DataSource
+
+/**
+ *  Called to retrieve a view controller
+ *
+ *  @param index The specific view controller at this index
+ *
+ *  @return The view controller at the passed index
+ */
 
 - (UIViewController *)viewControllerAtIndex:(NSUInteger)index
 {

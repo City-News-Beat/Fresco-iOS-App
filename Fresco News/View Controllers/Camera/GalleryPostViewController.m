@@ -79,8 +79,8 @@
     
     [self.socialTipView setUserInteractionEnabled:YES];
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

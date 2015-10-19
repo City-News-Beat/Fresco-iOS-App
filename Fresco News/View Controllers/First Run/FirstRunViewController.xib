@@ -71,7 +71,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIo-v8-VCd" userLabel="Login Container">
                     <rect key="frame" x="0.0" y="113" width="375" height="278"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xf4-ls-pqp" userLabel="Facebook" customClass="UISocialButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xf4-ls-pqp" userLabel="Facebook" customClass="FRSSocialButton">
                             <rect key="frame" x="193" y="9" width="167" height="46.5"/>
                             <animations/>
                             <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,7 +94,7 @@
                                 <action selector="facebookLogin:" destination="-1" eventType="touchUpInside" id="YXw-Na-hJK"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tet-fD-QD8" userLabel="Twitter" customClass="UISocialButton">
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tet-fD-QD8" userLabel="Twitter" customClass="FRSSocialButton">
                             <rect key="frame" x="15" y="9" width="167" height="46.5"/>
                             <animations/>
                             <color key="backgroundColor" red="0.33333333329999998" green="0.67450980390000004" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>

@@ -137,20 +137,20 @@
                             <variation key="default">
                                 <mask key="constraints">
                                     <exclude reference="NDO-fO-a5I"/>
+                                    <exclude reference="4E6-ys-6V7"/>
+                                    <exclude reference="A64-b8-vFY"/>
+                                    <exclude reference="BnA-YO-JFf"/>
                                     <exclude reference="LBJ-Gw-Sgi"/>
                                     <exclude reference="PSF-wh-8uS"/>
-                                    <exclude reference="4E6-ys-6V7"/>
-                                    <exclude reference="ype-6Y-kYh"/>
-                                    <exclude reference="BnA-YO-JFf"/>
-                                    <exclude reference="A64-b8-vFY"/>
                                     <exclude reference="slc-i4-gBd"/>
-                                    <exclude reference="aRH-EL-fBU"/>
-                                    <exclude reference="s87-Y5-IgN"/>
+                                    <exclude reference="ype-6Y-kYh"/>
                                     <exclude reference="Yms-au-RXH"/>
+                                    <exclude reference="s87-Y5-IgN"/>
+                                    <exclude reference="aRH-EL-fBU"/>
                                 </mask>
                             </variation>
                         </view>
-                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZY-Bo-Yht" userLabel="Twitter" customClass="UISocialButton">
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZY-Bo-Yht" userLabel="Twitter" customClass="FRSSocialButton">
                             <rect key="frame" x="15" y="9" width="166" height="46"/>
                             <animations/>
                             <color key="backgroundColor" red="0.33333333329999998" green="0.67450980390000004" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -169,17 +169,17 @@
                             </state>
                             <variation key="default">
                                 <mask key="constraints">
-                                    <exclude reference="ogb-Oz-gUQ"/>
-                                    <exclude reference="gwe-wr-5QR"/>
-                                    <exclude reference="Zyu-7q-VXn"/>
                                     <exclude reference="2gy-G6-fUG"/>
+                                    <exclude reference="Zyu-7q-VXn"/>
+                                    <exclude reference="gwe-wr-5QR"/>
+                                    <exclude reference="ogb-Oz-gUQ"/>
                                 </mask>
                             </variation>
                             <connections>
                                 <action selector="twitterButtonTapped:" destination="-1" eventType="touchUpInside" id="exH-QL-exh"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r1I-yC-ALw" userLabel="Facebook" customClass="UISocialButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r1I-yC-ALw" userLabel="Facebook" customClass="FRSSocialButton">
                             <rect key="frame" x="192" y="9" width="166" height="46"/>
                             <animations/>
                             <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>

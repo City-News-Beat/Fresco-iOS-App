@@ -46,5 +46,8 @@
 
 + (UIColor *)assetOverlayColor;
 
++ (UIColor *)radiusDarkGoldColor;
+
++ (UIColor *)frescoLightGreyColor;
 
 @end

@@ -96,6 +96,13 @@
 + (UIColor *)assetOverlayColor {
     return [UIColor colorWithRed:0 green:.47 blue:1.0 alpha:0.26];
 }
++ (UIColor *)radiusDarkGoldColor {
+    return [UIColor colorWithRed:0.88 green:0.68 blue:0 alpha:1];
+}
+
++ (UIColor *)frescoLightGreyColor {
+    return [UIColor colorWithRed:0.74 green:0.74 blue:0.74 alpha:1];
+}
 
 
 @end

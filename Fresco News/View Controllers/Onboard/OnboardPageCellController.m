@@ -28,11 +28,9 @@
  ** UI Elements
  */
 
-@property (weak, nonatomic) IBOutlet UIButton *nextButton;
+//@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UILabel *mainHeader;
 @property (weak, nonatomic) IBOutlet UILabel *subHeader;
-@property (weak, nonatomic) IBOutlet UIImageView *onboardImage;
-@property (weak, nonatomic) IBOutlet UIImageView *progressImage;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomImage;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomTextContainer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomLogo;
@@ -101,10 +99,6 @@
     
     self.subHeader.text = [self.subHeaders objectAtIndex:self.animationState];
     
-    self.onboardImage.image = [UIImage imageNamed:[self.images objectAtIndex:self.animationState]];
-    
-    self.progressImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"progress-3-%li", (long)(self.animationState +1)]];
-    
     /** **/
     
     if(self.animationState == AnimationStateOne){
@@ -112,23 +106,18 @@
         [self animateOnboard1];
         
     }
-    
-    if(self.animationState == AnimationStateTwo){
+    else if(self.animationState == AnimationStateTwo){
         [self setUpOnboard2];
         [self animateOnboard2];
         
     }
-    
-    if(self.animationState == AnimationStateThree){
+    else if(self.animationState == AnimationStateThree){
         [self setUpOnboard3];
         [self animateOnboard3];
         
     }
+ 
     
-    //Show "Done" on the last view
-    if(self.animationState == 2){
-        [self.nextButton setTitle:@"Done" forState:UIControlStateNormal];
-    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -141,6 +130,7 @@
     self.cash1.alpha = 0;
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
+ 
     
 }
 
@@ -167,7 +157,7 @@
             
             [self animateOnboard3];
             
-            break;
+            break; 
             
     }
     
@@ -365,6 +355,7 @@
     self.assignmentTopRight.transform = CGAffineTransformMakeScale(0, 0);
     self.assignmentBottomRight.transform = CGAffineTransformMakeScale(0, 0);
     
+    
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
@@ -508,7 +499,6 @@
     self.cash1.alpha = 1;
     self.cash2.alpha = 1;
     self.cash3.alpha = 1;
-    
     
     self.greyCloud.transform = CGAffineTransformMakeScale(.96,.96);
     self.greyCloud.alpha = 1;
@@ -697,6 +687,5 @@
                      }
                      completion:nil];
 }
-
 
 @end

@@ -36,6 +36,9 @@
         
         [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
         
+        //
+        self.view.clipsToBounds = YES;
+        
     }
     
     return self;
@@ -53,14 +56,12 @@
     
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)movedToViewAtIndex:(NSInteger)index{
+- (void)shouldMoveToViewAtIndex:(NSInteger)index{
     
+    self.previousIndex = self.currentIndex;
+    
+    self.currentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+
     if (index < 2 && !self.runningNextPage) {
         
         _runningNextPage = YES;
@@ -74,14 +75,14 @@
         NSArray *controllers = @[viewController];
         
         //Update the dots on the next button
-        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
-            
-            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
+        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]) {
+        
+            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *) self.parentViewController;
             
             [parentVC updateStateWithIndex:self.currentIndex];
-            
+             
         }
-        
+    
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
             [viewController performAnimation];
@@ -90,7 +91,6 @@
             
         }];
     }
-    
     else{
         
         if(![[FRSDataManager sharedManager] isLoggedIn]){
@@ -143,9 +143,11 @@
     
     if(!completed) return;
     
-    NSUInteger index = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+    // current index default = 0, always < current index.
+    self.previousIndex = self.currentIndex;
     
-    self.currentIndex = index;
+    self.currentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
+    
     
     if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
         
@@ -167,16 +169,18 @@
     if (index == 3) {
         return nil;
     }
-    
+
     OnboardPageCellController *viewController = [[OnboardPageCellController alloc] initWithAnimationState:index];
-    
+
     return viewController;
 }
 
-
+/**
+ *  Commits animation for current state of page view controller
+ */
 
 - (void)onboardAnimation {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         
         OnboardPageCellController *onBoardPageCellController = [self.viewControllers firstObject];
@@ -187,4 +191,3 @@
 }
 
 @end
-

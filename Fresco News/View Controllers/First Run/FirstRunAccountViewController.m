@@ -16,8 +16,8 @@
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
-@property (weak, nonatomic) IBOutlet UISocialButton *facebookButton;
-@property (weak, nonatomic) IBOutlet UISocialButton *twitterButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
+@property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
 
@@ -37,14 +37,14 @@
     
     self.tosTextView.delegate = self;
     
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     
     self.parentViewController.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
     
     [self setupTerms];
-
     [self.fieldsWrapper addBorderWithWidth:1.0f];
+
 
     
 }
@@ -92,15 +92,6 @@
     [self hitNext];
 }
 
-- (IBAction)facebookButtonTapped:(id)sender {
-    
-     [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
-}
-
-- (IBAction)twitterButtonTapped:(id)sender {
-    
-     [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
-}
 
 #pragma mark - UITextViewDelegate
 
@@ -286,11 +277,20 @@
 }
 
 
-- (void)backButtonTapped {
+- (void)backButtonTapped{
     
     [self.navigationController popViewControllerAnimated:YES];
 
 }
+
+- (IBAction)facebookLogin:(id)sender{
+    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
+}
+
+- (IBAction)twitterLogin:(id)sender {
+    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
+}
+
 
 
 

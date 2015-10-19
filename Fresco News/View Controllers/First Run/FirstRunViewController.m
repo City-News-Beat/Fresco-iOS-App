@@ -10,7 +10,6 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <DBImageColorPicker.h>
 #import "FirstRunViewController.h"
 #import "FirstRunAccountViewController.h"
 #import "TOSViewController.h"
@@ -37,7 +36,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *dismissButton;
 
-@property (strong, nonatomic) DBImageColorPicker *picker;
 
 @end
 
@@ -59,7 +57,7 @@
     
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-    
+
     // Add shadow above Dismiss Button
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
     shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
@@ -73,6 +71,7 @@
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
     
+
 }
 
 
@@ -148,6 +147,10 @@
 
 #pragma mark - IBAction Listeners
 
+/*
+** Login
+*/
+
 - (IBAction)loginButtonAction:(id)sender {
     
     //Check fields first
@@ -167,15 +170,6 @@
     
     }
 
-
-}
-
-- (IBAction)facebookLogin:(id)sender{
-    [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
-}
-
-- (IBAction)twitterLogin:(id)sender {
-    [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
 }
 
 /*
