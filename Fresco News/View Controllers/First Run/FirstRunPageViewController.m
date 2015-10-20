@@ -48,7 +48,6 @@
     
 }
 
-
 - (void)shouldMoveToViewAtIndex:(NSInteger)index{
     
     UIViewController *viewController = [self viewControllerAtIndex:index];
@@ -65,7 +64,6 @@
     
     [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
 
-    
 }
 
 #pragma mark - UIPageViewController Delegate
@@ -75,7 +73,6 @@
     NSInteger index = ((FRSBaseViewController *)viewController).index - 1;
     
     return [self viewControllerAtIndex:index];
-    
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {

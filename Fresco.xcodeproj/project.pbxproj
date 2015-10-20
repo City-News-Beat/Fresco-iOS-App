@@ -816,8 +816,6 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */,
-				E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */,
 				E7E582F01BBDC0CA00287324 /* Foundation */,
 				E7E582EF1BBDC0B200287324 /* UIKit */,
 			);
@@ -1192,6 +1190,8 @@
 		E7E582F01BBDC0CA00287324 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				E76DE0311BB1DC6200F572D5 /* AppDelegate+Additions.h */,
+				E76DE0321BB1DC6200F572D5 /* AppDelegate+Additions.m */,
 				42D998051AEC46D900636F33 /* NSDate+ISO.h */,
 				42D998061AEC46D900636F33 /* NSDate+ISO.m */,
 				BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */,

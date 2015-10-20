@@ -12,13 +12,11 @@
 
 @interface FRSFirstRunWrapperViewController () <FRSProgressViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *navigationButton;
-
-@property (strong, nonatomic) FRSProgressView *progressView;
-
 /*
 ** Views and Viewcontrollers
 */
+
+@property (strong, nonatomic) FRSProgressView *progressView;
 
 @property (strong, nonatomic) FirstRunPageViewController *pagedViewController;
 
@@ -53,13 +51,13 @@
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
     
-    self.pageCount = 5;
+    self.pageCount = 4;
 
     self.progressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
                                                                           0,
                                                                           [[UIScreen mainScreen] bounds].size.height - 65,
                                                                           [[UIScreen mainScreen] bounds].size.width,
-                                                                          65) andPageCount:self.pageCount];
+                                                                          65) andPageCount:self.pageCount withFirstIndexDisabled:YES];
     [self.view addSubview:self.progressView];
     
 }
@@ -96,7 +94,8 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
     
-    [self.progressView updateProgressViewAtIndex:self.pagedViewController.currentIndex fromIndex:self.pagedViewController.previousIndex];
+    [self.progressView updateProgressViewForIndex:self.pagedViewController.currentIndex
+                                       fromIndex:self.pagedViewController.previousIndex];
     
 }
 

@@ -24,30 +24,18 @@
 
 @property id<FRSProgressViewDelegate> delegate;
 
-@property CGFloat *progressPercent;
-
-@property (strong, nonatomic) NSMutableArray *arrayOfEmptyCircles;
-
-@property (strong, nonatomic) NSMutableArray *arrayOfFilledCircles;
-
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
-- (void)animateProgressViewAtPercent:(CGFloat)percent;
-
-- (void)fillingCircleAtIndex:(NSInteger)index;
-
-- (void)emptyingCircleAtIndex:(NSInteger)index;
-
-- (void)updateNextButtonAtIndex:(NSInteger)index;
+- (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count withFirstIndexDisabled:(BOOL)disabled;
 
 /**
- *  Updates the progress view at the pass indices
+ *  Updates the progress view at the passed indices
  *
  *  @param currentIndex  The current index (The one just traveled to)
  *  @param previousIndex The previous index of the progress view (The one it just came from)
  */
 
-- (void)updateProgressViewAtIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex;
+- (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex;
 
 
 @end

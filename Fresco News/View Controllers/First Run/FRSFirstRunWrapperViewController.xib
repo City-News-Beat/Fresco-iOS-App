@@ -9,7 +9,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSFirstRunWrapperViewController">
             <connections>
                 <outlet property="containerPageView" destination="ygc-eI-C2V" id="zMQ-5f-e4F"/>
-                <outlet property="navigationButton" destination="WHp-AK-8RV" id="trJ-JW-pXO"/>
                 <outlet property="view" destination="bLT-2a-2CZ" id="NjV-Q9-CWZ"/>
             </connections>
         </placeholder>
@@ -46,50 +45,29 @@
                         </mask>
                     </variation>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WHp-AK-8RV">
-                    <rect key="frame" x="0.0" y="622" width="375" height="45"/>
-                    <animations/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="45" id="s5Y-uR-7Qh"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                    <state key="normal" title="No thanks, I’ll sign up later">
-                        <color key="titleColor" red="1" green="0.77254901960784317" blue="0.23921568627450979" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonNavigationButton:" destination="-1" eventType="touchUpInside" id="KVH-Y4-cEV"/>
-                    </connections>
-                </button>
             </subviews>
             <animations/>
             <color key="backgroundColor" red="0.98431372549019602" green="0.98431372549019602" blue="0.98431372549019602" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="ygc-eI-C2V" firstAttribute="bottom" secondItem="WHp-AK-8RV" secondAttribute="bottom" constant="-49" id="6qC-bW-PBA"/>
-                <constraint firstAttribute="trailing" secondItem="WHp-AK-8RV" secondAttribute="trailing" id="8ZO-uN-ASa"/>
                 <constraint firstItem="PyU-mI-iKH" firstAttribute="centerX" secondItem="ygc-eI-C2V" secondAttribute="centerX" id="Chs-4p-kE0"/>
                 <constraint firstItem="ygc-eI-C2V" firstAttribute="top" secondItem="bLT-2a-2CZ" secondAttribute="top" constant="163" id="DD4-tP-3qu"/>
                 <constraint firstItem="PyU-mI-iKH" firstAttribute="top" secondItem="bLT-2a-2CZ" secondAttribute="top" constant="30" id="EEH-d1-CVC"/>
                 <constraint firstItem="ygc-eI-C2V" firstAttribute="top" relation="lessThanOrEqual" secondItem="PyU-mI-iKH" secondAttribute="bottom" constant="40" id="K3q-ae-MYU"/>
                 <constraint firstItem="ygc-eI-C2V" firstAttribute="top" secondItem="PyU-mI-iKH" secondAttribute="bottom" constant="16" id="Qxs-8C-WYR"/>
-                <constraint firstItem="WHp-AK-8RV" firstAttribute="top" secondItem="ygc-eI-C2V" secondAttribute="bottom" id="bd1-Fb-Cc2"/>
                 <constraint firstItem="ygc-eI-C2V" firstAttribute="top" secondItem="PyU-mI-iKH" secondAttribute="bottom" constant="25" id="fTN-R8-2JO"/>
                 <constraint firstAttribute="trailing" secondItem="ygc-eI-C2V" secondAttribute="trailing" id="gF0-UU-rkQ"/>
-                <constraint firstAttribute="bottom" secondItem="WHp-AK-8RV" secondAttribute="bottom" id="kbm-td-ut6"/>
                 <constraint firstItem="ygc-eI-C2V" firstAttribute="leading" secondItem="bLT-2a-2CZ" secondAttribute="leading" id="sYc-KN-6fH"/>
-                <constraint firstItem="WHp-AK-8RV" firstAttribute="leading" secondItem="bLT-2a-2CZ" secondAttribute="leading" id="u9s-Sd-LGS"/>
+                <constraint firstAttribute="bottom" secondItem="ygc-eI-C2V" secondAttribute="bottom" constant="45" id="ucA-II-bOX"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="6qC-bW-PBA"/>
                     <exclude reference="DD4-tP-3qu"/>
                     <exclude reference="K3q-ae-MYU"/>
                     <exclude reference="Qxs-8C-WYR"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="1367.5" y="-1324.5"/>
+            <point key="canvasLocation" x="1245.5" y="-1331.5"/>
         </view>
     </objects>
     <resources>
