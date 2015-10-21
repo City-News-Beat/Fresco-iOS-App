@@ -375,19 +375,19 @@ typedef void(^myCompletion)(BOOL);
     
     NSString *title;
     
+    UIFont *font;
+    
     if(index == 0 && self.disabledFirstIndex && ![self.nextButton.titleLabel.text isEqualToString:NO_THANKS]){
         title = NO_THANKS;
-        self.nextButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17];
+        font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17];
     }
-    else if(![self.nextButton.titleLabel.text isEqualToString:DONE] || ![self.nextButton.titleLabel.text isEqualToString:NEXT]){
-        
-        if (index == self.pageCount-1)
-            [self.nextButton setTitle:DONE forState:UIControlStateNormal];
-        else if (index < self.pageCount-1)
-            [self.nextButton setTitle:NEXT forState:UIControlStateNormal];
-        
-        self.nextButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
-        
+    else if(![self.nextButton.titleLabel.text isEqualToString:NEXT] && index < self.pageCount-1){
+        title = NEXT;
+        font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
+    }
+    else if(![self.nextButton.titleLabel.text isEqualToString:DONE] && index == self.pageCount-1){
+        title = DONE;
+        font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
     }
     
     if(!title)
@@ -401,20 +401,8 @@ typedef void(^myCompletion)(BOOL);
         
         } completion:^(BOOL finished) {
             
-            if(index == 0 && self.disabledFirstIndex && ![self.nextButton.titleLabel.text isEqualToString:NO_THANKS]){
-                [self.nextButton setTitle:NO_THANKS forState:UIControlStateNormal];
-                self.nextButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17];
-            }
-            else if(![self.nextButton.titleLabel.text isEqualToString:DONE] || ![self.nextButton.titleLabel.text isEqualToString:NEXT]){
-           
-                if (index == self.pageCount-1)
-                    [self.nextButton setTitle:DONE forState:UIControlStateNormal];
-                else if (index < self.pageCount-1)
-                    [self.nextButton setTitle:NEXT forState:UIControlStateNormal];
-            
-                self.nextButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
-                
-            }
+            [self.nextButton setTitle:title forState:UIControlStateNormal];
+            self.nextButton.titleLabel.font = font;
             
             [UIView animateWithDuration:.2 animations:^{
                 
