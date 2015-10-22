@@ -10,29 +10,15 @@
 
 @implementation FRSAlertViewManager
 
-#pragma mark - static methods
-
-+ (FRSAlertViewManager *)sharedManager
-{
-    static FRSAlertViewManager *manager = nil;
-    static dispatch_once_t onceToken;
-    
-    dispatch_once(&onceToken, ^{
-        manager = [[FRSAlertViewManager alloc] init];
-    });
-    
-    return manager;
-}
-
 #pragma mark - UIAlertController Object Methods
 
-- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action{
++ (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action{
 
     return [self alertControllerWithTitle:title message:message action:action handler:nil];
     
 }
 
-- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *))handler{
++ (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *))handler{
     
   
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title

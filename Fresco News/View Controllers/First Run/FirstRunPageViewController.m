@@ -43,6 +43,10 @@
     
     [super viewDidLoad];
     
+    for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+        recognizer.enabled = NO;
+    }
+    
     self.delegate = self;
     self.dataSource = self;
     
@@ -119,23 +123,14 @@
     else if(index == 1){
         FirstRunAccountViewController *vc = [[FirstRunAccountViewController alloc] init];
         vc.index = index;
+        
         return vc;
     }
     else if(index == 2){
-        
-        if([self.viewControllers[0] isKindOfClass:[FirstRunAccountViewController class]]){
-            
-            FirstRunAccountViewController *accountVC = (FirstRunAccountViewController *)self.viewControllers[0];
-            
-            if([accountVC.emailField hasText] && [accountVC.passwordField hasText] && [accountVC.confirmPasswordField hasText]){
-            
-                FirstRunPersonalViewController *vc = [[FirstRunPersonalViewController alloc] init];
-                vc.index = index;
-                return vc;
-                    
-            }
-            
-        }
+     
+        FirstRunPersonalViewController *vc = [[FirstRunPersonalViewController alloc] init];
+        vc.index = index;
+        return vc;
 
     }
     else if(index == 3){

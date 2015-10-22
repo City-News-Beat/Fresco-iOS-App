@@ -97,7 +97,7 @@
     // TODO: Also check for kCLAuthorizationStatusAuthorizedAlways
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
                 
-//        [self presentViewController:[[FRSAlertViewManager sharedManager]
+//        [self presentViewController:[FRSAlertViewManager
 //                                     alertControllerWithTitle:@"Access to Location Disabled"
 //                                     message:[NSString stringWithFormat:@"To re-enable, go to Settings and turn on Location Service for the %@ app.", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]]
 //                                     action:DISMISS]

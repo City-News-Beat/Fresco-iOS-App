@@ -2,7 +2,7 @@
 //  UIView+Border.m
 //  Fresco
 //
-//  Created by Elmir Kouliev on 10/1/15.
+//  Created by Fresco News on 10/1/15.
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
@@ -10,13 +10,6 @@
 
 @implementation UIView (Border)
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 - (void)addBorderWithWidth:(CGFloat)width{
 
@@ -25,7 +18,7 @@
     leftBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
     
     CALayer *rightBorder = [CALayer layer];
-    rightBorder.frame =CGRectMake([[UIScreen mainScreen] bounds].size.width, 0.0f, width / 2, CGRectGetHeight(self.frame));
+    rightBorder.frame =CGRectMake([[UIScreen mainScreen] bounds].size.width - (width /2), 0.0f, width / 2, CGRectGetHeight(self.frame));
     rightBorder.backgroundColor = [UIColor fieldBorderColor].CGColor;
     
     CALayer *bottomBorder = [CALayer layer];

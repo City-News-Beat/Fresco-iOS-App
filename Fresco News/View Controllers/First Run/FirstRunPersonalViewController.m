@@ -150,7 +150,7 @@
                 
                 [((UIButton *)sender) setUserInteractionEnabled:YES];
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:ERROR
                                              message:NAME_ERROR_MSG
                                              action:nil]
@@ -174,7 +174,7 @@
         
         [((UIButton *)sender) setUserInteractionEnabled:YES];
         
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
                                      message:NAME_PROMPT
                                      action:nil]

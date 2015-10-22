@@ -254,7 +254,7 @@
     
     if (!button.isSelected && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+        UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Whoops"
                                        message:@"It seems like you're not connected to Twitter, click \"Connect\" if you'd like to connect Fresco with Twitter"
                                        action:@"Cancel" handler:^(UIAlertAction *action) {
@@ -268,7 +268,7 @@
                 
                 if(error){
                     
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                    [self presentViewController:[FRSAlertViewManager
                                                  alertControllerWithTitle:@"Error"
                                                  message:@"We were unable to link your Twitter account!"
                                                  action:nil]
@@ -300,7 +300,7 @@
     
     if (!button.isSelected && ![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+        UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Whoops"
                                        message:@"It seems like you're not connected to Facebook, click \"Connect\" if you'd like to connect Fresco with Facebook"
                                        action:@"Cancel" handler:^(UIAlertAction *action) {
@@ -314,7 +314,7 @@
                 
                 if(error){
                 
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                    [self presentViewController:[FRSAlertViewManager
                                                  alertControllerWithTitle:ERROR
                                                  message:@"We were unable to link your Facebook account!"
                                                  action:nil]
@@ -347,7 +347,7 @@
 {
     if (self.defaultAssignment) {
         
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+        UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Remove Assignment?"
                                        message:@"Are you sure you want remove this assignment?"
                                        action:CANCEL handler:nil];
@@ -531,7 +531,7 @@
     //Check if there are less than the max amount of posts
     if([self.gallery.posts count] > MAX_POST_COUNT){
     
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
                                      message:MAX_POST_ERROR
                                      action:nil]
@@ -690,7 +690,7 @@
             
             [self configureControlsForUpload:NO];
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:UPLOAD_ERROR_TITLE
                                          message:UPLOAD_ERROR_MESSAGE action:DISMISS]
                                animated:YES completion:nil];
@@ -863,8 +863,8 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+    
+        UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Access to Location Disabled"
                                        message:@"Fresco uses your location in order to submit a gallery to an assignment. Please enable it through the Fresco app settings"
                                        action:DISMISS handler:nil];

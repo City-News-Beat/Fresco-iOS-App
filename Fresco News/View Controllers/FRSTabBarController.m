@@ -211,7 +211,7 @@
     
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             
-            UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+            UIAlertController *alertCon = [FRSAlertViewManager
                                            alertControllerWithTitle:ENABLE_CAMERA_TITLE
                                            message:ENABLE_CAMERA_SETTINGS
                                            action:DISMISS handler:nil];

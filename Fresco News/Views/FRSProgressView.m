@@ -323,13 +323,23 @@ typedef void(^myCompletion)(BOOL);
  *  @param show YES to show, NO to hide
  */
 
-- (void)toggleCircles:(BOOL)show completion:(myCompletion)compblock{
+- (void)toggleCircles:(BOOL)show{
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSInteger index = 0;
         
         for (UIView *view in self.emptyCircles) {
             
             view.hidden = NO;
+            
+            index++;
+            
+            //We run this check in order to make the first bubble filled
+            if(index == 1 && show){
+                [self fillCircleAtIndex:0];
+                continue;
+            }
             
             [UIView animateWithDuration:0.25
                                   delay:0.0
@@ -342,7 +352,7 @@ typedef void(^myCompletion)(BOOL);
                              } completion:^(BOOL finished) {
                                  
                                  view.hidden = !show;
-                                 
+
                                  if(show){
                                  
                                      [UIView animateWithDuration:0.15
@@ -357,17 +367,7 @@ typedef void(^myCompletion)(BOOL);
                                  }
 
                              }];
-        }
-    
-        double delayInSeconds = .25 + .15;
-        
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-            compblock(YES);
-        
-        });
-        
+        }	
     });
 }
 
@@ -377,11 +377,11 @@ typedef void(^myCompletion)(BOOL);
     
     UIFont *font;
     
-    if(index == 0 && self.disabledFirstIndex && ![self.nextButton.titleLabel.text isEqualToString:NO_THANKS]){
+    if(index < 0 && self.disabledFirstIndex && ![self.nextButton.titleLabel.text isEqualToString:NO_THANKS]){
         title = NO_THANKS;
         font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17];
     }
-    else if(![self.nextButton.titleLabel.text isEqualToString:NEXT] && index < self.pageCount-1){
+    else if(![self.nextButton.titleLabel.text isEqualToString:NEXT] && index < self.pageCount-1 && index >= 0){
         title = NEXT;
         font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17];
     }
@@ -419,12 +419,12 @@ typedef void(^myCompletion)(BOOL);
 
     //This condition tells us we have the first index disabled
     // and we are not at the "first" page of the progress view
-    if(self.disabledFirstIndex && (currentIndex == 1 || currentIndex == 0)){
+    if(self.disabledFirstIndex && ((currentIndex == 1 && currentIndex > previousIndex) ||  currentIndex == 0)){
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
             //Update the title of the button
-            [self updateNextButtonAtIndex:currentIndex];
+            [self updateNextButtonAtIndex:(currentIndex-1)];
             
             CGFloat lineHeight = (currentIndex == 0  ? 1.0f : ProgressLineHeight);
             
@@ -449,48 +449,40 @@ typedef void(^myCompletion)(BOOL);
                 if(currentIndex < previousIndex)
                     [self emptyCircleAtIndex:currentIndex];
                 
-                [self toggleCircles:(currentIndex == 1) completion:^(BOOL finished) {
-                    
-                    if(finished && currentIndex > previousIndex)
-                        [self fillCircleAtIndex:(currentIndex-1)];
-                    
-                }];
+                [self toggleCircles:(currentIndex == 1)];
+                
             }];
         });
     }
     else{
+
+        //Know current index down one because the first page is disabled
+        if(self.disabledFirstIndex){
+            
+            currentIndex--;
+            
+            previousIndex--;
+            
+        }
         
         //Update the title of the button
         [self updateNextButtonAtIndex:currentIndex];
         
-        //Check if we're either not disabling the first index, or the current index is past the first page
-        if(!self.disabledFirstIndex || currentIndex > 0){
+        if (currentIndex < previousIndex){
             
-            //Know current index down one because the first page is disabled
-            if(self.disabledFirstIndex){
-                
-                previousIndex = (currentIndex > previousIndex ? previousIndex-1 : previousIndex);
-                
-                currentIndex--;
-                
-            }
-            
-            if (currentIndex < previousIndex){
-                
-                [self emptyCircleAtIndex:previousIndex];
-                
-            }
-            else if (currentIndex > previousIndex){
-                
-                [self fillCircleAtIndex:currentIndex];
-            }
-            
-            //Animate the progress view to the percentage filled
-            [self animateProgressViewAtPercent:((float)(currentIndex + 1) / (self.pageCount + 1))];
+            [self emptyCircleAtIndex:previousIndex];
             
         }
-
+        else if (currentIndex > previousIndex){
+            
+            [self fillCircleAtIndex:currentIndex];
+        }
+        
+        //Animate the progress view to the percentage filled
+        [self animateProgressViewAtPercent:((float)(currentIndex + 1) / (self.pageCount + 1))];
+        
     }
+
 }
 
 

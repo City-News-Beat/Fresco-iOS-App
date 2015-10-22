@@ -52,24 +52,27 @@
 
 - (void)transferUser{
     
-    //Set has Launched Before to prevent onboard from ocurring again
+    //Set has launched before to prevent onboard from ocurring again
     if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
     
     //Tells profile to update
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_PROFILE];
     
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     //Tells rest of the app to update respective occurence of the user's profile picture
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
     
-    //New user, send them to rest of the first run
+    //New user, send them to rest of the first run or they have incomplete info
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         
-        [self performSegueWithIdentifier:SEG_REPLACE_WITH_SIGNUP sender:self];
+        
         
     }
     //User is valid and exists i.e. send them back to the app
     else{
+
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
         else{
@@ -78,7 +81,6 @@
         }
     }
     
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
@@ -126,7 +128,7 @@
                 [self hideActivityIndicator];
                 [self revertScreenToNormal:self.view];
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:INVALID_CREDENTIALS action:nil]
                                    animated:YES completion:nil];
@@ -158,7 +160,7 @@
                 [self revertScreenToNormal:self.view];
                 
                 //TODO: check if these are the strings we want
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:FACEBOOK_ERROR
                                              action:DISMISS]
@@ -190,7 +192,7 @@
                 [self revertScreenToNormal:self.view];
                 [self hideActivityIndicator];
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:TWITTER_ERROR
                                              action:DISMISS]

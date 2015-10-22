@@ -131,7 +131,6 @@
     self.cash2.alpha = 0;
     self.cash3.alpha = 0;
  
-    
 }
 
 

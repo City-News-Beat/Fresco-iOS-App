@@ -6,13 +6,13 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "camera-permissions-inactive@2x.png"
+      "filename" : "cameraOffIcon@1x.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "camera-permissions-inactive@3x.png"
+      "filename" : "cameraOffIcon@3x.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

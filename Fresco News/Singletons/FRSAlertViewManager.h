@@ -10,8 +10,6 @@
 
 @interface FRSAlertViewManager : NSObject
 
-+ (FRSAlertViewManager *)sharedManager;
-
 /**
  *  Returns a UIAlertController with specified params
  *
@@ -22,7 +20,7 @@
  *  @return A UIAlertController
  */
 
-- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action;
++ (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action;
 
 /**
  *  Returns a UIAlertController with specified params
@@ -34,6 +32,6 @@
  *  @return A UIAlertController
  */
 
-- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *action))handler;
++ (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message action:(NSString *)action handler:(void (^)(UIAlertAction *action))handler;
 
 @end

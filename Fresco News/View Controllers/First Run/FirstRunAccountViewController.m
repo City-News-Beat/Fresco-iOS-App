@@ -17,6 +17,7 @@
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
+
 @property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
 
 @property (weak, nonatomic) IBOutlet UIView *fieldsWrapper;
@@ -44,8 +45,6 @@
     
     [self setupTerms];
     [self.fieldsWrapper addBorderWithWidth:1.0f];
-
-
     
 }
 
@@ -89,7 +88,7 @@
 
 - (IBAction)clickedNext:(id)sender {
     
-    [self hitNext];
+    [self processLogin];
 }
 
 
@@ -110,13 +109,15 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    if (textField == self.emailField) {
+    if (textField == self.emailField)
         [self.passwordField becomeFirstResponder];
-    } else if (textField == self.passwordField) {
+    
+    else if (textField == self.passwordField)
         [self.confirmPasswordField becomeFirstResponder];
-    } else if (textField == self.confirmPasswordField) {
+   
+    else if (textField == self.confirmPasswordField){
         [self.confirmPasswordField resignFirstResponder];
-        [self hitNext];  
+        [self processLogin];  
     }
     
     return NO;
@@ -147,6 +148,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     UITouch *touch = [[event allTouches] anyObject];
+    
     if ([self.emailField isFirstResponder] && [touch view] != self.emailField) {
         [self.emailField resignFirstResponder];
     }
@@ -181,7 +183,7 @@
     self.tosTextView.textAlignment = NSTextAlignmentCenter;
 }
 
-- (void)hitNext {
+- (void)processLogin {
     
     if(_signUpRunning) return;
     
@@ -189,7 +191,7 @@
     
     if (![self.emailField.text isValidEmail]){
     
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:@"Invalid Email"
                                      message:@"Please enter a valid email" action:DISMISS]
                            animated:YES
@@ -202,7 +204,7 @@
     }
     else if(![self.passwordField.text isValidPassword]){
     
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:@"Invalid Password"
                                      message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
                            animated:YES
@@ -224,7 +226,7 @@
     
     if (![self.password isEqualToString:confirmPassword]) {
         
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
                                      message:PASSWORD_ERROR_TITLE action:DISMISS]
                            animated:YES
@@ -244,13 +246,13 @@
                 else
                     errorResponse = SIGNUP_ERROR;
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                                  alertControllerWithTitle:ERROR
                                                  message:errorResponse action:STR_TRY_AGAIN]
                                        animated:YES
                                      completion:nil];
                 
-                    self.emailField.textColor = [UIColor redColor];
+                self.emailField.textColor = [UIColor redColor];
              
             }
             //Successfully signed up
@@ -276,11 +278,8 @@
     
 }
 
-
 - (void)backButtonTapped{
-    
     [self.navigationController popViewControllerAnimated:YES];
-
 }
 
 - (IBAction)facebookLogin:(id)sender{
@@ -288,10 +287,10 @@
 }
 
 - (IBAction)twitterLogin:(id)sender {
+    
     [self performLogin:LoginTwitter button:self.twitterButton withLoginInfo:nil];
+    
 }
-
-
 
 
 @end

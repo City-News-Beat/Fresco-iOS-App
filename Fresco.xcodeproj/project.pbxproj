@@ -134,7 +134,7 @@
 		E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA2E41B18CFB100B820C0 /* GalleryViewController.m */; };
 		E7C112031B681C7F009C637C /* FRSAlertViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C112021B681C7F009C637C /* FRSAlertViewManager.m */; };
 		E7C43DB31BC40E550083CBF0 /* FirstRunAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7C43DB21BC40E550083CBF0 /* FirstRunAccountViewController.xib */; settings = {ASSET_TAGS = (); }; };
-		E7C43DB51BC419CC0083CBF0 /* FurstRunRadiusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		E7C43DB51BC419CC0083CBF0 /* FirstRunRadiusViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7C43DB41BC419CC0083CBF0 /* FirstRunRadiusViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		E7C43DBB1BC597560083CBF0 /* AssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */; settings = {ASSET_TAGS = (); }; };
 		E7C43DBE1BC59BFB0083CBF0 /* AssetGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E7C43DBD1BC59BFB0083CBF0 /* AssetGridViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E7D27A941B5FFF5900A08B51 /* CRMotionView.m */; };
@@ -420,7 +420,7 @@
 		E7C112011B681C7F009C637C /* FRSAlertViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAlertViewManager.h; path = Singletons/FRSAlertViewManager.h; sourceTree = "<group>"; };
 		E7C112021B681C7F009C637C /* FRSAlertViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAlertViewManager.m; path = Singletons/FRSAlertViewManager.m; sourceTree = "<group>"; };
 		E7C43DB21BC40E550083CBF0 /* FirstRunAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunAccountViewController.xib; sourceTree = "<group>"; };
-		E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FurstRunRadiusViewController.xib; sourceTree = "<group>"; };
+		E7C43DB41BC419CC0083CBF0 /* FirstRunRadiusViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstRunRadiusViewController.xib; sourceTree = "<group>"; };
 		E7C43DB91BC597560083CBF0 /* AssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsPickerController.h; path = Camera/AssetsPickerController.h; sourceTree = "<group>"; };
 		E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsPickerController.m; path = Camera/AssetsPickerController.m; sourceTree = "<group>"; };
 		E7C43DBC1BC59BFB0083CBF0 /* AssetGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetGridViewCell.h; sourceTree = "<group>"; };
@@ -1022,7 +1022,7 @@
 			children = (
 				E66F176F1AEE9D7E0032CA71 /* FirstRunRadiusViewController.h */,
 				E66F17701AEE9D7E0032CA71 /* FirstRunRadiusViewController.m */,
-				E7C43DB41BC419CC0083CBF0 /* FurstRunRadiusViewController.xib */,
+				E7C43DB41BC419CC0083CBF0 /* FirstRunRadiusViewController.xib */,
 			);
 			name = Radius;
 			sourceTree = "<group>";
@@ -1366,7 +1366,7 @@
 				E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */,
 				E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
-				E7C43DB51BC419CC0083CBF0 /* FurstRunRadiusViewController.xib in Resources */,
+				E7C43DB51BC419CC0083CBF0 /* FirstRunRadiusViewController.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,

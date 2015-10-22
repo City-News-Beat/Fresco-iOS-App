@@ -408,7 +408,7 @@
                     else
                         errorMsg = @"We couldn't save your payment info. Please try again later.";
                 
-                    [self presentViewController:[[FRSAlertViewManager sharedManager]
+                    [self presentViewController:[FRSAlertViewManager
                                                  alertControllerWithTitle:@"Error saving payment info"
                                                  message:errorMsg action:DISMISS]
                                        animated:YES
@@ -423,7 +423,7 @@
             
             [self.saveCardButton toggleSpinner];
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:@"Error saving payment info"
                                          message:error.localizedDescription action:DISMISS]
                                animated:YES

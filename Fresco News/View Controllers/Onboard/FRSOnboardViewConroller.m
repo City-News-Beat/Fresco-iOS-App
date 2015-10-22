@@ -59,6 +59,14 @@
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
     
+    self.pageCount = 3;
+    
+    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
+                                                                             0,
+                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
+                                                                             [[UIScreen mainScreen] bounds].size.width,
+                                                                             65) andPageCount:self.pageCount];
+    [self.view addSubview:self.frsProgressView];
 
 
 }
@@ -67,14 +75,6 @@
 
     [super viewDidAppear:animated];
     
-    self.pageCount = 3;
-    
-    self.frsProgressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
-                                                                             0,
-                                                                             [[UIScreen mainScreen] bounds].size.height - 65,
-                                                                             [[UIScreen mainScreen] bounds].size.width,
-                                                                             65) andPageCount:self.pageCount];    
-    [self.view addSubview:self.frsProgressView];
     
     
 }

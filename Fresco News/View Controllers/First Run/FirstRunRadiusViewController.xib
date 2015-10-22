@@ -16,7 +16,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="355"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="335"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B74-V7-vtU" userLabel="Map Container">
@@ -36,7 +36,7 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WLn-Px-EPW">
+                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WLn-Px-EPW">
                             <rect key="frame" x="0.0" y="75.5" width="375" height="215"/>
                             <animations/>
                             <constraints>
@@ -52,10 +52,10 @@
                                 <outlet property="delegate" destination="-1" id="frv-Tk-cNx"/>
                             </connections>
                         </mapView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N0f-vl-GGE">
+                        <view tag="101" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N0f-vl-GGE">
                             <rect key="frame" x="0.0" y="291" width="375" height="44"/>
                             <subviews>
-                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="39B-6v-Csh">
+                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="39B-6v-Csh">
                                     <rect key="frame" x="15" y="0.0" width="244" height="45"/>
                                     <animations/>
                                     <connections>
@@ -63,7 +63,7 @@
                                         <action selector="sliderValueChanged:" destination="-1" eventType="valueChanged" id="a9F-O5-TIt"/>
                                     </connections>
                                 </slider>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 miles" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mIz-KA-yZ0">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Off" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mIz-KA-yZ0">
                                     <rect key="frame" x="267" y="0.0" width="100" height="43"/>
                                     <animations/>
                                     <constraints>
@@ -78,7 +78,7 @@
                                 </label>
                             </subviews>
                             <animations/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="39B-6v-Csh" firstAttribute="leading" secondItem="N0f-vl-GGE" secondAttribute="leading" constant="17" id="2KW-XP-1RY"/>
                                 <constraint firstAttribute="trailing" secondItem="mIz-KA-yZ0" secondAttribute="trailing" constant="8" id="3M9-8M-cC1"/>
@@ -117,7 +117,7 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="590.5" y="385.5"/>
+            <point key="canvasLocation" x="590.5" y="375.5"/>
         </view>
     </objects>
 </document>

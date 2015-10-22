@@ -6,23 +6,24 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import "FirstRunPermissionsViewController.h"
 @import CoreLocation;
 @import AVFoundation;
 @import Photos;
 @import AssetsLibrary;
+
+#import "FirstRunPermissionsViewController.h"
 #import "AppDelegate.h"
 
 @interface FirstRunPermissionsViewController () <CLLocationManagerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIImageView *cameraPermissionsImage;
-@property (weak, nonatomic) IBOutlet UIImageView *locationPermissionsImage;
-@property (weak, nonatomic) IBOutlet UIImageView *notificationsPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIButton *locationPermissionsImage;
+@property (weak, nonatomic) IBOutlet UIButton *notificationsPermissionsImage;
+
 @property (weak, nonatomic) IBOutlet UIButton *cameraPermissionsLabel; // rename these to "button"
 @property (weak, nonatomic) IBOutlet UIButton *locationPermissionsLabel;
 @property (weak, nonatomic) IBOutlet UIButton *notificationsPermissionsLabel;
-@property (weak, nonatomic) IBOutlet UILabel *skipFeatureButton;
-@property (weak, nonatomic) IBOutlet UIImageView *progressBarImage;
+
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSTimer *timer;
@@ -31,14 +32,6 @@
 
 @implementation FirstRunPermissionsViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.cameraPermissionsImage.alpha = 0.54;
-    self.locationPermissionsImage.alpha = 0.54;
-    self.notificationsPermissionsImage.alpha = 0.54;
-     
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -49,21 +42,6 @@
    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-}
-
-
-- (void)loadAsSkipScreen
-{
-    [[self actionButton] setTitle:DONE forState:UIControlStateNormal];
-    self.progressBarImage.hidden = YES;
-    self.skipFeatureButton.hidden = NO;
-}
-
-- (void)loadAsPermissionsScreen
-{
-    [[self actionButton] setTitle:NEXT forState:UIControlStateNormal];
-    self.progressBarImage.hidden = NO;
-    self.skipFeatureButton.hidden = YES;
 }
 
 - (IBAction)cameraButtonTapped:(UIButton *)button
@@ -81,14 +59,13 @@
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
-    // If the user declines, prompt the user (at some point) to approve "when in use" location tracking - manually!
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-            self.locationPermissionsImage.image = [UIImage imageNamed:@"locationOnIcon"];
+            [self.locationPermissionsImage setImage:[UIImage imageNamed:@"locationOnIcon"] forState:UIControlStateSelected];
             [self.locationPermissionsLabel setTitle:LOC_ENABLED forState:UIControlStateNormal];
         }
         else {
@@ -122,7 +99,7 @@
         timer = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.notificationsPermissionsImage.image = [UIImage imageNamed:@"notificationOnIcon"];
+            [self.notificationsPermissionsImage setBackgroundImage:[UIImage imageNamed:@"notificationOnIcon"] forState:UIControlStateNormal];;
             [self.notificationsPermissionsLabel setTitle:NOTIF_ENABLED forState:UIControlStateNormal];
         });
     }
@@ -183,7 +160,7 @@
                 // [AVAudioSession sharedInstance].recordPermission == AVAudioSessionRecordPermissionGranted && // on hold pending a good way to test
                 [ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized)
         {
-            self.cameraPermissionsImage.image = [UIImage imageNamed:@"cameraOnIcon"];
+            [self.cameraPermissionsImage setBackgroundImage:[UIImage imageNamed:@"cameraOnIcon"] forState:UIControlStateNormal];
             [self.cameraPermissionsLabel setTitle:CAMERA_ENABLED forState:UIControlStateNormal];
         }
         else {

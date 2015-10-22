@@ -737,7 +737,7 @@
     // If the status is denied or only granted for when in use, display an alert
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
         
-        UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+        UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:CASUAL_LOC_DISABLED
                                        message:ENABLE_LOC_SETTINGS
                                        action:DISMISS handler:nil];

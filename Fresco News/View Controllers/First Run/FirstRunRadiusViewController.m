@@ -13,6 +13,7 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
+#import "UIView+Border.h"
 #import <DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
@@ -39,48 +40,42 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // build a list of stepper values
-    self.stepperSteps = @[ @{@"display": @"Off", @"value" : @(0)},
-                           @{@"display": @"500 ft", @"value" : @(.095)},
-                           @{@"display": @"2000 ft", @"value" : @(0.38)},
-                            @{@"display": @"1 mi", @"value" : @(1)},
-                            @{@"display": @"2 mi", @"value" : @(2)},
-                            @{@"display": @"5 mi", @"value" : @(5)},
-                            @{@"display": @"10 mi", @"value" : @(10)},
-                            @{@"display": @"20 mi", @"value" : @(20)},
-                            @{@"display": @"30 mi", @"value" : @(30)},
-                            @{@"display": @"40 mi", @"value" : @(40)},
-                            @{@"display": @"50 mi", @"value" : @(50)} ];
 
-    self.radiusStepper.value = [[[self.stepperSteps objectAtIndex:10] valueForKey:@"value"] floatValue];
-    
+
     [self sliderValueChanged:self.radiusStepper];
-
+    
+    [[self.view viewWithTag:100] addBorderWithWidth:1.0f];
+    [[self.view viewWithTag:101] addBorderWithWidth:1.0f];
+    
 }
 
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
 {
-    // CGFloat roundedValue = [self roundedValueForSlider:slider];
-    CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
     
-    if(roundedValue > 0){
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        // CGFloat roundedValue = [self roundedValueForSlider:slider];
+        CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
         
-        NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+        if(roundedValue > 0){
+            
+            NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
+            
+            NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
+            
+            // only update changes
+            if (![self.radiusStepperLabel.text isEqualToString:newValue])
+                self.radiusStepperLabel.text = newValue;
+            
+        }
+        else{
+            
+            self.radiusStepperLabel.text = OFF;
+            
+        }
         
-        NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
-        
-        // only update changes
-        if (![self.radiusStepperLabel.text isEqualToString:newValue])
-            self.radiusStepperLabel.text = newValue;
-        
-    }
-    else{
-        
-        self.radiusStepperLabel.text = OFF;
-        
-    }
+    });
 }
 
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
@@ -122,7 +117,7 @@
         
         if (!success) {
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:ERROR
                                          message:NOTIF_RADIUS_ERROR_MSG action:DISMISS]
                                animated:YES

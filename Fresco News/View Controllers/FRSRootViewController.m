@@ -192,7 +192,7 @@
 
 - (void)handleUpdatedTOSNeeded:(NSNotification *)notification{
     
-    UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+    UIAlertController *alertCon = [FRSAlertViewManager
                                    alertControllerWithTitle:@"Updated Terms of Service"
                                    message:@"We’ve updated our Terms of Service since the last time you logged on. Please read the terms before continuing."
                                    action:@"Logout" handler:^(UIAlertAction *action) {

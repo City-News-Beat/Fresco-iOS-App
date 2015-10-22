@@ -249,9 +249,12 @@ typedef enum : NSUInteger {
 
 #pragma mark - Controller Methods
 
-/*
-** Runs Parse social connect based on SocialNetwork param
-*/
+/**
+ *  Runs Parse social connect based on SocialNetwork param
+ *
+ *  @param network The network to connect to
+ *  @param button  The button being pressed
+ */
 
 - (void)socialConnect:(SocialNetwork)network networkButton:(UIButton*)button{
     
@@ -362,9 +365,12 @@ typedef enum : NSUInteger {
     
 }
 
-/*
-** Triggers a response based on the passed Error
-*/
+/**
+ *  Triggers a response based on the passed Error
+ *
+ *  @param error   <#error description#>
+ *  @param network <#network description#>
+ */
 
 - (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
     
@@ -389,7 +395,7 @@ typedef enum : NSUInteger {
                 title = SUCCESS;
             }
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:title
                                          message:message
                                          action:nil]
@@ -409,9 +415,9 @@ typedef enum : NSUInteger {
     
 }
 
-/*
-** Updates the status of the social buttons
-*/
+/**
+ *  Updates the status of the social buttons
+ */
 
 - (void)updateLinkingStatus {
     
@@ -448,9 +454,11 @@ typedef enum : NSUInteger {
 }
 
 
-/*
-** Invokes disable account dialog, and runs disable command if confirmed
-*/
+/**
+ *  Invokes disable account dialog, and runs disable command if confirmed
+ *
+ *  @param network The network name
+ */
 
 - (void)disableAcctWithSocialNetwork:(NSString *)network {
     
@@ -470,7 +478,7 @@ typedef enum : NSUInteger {
     
     }
     
-    UIAlertController *alertCon = [[FRSAlertViewManager sharedManager]
+    UIAlertController *alertCon = [FRSAlertViewManager
                                    alertControllerWithTitle:warningTitle
                                    message: warningMessage
                                    action:CANCEL handler:nil];
@@ -492,7 +500,7 @@ typedef enum : NSUInteger {
             }
             else{
                 
-                [self presentViewController:[[FRSAlertViewManager sharedManager]
+                [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:ERROR
                                              message:DISABLE_ACCT_ERROR
                                              action:nil]
@@ -514,52 +522,53 @@ typedef enum : NSUInteger {
 
 - (void)updateAddCardButton{
     
-    if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
-        
-        //If we already have the last 4
-        if([[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4]){
+    dispatch_async(dispatch_get_main_queue(), ^{
             
-            [self.addCardButton setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4] forState:UIControlStateNormal];
+        if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
             
-        }
-        //We don't have the last 4
-        else{
-            
-            //Retrieve the last 4 fromt the API
-            [[FRSDataManager sharedManager] getUserPaymentInfo:^(id responseObject, NSError *error) {
-                
-                [[NSUserDefaults standardUserDefaults] setObject:[responseObject objectForKey:@"last4"] forKey:UD_LAST4];
+            //If we already have the last 4
+            if([[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4]){
                 
                 [self.addCardButton setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4] forState:UIControlStateNormal];
                 
-            }];
+            }
+            //We don't have the last 4
+            else{
+                
+                //Retrieve the last 4 fromt the API
+                [[FRSDataManager sharedManager] getUserPaymentInfo:^(id responseObject, NSError *error) {
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:[responseObject objectForKey:@"last4"] forKey:UD_LAST4];
+                    
+                    [self.addCardButton setTitle:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST4] forState:UIControlStateNormal];
+                    
+                }];
+                
+            }
             
+            static dispatch_once_t onceToken;
+            
+            dispatch_once(&onceToken, ^{
+                
+                self.addCardButton.titleLabel.textColor = [UIColor textHeaderBlackColor];
+                self.addCardButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15.5];
+                
+                UILabel *newCardLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 15)];
+                
+                newCardLabel.text = @"New card";
+                newCardLabel.textAlignment = NSTextAlignmentRight;
+                newCardLabel.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:15.5];
+                [newCardLabel sizeToFit];
+                [newCardLabel setFrame:CGRectOffset(newCardLabel.frame,
+                                                    [[UIScreen mainScreen] bounds].size.width  - (newCardLabel.frame.size.width * 1.6),
+                                                    (self.addCardButton.frame.size.height / 2) - 10.5)];
+                
+                [self.addCardButton addSubview:newCardLabel];
+                
+            });
         }
         
-        static dispatch_once_t onceToken;
-        
-        dispatch_once(&onceToken, ^{
-            
-            self.addCardButton.titleLabel.textColor = [UIColor textHeaderBlackColor];
-            self.addCardButton.titleLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15.5];
-            
-            UILabel *newCardLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                              0,
-                                                                              0,
-                                                                              15
-                                                                              )];
-            newCardLabel.text = @"New card";
-            newCardLabel.textAlignment = NSTextAlignmentRight;
-            newCardLabel.font = [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:15.5];
-            [newCardLabel sizeToFit];
-            [newCardLabel setFrame:CGRectOffset(newCardLabel.frame,
-                                                [[UIScreen mainScreen] bounds].size.width  - (newCardLabel.frame.size.width * 1.6),
-                                                (self.addCardButton.frame.size.height / 2) - 10.5)];
-            
-            [self.addCardButton addSubview:newCardLabel];
-            
-        });
-    }
+    });
 }
 
 /*
@@ -585,7 +594,7 @@ typedef enum : NSUInteger {
         //Check if the password field text is valid
         if(![self.textfieldNewPassword.text isValidPassword]){
 
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:@"Invalid Password"
                                          message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
                                animated:YES
@@ -598,7 +607,7 @@ typedef enum : NSUInteger {
         //If the password is valid, check if the password fields match
         else if(![self.textfieldNewPassword.text isEqualToString:self.textfieldConfirmPassword.text]){
             
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:PASSWORD_ERROR_TITLE
                                          message:PASSWORD_ERROR_MESSAGE
                                          action:DISMISS]
@@ -627,7 +636,7 @@ typedef enum : NSUInteger {
             
             [self.saveChangesbutton toggleSpinner];
                         
-            [self presentViewController:[[FRSAlertViewManager sharedManager]
+            [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:ERROR
                                          message:PROFILE_SETTINGS_SAVE_ERROR
                                          action:DISMISS handler:nil]
@@ -661,7 +670,7 @@ typedef enum : NSUInteger {
                         //Run check in case settings are saved in pop
                         if (self.isViewLoaded && self.view.window) {
                             // viewController is visible
-                            [self presentViewController:[[FRSAlertViewManager sharedManager]
+                            [self presentViewController:[FRSAlertViewManager
                                                          alertControllerWithTitle:ERROR
                                                          message:PASSWORD_SAVE_ERROR
                                                          action:DISMISS handler:nil]
@@ -709,7 +718,7 @@ typedef enum : NSUInteger {
 
 - (IBAction)logOut:(id)sender {
     
-    UIAlertController *logOutAlertController = [[FRSAlertViewManager sharedManager] alertControllerWithTitle:@"Are you sure?" message:@"" action:CANCEL];
+    UIAlertController *logOutAlertController = [FRSAlertViewManager alertControllerWithTitle:@"Are you sure?" message:@"" action:CANCEL];
     
     [logOutAlertController addAction:[UIAlertAction actionWithTitle:@"Log Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         

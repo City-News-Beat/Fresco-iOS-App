@@ -163,7 +163,7 @@
     
     } else {
         
-        [self presentViewController:[[FRSAlertViewManager sharedManager]
+        [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:LOGIN_ERROR
                                      message:LOGIN_PROMPT action:nil]
                                        animated:YES completion:nil];
@@ -184,6 +184,16 @@
         [((FirstRunPageViewController *)self.parentViewController) shouldMoveToViewAtIndex:self.index + 1];
         
     }
+}
+- (IBAction)twitterAction:(id)sender {
+    
+   
+    [self performLogin:LoginTwitter button:sender withLoginInfo:nil];
+
+}
+- (IBAction)facebookAction:(id)sender {
+    [self performLogin:LoginFacebook button:sender withLoginInfo:nil];
+
 }
 
 - (IBAction)forgotPassword:(id)sender {
