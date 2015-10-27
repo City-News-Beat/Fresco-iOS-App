@@ -62,7 +62,7 @@
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
     
     if([viewController isKindOfClass:[FirstRunAccountViewController class]])
-       return [[FirstRunViewController alloc] init];
+       return [[FirstRunViewController alloc] initWithIndex:0];
     
     return nil;
 }
@@ -70,7 +70,7 @@
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
     if([viewController isKindOfClass:[FirstRunViewController class]])
-        return [[FirstRunAccountViewController alloc] init];
+        return [[FirstRunAccountViewController alloc] initWithIndex:1];
     
     return nil;
     
@@ -108,25 +108,22 @@
     switch (index){
         
         case 0:
-            vc = [[FirstRunViewController alloc] init];
+            vc = [[FirstRunViewController alloc] initWithIndex:index];
             break;
         case 1:
-            vc = [[FirstRunAccountViewController alloc] init];
+            vc = [[FirstRunAccountViewController alloc] initWithIndex:index];
             break;
         case 2:
-            vc = [[FirstRunPersonalViewController alloc] init];
+            vc = [[FirstRunPersonalViewController alloc] initWithIndex:index];
             break;
         case 3:
-            vc = [[FirstRunPermissionsViewController alloc] init];
+            vc = [[FirstRunPermissionsViewController alloc] initWithIndex:index];
             break;
         case 4:
-            vc = [[FirstRunRadiusViewController alloc] init];
+            vc = [[FirstRunRadiusViewController alloc] initWithIndex:index];
             break;
 
     }
-    
-    if(vc)
-        vc.index = index;
     
     return vc;
 

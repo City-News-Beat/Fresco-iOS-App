@@ -17,6 +17,17 @@ typedef enum : NSUInteger {
 
 @interface FRSBaseViewController : UIViewController
 
+/**
+ *  Initializes View Controller with passed index
+ *
+ *  @param index index
+ *
+ *  @return instance type
+ */
+
+- (instancetype)initWithIndex:(NSInteger)index;
+
+
 /* Spinner */
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;

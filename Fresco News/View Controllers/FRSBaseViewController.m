@@ -18,18 +18,20 @@
 
 @implementation FRSBaseViewController
 
-- (void)viewDidLoad {
+- (instancetype)initWithIndex:(NSInteger)index{
     
-    [super viewDidLoad];
-
-    // Do any additional setup after loading the view.
+    self = [super init];
+    
+    if(self){
+        
+        self.index = index;
+        
+    }
+    
+    return self;
+    
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-
-    [super viewDidAppear:animated];
-    
-}
 
 - (void)navigateToMainApp
 {
