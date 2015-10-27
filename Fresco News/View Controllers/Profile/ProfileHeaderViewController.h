@@ -8,9 +8,12 @@
 
 @import UIKit;
 
-@class FRSUser;
-
 @interface ProfileHeaderViewController : UIViewController
+
+
+/**
+ *  Updates the profile header info with the latest data
+ */
 
 -(void)updateUserInfo;
 

@@ -178,6 +178,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         });
         
     }
+    
     if(![self.labelByLineAndTime.text isEqual:bylineAndTime]){
         
         dispatch_async(dispatch_get_main_queue(), ^{

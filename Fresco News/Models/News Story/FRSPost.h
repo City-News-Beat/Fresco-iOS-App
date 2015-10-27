@@ -33,6 +33,28 @@
 @property (nonatomic, strong) NSDate *createdDate;
 
 - (NSURL *)largeImageURL;
+
 - (BOOL)isVideo;
+
+
+/**
+ *  Returns metadata for the post object
+ *
+ *  @param fileName File name for the post
+ *
+ *  @return NSJSONSerialization JSON reprenstation of post metadata
+ */
+
+- (NSData *)constructPostMetaDataWithFileName:(NSString *)fileName;
+
+
+/**
+ *  Retrieves NSData for a post's PHAsset
+ *
+ *  @param responseBlock responseBlock containing post data as NSData
+ */
+
+- (void)dataForPostWithResponseBlock:(FRSDataResponseBlock)responseBlock;
+
 
 @end

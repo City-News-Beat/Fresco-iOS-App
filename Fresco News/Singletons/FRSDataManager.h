@@ -20,10 +20,6 @@
 #import "FRSCluster.h"
 #import "FRSNotification.h"
 
-typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
-typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
-typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
-
 @interface FRSDataManager : AFHTTPSessionManager
 
 /**
@@ -55,6 +51,12 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 */
 
 @property (nonatomic, assign) BOOL tokenValidatedForSession;
+
+/**
+ *  Shared accessor for manager
+ *
+ *  @return Returns singleton instance of FRSDatamanger
+ */
 
 + (FRSDataManager *)sharedManager;
 
@@ -156,10 +158,9 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 
 - (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesForUser:(NSString *)userId offset:(NSNumber *)offset shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getGallery:(NSString *)galleryId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)getGalleriesFromStory:(NSString *)storyId withOffset:(NSNumber *)offset responseBlock:(FRSAPIResponseBlock)responseBlock;
 - (void)resolveGalleriesInList:(NSArray *)galleries withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)resetDraftGalleryPost;
 
 #pragma mark - Stories
 

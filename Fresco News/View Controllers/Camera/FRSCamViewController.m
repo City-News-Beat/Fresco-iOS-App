@@ -21,6 +21,7 @@
 #import "GalleryPostViewController.h"
 #import "BaseNavigationController.h"
 #import "FRSMotionManager.h"
+#import "FRSUploadManager.h"
 #import "FRSLocationManager.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
@@ -95,6 +96,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     [super viewDidLoad];
     
+    [self configureUIElements];
+    
     // Create the AVCaptureSession.
     self.session = [[AVCaptureSession alloc] init];
     
@@ -155,18 +158,15 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         AVCaptureDevice *videoDevice = [FRSCamViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
-        
-        if ( ! videoDeviceInput ) {
-            NSLog( @"Could not create video device input: %@", error );
-        }
-        
+    
         [self.session beginConfiguration];
         
-        if ( [self.session canAddInput:videoDeviceInput] ) {
+        if ([self.session canAddInput:videoDeviceInput] ) {
+            
             [self.session addInput:videoDeviceInput];
             self.videoDeviceInput = videoDeviceInput;
             
-            dispatch_async( dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 // Why are we dispatching this to the main queue?
                 // Because AVCaptureVideoPreviewLayer is the backing layer for AAPLPreviewView and UIView
                 // can only be manipulated on the main thread.
@@ -183,7 +183,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 
                 AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
                 previewLayer.connection.videoOrientation = initialVideoOrientation;
-            } );
+            });
         }
         else {
             NSLog( @"Could not add video device input to the session" );
@@ -192,10 +192,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
         AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
-        
-        if ( ! audioDeviceInput ) {
-            NSLog( @"Could not create audio device input: %@", error );
-        }
         
         if ( [self.session canAddInput:audioDeviceInput] ) {
             [self.session addInput:audioDeviceInput];
@@ -236,8 +232,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     //End session thread
     });
     
-    [self configureUIElements];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -246,47 +240,52 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
-    dispatch_async( self.sessionQueue, ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         
-        switch ( self.setupResult )
-        {
-            case FRSCamSetupResultSuccess:
+        dispatch_async(self.sessionQueue, ^{
+            
+            switch ( self.setupResult )
             {
-                // Only setup observers and start the session running if setup succeeded.
-                [self addObservers];
-                [self.session startRunning];
-                self.sessionRunning = self.session.isRunning;
-                break;
+                case FRSCamSetupResultSuccess:
+                {
+                    // Only setup observers and start the session running if setup succeeded.
+                    [self addObservers];
+                    [self.session startRunning];
+                    self.sessionRunning = self.session.isRunning;
+                    break;
+                }
+                case FRSCamSetupResultCameraNotAuthorized:
+                {
+                    dispatch_async( dispatch_get_main_queue(), ^{
+                        NSString *message = NSLocalizedString( @"Fresco doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
+                        [alertController addAction:cancelAction];
+                        // Provide quick access to Settings.
+                        UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"Settings", @"Alert button to open Settings" ) style:UIAlertActionStyleDefault handler:^( UIAlertAction *action ) {
+                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                        }];
+                        [alertController addAction:settingsAction];
+                        [self presentViewController:alertController animated:YES completion:nil];
+                    } );
+                    break;
+                }
+                case FRSCamSetupResultSessionConfigurationFailed:
+                {
+                    dispatch_async( dispatch_get_main_queue(), ^{
+                        NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
+                        [alertController addAction:cancelAction];
+                        //[self presentViewController:alertController animated:YES completion:nil];
+                    } );
+                    break;
+                }
             }
-            case FRSCamSetupResultCameraNotAuthorized:
-            {
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"Fresco doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
-                    [alertController addAction:cancelAction];
-                    // Provide quick access to Settings.
-                    UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"Settings", @"Alert button to open Settings" ) style:UIAlertActionStyleDefault handler:^( UIAlertAction *action ) {
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                    }];
-                    [alertController addAction:settingsAction];
-                    [self presentViewController:alertController animated:YES completion:nil];
-                } );
-                break;
-            }
-            case FRSCamSetupResultSessionConfigurationFailed:
-            {
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
-                    [alertController addAction:cancelAction];
-                    //[self presentViewController:alertController animated:YES completion:nil];
-                } );
-                break;
-            }
-        }
-    } );
+        });
+        
+    });
+    
 
     //Restart location manager updating
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateForeground];
@@ -357,11 +356,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         /* Assignment Label */
         self.assignmentLabel.alpha = 0;
         
-        self.previewView.alpha = 0;
+//        self.previewView.alpha = 0;
 
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
-        [self.cancelButtonTapView
-         addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab)]];
+        [self.cancelButtonTapView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab)]];
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.rotateImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
@@ -556,6 +554,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 {
 
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+    navVC.modalPresentationStyle = UIModalPresentationFullScreen;
     navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [self presentViewController:navVC animated:YES completion:nil];
@@ -1155,13 +1154,13 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 
 - (void)cancelAndReturnToPreviousTab
 {
-    [[FRSDataManager sharedManager] resetDraftGalleryPost];
+    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
 
     tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
 
-    [self dismissViewController:self withScale:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

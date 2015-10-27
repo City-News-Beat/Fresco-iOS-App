@@ -68,10 +68,10 @@
                         <constraint firstItem="cSu-Os-bRt" firstAttribute="top" secondItem="4ma-TF-rlS" secondAttribute="top" id="xOK-Ih-PPb"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czW-gd-5KD" userLabel="Permissions Container">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="czW-gd-5KD" userLabel="Permissions Container">
                     <rect key="frame" x="0.0" y="82" width="375" height="188"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9NW-UK-BYt" userLabel="CameraIcon">
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9NW-UK-BYt" userLabel="CameraIcon">
                             <rect key="frame" x="50" y="0.0" width="48" height="48"/>
                             <animations/>
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -82,8 +82,70 @@
                                 <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="MYY-jC-3fn"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KiT-VP-211">
-                            <rect key="frame" x="138" y="8" width="117" height="32"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ign-ev-LVd" userLabel="LocaitonIcon">
+                            <rect key="frame" x="50" y="67" width="48" height="48"/>
+                            <animations/>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal" backgroundImage="locationOffIcon">
+                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="cTQ-xw-PQ0"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WB7-qc-Ok6">
+                            <rect key="frame" x="147.5" y="75" width="123" height="32"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="148" id="DXZ-kZ-g42"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Enable Location">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="DXZ-kZ-g42"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="wGL-Me-9bh"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-V7-WUx" userLabel="NotifIcon">
+                            <rect key="frame" x="50" y="132" width="48" height="48"/>
+                            <animations/>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal" backgroundImage="notificationOffIcon">
+                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="DLt-YY-aAo"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIu-dE-q8k">
+                            <rect key="frame" x="133" y="140" width="152" height="32"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="MP6-f3-3dg"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Enable Notifications">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="MP6-f3-3dg"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="gkJ-PX-2NM"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KiT-VP-211">
+                            <rect key="frame" x="150.5" y="8" width="117" height="32"/>
                             <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="263" id="YbK-Eo-8cm"/>
@@ -102,58 +164,6 @@
                                 <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="vSI-qG-PQ4"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ign-ev-LVd" userLabel="LocaitonIcon">
-                            <rect key="frame" x="50" y="67" width="48" height="48"/>
-                            <animations/>
-                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <state key="normal" backgroundImage="locationOffIcon">
-                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="cTQ-xw-PQ0"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WB7-qc-Ok6">
-                            <rect key="frame" x="133.5" y="75" width="126" height="32"/>
-                            <animations/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="126" id="DXZ-kZ-g42"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                            <state key="normal" title="Enable Location">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="wGL-Me-9bh"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-V7-WUx" userLabel="NotifIcon">
-                            <rect key="frame" x="50" y="132" width="48" height="48"/>
-                            <animations/>
-                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <state key="normal" backgroundImage="notificationOffIcon">
-                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="DLt-YY-aAo"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIu-dE-q8k">
-                            <rect key="frame" x="116.5" y="140" width="160" height="32"/>
-                            <animations/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="160" id="MP6-f3-3dg"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                            <state key="normal" title="Enable Notifications">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="gkJ-PX-2NM"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -163,18 +173,24 @@
                         <constraint firstAttribute="bottom" secondItem="CIu-dE-q8k" secondAttribute="bottom" constant="16" id="6Hq-i3-id9"/>
                         <constraint firstItem="ign-ev-LVd" firstAttribute="top" secondItem="9NW-UK-BYt" secondAttribute="bottom" constant="19" id="Bvn-qt-DOd"/>
                         <constraint firstItem="WB7-qc-Ok6" firstAttribute="centerX" secondItem="KiT-VP-211" secondAttribute="centerX" id="GWD-4p-UTv"/>
-                        <constraint firstItem="KiT-VP-211" firstAttribute="leading" secondItem="9NW-UK-BYt" secondAttribute="trailing" constant="40" id="Hq6-iz-O1g"/>
+                        <constraint firstItem="KiT-VP-211" firstAttribute="leading" secondItem="9NW-UK-BYt" secondAttribute="trailing" constant="50" id="Hq6-iz-O1g"/>
                         <constraint firstItem="9NW-UK-BYt" firstAttribute="top" secondItem="czW-gd-5KD" secondAttribute="top" id="IpH-CA-5Ia"/>
                         <constraint firstItem="WB7-qc-Ok6" firstAttribute="centerY" secondItem="ign-ev-LVd" secondAttribute="centerY" id="K72-AU-sLp"/>
                         <constraint firstItem="jnT-V7-WUx" firstAttribute="leading" secondItem="ign-ev-LVd" secondAttribute="leading" id="QQy-7b-FPm"/>
+                        <constraint firstItem="CIu-dE-q8k" firstAttribute="leading" secondItem="jnT-V7-WUx" secondAttribute="trailing" constant="35" id="RfE-mi-hg8"/>
                         <constraint firstItem="CIu-dE-q8k" firstAttribute="centerY" secondItem="jnT-V7-WUx" secondAttribute="centerY" id="ZdR-vc-UEe"/>
                         <constraint firstItem="ign-ev-LVd" firstAttribute="leading" secondItem="9NW-UK-BYt" secondAttribute="leading" id="aOX-G1-Xip"/>
                         <constraint firstItem="CIu-dE-q8k" firstAttribute="centerX" secondItem="KiT-VP-211" secondAttribute="centerX" id="bId-rU-fcR"/>
                         <constraint firstItem="KiT-VP-211" firstAttribute="centerY" secondItem="9NW-UK-BYt" secondAttribute="centerY" id="n7G-ne-Waa"/>
                         <constraint firstItem="KiT-VP-211" firstAttribute="top" secondItem="czW-gd-5KD" secondAttribute="top" constant="8" id="tKi-C4-aLO"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Hq6-iz-O1g"/>
+                        </mask>
+                    </variation>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UtK-p6-afO" userLabel="Footer Text Container">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UtK-p6-afO" userLabel="Footer Text Container">
                     <rect key="frame" x="0.0" y="275" width="375" height="81"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Your location is kept completely anonymous to Fresco users and partners. We never share your personal data." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cRs-gV-f5l">

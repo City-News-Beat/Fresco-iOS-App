@@ -10,4 +10,16 @@
 
 @interface FirstRunViewController : FRSBaseViewController
 
+/**
+ *  Passed over the Account VC to display email field
+ */
+
+@property (nonatomic, strong) NSString *email;
+
+/**
+ *  Passed over to Account VC to display password field
+ */
+
+@property (nonatomic, strong) NSString *password;
+
 @end

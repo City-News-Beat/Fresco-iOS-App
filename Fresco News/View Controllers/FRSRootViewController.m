@@ -24,7 +24,7 @@
 
 @property (nonatomic, strong) NotificationsViewController *notificationsView;
 
-@property (weak, nonatomic) IBOutlet UIView *viewContainer;
+@property (strong, nonatomic) UIProgressView *progressView;
 
 @end
 
@@ -44,15 +44,24 @@
     return UIInterfaceOrientationMaskPortrait;
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
-
 - (void)viewDidLoad{
 
     [super viewDidLoad];
     
+    //Add progress indicator
+    UIProgressView *progress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    
+    progress.frame = CGRectMake(0, 64 , [[UIScreen mainScreen] bounds].size.width, 2.5);
+    progress.tintColor = [UIColor frescoBlueColor];
+    
+    self.progressView = progress;
+    
+    [self.tbc.view addSubview:self.progressView];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdatedTOSNeeded:) name:NOTIF_UPDATED_TOS object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUploadProgress:) name:NOTIF_UPLOAD_PROGRESS object:nil];
+
 
 }
 
@@ -102,22 +111,9 @@
     [self.tbc setSelectedIndex:0];
 }
 
-/*
-** Actually present the first run modally
-*/
-
-- (void)presentFirstRunViewController:(UIViewController *)controller
-{
-    
-    FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
-    
-    [controller presentViewController:vc animated:YES completion:nil];
-    
-}
-
-/*
-** Sets the root view controller completely to the first run
-*/
+/**
+ *  Sets the root view controller completely to the first run
+ */
 
 - (void)setRootViewControllerToFirstRun{
 
@@ -189,6 +185,24 @@
 }
 
 #pragma mark - NotificationCenter Listener
+
+- (void)updateUploadProgress:(NSNotification *)notif{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if([notif.userInfo objectForKey:@"fractionCompleted"] != nil){
+            
+            NSNumber *progress = (NSNumber *)[notif.userInfo objectForKey:@"fractionCompleted"];
+            
+            [UIView animateWithDuration:1 animations:^{
+                [self.progressView setProgress:progress.floatValue animated:YES];
+            }];
+            
+        }
+
+    });
+
+}
 
 - (void)handleUpdatedTOSNeeded:(NSNotification *)notification{
     

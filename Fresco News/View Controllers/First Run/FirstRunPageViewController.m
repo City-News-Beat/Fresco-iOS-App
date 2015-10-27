@@ -6,6 +6,8 @@
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
+@import Parse;
+
 #import "FirstRunPageViewController.h"
 #import "FirstRunViewController.h"
 #import "FirstRunRadiusViewController.h"
@@ -14,6 +16,7 @@
 #import "FirstRunPersonalViewController.h"
 #import "FirstRunRadiusViewController.h"
 #import "FRSFirstRunWrapperViewController.h"
+#import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
 
 @implementation FirstRunPageViewController
@@ -52,38 +55,24 @@
     
 }
 
-- (void)shouldMoveToViewAtIndex:(NSInteger)index{
-    
-    UIViewController *viewController = [self viewControllerAtIndex:index];
-    
-    if(viewController == nil) return;
-    
-    self.previousIndex = self.currentIndex;
-    
-    self.currentIndex  = index;
-    
-    NSArray *controllers = @[viewController];
-                                        
-    [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-    
-    [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
-
-}
-
 #pragma mark - UIPageViewController Delegate
+
+//These are both nil to disable swipe, unless if in the second view controller
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
     
-    NSInteger index = ((FRSBaseViewController *)viewController).index - 1;
+    if([viewController isKindOfClass:[FirstRunAccountViewController class]])
+       return [[FirstRunViewController alloc] init];
     
-    return [self viewControllerAtIndex:index];
+    return nil;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
-    NSInteger index = ((FRSBaseViewController *)viewController).index + 1;
+    if([viewController isKindOfClass:[FirstRunViewController class]])
+        return [[FirstRunAccountViewController alloc] init];
     
-    return [self viewControllerAtIndex:index];
+    return nil;
     
 }
 
@@ -101,7 +90,6 @@
     
 }
 
-
 #pragma mark - UIPageViewController DataSource
 
 /**
@@ -115,37 +103,84 @@
 - (UIViewController *)viewControllerAtIndex:(NSUInteger)index
 {
     
-    if(index == 0){
-        FirstRunViewController *vc = [[FirstRunViewController alloc] init];
-        vc.index = index;
-        return vc;
-    }
-    else if(index == 1){
-        FirstRunAccountViewController *vc = [[FirstRunAccountViewController alloc] init];
-        vc.index = index;
-        
-        return vc;
-    }
-    else if(index == 2){
-     
-        FirstRunPersonalViewController *vc = [[FirstRunPersonalViewController alloc] init];
-        vc.index = index;
-        return vc;
+    FRSBaseViewController *vc;
 
-    }
-    else if(index == 3){
-        FirstRunPermissionsViewController *vc = [[FirstRunPermissionsViewController alloc] init];
-        vc.index = index;
-        return vc;
-    }
-    else if(index == 4){
-        FirstRunRadiusViewController *vc = [[FirstRunRadiusViewController alloc] init];
-        vc.index = index;
-        return vc;
+    switch (index){
+        
+        case 0:
+            vc = [[FirstRunViewController alloc] init];
+            break;
+        case 1:
+            vc = [[FirstRunAccountViewController alloc] init];
+            break;
+        case 2:
+            vc = [[FirstRunPersonalViewController alloc] init];
+            break;
+        case 3:
+            vc = [[FirstRunPermissionsViewController alloc] init];
+            break;
+        case 4:
+            vc = [[FirstRunRadiusViewController alloc] init];
+            break;
+
     }
     
-    return nil;
+    if(vc)
+        vc.index = index;
+    
+    return vc;
 
+}
+
+#pragma mark - View Controller specific methods
+
+- (void)moveToViewAtindex:(NSInteger)index{
+
+    UIViewController *viewController = [self viewControllerAtIndex:index];
+
+    if(viewController == nil)
+        return;
+
+    self.previousIndex = self.currentIndex;
+
+    self.currentIndex  = index;
+
+    NSArray *controllers = @[viewController];
+
+    [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+
+    [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
+    
+}
+
+
+- (void)shouldMoveToViewAtIndex:(NSInteger)index{
+    
+    if(index == 2){
+    
+        FirstRunAccountViewController *vc = self.viewControllers[0];
+        
+        [vc processLogin];
+    
+    }
+    else if(index == 3){
+        
+        FirstRunPersonalViewController *vc = self.viewControllers[0];
+        
+        [vc saveInfo];
+        
+    }
+    else if(index == 4){
+        
+        [self moveToViewAtindex:index];
+        
+    }
+    else{
+    
+        
+    
+    }
+    
 }
 
 

@@ -13,38 +13,55 @@
 
 @interface GalleryView : UIView
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
 
-@property (weak, nonatomic) IBOutlet UIButton *readmore;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionPosts;
 
 @property (weak, nonatomic) FRSGallery *gallery;
 
-- (void)setGallery:(FRSGallery *)gallery isInList:(BOOL)inList;
 
-/*
-** Shared Video Player of Controller
-*/
+/**
+ *  Sets gallery for galelry view
+ *
+ *  @param gallery       FRSGallery for view
+ *  @param begingPlaying If the gallery view should beging playing on presentation
+ */
+
+- (void)setGallery:(FRSGallery *)gallery shouldBeginPlaying:(BOOL)begingPlaying withDynamicAspectRatio:(BOOL)dynamicAspectRatio;
+
+/**
+ *  Shared Video Player of Controller
+ */
 
 @property (nonatomic, strong) AVPlayer *sharedPlayer;
 
-/*
-** Shared Video Layer of Controller
-*/
+/**
+ *  Shared Video Layer of Controller
+ */
 
 @property (nonatomic, strong) AVPlayerLayer *sharedLayer;
 
-
-/*
-** Shared Player Item of Controller
-*/
+/**
+ *  Shared Player Item of Controller
+ */
 
 @property (nonatomic, strong) AVPlayerItem *sharedItem;
 
 - (void)setAspectRatio;
 
+
+/**
+ *  Cleans up video player, stops playing
+ */
+
 - (void)cleanUpVideoPlayer;
+
+/**
+ *  Set up video player in passed PostCollectionViewCell
+ *
+ *  @param url      URL of the video
+ *  @param postCell cell to play in
+ */
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell;
 

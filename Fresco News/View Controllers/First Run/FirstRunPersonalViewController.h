@@ -13,4 +13,6 @@
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
 
+- (void)saveInfo;
+
 @end

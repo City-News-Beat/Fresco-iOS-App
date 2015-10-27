@@ -12,8 +12,9 @@
 #import "FRSGallery.h"
 #import "GalleryHeader.h"
 #import "FRSDataManager.h"
+#import "FirstRunPageViewController.h"
 #import "FRSSocialButton.h"
-#import "AppDelegate.h"
+#import "FRSFirstRunWrapperViewController.h"
 
 @implementation FRSBaseViewController
 
@@ -44,8 +45,18 @@
 
 - (void)navigateToFirstRun
 {
-    FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
-    [rvc presentFirstRunViewController:self];
+    FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
+
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)navigateToNextIndex{
+
+    //Move to next page
+    if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
+        [((FirstRunPageViewController *)self.parentViewController) moveToViewAtindex:self.index + 1];
+    }
+    
 }
 
 #pragma mark - Login / Signup Methods
@@ -67,22 +78,21 @@
     //New user, send them to rest of the first run or they have incomplete info
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         
+        [self navigateToNextIndex];
         
         
     }
     //User is valid and exists i.e. send them back to the app
     else{
-
+        
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
         else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }
     
 }
-
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
 
@@ -153,11 +163,14 @@
             }
             else {
                 
-                
-                [button setTitle:FACEBOOK forState:UIControlStateNormal];
-                [button setImage:[UIImage imageNamed:FACEBOOK] forState:UIControlStateNormal];
-                [self hideActivityIndicator];
-                [self revertScreenToNormal:self.view];
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                    [button setTitle:FACEBOOK forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:FACEBOOK] forState:UIControlStateNormal];
+                    [self hideActivityIndicator];
+                    [self revertScreenToNormal:self.view];
+                    
+                });
                 
                 //TODO: check if these are the strings we want
                 [self presentViewController:[FRSAlertViewManager
@@ -187,10 +200,14 @@
             }
             else {
                 
-                [button setTitle:TWITTER forState:UIControlStateNormal];
-                [button setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
-                [self revertScreenToNormal:self.view];
-                [self hideActivityIndicator];
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                    [button setTitle:TWITTER forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+                    [self revertScreenToNormal:self.view];
+                    [self hideActivityIndicator];
+                    
+                });
                 
                 [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:LOGIN_ERROR
@@ -202,6 +219,8 @@
         }];
     }
 }
+
+
 
 - (void)hideActivityIndicator{
 

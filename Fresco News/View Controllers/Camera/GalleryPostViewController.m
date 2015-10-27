@@ -22,6 +22,7 @@
 #import "FirstRunViewController.h"
 #import "FRSSocialButton.h"
 #import "FRSRootViewController.h"
+#import "FRSUploadManager.h"
 
 @interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
@@ -33,7 +34,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *linkAssignmentButton;
 @property (weak, nonatomic) IBOutlet UITextView *captionTextView;
-@property (weak, nonatomic) IBOutlet UIProgressView *uploadProgressView;
 @property (weak, nonatomic) IBOutlet UIImageView *socialTipView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *twitterHeightConstraint;
@@ -69,9 +69,13 @@
     [super viewDidLoad];
 
     [self setupButtons];
+    
     self.title = @"Create a Gallery";
+    
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
-    [self.galleryView setGallery:self.gallery isInList:YES];
+    
+    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
+    
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.captionTextView setTextContainerInset:UIEdgeInsetsMake(5, 5, 0, 0)];
@@ -79,8 +83,15 @@
     
     [self.socialTipView setUserInteractionEnabled:YES];
     
-    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+    [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
+    [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
+    
+    self.socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
+    [self.socialTipView addGestureRecognizer:self.socialTipTap];
+    
+    self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
+    [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -92,36 +103,33 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
     
-    self.socialTipTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)];
-    [self.socialTipView addGestureRecognizer:self.socialTipTap];
-    
-    self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
-    [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
-    self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
+        
+        self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
+        
+        if ([PFUser currentUser]) {
+            
+            self.twitterButton.hidden = NO;
+            self.facebookButton.hidden = NO;
+            
+            self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+            self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
+            self.socialTipView.hidden = [defaults boolForKey:UD_GALLERY_POSTED];
+            
+        }
+        else {
+            self.twitterButton.hidden = YES;
+            self.facebookButton.hidden = YES;
+            self.socialTipView.hidden = YES;
+        }
+        
+    });
 
-    if ([PFUser currentUser]) {
-        
-        self.twitterButton.hidden = NO;
-        self.facebookButton.hidden = NO;
-        
-        self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
-        self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
-        
-        BOOL hideCrosspostingHelp = [defaults boolForKey:@"galleryPreviouslyPosted"];
-        
-        self.socialTipView.hidden = hideCrosspostingHelp;
-    }
-    else {
-        self.twitterButton.hidden = YES;
-        self.facebookButton.hidden = YES;
-        self.twitterHeightConstraint.constant = 0;
-        self.socialTipView.hidden = YES;
-    }
     
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"galleryPreviouslyPosted"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
@@ -153,24 +161,12 @@
     
     [self.locationManager stopUpdatingLocation];
     
-    [self.socialTipView removeGestureRecognizer:self.socialTipTap];
-    [self.navigationController.toolbar removeGestureRecognizer:self.submitTap];
-    
     //Turn off any video
-    [self disableVideo];
-    
-    [self.captionTextView resignFirstResponder];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-/*
-** Disable any playing video
-*/
-
-- (void)disableVideo{
-    
     [self.galleryView cleanUpVideoPlayer];
     
+    [self.captionTextView resignFirstResponder];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UI Setup
@@ -186,11 +182,14 @@
 
 - (void)configureControlsForUpload:(BOOL)upload
 {
-    self.uploadProgressView.hidden = !upload;
-    self.view.userInteractionEnabled = !upload;
-    self.navigationController.navigationBar.userInteractionEnabled = !upload;
-    self.navigationController.toolbar.userInteractionEnabled = !upload;
-    self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.view.userInteractionEnabled = !upload;
+        self.navigationController.navigationBar.userInteractionEnabled = !upload;
+        self.navigationController.toolbar.userInteractionEnabled = !upload;
+        self.navigationController.interactivePopGestureRecognizer.enabled = !upload;
+        
+    });
 }
 
 #pragma mark - Toolbar Items
@@ -356,7 +355,6 @@
             
             [self toggleAssignment:NO];
             
-            
         }]];
         
         [self presentViewController:alertCon animated:YES completion:nil];
@@ -375,23 +373,7 @@
         return;
     }
     
-    string = [NSString stringWithFormat:@"status=%@", string];
-    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    tweetRequest.HTTPMethod = @"POST";
-    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
-    [[PFTwitterUtils twitter] signRequest:tweetRequest];
-    
-    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if (connectionError) {
-            // TODO: Notify the user
-            NSLog(@"Error crossposting to Twitter: %@", connectionError);
-        }
-        else {
-            NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        }
-    }];
+    [[FRSUploadManager sharedManager] postToTwitter:string];
 }
 
 - (void)crossPostToFacebook:(NSString *)string
@@ -400,38 +382,29 @@
         return;
     }
     
-    if (YES /* TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] */) {
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
-                                           parameters: @{@"message" : string}
-                                           HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-            if (error) {
-                // TODO: Notify the user
-                NSLog(@"Error crossposting to Facebook");
-            }
-            else {
-                NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
-            }
-        }];
-    }
+    [[FRSUploadManager sharedManager] postToFacebook:string];
+
 }
 
 - (void)updateSocialTipView {
  
-    if (self.socialTipView.hidden == NO) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        [UIView animateWithDuration:0.3 animations:^{
+        if (self.socialTipView.hidden == NO) {
             
-            self.socialTipView.alpha = 0;
+            [UIView animateWithDuration:0.3 animations:^{
+                
+                self.socialTipView.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                
+              self.socialTipView.hidden = YES;
             
-        } completion:^(BOOL finished) {
-            
-          self.socialTipView.hidden = YES;
+            }];
+        }
         
-        }];
-    }
+    });
 }
-
-
 
 - (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
 {
@@ -447,6 +420,12 @@
     self.assignmentLabel.attributedText = titleString;
     
 }
+
+/**
+ *  Finds assignments in location and updates banner in view controller
+ *
+ *  @param location The location to look for assignments in
+ */
 
 - (void)configureAssignmentForLocation:(CLLocation *)location
 {
@@ -508,6 +487,11 @@
     });
 }
 
+/**
+ *  Uploads controllers gallery
+ *
+ *  @param sender Sender property
+ */
 
 - (void)submitGalleryPost:(id)sender
 {
@@ -516,20 +500,23 @@
     //First check if the caption is valid
     if([self.captionTextView.text isEqualToString:WHATS_HAPPENING] || [self.captionTextView.text  isEqual: @""]){
         
-        if (![self.captionTextView isFirstResponder]) {
-            CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
-            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            animation.duration = 0.8;
-            animation.values = @[@(-8), @(8), @(-6), @(6), @(-4), @(4), @(-2), @(2), @(0)];
-            [self.captionTextView.layer addAnimation:animation forKey:@"shake"];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+        
+            if (![self.captionTextView isFirstResponder]) {
+                CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+                animation.duration = 0.8;
+                animation.values = @[@(-8), @(8), @(-6), @(6), @(-4), @(4), @(-2), @(2), @(0)];
+                [self.captionTextView.layer addAnimation:animation forKey:@"shake"];
+            }
+            
+        });
       
         return;
     
     }
-    
     //Check if there are less than the max amount of posts
-    if([self.gallery.posts count] > MAX_POST_COUNT){
+    else if([self.gallery.posts count] > MAX_POST_COUNT){
     
         [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
@@ -541,23 +528,28 @@
         return;
     
     }
-    
     //Check if the user is logged in before proceeding, send to sign up otherwise
-    if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
+    else if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
         
         [self navigateToFirstRun];
         
         return;
     }
     
+    /**
+    *** All conditions passed for upload
+    **/
+    
     //Run the spinner animation to indicate that upload has started
     dispatch_async(dispatch_get_main_queue(), ^{
         
         CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
+        
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
         self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
         self.spinner.color = [UIColor whiteColor];
         [self.spinner startAnimating];
+        
         self.navigationController.toolbar.items[1].title = @"";
         [self.navigationController.toolbar addSubview:self.spinner];
         
@@ -565,128 +557,17 @@
     
     [self configureControlsForUpload:YES];
     
-    NSString *urlString = [[FRSDataManager sharedManager] endpointForPath:@"gallery/assemble"];
+    self.gallery.caption = self.captionTextView.text;
     
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    
-    NSProgress *progress = nil;
-    NSError *error;
-
-    NSMutableDictionary *postMetadata = [NSMutableDictionary new];
-    
-    for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
+    [[FRSUploadManager sharedManager] uploadGallery:self.gallery withAssignment:self.defaultAssignment withResponseBlock:^(BOOL success, NSError *error) {
+       
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.spinner stopAnimating];
+//            [self.spinner removeFromSuperview];
+//            self.navigationController.toolbar.items[1].title = GALLERY_TOOLBAR;
+//        });
         
-        NSString *filename = [NSString stringWithFormat:@"file%@", @(i)];
-
-        //Grab post out of gallery array
-        FRSPost *post = self.gallery.posts[i];
-        
-        //Get time interval for asset creation data, in milliseconds
-        NSTimeInterval postTime = round([post.createdDate timeIntervalSince1970] * 1000);
-        
-        //Create post metadata
-        postMetadata[filename] = @{ @"type" : post.type,
-                                    @"lat" : post.image.latitude,
-                                    @"lon" : post.image.longitude,
-                                    @"timeCaptured" : [NSString stringWithFormat:@"%ld",(long)postTime]
-                                };
-    }
-
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:postMetadata
-                                                       options:(NSJSONWritingOptions)0
-                                                         error:&error];
-
-    NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
-                                  @"caption" : self.captionTextView.text ?: [NSNull null],
-                                  @"posts" : jsonData,
-                                  @"assignment" : self.defaultAssignment.assignmentId ?: [NSNull null] };
-
-    
-    //Form the request
-    
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST"
-                                                                                              URLString:urlString
-                                                                                             parameters:parameters
-                                                                              constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSInteger count = 0;
-                                                                  
-        for (FRSPost *post in self.gallery.posts) {
-          
-            NSString *filename = [NSString stringWithFormat:@"file%@", @(count)];
-            NSString *mimeType;
-            __block NSData *data;
-            
-            if (post.image.asset.mediaType == PHAssetMediaTypeImage) {
-                
-                PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-                options.synchronous = YES;
-                
-                mimeType = @"image/jpeg";
-                
-                [[PHImageManager defaultManager] requestImageDataForAsset:post.image.asset options:options resultHandler:^(NSData * imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary * info) {
-                    
-                    data = imageData;
-                    
-                }];
-                
-                
-                [formData appendPartWithFileData:data
-                                            name:filename
-                                        fileName:filename
-                                        mimeType:mimeType];
-                
-            
-            }
-            else if(post.image.asset.mediaType == PHAssetMediaTypeVideo) {
-               
-                mimeType = @"video/mp4";
-                
-                __block AVURLAsset *resultAsset;
-                
-                //Need to delay the thread until the AVAsset comes back
-                dispatch_semaphore_t  semaphore = dispatch_semaphore_create(0);
-                
-                PHVideoRequestOptions *option = [PHVideoRequestOptions new];
-                option.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
-                
-                [[PHImageManager defaultManager] requestAVAssetForVideo:post.image.asset options:nil resultHandler:^(AVAsset *asset, AVAudioMix * audioMix, NSDictionary * info) {
-                    
-                   resultAsset = (AVURLAsset *)asset;
-                    
-                    dispatch_semaphore_signal(semaphore);
-                    
-                }];
-                
-                //Call dispatch_semaphore_wait to prevent thread from running
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                
-                data = [NSData dataWithContentsOfURL:resultAsset.URL];
-                
-                [formData appendPartWithFileData:data
-                                            name:filename
-                                        fileName:filename
-                                        mimeType:mimeType];
-                
-
-            }
-            
-            count++;
-        }
-                                                                                  
-    } error:nil];
-
-    [request setValue:[FRSDataManager sharedManager].frescoAPIToken forHTTPHeaderField:@"authtoken"];
-    
-    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
-                                                                  
-                                                                  
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.spinner stopAnimating];
-            [self.spinner removeFromSuperview];
-            self.navigationController.toolbar.items[1].title = GALLERY_TOOLBAR;
-        });
-    
-        if (uploadError || responseObject[@"err"] != (id)[NSNull null]) {
+        if (!success || error) {
             
             [self configureControlsForUpload:NO];
             
@@ -697,65 +578,24 @@
             
         }
         else {
+    
+//            // TODO: Handle error conditions
+//            NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
+//            
+//            [self crossPostToTwitter:crossPostString];
+//            
+//            [self crossPostToFacebook:crossPostString];
             
-            @try{
-                
-                // TODO: Handle error conditions
-                NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
-                
-                [self crossPostToTwitter:crossPostString];
-                
-                [self crossPostToFacebook:crossPostString];
-                
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
-                
-                [[FRSDataManager sharedManager] resetDraftGalleryPost];
-                
-                [self returnToTabBarWithPrevious:NO];
-                
-            }
-            @catch(NSException *exception){
-                NSLog(@"%@", exception);
-            }
-
-
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+            
+            [[FRSUploadManager sharedManager] resetDraftGalleryPost];
+            
+            [self returnToTabBarWithPrevious:NO];
+        
         }
+        
     }];
 
-    [uploadTask resume];
-    
-    [progress addObserver:self
-               forKeyPath:@"fractionCompleted"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    
-
-}
-
-- (void)showUploadProgress:(CGFloat)fractionCompleted
-{
-    
-    [UIView animateWithDuration:1 animations:^{
-        [self.uploadProgressView setProgress:fractionCompleted animated:YES];
-    }];
-    
-}
-
-#pragma mark - KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"fractionCompleted"]) {
-        NSProgress *progress = (NSProgress *)object;
-        // NSLog(@"Progress... %f", progress.fractionCompleted);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showUploadProgress:progress.fractionCompleted];
-        });
-    }
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
 }
 
 #pragma mark - UITextViewDelegate
@@ -788,29 +628,37 @@
     return NO;
 }
 
-- (void)toggleToolbarAppearance {
-    
-    UIColor *textViewColor = [UIColor darkGrayColor];
-    UIColor *toolbarColor = [UIColor greenToolbarColor];
-    
-    if ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) {
-        
-        toolbarColor = [UIColor disabledToolbarColor];
-        
-        textViewColor = [UIColor lightGrayColor];
-    }
-    self.navigationController.toolbar.barTintColor = toolbarColor;
-    
-    [self.captionTextView setTextColor:textViewColor];
-}
-
 - (void)textViewDidChange:(UITextView *)textView
 {
-
+    
     [self toggleToolbarAppearance];
     
     [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
 }
+
+#pragma mark - UIToolBar Appearance
+
+- (void)toggleToolbarAppearance {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        UIColor *textViewColor = [UIColor darkGrayColor];
+        UIColor *toolbarColor = [UIColor greenToolbarColor];
+        
+        if ([self.captionTextView.text length] == 0 || [self.captionTextView.text isEqualToString:WHATS_HAPPENING]) {
+            
+            toolbarColor = [UIColor disabledToolbarColor];
+            
+            textViewColor = [UIColor lightGrayColor];
+        }
+        
+        self.navigationController.toolbar.barTintColor = toolbarColor;
+        
+        [self.captionTextView setTextColor:textViewColor];
+        
+    });
+}
+
 
 #pragma mark - Notification Delegate
 

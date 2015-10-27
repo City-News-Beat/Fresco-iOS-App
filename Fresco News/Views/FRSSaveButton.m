@@ -82,36 +82,32 @@
 
 - (void)updateSaveState:(SaveState)state{
 
-    if(state == SaveStateDisabled){
-        
-        self.enabled = NO;
-        
-        if(self.backgroundColor != [UIColor disabledSaveColor]){
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        if(state == SaveStateDisabled){
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            self.enabled = NO;
+            
+            if(self.backgroundColor != [UIColor disabledSaveColor]){
                 
                 self.backgroundColor = [UIColor disabledSaveColor];
                 
-            });
+            }
             
         }
-    
-    }
-    else if(state == SaveStateEnabled){
-        
-        self.enabled = YES;
-        
-        if(self.backgroundColor != [UIColor greenToolbarColor]){
+        else if(state == SaveStateEnabled){
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            self.enabled = YES;
             
+            if(self.backgroundColor != [UIColor greenToolbarColor]){
+                
                 self.backgroundColor = [UIColor greenToolbarColor];
-            
-            });
+                
+            }
             
         }
         
-    }
+    });
 
 }
 

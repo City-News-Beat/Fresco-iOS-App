@@ -14,6 +14,10 @@
 ** Add four spaces in between sections
 */
 
+typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
+typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
+typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
+typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 /* Enums */
 
@@ -26,6 +30,7 @@ enum FRSErrorCodes {
     ErrorSignupCantGetUser,
     ErrorSignupNoUserOnServer,
     ErrorSignupNoUserFromParseUser,
+    ErrorUploadFail
 } frsErrorCodes;
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
@@ -47,6 +52,7 @@ enum FRSErrorCodes {
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
+#define NOTIF_UPLOAD_PROGRESS               @"UploadProgress"
 
 
 /* Keys Plist */
@@ -123,6 +129,7 @@ enum FRSErrorCodes {
 #define UD_UPDATE_PROFILE_HEADER            @"updateProfileHeader"
 #define UD_UPDATE_PROFILE                   @"updateProfile"
 #define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
+#define UD_GALLERY_POSTED                   @"galleryPosted"
 
 
 
@@ -362,7 +369,7 @@ enum FRSErrorCodes {
 #define MAX_POST_ERROR                     NSLocalizedString(@"Galleries can only contain up to 8 photos or videos.", nil)
 
 #define UPLOAD_ERROR_TITLE                 NSLocalizedString(@"Upload Error", nil)
-#define UPLOAD_ERROR_MESSAGE               NSLocalizedString(@"We ran into an issue uploading your cotent. Please try again in a bit.", nil)
+#define UPLOAD_ERROR_MESSAGE               NSLocalizedString(@"We ran into an issue uploading your content. Please try again in a bit.", nil)
 
 
 /* Device Macros */

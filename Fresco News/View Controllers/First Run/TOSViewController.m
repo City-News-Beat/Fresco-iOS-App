@@ -23,18 +23,13 @@
     
     [super viewDidLoad];
     
-    [self setupView];
-   
-    [self getTermsFromServer];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-
-    [super viewWillAppear:animated];
-    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
+    [self setupView];
+   
+    [self fetchTerms];
 }
+
 
 - (void)viewWillDisappear:(BOOL)animated{
     
@@ -43,11 +38,11 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
-/*
-** Pull TOS from server
-*/
+/**
+ *  Pull TOS from server
+ */
 
-- (void)getTermsFromServer {
+- (void)fetchTerms {
     
     [[FRSDataManager sharedManager] getTermsOfService:NO withResponseBlock:^(id responseObject, NSError *error) {
         
@@ -116,9 +111,9 @@
 }
 
 
-/*
-** Close button is hit, exiting TOS view
-*/
+/**
+ *  Close button is hit, exiting TOS view
+ */
 
 - (void)dismissTerms{
     

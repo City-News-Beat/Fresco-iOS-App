@@ -132,6 +132,9 @@
                                     <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="-1" id="DNE-FP-WBN"/>
+                                    </connections>
                                 </textField>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sqx-Oy-mlR">
                                     <rect key="frame" x="17" y="44" width="358" height="1"/>
@@ -151,6 +154,9 @@
                                     <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="-1" id="0WV-bR-JPE"/>
+                                    </connections>
                                 </textField>
                             </subviews>
                             <animations/>
@@ -188,6 +194,7 @@
                                     <exclude reference="Wip-UI-BOI"/>
                                     <exclude reference="ted-f8-HPN"/>
                                     <exclude reference="50V-6T-htH"/>
+                                    <exclude reference="Bky-Ra-jZt"/>
                                     <exclude reference="GPu-6o-tHd"/>
                                     <exclude reference="Ifu-ED-eiq"/>
                                     <exclude reference="rWx-wL-Gjq"/>

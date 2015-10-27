@@ -40,6 +40,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 
     //First make the paged view controller
     self.pagedViewController = [[OnboardPageViewController alloc]
@@ -71,13 +73,6 @@
 
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-
-    [super viewDidAppear:animated];
-    
-    
-    
-}
 
 #pragma mark - FRSProgressView Delegate
 
@@ -92,11 +87,6 @@
     
    [self.frsProgressView updateProgressViewForIndex:self.pagedViewController.currentIndex fromIndex:self.pagedViewController.previousIndex];
         
-}
-
-
-- (BOOL)prefersStatusBarHidden{
-    return YES;
 }
 
 

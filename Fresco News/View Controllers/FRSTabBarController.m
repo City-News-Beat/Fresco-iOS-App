@@ -16,6 +16,7 @@
 #import "ProfileViewController.h"
 #import "StoriesViewController.h"
 #import "NotificationsViewController.h"
+#import "FRSFirstRunWrapperViewController.h"
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "UIViewController+Additions.h"
@@ -25,20 +26,12 @@
 
 #pragma mark - General
 
--(BOOL)shouldAutorotate {
-    return YES;
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
-}
-
-- (UIStatusBarStyle) preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - Initialization
@@ -56,11 +49,17 @@
     return self;
 }
 
+- (void)viewDidLoad{
+
+    [super viewDidLoad];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     
@@ -82,9 +81,12 @@
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
     
     //Custom addition
-    [self presentViewController:vc withScale:YES];
+    [self presentViewController:vc animated:YES completion:nil];
 
 }
 
@@ -143,8 +145,8 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
+
     
-    //Check if the user is not logged in (we check PFUser here, instead of the datamanager, because the user is loaded asynchrously, and we might have the user on disk before we have the DB user)
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
 
     UIViewController *vc = [viewController.childViewControllers firstObject];
@@ -153,7 +155,9 @@
         
         if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
             
-            [((HighlightsViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointMake(0, -((HighlightsViewController *)vc).galleriesViewController.tableView.contentInset.top) animated:YES];
+            NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
+            
+            [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
             
         }
         else{
@@ -165,7 +169,11 @@
     else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
         
         if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
-            [((StoriesViewController *)vc).tableView setContentOffset:CGPointZero animated:YES];
+            
+            NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
+            
+            [((StoriesViewController *)vc).tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
         }
         else{
             [vc.navigationController popViewControllerAnimated:YES];
@@ -181,12 +189,14 @@
     }
     else if ([vc isMemberOfClass:[ProfileViewController class]]) {
     
+        //Check if we are already at this tab
         if(tabBarController.selectedIndex == 4){
         
             if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
                 
-                [((ProfileViewController *)vc).galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
+                NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
                 
+                [((ProfileViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
             }
             else{
                 [vc.navigationController popViewControllerAnimated:YES];
@@ -195,20 +205,22 @@
             return NO;
             
         }
+        //Otherwise check for log in, and present the login screen otherwise
         else{
         
             if(![[FRSDataManager sharedManager] isLoggedIn]){
                 
-                FRSRootViewController *rvc = (FRSRootViewController *)self.parentViewController;
+                FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
                 
-                [rvc presentFirstRunViewController:self];
+                [self presentViewController:vc animated:YES completion:nil];
                 
                 return NO;
             }
         }
     }
     else if(vc == nil){
-    
+        
+        //Check if we have permission to use the camera
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
             
             UIAlertController *alertCon = [FRSAlertViewManager
@@ -225,10 +237,8 @@
             [self presentViewController:alertCon animated:YES completion:nil];
             
             return NO;
-            
-            
-        }
         
+        }
     }
     
     return YES;

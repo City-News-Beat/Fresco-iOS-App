@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 TapMedia LLC. All rights reserved.
 //
 
+@import Photos;
+
 #import "FRSPost.h"
 #import "FRSUser.h"
 #import "FRSTag.h"
@@ -82,6 +84,56 @@
 - (NSURL *)largeImageURL
 {
     return [self.image largeImageUrl];
+}
+
+
+- (NSData *)constructPostMetaDataWithFileName:(NSString *)fileName{
+
+    //Get time interval for asset creation data, in milliseconds
+    NSTimeInterval postTime = round([self.createdDate timeIntervalSince1970] * 1000);
+
+    //Create post metadata from the first post
+    NSDictionary *postMetadata = @{
+                                   fileName : @{
+                                               @"lat" : self.image.latitude,
+                                               @"lon" : self.image.longitude,
+                                               @"time_captured" : [NSString stringWithFormat:@"%ld",(long)postTime]
+                                               }
+                                   };
+    
+    //Create NSData representation of the dictionary
+    return [NSJSONSerialization dataWithJSONObject:postMetadata
+                                           options:(NSJSONWritingOptions)0
+                                             error:nil];
+
+
+}
+
+- (void)dataForPostWithResponseBlock:(FRSDataResponseBlock)responseBlock{
+    
+    if (self.image.asset.mediaType == PHAssetMediaTypeImage) {
+        
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        
+        [[PHImageManager defaultManager] requestImageDataForAsset:self.image.asset options:options resultHandler:^(NSData * imageData, NSString * dataUTI, UIImageOrientation orientation, NSDictionary * info) {
+            
+            responseBlock(imageData, nil);
+            
+        }];
+        
+    }
+    else if(self.image.asset.mediaType == PHAssetMediaTypeVideo) {
+        
+        PHVideoRequestOptions *option = [PHVideoRequestOptions new];
+        option.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
+        
+        [[PHImageManager defaultManager] requestAVAssetForVideo:self.image.asset options:nil resultHandler:^(AVAsset *asset, AVAudioMix * audioMix, NSDictionary * info) {
+            
+            responseBlock([NSData dataWithContentsOfURL:((AVURLAsset *)asset).URL], nil);
+            
+        }];
+        
+    }
 }
 
 @end

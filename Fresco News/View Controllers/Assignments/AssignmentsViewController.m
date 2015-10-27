@@ -112,7 +112,8 @@
     
     [self updateNotificationBanner];
     
-    if (!self.picker) self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    if (!self.picker)
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
     
     //If we have an assignment set, present it
     if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
@@ -125,17 +126,18 @@
 
 - (void)updateNotificationBanner{
     
-    //Configure radius banner
-    if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-        
-        if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
-            self.storyBreaksView.hidden = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //Configure radius banner
+        if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+            
+            if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
+                self.storyBreaksView.hidden = NO;
+            else
+                self.storyBreaksView.hidden = YES;
+        }
         else
             self.storyBreaksView.hidden = YES;
-    }
-    else
-        self.storyBreaksView.hidden = YES;
-    
+    });
 }
 
 - (void)resetPin:(NSNotification *)notification {
@@ -148,7 +150,7 @@
         
         self.picker = [MKMapView createDBImageColorPickerForUserWithImage:profileImage];
 
-        [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:profileImage];
+        [self.assignmentsMap updateUserPinViewForMapViewWithImage:profileImage];
         
         [self.assignmentsMap userRadiusUpdated:nil];
             
@@ -157,7 +159,7 @@
         
         UIImage *defaultPinImage = [UIImage imageNamed:@"dot-user-fill"];
         
-        [self.assignmentsMap updateUserPinViewForMapView:self.assignmentsMap withImage:defaultPinImage];
+        [self.assignmentsMap updateUserPinViewForMapViewWithImage:defaultPinImage];
         
     }
 }

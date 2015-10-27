@@ -12,7 +12,7 @@
 @interface FRSFirstRunWrapperViewController : FRSBaseViewController
 
 /**
- *  Updates state of View Controller
+ *  Updates state of view controller components to represent index
  *
  *  @param index Index context for update
  */

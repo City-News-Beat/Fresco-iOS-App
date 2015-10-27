@@ -21,19 +21,16 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 @interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 
-/*
-** Index of cell that is currently playing a video
-*/
+@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
+@property (weak, nonatomic) IBOutlet UIButton *readmore;
+
+/**
+ *  Index of cell that is currently playing a video
+ */
 
 @property (nonatomic) NSIndexPath *playingIndex;
 
 @property (nonatomic, strong) FRSPhotoBrowserView *photoBrowserView;
-
-/*
-** Index of cell in gallery view that is playing
-*/
-
-@property (nonatomic, assign) NSUInteger index;
 
 @end
 
@@ -56,13 +53,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - Gallery Methods
 
-- (void)setGallery:(FRSGallery *)gallery
-{
-    [self setGallery:gallery isInList:NO];
-}
-
-// "list" is e.g. a table view
-- (void)setGallery:(FRSGallery *)gallery isInList:(BOOL)inList
+- (void)setGallery:(FRSGallery *)gallery shouldBeginPlaying:(BOOL)begingPlaying withDynamicAspectRatio:(BOOL)dynamicAspectRatio
 {
     _gallery = gallery;
     
@@ -75,7 +66,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [self.collectionPosts reloadData];
 
-    if(!inList){
+    if(begingPlaying){
     
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -117,7 +108,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
     }
     
-    if(!inList) [self setAspectRatio];
+    if(dynamicAspectRatio)
+        [self setAspectRatio];
     
 }
 
@@ -149,6 +141,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                                                  views: @{@"posts":self.collectionPosts}]];
 
             [self.collectionPosts updateConstraints];
+            
         }
         else{
         
@@ -167,10 +160,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 }
 
 #pragma mark - AVPlayer
-
-/*
-** Set up video player in passed PostCollectionViewCell
-*/
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
@@ -280,10 +269,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
    
 }
 
-/*
-** Cleans up video player, stops playing
-*/
-
 - (void)cleanUpVideoPlayer{
     
     @try{
@@ -293,9 +278,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-            [self.sharedLayer removeFromSuperlayer];
-            [self.sharedPlayer pause];
-            [self removeObserverForPlayer];
+                [self.sharedLayer removeFromSuperlayer];
+                [self.sharedPlayer pause];
+                [self removeObserverForPlayer];
                 
             });
         }

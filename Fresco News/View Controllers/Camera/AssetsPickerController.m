@@ -139,6 +139,8 @@ static CGSize AssetGridThumbnailSize;
 
     [super viewDidLoad];
 
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
 }
 
 - (void)dealloc

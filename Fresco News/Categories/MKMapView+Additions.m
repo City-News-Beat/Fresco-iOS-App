@@ -13,34 +13,7 @@
 
 @implementation MKMapView (Additions)
 
-#pragma mark - Legal Label
-
-- (UILabel *)legalLabel
-{
-    return [self.subviews objectAtIndex:1];
-}
-
-- (void)offsetLegalLabel:(CGSize)distance
-{
-    UILabel *label = self.legalLabel;
-    CGPoint point = label.center;
-    point.x += distance.width;
-    point.y += distance.height;
-    label.center = point;
-}
-
-- (void)setLegalLabelCenter:(CGPoint)point
-{
-    UILabel *label = self.legalLabel;
-    label.center = point;
-}
-
 #pragma mark - Zooming
-
-/*
-** Zoom to specified coordinates
-** Note: All values passed into these functions are in meters
-*/
 
 - (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate
 {
@@ -55,10 +28,6 @@
     [self setRegion:regionThatFits animated:animate];
 }
 
-/*
-** Zooms to user location of the class map
-*/
-
 - (void)zoomToCurrentLocation{
     
     MKCoordinateSpan span = MKCoordinateSpanMake(0.0002f, 0.0002f);
@@ -67,10 +36,6 @@
     
     [self setRegion:regionThatFits animated:YES];
 }
-
-/*
-** Returns value for slider, casted to an int
-*/
 
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider
 {
@@ -84,10 +49,6 @@
 }
 
 #pragma mark - User Location
-
-/*
-** Adds radius to user annotation view, has option of using the margin of error
-*/
 
 + (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius {
     
@@ -112,10 +73,6 @@
     return circle;
 }
 
-/*
-** Adds overlay to map, with passed radius in miles
-*/
-
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius
 {
     CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
@@ -126,10 +83,6 @@
     
     [self userRadiusUpdated:[NSNumber numberWithDouble:radius]];
 }
-
-/*
-** Method to remove and re-add the user's radius
-*/
 
 - (void)userRadiusUpdated:(NSNumber *)radius{
 
@@ -148,18 +101,15 @@
     
 }
 
-/*
-** Returns DBImageColorPicker, with optinal image paramater
-*/
-
 + (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image{
     
     //Check if the paramater is nil and if the user has an avatar
     if(!image && [[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]){
         
         image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]]];
-    }
     
+    }
+
     //Check if image is set after first conidition, otherwise return nil
     if(image)
         return [[DBImageColorPicker alloc] initFromImage:image withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
@@ -168,10 +118,6 @@
 }
 
 #pragma mark - Circle Rendering
-
-/*
-** Returns MKCircleRenderer for user/assignments
-*/
 
 + (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker{
 
@@ -224,10 +170,6 @@
 
 #pragma mark - Annotations
 
-/*
-** Returns UIButton for disclosure indicator
-*/
-
 + (UIButton *)caret {
     
     UIButton *caret = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
@@ -240,10 +182,6 @@
     
     return caret;
 }
-
-/*
-** Returns MKAnnotationView for Assignment Annotation
-*/
 
 - (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type{
     
@@ -273,9 +211,6 @@
     return annotationView;
 }
 
-/*
-** Returns MKAnnotationView for User Annotation
-*/
 
 - (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation {
 
@@ -301,9 +236,6 @@
     return annotationView;
 }
 
-/*
-** Helper method to set image for pin view
-*/
 
 + (UIImageView *)imagePinViewForAnnotationType: (FRSAnnotationType)type {
     
@@ -332,19 +264,15 @@
     return customPinView;
 }
 
-/*
-** Finds user annotaiton in map, and reset to the passed image
-*/
-
-- (void)updateUserPinViewForMapView:(MKMapView *)mapView withImage:(UIImage *)image {
+- (void)updateUserPinViewForMapViewWithImage:(UIImage *)image {
     
     if (image != nil) {
         
-        for (id<MKAnnotation> annotation in mapView.annotations){
+        for (id<MKAnnotation> annotation in self.annotations){
             
-            if (annotation == mapView.userLocation){
+            if (annotation == self.userLocation){
                 
-                MKAnnotationView *profileAnnotation = [mapView viewForAnnotation:annotation];
+                MKAnnotationView *profileAnnotation = [self viewForAnnotation:annotation];
                 
                 if ([profileAnnotation.subviews count] > 0){
                     

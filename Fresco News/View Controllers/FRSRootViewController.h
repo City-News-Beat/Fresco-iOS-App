@@ -20,8 +20,6 @@
 
 - (void)setRootViewControllerToTabBar;
 
-- (void)presentFirstRunViewController:(UIViewController *)controller;
-
 - (void)setRootViewControllerToFirstRun;
     
 - (void)setRootViewControllerToOnboard;

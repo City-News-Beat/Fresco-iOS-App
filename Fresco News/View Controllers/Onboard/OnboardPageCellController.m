@@ -120,7 +120,9 @@
     
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
     
     self.assignmentTopLeft.alpha = 0;
     self.assignmentBottomLeft.alpha = 0;

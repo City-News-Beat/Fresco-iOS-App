@@ -24,6 +24,7 @@ typedef enum : NSUInteger {
 /**
  *  View controller index, for uses in a UIPageViewController
  */
+
 @property (assign, nonatomic) NSInteger index;
 
 /*
@@ -35,6 +36,12 @@ typedef enum : NSUInteger {
 - (void)navigateToFirstRun;
 
 - (void)navigateToCamera;
+
+/**
+ *  Navigates to next index in page view controller stack
+ */
+
+- (void)navigateToNextIndex;
 
 /**
  *  Method to send us out of view controller after logging in
@@ -49,6 +56,7 @@ typedef enum : NSUInteger {
  *  @param button The button eing selected
  *  @param info   The email/pass dictionairy if Fresco login
  */
+
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info;
 
 @end

@@ -63,10 +63,6 @@
     shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
     [self.dismissButton addSubview:shadowView];
     
-    //This allows us to NEXT to fields
-    self.emailField.delegate = self;
-    self.passwordField.delegate = self;
-    
     //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
@@ -79,8 +75,6 @@
 {
     [super viewWillAppear:animated];
   
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShowOrHide:)
                                                  name:UIKeyboardWillShowNotification
@@ -93,8 +87,7 @@
 
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -109,13 +102,15 @@
         [self.passwordField becomeFirstResponder];
         
     } else if (textField == self.passwordField) {
+        
         [self.passwordField resignFirstResponder];
         
         if ([self.emailField.text length] == 0 && [self.passwordField.text length] == 0) {
             
-            [self performSegueWithIdentifier:SEG_SHOW_ACCT_INFO sender:self];
+            [self navigateToNextIndex];
             
-        } else {
+        }
+        else {
             [self loginButtonAction:self];
         }
     }
@@ -139,7 +134,7 @@
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                         
-                            self.parentViewController.parentViewController.view.frame= viewFrame;
+                            self.parentViewController.parentViewController.view.frame = viewFrame;
                             
                         } completion:nil];
 }
@@ -161,7 +156,8 @@
                              @"password" : self.passwordField.text
                              }];
     
-    } else {
+    }
+    else {
         
         [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:LOGIN_ERROR
@@ -172,22 +168,22 @@
 
 }
 
-/*
-** Signup Button
-*/
+/**
+ *  Signup Button Action
+ *
+ *  @param sender <#sender description#>
+ */
 
 - (IBAction)signUpButtonAction:(id)sender
 {
+    self.email = self.emailField.text;
+    self.password = self.passwordField.text;
     
-    if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
+    [self navigateToNextIndex];
     
-        [((FirstRunPageViewController *)self.parentViewController) shouldMoveToViewAtIndex:self.index + 1];
-        
-    }
 }
 - (IBAction)twitterAction:(id)sender {
     
-   
     [self performLogin:LoginTwitter button:sender withLoginInfo:nil];
 
 }
@@ -197,9 +193,7 @@
 }
 
 - (IBAction)forgotPassword:(id)sender {
-    
      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/forgot",BASE_URL]]];
-    
 }
 
 #pragma mark - Touch Handler

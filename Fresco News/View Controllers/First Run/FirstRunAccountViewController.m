@@ -7,6 +7,7 @@
 //
 
 #import "FirstRunAccountViewController.h"
+#import "FirstRunPageViewController.h"
 #import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "NSString+Validation.h"
@@ -14,7 +15,7 @@
 #import "FRSBackButton.h"
 #import "UIView+Border.h"
 
-@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate, FRSBackButtonDelegate>
+@interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet FRSSocialButton *facebookButton;
 
@@ -52,8 +53,6 @@
     
     [super viewWillAppear:animated];
 
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-
     //we may prepopulate these either during pushing or backing
     if (self.email)
         self.emailField.text = self.email;
@@ -84,12 +83,6 @@
 
 }
 
-#pragma mark - UI Actions
-
-- (IBAction)clickedNext:(id)sender {
-    
-    [self processLogin];
-}
 
 
 #pragma mark - UITextViewDelegate
@@ -231,6 +224,9 @@
                                      message:PASSWORD_ERROR_TITLE action:DISMISS]
                            animated:YES
                          completion:nil];
+        
+        _signUpRunning = NO;
+
     }
     else {
         
@@ -258,7 +254,7 @@
             //Successfully signed up
             else {
 
-                 [self transferUser];
+                [self navigateToNextIndex];
                 
             }
             
@@ -268,19 +264,6 @@
     }
 }
 
-- (void)initBackButton {
-
-    FRSBackButton *backButton = [FRSBackButton createBackButton];
-    
-    [self.view addSubview:backButton];
-    
-    backButton.delegate = self;
-    
-}
-
-- (void)backButtonTapped{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 - (IBAction)facebookLogin:(id)sender{
     [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];

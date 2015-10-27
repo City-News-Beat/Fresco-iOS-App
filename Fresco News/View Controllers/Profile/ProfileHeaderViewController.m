@@ -10,10 +10,10 @@
 @import FBSDKCoreKit;
 @import FBSDKLoginKit;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "ProfileHeaderViewController.h"
 #import "ProfileSettingsViewController.h"
 #import "FRSUser.h"
-#import <AFNetworking/UIImageView+AFNetworking.h>
 #import "FRSDataManager.h"
 
 @interface ProfileHeaderViewController ()
@@ -21,9 +21,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelDisplayName;
 @property (weak, nonatomic) IBOutlet UILabel *twitterLabel;
 @property (weak, nonatomic) IBOutlet UILabel *facebookLabel;
+
 @property (weak, nonatomic) IBOutlet UIImageView *twitterIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
+
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+
 @property (weak, nonatomic) IBOutlet UIView *settingsButtonView;
 
 @end
@@ -55,48 +58,49 @@
     
 }
 
-/*
-** Updates the profile header info with the latest data
-*/
 
--(void)updateUserInfo{
+- (void)updateUserInfo{
     
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"] != nil){
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.profileImageView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
-         placeholderImage:[UIImage imageNamed:@"user"]];
-    
-    }
-    else{
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"] != nil){
+            
+            [self.profileImageView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"]]
+                                  placeholderImage:[UIImage imageNamed:@"user"]];
+            
+        }
+        else{
+            
+            [self.profileImageView setImage:[UIImage imageNamed:@"user"]];
+            
+        }
         
-        [self.profileImageView setImage:[UIImage imageNamed:@"user"]];
+        NSString *first = [[NSUserDefaults standardUserDefaults] stringForKey:UD_FIRSTNAME];
         
-    }
-
-    NSString *first = [[NSUserDefaults standardUserDefaults] stringForKey:UD_FIRSTNAME];
-    
-    NSString *last = [[NSUserDefaults standardUserDefaults] stringForKey:UD_LASTNAME];
-    
-    if(first == nil && last == nil){
+        NSString *last = [[NSUserDefaults standardUserDefaults] stringForKey:UD_LASTNAME];
         
-        //Set the display name
-        self.labelDisplayName.text = @"Unnamed User";
-    
-    }
-    else{
+        if(first == nil && last == nil){
+            
+            //Set the display name
+            self.labelDisplayName.text = @"Unnamed User";
+            
+        }
+        else{
+            
+            //Set the display name
+            self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  first , last];
+            
+        }
         
-        //Set the display name
-        self.labelDisplayName.text = [NSString stringWithFormat:@"%@ %@",  first , last];
-    
-    }
-
-    
-    //Update the corner radius on the user image
-    self.profileImageView.clipsToBounds = YES;
-    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-    
-    [self setTwitterInfo];
-    [self setFacebookInfo];
+        
+        //Update the corner radius on the user image
+        self.profileImageView.clipsToBounds = YES;
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+        
+        [self setTwitterInfo];
+        [self setFacebookInfo];
+        
+    });
     
 }
 

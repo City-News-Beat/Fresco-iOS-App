@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -930,41 +931,6 @@
                                             <outlet property="delegate" destination="DwB-O9-wIu" id="JmV-au-3z8"/>
                                         </connections>
                                     </textView>
-                                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-sb-hAO" userLabel="Progress View">
-                                        <rect key="frame" x="0.0" y="775" width="600" height="2.5"/>
-                                        <animations/>
-                                    </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="FRSSocialButton">
-                                        <rect key="frame" x="0.0" y="777" width="300" height="46"/>
-                                        <animations/>
-                                        <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Twitter">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="FRSSocialButton">
-                                        <rect key="frame" x="300" y="777" width="300" height="46"/>
-                                        <animations/>
-                                        <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Facebook">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="facebookButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="RfE-qu-Rd5"/>
-                                        </connections>
-                                    </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="social-tip" translatesAutoresizingMaskIntoConstraints="NO" id="DUq-AH-QMm">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <animations/>
@@ -1008,6 +974,35 @@
                                             </mask>
                                         </variation>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="FRSSocialButton">
+                                        <rect key="frame" x="0.0" y="777" width="300" height="46"/>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.0" green="0.67450980392156867" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Twitter">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6D-z2-Jzy" userLabel="Facebook Button" customClass="FRSSocialButton">
+                                        <rect key="frame" x="300" y="777" width="300" height="46"/>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Facebook">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="facebookButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="RfE-qu-Rd5"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1018,23 +1013,17 @@
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="width" secondItem="q6D-z2-Jzy" secondAttribute="width" id="5Fy-a4-n8s"/>
                                     <constraint firstItem="DUq-AH-QMm" firstAttribute="leading" secondItem="ZZm-Kh-7Lh" secondAttribute="leading" id="6TH-J8-SM8"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="leading" secondItem="Znr-ql-7SW" secondAttribute="trailing" id="7K3-kM-chZ"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="838-s7-Ypr"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="DUq-AH-QMm" secondAttribute="bottom" constant="-2" id="AkC-fb-Vkz">
-                                        <variation key="heightClass=compact" constant="1"/>
-                                    </constraint>
                                     <constraint firstItem="DUq-AH-QMm" firstAttribute="centerX" secondItem="FHD-iC-fKo" secondAttribute="centerX" id="DX4-Oh-Ihs"/>
-                                    <constraint firstAttribute="trailing" secondItem="2fK-sb-hAO" secondAttribute="trailing" id="Fpu-9J-yjI"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="RnX-Qn-qK1" secondAttribute="bottom" constant="10" id="GWU-e1-LoY"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="height" secondItem="q6D-z2-Jzy" secondAttribute="height" id="ICO-43-kSw"/>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="IXx-wy-r8k"/>
                                     <constraint firstItem="DUq-AH-QMm" firstAttribute="leading" secondItem="ZZm-Kh-7Lh" secondAttribute="leading" id="IlT-sd-mh1"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" constant="-2" id="Lst-7X-cnN"/>
+                                    <constraint firstItem="Znr-ql-7SW" firstAttribute="top" secondItem="DUq-AH-QMm" secondAttribute="bottom" constant="3" id="OCC-jg-pGc"/>
                                     <constraint firstItem="VgT-z6-Ir7" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="QMt-od-eoD"/>
                                     <constraint firstAttribute="bottom" secondItem="Znr-ql-7SW" secondAttribute="bottom" id="R54-Dc-bgB"/>
                                     <constraint firstItem="DUq-AH-QMm" firstAttribute="leading" secondItem="ZZm-Kh-7Lh" secondAttribute="leading" id="RqY-Tc-1c9"/>
                                     <constraint firstItem="RnX-Qn-qK1" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" constant="2" id="V01-ps-NAN"/>
                                     <constraint firstAttribute="trailing" secondItem="RnX-Qn-qK1" secondAttribute="trailing" id="X25-X8-Vi8"/>
-                                    <constraint firstItem="DUq-AH-QMm" firstAttribute="bottom" secondItem="2fK-sb-hAO" secondAttribute="bottom" id="YNm-Bc-q5C"/>
                                     <constraint firstItem="DUq-AH-QMm" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="top" id="cdf-eO-Ew9"/>
                                     <constraint firstAttribute="trailing" secondItem="q6D-z2-Jzy" secondAttribute="trailing" id="eb2-Ut-99h"/>
                                     <constraint firstItem="q6D-z2-Jzy" firstAttribute="top" secondItem="Znr-ql-7SW" secondAttribute="top" id="hYI-l2-WPS"/>
@@ -1043,11 +1032,6 @@
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" constant="-37" id="qOm-qu-iOS"/>
                                     <constraint firstItem="RnX-Qn-qK1" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="shi-JH-0zy"/>
                                     <constraint firstItem="Znr-ql-7SW" firstAttribute="leading" secondItem="FHD-iC-fKo" secondAttribute="leading" id="tVP-Ki-GOJ"/>
-                                    <constraint firstItem="2fK-sb-hAO" firstAttribute="top" secondItem="DUq-AH-QMm" secondAttribute="bottom" constant="32" id="ylJ-pa-y0M">
-                                        <variation key="widthClass=compact" constant="5"/>
-                                        <variation key="heightClass=compact-widthClass=compact" constant="1"/>
-                                        <variation key="heightClass=regular-widthClass=compact" constant="1"/>
-                                    </constraint>
                                     <constraint firstItem="ZZm-Kh-7Lh" firstAttribute="top" secondItem="VgT-z6-Ir7" secondAttribute="bottom" constant="-37" id="zRa-9k-KX3"/>
                                 </constraints>
                                 <variation key="default">
@@ -1056,33 +1040,29 @@
                                         <exclude reference="DX4-Oh-Ihs"/>
                                         <exclude reference="IlT-sd-mh1"/>
                                         <exclude reference="RqY-Tc-1c9"/>
-                                        <exclude reference="YNm-Bc-q5C"/>
                                         <exclude reference="cdf-eO-Ew9"/>
                                         <exclude reference="iJ8-M4-cjv"/>
                                         <exclude reference="pVI-Q1-yds"/>
                                         <exclude reference="qOm-qu-iOS"/>
-                                        <exclude reference="AkC-fb-Vkz"/>
-                                        <exclude reference="ylJ-pa-y0M"/>
+                                        <exclude reference="OCC-jg-pGc"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="IlT-sd-mh1"/>
-                                        <exclude reference="YNm-Bc-q5C"/>
                                         <exclude reference="cdf-eO-Ew9"/>
                                         <include reference="iJ8-M4-cjv"/>
-                                        <include reference="AkC-fb-Vkz"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="ylJ-pa-y0M"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=compact">
                                     <mask key="constraints">
                                         <exclude reference="RqY-Tc-1c9"/>
                                         <include reference="pVI-Q1-yds"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="OCC-jg-pGc"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -1123,7 +1103,6 @@
                         <outlet property="linkAssignmentButton" destination="1pe-Up-bZs" id="HKN-iX-LpS"/>
                         <outlet property="socialTipView" destination="DUq-AH-QMm" id="7lT-17-1ub"/>
                         <outlet property="twitterButton" destination="Znr-ql-7SW" id="D3D-HZ-uvR"/>
-                        <outlet property="uploadProgressView" destination="2fK-sb-hAO" id="VK0-gU-EOw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yEI-re-Kqn" userLabel="First Responder" sceneMemberID="firstResponder"/>

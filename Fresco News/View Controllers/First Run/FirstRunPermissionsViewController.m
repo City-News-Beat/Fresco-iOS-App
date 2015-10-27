@@ -65,7 +65,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-            [self.locationPermissionsImage setImage:[UIImage imageNamed:@"locationOnIcon"] forState:UIControlStateSelected];
+            [self.locationPermissionsImage setBackgroundImage:[UIImage imageNamed:@"locationOnIcon"] forState:UIControlStateNormal];
             [self.locationPermissionsLabel setTitle:LOC_ENABLED forState:UIControlStateNormal];
         }
         else {
@@ -103,11 +103,6 @@
             [self.notificationsPermissionsLabel setTitle:NOTIF_ENABLED forState:UIControlStateNormal];
         });
     }
-}
-
-- (IBAction)actionNext:(id)sender
-{
-    [self performSegueWithIdentifier:SEG_SHOW_RADIUS sender:self];
 }
 
 #pragma mark - Request authorization methods

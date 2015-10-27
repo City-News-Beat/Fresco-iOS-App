@@ -176,63 +176,68 @@
 
 - (void)setUserMessage:(BOOL)shouldHide{
     
-    if(shouldHide){
-    
-        self.noContentLabel.hidden = YES;
-        self.noContentLabelSmall.hidden = YES;
-        self.noContentImage.hidden = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-    }
-    else{
-    
-        if(self.noContentLabel == nil && self.noContentImage == nil){
+        if(shouldHide){
             
-            NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:NOTHING_HERE_YET];
-            NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: OPEN_CAMERA];
-            
-            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-            
-            [style setLineSpacing:18];
-            [style setAlignment:NSTextAlignmentCenter];
-            [attrString addAttribute:NSParagraphStyleAttributeName
-                               value:style
-                               range:NSMakeRange(0, attrString.length)];
-            
-            [attrStringSmall addAttribute:NSParagraphStyleAttributeName
-                                    value:style
-                                    range:NSMakeRange(0, attrString.length)];
-            
-            self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
-            self.noContentLabel.numberOfLines = 1;
-            self.noContentLabel.attributedText = attrString;
-            self.noContentLabel.font= [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:16.0f];
-            self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
-            self.noContentLabel.alpha = .87f;
-            
-            self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-            self.noContentLabelSmall.numberOfLines = 1;
-            self.noContentLabelSmall.attributedText = attrStringSmall;
-            self.noContentLabelSmall.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:13.0f];
-            self.noContentLabelSmall.center = CGPointMake(self.view.center.x, self.view.center.y + 30);
-            self.noContentLabelSmall.alpha = .54f;
-            
-            UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
-            tapGestureRecognizer.numberOfTapsRequired = 1;
-            [self.noContentLabelSmall addGestureRecognizer:tapGestureRecognizer];
-            self.noContentLabelSmall.userInteractionEnabled = YES;
-            
-            self.noContentImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
-            self.noContentImage.frame = CGRectMake(0, 0, 100, 100);
-            self.noContentImage.contentMode = UIViewContentModeScaleAspectFit;
-            self.noContentImage.center = CGPointMake(self.view.center.x, self.view.center.y - 70);
-            self.noContentImage.alpha = .54f;
-            
-            [self.view addSubview:self.noContentImage];
-            [self.view addSubview:self.noContentLabel];
-            [self.view addSubview:self.noContentLabelSmall];
+            self.noContentLabel.hidden = YES;
+            self.noContentLabelSmall.hidden = YES;
+            self.noContentImage.hidden = YES;
             
         }
-    }
+        else{
+            
+            if(self.noContentLabel == nil && self.noContentImage == nil){
+                
+                NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithString:NOTHING_HERE_YET];
+                NSMutableAttributedString* attrStringSmall = [[NSMutableAttributedString alloc] initWithString: OPEN_CAMERA];
+                
+                NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+                
+                [style setLineSpacing:18];
+                [style setAlignment:NSTextAlignmentCenter];
+                [attrString addAttribute:NSParagraphStyleAttributeName
+                                   value:style
+                                   range:NSMakeRange(0, attrString.length)];
+                
+                [attrStringSmall addAttribute:NSParagraphStyleAttributeName
+                                        value:style
+                                        range:NSMakeRange(0, attrString.length)];
+                
+                self.noContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
+                self.noContentLabel.numberOfLines = 1;
+                self.noContentLabel.attributedText = attrString;
+                self.noContentLabel.font= [UIFont fontWithName:HELVETICA_NEUE_REGULAR size:16.0f];
+                self.noContentLabel.center = CGPointMake(self.view.center.x, self.view.center.y);
+                self.noContentLabel.alpha = .87f;
+                
+                self.noContentLabelSmall = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+                self.noContentLabelSmall.numberOfLines = 1;
+                self.noContentLabelSmall.attributedText = attrStringSmall;
+                self.noContentLabelSmall.font= [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:13.0f];
+                self.noContentLabelSmall.center = CGPointMake(self.view.center.x, self.view.center.y + 30);
+                self.noContentLabelSmall.alpha = .54f;
+                
+                UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
+                tapGestureRecognizer.numberOfTapsRequired = 1;
+                [self.noContentLabelSmall addGestureRecognizer:tapGestureRecognizer];
+                self.noContentLabelSmall.userInteractionEnabled = YES;
+                
+                self.noContentImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"noPhoto"]];
+                self.noContentImage.frame = CGRectMake(0, 0, 100, 100);
+                self.noContentImage.contentMode = UIViewContentModeScaleAspectFit;
+                self.noContentImage.center = CGPointMake(self.view.center.x, self.view.center.y - 70);
+                self.noContentImage.alpha = .54f;
+                
+                [self.view addSubview:self.noContentImage];
+                [self.view addSubview:self.noContentLabel];
+                [self.view addSubview:self.noContentLabelSmall];
+                
+            }
+        }
+
+    });
+    
 }
 
 #pragma mark - UITapGestureRecognizer

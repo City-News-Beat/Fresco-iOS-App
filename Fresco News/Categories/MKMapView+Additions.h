@@ -24,36 +24,133 @@ typedef enum : NSInteger {
     FRSClusterAnnotation = 2
 } FRSAnnotationType;
 
-@property (nonatomic, readonly) UILabel *legalLabel;
+/**
+ *  Zoom to specified coordinates
+ *  Note: All values passed into these functions are in meters
+ *
+ *  @param lat     Latitude to zoom to
+ *  @param lon     Longitude to zoom to
+ *  @param radius  Radius to be within
+ *  @param animate Animate zoom
+ */
 
-// Actions
-- (void)offsetLegalLabel:(CGSize)distance;
-- (void)setLegalLabelCenter:(CGPoint)point;
 - (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate;
+
+/**
+ *  Zooms to user location of the class map
+ */
+
 - (void)zoomToCurrentLocation;
+
+/**
+ *  Adds overlay to map for user location
+ *
+ *  @param radius Radius of the user location overlay
+ */
+
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
-- (void)updateUserPinViewForMapView: (MKMapView *)mapView withImage: (UIImage *)image;
+
+/**
+ *  Finds user annotaiton in map, and reset to the passed image
+ *
+ *  @param image   Image to set the user pin to
+ */
+
+- (void)updateUserPinViewForMapViewWithImage:(UIImage *)image;
+
+/**
+ *  Method to remove and re-add the user's radius
+ *
+ *  @param radius Radius to reset to
+ */
+
 - (void)userRadiusUpdated:(NSNumber *)radius;
-
-+ (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image;
-
-+ (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker;
 
 - (void)updateRadiusColor;
 
 - (void)removeAllOverlaysButUser;
 
-// Annotation Views
+#pragma mark - Annotation Views
+
+/**
+ *  Sets up an assignment annotation
+ *
+ *  @param annotation MKAnnotation that is to be associated with annotiation view
+ *  @param type       FRSAnnotationType
+ *
+ *  @return MKAnnotationView for Assignment Annotation
+ */
+
 - (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type;
 
-- (MKAnnotationView *)setupUserPinForAnnotation: (id <MKAnnotation>)annotation;
+/**
+ *  Returns MKAnnotationView for User Annotation
+ *
+ *  @param annotation MKAnnotation that is to be associated with annotiation view
+ *
+ *  @return <#return value description#>
+ */
 
-// Annotation additional views
+- (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation;
+
+/**
+ *  Returns DBImageColorPicker, with optinal image paramater
+ *
+ *  @param image Image to assocaite DBImageColorPicker with
+ *
+ *  @return a DBImageColorPicker with passed image
+ */
+
++ (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image;
+
+/**
+ *  Returns MKCircleRenderer for user/assignments
+ *
+ *  @param overlay MKOverlay that is to be associated with renderer
+ *  @param picker  Color picker holding color of renderer
+ *
+ *  @return renderer representing overlay
+ */
+
++ (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker;
+
+/**
+ *  Returns UIButton for disclosure indicator
+ *
+ *  @return UIButton for disclosure indicator
+ */
+
 + (UIButton *)caret;
+
+
+/**
+ *  Helper method to set image for pin view
+ *
+ *  @param type Type of annotation
+ *
+ *  @return returns a UIImageView for the annotation
+ */
+
 + (UIImageView *)imagePinViewForAnnotationType:(FRSAnnotationType)type;
 
-// not a MapView method but a buddy in our interface sometimes
+/**
+ *  Returns value for slider, casted to an int
+ *
+ *  @param CGFloat <#CGFloat description#>
+ *
+ *  @return <#return value description#>
+ */
+
 + (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider;
+
+/**
+ *  Returns radius for user annotation view, has option of using the margin of error
+ *
+ *  @param mapView mapView for the static method
+ *  @param radius  Radius of the user radius circle
+ *
+ *  @return <#return value description#>
+ */
 
 + (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius;
 

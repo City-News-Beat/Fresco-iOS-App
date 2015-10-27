@@ -21,11 +21,20 @@
 @property (assign, nonatomic) NSInteger previousIndex;
 
 /**
-*  Tells the PageViewController to move to a specific index
-*
-*  @param index The index to move to
-*/
+ *  Communicates to the page view controller that it should move to the passed index
+ *
+ *  @param index The index to move to
+ */
 
 - (void)shouldMoveToViewAtIndex:(NSInteger)index;
+
+
+/**
+ *  Tells the PageViewController to move to a specific index
+ *
+ *  @param index The index to move to
+ */
+
+- (void)moveToViewAtindex:(NSInteger)index;
 
 @end

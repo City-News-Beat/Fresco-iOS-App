@@ -36,7 +36,7 @@ static CGFloat kCellHeight = 44.0f;
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 
 /*
-** Gallery Outlets, in order of appearance
+** Gallery View Properties, in order of appearance
 */
 
 @property (weak, nonatomic) IBOutlet UILabel *caption;
@@ -72,7 +72,7 @@ static CGFloat kCellHeight = 44.0f;
     
     [super viewWillDisappear:NO];
 
-    [self disableVideo];
+    [self.galleryView cleanUpVideoPlayer];
 }
 
 
@@ -111,16 +111,16 @@ static CGFloat kCellHeight = 44.0f;
     
 }
 
-/*
-** Constructs view from the Gallery object
-*/
+/**
+ *  Constructs view from the Gallery object
+ */
 
 - (void)setUpGalleryInView{
 
     self.galleryTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.galleryTable.allowsSelection = YES;
 
-    [self.galleryView setGallery:self.gallery isInList:NO];
+    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:YES];
     
     self.caption.text = self.gallery.caption;
 
@@ -131,9 +131,11 @@ static CGFloat kCellHeight = 44.0f;
     [self.galleryHeader addSubview:galleryHeader];
 }
 
-/*
-** Initiates Activity Controller to share Gallery URL
-*/
+/**
+ *  Initiates Activity Controller to share Gallery URL
+ *
+ *  @param sender Sender property
+ */
 
 - (void)shareGallery:(id)sender
 {
@@ -173,17 +175,6 @@ static CGFloat kCellHeight = 44.0f;
                                           completion:nil];
 }
 
-/*
-** Disables currently playing video, check in viewDidDisappear
-*/
-
-- (void)disableVideo
-{
-    
-   [self.galleryView cleanUpVideoPlayer];
-    
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -212,7 +203,7 @@ static CGFloat kCellHeight = 44.0f;
     return 0;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     
     /* Create custom view to display section header... */

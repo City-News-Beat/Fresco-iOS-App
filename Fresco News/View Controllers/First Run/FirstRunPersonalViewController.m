@@ -12,6 +12,7 @@
 #import "FRSDataManager.h"
 #import "FRSBackButton.h"
 #import "UIView+Border.h"
+#import "FirstRunPageViewController.h"
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;
 
@@ -125,10 +126,8 @@
                         } completion:nil];
 }
 
-- (IBAction)actionNext:(id)sender
-{
-    [((UIButton *)sender) setUserInteractionEnabled:NO];
-
+- (void)saveInfo{
+    
     // save this to allow backing to the VC
     self.firstName = [self.textfieldFirstName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.lastName = [self.textfieldLastName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -138,17 +137,18 @@
         
         NSData *imageData = self.selectedImage ? UIImageJPEGRepresentation(self.selectedImage, 0.5) : nil;
         
-        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{ @"firstname" : self.firstName, @"lastname" : self.lastName}];
-
+        NSMutableDictionary *updateParams = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                            @"firstname" : self.firstName,
+                                                                                            @"lastname" : self.lastName
+                                                                                            }];
+        
         if (self.socialImageURL) {
             [updateParams setObject:[self.socialImageURL absoluteString] forKey:@"avatar"];
         }
-
+        
         [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:imageData block:^(BOOL success, NSError *error) {
             
             if (!success) {
-                
-                [((UIButton *)sender) setUserInteractionEnabled:YES];
                 
                 [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:ERROR
@@ -159,20 +159,15 @@
             }
             else {
                 
-                [((UIButton *)sender) setUserInteractionEnabled:YES];
-                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_IMAGE_SET object:nil];
                 
-                [self performSegueWithIdentifier:SEG_SHOW_PERMISSIONS sender:self];
+                [self navigateToNextIndex];
                 
             }
-
         }];
         
     }
     else {
-        
-        [((UIButton *)sender) setUserInteractionEnabled:YES];
         
         [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
@@ -187,7 +182,7 @@
 #pragma mark - Social data
 
 /*
-** Grab info from twitter, and set to respective fields
+** Grab info from twitter, and sets to respective fields
 */
 
 - (void)setTwitterInfo
@@ -258,7 +253,8 @@
 
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me"
                                                                    parameters:@{
-                                                                                @"fields" : @"picture.width(500).height(500){url}, first_name, last_name, id, email"}
+                                                                                @"fields" : @"picture.width(500).height(500){url}, first_name, last_name, id, email"
+                                                                                }
                                                                    HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,

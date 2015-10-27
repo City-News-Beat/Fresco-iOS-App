@@ -18,6 +18,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
 
-- (BOOL)valid;
+- (void)processLogin;
 
 @end

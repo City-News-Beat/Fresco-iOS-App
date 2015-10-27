@@ -30,6 +30,8 @@
 
 - (void)viewDidLoad {
     
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
@@ -62,32 +64,38 @@
     
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+
+    [super viewWillDisappear:animated];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+
+}
+
 #pragma mark - FRSProgressView Delegate
 
 -(void)nextButtonTapped{
     
-    //If we're on the first page
-    if(self.pagedViewController.currentIndex == 0){
-        
+    //If we're on the first page or the last page
+    if(self.pagedViewController.currentIndex == 0 || self.pagedViewController.currentIndex == 4){
+
         //Set has Launched Before to prevent onboard from ocurring again
         if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_HAS_LAUNCHED_BEFORE];
-        
+
         if(self.presentingViewController == nil){
             [self navigateToMainApp];
         }
         else{
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
             [self dismissViewControllerAnimated:YES completion:nil];
         }
-        
-        
+
     }
     //If we're on any other page
     else{
-        
+
         [self.pagedViewController shouldMoveToViewAtIndex:self.pagedViewController.currentIndex + 1];
-        
+
     }
 
 }

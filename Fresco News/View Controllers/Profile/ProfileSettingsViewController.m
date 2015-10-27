@@ -101,13 +101,33 @@ typedef enum : NSUInteger {
 
     [self configureViews];
     
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+    [self updateAddCardButton];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+//        self.saveChangesbutton.alpha = 1;
+
+    });
+    
+}
+
+
+- (void)configureViews{
+    
+//    self.saveChangesbutton.alpha = 0;
+    
+    //Set text fields with user data
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
-    [self.textfieldFirst addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.textfieldLast addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.textfieldEmail addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [self.textfieldNewPassword addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     [self.addCardButton setTitleColor:[UIColor textInputBlackColor] forState:UIControlStateHighlighted];
     
     // Radius slider values
@@ -119,99 +139,73 @@ typedef enum : NSUInteger {
     //Update social connect buttons
     [self updateLinkingStatus];
     
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    
-    if (!self.picker)
-        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
-    
-    [self updateAddCardButton];
-    
-}
-
-- (void)configureViews{
-    
-    self.saveChangesbutton.alpha = 0;
-    
-    [self.saveChangesbutton updateSaveState:SaveStateDisabled];
-     
-    for (UIView *view in self.viewsWithShadows) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        [view addBorderWithWidth:1.0f];
+        //Checks if the user's primary login is through social, then disable the email and password fields
+        if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+           && [FRSDataManager sharedManager].currentUser.email == nil){
+            
+            [self.view viewWithTag:100].hidden = YES;
+            [self.view viewWithTag:101].hidden = YES;
+            [[self.view viewWithTag:100] removeFromSuperview];
+            [[self.view viewWithTag:101] removeFromSuperview];
+            
+            CGFloat y = -self.view.frame.size.height/8;
+            self.constraintAccountVerticalTop.constant = y;
+            self.constraintAccountVerticalBottom.constant = 0;
+            
+        }
         
-    }
-    
-    //Checks if the user's primary login is through social, then disable the email and password fields
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-       && [FRSDataManager sharedManager].currentUser.email == nil){
+        [self.scrollView setNeedsLayout];
+        [self.scrollView layoutIfNeeded];
+        [self getYolked];
         
-        [self.view viewWithTag:100].hidden = YES;
-        [self.view viewWithTag:101].hidden = YES;
-        [[self.view viewWithTag:100] removeFromSuperview];
-        [[self.view viewWithTag:101] removeFromSuperview];
+        if (!self.picker)
+            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
         
-        CGFloat y = -self.view.frame.size.height/8;
-        self.constraintAccountVerticalTop.constant = y;
-        self.constraintAccountVerticalBottom.constant = 0;
+        for (UIView *view in self.viewsWithShadows) {
+            
+            [view addBorderWithWidth:1.0f];
+            
+        }
         
-    }
-    
-    [self.scrollView setNeedsLayout];
-    [self.scrollView layoutIfNeeded];
-    
-    //Update the profile image
-    if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+        //Update the profile image
+        if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+            
+            [self.profileImageView
+             setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
+             placeholderImage:[UIImage imageNamed:@"user"]
+             success:nil failure:nil];
+        }
         
-        [self.profileImageView
-         setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
-         placeholderImage:[UIImage imageNamed:@"user"]
-         success:nil failure:nil];
-    }
-    
-    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
-    singleTap.numberOfTapsRequired = 1;
-    
-    //Make the profile image interactive
-    [self.profileImageView addGestureRecognizer:singleTap];
-    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-    self.profileImageView.clipsToBounds = YES;
-    
-    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
-    
-    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
-    caret.contentMode = UIViewContentModeScaleAspectFit;
-    caret.frame = CGRectMake(
-                             [[UIScreen mainScreen] bounds].size.width - 30,
-                             (self.addCardButton.frame.size.height / 2) - 7.5,
-                             15,
-                             15
-                             );
-    
-    [self.addCardButton addSubview:caret];
-    
-    [self updateAddCardButton];
-    
-    [self getYolked];
+        //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+        singleTap.numberOfTapsRequired = 1;
+        
+        //Make the profile image interactive
+        [self.profileImageView addGestureRecognizer:singleTap];
+        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+        self.profileImageView.clipsToBounds = YES;
+        
+        [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+        [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+        
+        UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
+        caret.contentMode = UIViewContentModeScaleAspectFit;
+        caret.frame = CGRectMake(
+                                 [[UIScreen mainScreen] bounds].size.width - 30,
+                                 (self.addCardButton.frame.size.height / 2) - 7.5,
+                                 15,
+                                 15
+                                 );
+        
+        [self.addCardButton addSubview:caret];
+        
+    });
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-   
-    [super viewDidAppear:animated];
-    
-    self.saveChangesbutton.alpha = 1;
-
-}
-
-/*
-** Automatic save when user goes back to Profile Screen
-*/
-
+// Automatic save when user goes back to Profile Screen
 - (void)willMoveToParentViewController:(UIViewController *)parent{
     
     [super willMoveToParentViewController:parent];
@@ -223,27 +217,32 @@ typedef enum : NSUInteger {
 
 - (void)getYolked{
 
-    UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
+        
+        egg.frame = CGRectMake(0, 0, self.view.frame.size.width / 1.3, 220);
+        egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
+        egg.contentMode = UIViewContentModeScaleAspectFit;
+        
+        
+        UILabel *version = [[UILabel alloc] init];
+        version.numberOfLines = 0;
+        version.frame = CGRectMake(0, 0, 65, 70);
+        version.center = CGPointMake(self.navigationController.toolbar.frame.size.width / 2, self.scrollView.contentSize.height + 100);
+        version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
+        version.text = [NSString
+                        stringWithFormat:@"Build %@\n\nVersion %@",
+                        [[NSBundle mainBundle]infoDictionary][@"CFBundleVersion"],
+                        [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
+        version.textColor = [UIColor textHeaderBlackColor];
+        version.textAlignment = NSTextAlignmentCenter;
+        
+        [self.scrollView addSubview:version];
+        [self.scrollView addSubview:egg];
+        
+    });
     
-    egg.frame = CGRectMake(0, 0, self.view.frame.size.width / 1.3, 220);
-    egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
-    egg.contentMode = UIViewContentModeScaleAspectFit;
-    
-
-    UILabel *version = [[UILabel alloc] init];
-    version.numberOfLines = 0;
-    version.frame = CGRectMake(0, 0, 65, 70);
-    version.center = CGPointMake(self.navigationController.toolbar.frame.size.width / 2, self.scrollView.frame.size.height + 100);
-    version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
-    version.text = [NSString
-                    stringWithFormat:@"Build %@\n\nVersion %@",
-                    [[NSBundle mainBundle]infoDictionary][@"CFBundleVersion"],
-                    [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
-    version.textColor = [UIColor textHeaderBlackColor];
-    version.textAlignment = NSTextAlignmentCenter;
-    
-    [self.scrollView addSubview:version];
-    [self.scrollView addSubview:egg];
     
 }
 
@@ -261,8 +260,7 @@ typedef enum : NSUInteger {
     [button setTitle:@"" forState:UIControlStateNormal];
     [button setImage:nil forState:UIControlStateNormal];
     
-    self.connectTwitterButton.enabled = NO;
-    self.connectFacebookButton.enabled = NO;
+    button.enabled = NO;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -368,8 +366,8 @@ typedef enum : NSUInteger {
 /**
  *  Triggers a response based on the passed Error
  *
- *  @param error   <#error description#>
- *  @param network <#network description#>
+ *  @param error   Type of error
+ *  @param network Network that is being responded to
  */
 
 - (void)triggerSocialResponse:(SocialError)error network:(NSString *)network{
@@ -423,33 +421,21 @@ typedef enum : NSUInteger {
     
     dispatch_async(dispatch_get_main_queue(), ^{
             
-        if (![PFUser currentUser]) {
-            [self.connectTwitterButton setHidden:YES];
-            [self.connectFacebookButton setHidden:YES];
-        }
-        else {
-            
-            [self.connectTwitterButton setHidden:NO];
-            [self.connectFacebookButton setHidden:NO];
-            
-            [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
-            [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
-        
-            //Twitter
-            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]])
-                [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            else
-                [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
+        [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+        [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
 
-            //Facebook
-            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-                [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
-            else
-                [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+        //Twitter
+        if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]])
+            [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+        else
+            [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
 
-            
-        }
-        
+        //Facebook
+        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+            [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
+        else
+            [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
+
     });
 }
 
@@ -515,7 +501,6 @@ typedef enum : NSUInteger {
     [self presentViewController:alertCon animated:YES completion:nil];
 }
 
-
 /**
  *  Updates the state of the card button
  */
@@ -571,9 +556,10 @@ typedef enum : NSUInteger {
     });
 }
 
-/*
-** Catch all save method
-*/
+
+/**
+ *  Catch all save method
+ */
 
 - (void)saveChanges {
     
@@ -786,10 +772,10 @@ typedef enum : NSUInteger {
 
 #pragma mark - UITextField Delegate
 
-- (void)textFieldDidChange:(UITextField *)textField {
+- (void)textFieldDidEndEditing:(UITextField *)textField{
     
     [self.saveChangesbutton updateSaveState:SaveStateEnabled];
-    
+
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -797,15 +783,13 @@ typedef enum : NSUInteger {
     if (textField == self.textfieldFirst) {
         [self.textfieldLast becomeFirstResponder];
     }
-    if (textField == self.textfieldLast) {
+    else if (textField == self.textfieldLast) {
         [self.textfieldLast resignFirstResponder];
     }
-    
-    if (textField == self.textfieldNewPassword) {
+    else if (textField == self.textfieldNewPassword) {
         [self.textfieldConfirmPassword becomeFirstResponder];
     }
-    
-    if (textField == self.textfieldConfirmPassword) {
+    else if (textField == self.textfieldConfirmPassword) {
         [self.textfieldConfirmPassword resignFirstResponder];
     }
     
@@ -871,7 +855,7 @@ typedef enum : NSUInteger {
     
     [self.saveChangesbutton updateSaveState:SaveStateEnabled];
     
-    [self.mapView updateUserPinViewForMapView:self.mapView withImage:self.selectedImage];
+    [self.mapView updateUserPinViewForMapViewWithImage:self.selectedImage];
     self.picker = [MKMapView createDBImageColorPickerForUserWithImage:self.selectedImage];
     [self.mapView userRadiusUpdated:@(self.radiusStepper.value)];
 

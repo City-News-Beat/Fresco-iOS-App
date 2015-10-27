@@ -19,7 +19,7 @@
 
 - (void)openGalleryFromPush:(NSString *)galleryId{
 
-    [[FRSDataManager sharedManager] getGallery:galleryId WithResponseBlock:^(id responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getGallery:galleryId withResponseBlock:^(id responseObject, NSError *error) {
         
         if (!error && responseObject) {
             

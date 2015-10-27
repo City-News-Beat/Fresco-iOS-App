@@ -40,7 +40,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    #warning Slider on this view won't work in page view controller
 
     [self sliderValueChanged:self.radiusStepper];
     
@@ -124,9 +125,7 @@
                              completion:nil];
         }
         else{
-        
-            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-            
+                    
             if(self.presentingViewController == nil)
                 [self navigateToMainApp];
             else{

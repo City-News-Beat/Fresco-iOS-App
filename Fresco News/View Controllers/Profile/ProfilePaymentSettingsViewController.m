@@ -200,7 +200,7 @@
 
     [CardIOUtilities preload];
     
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

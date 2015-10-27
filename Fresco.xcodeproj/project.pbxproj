@@ -125,6 +125,7 @@
 		E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E78428111B57F4010090DFCC /* OnboardPageCellController.xib */; };
 		E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = E796FA171B0E54B6002B30C4 /* FRSAssignment.m */; };
 		E79ACC651BB46DD5005EF7E6 /* FRSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */; };
+		E7A2C1CA1BDA90F2000A7266 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A2C1C91BDA90F2000A7266 /* FRSUploadManager.m */; settings = {ASSET_TAGS = (); }; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
@@ -406,6 +407,8 @@
 		E796FA171B0E54B6002B30C4 /* FRSAssignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAssignment.m; path = Assignment/FRSAssignment.m; sourceTree = "<group>"; };
 		E79ACC631BB46DD5005EF7E6 /* FRSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLabel.h; sourceTree = "<group>"; };
 		E79ACC641BB46DD5005EF7E6 /* FRSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLabel.m; sourceTree = "<group>"; };
+		E7A2C1C81BDA90F2000A7266 /* FRSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadManager.h; sourceTree = "<group>"; };
+		E7A2C1C91BDA90F2000A7266 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
 		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKRelativeDate.m; sourceTree = "<group>"; };
 		E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterImages.xcassets; sourceTree = "<group>"; };
@@ -748,6 +751,8 @@
 			children = (
 				1EDA45141AA500EE0082E08D /* FRSDataManager.h */,
 				1EDA45151AA500EE0082E08D /* FRSDataManager.m */,
+				E7A2C1C81BDA90F2000A7266 /* FRSUploadManager.h */,
+				E7A2C1C91BDA90F2000A7266 /* FRSUploadManager.m */,
 				E706DFC21B56B024001A6DD0 /* FRSLocationManager.h */,
 				E706DFC31B56B024001A6DD0 /* FRSLocationManager.m */,
 				E7C112011B681C7F009C637C /* FRSAlertViewManager.h */,
@@ -1494,6 +1499,7 @@
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
+				E7A2C1CA1BDA90F2000A7266 /* FRSUploadManager.m in Sources */,
 				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,

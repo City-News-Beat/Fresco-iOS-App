@@ -454,8 +454,6 @@
             //Failed refresh and log in
             else{
                 
-                [[FRSDataManager sharedManager] logout];
-                
                 if(block) block(NO, nil);
                 
             }
@@ -473,6 +471,7 @@
     
     __block FRSDataManager *dM = self;
     
+    //Check if there is already a current user set
     if(dM.currentUser != nil){
         responseBlock(YES, nil);
         return;
@@ -852,7 +851,10 @@
     
     if(userId != nil){
     
-        NSDictionary *params = @{ @"id" : userId, @"offset" : offset ?: 0 };
+        NSDictionary *params = @{
+                                 @"id" : userId,
+                                 @"offset" : offset == nil ? 0 : offset
+                                 };
         
         //If we are refreshing, removed the cached response for the request by setting the cache policy
         if(refresh) self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
@@ -940,7 +942,7 @@
     
 }
 
-- (void)getGallery:(NSString *)galleryId WithResponseBlock:(FRSAPIResponseBlock)responseBlock {
+- (void)getGallery:(NSString *)galleryId withResponseBlock:(FRSAPIResponseBlock)responseBlock {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
@@ -1005,14 +1007,6 @@
         
     }];
     
-}
-
-- (void)resetDraftGalleryPost
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:nil forKey:UD_CAPTION_STRING_IN_PROGRESS];
-    [defaults setObject:nil forKey:UD_DEFAULT_ASSIGNMENT_ID];
-    [defaults setObject:nil forKey:UD_SELECTED_ASSETS];
 }
 
 #pragma mark - Assignments
