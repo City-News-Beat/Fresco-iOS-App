@@ -218,7 +218,7 @@ enum FRSErrorCodes {
 #define SIGNUP_ERROR                        NSLocalizedString(@"It seems there was an error signing you up. Please try again in a bit.", nil)
 #define SIGNUP_EXISTS                       NSLocalizedString(@"Looks like that email is taken! Please use a different one", nil)
 
-#define NAME_PROMPT                         NSLocalizedString(@"Please enter both first and last name", nil)
+#define NAME_PROMPT                         NSLocalizedString(@"Please enter both a first and last name", nil)
 #define NAME_ERROR_MSG                      NSLocalizedString(@"We could not successfully save your first and last name", nil)
 
 #define AVATAR_PROMPT                       NSLocalizedString(@"Choose a new avatar", nil)

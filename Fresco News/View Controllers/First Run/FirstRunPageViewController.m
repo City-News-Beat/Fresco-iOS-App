@@ -19,6 +19,12 @@
 #import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
 
+@interface FirstRunPageViewController()
+
+@property (nonatomic, assign) BOOL inTransition;
+
+@end
+
 @implementation FirstRunPageViewController
 
 -(id)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options{
@@ -26,8 +32,6 @@
     if(self = [super initWithTransitionStyle:style navigationOrientation:navigationOrientation options:options]){
         
         // Create page view controller
-        self.dataSource = self;
-        
         self.view.backgroundColor = [UIColor frescoGreyBackgroundColor];
         
         FirstRunViewController *viewController = [[FirstRunViewController alloc] init];
@@ -51,7 +55,6 @@
     }
     
     self.delegate = self;
-    self.dataSource = self;
     
 }
 
@@ -131,7 +134,12 @@
 
 #pragma mark - View Controller specific methods
 
-- (void)moveToViewAtindex:(NSInteger)index{
+- (void)moveToViewAtIndex:(NSInteger)index withDirection:(UIPageViewControllerNavigationDirection)direction{
+    
+//    if(self.inTransition)
+//        return;
+    
+    self.inTransition = YES;
 
     UIViewController *viewController = [self viewControllerAtIndex:index];
 
@@ -143,11 +151,16 @@
     self.currentIndex  = index;
 
     NSArray *controllers = @[viewController];
-
-    [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-
-    [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
     
+    __weak typeof(self) weakSelf = self;
+
+    [self setViewControllers:controllers direction:direction animated:YES completion:^(BOOL finished) {
+        
+        [(FRSFirstRunWrapperViewController *)weakSelf.parentViewController updateStateWithIndex:weakSelf.currentIndex];
+    
+        weakSelf.inTransition = NO;
+        
+    }];
 }
 
 
@@ -169,18 +182,11 @@
     }
     else if(index == 4){
         
-        [self moveToViewAtindex:index];
+        [self moveToViewAtIndex:index withDirection:UIPageViewControllerNavigationDirectionForward];
         
     }
-    else{
-    
-        
-    
-    }
-    
+
 }
-
-
 
 
 @end

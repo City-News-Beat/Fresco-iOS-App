@@ -40,8 +40,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    #warning Slider on this view won't work in page view controller
 
     [self sliderValueChanged:self.radiusStepper];
     

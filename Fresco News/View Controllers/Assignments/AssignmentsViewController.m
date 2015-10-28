@@ -66,20 +66,29 @@
     
     [super viewDidLoad];
     
-    [self setFrescoNavigationBar];
-    
-    //Configure the assignment detail view
-    self.detailViewWrapper.hidden = YES;
-    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.detailViewWrapper.layer.shadowOpacity = 0.26;
-    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-    
-    //Check for location permission
-    [self requestAlwaysAuthorization];
-    
     //Set delegates
     self.assignmentsMap.delegate = self;
     self.scrollView.delegate = self;
+    
+    
+    //Set all values to 0 to reset controller conditioning
+    self.operatingRadius = 0;
+    self.operatingLat = 0;
+    self.operatingLon = 0;
+
+    [self setFrescoNavigationBar];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        //Configure the assignment detail view
+        self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
+        self.detailViewWrapper.layer.shadowOpacity = 0.26;
+        self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
+        
+    });
+    
+    //Check for location permission
+    [self requestAlwaysAuthorization];
     
     //Set up action sheet for navigation
     self.navigationSheet = [[UIActionSheet alloc]
@@ -92,11 +101,6 @@
     
     self.navigationSheet.tag = 100;
 
-    //Set all values to 0 to reset controller conditioning
-    self.operatingRadius = 0;
-    self.operatingLat = 0;
-    self.operatingLon = 0;
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
@@ -106,14 +110,18 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
-
-    //Run updates for assignments
-    [self updateAssignments];
     
     [self updateNotificationBanner];
     
-    if (!self.picker)
-        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    //Run updates for assignments
+    [self updateAssignments];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!self.picker)
+            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+        
+    });
     
     //If we have an assignment set, present it
     if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
@@ -127,16 +135,16 @@
 - (void)updateNotificationBanner{
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         //Configure radius banner
         if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+
+            self.storyBreaksView.hidden = [[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0 ? NO : YES;
             
-            if([[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0)
-                self.storyBreaksView.hidden = NO;
-            else
-                self.storyBreaksView.hidden = YES;
         }
         else
             self.storyBreaksView.hidden = YES;
+        
     });
 }
 
@@ -183,9 +191,11 @@
     
 }
 
-/*
-** Action to open camera from single assignment view
-*/
+/**
+ *  Action to open camera from single assignment view
+ *
+ *  @param sender <#sender description#>
+ */
 
 - (IBAction)openInCamera:(id)sender {
     
@@ -195,9 +205,14 @@
 
 #pragma mark - Assignment Management
 
-/*
-** Sets current assignment of view controller, with conditioning variables and checks for expiration
-*/
+/**
+ *  Sets current assignment of view controller, with conditioning variables and checks for expiration
+ *
+ *  @param currentAssignment The new current assignment
+ *  @param navigate          To present the navigation option
+ *  @param present           To present the current assignment with a banner
+ *  @param animate           To animate or not
+ */
 
 -(void)setCurrentAssignment:(FRSAssignment *)currentAssignment navigateTo:(BOOL)navigate present:(BOOL)present withAnimation:(BOOL)animate{
     
@@ -214,9 +229,12 @@
     }
 }
 
-/*
-** Presents current assignment of view controller, fades in view
-*/
+
+/**
+ *  Presents current assignment of view controller, fades in view
+ *
+ *  @param animate To animate or not
+ */
 
 - (void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
     
@@ -271,9 +289,9 @@
     }
 }
 
-/*
-** Update Assignments
-*/
+/**
+ *  Runs through and updates assignments on the map
+ */
 
 -(void)updateAssignments{
     
@@ -371,7 +389,6 @@
                 }];
             
             }
-            
         }
     }
     
@@ -379,9 +396,9 @@
 
 #pragma mark - MapView Annotations
 
-/*
-** Runs through controller's assignments, and adds them to the map
-*/
+/**
+ *  Runs through controller's assignments, and adds them to the map
+ */
 
 - (void)populateMapWithAnnotations{
 
@@ -430,9 +447,12 @@
 
 }
 
-/*
-** Adds assignment to map through AssignmentAnnotation (MKAnnotation subclass)
-*/
+/**
+ *  Adds assignment to map through AssignmentAnnotation (MKAnnotation subclass)
+ *
+ *  @param assignment The FRSAssignment for the annotation
+ *  @param index      The index of the annotation
+ */
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
@@ -451,9 +471,13 @@
     
 }
 
-/*
-** Adds cluster to map through ClusterAnnotion (MKAnnotation sublcass)
-*/
+
+/**
+ *  Adds cluster to map through ClusterAnnotion (MKAnnotation sublcass)
+ *
+ *  @param cluster FRSCluster object for annotation
+ *  @param index   The index of the cluster annotation
+ */
 
 - (void)addClusterAnnotation:(FRSCluster*)cluster index:(NSInteger)index{
     
@@ -463,9 +487,9 @@
     
 }
 
-/*
-** Cleans up annotations on the map
-*/
+/**
+ *  Cleans up annotations on the map
+ */
 
 - (void)clearMapAnnotations{
 

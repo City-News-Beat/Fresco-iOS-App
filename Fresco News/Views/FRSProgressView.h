@@ -26,6 +26,17 @@
 
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count;
 
+
+/**
+ *  Initializes new progress view
+ *
+ *  @param frame    Frame for progress vierw
+ *  @param count    Number of pages in progress view
+ *  @param disabled If the first index is disabled
+ *
+ *  @return Returns FRSProgressView insance
+ */
+
 - (instancetype)initWithFrame:(CGRect)frame andPageCount:(NSInteger)count withFirstIndexDisabled:(BOOL)disabled;
 
 /**

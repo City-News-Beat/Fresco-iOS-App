@@ -35,7 +35,6 @@
     
     [super viewWillDisappear:animated];
 
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 /**

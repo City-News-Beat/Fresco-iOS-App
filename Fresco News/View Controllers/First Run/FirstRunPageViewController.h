@@ -13,11 +13,13 @@
 /**
  *  The current index the page view controller is on
  */
+
 @property (assign, nonatomic) NSInteger currentIndex;
 
 /**
  *  The previous index of the page view controller
  */
+
 @property (assign, nonatomic) NSInteger previousIndex;
 
 /**
@@ -32,9 +34,10 @@
 /**
  *  Tells the PageViewController to move to a specific index
  *
- *  @param index The index to move to
+ *  @param index     The index to move to
+ *  @param direction The direction to move in
  */
 
-- (void)moveToViewAtindex:(NSInteger)index;
+- (void)moveToViewAtIndex:(NSInteger)index withDirection:(UIPageViewControllerNavigationDirection)direction;
 
 @end

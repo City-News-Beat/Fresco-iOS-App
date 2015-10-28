@@ -19,19 +19,15 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
     return kCellIdentifier;
 }
 
-- (void)awakeFromNib {
-    
-}
-
 - (void)setGallery:(FRSGallery *)gallery
 {
     _gallery = gallery;
     
+    self.labelCaption.text = self.gallery.caption;
+    
     [self.galleryView setGallery:gallery shouldBeginPlaying:NO withDynamicAspectRatio:NO];
     
-    UITapGestureRecognizer *shareTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareGallery:)];
-    
-    [self.shareButtonView addGestureRecognizer:shareTap];
+    [self.shareButtonView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareGallery:)]];
 }
 
 #pragma mark - UIButtons Actions

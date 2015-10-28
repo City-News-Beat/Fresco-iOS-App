@@ -56,9 +56,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 @property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *doneButtonImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *rotateImageView;
-
-
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
 
 @property (strong, nonatomic) CAShapeLayer *circleLayer;
@@ -183,7 +180,9 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 
                 AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
                 previewLayer.connection.videoOrientation = initialVideoOrientation;
+                
             });
+            
         }
         else {
             NSLog( @"Could not add video device input to the session" );
@@ -536,11 +535,11 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         button.selected = YES;
         
-        if (button.tag) {
-            [self updateCameraMode:CameraModeVideo];
-        }
-        else {
+        if (button.tag == 50) {
             [self updateCameraMode:CameraModePhoto];
+        }
+        else if(button.tag == 51) {
+            [self updateCameraMode:CameraModeVideo];
         }
     }
 }
@@ -769,8 +768,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         }
         else if(cameraMode == CameraModeVideo) {
             
-            self.photoButton.selected = NO;
-            
             //Save the bounds, so we can reset back to it later
             self.previewView.savedBounds = self.previewView.frame;
             
@@ -818,43 +815,34 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
  *  @param image  Optional image to set as a placeholder
  */
 
-- (void)setRecentPhotoViewHidden:(BOOL)hidden withImage:(UIImage *)image{
+- (void)toggleRecentPhotoViewWithImage:(UIImage *)image{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if(hidden){
+//        if(hidden){
+//        
+//            [UIView animateWithDuration:.5 animations:^{
+//                self.doneButton.alpha = 0.0f;
+//            }];
+//            
+//        }
+//        else{
+//            
+//            self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
+//            
+//            if (image) {
+//                self.doneButtonBackground.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
+//                [self.doneButtonImageView setImage:image];
+//            }
+//            
+//            [UIView animateWithDuration:.2 animations:^{
+//                 self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//                 self.doneButton.alpha = 1.0f;
+//             } completion:nil];
+//            
+//            
+//        }
         
-            [self.activityIndicator startAnimating];
-            
-            [UIView animateWithDuration:.5 animations:^{
-                 self.doneButton.alpha = 0.0f;
-                self.activityIndicator.alpha = 1.0f;
-            }];
-            
-        }
-        else{
-            
-            [UIView animateWithDuration:.5 animations:^{
-                self.activityIndicator.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                
-                [self.activityIndicator stopAnimating];
-                [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
-                self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
-                
-                if (image) {
-                    self.doneButtonBackground.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
-                    [self.doneButtonImageView setImage:image];
-                }
-                
-                [UIView animateWithDuration:.2 animations:^{
-                     self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                     self.doneButton.alpha = 1.0f;
-                 } completion:nil];
-                
-            }];
-            
-        }
     });
 }
 
@@ -957,7 +945,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         [self showUIForCameraMode:CameraModeVideo];
         
         //Update the recent photo view
-        [self setRecentPhotoViewHidden:YES withImage:nil];
+//        [self setRecentPhotoViewHidden:YES withImage:nil];
 
     }
     else {

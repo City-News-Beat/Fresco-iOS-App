@@ -127,7 +127,6 @@
         }
         
     });
-
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
 

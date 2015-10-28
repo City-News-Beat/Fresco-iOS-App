@@ -16,7 +16,6 @@
 
 #pragma mark - Utility methods
 
-
 /**
  *  Sets up navigation bar, adds listeners for 3 notifications, and sets up notification bar button
  */
@@ -41,56 +40,66 @@
     
 }
 
-/*
-** Sets up UI of notification bar button and clears NSUserDefaults
-*/
+
+/**
+ *  Sets up UI of notification bar button and clears NSUserDefaults
+ *
+ *  @param badge    To add a badge or not
+ *  @param disabled to disable the bar button or not
+ */
 
 - (void)setRightBarButtonItemWithBadge:(BOOL)badge setDisabled:(BOOL)disabled {
     
-    if(disabled){
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.navigationItem setRightBarButtonItem:nil];
-        
-    }
-    else{
-    
-        UIImage *bell = [UIImage imageNamed:@"notifications"];
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        
-        button.alpha = .54;
-        
-        button.bounds = CGRectMake( 0, 0, bell.size.width, bell.size.height );
-        
-        button.clipsToBounds = NO;
-        
-        [button setImage:bell forState:UIControlStateNormal];
-        
-        [button addTarget:self action:@selector(toggleNotifications:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UIBarButtonItem *notificationIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
-        
-        [self.navigationItem setRightBarButtonItem:notificationIcon];
-        
-        //Set the badge on the notification bell
-        if(badge) {
-            [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
+        if(disabled){
             
-        } else {
+            [self.navigationItem setRightBarButtonItem:nil];
             
-            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"] > 0) {
-                [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"notificationsCount"];
+        }
+        else{
+            
+            UIImage *bell = [UIImage imageNamed:@"notifications"];
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            
+            button.alpha = .54;
+            
+            button.bounds = CGRectMake( 0, 0, bell.size.width, bell.size.height );
+            
+            button.clipsToBounds = NO;
+            
+            [button setImage:bell forState:UIControlStateNormal];
+            
+            [button addTarget:self action:@selector(toggleNotifications:) forControlEvents:UIControlEventTouchUpInside];
+            
+            UIBarButtonItem *notificationIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
+            
+            [self.navigationItem setRightBarButtonItem:notificationIcon];
+            
+            //Set the badge on the notification bell
+            if(badge) {
+                [self.navigationItem.rightBarButtonItem.customView addSubview:[self getBadgeView]];
+                
+            } else {
+                
+                if ([[NSUserDefaults standardUserDefaults] integerForKey:@"notificationsCount"] > 0) {
+                    [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"notificationsCount"];
+                }
             }
+            
         }
         
-    }
+    });
 
 }
 
 
-/*
-** Sets up badgeView based on count of response object
-*/
+/**
+ *  Sets up badgeView based on count of response object
+ *
+ *  @return Returns a badge view for the bell
+ */
 
 - (BTBadgeView *)getBadgeView {
     
@@ -147,9 +156,11 @@
 }
 
 
-/*
-** Toggles notification view
-*/
+/**
+ *  Toggles notification view
+ *
+ *  @param sender Sender object
+ */
 
 - (void)toggleNotifications:(UIBarButtonItem*)sender{
     
@@ -167,9 +178,11 @@
         [self showNotifications];
 }
 
-/*
-** Hides notifications
-*/
+/**
+ *  Hides notifications
+ *
+ *  @param notification <#notification description#>
+ */
 
 - (void)hideNotifications:(NSNotification *)notification{
     
@@ -213,9 +226,9 @@
 
 }
 
-/*
-** Shows notifications and posts notification for badge reset
-*/
+/**
+ *  Shows notifications and posts notification for badge reset
+ */
 
 - (void)showNotifications {
     
@@ -248,22 +261,30 @@
     }
 }
 
-#pragma mark - NSNotificationCenter Notification handling
+#pragma mark - NSNotificationCenter / KVO
 
-/*
-** Adds badge
-*/
+/**
+ *  Adds badge to nav bar
+ *
+ *  @param notification <#notification description#>
+ */
 
 - (void)handleAPIKeyAvailable:(NSNotification *)notification{
+
     [self setRightBarButtonItemWithBadge:YES setDisabled:NO];
+
 }
 
-/*
-** Selector for notification that removes badge
-*/
+/**
+ *  Selector for notification that removes badge
+ *
+ *  @param notification <#notification description#>
+ */
 
 - (void)resetNotificationBell:(NSNotification *)notification{
+    
     [self setRightBarButtonItemWithBadge:NO setDisabled:YES];
+    
 }
 
 

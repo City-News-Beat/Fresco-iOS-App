@@ -10,7 +10,7 @@
 #import "FirstRunPageViewController.h"
 #import "FRSProgressView.h"
 
-@interface FRSFirstRunWrapperViewController () <FRSProgressViewDelegate>
+@interface FRSFirstRunWrapperViewController () <FRSProgressViewDelegate, FRSBackButtonDelegate>
 
 /*
 ** Views and Viewcontrollers
@@ -22,7 +22,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
-@property (nonatomic, assign) NSInteger pageCount;
+@property (strong, nonatomic) FRSBackButton *backButton;
 
 @end
 
@@ -53,14 +53,24 @@
     //Set didMove for the paged view controller
     [self.pagedViewController didMoveToParentViewController:self];
     
-    self.pageCount = 4;
+    CGRect progressViewFrame = CGRectMake(0,
+                                          [[UIScreen mainScreen] bounds].size.height - 65,
+                                          [[UIScreen mainScreen] bounds].size.width,
+                                          65);
 
-    self.progressView = [[FRSProgressView alloc] initWithFrame:CGRectMake(
-                                                                          0,
-                                                                          [[UIScreen mainScreen] bounds].size.height - 65,
-                                                                          [[UIScreen mainScreen] bounds].size.width,
-                                                                          65) andPageCount:self.pageCount withFirstIndexDisabled:YES];
+    self.progressView = [[FRSProgressView alloc] initWithFrame:progressViewFrame
+                                                  andPageCount:4
+                                        withFirstIndexDisabled:YES];
+    
     [self.view addSubview:self.progressView];
+    
+    self.backButton = [FRSBackButton createBackButton];
+    self.backButton.delegate = self;
+    self.backButton.alpha = 0;
+    
+    [self.view addSubview:self.backButton];
+    
+    
     
 }
 
@@ -71,6 +81,24 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 
 }
+
+#pragma mark - FRSBackButton Delegate
+
+- (void)backButtonTapped{
+    
+    NSInteger index = self.pagedViewController.currentIndex -1;
+
+    [self.pagedViewController moveToViewAtIndex:index
+                                  withDirection:UIPageViewControllerNavigationDirectionReverse];
+    
+    //Index 0 = the first page
+    //Index 2 = the first page after signing up
+    if((index == 0 || index == 2)){
+        self.backButton.enabled = NO;
+    }
+
+}
+
 
 #pragma mark - FRSProgressView Delegate
 
@@ -102,8 +130,33 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
     
+    
     [self.progressView updateProgressViewForIndex:self.pagedViewController.currentIndex
                                        fromIndex:self.pagedViewController.previousIndex];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGFloat alpha;
+        
+        //Index 0 = the first page
+        //Index 2 = the first page after signing up
+        if(self.backButton.alpha > 0 && (index == 0 || index == 2)){
+            alpha = 0.0f;
+        }
+        else{
+            alpha = 1.0f;
+            self.backButton.enabled = YES;
+            self.backButton.hidden = NO;
+        }
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.backButton.alpha = alpha;
+        } completion:^(BOOL finished) {
+            if(alpha == 0)
+                self.backButton.hidden = YES;
+        }];
+        
+    });
     
 }
 

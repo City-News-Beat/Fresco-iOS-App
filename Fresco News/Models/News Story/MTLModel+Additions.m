@@ -103,7 +103,7 @@
         return [NSString stringWithFormat:@"%dd", diff];
         
     }
-    else if(ti < 31556900){
+    else if(ti < 31536000){
         
         int diff = ti / 60 / 60 / 24 / 4;
         

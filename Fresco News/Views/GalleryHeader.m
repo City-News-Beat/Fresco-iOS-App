@@ -40,7 +40,7 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGalleryHeader:) name:NOTIF_GALLERY_HEADER_UPDATE object:nil];
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor whiteColor];
         CGRect labelFrame = CGRectMake(0, 0, 0, 12);
         
         self.labelPlace = [[UILabel alloc] initWithFrame:labelFrame];
@@ -128,11 +128,45 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 }
 
 
-#pragma mark - Notification Center Delegate
+/**
+ *  Updates header view with passed post
+ *
+ *  @param post <#post description#>
+ */
 
-/*
-** Runs update on gallery header with passed notif object
-*/
+- (void)setHeaderWithPost:(FRSPost *)post
+{
+    
+    if(![post.address isEqualToString:@"No Location"])
+        self.labelPlace.text =  post.address;
+    else
+        self.labelPlace.text = @"";
+    
+    NSString *bylineAndTime = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
+    
+    self.labelByLineAndTime.text = bylineAndTime;
+    
+}
+
+- (void)setGallery:(FRSGallery *)passedGallery
+{
+    
+    _gallery = passedGallery;
+    
+    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
+    
+    [self setHeaderWithPost:post];
+    
+}
+
+
+#pragma mark - Notification Center / KVO
+
+/**
+ *  Runs update on gallery header with passed notif object
+ *
+ *  @param notif <#notif description#>
+ */
 
 - (void)updateGalleryHeader:(NSNotification *)notif{
     
@@ -202,35 +236,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
         });
         
     }
-
-}
-
-/*
-** Updates header view with passed post
-*/
-
-- (void)setHeaderWithPost:(FRSPost *)post
-{
-    
-    if(![post.address isEqualToString:@"No Location"])
-        self.labelPlace.text =  post.address;
-    else
-        self.labelPlace.text = @"";
-    
-    NSString *bylineAndTime = [NSString stringWithFormat:@"%@  %@", post.byline, [MTLModel relativeDateStringFromDate:self.gallery.createTime]];
-
-    self.labelByLineAndTime.text = bylineAndTime;
-    
-}
-
-- (void)setGallery:(FRSGallery *)passedGallery
-{
-    
-    _gallery = passedGallery;
-    
-    FRSPost *post = (FRSPost *)[self.gallery.posts firstObject];
-    
-    [self setHeaderWithPost:post];
 
 }
 

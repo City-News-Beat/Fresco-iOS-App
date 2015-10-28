@@ -90,13 +90,12 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
         }
     
-        
         //back to the main thread for the UI call
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.photoIndicatorView startAnimating];
         });
     
-        [weakSelf.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post largeImageURL]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [weakSelf.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post.image mediumImageUrl]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             weakSelf.imageView.image = image;
             

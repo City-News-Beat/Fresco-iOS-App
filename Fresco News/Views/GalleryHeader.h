@@ -9,7 +9,7 @@
 @import UIKit;
 @class FRSGallery;
 
-@interface GalleryHeader : UIView
+@interface GalleryHeader : UITableViewHeaderFooterView
 
 @property (nonatomic, weak) IBOutlet UIView *view;
 

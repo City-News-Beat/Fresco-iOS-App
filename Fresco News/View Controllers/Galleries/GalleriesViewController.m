@@ -135,11 +135,14 @@
 
 }
 
-/*
-** Disable any playing video
-*/
+/**
+ *  Disable any playing video
+ */
 
 - (void)disableVideo{
+    
+    if(!self.playingIndex && !self.dispatchIndex)
+        return;
     
     self.playingIndex = nil;
     
@@ -151,8 +154,10 @@
 
 }
 
-/*
- ** Open gallery detail view
+/**
+ *  Open gallery detail view
+ *
+ *  @param gallery FRSGallery to open to
  */
 
 - (void)openDetailWithGallery:(FRSGallery *)gallery{
@@ -206,8 +211,14 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    GalleryHeader *galleryHeader = [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, tableView.rowHeight)];
-        
+    GalleryHeader *galleryHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[GalleryHeader identifier]];
+    
+    if(galleryHeader == nil){
+    
+        galleryHeader =  [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, tableView.rowHeight)];
+    
+    }
+    
     galleryHeader.gallery = [self.galleries objectAtIndex:section];
     
     return galleryHeader;
@@ -218,46 +229,6 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
         
     [self checkForVideo];
-
-    /*
-    ** Navigation Bar Conditioning
-    */
-
-//    if (self.lastContentOffset > scrollView.contentOffset.y && ( (fabs(scrollView.contentOffset.y  - self.lastContentOffset) > 200) || scrollView.contentOffset.y <=0)){
-//        
-//        //SHOW
-//        if(self.navigationController.navigationBar.hidden == YES  && self.currentlyHidden){
-//            
-//            [self resetNavigationBar:YES];
-//
-//        }
-//        
-//        self.lastContentOffset = scrollView.contentOffset.y;
-//        
-//        
-//    }
-//    else if (self.lastContentOffset < scrollView.contentOffset.y && scrollView.contentOffset.y > 100){
-//        
-//        //HIDE
-//        if(self.navigationController.navigationBar.hidden == NO && !self.currentlyHidden){
-//            
-//            self.currentlyHidden = YES;
-//            
-//            self.statusBarBackground.frame = [[UIApplication sharedApplication] statusBarFrame];
-//            
-//            [self.navigationController setNavigationBarHidden:YES animated:YES];
-//            
-//            [UIView animateWithDuration:.1 animations:^{
-//                self.statusBarBackground.alpha = 1.0f;
-//            }];
-//            
-//        }
-//        
-//        self.lastContentOffset = scrollView.contentOffset.y;
-//        
-//    }
-    
-    
     
 }
 
@@ -301,7 +272,8 @@
             
         }
         //Otherwise set the visiblePosth path to the visible cell with a video
-        else visiblePostPath = [cell.galleryView.collectionPosts indexPathForCell:postCell];
+        else
+            visiblePostPath = [cell.galleryView.collectionPosts indexPathForCell:postCell];
         
     }
 

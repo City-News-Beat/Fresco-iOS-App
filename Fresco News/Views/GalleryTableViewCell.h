@@ -26,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet UIView *shareButtonView;
+@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
 
 + (NSString *)identifier;
 

@@ -21,9 +21,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 @interface GalleryView () <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *labelCaption;
-@property (weak, nonatomic) IBOutlet UIButton *readmore;
-
 /**
  *  Index of cell that is currently playing a video
  */
@@ -40,16 +37,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     self.collectionPosts.scrollsToTop = NO;
     self.pageControl.numberOfPages = 0;
-    self.collectionPosts.dataSource = self;
-    self.collectionPosts.delegate = self;
 }
-
-- (void)dealloc{
-    
-    [self removeObserverForPlayer];
-
-}
-
 
 #pragma mark - Gallery Methods
 
@@ -57,14 +45,15 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 {
     _gallery = gallery;
     
-    self.labelCaption.text = self.gallery.caption;
-    
     if([self.gallery.posts count] == 1)
         self.pageControl.hidden = YES;
     else
         self.pageControl.numberOfPages = [self.gallery.posts count];
     
     [self.collectionPosts reloadData];
+    
+    if(dynamicAspectRatio)
+        [self setAspectRatio];
 
     if(begingPlaying){
     
@@ -107,9 +96,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         });
             
     }
-    
-    if(dynamicAspectRatio)
-        [self setAspectRatio];
     
 }
 
@@ -191,8 +177,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     self.sharedPlayer.muted = YES;
     
-    [self.sharedPlayer play];
-    
     self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
     
     //Bring play/pause button to front, so it can be visible on click
@@ -227,6 +211,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
             postCell.playingVideo = YES;
             
+            [self.sharedPlayer play];
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [UIView animateWithDuration:1.0 animations:^{
@@ -265,31 +251,27 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     @try{
         [self.sharedPlayer.currentItem removeObserver:self forKeyPath:@"status"];
     }
-    @catch(id anException){}
+    @catch(id anException){
+    
+    }
    
 }
 
 - (void)cleanUpVideoPlayer{
     
-    @try{
+    //Check if the player is actually playing
+    if(self.sharedPlayer != nil){
         
-        //Check if the player is actually playing
-        if(self.sharedPlayer != nil){
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self.sharedLayer removeFromSuperlayer];
-                [self.sharedPlayer pause];
-                [self removeObserverForPlayer];
-                
-            });
+        [self.sharedLayer removeFromSuperlayer];
+        [self.sharedPlayer pause];
+        
+        @try{
+            [self removeObserverForPlayer];
         }
+        @catch (id anException){
         
+        }
     }
-    @catch(id anException){
-        //do nothing, obviously it wasn't attached because an exception was thrown
-    }
-
 }
 
 #pragma mark - UICollectionViewDataSource

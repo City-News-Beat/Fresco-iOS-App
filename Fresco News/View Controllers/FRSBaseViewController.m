@@ -56,7 +56,7 @@
 
     //Move to next page
     if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
-        [((FirstRunPageViewController *)self.parentViewController) moveToViewAtindex:self.index + 1];
+        [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 1 withDirection:UIPageViewControllerNavigationDirectionForward];
     }
     
 }
