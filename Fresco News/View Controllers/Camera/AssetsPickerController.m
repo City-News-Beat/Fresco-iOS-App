@@ -10,6 +10,7 @@
 #import "AssetGridViewCell.h"
 #import "FRSGallery.h"
 #import "GalleryPostViewController.h"
+#import "FRSCamViewController.h"
 #import "FRSRootViewController.h"
 #import "FRSTabBarController.h"
 
@@ -62,15 +63,13 @@ static CGSize AssetGridThumbnailSize;
     
     if(self){
         
+        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
         //Navigation Controller
         self.navigationItem.title = @"Choose Media";
         self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
-    
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(returnToCamera)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
-        
-        self.view.backgroundColor = [UIColor whiteColor];
 
+        self.view.backgroundColor = [UIColor whiteColor];
         
         //Check the orientation
         CGFloat width = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ?
@@ -152,6 +151,11 @@ static CGSize AssetGridThumbnailSize;
 
     [super viewWillAppear:animated];
     
+    if([self.navigationController.presentingViewController isKindOfClass:[FRSCamViewController class]])
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(returnToCamera)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     
     //Set up tool bar items
@@ -223,12 +227,20 @@ static CGSize AssetGridThumbnailSize;
 
 #pragma mark - UICollectionViewDelegate
 
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     [self toggleToolbarAppearance];
     
-    //Add PHAsset to selected assets from `assetsFetchResults` array
-    [self.selectedAssets addObject:self.assetsFetchResults[indexPath.item]];
+    if([self.selectedAssets count] > MAX_ASSET_COUNT){
+    
+        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    }
+    else{
+        //Add PHAsset to selected assets from `assetsFetchResults` array
+        [self.selectedAssets addObject:self.assetsFetchResults[indexPath.item]];
+    }
     
 }
 
@@ -479,12 +491,19 @@ static CGSize AssetGridThumbnailSize;
  */
 
 - (void)cancel{
-
-    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
+    
+    if([self.presentingViewController isKindOfClass:[FRSCamViewController class]])
+       ((FRSCamViewController *)self.presentingViewController).isPresented = NO;
+    
+    FRSTabBarController *tabBarController;
+    
+    //Check if we came from camera or from straight from the tab bar interface
+    if([self.presentingViewController isKindOfClass:[FRSRootViewController class]])
+        tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+    else
+        tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
     
     tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-    
-    tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
 

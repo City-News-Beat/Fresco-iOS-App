@@ -33,7 +33,6 @@
 
 @property (nonatomic, strong) NSIndexPath *playingIndex;
 
-
 /*
 ** Check if the navigation is in the detail
 */
@@ -51,12 +50,6 @@
  */
 
 @property (nonatomic, strong) UIView  *statusBarBackground;
-
-/*
- ** Child table view controller
- */
-
-@property (nonatomic) UITableViewController *tableViewController;
 
 @end
 
@@ -76,8 +69,7 @@
     /* Refresh Control Setup */
     self.refreshControl = [[FRSRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-    self.tableViewController.refreshControl = self.refreshControl;
-
+    
     // YES by default, but needs to be the only such visible UIScrollView
     self.tableView.scrollsToTop = YES;
     
@@ -202,8 +194,6 @@
     return galleryTableViewCell;
 }
 
-#pragma mark - UITableViewDelegate
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 32;
@@ -216,13 +206,14 @@
     if(galleryHeader == nil){
     
         galleryHeader =  [[GalleryHeader alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, tableView.rowHeight)];
-    
+        
     }
     
     galleryHeader.gallery = [self.galleries objectAtIndex:section];
     
     return galleryHeader;
 }
+
 
 #pragma mark - UIScrollViewDelegate
 

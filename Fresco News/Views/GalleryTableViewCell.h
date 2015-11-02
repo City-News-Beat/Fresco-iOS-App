@@ -10,7 +10,7 @@
 
 @class FRSGallery, GalleryView;
 
-@protocol GalleryTableViewCellDelegate
+@protocol GalleryTableViewCellDelegate <NSObject>
 
 - (void)readMoreTapped:(FRSGallery *)gallery;
 

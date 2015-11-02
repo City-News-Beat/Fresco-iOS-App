@@ -38,7 +38,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     FRSCamSetupResultSessionConfigurationFailed
 };
 
-@interface FRSCamViewController () <AVCaptureFileOutputRecordingDelegate, CLLocationManagerDelegate>
+@interface FRSCamViewController () <AVCaptureFileOutputRecordingDelegate, CLLocationManagerDelegate, FRSMotionMangerDelegate>
 
 @property (weak, nonatomic) IBOutlet CameraPreviewView *previewView;
 
@@ -53,7 +53,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 //UIViews
 @property (weak, nonatomic) IBOutlet UIView *cancelButtonTapView;
 @property (weak, nonatomic) IBOutlet UIView *controlsView;
-@property (weak, nonatomic) IBOutlet UIView *doneButtonBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *doneButtonImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *rotateImageView;
 @property (weak, nonatomic) IBOutlet UILabel *assignmentLabel;
@@ -74,6 +73,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 /**
  *  Tells us if the camera is in the correct orientation
  */
+
 @property (nonatomic) BOOL isCorrectOrientation;
 
 
@@ -89,9 +89,19 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 
 @implementation FRSCamViewController
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.isPresented = YES;
+    }
+    return self;
+}
 - (void)viewDidLoad{
     
     [super viewDidLoad];
+    
+    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [self configureUIElements];
     
@@ -238,108 +248,106 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        
-        dispatch_async(self.sessionQueue, ^{
-            
-            switch ( self.setupResult )
-            {
-                case FRSCamSetupResultSuccess:
-                {
-                    // Only setup observers and start the session running if setup succeeded.
-                    [self addObservers];
-                    [self.session startRunning];
-                    self.sessionRunning = self.session.isRunning;
-                    break;
-                }
-                case FRSCamSetupResultCameraNotAuthorized:
-                {
-                    dispatch_async( dispatch_get_main_queue(), ^{
-                        NSString *message = NSLocalizedString( @"Fresco doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
-                        [alertController addAction:cancelAction];
-                        // Provide quick access to Settings.
-                        UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"Settings", @"Alert button to open Settings" ) style:UIAlertActionStyleDefault handler:^( UIAlertAction *action ) {
-                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                        }];
-                        [alertController addAction:settingsAction];
-                        [self presentViewController:alertController animated:YES completion:nil];
-                    } );
-                    break;
-                }
-                case FRSCamSetupResultSessionConfigurationFailed:
-                {
-                    dispatch_async( dispatch_get_main_queue(), ^{
-                        NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
-                        [alertController addAction:cancelAction];
-                        //[self presentViewController:alertController animated:YES completion:nil];
-                    } );
-                    break;
-                }
-            }
-        });
-        
-    });
-    
 
     //Restart location manager updating
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateForeground];
     [FRSLocationManager sharedManager].delegate = self;
     
-    // Orientation notification set up
-    ///Call update block to check for orientation on load
-    [self deviceOrientationDidChange:nil];
-
-    //Set up listener for oreitnation change
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:NOTIF_ORIENTATION_CHANGE object:nil];
     
     //Start tracking movement via the FRSMotionManager (acceleromotor)
     [[FRSMotionManager sharedManager] startTrackingMovement];
-
+    [FRSMotionManager sharedManager].delegate = self;
+    
+    // Orientation notification set up
+    ///Call update block to check for orientation on load
+    [self orientationDidChange];
 
 }
 
 
 - (void)viewDidAppear:(BOOL)animated{
-
+    
     [super viewDidAppear:animated];
     
-     dispatch_async(dispatch_get_main_queue(), ^{
-         
-        //Fade in the preview layer for smooth transition
-        if(self.previewView.alpha == 0){
-                
-            [UIView animateWithDuration:.4 animations:^{
-                self.previewView.alpha = 1;
-            }];
-            
+    dispatch_async(self.sessionQueue, ^{
+        
+        switch ( self.setupResult )
+        {
+            case FRSCamSetupResultSuccess:
+            {
+                // Only setup observers and start the session running if setup succeeded.
+                [self addObservers];
+                [self.session startRunning];
+                self.sessionRunning = self.session.isRunning;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    //Fade in the preview layer for smooth transition
+                    if(self.previewView.alpha == 0){
+                        
+                        [UIView animateWithDuration:.4 animations:^{
+                            self.previewView.alpha = 1;
+                        }];
+                        
+                    }
+                });
+                break;
+            }
+            case FRSCamSetupResultCameraNotAuthorized:
+            {
+                dispatch_async( dispatch_get_main_queue(), ^{
+                    
+                    UIAlertController *alertCon = [FRSAlertViewManager
+                                                   alertControllerWithTitle:@"Can't use your camera!"
+                                                   message:@"Fresco doesn't have permission to use the camera, please change privacy settings"
+                                                   action:DISMISS handler:nil];
+                    
+                    [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                        
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                        
+                    }]];
+                    
+//                    [self presentViewController:alertCon animated:YES completion:nil];
+                    
+                });
+                break;
+            }
+            case FRSCamSetupResultSessionConfigurationFailed:
+            {
+                dispatch_async( dispatch_get_main_queue(), ^{
+                    
+//                    [self presentViewController:[FRSAlertViewManager
+//                                                 alertControllerWithTitle:@"Some issues with your camera"
+//                                                 message:@"Unable to capture photos or videos"
+//                                                 action:DISMISS handler:nil]
+//                                       animated:YES
+//                                     completion:nil];
+                });
+                break;
+            }
         }
     });
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
 
     //Stop the session from running when leaving the view
-    dispatch_async( self.sessionQueue, ^{
-        if ( self.setupResult == FRSCamSetupResultSuccess ) {
+    dispatch_async(self.sessionQueue, ^{
+        if (self.setupResult == FRSCamSetupResultSuccess) {
             [self.session stopRunning];
             [self removeObservers];
         }
-    } );
-
+    });
+    
+    [super viewDidDisappear:animated];
+    
     //Clear all the timers so they don't re-run
     [self.videoTimer invalidate];
     self.videoTimer = nil;
     
     [self.locationTimer invalidate];
     self.locationTimer = nil;
-
-    [super viewDidDisappear:animated];
-
 }
 
 /**
@@ -349,28 +357,20 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 -(void)configureUIElements{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-    
-        self.doneButtonBackground.backgroundColor = [UIColor blackColor];
         
         /* Assignment Label */
         self.assignmentLabel.alpha = 0;
         
-//        self.previewView.alpha = 0;
-
+        self.doneButton.clipsToBounds = YES;
+        self.doneButton.layer.cornerRadius = 8;
+        self.doneButtonImageView.clipsToBounds = YES;
+        self.doneButtonImageView.layer.cornerRadius = self.doneButton.layer.cornerRadius;
+        
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.cancelButtonTapView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab)]];
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.rotateImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
-        
-        if(!self.photoButton.selected) self.photoButton.selected = YES;
-        
-        [self.doneButton setTitle:@"" forState:UIControlStateNormal];
-        
-        self.doneButtonBackground.clipsToBounds = YES;
-        self.doneButtonBackground.layer.cornerRadius = 8;
-        self.doneButtonImageView.clipsToBounds = YES;
-        self.doneButtonImageView.layer.cornerRadius = self.doneButtonBackground.layer.cornerRadius;
         
     });
 }
@@ -387,6 +387,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     [self.stillImageOutput addObserver:self forKeyPath:@"capturingStillImage" options:NSKeyValueObservingOptionNew context:CapturingStillImageContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:self.videoDeviceInput.device];
+    
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionRuntimeError:) name:AVCaptureSessionRuntimeErrorNotification object:self.session];
     // A session can only run when the app is full screen. It will be interrupted in a multi-app layout, introduced in iOS 9,
     // see also the documentation of AVCaptureSessionInterruptionReason. Add observers to handle these session interruptions
@@ -404,16 +405,23 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self.session removeObserver:self forKeyPath:@"running" context:SessionRunningContext];
-    [self.stillImageOutput removeObserver:self forKeyPath:@"capturingStillImage" context:CapturingStillImageContext];
+    @try {
+        [self.session removeObserver:self forKeyPath:@"running" context:SessionRunningContext];
+        [self.stillImageOutput removeObserver:self forKeyPath:@"capturingStillImage" context:CapturingStillImageContext];
+    }
+    @catch (NSException *exception) {
+        
+    }
+
 }
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ( context == CapturingStillImageContext ) {
+    if (context == CapturingStillImageContext) {
         
         BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
-    
+        
         if (isCapturingStillImage) {
             
             [self runStillImageCaptureAnimation];
@@ -421,16 +429,16 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         }
         
     }
-    else if ( context == SessionRunningContext ) {
+    else if (context == SessionRunningContext) {
         
-//        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
-//        
-//        dispatch_async( dispatch_get_main_queue(), ^{
-//             Only enable the ability to change camera if the device has more than one camera.
-//            self.cameraButton.enabled = isSessionRunning && ( [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo].count > 1 );
-//            self.recordButton.enabled = isSessionRunning;
-//            self.stillButton.enabled = isSessionRunning;
-//        } );
+        //        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
+        //
+        //        dispatch_async( dispatch_get_main_queue(), ^{
+        //             Only enable the ability to change camera if the device has more than one camera.
+        //            self.cameraButton.enabled = isSessionRunning && ( [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo].count > 1 );
+        //            self.recordButton.enabled = isSessionRunning;
+        //            self.stillButton.enabled = isSessionRunning;
+        //        } );
         
     }
     else {
@@ -459,8 +467,12 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskLandscapeRight;
+    if(self.isPresented)
+        return UIInterfaceOrientationMaskLandscapeRight;
+    
+    return UIInterfaceOrientationMaskAll;
 }
+
 
 #pragma mark - IB Actions
 
@@ -477,19 +489,19 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     if (self.isCorrectOrientation == YES) {
         
         //If we're in Photo mode
-        if (self.photoButton.selected) {
+        if (self.photoButton.selected)
             [self snapStillImage];
-        }
+
         //If we're in Video mode
-        else {
+        else if(self.videoButton.selected)
             [self toggleMovieRecording];
-        }
         
     }
     //Animate the rotate image to indicate the device needs to be rotated
     else{
         
         [self animateRotateImageView:nil];
+        
     }
 
 }
@@ -549,14 +561,15 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
  *
  *  @param sender
  */
+
 - (IBAction)doneButtonTapped:(id)sender
 {
 
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
-    navVC.modalPresentationStyle = UIModalPresentationFullScreen;
+
     navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
-    [self presentViewController:navVC animated:YES completion:nil];
+    [self presentViewController:navVC animated:NO completion:nil];
 
 }
 
@@ -749,7 +762,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 }
                 [self.session commitConfiguration];
                 
-                
                 [self.apertureButton setImage:[UIImage imageNamed:@"shutter-1"] forState:UIControlStateNormal];
                 
                 self.videoButton.selected = NO;
@@ -800,11 +812,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 }];
                 
             }];
-            
         }
-        
     });
-    
 }
 
 
@@ -815,34 +824,21 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
  *  @param image  Optional image to set as a placeholder
  */
 
-- (void)toggleRecentPhotoViewWithImage:(UIImage *)image{
+- (void)toggleRecentPhotoViewWithImage:(UIImage *)thumbnail{
     
     dispatch_async(dispatch_get_main_queue(), ^{
+
+        self.doneButtonImageView.transform = CGAffineTransformMakeScale(0.1, 0.1);
         
-//        if(hidden){
-//        
-//            [UIView animateWithDuration:.5 animations:^{
-//                self.doneButton.alpha = 0.0f;
-//            }];
-//            
-//        }
-//        else{
-//            
-//            self.doneButton.transform = CGAffineTransformMakeScale(0.1, 0.1);
-//            
-//            if (image) {
-//                self.doneButtonBackground.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
-//                [self.doneButtonImageView setImage:image];
-//            }
-//            
-//            [UIView animateWithDuration:.2 animations:^{
-//                 self.doneButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
-//                 self.doneButton.alpha = 1.0f;
-//             } completion:nil];
-//            
-//            
-//        }
+        if (thumbnail) {
+            [self.doneButtonImageView setImage:thumbnail];
+        }
         
+        [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+             self.doneButtonImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+             self.doneButton.alpha = 1.0f;
+         } completion:nil];
+    
     });
 }
 
@@ -1012,14 +1008,13 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 
 - (void)snapStillImage
 {
-
     dispatch_async(self.sessionQueue, ^{
         
         if(self.capturingStilImage)
             return;
         else
             self.capturingStilImage = YES;
-            
+        
         AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.previewView.layer;
         
@@ -1037,19 +1032,16 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 
                 CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
                 
-                //get all the metadata in the image
-                NSDictionary *metadata = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL);
-                
                 //make the metadata dictionary mutable so we can add properties to it
-                NSMutableDictionary *metadataAsMutable = [metadata mutableCopy];
+                NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
                 
-                NSMutableDictionary *GPSDictionary = [[metadataAsMutable objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
                 
                 if(!GPSDictionary)
                     GPSDictionary = [[[FRSLocationManager sharedManager].location EXIFMetadata] mutableCopy];
                 
                 //Add the modified Data back into the image’s metadata
-                [metadataAsMutable setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
                 
                 CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
                 
@@ -1062,7 +1054,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                     NSLog(@"***Could not create image destination ***");
                 
                 //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-                CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadataAsMutable);
+                CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
                 
                 //tell the destination to write the image data and metadata into our data object.
                 //It will return false if something goes wrong
@@ -1089,9 +1081,13 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                                 
                             } completionHandler:^( BOOL success, NSError *error ) {
                                 
-                                if ( ! success ) {
+                                if (!success) {
                                     NSLog( @"Error occurred while saving image to photo library: %@", error );
                                 }
+                                else
+                                    [self toggleRecentPhotoViewWithImage:[UIImage imageWithData:newImageData scale:.1]];
+
+                                
                             }];
                         }
                         else {
@@ -1119,6 +1115,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                                 if (!success ) {
                                     NSLog( @"Error occurred while saving image to photo library: %@", error );
                                 }
+                                else
+                                    [self toggleRecentPhotoViewWithImage:[UIImage imageWithData:newImageData scale:.1]];
                                 
                                 // Delete the temporary file.
                                 [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
@@ -1243,9 +1241,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     }
 }
 
-- (void)deviceOrientationDidChange:(NSNotification*)note
-{
-    
+- (void)orientationDidChange{
+
     if([FRSMotionManager sharedManager].lastOrientation == UIInterfaceOrientationLandscapeRight) {
         
         self.isCorrectOrientation = YES;
@@ -1259,7 +1256,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 
             });
         }
-
+        
     }
     else {
         
@@ -1275,7 +1272,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             });
         }
     }
-    
 }
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange

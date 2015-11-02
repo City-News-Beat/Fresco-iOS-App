@@ -15,7 +15,7 @@
 */
 
 + (UIColor *)frescoGreyBackgroundColor {
-    return [UIColor colorWithRed:250.0/255 green:250.0/255 blue:250.0/255 alpha:1.00];
+    return [UIColor colorWithRed:0.98 green:0.98 blue:0.98 alpha:1.00];
 }
 
 + (UIColor *)greenToolbarColor {
@@ -24,7 +24,7 @@
 }
 
 + (UIColor *)disabledToolbarColor{
-    return [UIColor colorWithRed:224/255.0 green:224/255.0 blue:224/255.0 alpha:1];
+    return [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.00];
 }
 
 + (UIColor *)disabledSaveColor {
@@ -38,8 +38,8 @@
 }
 
 + (UIColor *)frescoBlueColor {
-//  0077FF
-    return [UIColor colorWithRed:0.00 green:0.47 blue:1.0 alpha:1.00];
+//  0047BB
+    return [UIColor colorWithRed:0.00 green:0.28 blue:0.73 alpha:1.00];
 }
 
 + (UIColor *)radiusGoldColor {
@@ -96,6 +96,7 @@
 + (UIColor *)assetOverlayColor {
     return [UIColor colorWithRed:0 green:.47 blue:1.0 alpha:0.26];
 }
+
 + (UIColor *)radiusDarkGoldColor {
     return [UIColor colorWithRed:0.88 green:0.68 blue:0 alpha:1];
 }

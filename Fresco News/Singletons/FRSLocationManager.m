@@ -126,6 +126,8 @@
  *  @param locations Array of locations from manager's didUpdateLocations
  */
 
+#warning Background thread possibly
+
 - (void)pingUserLocationToServer:(NSArray *)locations{
     
     if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {

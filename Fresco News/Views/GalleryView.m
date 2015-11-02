@@ -51,6 +51,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         self.pageControl.numberOfPages = [self.gallery.posts count];
     
     [self.collectionPosts reloadData];
+    [self.collectionPosts setContentOffset:CGPointZero animated:NO];
     
     if(dynamicAspectRatio)
         [self setAspectRatio];
@@ -72,7 +73,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
                 
                     }
-                
+                    #warning Check this
                     //If the cell doesn't have a video
                     else{
                 
@@ -232,9 +233,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     }
 }
 
-/*
-** Notification listener for when video reaches the end (tells it to repeat in a loop)
-*/
+/**
+ *  Notification listener for when video reaches the end (tells it to repeat in a loop)
+ *
+ *  @param notification <#notification description#>
+ */
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     
@@ -242,10 +245,10 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
 }
 
-/*
-** Cleans up notificaiton observer on the AVPlayers item
-*/
 
+/**
+ *  Cleans up notificaiton observer on the AVPlayers item
+ */
 - (void)removeObserverForPlayer{
 
     @try{

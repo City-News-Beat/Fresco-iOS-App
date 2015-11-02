@@ -26,9 +26,9 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
 
-/*
-** Refresh function
-*/
+/**
+ *  Refresh function
+ */
 
 - (void)refresh;
 

@@ -8,7 +8,9 @@
 
 @import UIKit;
 
-@interface FRSCamViewController : UIViewController <UINavigationControllerDelegate>
+@interface FRSCamViewController : UIViewController
+
+@property (nonatomic, assign) BOOL isPresented;
 
 - (void)cancelAndReturnToPreviousTab;
 

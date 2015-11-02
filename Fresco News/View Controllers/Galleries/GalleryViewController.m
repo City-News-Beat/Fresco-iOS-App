@@ -62,12 +62,6 @@ static CGFloat kCellHeight = 44.0f;
     
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
-
-}
-
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:NO];

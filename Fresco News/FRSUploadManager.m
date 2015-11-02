@@ -72,7 +72,7 @@
     FRSPost *post = gallery.posts[0];
     
     self.postCount = gallery.posts.count;
-    self.currentPostIndex = 1;
+    self.currentPostIndex = 0;
     
     NSString *filename = [NSString stringWithFormat:@"file%@", @(0)];
     
@@ -93,7 +93,7 @@
                                             
                                             FRSPost *post = gallery.posts[0];
                                             
-                                            NSString *mimeType = post.image.asset.mediaType == PHAssetMediaTypeImage ? @"image/jpeg" : @"video/mp4";
+                                            NSString *mimeType = post.image.asset.mediaType == PHAssetMediaTypeImage ? @"image/jpeg" : @"video/quicktime";
                                             
                                             [formData appendPartWithFileData:data
                                                                         name:filename
@@ -111,54 +111,28 @@
                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
                                                   
                                                   //Check if we have a valid response
-                                                  if(responseObject[@"data"] != nil && !uploadError){
+                                                  if(responseObject[@"data"][@"_id"] != nil && !uploadError){
                                                       
-                                                      NSString *galleryId = responseObject[@"data"][@"_id"];
+                                                      gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
-                                                      if(galleryId){
-                                                          
-                                                          dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-                                                          
-                                                          dispatch_group_t postUploadGroup = dispatch_group_create();
-                                                          
-                                                          //Upload the rest of the posts
-                                                          for (NSInteger i = 1; i < gallery.posts.count; i++) {
-                                                              
-                                                              dispatch_group_enter(postUploadGroup);
-                                                              
-                                                              dispatch_async(queue, ^{
-                                                                  
-                                                                  [self uploadPost:gallery.posts[i] withGalleryId:galleryId withAssignment:assignment withResponseBlock:^(BOOL sucess, NSError *error) {
-                                                                      
-                                                                      dispatch_group_leave(postUploadGroup); // 3
-                                                                      
-                                                                  }];
-                                                                  
-                                                              });
-                                                              
-                                                          }
-                                                          
-                                                          dispatch_group_notify(postUploadGroup, dispatch_get_main_queue(), ^{
-                                                              NSLog(@"Done");
-                                                          });
-                                                          
-                                                      }
+                                                      //Run rest of upload
+                                                      [self handleGalleryCompletionForGallery:gallery];
                                                       
                                                   }
+                                                  //Gallery ID is missing
                                                   else{
                                                       
-                                                      //Handle error
-                                                      //NSError *error = [NSError errorWithDomain:ERROR_DOMAIN code:ErrorUploadFail userInfo:@{}];
+                                                      //Send response block back to caller
+                                                      if(responseBlock)
+                                                          responseBlock(NO, nil);
+                                                      
+                                                      [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_FAILURE object:nil];
                                                       
                                                   }
                                                   
                                               }];
         
         [uploadTask resume];
-        
-        //Send response block back to caller
-        if(responseBlock)
-            responseBlock(YES, nil);
         
         [progress addObserver:self
                    forKeyPath:@"fractionCompleted"
@@ -168,8 +142,68 @@
     }];
 }
 
+/**
+ *  Extracting completion for initial gallery upload, this method uploads the rest of the posts from the gallery that is being uploaded.
+ *
+ *  @param gallery The gallery to finish upload
+ */
 
-- (void)uploadPost:(FRSPost *)post withGalleryId:(NSString *)galleryId withAssignment:(FRSAssignment *)assignment withResponseBlock:(FRSAPISuccessBlock)responseBlock{
+- (void)handleGalleryCompletionForGallery:(FRSGallery *)gallery{
+    
+    //Check if the gallery has more than one post
+    if(gallery.posts.count > 1)
+        
+        //Dispatch posts upload to global queue
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+            
+            //Thread waits for each upload
+            dispatch_semaphore_t  semaphore = dispatch_semaphore_create(0);
+            
+            //Lopp through posts and upload each one back to back
+            for (NSInteger i = 1; i < gallery.posts.count; i++) {
+                
+                [self uploadPost:gallery.posts[i] withGalleryId:gallery.galleryID withResponseBlock:^(BOOL sucess, NSError *error) {
+                    
+                    //Signal to update the profile when upload is finished i.e. finished with the last post
+                    if(i == gallery.posts.count -1){
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                    }
+                    
+                    //Signal that upload is done to semaphore
+                    dispatch_semaphore_signal(semaphore);
+                    
+                    
+                }];
+                
+                //Call dispatch_semaphore_wait to prevent thread from running
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                
+            }
+            
+        });
+
+    else{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+    
+    }
+    
+    #warning Fix this
+//    //Run social psot now that we have the gallery id back
+//    NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", gallery.galleryID];
+//    
+//    [self postToTwitter:crossPostString];
+//    
+//    [self postToFacebook:crossPostString];
+    
+    [self resetDraftGalleryPost];
+
+}
+
+- (void)uploadPost:(FRSPost *)post withGalleryId:(NSString *)galleryId withResponseBlock:(FRSAPISuccessBlock)responseBlock{
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
@@ -177,7 +211,7 @@
     
     __block NSProgress *progress = nil;
     
-    NSString *filename = [NSString stringWithFormat:@"file%@", @(self.currentPostIndex-1)];
+    NSString *filename = [NSString stringWithFormat:@"file%@", @(self.currentPostIndex)];
     
     NSDictionary *parameters = @{
                                  @"gallery" : galleryId,
@@ -193,7 +227,7 @@
                                         parameters:parameters
                                         constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                                             
-                                            NSString *mimeType = post.image.asset.mediaType == PHAssetMediaTypeImage ? @"image/jpeg" : @"video/mp4";
+                                            NSString *mimeType = post.image.asset.mediaType == PHAssetMediaTypeImage ? @"image/jpeg" : @"video/quicktime";
                                             
                                             [formData appendPartWithFileData:data
                                                                         name:filename

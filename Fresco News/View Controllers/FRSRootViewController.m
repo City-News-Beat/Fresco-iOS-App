@@ -18,6 +18,7 @@
 #import "BaseNavigationController.h"
 #import "TOSViewController.h"
 #import "FRSOnboardViewConroller.h"
+#import "AssetsPickerController.h"
 #import <BTBadgeView.h>
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
@@ -51,8 +52,8 @@
     //Add progress indicator
     UIProgressView *progress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     
-    progress.frame = CGRectMake(0, 64 , [[UIScreen mainScreen] bounds].size.width, 2.5);
-    progress.tintColor = [UIColor frescoBlueColor];
+    progress.frame = CGRectMake(0, 62 , [[UIScreen mainScreen] bounds].size.width, 2.5);
+    progress.tintColor = [UIColor whiteColor];
     
     self.progressView = progress;
     
@@ -60,7 +61,11 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdatedTOSNeeded:) name:NOTIF_UPDATED_TOS object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUploadFailure:) name:NOTIF_UPLOAD_FAILURE object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUploadProgress:) name:NOTIF_UPLOAD_PROGRESS object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideUploadProgress:) name:NOTIF_UPLOAD_COMPLETE object:nil];
 
 
 }
@@ -99,6 +104,13 @@
     
     self.tbc.selectedIndex = 0;
     
+}
+
+- (void)setRootViewControllerUpload{
+    
+    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+    
+    [self.tbc presentViewController:navVC animated:YES completion:nil];
 }
 
 - (void)setRootViewControllerToCamera{
@@ -187,7 +199,7 @@
 #pragma mark - NotificationCenter Listener
 
 - (void)updateUploadProgress:(NSNotification *)notif{
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if([notif.userInfo objectForKey:@"fractionCompleted"] != nil){
@@ -195,11 +207,53 @@
             NSNumber *progress = (NSNumber *)[notif.userInfo objectForKey:@"fractionCompleted"];
             
             [UIView animateWithDuration:1 animations:^{
+
                 [self.progressView setProgress:progress.floatValue animated:YES];
-            }];
+           
+            } completion:nil];
             
         }
+    });
+}
 
+- (void)hideUploadProgress:(NSNotification *)notif{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        [UIView animateWithDuration:.3 animations:^{
+            
+            self.progressView.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            
+            self.progressView.progress = 0.0f;
+            self.progressView.alpha = 1;
+            
+        }];
+    });
+}
+
+
+
+- (void)handleUploadFailure:(NSNotification *)notification{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self hideUploadProgress:nil];
+        
+        UIAlertController *alertCon = [FRSAlertViewManager
+                                       alertControllerWithTitle:@"Upload Failure"
+                                       message:@"It seems that your upload failed. Please try again."
+                                       action:@"Dismiss" handler:nil];
+        
+        [alertCon addAction:[UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            
+            [self setRootViewControllerUpload];
+            
+        }]];
+        
+        [self presentViewController:alertCon animated:YES completion:nil];
+        
     });
 
 }

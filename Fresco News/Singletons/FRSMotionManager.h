@@ -8,6 +8,12 @@
 
 #import <CoreMotion/CoreMotion.h>
 
+@protocol FRSMotionMangerDelegate <NSObject>
+
+- (void)orientationDidChange;
+
+@end
+
 @interface FRSMotionManager : CMMotionManager
 
 + (FRSMotionManager *)sharedManager;
@@ -16,14 +22,21 @@
 
 
 /**
-*  Begins Accelerometer updates
-*/
+ *  Instance of the class's custom protocol
+ */
+
+@property (strong, nonatomic) id <FRSMotionMangerDelegate> delegate;
+
+/**
+ *  Begins Accelerometer updates
+ */
 
 - (void)startTrackingMovement;
 
+
 /**
-*  Stops Accelerometer updates
-*/
+ *  Stops Accelerometer updates
+ */
 
 - (void)stopTrackingMovement;
 

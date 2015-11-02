@@ -23,13 +23,18 @@
     
     [super viewDidLoad];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    
     [self setupView];
    
     [self fetchTerms];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+
+    [super viewWillAppear:animated];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+
+}
 
 - (void)viewWillDisappear:(BOOL)animated{
     

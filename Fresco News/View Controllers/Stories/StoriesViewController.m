@@ -17,6 +17,8 @@
 #import "FRSImage.h"
 #import "FRSRefreshControl.h"
 
+#warning Fix crash on scroll near bottom
+
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 

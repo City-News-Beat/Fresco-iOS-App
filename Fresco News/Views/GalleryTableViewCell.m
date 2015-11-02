@@ -19,6 +19,13 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
     return kCellIdentifier;
 }
 
+
+- (void)prepareForReuse
+{
+    self.gallery = nil;
+    self.galleryView.pageControl.hidden = NO;
+}
+
 - (void)setGallery:(FRSGallery *)gallery
 {
     _gallery = gallery;
@@ -44,9 +51,4 @@ static NSString * const kCellIdentifier = @"GalleryTableViewCell";
     
 }
 
-- (void)prepareForReuse
-{
-    self.gallery = nil;
-    self.galleryView.pageControl.hidden = NO;
-}
 @end

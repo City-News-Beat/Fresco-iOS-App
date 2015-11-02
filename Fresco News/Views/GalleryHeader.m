@@ -127,7 +127,6 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 
 }
 
-
 /**
  *  Updates header view with passed post
  *

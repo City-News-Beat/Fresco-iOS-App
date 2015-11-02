@@ -43,7 +43,7 @@
  *  @param responseBlock Success block block indiciating success or failure
  */
 
-- (void)uploadPost:(FRSPost *)post withGalleryId:(NSString *)galleryId withAssignment:(FRSAssignment *)assignment withResponseBlock:(FRSAPISuccessBlock)responseBlock;
+- (void)uploadPost:(FRSPost *)post withGalleryId:(NSString *)galleryId withResponseBlock:(FRSAPISuccessBlock)responseBlock;
 
 
 #pragma mark - Social Upload Methods

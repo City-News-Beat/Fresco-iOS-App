@@ -14,6 +14,11 @@
 
 @implementation NotificationCell
 
+- (void)prepareForReuse{
+
+    self.notification = nil;
+
+}
 
 - (void)setNotification:(FRSNotification *)notif{
     

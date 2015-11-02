@@ -52,7 +52,9 @@ enum FRSErrorCodes {
 #define NOTIF_UPDATED_TOS                   @"UpdatedTOS"
 #define NOTIF_ORIENTATION_CHANGE            @"OrientationChanged"
 #define NOTIF_GALLERY_HEADER_UPDATE         @"UpdateGalleryHeader"
+#define NOTIF_UPLOAD_FAILURE                @"UploadFailed"
 #define NOTIF_UPLOAD_PROGRESS               @"UploadProgress"
+#define NOTIF_UPLOAD_COMPLETE               @"UploadComplete"
 
 
 /* Keys Plist */
@@ -105,7 +107,7 @@ enum FRSErrorCodes {
 #define MAX_VIDEO_LENGTH                    30.0
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            60
-#define MAX_POST_COUNT                      8
+#define MAX_ASSET_COUNT                     8
 #define kMetersInAMile                      1609.34
 #define kDegreesInAMile                     69.0
 

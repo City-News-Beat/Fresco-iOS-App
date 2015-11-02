@@ -106,6 +106,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
         NSString *captionString = [defaults objectForKey:@"captionStringInProgress"];
         
         self.captionTextView.text = captionString.length ? captionString : WHATS_HAPPENING;
@@ -116,7 +117,12 @@
             self.facebookButton.hidden = NO;
             
             self.twitterButton.selected = [defaults boolForKey:@"twitterButtonSelected"] && [PFTwitterUtils isLinkedWithUser:[PFUser currentUser]];
+            self.twitterButton.alpha = self.twitterButton.selected ? 1.0 : .54;
+            
             self.facebookButton.selected = [defaults boolForKey:@"facebookButtonSelected"] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]];
+            self.facebookButton.alpha = self.twitterButton.selected ? 1.0 : .54;
+
+            
             self.socialTipView.hidden = [defaults boolForKey:UD_GALLERY_POSTED];
             
         }
@@ -179,7 +185,7 @@
                                               action:@selector(rightBarButtonItemClicked:)];
 }
 
-- (void)configureControlsForUpload:(BOOL)upload
+- (void)disableUploadControls:(BOOL)upload
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -223,26 +229,26 @@
 
 -(void)returnToTabBarWithPrevious:(BOOL)previous{
     
-    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
+    FRSTabBarController *tabBarController;
     
-    if (previous) {
+    //Check if we're coming from the camera
+    if([self.presentingViewController isKindOfClass:[FRSCamViewController class]]){
 
-        tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+        ((FRSCamViewController *)self.presentingViewController).isPresented = NO;
+        
+        tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
+
     }
-    else {
-        tabBarController.selectedIndex = 4;
-    }
+    else
+        tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
     
+    tabBarController.selectedIndex = previous ? [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB] : 4;
+    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
+
 }
 
-- (void)returnToCamera:(id)sender
-{
-    
-    self.presentingViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 #pragma mark - IBActions
 
@@ -284,11 +290,17 @@
         [self presentViewController:alertCon animated:YES completion:nil];
         
     } else {
+        
+        
+        button.selected = !button.isSelected;
+        button.alpha = button.selected ? 1.0 : .54;
+
 
         [[NSUserDefaults standardUserDefaults] setBool:button.isSelected forKey:@"twitterButtonSelected"];
-    }
 
-    button.selected = !button.isSelected;
+    }
+    
+
 
 }
 
@@ -332,12 +344,14 @@
         
     }
     else{
+        
+        button.selected = !button.isSelected;
+        button.alpha = button.selected ? 1.0 : .54;
+        
     
         [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
     
     }
-
-    button.selected = !button.isSelected;
 
 }
 
@@ -375,8 +389,8 @@
     [[FRSUploadManager sharedManager] postToTwitter:string];
 }
 
-- (void)crossPostToFacebook:(NSString *)string
-{
+- (void)crossPostToFacebook:(NSString *)string{
+    
     if (!self.facebookButton.selected) {
         return;
     }
@@ -405,8 +419,8 @@
     });
 }
 
-- (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment
-{
+- (void)setDefaultAssignment:(FRSAssignment *)defaultAssignment{
+    
     _defaultAssignment = defaultAssignment;
     
     self.linkAssignmentButton.hidden = NO;
@@ -426,8 +440,7 @@
  *  @param location The location to look for assignments in
  */
 
-- (void)configureAssignmentForLocation:(CLLocation *)location
-{
+- (void)configureAssignmentForLocation:(CLLocation *)location{
     
     [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
 
@@ -492,8 +505,8 @@
  *  @param sender Sender property
  */
 
-- (void)submitGalleryPost:(id)sender
-{
+- (void)submitGalleryPost:(id)sender{
+    
     [self updateSocialTipView];
     
     //First check if the caption is valid
@@ -515,7 +528,7 @@
     
     }
     //Check if there are less than the max amount of posts
-    else if([self.gallery.posts count] > MAX_POST_COUNT){
+    else if([self.gallery.posts count] > MAX_ASSET_COUNT){
     
         [self presentViewController:[FRSAlertViewManager
                                      alertControllerWithTitle:ERROR
@@ -534,66 +547,19 @@
         
         return;
     }
+
     
     /**
     *** All conditions passed for upload
     **/
     
-    //Run the spinner animation to indicate that upload has started
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        CGRect spinnerFrame = CGRectMake(0, 0, 20, 20);
-        
-        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
-        self.spinner.center = CGPointMake(self.navigationController.toolbar.frame.size.width  / 2, self.navigationController.toolbar.frame.size.height / 2);
-        self.spinner.color = [UIColor whiteColor];
-        [self.spinner startAnimating];
-        
-        self.navigationController.toolbar.items[1].title = @"";
-        [self.navigationController.toolbar addSubview:self.spinner];
-        
-    });
-    
-    [self configureControlsForUpload:YES];
+    [self disableUploadControls:YES];
     
     self.gallery.caption = self.captionTextView.text;
     
-    [[FRSUploadManager sharedManager] uploadGallery:self.gallery withAssignment:self.defaultAssignment withResponseBlock:^(BOOL success, NSError *error) {
-       
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.spinner stopAnimating];
-//            [self.spinner removeFromSuperview];
-//            self.navigationController.toolbar.items[1].title = GALLERY_TOOLBAR;
-//        });
-        
-        if (!success || error) {
-            
-            [self configureControlsForUpload:NO];
-            
-            [self presentViewController:[FRSAlertViewManager
-                                         alertControllerWithTitle:UPLOAD_ERROR_TITLE
-                                         message:UPLOAD_ERROR_MESSAGE action:DISMISS]
-                               animated:YES completion:nil];
-            
-        }
-        else {
+    [[FRSUploadManager sharedManager] uploadGallery:self.gallery withAssignment:self.defaultAssignment withResponseBlock:nil];
     
-//            // TODO: Handle error conditions
-//            NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", [[responseObject objectForKey:@"data"] objectForKey:@"_id"]];
-//            
-//            [self crossPostToTwitter:crossPostString];
-//            
-//            [self crossPostToFacebook:crossPostString];
-            
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
-            
-            [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-            
-            [self returnToTabBarWithPrevious:NO];
-        
-        }
-        
-    }];
+    [self returnToTabBarWithPrevious:YES];
 
 }
 

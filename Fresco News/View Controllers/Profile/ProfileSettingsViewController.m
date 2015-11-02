@@ -110,19 +110,11 @@ typedef enum : NSUInteger {
     
     [self updateAddCardButton];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-//        self.saveChangesbutton.alpha = 1;
-
-    });
-    
 }
 
 
 - (void)configureViews{
-    
-//    self.saveChangesbutton.alpha = 0;
-    
+
     //Set text fields with user data
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;

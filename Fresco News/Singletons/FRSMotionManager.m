@@ -70,21 +70,19 @@
         }
     }
     
-//    NSLog(@"X: %f", acceleration.x);
-//    NSLog(@"Y: %f", acceleration.y);
-//    NSLog(@"Z: %f", acceleration.z);
-    
     if (orientationNew == self.lastOrientation)
         return;
     
     self.lastOrientation = orientationNew;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ORIENTATION_CHANGE object:nil];
+    [self.delegate orientationDidChange];
 
 }
 
 -(void)stopTrackingMovement {
+    
     [self stopAccelerometerUpdates];
+    
 }
 
 @end

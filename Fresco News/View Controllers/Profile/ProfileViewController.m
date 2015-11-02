@@ -18,9 +18,11 @@
 @interface ProfileViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *galleriesView;
+
 @property (strong, nonatomic) UILabel *noContentLabel;
 @property (strong, nonatomic) UILabel *noContentLabelSmall;
 @property (strong, nonatomic) UIImageView *noContentImage;
+
 @property (nonatomic, assign) BOOL initialUpdate;
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
@@ -97,6 +99,7 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_PROFILE];
     }
+    
     if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
         [self performNecessaryFetch:YES withResponseBlock:nil];
