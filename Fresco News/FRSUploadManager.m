@@ -62,7 +62,7 @@
 
 #pragma mark Upload Methods
 
-- (void)uploadGallery:(FRSGallery *)gallery withAssignment:(FRSAssignment *)assignment withResponseBlock:(FRSAPISuccessBlock)responseBlock{
+- (void)uploadGallery:(FRSGallery *)gallery withAssignment:(FRSAssignment *)assignment withSocialOptions:(NSDictionary *)socialOptions withResponseBlock:(FRSAPISuccessBlock)responseBlock{
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
@@ -116,7 +116,7 @@
                                                       gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
                                                       //Run rest of upload
-                                                      [self handleGalleryCompletionForGallery:gallery];
+                                                      [self handleGalleryCompletionForGallery:gallery withSocialOptions:socialOptions];
                                                       
                                                   }
                                                   //Gallery ID is missing
@@ -148,7 +148,7 @@
  *  @param gallery The gallery to finish upload
  */
 
-- (void)handleGalleryCompletionForGallery:(FRSGallery *)gallery{
+- (void)handleGalleryCompletionForGallery:(FRSGallery *)gallery withSocialOptions:(NSDictionary *)socialOptions{
     
     //Check if the gallery has more than one post
     if(gallery.posts.count > 1)
@@ -191,13 +191,14 @@
     
     }
     
-    #warning Fix this
-//    //Run social psot now that we have the gallery id back
-//    NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: http://fresconews.com/gallery/%@", gallery.galleryID];
-//    
-//    [self postToTwitter:crossPostString];
-//    
-//    [self postToFacebook:crossPostString];
+    //Run social psot now that we have the gallery id back
+    NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: %@/gallery/%@", BASE_URL, gallery.galleryID];
+    
+    if(((NSNumber *)socialOptions[@"twitter"]).boolValue)
+        [self postToTwitter:crossPostString];
+    
+    if(((NSNumber *)socialOptions[@"facebook"]).boolValue)
+        [self postToFacebook:crossPostString];
     
     [self resetDraftGalleryPost];
 
@@ -273,13 +274,12 @@
     [[PFTwitterUtils twitter] signRequest:tweetRequest];
     
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
         if (connectionError) {
             // TODO: Notify the user
             NSLog(@"Error crossposting to Twitter: %@", connectionError);
         }
-        else {
-            NSLog(@"Success crossposting to Twitter: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        }
+        
     }];
 }
 

@@ -380,25 +380,6 @@
 
 #pragma mark - Controller Methods
 
-- (void)crossPostToTwitter:(NSString *)string {
-    
-    if (!self.twitterButton.selected) {
-        return;
-    }
-    
-    [[FRSUploadManager sharedManager] postToTwitter:string];
-}
-
-- (void)crossPostToFacebook:(NSString *)string{
-    
-    if (!self.facebookButton.selected) {
-        return;
-    }
-    
-    [[FRSUploadManager sharedManager] postToFacebook:string];
-
-}
-
 - (void)updateSocialTipView {
  
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -557,7 +538,20 @@
     
     self.gallery.caption = self.captionTextView.text;
     
-    [[FRSUploadManager sharedManager] uploadGallery:self.gallery withAssignment:self.defaultAssignment withResponseBlock:nil];
+    NSNumber * facebookPost = [NSNumber numberWithBool:NO];
+    NSNumber * twitterPost = [NSNumber numberWithBool:NO];
+    
+    if (self.twitterButton.selected) facebookPost = [NSNumber numberWithBool:YES];
+
+    if (self.facebookButton.selected) twitterPost = [NSNumber numberWithBool:YES];
+    
+    [[FRSUploadManager sharedManager] uploadGallery:self.gallery
+                                     withAssignment:self.defaultAssignment
+                                    withSocialOptions:@{
+                                                      @"facebook" : facebookPost,
+                                                      @"twitter" : twitterPost
+                                                      }
+                                  withResponseBlock:nil];
     
     [self returnToTabBarWithPrevious:YES];
 

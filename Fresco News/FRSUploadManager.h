@@ -31,7 +31,7 @@
  *  @param responseBlock Response block containing created gallery
  */
 
-- (void)uploadGallery:(FRSGallery *)gallery withAssignment:(FRSAssignment *)assignment withResponseBlock:(FRSAPISuccessBlock)responseBlock;
+- (void)uploadGallery:(FRSGallery *)gallery withAssignment:(FRSAssignment *)assignment withSocialOptions:(NSDictionary *)socialOptions withResponseBlock:(FRSAPISuccessBlock)responseBlock;
 
 
 /**
