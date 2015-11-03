@@ -15,7 +15,6 @@
 #import "AssignmentsViewController.h"
 #import "GalleryViewController.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import <UIScrollView+SVInfiniteScrolling.h>
 #import "NotificationCell.h"
 #import "UIViewController+Additions.h"
 #import "ProfilePaymentSettingsViewController.h"
@@ -54,40 +53,41 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.estimatedRowHeight = 119;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.showsVerticalScrollIndicator = NO;
-    
+
+    #warning Fix this
     //Endless scroll handler
-    [self.tableView addInfiniteScrollingWithActionHandler:^{
-        
-        if(!self.disableEndlessScroll) {
-        
-            // append data to data source, insert new cells at the end of table view
-            NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
-            
-            //Make request for more posts, append to galleries array
-            [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
-                    
-                    if ([responseObject count] > 0) {
-                        
-                        [self.notifications addObjectsFromArray:responseObject];
-                        
-                        [self.tableView reloadData];
-                        
-                        
-                    }
-                    else
-                        self.disableEndlessScroll = YES;
-                    
-                    [self.tableView.infiniteScrollingView stopAnimating];
-                    
-                }
-            }];
-            
-        } else {
-            [self.tableView.infiniteScrollingView stopAnimating];
-        }
-        
-    }];
+//    [self.tableView addInfiniteScrollingWithActionHandler:^{
+//        
+//        if(!self.disableEndlessScroll) {
+//        
+//            // append data to data source, insert new cells at the end of table view
+//            NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
+//            
+//            //Make request for more posts, append to galleries array
+//            [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
+//                if (!error) {
+//                    
+//                    if ([responseObject count] > 0) {
+//                        
+//                        [self.notifications addObjectsFromArray:responseObject];
+//                        
+//                        [self.tableView reloadData];
+//                        
+//                        
+//                    }
+//                    else
+//                        self.disableEndlessScroll = YES;
+//                    
+//                    [self.tableView.infiniteScrollingView stopAnimating];
+//                    
+//                }
+//            }];
+//            
+//        } else {
+//            [self.tableView.infiniteScrollingView stopAnimating];
+//        }
+//        
+//    }];
     
     [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
         

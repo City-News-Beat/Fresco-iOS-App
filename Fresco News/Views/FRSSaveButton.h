@@ -22,11 +22,13 @@ typedef enum : NSUInteger {
  *
  *  @param state The state othe button
  */
+
 - (void)updateSaveState:(SaveState)state;
 
 /**
  *  Toggles the state of the spinner between animation / not-animating
  */
+
 - (void)toggleSpinner;
     
 @end

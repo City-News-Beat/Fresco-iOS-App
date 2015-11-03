@@ -36,7 +36,7 @@
             self.title.text = @"You just got paid!";
         }
         else{
-            self.title.text = [NSString stringWithFormat:@"You have $%i waiting for you!", 10];
+            self.title.text = notif.title;
         }
             
     }
@@ -61,8 +61,6 @@
         
     }
     else if ([_notification.type isEqualToString:@"use"]) {
-        
-        [self.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
         
         //Hide the second button
         self.secondButton.hidden = YES;

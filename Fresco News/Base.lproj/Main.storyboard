@@ -10,10 +10,10 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Home Navigation-->
+        <!--Highlights Navigation-->
         <scene sceneID="WFY-08-iPs">
             <objects>
-                <navigationController title="Home Navigation" id="G0t-Ny-nTp" customClass="BaseNavigationController" sceneMemberID="viewController">
+                <navigationController title="Highlights Navigation" id="G0t-Ny-nTp" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Highlights" image="tab-home" id="2v8-GA-Shr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="CeV-bX-2LY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -344,7 +344,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isw-ZN-cA3">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="558F603B-BEDD-4E29-B234-44642362127F" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assignmentWarningIcon" translatesAutoresizingMaskIntoConstraints="NO" id="KM8-Sr-35t" userLabel="notificationIcon">
                                                             <rect key="frame" x="19" y="11" width="20" height="20"/>
                                                             <animations/>
                                                             <constraints>
@@ -1714,84 +1714,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="558F603B-BEDD-4E29-B234-44642362127F" width="20" height="20">
-            <mutableData key="keyedArchiveRepresentation">
-YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
-GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
-c1dOU0NvbG9ygAKADRIgwAAAgAOAC1h7MjAsIDIwfdIVChYYWk5TLm9iamVjdHOhF4AEgArSFQoaHaIb
-HIAFgAaACRAA0iAKISJfEBROU1RJRkZSZXByZXNlbnRhdGlvboAHgAhPEQ6uTU0AKgAABkgQDAMRsYEg
-sv66MP/+uzD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//rsw
-//66MP+xgSCyEAwDEbKCIbP+vzH//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//6/Mf+ygSCz/row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+uzD//rsw//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+uzD/87Et9DgpCjk4KQo587Et
-9P67MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//67MP/xsC3yCwgCDAsIAgzxsC3y/rsw//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//rsw//GwLfIPCwMQDwsDEPGwLfL+uzD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+uzD/8bAt8hkSBBoZEgQa8bAt
-8v67MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/9uS/+6qor6+qqK+v9uS/+/row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//25L/7ysSzz8rEs8/25L/7+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+uzD/8rEs8xwUBR0cFAUd8rEs
-8/67MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//67MP/ysSzzJBsHJSQbByXysSzz/rsw//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/1sy729bMu9v66MP/+ujD//row//66MP/+ujD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//66MP/+ujD//row//67MP/+uzD//row
-//66MP/+ujD//row//66MP/+ujD//row//66MP/+uzD//row//66MP/+ujD//rsw//6/Mf/+vzH//r8x
-//6/Mf/+vzH//r8x//6/Mf/+vzH//r8x//6/Mf/+vzH//r8x//6/Mf/+vzH//sQx/8GMIsL+ujD//row
-//67MP/+ujD/1pwo19OaJ9TTmifU05on1NOaJ9TTmifU05on1NOaJ9TTmifU05on1NOaJ9TTmifU05on
-1NOaJ9Shdh2iGxMEHP66MP/+vTD//r4x/35aF4ADAgAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/rsw//2+MP5/XBeAAAAAAQAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD7vTD8f1wX
-gAEBAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAH9cF4ABAQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4BAAADAAAAAQAUAAABAQADAAAAAQAUAAAB
-AgADAAAABAAABvYBAwADAAAAAQABAAABBgADAAAAAQACAAABEQAEAAAAAQAAAAgBEgADAAAAAQABAAAB
-FQADAAAAAQAEAAABFgADAAAAAQAUAAABFwAEAAAAAQAABkABHAADAAAAAQABAAABUgADAAAAAQABAAAB
-UwADAAAABAAABv6HcwAHAAAHqAAABwYAAAAAAAgACAAIAAgAAQABAAEAAQAAB6hhcHBsAiAAAG1udHJS
-R0IgWFlaIAfZAAIAGQALABoAC2Fjc3BBUFBMAAAAAGFwcGwAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAA
-ANMtYXBwbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC2Rlc2MA
-AAEIAAAAb2RzY20AAAF4AAAFbGNwcnQAAAbkAAAAOHd0cHQAAAccAAAAFHJYWVoAAAcwAAAAFGdYWVoA
-AAdEAAAAFGJYWVoAAAdYAAAAFHJUUkMAAAdsAAAADmNoYWQAAAd8AAAALGJUUkMAAAdsAAAADmdUUkMA
-AAdsAAAADmRlc2MAAAAAAAAAFEdlbmVyaWMgUkdCIFByb2ZpbGUAAAAAAAAAAAAAABRHZW5lcmljIFJH
-QiBQcm9maWxlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt
-bHVjAAAAAAAAAB4AAAAMc2tTSwAAACgAAAF4aHJIUgAAACgAAAGgY2FFUwAAACQAAAHIcHRCUgAAACYA
-AAHsdWtVQQAAACoAAAISZnJGVQAAACgAAAI8emhUVwAAABYAAAJkaXRJVAAAACgAAAJ6bmJOTwAAACYA
-AAKia29LUgAAABYAAALIY3NDWgAAACIAAALeaGVJTAAAAB4AAAMAZGVERQAAACwAAAMeaHVIVQAAACgA
-AANKc3ZTRQAAACYAAAKiemhDTgAAABYAAANyamFKUAAAABoAAAOIcm9STwAAACQAAAOiZWxHUgAAACIA
-AAPGcHRQTwAAACYAAAPobmxOTAAAACgAAAQOZXNFUwAAACYAAAPodGhUSAAAACQAAAQ2dHJUUgAAACIA
-AARaZmlGSQAAACgAAAR8cGxQTAAAACwAAASkcnVSVQAAACIAAATQYXJFRwAAACYAAATyZW5VUwAAACYA
-AAUYZGFESwAAAC4AAAU+AFYBYQBlAG8AYgBlAGMAbgD9ACAAUgBHAEIAIABwAHIAbwBmAGkAbABHAGUA
-bgBlAHIAaQENAGsAaQAgAFIARwBCACAAcAByAG8AZgBpAGwAUABlAHIAZgBpAGwAIABSAEcAQgAgAGcA
-ZQBuAOgAcgBpAGMAUABlAHIAZgBpAGwAIABSAEcAQgAgAEcAZQBuAOkAcgBpAGMAbwQXBDAEMwQwBDsE
-TAQ9BDgEOQAgBD8EQAQ+BEQEMAQ5BDsAIABSAEcAQgBQAHIAbwBmAGkAbAAgAGcA6QBuAOkAcgBpAHEA
-dQBlACAAUgBWAEKQGnUoACAAUgBHAEIAIIJyX2ljz4/wAFAAcgBvAGYAaQBsAG8AIABSAEcAQgAgAGcA
-ZQBuAGUAcgBpAGMAbwBHAGUAbgBlAHIAaQBzAGsAIABSAEcAQgAtAHAAcgBvAGYAaQBsx3y8GAAgAFIA
-RwBCACDVBLhc0wzHfABPAGIAZQBjAG4A/QAgAFIARwBCACAAcAByAG8AZgBpAGwF5AXoBdUF5AXZBdwA
-IABSAEcAQgAgBdsF3AXcBdkAQQBsAGwAZwBlAG0AZQBpAG4AZQBzACAAUgBHAEIALQBQAHIAbwBmAGkA
-bADBAGwAdABhAGwA4QBuAG8AcwAgAFIARwBCACAAcAByAG8AZgBpAGxmbpAaACAAUgBHAEIAIGPPj/Bl
-h072TgCCLAAgAFIARwBCACAw1zDtMNUwoTCkMOsAUAByAG8AZgBpAGwAIABSAEcAQgAgAGcAZQBuAGUA
-cgBpAGMDkwO1A70DuQO6A8wAIAPAA8EDvwPGA68DuwAgAFIARwBCAFAAZQByAGYAaQBsACAAUgBHAEIA
-IABnAGUAbgDpAHIAaQBjAG8AQQBsAGcAZQBtAGUAZQBuACAAUgBHAEIALQBwAHIAbwBmAGkAZQBsDkIO
-Gw4jDkQOHw4lDkwAIABSAEcAQgAgDhcOMQ5IDicORA4bAEcAZQBuAGUAbAAgAFIARwBCACAAUAByAG8A
-ZgBpAGwAaQBZAGwAZQBpAG4AZQBuACAAUgBHAEIALQBwAHIAbwBmAGkAaQBsAGkAVQBuAGkAdwBlAHIA
-cwBhAGwAbgB5ACAAcAByAG8AZgBpAGwAIABSAEcAQgQeBDEESQQ4BDkAIAQ/BEAEPgREBDgEOwRMACAA
-UgBHAEIGRQZEBkEAIAYqBjkGMQZKBkEAIABSAEcAQgAgBicGRAY5BicGRQBHAGUAbgBlAHIAaQBjACAA
-UgBHAEIAIABQAHIAbwBmAGkAbABlAEcAZQBuAGUAcgBlAGwAIABSAEcAQgAtAGIAZQBzAGsAcgBpAHYA
-ZQBsAHMAZXRleHQAAAAAQ29weXJpZ2h0IDIwMDcgQXBwbGUgSW5jLiwgYWxsIHJpZ2h0cyByZXNlcnZl
-ZC4AWFlaIAAAAAAAAPNSAAEAAAABFs9YWVogAAAAAAAAdE0AAD3uAAAD0FhZWiAAAAAAAABadQAArHMA
-ABc0WFlaIAAAAAAAACgaAAAVnwAAuDZjdXJ2AAAAAAAAAAEBzQAAc2YzMgAAAAAAAQxCAAAF3v//8yYA
-AAeSAAD9kf//+6L///2jAAAD3AAAwGzSJSYnKFokY2xhc3NuYW1lWCRjbGFzc2VzXxAQTlNCaXRtYXBJ
-bWFnZVJlcKMnKSpaTlNJbWFnZVJlcFhOU09iamVjdNIlJiwtV05TQXJyYXmiLCrSJSYvMF5OU011dGFi
-bGVBcnJheaMvLCrTMjMKNDU2V05TV2hpdGVcTlNDb2xvclNwYWNlRDAgMAAQA4AM0iUmODlXTlNDb2xv
-cqI4KtIlJjs8V05TSW1hZ2WiOypfEA9OU0tleWVkQXJjaGl2ZXLRP0BUcm9vdIABAAgAEQAaACMALQAy
-ADcARgBMAFcAXgBlAHIAeQCBAIMAhQCKAIwAjgCXAJwApwCpAKsArQCyALUAtwC5ALsAvQDCANkA2wDd
-D48PlA+fD6gPuw+/D8oP0w/YD+AP4w/oD/cP+xACEAoQFxAcEB4QIBAlEC0QMBA1ED0QQBBSEFUQWgAA
-AAAAAAIBAAAAAAAAAEEAAAAAAAAAAAAAAAAAABBcA
-</mutableData>
-        </image>
         <image name="article" width="29" height="29"/>
+        <image name="assignmentWarningIcon" width="20" height="20"/>
         <image name="facebook-b" width="20" height="20"/>
         <image name="onboard1" width="167" height="186"/>
         <image name="onboard2" width="150" height="246"/>
@@ -1807,6 +1731,6 @@ AAAAAAIBAAAAAAAAAEEAAAAAAAAAAAAAAAAAABBcA
         <image name="user" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dey-Pz-HfA"/>
+        <segue reference="mbJ-dc-9zc"/>
     </inferredMetricsTieBreakers>
 </document>

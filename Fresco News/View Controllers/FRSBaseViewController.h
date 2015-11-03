@@ -44,7 +44,7 @@ typedef enum : NSUInteger {
 
 - (void)navigateToMainApp;
 
-- (void)navigateToFirstRun;
+- (void)presentFirstRun;
 
 - (void)navigateToCamera;
 

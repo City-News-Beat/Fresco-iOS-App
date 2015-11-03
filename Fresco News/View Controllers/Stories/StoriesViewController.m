@@ -7,7 +7,6 @@
 //
 
 #import "FRSRootViewController.h"
-#import <UIScrollView+SVInfiniteScrolling.h>
 #import "StoriesViewController.h"
 #import "UIViewController+Additions.h"
 #import "FRSDataManager.h"
@@ -89,49 +88,40 @@ static CGFloat const kInterImageGap = 1.0f;
     self.refreshControl = [[FRSRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
 
-    [self performNecessaryFetch:NO withResponseBlock:nil];
+    [self performNecessaryFetch:NO withResponseBlock:^(BOOL success, NSError *error) {
+        [self.tableView reloadData];
+    }];
     
-    __weak typeof(self) weakSelf = self;
-    
-    //Endless scroll handler
-    [self.tableView addInfiniteScrollingWithActionHandler:^{
+    self.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
         // append data to data source, insert new cells at the end of table view
-        NSNumber *num = [NSNumber numberWithInteger:weakSelf.stories.count];
+        NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
         
         [[FRSDataManager sharedManager] getStoriesWithResponseBlock:num shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
+            
             if (!error) {
                 
                 if ([responseObject count] > 0) {
                     
-                    [weakSelf.stories addObjectsFromArray:responseObject];
+                    [self.stories addObjectsFromArray:responseObject];
                     
-                    [weakSelf.tableView reloadData];
+                    [self.tableView reloadData];
                     
                 }
-                
-                [weakSelf.tableView.infiniteScrollingView stopAnimating];
-                
+    
             }
             
         }];
         
-    }];
+    };
+
     
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Stories"
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:[self navigationController]
                                                                      action:@selector(popViewControllerAnimated:)];
     [[self navigationItem] setBackBarButtonItem:newBackButton];
-    
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    
-    self.statusBarBackground = [[UIView alloc] initWithFrame:statusBarFrame];
-    self.statusBarBackground.backgroundColor = [UIColor goldStatusBarColor];
-    self.statusBarBackground.alpha = 0.0f;
-    
-    [self.view addSubview:self.statusBarBackground];
-    
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -157,19 +147,24 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     
     [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil shouldRefresh:refresh  withReponseBlock:^(id responseObject, NSError *error) {
+        
         if (!error) {
             
-            if([self.stories count] == 0
-               || ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID]
-               || refresh){
+            //Check if either there are no stories, or the stories are the not the same, or a force refresh is called
+            if([self.stories count] == 0 ||
+               ![((FRSStory *)[responseObject objectAtIndex:0]).storyID isEqualToString:((FRSStory *)[self.stories objectAtIndex:0]).storyID] ||
+               refresh){
             
                 [self.stories setArray:responseObject];
-                [self.tableView reloadData];
-            
+                
+                if(responseBlock) responseBlock(YES, nil);
+
             }
+            else
+                if(responseBlock) responseBlock(YES, nil);
         }
-        
-        if(responseBlock) responseBlock(YES, nil);
+        else
+            if(responseBlock) responseBlock(YES, nil);
         
     }];
 
@@ -183,9 +178,8 @@ static CGFloat const kInterImageGap = 1.0f;
 {
     //Force the refresh as we're manually pulling to refresh here
     [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
-        
+
         [self.tableView reloadData];
-        
         [self.refreshControl endRefreshing];
         
     }];
@@ -242,7 +236,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
 #pragma mark - UITableViewDelegate
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 40;
@@ -281,6 +274,14 @@ static CGFloat const kInterImageGap = 1.0f;
     return 96.0;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+    [super scrollViewDidScroll:scrollView];
+
+}
+
 #pragma mark - Tap Gesture Delegate Handlers
 
 - (void)tappedStoryThumbnail:(FRSStory *)story atIndex:(NSInteger)index
@@ -301,6 +302,7 @@ static CGFloat const kInterImageGap = 1.0f;
     StoryViewController *svc = [self.storyboard instantiateViewControllerWithIdentifier:@"storyViewController"];
     
     svc.story = story;
+    svc.galleriesViewController.refreshDisabled = YES;
     
     [self.navigationController pushViewController:svc animated:YES];
     

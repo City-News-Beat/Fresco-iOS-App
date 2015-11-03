@@ -524,7 +524,7 @@
     //Check if the user is logged in before proceeding, send to sign up otherwise
     else if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
         
-        [self navigateToFirstRun];
+        [self presentFirstRun];
         
         return;
     }

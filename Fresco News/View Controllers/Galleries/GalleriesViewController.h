@@ -6,17 +6,16 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
-
 @import UIKit;
 
 #import "FRSBaseViewController.h"
 #import "GalleryTableViewCell.h"
 #import "ProfileHeaderViewController.h"
+#import "FRSTableViewController.h"
 
 @class FRSUser;
 
-@interface GalleriesViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, GalleryTableViewCellDelegate>
+@interface GalleriesViewController : FRSTableViewController <GalleryTableViewCellDelegate>
 
 @property (strong, nonatomic) NSMutableArray *galleries;
 
@@ -24,14 +23,13 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
 
 @property (weak, nonatomic) ProfileHeaderViewController *profileHeaderViewController;
 
-@property (weak, nonatomic) IBOutlet UIView *viewProfileHeader;
+@property (assign, nonatomic) BOOL refreshDisabled;
+
 
 /**
  *  Refresh function
  */
 
 - (void)refresh;
-
-- (void)reloadData;
 
 @end

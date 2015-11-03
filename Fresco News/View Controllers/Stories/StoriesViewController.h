@@ -7,13 +7,9 @@
 //
 
 @import UIKit;
-#import "FRSBaseViewController.h"
+#import "FRSTableViewController.h"
 
-typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError* error);
-
-@class FRSTag;
-
-@interface StoriesViewController : UITableViewController
+@interface StoriesViewController : FRSTableViewController
 
 @property (nonatomic, strong) NSMutableArray *stories;
 

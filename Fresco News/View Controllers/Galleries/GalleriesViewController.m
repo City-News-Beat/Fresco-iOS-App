@@ -55,23 +55,29 @@
 
 @implementation GalleriesViewController
 
+
+-(instancetype)init {
+    if (self = [super init])  {
+        self.refreshDisabled = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     /* Table View Setup */
-    self.tableView.dataSource = self;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 400.0f;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.showsVerticalScrollIndicator = NO;
     
     /* Refresh Control Setup */
-    self.refreshControl = [[FRSRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    if(!_refreshDisabled){
+        self.refreshControl = [[FRSRefreshControl alloc] init];
+        [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    }
     
-    // YES by default, but needs to be the only such visible UIScrollView
-    self.tableView.scrollsToTop = YES;
     
 }
 
@@ -100,9 +106,9 @@
 
     if([self.parentViewController isKindOfClass:[HighlightsViewController class]]){
         
-        [((HighlightsViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+        [((HighlightsViewController *) self.parentViewController) performNecessaryFetchWithRefresh:YES withResponseBlock:^(BOOL success, NSError *error) {
             
-            [self reloadData];
+            [self.tableView reloadData];
             [self.refreshControl endRefreshing];
             
         }];
@@ -111,19 +117,14 @@
     else if([self.parentViewController isKindOfClass:[ProfileViewController class]]){
         
         [((ProfileViewController *) self.parentViewController) performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
-            [self reloadData];
+
+            [self.profileHeaderViewController updateUserInfo];
+            [self.tableView reloadData];
             [self.refreshControl endRefreshing];
+            
         }];
         
-        [self.profileHeaderViewController updateUserInfo];
-        
     }
-
-}
-
-- (void)reloadData{
-
-    [self.tableView reloadData];
 
 }
 
@@ -218,9 +219,11 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-        
-    [self checkForVideo];
     
+    [super scrollViewDidScroll:scrollView];
+    
+    [self checkForVideo];
+
 }
 
 #pragma mark - Video Conditioning
@@ -375,10 +378,8 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
 
     if ([identifier isEqualToString:@"embedProfileHeader"]) {
-        if ([self.containingViewController isKindOfClass:[HighlightsViewController class]] ||
-            [self.containingViewController isKindOfClass:[StoryViewController class]] ) {
+        if (![self.containingViewController isKindOfClass:[ProfileViewController class]]) {
             self.tableView.tableHeaderView = nil;
-            [self.viewProfileHeader removeFromSuperview];
             return NO;
         }
     }

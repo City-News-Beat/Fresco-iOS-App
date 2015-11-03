@@ -22,12 +22,8 @@
     
     self = [super init];
     
-    if(self){
-        
-        self.index = index;
-        
-    }
-    
+    if(self) self.index = index;
+
     return self;
     
 }
@@ -45,7 +41,7 @@
     [rvc setRootViewControllerToCamera];
 }
 
-- (void)navigateToFirstRun
+- (void)presentFirstRun
 {
     FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
 
@@ -234,6 +230,12 @@
     
 }
 
+/**
+ *  Reverts screen back to normal state by setting all subivews to their normal state
+ *
+ *  @param parentView The parent view i.e. screen to loop under
+ */
+
 - (void)revertScreenToNormal:(UIView *)parentView{
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -263,6 +265,13 @@
     });
     
 }
+
+/**
+ *  Hides all view excepct the one passed
+ *
+ *  @param exceptionView The view not to hide
+ *  @param parentView    The parent view of the exception view
+ */
 
 - (void)hideViewsExceptView:(UIView *)exceptionView withView:(UIView *)parentView{
     

@@ -17,7 +17,14 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @property (weak, nonatomic) GalleriesViewController *galleriesViewController;
 
-- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock;
+/**
+ *  Performs data call to fetch initial set of galleries
+ *
+ *  @param refresh       To perform refresh of content or not
+ *  @param responseBlock Completion block for refresh
+ */
+
+- (void)performNecessaryFetchWithRefresh:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock;
 
 @end
 

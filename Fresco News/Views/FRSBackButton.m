@@ -20,6 +20,10 @@
 }
 
 
+/**
+ *  Extracted method to configure button's appearance when initialized
+ */
+
 - (void)setUpBackButton {
         
     self.frame = CGRectMake(4, 24, 70, 24);
@@ -35,7 +39,6 @@
     
     [self setImage:[UIImage imageNamed:@"backCaretDark"] forState:UIControlStateNormal];
     
-
 }
 
 

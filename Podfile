@@ -5,7 +5,6 @@ platform :ios, '8.0'
 link_with 'Fresco WatchKit Extension', 'Fresco'
 
 pod 'STKWebKitViewController'
-pod 'SVPullToRefresh'
 pod 'AFNetworking'
 pod 'AFNetworkActivityLogger'
 pod 'BTBadgeView'

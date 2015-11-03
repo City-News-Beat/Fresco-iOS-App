@@ -13,7 +13,6 @@
 #import "FRSDataManager.h"
 #import "UIViewController+Additions.h"
 #import "ProfileHeaderViewController.h"
-#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface ProfileViewController ()
 
@@ -41,41 +40,35 @@
     
     //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
-    
-    self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
-    //Endless scroll handler
-    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+    self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
-        if(self.disableEndlessScroll){
+        if(self.disableEndlessScroll)
+            return;
         
-            // append data to data source, insert new cells at the end of table view
-            NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
+        
+        [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
             
-            [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:num shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
-                if (!error) {
+            if (!error) {
+                
+                if ([responseObject count] > 0) {
                     
-                    if ([responseObject count] > 0) {
-                        
-                        [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
-                        
-                        [self.galleriesViewController.tableView reloadData];
-                        
-                        self.noContentLabel.hidden = YES;
-                        self.noContentLabelSmall.hidden = YES;
+                    [self userMessageShouldHide:YES];
 
-                    }
-                    else self.disableEndlessScroll = YES;
+                    [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
+                    
+                    [self.galleriesViewController.tableView reloadData];
+                    
                 }
-
-            }];
+                else self.disableEndlessScroll = YES;
+            }
             
-        }
+        }];
         
-        [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
+    };
 
-
-    }];
     
     //Set up bar button item to show contextual "Me"
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Me"
@@ -102,7 +95,11 @@
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
-        [self performNecessaryFetch:YES withResponseBlock:nil];
+        [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
+
+            [self.galleriesViewController.tableView reloadData];
+
+        }];
 
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_USER_GALLERIES];
     
@@ -123,7 +120,10 @@
     //Load galleries only if we successfuly load them from the database
     if([[FRSDataManager sharedManager] currentUserIsLoaded]){
         
-        [self performNecessaryFetch:NO withResponseBlock:nil];
+        [self performNecessaryFetch:NO withResponseBlock:^(BOOL success, NSError *error) {
+            [self.galleriesViewController.tableView reloadData];
+        }];
+        
     }
 }
 
@@ -141,47 +141,47 @@
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
+- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSAPISuccessBlock)responseBlock{
     
-    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID
-                                                 offset:[NSNumber numberWithInteger:0] shouldRefresh:refresh
-                                      withResponseBlock:^(id responseObject, NSError *error) {
-                                          
-
+    [[FRSDataManager sharedManager] getGalleriesForUser:[FRSDataManager sharedManager].currentUser.userID offset:[NSNumber numberWithInteger:0] shouldRefresh:refresh withResponseBlock:^(id responseObject, NSError *error) {
+        
         if(responseObject == nil || [responseObject count] == 0) {
-    
-            [self setUserMessage:NO];
+            
+            [self userMessageShouldHide:NO];
             
             self.galleriesViewController.galleries = nil;
             
-            [self.galleriesViewController.tableView reloadData];
-        
+            if(responseBlock) responseBlock(YES, nil);
+            
         }
         else{
-        
-            [self setUserMessage:YES];
-        
+            
+            [self userMessageShouldHide:YES];
+            
             //Check to make sure the first gallery and the response object's first gallery are different
             if([self.galleriesViewController.galleries count] == 0
-               || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
-                    isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
-            
+               ||
+               ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:
+                 ((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
+                
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                [self.galleriesViewController reloadData];
-        
+                
+                if(responseBlock) responseBlock(YES, nil);
+                
             }
+            else
+                if(responseBlock) responseBlock(YES, nil);
+            
         }
-                                
-      if(responseBlock) responseBlock(YES, nil);
-    
+        
     }];
 }
 
-- (void)setUserMessage:(BOOL)shouldHide{
+- (void)userMessageShouldHide:(BOOL)hide{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if(shouldHide){
+        if(hide){
             
             self.noContentLabel.hidden = YES;
             self.noContentLabelSmall.hidden = YES;
@@ -262,6 +262,7 @@
         self.galleriesViewController = [segue destinationViewController];
         self.galleriesViewController.containingViewController = self;
     }
+    
 }
 
 @end

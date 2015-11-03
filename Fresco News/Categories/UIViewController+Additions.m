@@ -223,7 +223,6 @@
         ((UITableViewController *)self).tableView.scrollEnabled = YES;
     }
     
-
 }
 
 /**

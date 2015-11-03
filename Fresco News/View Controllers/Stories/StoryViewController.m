@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-#import <UIScrollView+SVInfiniteScrolling.h>
 #import "StoryViewController.h"
 #import "GalleriesViewController.h"
 #import "FRSStory.h"
@@ -18,6 +17,8 @@
 
 @property (strong, nonatomic) NSNumber *offset;
 
+@property (nonatomic, assign) BOOL disableEndlessScroll;
+
 @end
 
 @implementation StoryViewController
@@ -25,15 +26,16 @@
 - (void)viewDidLoad
 {
     
-    #warning Don't let this page refresh
     [super viewDidLoad];
     
     self.title = self.story.title;
     
     [self performNecessaryFetch:nil];
     
-    //Endless scroll handler
-    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+    self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
+        
+        if(self.disableEndlessScroll)
+            return;
         
         // append data to data source, insert new cells at the end of table view
         NSNumber *offset = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
@@ -47,14 +49,15 @@
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
                     [self.galleriesViewController.tableView reloadData];
-    
+                    
                 }
+                else
+                    self.disableEndlessScroll = YES;
             }
             
-            [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
-            
         }];
-    }];
+    };
+    
 }
 
 #pragma mark - Data Loading

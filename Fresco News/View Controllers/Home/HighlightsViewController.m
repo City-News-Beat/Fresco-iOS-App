@@ -14,7 +14,6 @@
 #import "GalleryHeader.h"
 #import "GalleryTableViewCell.h"
 #import "AssignmentsViewController.h"
-#import <UIScrollView+SVInfiniteScrolling.h>
 
 @interface HighlightsViewController ()
 
@@ -30,22 +29,22 @@
 {
     [super viewDidLoad];
     
-    //Check if the app visited onbard, then go straight to updating
+    //Check if the app visited onboard, then go straight to updating
     if(((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController).onboardVisited){
     
-        [self updateHighlights:nil];
+        [self initialUpdate];
     
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHighlights:) name:NOTIF_REACHABILITY_MONITORING object:nil];
+    [self initialUpdate];
     
     [self setFrescoNavigationBar];
-    
-    self.galleriesViewController.tableView.showsInfiniteScrolling = NO;
 
-    //Endless scroll handler
-    [self.galleriesViewController.tableView addInfiniteScrollingWithActionHandler:^{
+    self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
+        if(self.disableEndlessScroll)
+            return;
+    
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
@@ -55,20 +54,22 @@
         [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
             
             if (!error) {
+                
                 if ([responseObject count] > 0) {
                     
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
                     [self.galleriesViewController.tableView reloadData];
-
+                    
                 }
-                
-                [self.galleriesViewController.tableView.infiniteScrollingView stopAnimating];
-                
+                else
+                    self.disableEndlessScroll = YES;
             }
             
+            responseBlock(YES, nil);
+            
         }];
-    }];
+    };
     
     //Set up bar button items
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:HIGHLIGHTS
@@ -82,48 +83,27 @@
 
 #pragma mark - Data Loading
 
-/*
-** Notification listener telling us the reachability manager is ready
-*/
+/**
+ *  Performs initial update forcing refresh when app opens for the first time
+ */
 
-- (void)updateHighlights:(NSNotification *)notification {
+- (void)initialUpdate{
 
-    //Check for initial refresh,
-    if(!self.initialRefresh){
+    [self.galleriesViewController.refreshControl beginRefreshing];
+    
+    [self.galleriesViewController.tableView setContentOffset:CGPointMake(0, -self.galleriesViewController.refreshControl.frame.size.height) animated:NO];
+    
+    [self performNecessaryFetchWithRefresh:YES withResponseBlock:^(BOOL success, NSError *error) {
         
-        [self.galleriesViewController.refreshControl beginRefreshing];
+        [self.galleriesViewController.refreshControl endRefreshing];
+        [self.galleriesViewController.tableView reloadData];
+        [self.galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
         
-        [self.galleriesViewController.tableView setContentOffset:CGPointMake(0, -self.galleriesViewController.refreshControl.frame.size.height) animated:NO];
-        
-        [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
-            
-            if(success){
-                
-                //Wait one second so the animation doesn't jitter
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    
-                    [self.galleriesViewController.refreshControl endRefreshing];
-                    
-                    [self.galleriesViewController.tableView setContentOffset:CGPointZero animated:YES];
-                    
-                });
-            }
-            
-        }];
-        
-    }
-    //Perform update without refresh
-    else{
-        [self performNecessaryFetch:NO withResponseBlock:nil];
-    }
-
+    }];
+    
 }
 
-/*
-** General data command for fetching initial highlights (galleries)
-*/
-
-- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
+- (void)performNecessaryFetchWithRefresh:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
     
     NSDictionary *params = @{@"offset" : @0, @"stories" : @"true", @"hide" : @"1"};
         
@@ -131,22 +111,28 @@
     
         if (!error) {
             
-            if ([responseObject count]) {
+            if ([responseObject count] > 0) {
                 
                 //Check to make sure the first gallery and the response object's first gallery are different
-                if([self.galleriesViewController.galleries count] == 0
-                   || ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID
-                        isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]
-                   || refresh){
-                
+                if([self.galleriesViewController.galleries count] == 0 ||
+                   ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID] ||
+                   refresh){
+                    
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     
-                    [self.galleriesViewController reloadData];
+                    if(responseBlock) responseBlock(YES, error);
+                    
                 }
             }
+            else
+                if(responseBlock) responseBlock(YES, error);
         }
-        
-        if(responseBlock) responseBlock(YES, nil);
+        else{
+
+            if(responseBlock) responseBlock(YES, error);
+            
+        }
+
     
     }];
 }

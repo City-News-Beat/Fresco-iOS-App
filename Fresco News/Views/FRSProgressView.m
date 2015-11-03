@@ -25,7 +25,7 @@ typedef void(^myCompletion)(BOOL);
 @property CGFloat *progressPercent;
 
 /**
- *  Holds all the empty sircles
+ *  Holds all the empty circles
  */
 
 @property (strong, nonatomic) NSMutableArray *emptyCircles;
@@ -46,8 +46,6 @@ typedef void(^myCompletion)(BOOL);
 @property (strong, nonatomic) UIView *progressView;
 
 @property (strong, nonatomic) UIView *emptyProgressView;
-
-@property (strong, nonatomic) UIView *progressBar;
 
 @end
 
