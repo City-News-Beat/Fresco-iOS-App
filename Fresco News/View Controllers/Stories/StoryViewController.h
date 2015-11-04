@@ -10,8 +10,6 @@
 #import "FRSBaseViewController.h"
 #import "GalleriesViewController.h"
 
-typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
-
 @class FRSStory;
 
 @interface StoryViewController : FRSBaseViewController
@@ -24,6 +22,6 @@ typedef void(^FRSRefreshResponseBlock)(BOOL success, NSError *error);
 
 @property (strong, nonatomic) NSMutableArray *galleries;
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock;
+- (void)performNecessaryFetch:(FRSAPISuccessBlock)responseBlock;
 
 @end

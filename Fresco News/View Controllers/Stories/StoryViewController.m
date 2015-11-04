@@ -25,12 +25,45 @@
 
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
     
     self.title = self.story.title;
     
-    [self performNecessaryFetch:nil];
+    [self performNecessaryFetch:^(BOOL success, NSError *error) {
+        
+        if(!success)
+            return;
+        
+        [self.galleriesViewController.tableView reloadData];
+        
+        //Check if there is a gallery selected from the thumbnail
+        if(self.selectedGallery){
+            
+            NSUInteger galleryIndex = 0;
+            
+            BOOL galleryFound = NO;
+            
+            //Loop through the galleries and find the corresponding cell
+            for (FRSGallery *gallery in self.galleriesViewController.galleries) {
+                galleryIndex ++;
+                if([gallery.galleryID isEqualToString:self.selectedGallery]){
+                    galleryFound = YES;
+                    break;
+                }
+            }
+            
+            //If the index matches
+            if(galleryIndex > 0 && galleryFound){
+                
+                NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:galleryIndex -1];
+                
+                [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                
+            }
+        }
+        
+        
+    }];
     
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
@@ -45,9 +78,6 @@
             
         }
         
-        if([self.galleriesViewController.galleries count] == 0)
-            return;
-        
         // append data to data source, insert new cells at the end of table view
         NSNumber *offset = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
@@ -61,10 +91,14 @@
                     
                     [self.galleriesViewController.tableView reloadData];
                     
+                    responseBlock(YES, nil);
+                    
                 }
                 else
                     self.disableEndlessScroll = YES;
             }
+            else
+                responseBlock(YES, nil);
             
         }];
     };
@@ -73,13 +107,14 @@
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(FRSRefreshResponseBlock)responseBlock
+- (void)performNecessaryFetch:(FRSAPISuccessBlock)responseBlock
 {
     
-    if(self.galleries != nil){
+    if([self.galleries count] > 0){
     
         self.galleriesViewController.galleries = self.galleries;
-        [self.galleriesViewController.tableView reloadData];
+        
+        responseBlock(YES, nil);
         
         return;
         
@@ -89,39 +124,17 @@
         
         if (!error) {
             
-            if ([responseObject count]) {
+            if ([responseObject count] > 0) {
                     
                 self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                 
-                [self.galleriesViewController.tableView reloadData];
-                
-                //Check if there is a gallery selected from the thumbnail
-                if(self.selectedGallery){
-
-                    NSUInteger galleryIndex = 0;
-
-                    BOOL galleryFound = NO;
-
-                    //Loop through the galleries and find the corresponding cell
-                    for (FRSGallery *gallery in self.galleriesViewController.galleries) {
-                        galleryIndex ++;
-                        if([gallery.galleryID isEqualToString:self.selectedGallery]){
-                            galleryFound = YES;
-                            break;
-                        }
-                    }
-
-                    //If the index matches
-                    if(galleryIndex > 0 && galleryFound){
-
-                        NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:galleryIndex -1];
-
-                        [self.galleriesViewController.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                        
-                    }
-                }
             }
+
+            responseBlock(YES, nil);
+            
         }
+        else
+            responseBlock(NO, nil);
         
     }];
 

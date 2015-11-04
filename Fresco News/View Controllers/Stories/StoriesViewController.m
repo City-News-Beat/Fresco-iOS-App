@@ -157,7 +157,7 @@ static CGFloat const kInterImageGap = 1.0f;
 
 #pragma mark - Data Loading
 
-- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock
+- (void)performNecessaryFetch:(BOOL)refresh withResponseBlock:(FRSAPISuccessBlock)responseBlock
 {
     
     [[FRSDataManager sharedManager] getStoriesWithResponseBlock:nil shouldRefresh:refresh  withReponseBlock:^(id responseObject, NSError *error) {
@@ -171,14 +171,12 @@ static CGFloat const kInterImageGap = 1.0f;
             
                 [self.stories setArray:responseObject];
                 
-                if(responseBlock) responseBlock(YES, nil);
-
             }
-            else
-                if(responseBlock) responseBlock(YES, nil);
+           
+            if(responseBlock) responseBlock(YES, nil);
         }
         else
-            if(responseBlock) responseBlock(YES, nil);
+            if(responseBlock) responseBlock(NO, nil);
         
     }];
 

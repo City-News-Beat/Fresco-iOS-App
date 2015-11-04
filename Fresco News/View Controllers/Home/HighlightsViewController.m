@@ -29,6 +29,8 @@
 {
     [super viewDidLoad];
     
+    [self setFrescoNavigationBar];
+
     //Check if the app visited onboard, then go straight to updating
     if(((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController).onboardVisited){
     
@@ -38,8 +40,6 @@
     
     [self initialUpdate];
     
-    [self setFrescoNavigationBar];
-
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
         if(self.disableEndlessScroll)
@@ -52,7 +52,6 @@
             return;
         
         }
-            
         
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
@@ -70,12 +69,14 @@
                     
                     [self.galleriesViewController.tableView reloadData];
                     
+                    responseBlock(YES, nil);
+                    
                 }
                 else
                     self.disableEndlessScroll = YES;
             }
-            
-            responseBlock(YES, nil);
+            else
+                responseBlock(YES, nil);
             
         }];
     };
@@ -129,20 +130,15 @@
                     
                     self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
                     
-                    if(responseBlock) responseBlock(YES, error);
-                    
                 }
             }
-            else
-                if(responseBlock) responseBlock(YES, error);
-        }
-        else{
-
-            if(responseBlock) responseBlock(YES, error);
             
-        }
+            if(responseBlock) responseBlock(YES, error);
 
-    
+        }
+        else
+            if(responseBlock) responseBlock(NO, error);
+        
     }];
 }
 

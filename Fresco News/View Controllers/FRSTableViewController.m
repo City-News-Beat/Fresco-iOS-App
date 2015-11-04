@@ -33,7 +33,7 @@
     float scrollOffset = scrollView.contentOffset.y;
 
     //Check if we're at the end of the table view
-    if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height){
+    if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height && scrollOffset > 0){
         
         if(!self.endlessBlockInProgress && self.endlessScrollBlock){
         
