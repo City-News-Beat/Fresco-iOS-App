@@ -46,6 +46,14 @@
         if(self.disableEndlessScroll)
             return;
         
+        if([self.galleriesViewController.galleries count] == 0){
+            
+            responseBlock(YES, nil);
+            
+            return;
+            
+        }
+        
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         

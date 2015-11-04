@@ -94,6 +94,15 @@ static CGFloat const kInterImageGap = 1.0f;
     
     self.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
+        //Check to make sure there's actually content before adding to prevent immediate endless on load
+        if([self.stories count] == 0){
+            
+            if(responseBlock) responseBlock(YES, nil);
+            
+            return;
+            
+        }
+        
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:self.stories.count];
         
@@ -107,9 +116,14 @@ static CGFloat const kInterImageGap = 1.0f;
                     
                     [self.tableView reloadData];
                     
+                    if(responseBlock) responseBlock(YES, nil);
                 }
+                else
+                    if(responseBlock) responseBlock(YES, nil);
     
             }
+            else
+                if(responseBlock) responseBlock(YES, nil);
             
         }];
         

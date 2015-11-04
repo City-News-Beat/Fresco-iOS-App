@@ -37,6 +37,17 @@
         if(self.disableEndlessScroll)
             return;
         
+        if([self.galleriesViewController.galleries count] == 0){
+            
+            responseBlock(YES, nil);
+            
+            return;
+            
+        }
+        
+        if([self.galleriesViewController.galleries count] == 0)
+            return;
+        
         // append data to data source, insert new cells at the end of table view
         NSNumber *offset = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
@@ -44,7 +55,7 @@
             
             if (!error) {
                 
-                if ([responseObject count]) {
+                if ([responseObject count] > 0) {
                     
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
