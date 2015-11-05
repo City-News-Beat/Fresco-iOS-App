@@ -29,6 +29,8 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
+@property (nonatomic, assign) BOOL endlessBlockInProgress;
+
 @end
 
 @implementation NotificationsViewController
@@ -54,40 +56,6 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.showsVerticalScrollIndicator = NO;
 
-    #warning Fix this
-    //Endless scroll handler
-//    [self.tableView addInfiniteScrollingWithActionHandler:^{
-//        
-//        if(!self.disableEndlessScroll) {
-//        
-//            // append data to data source, insert new cells at the end of table view
-//            NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
-//            
-//            //Make request for more posts, append to galleries array
-//            [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
-//                if (!error) {
-//                    
-//                    if ([responseObject count] > 0) {
-//                        
-//                        [self.notifications addObjectsFromArray:responseObject];
-//                        
-//                        [self.tableView reloadData];
-//                        
-//                        
-//                    }
-//                    else
-//                        self.disableEndlessScroll = YES;
-//                    
-//                    [self.tableView.infiniteScrollingView stopAnimating];
-//                    
-//                }
-//            }];
-//            
-//        } else {
-//            [self.tableView.infiniteScrollingView stopAnimating];
-//        }
-//        
-//    }];
     
     [[FRSDataManager sharedManager] getNotificationsForUser:0 withResponseBlock:^(id responseObject, NSError *error) {
         
@@ -176,6 +144,42 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
     return NO;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    float scrollViewHeight = scrollView.frame.size.height;
+    float scrollOffset = scrollView.contentOffset.y;
+    
+    //Check if we're at the end of the table view
+    if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height && scrollOffset > 0 && !self.endlessBlockInProgress){
+        
+        self.endlessBlockInProgress = YES;
+        
+        // append data to data source, insert new cells at the end of table view
+        NSNumber *num = [NSNumber numberWithInteger:[self.notifications count]];
+        
+        //Make request for more posts, append to galleries array
+        [[FRSDataManager sharedManager] getNotificationsForUser:num withResponseBlock:^(id responseObject, NSError *error) {
+            if (!error) {
+                
+                if ([responseObject count] > 0) {
+                    
+                    [self.notifications addObjectsFromArray:responseObject];
+                    
+                    [self.tableView reloadData];
+                    
+                }
+                else
+                    self.disableEndlessScroll = YES;
+                
+                self.endlessBlockInProgress = NO;
+                
+            }
+        }];
+
+    }
+
 }
 
 // Override to support editing the table view.

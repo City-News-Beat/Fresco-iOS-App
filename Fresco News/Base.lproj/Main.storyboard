@@ -330,7 +330,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="164" sectionHeaderHeight="42" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="0Xi-lz-kA9">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.97647058819999999" green="0.98039215690000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -540,7 +540,7 @@
                             <constraint firstItem="0Xi-lz-kA9" firstAttribute="top" secondItem="ZPq-RN-D5o" secondAttribute="topMargin" id="Jk3-sE-P0H"/>
                             <constraint firstAttribute="trailing" secondItem="0Xi-lz-kA9" secondAttribute="trailing" id="fXW-np-Jzr"/>
                             <constraint firstItem="0Xi-lz-kA9" firstAttribute="top" secondItem="ZPq-RN-D5o" secondAttribute="topMargin" constant="-40" id="oBz-mu-j6N"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="0Xi-lz-kA9" secondAttribute="bottom" id="w9e-Qp-Tsi"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="0Xi-lz-kA9" secondAttribute="bottom" constant="49" id="w9e-Qp-Tsi"/>
                             <constraint firstItem="9cW-Gt-aoZ" firstAttribute="top" secondItem="0Xi-lz-kA9" secondAttribute="bottom" constant="-113" id="x9y-K5-qw3"/>
                         </constraints>
                         <variation key="default">
@@ -550,6 +550,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="tableView" destination="0Xi-lz-kA9" id="YgK-GQ-R1c"/>

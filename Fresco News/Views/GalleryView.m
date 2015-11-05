@@ -73,31 +73,10 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
                 
                     }
-                    #warning Check this
-                    //If the cell doesn't have a video
-                    else{
-                
-                        //If the Player is actually playing
-                        if([self sharedPlayer] != nil){
-                
-                            //Stop the player
-                
-                            [[self sharedPlayer] pause];
-                            
-                            [[self sharedLayer] removeFromSuperlayer];
-                            
-                        }
-                        
-                    }
-                    
                 }
-                
             }
-
         });
-            
     }
-    
 }
 
 - (void)setAspectRatio

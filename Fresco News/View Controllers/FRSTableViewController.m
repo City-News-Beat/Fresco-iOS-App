@@ -35,7 +35,8 @@
     //Check if we're at the end of the table view
     if (scrollOffset + scrollViewHeight >= scrollView.contentSize.height && scrollOffset > 0){
         
-        if(!self.endlessBlockInProgress && self.endlessScrollBlock){
+        //Check if there is a block to execute and that it is not in progress
+        if(self.endlessScrollBlock && !self.endlessBlockInProgress){
         
             self.endlessBlockInProgress = YES;
 

@@ -87,6 +87,7 @@
     if(self.managerState == LocationManagerStateBackground){
     
         [self pingUserLocationToServer:locations];
+    
     }
 
 }
@@ -126,48 +127,52 @@
  *  @param locations Array of locations from manager's didUpdateLocations
  */
 
-#warning Background thread possibly
-
 - (void)pingUserLocationToServer:(NSArray *)locations{
     
-    if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
-        
-        self.currentLocation = [locations lastObject];
-        
-        NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
-                                 @"lon" : @(self.location.coordinate.longitude)};
-        
-        [[FRSDataManager sharedManager] updateUserLocation:params block:^(BOOL sucess, NSError *error) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{ // 1
+    
+        if (!self.currentLocation || [self.currentLocation distanceFromLocation:[locations lastObject]] > 0) {
             
-            if(sucess)  NSLog(@"Successfully updated location");
+            self.currentLocation = [locations lastObject];
             
-        }];
-        
-        //Check if we're inactive, then send the local push for the assignment
-        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground){
-            [self sendLocalPushForAssignment];
+            NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
+                                     @"lon" : @(self.location.coordinate.longitude)};
+            
+            [[FRSDataManager sharedManager] updateUserLocation:params block:^(BOOL sucess, NSError *error) {
+                
+                if(sucess)  NSLog(@"Successfully updated location");
+                
+            }];
+            
+            //Check if we're inactive, then send the local push for the assignment
+            if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground){
+                [self sendLocalPushForAssignment];
+            }
+            
+            //        Uncomment for local notifications while testing
+            //        UILocalNotification *notification = [[UILocalNotification alloc] init];
+            //        notification.alertBody = [self.location description];
+            //        notification.soundName = UILocalNotificationDefaultSoundName;
+            //        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+            //        notification.timeZone = [NSTimeZone defaultTimeZone];
+            //        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+            
         }
         
-        //        Uncomment for local notifications while testing
-        //        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        //        notification.alertBody = [self.location description];
-        //        notification.soundName = UILocalNotificationDefaultSoundName;
-        //        notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-        //        notification.timeZone = [NSTimeZone defaultTimeZone];
-        //        [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
+        //Stop updating location, will be turned back on `restartLocationUpdates` on the interval
+        [self stopUpdatingLocation];
         
-    }
-    
-    //Stop updating location, will be turned back on `restartLocationUpdates` on the interval
-    [self stopUpdatingLocation];
-    
-    //Set interval for location update every `locationUpdateInterval` seconds
-    if (self.locationTimer == nil) {
-        // NSLog(@"Starting timer...");
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
-        
-    }
-
+        //Set interval for location update every `locationUpdateInterval` seconds
+        if (self.locationTimer == nil) {
+            
+            self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:LOCATION_UPDATE_INTERVAL
+                                                                  target:self
+                                                                selector:@selector(restartLocationUpdates)
+                                                                userInfo:nil
+                                                                 repeats:YES];
+            
+        }
+    });
 }
 
 /**
