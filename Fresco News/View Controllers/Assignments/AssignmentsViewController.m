@@ -342,9 +342,9 @@
                             }
                             
                             if(copy.count > 0
-                               || self.assignments.count == 0
+                               || [self.assignments count] == 0
                                || self.assignments == nil
-                               || ([self.assignments count] +1) > [self.assignmentsMap.annotations count])
+                               || ([self.assignments count]) > [self.assignmentsMap.annotations count])
                             {
                                 
                                 self.assignments = responseObject;
@@ -836,14 +836,19 @@
 
 - (void)hideOnboarding:(NSNotification *)notification {
     
-    [UIView animateWithDuration:0.3 animations:^{
-        self.onboardContainerView.alpha = 0;
-    } completion:^(BOOL finished){
-    
-        [self.onboardContainerView removeFromSuperview];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-    }];
+        [UIView animateWithDuration:0.3 animations:^{
+            self.onboardContainerView.alpha = 0;
+        } completion:^(BOOL finished){
+            
+            [self.onboardContainerView removeFromSuperview];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_ASSIGNMENTS_ONBOARDING];
+            
+        }];
+        
+    });
+    
 
 }
 
