@@ -10,4 +10,11 @@
 
 @interface FirstRunRadiusViewController : FRSBaseViewController
 
+/**
+ *  Saves set radius in the slider
+ */
+
+- (void)save;
+
+    
 @end

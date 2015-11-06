@@ -170,7 +170,6 @@
                                                                 selector:@selector(restartLocationUpdates)
                                                                 userInfo:nil
                                                                  repeats:YES];
-            
         }
     });
 }

@@ -110,18 +110,20 @@
 
 - (void)keyboardWillShowOrHide:(NSNotification *)notification
 {
+    CGSize kbSize = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    CGRect viewFrame = self.parentViewController.parentViewController.view.frame;
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
+        viewFrame.origin.y = -kbSize.height;
+    else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
+        viewFrame.origin.y = 0;
+    
     [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0.3
+                          delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
-                            CGRect viewFrame = self.view.frame;
-                            
-                            if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-                                viewFrame.origin.y = -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                            else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
-                                viewFrame.origin.y = 0;
-                            
-                            self.view.frame = viewFrame;
+                            self.parentViewController.parentViewController.view.frame= viewFrame;
                             
                         } completion:nil];
 }
@@ -294,6 +296,7 @@
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
     [self presentViewController:picker animated:YES completion:^{
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
         self.addPhotoImageView.clipsToBounds = YES;
     }];

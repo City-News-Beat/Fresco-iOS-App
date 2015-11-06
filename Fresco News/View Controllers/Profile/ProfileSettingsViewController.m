@@ -120,6 +120,8 @@ typedef enum : NSUInteger {
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
     
+    self.saveChangesbutton.enabled = NO;
+    
     [self.addCardButton setTitleColor:[UIColor textInputBlackColor] forState:UIControlStateHighlighted];
     
     // Radius slider values

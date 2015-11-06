@@ -85,9 +85,9 @@
         
         if(self.presentingViewController == nil)
             [self navigateToMainApp];
-        else{
+        else
             [self dismissViewControllerAnimated:YES completion:nil];
-        }
+        
     }
     
 }

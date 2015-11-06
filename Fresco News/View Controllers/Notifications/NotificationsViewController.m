@@ -63,7 +63,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
             
             if(responseObject == nil || [responseObject count] == 0){
                 
-                UILabel  * label = [[UILabel alloc] initWithFrame:CGRectMake(40, 70, 150, 100)];
+                UILabel  *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 70, 150, 100)];
                 
                 label.text = @"No Notifications";
                 

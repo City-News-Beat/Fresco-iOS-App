@@ -136,11 +136,6 @@
 
 - (void)moveToViewAtIndex:(NSInteger)index withDirection:(UIPageViewControllerNavigationDirection)direction{
     
-//    if(self.inTransition)
-//        return;
-    
-    self.inTransition = YES;
-
     UIViewController *viewController = [self viewControllerAtIndex:index];
 
     if(viewController == nil)
@@ -157,8 +152,6 @@
     [self setViewControllers:controllers direction:direction animated:YES completion:^(BOOL finished) {
         
         [(FRSFirstRunWrapperViewController *)weakSelf.parentViewController updateStateWithIndex:weakSelf.currentIndex];
-    
-        weakSelf.inTransition = NO;
         
     }];
 }
@@ -183,6 +176,13 @@
     else if(index == 4){
         
         [self moveToViewAtIndex:index withDirection:UIPageViewControllerNavigationDirectionForward];
+        
+    }
+    else if(index == 5){
+        
+        FirstRunRadiusViewController *vc = self.viewControllers[0];
+        
+        [vc save];
         
     }
 

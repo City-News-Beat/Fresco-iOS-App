@@ -16,25 +16,10 @@
 #import "FRSImage.h"
 #import "FRSRefreshControl.h"
 
-#warning Fix crash on scroll near bottom
-
 static CGFloat const kImageHeight = 96.0;
 static CGFloat const kInterImageGap = 1.0f;
 
 @interface StoriesViewController () <UITableViewDelegate, UITableViewDataSource, StoryThumbnailViewTapHandler, StoryHeaderViewTapHandler>
-
-/*
- ** Sets of images for each story
- */
-
-@property (strong, nonatomic) NSMutableArray *imageArrays;
-
-
-/*
-** Scroll View's Last Content Offset, for nav bar conditioning
-*/
-
-@property (nonatomic, assign) CGFloat lastContentOffset;
 
 /*
  ** Background on the status bar
@@ -48,13 +33,6 @@ static CGFloat const kInterImageGap = 1.0f;
 
 @implementation StoriesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [self setup];
-    }
-    return self;
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -67,7 +45,6 @@ static CGFloat const kInterImageGap = 1.0f;
 - (void)setup
 {
     _stories = [[NSMutableArray alloc] init];
-    _imageArrays = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -223,9 +200,7 @@ static CGFloat const kInterImageGap = 1.0f;
     StoryCellMosaic *storyCell = [tableView dequeueReusableCellWithIdentifier:[StoryCellMosaic identifier] forIndexPath:indexPath];
     storyCell.story = story;
     storyCell.tapHandler = self;
-    
-    if(index < [self.imageArrays count])
-        storyCell.imageArray = self.imageArrays[index];
+    storyCell.imageArray = [self imageArrayForStory:self.stories[index]];
     
     [storyCell configureImages];
     
@@ -242,7 +217,6 @@ static CGFloat const kInterImageGap = 1.0f;
     [storyCellHeader setStory:cellStory];
     storyCellHeader.tapHandler = self;
     
-    
     return storyCellHeader;
 }
 
@@ -258,19 +232,18 @@ static CGFloat const kInterImageGap = 1.0f;
     
     NSUInteger index = indexPath.section;
     
-    if(index < [self.stories count])
-        self.imageArrays[index] = [self imageArrayForStory:self.stories[index]];
-    else
-        return 96.0;
+    if(!index < [self.stories count])
+        return kImageHeight;
 
     CGFloat width = 0;
+    
     BOOL flag = NO;
     
     //Check if we should double the height
-    for (FRSImage *image in self.imageArrays[index]) {
+    for (FRSImage *image in [self imageArrayForStory:self.stories[index]]) {
         
         if (flag) {
-            return 96.0 * 2;
+            return kImageHeight * 2;
         }
         
         CGFloat scale = kImageHeight / [image.height floatValue];

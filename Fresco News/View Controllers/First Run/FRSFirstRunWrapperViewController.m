@@ -105,7 +105,7 @@
 -(void)nextButtonTapped{
     
     //If we're on the first page or the last page
-    if(self.pagedViewController.currentIndex == 0 || self.pagedViewController.currentIndex == 4){
+    if(self.pagedViewController.currentIndex == 0){
 
         //Set has Launched Before to prevent onboard from ocurring again
         if (![[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE])

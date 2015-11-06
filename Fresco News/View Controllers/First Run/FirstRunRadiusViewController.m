@@ -32,11 +32,6 @@
 
 @implementation FirstRunRadiusViewController
 
-// 500 ft (.095), 2000 ft (0.38), 1, 2, 5, 10, 15, 20, 30, 40, 50
-
-// Note: If user has declined to share location (either "when in use" or "always"), the following console warning will appear:
-// Trying to start MapKit location updates without prompting for location authorization. Must call -[CLLocationManager requestWhenInUseAuthorization] or -[CLLocationManager requestAlwaysAuthorization] first.
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -110,6 +105,9 @@
 
 - (void)save {
     
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+    
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(BOOL success, NSError *error) {
@@ -123,15 +121,12 @@
                              completion:nil];
         }
         else{
-                    
-            if(self.presentingViewController == nil)
-                [self navigateToMainApp];
-            else{
-                [self dismissViewControllerAnimated:YES completion:nil];
-                
-            }
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
         
         }
+
     }];
 
 }

@@ -124,7 +124,7 @@
     CGRect viewFrame = self.parentViewController.parentViewController.view.frame;
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification])
-        viewFrame.origin.y = -kbSize.height /4;
+        viewFrame.origin.y = -kbSize.height;
     else if([notification.name isEqualToString:UIKeyboardWillHideNotification])
         viewFrame.origin.y = 0;
     
