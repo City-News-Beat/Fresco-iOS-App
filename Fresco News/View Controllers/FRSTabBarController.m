@@ -181,9 +181,15 @@
                 
                 NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
                 
-                [((ProfileViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                if (((ProfileViewController *)vc).galleriesViewController.galleries){
+                    
+                    [((ProfileViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                }
+                
             }
             else{
+                
+                
                 [vc.navigationController popViewControllerAnimated:YES];
             }
             

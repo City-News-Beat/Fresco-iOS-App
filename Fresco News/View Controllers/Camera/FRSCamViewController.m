@@ -271,6 +271,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     dispatch_async(self.sessionQueue, ^{
         
+#warning possible race conditions, needs investigation
+        
         switch ( self.setupResult )
         {
             case FRSCamSetupResultSuccess:
@@ -331,7 +333,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-
+    
     //Stop the session from running when leaving the view
     dispatch_async(self.sessionQueue, ^{
         if (self.setupResult == FRSCamSetupResultSuccess) {

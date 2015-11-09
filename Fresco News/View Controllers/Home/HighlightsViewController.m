@@ -32,6 +32,9 @@
     [self setFrescoNavigationBar];
 
     //Check if the app visited onboard, then go straight to updating
+    
+    #warning Make sure highlights appear after onboard process
+    
     if(((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController).onboardVisited){
     
         [self initialUpdate];

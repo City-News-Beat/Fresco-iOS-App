@@ -642,7 +642,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-141.5" y="-243.75"/>
+            <point key="canvasLocation" x="-162.5" y="-275.25"/>
         </scene>
         <!--Gallery Post View Controller-->
         <scene sceneID="sMd-gK-CCb">

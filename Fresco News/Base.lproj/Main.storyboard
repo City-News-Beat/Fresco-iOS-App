@@ -783,7 +783,7 @@
         <!--Camera-->
         <scene sceneID="8Xq-LW-j2N">
             <objects>
-                <viewController id="ZRN-7D-fGO" customClass="FRSCamViewController" sceneMemberID="viewController">
+                <viewController id="ZRN-7D-fGO" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Camera" image="tab-camera" id="are-vO-thx">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="30"/>
@@ -798,7 +798,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-424" y="-781"/>
+            <point key="canvasLocation" x="-416" y="-735"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="CFy-IY-NkP">

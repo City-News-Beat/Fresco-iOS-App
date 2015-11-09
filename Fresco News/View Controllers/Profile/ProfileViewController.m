@@ -26,6 +26,7 @@
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
+
 @end
 
 @implementation ProfileViewController
@@ -40,7 +41,7 @@
     
     //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
-
+    
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
         if(self.disableEndlessScroll)
@@ -64,19 +65,21 @@
                 if ([responseObject count] > 0) {
                     
                     [self userMessageShouldHide:YES];
-
+                    
                     [self.galleriesViewController.galleries addObjectsFromArray:responseObject];
                     
                     [self.galleriesViewController.tableView reloadData];
                     
                 }
-                else self.disableEndlessScroll = YES;
+                else {
+                    self.disableEndlessScroll = YES;
+                    
+                }
             }
-            
         }];
         
     };
-
+    
     
     //Set up bar button item to show contextual "Me"
     UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Me"
@@ -93,7 +96,7 @@
     [super viewDidAppear:animated];
     
     if(!self.initialUpdate || [[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_PROFILE]){
-       
+        
         [self populateProfile];
         
         self.initialUpdate = YES;
@@ -104,19 +107,19 @@
     if([[NSUserDefaults standardUserDefaults] boolForKey:UD_UPDATE_USER_GALLERIES]){
         
         [self performNecessaryFetch:YES withResponseBlock:^(BOOL success, NSError *error) {
-
+            
             [self.galleriesViewController.tableView reloadData];
-
+            
         }];
-
+        
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UD_UPDATE_USER_GALLERIES];
-    
+        
     }
 }
 
 /*
-** Populates view controller with galleries and the profile header
-*/
+ ** Populates view controller with galleries and the profile header
+ */
 
 - (void)populateProfile{
     
@@ -139,8 +142,8 @@
 #pragma mark - NSNotificationCenter Notification handling
 
 /*
-** API Key for user is now available, run update on profile view
-*/
+ ** API Key for user is now available, run update on profile view
+ */
 
 - (void)handleAPIKeyAvailable:(NSNotification *)notification
 {
@@ -171,12 +174,12 @@
                ||
                ![((FRSGallery *)[responseObject objectAtIndex:0]).galleryID isEqualToString:
                  ((FRSGallery *)[self.galleriesViewController.galleries objectAtIndex:0]).galleryID]){
-                
-                self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
-                
-                if(responseBlock) responseBlock(YES, nil);
-                
-            }
+                   
+                   self.galleriesViewController.galleries = [NSMutableArray arrayWithArray:responseObject];
+                   
+                   if(responseBlock) responseBlock(YES, nil);
+                   
+               }
             else
                 if(responseBlock) responseBlock(YES, nil);
             
@@ -246,7 +249,7 @@
                 
             }
         }
-
+        
     });
     
 }
@@ -254,9 +257,9 @@
 #pragma mark - UITapGestureRecognizer
 
 - (void)labelTapped:(UITapGestureRecognizer *)sender {
-
+    
     [self navigateToCamera];
-
+    
 }
 
 
