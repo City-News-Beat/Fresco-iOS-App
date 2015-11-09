@@ -55,6 +55,7 @@ enum FRSErrorCodes {
 #define NOTIF_UPLOAD_FAILURE                @"UploadFailed"
 #define NOTIF_UPLOAD_PROGRESS               @"UploadProgress"
 #define NOTIF_UPLOAD_COMPLETE               @"UploadComplete"
+#define NOTIF_GALLERY_ASSET_CHANGE          @"GalleryAssetsChanged"
 
 
 /* Keys Plist */

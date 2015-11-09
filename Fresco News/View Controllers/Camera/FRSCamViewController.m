@@ -24,6 +24,8 @@
 #import "FRSUploadManager.h"
 #import "FRSLocationManager.h"
 
+#import "FRSGalleryAssetsManager.h"
+
 static void * CapturingStillImageContext = &CapturingStillImageContext;
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -241,6 +243,22 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     //End session thread
     });
     
+    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+    
+    [self configureDoneButtonAndImageView];
+    
+}
+
+-(void)configureDoneButtonAndImageView{
+    
+    PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;
+    if (result){
+        PHAsset *asset = [result firstObject];
+        
+        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                self.doneButtonImageView.image = result;
+            }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -365,6 +383,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         self.doneButton.clipsToBounds = YES;
         self.doneButton.layer.cornerRadius = 8;
+        self.doneButton.layer.borderWidth = 0.5;
+        self.doneButton.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
+        self.doneButton.alpha = 0.0;
+        
         self.doneButtonImageView.clipsToBounds = YES;
         self.doneButtonImageView.layer.cornerRadius = self.doneButton.layer.cornerRadius;
         
@@ -829,7 +851,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 - (void)toggleRecentPhotoViewWithImage:(UIImage *)thumbnail{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         self.doneButtonImageView.transform = CGAffineTransformMakeScale(0.1, 0.1);
         
         if (thumbnail) {
@@ -837,10 +859,9 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         }
         
         [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-             self.doneButtonImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-             self.doneButton.alpha = 1.0f;
-         } completion:nil];
-    
+            self.doneButtonImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+            self.doneButton.alpha = 1.0f;
+        } completion:nil];
     });
 }
 
@@ -1086,10 +1107,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                                 if (!success) {
                                     NSLog( @"Error occurred while saving image to photo library: %@", error );
                                 }
-                                else
+                                else {
                                     [self toggleRecentPhotoViewWithImage:[UIImage imageWithData:newImageData scale:.1]];
-
-                                
+                                    
+                                }
                             }];
                         }
                         else {
@@ -1117,8 +1138,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                                 if (!success ) {
                                     NSLog( @"Error occurred while saving image to photo library: %@", error );
                                 }
-                                else
+                                else {
                                     [self toggleRecentPhotoViewWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                    
+                                }
                                 
                                 // Delete the temporary file.
                                 [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];

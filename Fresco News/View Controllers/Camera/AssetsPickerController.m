@@ -13,6 +13,7 @@
 #import "FRSCamViewController.h"
 #import "FRSRootViewController.h"
 #import "FRSTabBarController.h"
+#import "FRSGalleryAssetsManager.h"
 
 @implementation NSIndexSet (Convenience)
 - (NSArray *)aapl_indexPathsFromIndexesWithSection:(NSUInteger)section {
@@ -37,7 +38,7 @@
 }
 @end
 
-@interface AssetsPickerController () <PHPhotoLibraryChangeObserver>
+@interface AssetsPickerController ()
 
 @property (strong, nonatomic) UIView *noAssetsView;
 
@@ -82,7 +83,7 @@ static CGSize AssetGridThumbnailSize;
         :
         [[UIScreen mainScreen] bounds].size.width;
         
-        self.assetsFetchResults = [self fetchInitialResults];
+        self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
         
         if(self.assetsFetchResults.count == 0){
             
@@ -93,7 +94,6 @@ static CGSize AssetGridThumbnailSize;
         //Initiaize image manager
         self.imageManager = [[PHCachingImageManager alloc] init];
         [self resetCachedAssets];
-        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
         
         // Initialize Flow Layout.
         UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
@@ -139,12 +139,14 @@ static CGSize AssetGridThumbnailSize;
     [super viewDidLoad];
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionViewWithChange:) name:NOTIF_GALLERY_ASSET_CHANGE object:nil];
 
 }
 
 - (void)dealloc
 {
-    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -254,15 +256,18 @@ static CGSize AssetGridThumbnailSize;
 }
 
 
-#pragma mark - PHPhotoLibraryChangeObserver
+#pragma mark - Collection View Updating
 
-- (void)photoLibraryDidChange:(PHChange *)changeInstance
-{
-    // Call might come on any background queue. Re-dispatch to the main queue to handle it.
+-(void)updateCollectionViewWithChange:(NSNotification *)sender{
+    
+    PHChange *changeObject = sender.userInfo[@"changeObject"];
+    
+    if (!changeObject) return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         // check if there are changes to the assets (insertions, deletions, updates)
-        PHFetchResultChangeDetails *collectionChanges = [changeInstance changeDetailsForFetchResult:self.assetsFetchResults];
+        PHFetchResultChangeDetails *collectionChanges = [changeObject changeDetailsForFetchResult:self.assetsFetchResults];
         if (collectionChanges) {
             
             // get the new fetch result
@@ -295,7 +300,9 @@ static CGSize AssetGridThumbnailSize;
             [self resetCachedAssets];
         }
     });
+    
 }
+
 
 #pragma mark - UIScrollViewDelegate
 
