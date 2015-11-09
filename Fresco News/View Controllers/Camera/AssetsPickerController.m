@@ -178,6 +178,8 @@ static CGSize AssetGridThumbnailSize;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
     [self updateCachedAssets];
 }
 

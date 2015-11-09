@@ -385,7 +385,9 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         self.doneButton.layer.cornerRadius = 8;
         self.doneButton.layer.borderWidth = 0.5;
         self.doneButton.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
-        self.doneButton.alpha = 0.0;
+        
+        self.doneButton.backgroundColor = [UIColor clearColor];
+        [self.doneButton setTitle:@"" forState:UIControlStateNormal];
         
         self.doneButtonImageView.clipsToBounds = YES;
         self.doneButtonImageView.layer.cornerRadius = self.doneButton.layer.cornerRadius;
@@ -858,6 +860,9 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             [self.doneButtonImageView setImage:thumbnail];
         }
         
+        [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+        self.doneButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
+        
         [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.doneButtonImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
             self.doneButton.alpha = 1.0f;
@@ -1215,11 +1220,21 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                     }
                     else {
                         [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                        
                     }
                 } completionHandler:^( BOOL success, NSError *error ) {
                     if ( ! success ) {
                         NSLog( @"Could not save movie to photo library: %@", error );
                     }
+                    
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+                    PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
+                    
+                    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                        
+                        [self toggleRecentPhotoViewWithImage:result];
+                    }];
+                    
                     cleanup();
                 }];
             }
