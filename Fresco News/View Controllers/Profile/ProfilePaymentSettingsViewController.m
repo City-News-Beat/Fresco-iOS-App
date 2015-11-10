@@ -355,7 +355,7 @@
 - (void)saveCardAction:(id)sender {
     
     //Create the STPCard Object
-    STPCard *card = [[STPCard alloc] init];
+    STPCardParams *card = [[STPCardParams alloc] init];
     card.number = self.cardNumberField.cardNumber;
     card.expMonth = self.expireField.dateComponents.month;
     card.expYear = self.expireField.dateComponents.year;

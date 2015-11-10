@@ -357,6 +357,7 @@ enum FRSErrorCodes {
 
 #define NAVIGATE_STR                        NSLocalizedString(@"Navigate", nil)
 #define NAVIGATE_TO_ASSIGNMENT              NSLocalizedString(@"Navigate to the assignment", nil)
+#define LOC_DISABLED_BANNER                 NSLocalizedString(@"Tap here to enable location", nil)
 
 #pragma mark - MapView Identifiers
 

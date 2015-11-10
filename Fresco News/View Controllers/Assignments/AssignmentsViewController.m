@@ -44,6 +44,7 @@
     /*
     ** Conditioning Variables
     */
+
     @property (strong, nonatomic) CLLocation *lastLoc;
 
     @property (assign, nonatomic) BOOL navigateTo;
@@ -69,7 +70,6 @@
     //Set delegates
     self.assignmentsMap.delegate = self;
     self.scrollView.delegate = self;
-    
     
     //Set all values to 0 to reset controller conditioning
     self.operatingRadius = 0;
@@ -102,7 +102,7 @@
     self.navigationSheet.tag = 100;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNotificationBanner) name:UIApplicationWillEnterForegroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
 
 }
@@ -132,18 +132,41 @@
     
 }
 
+- (void)dealloc{
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
+
 - (void)updateNotificationBanner{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        //Configure radius banner
-        if([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-
-            self.storyBreaksView.hidden = [[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0 ? NO : YES;
-            
+        //Check if the user doesn't have their notification radius set
+        if([[FRSDataManager sharedManager] isLoggedIn]
+           &&
+           [[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0
+        ){
+            self.storyBreaksView.hidden = NO;
         }
-        else
-            self.storyBreaksView.hidden = YES;
+        else{
+        
+            CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+            
+            // If the status is denied or only granted for when in use, display an alert
+            if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+                
+                [((UIButton *)[self.view viewWithTag:3]) setTitle:LOC_DISABLED_BANNER forState:UIControlStateNormal];
+                
+                self.storyBreaksView.hidden = NO;
+                
+            }
+            //Catch all if nothing else is true, hide it
+            else
+                self.storyBreaksView.hidden = YES;
+        
+        }
+        
         
     });
 }
@@ -178,16 +201,30 @@
 }
 
 
-/*
-** Action for clicking radius banner
-*/
+/**
+ *  Action for clicking radius banner
+ *
+ *  @param sender <#sender description#>
+ */
 
 - (IBAction)clickedRadiusNotificationButton:(id)sender {
-        
-    ProfileSettingsViewController *pVC = [[ProfileSettingsViewController alloc] initWithNibName:@"ProfileSettingsViewController" bundle:nil];
-    pVC.hidesBottomBarWhenPushed = YES;
     
-    [self.navigationController pushViewController:pVC animated:YES];
+    //Check if the locatin disabled banner is set
+    if([((UIButton *)sender).titleLabel.text isEqualToString:LOC_DISABLED_BANNER]){
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    
+    }
+    //Default to profile settings action i.e. notification radius not set
+    else{
+        
+        ProfileSettingsViewController *pVC = [[ProfileSettingsViewController alloc] initWithNibName:@"ProfileSettingsViewController" bundle:nil];
+        pVC.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:pVC animated:YES];
+        
+    }
+
     
 }
 

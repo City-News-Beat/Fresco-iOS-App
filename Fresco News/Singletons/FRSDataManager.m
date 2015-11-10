@@ -315,14 +315,19 @@
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
         // upon success connect parse and frs login
         if (user) {
+            
             [self refreshUser:^(BOOL succeeded, NSError *error) {
                 
-                if(!succeeded)
+                if(!succeeded){
                     [self logout];
-                else
+                    block(nil, error);
+                }
+                else{
                     block(user, error);
+                }
             
             }];
+            
         }
         else block(nil, error);
     }];

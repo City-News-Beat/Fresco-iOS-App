@@ -93,7 +93,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="an2-MI-GTV" userLabel="Notification View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="32"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rGW-eB-Nzy">
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rGW-eB-Nzy">
                                         <rect key="frame" x="134" y="3" width="331" height="26"/>
                                         <animations/>
                                         <constraints>
@@ -112,7 +112,7 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="rGW-eB-Nzy" secondAttribute="centerX" constant="0.5" id="7qW-Id-4Ib"/>
+                                    <constraint firstAttribute="centerX" secondItem="rGW-eB-Nzy" secondAttribute="centerX" id="7qW-Id-4Ib"/>
                                     <constraint firstItem="rGW-eB-Nzy" firstAttribute="leading" secondItem="an2-MI-GTV" secondAttribute="leading" constant="134" id="9FH-iC-z1T"/>
                                     <constraint firstAttribute="trailing" secondItem="rGW-eB-Nzy" secondAttribute="trailing" constant="135" id="GrQ-iZ-XBF"/>
                                     <constraint firstItem="rGW-eB-Nzy" firstAttribute="top" secondItem="an2-MI-GTV" secondAttribute="top" constant="3" id="LYE-Y7-TnJ"/>
@@ -132,14 +132,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="109"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assignment Title" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZO-a3-yF6">
-                                                <rect key="frame" x="15" y="8" width="577" height="21"/>
+                                                <rect key="frame" x="15" y="8" width="577" height="20.5"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires in 10 min" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h3D-bu-Qca">
-                                                <rect key="frame" x="16" y="30" width="576" height="15"/>
+                                                <rect key="frame" x="16" y="30.5" width="576" height="14.5"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
