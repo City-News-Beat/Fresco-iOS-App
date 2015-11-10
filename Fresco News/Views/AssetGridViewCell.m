@@ -28,7 +28,7 @@
     self.selectedView.hidden = NO;
     
     UIImageView *checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.selectedView.frame) - 30 , 8, 22, 22)];
-    checkMark.image = [UIImage imageNamed:@"checkmark"];
+    checkMark.image = [UIImage imageNamed:@"picker-checkmark"];
     [self.selectedView addSubview:checkMark];
     
     [self addSubview:self.selectedView];

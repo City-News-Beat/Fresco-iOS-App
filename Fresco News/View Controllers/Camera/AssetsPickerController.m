@@ -141,6 +141,8 @@ static CGSize AssetGridThumbnailSize;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionViewWithChange:) name:NOTIF_GALLERY_ASSET_CHANGE object:nil];
+    
+    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
 
 }
 

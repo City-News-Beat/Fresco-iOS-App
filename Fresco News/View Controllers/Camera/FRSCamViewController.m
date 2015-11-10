@@ -243,7 +243,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     //End session thread
     });
     
+    
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+    
+   
     
 }
 
@@ -266,8 +269,13 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     ///Call update block to check for orientation on load
     [self orientationDidChange];
     
-    [self configureDoneButtonAndImageView];
-
+    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+        
+        BOOL authorized = status == PHAuthorizationStatusAuthorized? YES : NO;
+        
+        [self configureDoneButtonAndImageViewForAuthorized:authorized];
+        
+    }];
 }
 
 
@@ -372,14 +380,14 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         self.doneButton.clipsToBounds = YES;
         self.doneButton.layer.cornerRadius = 8;
-        self.doneButton.layer.borderWidth = 0.5;
-        self.doneButton.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
         
         self.doneButton.backgroundColor = [UIColor clearColor];
         [self.doneButton setTitle:@"" forState:UIControlStateNormal];
         
         self.doneButtonImageView.clipsToBounds = YES;
         self.doneButtonImageView.layer.cornerRadius = self.doneButton.layer.cornerRadius;
+        self.doneButtonImageView.layer.borderWidth = 0.5;
+        self.doneButtonImageView.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.cancelButtonTapView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab)]];
@@ -394,19 +402,32 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
  *Checks the results of the assets fetch and appropriate configures the states of both the done button and the imageview
  */
 
--(void)configureDoneButtonAndImageView{
-    
-    PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;
-    if (result.count){
-        PHAsset *asset = [result firstObject];
+-(void)configureDoneButtonAndImageViewForAuthorized:(BOOL)authorized{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!authorized){
+            
+            self.doneButtonImageView.alpha = 1.0;
+            self.doneButtonImageView.image = [UIImage imageNamed:@"camera-roll"];
+            self.doneButton.alpha = 0.0;
+            return;
+            
+            
+        }
         
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            self.doneButtonImageView.image = result;
-        }];
-    }
-    else {
-        self.doneButton.alpha = 0.0;
-    }
+        PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;
+        if (result.count){
+            PHAsset *asset = [result firstObject];
+            
+            [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                self.doneButtonImageView.alpha = 1.0;
+                self.doneButtonImageView.image = result;
+            }];
+        }
+        else {
+            self.doneButtonImageView.alpha = 0.0;
+            self.doneButton.alpha = 0.0;
+        }
+    });
 }
 
 
@@ -863,9 +884,11 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        
         self.doneButtonImageView.transform = CGAffineTransformMakeScale(0.1, 0.1);
         
         if (thumbnail) {
+            self.doneButtonImageView.alpha = 1.0;
             [self.doneButtonImageView setImage:thumbnail];
         }
         
