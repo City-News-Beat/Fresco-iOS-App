@@ -105,5 +105,9 @@
     return [UIColor colorWithRed:0.74 green:0.74 blue:0.74 alpha:1];
 }
 
++(UIColor *)frescoShadowColor {
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+}
+
 
 @end

@@ -82,56 +82,80 @@ static CGSize AssetGridThumbnailSize;
         [[UIScreen mainScreen] bounds].size.height
         :
         [[UIScreen mainScreen] bounds].size.width;
-        
-        self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
-        
-        if(self.assetsFetchResults.count == 0){
-            
-            [self configureAuxiliaryView:width andHeight:height];
-            
-        }
-        
-        //Initiaize image manager
-        self.imageManager = [[PHCachingImageManager alloc] init];
-        [self resetCachedAssets];
-        
-        // Initialize Flow Layout.
-        UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
-        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        layout.minimumInteritemSpacing = 0;
-        layout.minimumLineSpacing = 4;
-        
-        
-        //Configure cell size
-        AssetGridThumbnailSize = CGSizeMake(width / 3 - 3, width / 3 - 3); // -3 to account for cell spacing
-        layout.itemSize = AssetGridThumbnailSize;
 
-        self.collectionViewLayout = layout;
         
-        // Initilaize collection view.
-        self.collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, width, height - 66) collectionViewLayout:self.collectionViewLayout]; // -66 to account for toolbar height
-        self.collectionView.allowsMultipleSelection = YES;
-        self.collectionView.allowsSelection = YES;
-        
-        // Set it as delegate and data source.
-        [self.collectionView setDataSource:self];
-        [self.collectionView setDelegate:self];
-        
-        // Register cell class and prepare each cell for re-use for efficiency.
-        [self.collectionView registerClass:[AssetGridViewCell class] forCellWithReuseIdentifier:CellReuseIdentifier];
-        // Make background view clear
-        [self.collectionView setBackgroundColor:[UIColor clearColor]];
-        
-        // Add collection view as subview to our root view.
-        [self.view addSubview:self.collectionView];
-        
-        //Initialize selected assets property for keeping track of assets
-        self.selectedAssets = [NSMutableArray new];
-        
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == PHAuthorizationStatusAuthorized){
+                    self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
+                    
+                    if(self.assetsFetchResults.count == 0){
+                        [self configureAuxiliaryView:width andHeight:height authorized:YES];
+                    }
+                    [self setupImageCachingAndCollectionView];
+                    
+                }
+                else{
+                    [self configureAuxiliaryView:width andHeight:height authorized:NO];
+                }
+            });
+        }];
+                           
     }
     
     return self;
 
+}
+
+-(void)setupImageCachingAndCollectionView{
+    
+    CGFloat width = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ?
+    [[UIScreen mainScreen] bounds].size.width
+    :
+    [[UIScreen mainScreen] bounds].size.height;
+    
+    CGFloat height = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ?
+    [[UIScreen mainScreen] bounds].size.height
+    :
+    [[UIScreen mainScreen] bounds].size.width;
+    
+    
+    //Initiaize image manager
+    self.imageManager = [[PHCachingImageManager alloc] init];
+    [self resetCachedAssets];
+    
+    // Initialize Flow Layout.
+    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    layout.minimumInteritemSpacing = 0;
+    layout.minimumLineSpacing = 4;
+    
+    
+    //Configure cell size
+    AssetGridThumbnailSize = CGSizeMake(width / 3 - 3, width / 3 - 3); // -3 to account for cell spacing
+    layout.itemSize = AssetGridThumbnailSize;
+    
+    self.collectionViewLayout = layout;
+    
+    // Initilaize collection view.
+    self.collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, width, height - 66) collectionViewLayout:self.collectionViewLayout]; // -66 to account for toolbar height
+    self.collectionView.allowsMultipleSelection = YES;
+    self.collectionView.allowsSelection = YES;
+    
+    // Set it as delegate and data source.
+    [self.collectionView setDataSource:self];
+    [self.collectionView setDelegate:self];
+    
+    // Register cell class and prepare each cell for re-use for efficiency.
+    [self.collectionView registerClass:[AssetGridViewCell class] forCellWithReuseIdentifier:CellReuseIdentifier];
+    // Make background view clear
+    [self.collectionView setBackgroundColor:[UIColor clearColor]];
+    
+    // Add collection view as subview to our root view.
+    [self.view addSubview:self.collectionView];
+    
+    //Initialize selected assets property for keeping track of assets
+    self.selectedAssets = [NSMutableArray new];
 }
 
 - (void)viewDidLoad{
@@ -141,9 +165,10 @@ static CGSize AssetGridThumbnailSize;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionViewWithChange:) name:NOTIF_GALLERY_ASSET_CHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
-
+    
 }
 
 - (void)dealloc
@@ -455,7 +480,7 @@ static CGSize AssetGridThumbnailSize;
  *  @param height The height of the super view
  */
 
-- (void)configureAuxiliaryView:(CGFloat)width andHeight:(CGFloat)height {
+- (void)configureAuxiliaryView:(CGFloat)width andHeight:(CGFloat)height authorized:(BOOL)authorized{
     
     self.noAssetsView = [[UIView alloc] initWithFrame:CGRectMake(0,0, width * .9, 120)];
     self.noAssetsView.center = CGPointMake(width /2, height/2);
@@ -464,7 +489,7 @@ static CGSize AssetGridThumbnailSize;
     primary.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:17];
     primary.textAlignment = NSTextAlignmentCenter;
     primary.textColor = [UIColor textHeaderBlackColor];
-    primary.text = @"No Photos or Videos";
+    primary.text = authorized ? @"No Photos or Videos" : @"Can't access Photos!";
     [primary sizeToFit];
     primary.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 0);
     
@@ -472,14 +497,95 @@ static CGSize AssetGridThumbnailSize;
     secondary.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
     secondary.textAlignment = NSTextAlignmentCenter;
     secondary.textColor = [UIColor textHeaderBlackColor];
-    secondary.text = @"Only media from the last 24 hours is visible";
+    secondary.text = authorized ? @"Only media from the last 24 hours is visible" : @"Give Fresco permission in";
     [secondary sizeToFit];
     secondary.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 22);
     
+    
     [self.noAssetsView addSubview:primary];
-    [self.noAssetsView addSubview:secondary];
+    
+    if (authorized){
+        [self.noAssetsView addSubview:secondary];
+    }
+    else {
+        NSInteger xPadding = 2;
+        
+        UIView *container = [[UIView alloc] init];
+        container.backgroundColor = self.noAssetsView.backgroundColor;
+        secondary.frame = CGRectMake(0, 0, secondary.frame.size.width, secondary.frame.size.height);
+        [container addSubview:secondary];
+        
+        UIButton *settingsLink = [[UIButton alloc] initWithFrame:CGRectMake(secondary.frame.origin.x + secondary.frame.size.width + xPadding, secondary.frame.origin.y, 0, 0)];
+        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Settings" attributes:@{NSForegroundColorAttributeName : [UIColor blueColor],
+                                                                                                                        NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11],
+                                                                                                             NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}]
+                                forState:UIControlStateNormal];
+        [settingsLink sizeToFit];
+        [settingsLink addTarget:self action:@selector(openSettings) forControlEvents:UIControlEventTouchUpInside];
+        settingsLink.center = secondary.center;
+        settingsLink.frame = CGRectMake(secondary.frame.size.width + xPadding, settingsLink.frame.origin.y, settingsLink.frame.size.width, settingsLink.frame.size.height);
+        [container addSubview:settingsLink];
+        
+//        UILabel *privacyLabel = [[UILabel alloc] init];
+//        privacyLabel.text = @"> Privacy";
+//        privacyLabel.textColor = [UIColor textHeaderBlackColor];
+//        privacyLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
+//        [privacyLabel sizeToFit];
+//        privacyLabel.center = settingsLink.center;
+//        privacyLabel.frame = CGRectMake(settingsLink.frame.origin.x + settingsLink.frame.size.width + xPadding, privacyLabel.frame.origin.y, privacyLabel.frame.size.width, privacyLabel.frame.size.height);
+//        [container addSubview:privacyLabel];
+        
+        container.frame = CGRectMake(0, 0, xPadding + secondary.frame.size.width + settingsLink.frame.size.width, secondary.frame.size.height);
+        container.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 22);
+        container.frame = CGRectMake(container.frame.origin.x, container.frame.origin.y, container.frame.size.width, container.frame.size.height);
+        
+        [self.noAssetsView addSubview:container];
+        
+    }
     
     [self.view addSubview:self.noAssetsView];
+}
+
+-(void)openSettings{
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+-(void)handleApplicationDidBecomeActive{
+    
+    CGFloat width = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ?
+    [[UIScreen mainScreen] bounds].size.width
+    :
+    [[UIScreen mainScreen] bounds].size.height;
+    
+    CGFloat height = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ?
+    [[UIScreen mainScreen] bounds].size.height
+    :
+    [[UIScreen mainScreen] bounds].size.width;
+    
+    
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (status == PHAuthorizationStatusAuthorized){
+                
+                self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
+                
+                if(self.assetsFetchResults.count == 0){
+                    [self configureAuxiliaryView:width andHeight:height authorized:YES];
+                }
+                else{
+                    self.noAssetsView.alpha = 0.0;
+                }
+                [self setupImageCachingAndCollectionView];
+                
+            }
+            else{
+                [self configureAuxiliaryView:width andHeight:height authorized:NO];
+            }
+        });
+    }];
+    
 }
 
 #pragma mark - Toolbar Apperance

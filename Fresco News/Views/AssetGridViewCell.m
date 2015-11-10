@@ -27,9 +27,14 @@
     self.selectedView.backgroundColor = [UIColor assetOverlayColor];
     self.selectedView.hidden = NO;
     
+    
     UIImageView *checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.selectedView.frame) - 30 , 8, 22, 22)];
     checkMark.image = [UIImage imageNamed:@"picker-checkmark"];
     [self.selectedView addSubview:checkMark];
+    checkMark.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
+    checkMark.layer.shadowRadius = 3.0;
+    checkMark.layer.shadowOffset = CGSizeMake(0, 3);
+    checkMark.layer.shadowOpacity = 1.0;
     
     [self addSubview:self.selectedView];
     [self addSubview:photoImageView];
@@ -42,14 +47,25 @@
     lengthLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
     lengthLabel.textColor = [UIColor whiteColor];
     [lengthLabel sizeToFit];
-    lengthLabel.frame = CGRectMake(self.frame.size.width - lengthLabel.frame.size.width - 4, self.frame.size.width - lengthLabel.frame.size.height - 4, lengthLabel.frame.size.width, lengthLabel.frame.size.height);
+    lengthLabel.frame = CGRectMake(self.frame.size.width - lengthLabel.frame.size.width - 6, self.frame.size.width - lengthLabel.frame.size.height - 5, lengthLabel.frame.size.width, lengthLabel.frame.size.height);
+    lengthLabel.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
+    lengthLabel.layer.shadowOffset = CGSizeMake(0, 2);
+    lengthLabel.layer.shadowRadius = 2.0;
+    lengthLabel.layer.shadowOpacity = 1.0;
+    
     [self addSubview:lengthLabel];
     
-    UIImageView *videoIconIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+    UIImageView *videoIconIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 12, 12)];
     videoIconIV.center = lengthLabel.center;
-    videoIconIV.frame = CGRectMake(4, videoIconIV.frame.origin.y, 14, 14);
+    videoIconIV.frame = CGRectMake(8, videoIconIV.frame.origin.y, 12, 12);
     videoIconIV.contentMode = UIViewContentModeScaleAspectFit;
     videoIconIV.image = [UIImage imageNamed:@"video-thumb"];
+    videoIconIV.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
+    videoIconIV.layer.shadowOffset = CGSizeMake(0, 2);
+    videoIconIV.layer.shadowRadius = 2.0;
+    videoIconIV.layer.shadowOpacity = 1.0;
+    
+    
     [self addSubview:videoIconIV];
 }
 

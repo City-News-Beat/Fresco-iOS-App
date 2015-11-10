@@ -388,6 +388,10 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         self.doneButtonImageView.layer.cornerRadius = self.doneButton.layer.cornerRadius;
         self.doneButtonImageView.layer.borderWidth = 0.5;
         self.doneButtonImageView.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
+        self.doneButtonImageView.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doneButtonTapped:)];
+        [self.doneButtonImageView addGestureRecognizer:gr];
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.cancelButtonTapView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAndReturnToPreviousTab)]];
@@ -410,8 +414,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             self.doneButtonImageView.image = [UIImage imageNamed:@"camera-roll"];
             self.doneButton.alpha = 0.0;
             return;
-            
-            
+        
         }
         
         PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;

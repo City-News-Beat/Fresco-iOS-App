@@ -50,4 +50,6 @@
 
 + (UIColor *)frescoLightGreyColor;
 
++(UIColor *)frescoShadowColor;
+
 @end
