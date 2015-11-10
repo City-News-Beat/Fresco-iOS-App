@@ -508,9 +508,14 @@ static CGSize AssetGridThumbnailSize;
     else {
     
         UIButton *settingsLink = [[UIButton alloc] initWithFrame:CGRectZero];
-        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Give Fresco permission in Settings > Privacy" attributes:@{NSForegroundColorAttributeName : [UIColor blueColor],
+        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Give Fresco permission in Settings > Privacy" attributes:@{NSForegroundColorAttributeName : [UIColor frescoBlueColor],
                                                                                                                         NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11]}]
                                 forState:UIControlStateNormal];
+
+        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Give Fresco permission in Settings > Privacy" attributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:0.00 green:0.28 blue:0.73 alpha:0.5],
+                                                                                                                                                 NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11]}]
+                                forState:UIControlStateHighlighted];
+        
         [settingsLink sizeToFit];
         [settingsLink addTarget:self action:@selector(openSettings) forControlEvents:UIControlEventTouchUpInside];
         settingsLink.center = CGPointMake(primary.center.x, 22);
