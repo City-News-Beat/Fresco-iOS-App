@@ -74,7 +74,7 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     
-//    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
+    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
     
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -102,8 +102,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         

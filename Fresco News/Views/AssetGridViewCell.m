@@ -28,13 +28,19 @@
     self.selectedView.hidden = NO;
     
     
-    UIImageView *checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.selectedView.frame) - 30 , 8, 22, 22)];
+    UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.selectedView.frame) - 30 , 8, 22, 22)];
+    shadowView.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
+    shadowView.layer.shadowOffset = CGSizeMake(0, 3);
+    shadowView.layer.shadowRadius = 3.0;
+    shadowView.layer.shadowOpacity = 1.0;
+    shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:shadowView.bounds cornerRadius:shadowView.frame.size.width/2].CGPath;
+    [self.selectedView addSubview:shadowView];
+    
+    UIImageView *checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
     checkMark.image = [UIImage imageNamed:@"picker-checkmark"];
-    [self.selectedView addSubview:checkMark];
-    checkMark.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
-    checkMark.layer.shadowRadius = 3.0;
-    checkMark.layer.shadowOffset = CGSizeMake(0, 3);
-    checkMark.layer.shadowOpacity = 1.0;
+    checkMark.layer.cornerRadius = checkMark.frame.size.width/2;
+    checkMark.clipsToBounds = YES;
+    [shadowView addSubview:checkMark];
     
     [self addSubview:self.selectedView];
     [self addSubview:photoImageView];

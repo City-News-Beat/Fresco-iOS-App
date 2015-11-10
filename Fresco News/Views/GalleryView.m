@@ -59,11 +59,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         [self setAspectRatio];
 
     if(begingPlaying){
-    
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             if(self.collectionPosts.visibleCells.count){
-        
+                
                 if(self.collectionPosts.visibleCells[0] != nil){
                     
                     PostCollectionViewCell *postCell = (PostCollectionViewCell *) self.collectionPosts.visibleCells[0];
@@ -77,9 +77,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
                             
                             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
-                                });
+                                
+                                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
                                 
                             }];
                         }
@@ -140,10 +139,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
-    //Cleans up the video player if playing
-    [self cleanUpVideoPlayer];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        //Cleans up the video player if playing
+        [self cleanUpVideoPlayer];
+        
+        
         //update UI in main thread.
         //Start animating the indicator
         postCell.photoIndicatorView.color = [UIColor whiteColor];
@@ -151,36 +151,36 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         [UIView animateWithDuration:1.0 animations:^{
             postCell.photoIndicatorView.alpha = 1.0f;
         }];
+        
+        
+        self.sharedPlayer = [AVPlayer playerWithURL:url];
+        
+        //Set up the AVPlayerItem
+        [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
+        
+        self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
+        
+        self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
+        
+        self.sharedLayer.frame = postCell.imageView.bounds;
+        
+        [postCell.imageView.layer addSublayer:self.sharedLayer];
+        
+        self.sharedPlayer.muted = YES;
+        
+        self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+        
+        //Bring play/pause button to front, so it can be visible on click
+        [postCell bringSubviewToFront:postCell.playPause];
+        
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerItemDidReachEnd:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:[self.sharedPlayer currentItem]];
+        
+        self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
     });
-
-    self.sharedPlayer = [AVPlayer playerWithURL:url];
-
-    //Set up the AVPlayerItem
-    [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
-    
-    self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
-    
-    self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
-    
-    self.sharedLayer.frame = postCell.imageView.bounds;
-    
-    [postCell.imageView.layer addSublayer:self.sharedLayer];
-    
-    self.sharedPlayer.muted = YES;
-    
-    self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-    
-    //Bring play/pause button to front, so it can be visible on click
-    [postCell bringSubviewToFront:postCell.playPause];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerItemDidReachEnd:)
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:[self.sharedPlayer currentItem]];
-    
-    self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
-
 }
 
 /*
@@ -478,9 +478,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
             
             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
-                });
+                
+                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
                 
             }];
         }

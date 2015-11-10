@@ -87,6 +87,7 @@ static CGSize AssetGridThumbnailSize;
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == PHAuthorizationStatusAuthorized){
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
                     self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
                     
                     if(self.assetsFetchResults.count == 0){
@@ -165,7 +166,6 @@ static CGSize AssetGridThumbnailSize;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionViewWithChange:) name:NOTIF_GALLERY_ASSET_CHANGE object:nil];
 
-    
 }
 
 - (void)dealloc
@@ -203,7 +203,7 @@ static CGSize AssetGridThumbnailSize;
 {
     [super viewDidAppear:animated];
     
-//    [self updateCachedAssets];
+    [self updateCachedAssets];
 }
 
 #pragma mark - Orientation
