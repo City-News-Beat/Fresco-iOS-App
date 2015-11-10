@@ -62,11 +62,11 @@
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.dismissButton.frame.size.width, 1)];
     shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.08];
     [self.dismissButton addSubview:shadowView];
+
     
     //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
-    
 
 }
 

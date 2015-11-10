@@ -56,6 +56,8 @@ enum FRSErrorCodes {
 #define NOTIF_UPLOAD_PROGRESS               @"UploadProgress"
 #define NOTIF_UPLOAD_COMPLETE               @"UploadComplete"
 #define NOTIF_GALLERY_ASSET_CHANGE          @"GalleryAssetsChanged"
+#define NOTIF_ATTEMPING_LOGIN               @"UserIsAttemptingLogin"
+#define NOTIF_LOGIN_ATTEMPT_DONE            @"LoginAttemptDone"
 
 
 /* Keys Plist */

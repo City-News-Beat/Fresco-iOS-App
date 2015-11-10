@@ -70,8 +70,16 @@
     
     [self.view addSubview:self.backButton];
     
-    
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableProgressViewButton) name:NOTIF_ATTEMPING_LOGIN object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enableProgressViewButton) name:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
+}
+
+-(void)disableProgressViewButton{
+    [self.progressView toggleUserInteractionForProgressButton:NO];
+}
+
+-(void)enableProgressViewButton{
+    [self.progressView toggleUserInteractionForProgressButton:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

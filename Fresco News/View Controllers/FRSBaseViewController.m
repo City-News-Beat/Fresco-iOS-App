@@ -15,6 +15,7 @@
 #import "FirstRunPageViewController.h"
 #import "FRSSocialButton.h"
 #import "FRSFirstRunWrapperViewController.h"
+#import "FRSAppConstants.h"
 
 @implementation FRSBaseViewController
 
@@ -94,6 +95,8 @@
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ATTEMPING_LOGIN object:nil];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
 
         self.view.userInteractionEnabled = NO;
@@ -116,6 +119,7 @@
         [button addSubview:self.spinner];
         
         [self hideViewsExceptView:button withView:self.view];
+        
             
     });
 
@@ -141,6 +145,7 @@
                                              message:INVALID_CREDENTIALS action:nil]
                                    animated:YES completion:nil];
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
             
         }];
         
@@ -178,7 +183,7 @@
                                    animated:YES
                                  completion:nil];
             }
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
         }];
         
     }
@@ -214,6 +219,7 @@
                                    animated:YES
                                  completion:nil];
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
         }];
     }
 }

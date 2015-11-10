@@ -49,4 +49,12 @@
 - (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex;
 
 
+/**
+ *  Toggles the user's ability to tap the progress button for time sensitive tasks such as logging in.
+ *
+ *  @param isInteractive Boolean value for the userInteraction property of the progress button
+ */
+
+-(void)toggleUserInteractionForProgressButton:(BOOL)isInteractive;
+
 @end
