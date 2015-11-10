@@ -55,6 +55,6 @@
  *  @param isInteractive Boolean value for the userInteraction property of the progress button
  */
 
--(void)toggleUserInteractionForProgressButton:(BOOL)isInteractive;
+-(void)disableUserInteraction:(BOOL)disable;
 
 @end

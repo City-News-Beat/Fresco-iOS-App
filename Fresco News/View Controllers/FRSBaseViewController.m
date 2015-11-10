@@ -94,8 +94,12 @@
 }
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ATTEMPING_LOGIN object:nil];
+    
+    if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]]){
+        
+        [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:YES];
+        
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -145,8 +149,8 @@
                                              message:INVALID_CREDENTIALS action:nil]
                                    animated:YES completion:nil];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
             
+            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         }];
         
     }
@@ -183,7 +187,9 @@
                                    animated:YES
                                  completion:nil];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
+        
+            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+        
         }];
         
     }
@@ -219,7 +225,8 @@
                                    animated:YES
                                  completion:nil];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOGIN_ATTEMPT_DONE object:nil];
+            
+            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         }];
     }
 }

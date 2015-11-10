@@ -483,8 +483,8 @@ typedef void(^myCompletion)(BOOL);
 
 }
 
--(void)toggleUserInteractionForProgressButton:(BOOL)isInteractive{
-    self.nextButton.enabled = isInteractive;
+-(void)disableUserInteraction:(BOOL)disable{
+    self.nextButton.enabled = !disable;
 }
 
 

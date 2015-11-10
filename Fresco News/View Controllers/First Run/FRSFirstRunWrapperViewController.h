@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSProgressView.h"
 
 @interface FRSFirstRunWrapperViewController : FRSBaseViewController
 
@@ -18,5 +19,12 @@
  */
 
 - (void)updateStateWithIndex:(NSInteger)index;
-    
+
+/**
+ *  Progress view at the button of the wrapper
+ */
+
+@property (strong, nonatomic) FRSProgressView *progressView;
+
+
 @end
