@@ -492,55 +492,30 @@ static CGSize AssetGridThumbnailSize;
     primary.text = authorized ? @"No Photos or Videos" : @"Can't access Photos!";
     [primary sizeToFit];
     primary.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 0);
-    
-    UILabel *secondary = [[UILabel alloc] initWithFrame:CGRectZero];
-    secondary.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
-    secondary.textAlignment = NSTextAlignmentCenter;
-    secondary.textColor = [UIColor textHeaderBlackColor];
-    secondary.text = authorized ? @"Only media from the last 24 hours is visible" : @"Give Fresco permission in";
-    [secondary sizeToFit];
-    secondary.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 22);
-    
-    
     [self.noAssetsView addSubview:primary];
     
+    
     if (authorized){
+        UILabel *secondary = [[UILabel alloc] initWithFrame:CGRectZero];
+        secondary.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
+        secondary.textAlignment = NSTextAlignmentCenter;
+        secondary.textColor = [UIColor textHeaderBlackColor];
+        secondary.text = @"Only media from the last 24 hours is visible";
+        [secondary sizeToFit];
+        secondary.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 22);
         [self.noAssetsView addSubview:secondary];
     }
     else {
-        NSInteger xPadding = 2;
-        
-        UIView *container = [[UIView alloc] init];
-        container.backgroundColor = self.noAssetsView.backgroundColor;
-        secondary.frame = CGRectMake(0, 0, secondary.frame.size.width, secondary.frame.size.height);
-        [container addSubview:secondary];
-        
-        UIButton *settingsLink = [[UIButton alloc] initWithFrame:CGRectMake(secondary.frame.origin.x + secondary.frame.size.width + xPadding, secondary.frame.origin.y, 0, 0)];
-        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Settings" attributes:@{NSForegroundColorAttributeName : [UIColor blueColor],
-                                                                                                                        NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11],
-                                                                                                             NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}]
+    
+        UIButton *settingsLink = [[UIButton alloc] initWithFrame:CGRectZero];
+        [settingsLink setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Give Fresco permission in Settings > Privacy" attributes:@{NSForegroundColorAttributeName : [UIColor blueColor],
+                                                                                                                        NSFontAttributeName : [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11]}]
                                 forState:UIControlStateNormal];
         [settingsLink sizeToFit];
         [settingsLink addTarget:self action:@selector(openSettings) forControlEvents:UIControlEventTouchUpInside];
-        settingsLink.center = secondary.center;
-        settingsLink.frame = CGRectMake(secondary.frame.size.width + xPadding, settingsLink.frame.origin.y, settingsLink.frame.size.width, settingsLink.frame.size.height);
-        [container addSubview:settingsLink];
-        
-//        UILabel *privacyLabel = [[UILabel alloc] init];
-//        privacyLabel.text = @"> Privacy";
-//        privacyLabel.textColor = [UIColor textHeaderBlackColor];
-//        privacyLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
-//        [privacyLabel sizeToFit];
-//        privacyLabel.center = settingsLink.center;
-//        privacyLabel.frame = CGRectMake(settingsLink.frame.origin.x + settingsLink.frame.size.width + xPadding, privacyLabel.frame.origin.y, privacyLabel.frame.size.width, privacyLabel.frame.size.height);
-//        [container addSubview:privacyLabel];
-        
-        container.frame = CGRectMake(0, 0, xPadding + secondary.frame.size.width + settingsLink.frame.size.width, secondary.frame.size.height);
-        container.center = CGPointMake(CGRectGetWidth(self.noAssetsView.frame) /2, 22);
-        container.frame = CGRectMake(container.frame.origin.x, container.frame.origin.y, container.frame.size.width, container.frame.size.height);
-        
-        [self.noAssetsView addSubview:container];
-        
+        settingsLink.center = CGPointMake(primary.center.x, 22);
+        [self.noAssetsView addSubview:settingsLink];
+
     }
     
     [self.view addSubview:self.noAssetsView];
