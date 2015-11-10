@@ -245,20 +245,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
     
-    [self configureDoneButtonAndImageView];
-    
-}
-
--(void)configureDoneButtonAndImageView{
-    
-    PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;
-    if (result){
-        PHAsset *asset = [result firstObject];
-        
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                self.doneButtonImageView.image = result;
-            }];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -279,6 +265,8 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     // Orientation notification set up
     ///Call update block to check for orientation on load
     [self orientationDidChange];
+    
+    [self configureDoneButtonAndImageView];
 
 }
 
@@ -348,6 +336,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         }
     });
 
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -400,6 +389,26 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
     });
 }
+
+/**
+ *Checks the results of the assets fetch and appropriate configures the states of both the done button and the imageview
+ */
+
+-(void)configureDoneButtonAndImageView{
+    
+    PHFetchResult *result = [FRSGalleryAssetsManager sharedManager].fetchResult;
+    if (result.count){
+        PHAsset *asset = [result firstObject];
+        
+        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+            self.doneButtonImageView.image = result;
+        }];
+    }
+    else {
+        self.doneButton.alpha = 0.0;
+    }
+}
+
 
 #pragma mark KVO and Notifications
 
