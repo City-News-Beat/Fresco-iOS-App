@@ -14,4 +14,17 @@
 
 @property (nonatomic, strong) UIView *selectedView;
 
+
+
+/**
+ *  Adds video thumbnail and duration in cell to distinguish between stills and video assets
+ *
+ *  @param duration the duration of the video asset
+ */
+
+-(void)configureForVideoAssetWithDuration:(NSTimeInterval)duration;
+
+
+
+
 @end

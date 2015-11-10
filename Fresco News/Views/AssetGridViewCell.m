@@ -36,6 +36,32 @@
 
 }
 
+-(void)configureForVideoAssetWithDuration:(NSTimeInterval)duration{
+    UILabel *lengthLabel = [[UILabel alloc] init];
+    lengthLabel.text = [self stringWithDuration:duration];
+    lengthLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];
+    lengthLabel.textColor = [UIColor whiteColor];
+    [lengthLabel sizeToFit];
+    lengthLabel.frame = CGRectMake(self.frame.size.width - lengthLabel.frame.size.width - 4, self.frame.size.width - lengthLabel.frame.size.height - 4, lengthLabel.frame.size.width, lengthLabel.frame.size.height);
+    [self addSubview:lengthLabel];
+    
+    UIImageView *videoIconIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+    videoIconIV.center = lengthLabel.center;
+    videoIconIV.frame = CGRectMake(4, videoIconIV.frame.origin.y, 14, 14);
+    videoIconIV.contentMode = UIViewContentModeScaleAspectFit;
+    videoIconIV.image = [UIImage imageNamed:@"video-thumb"];
+    [self addSubview:videoIconIV];
+}
+
+-(NSString *)stringWithDuration:(NSTimeInterval)duration{
+    NSInteger minutes = duration / 60;
+    NSInteger seconds = (NSInteger)duration % 60;
+    
+    NSString *secondsString = seconds > 9 ? [NSString stringWithFormat:@"%lu", seconds] : [NSString stringWithFormat:@"0%lu",seconds];
+    
+    return [NSString stringWithFormat:@"%lu:%@", minutes, secondsString];
+}
+
 #pragma mark - Accessors
 
 - (void)setSelected:(BOOL)selected{

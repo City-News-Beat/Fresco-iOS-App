@@ -223,9 +223,10 @@ static CGSize AssetGridThumbnailSize;
         if (cell.tag == currentTag) {
             
             [cell setThumbnailImage:result];
-            
+            if (asset.mediaType == PHAssetMediaTypeVideo){
+                [cell configureForVideoAssetWithDuration:asset.duration];
+            }
         }
-        
     }];
     
     return cell;

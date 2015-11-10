@@ -755,10 +755,11 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     int radius = 40;
     self.circleLayer = [CAShapeLayer layer];
     // Make a circular shape
+    
     self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                                        cornerRadius:radius].CGPath;
     // Center the shape in self.view
-    self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius - 3,
+    self.circleLayer.position = CGPointMake(self.view.frame.size.width - CGRectGetMidX(self.apertureButton.frame) - radius,
                                             CGRectGetMidY(self.apertureButton.frame)-radius);
     
     // Configure the apperence of the circle
