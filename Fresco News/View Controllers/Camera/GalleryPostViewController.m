@@ -74,7 +74,7 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
     
-    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
+//    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
     
     self.captionTextView.delegate = self;
     self.captionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -92,16 +92,18 @@
     self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
     [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
     
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager startUpdatingLocation];
+    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         

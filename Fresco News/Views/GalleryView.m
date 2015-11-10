@@ -15,6 +15,8 @@
 #import "GalleriesViewController.h"
 #import "FRSPhotoBrowserView.h"
 
+@import Photos;
+
 static CGFloat const kImageInitialScaleAmt = 0.9f;
 static CGFloat const kImageFinalScaleAmt = 0.98f;
 static CGFloat const kImageInitialYTranslation = 10.f;
@@ -65,13 +67,22 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                 if(self.collectionPosts.visibleCells[0] != nil){
                     
                     PostCollectionViewCell *postCell = (PostCollectionViewCell *) self.collectionPosts.visibleCells[0];
-                
+                    
                     //If the cell has a video
                     if([postCell.post isVideo]){
-                
-                        if(postCell.post.video)
+                        
+                        if(postCell.post.video) {
                             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
-                
+                        }
+                        else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
+                            
+                            [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
+                                });
+                                
+                            }];
+                        }
                     }
                 }
             }
@@ -462,9 +473,17 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell has a video
     if([postCell.post isVideo]){
         
-        if(postCell.post.video)
+        if (postCell.post.video)
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
-        
+        else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
+            
+            [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
+                });
+                
+            }];
+        }
     }
     //If the cell doesn't have a video
     else{

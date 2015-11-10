@@ -100,7 +100,6 @@ static CGSize AssetGridThumbnailSize;
                 }
             });
         }];
-                           
     }
     
     return self;
@@ -165,9 +164,7 @@ static CGSize AssetGridThumbnailSize;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCollectionViewWithChange:) name:NOTIF_GALLERY_ASSET_CHANGE object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+
     
 }
 
@@ -206,8 +203,7 @@ static CGSize AssetGridThumbnailSize;
 {
     [super viewDidAppear:animated];
     
-    self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
-    [self updateCachedAssets];
+//    [self updateCachedAssets];
 }
 
 #pragma mark - Orientation
