@@ -130,7 +130,12 @@
     self.title = @"Add a debit card";
 
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 256)];
-    self.containerView.backgroundColor = [UIColor whiteColor];
+    
+    if (IS_STANDARD_IPHONE_6_PLUS){
+        self.containerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 300);
+    }
+    
+    self.containerView.backgroundColor = [UIColor blueColor];
     self.containerView.clipsToBounds = YES;
     
     /* CardIO View */
@@ -244,8 +249,17 @@
 - (CardIOView *)createCardIOView{
 
     /* CardIO View */
+    
+    
+    
     CardIOView *cardView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -120, self.view.frame.size.width, 500)];
-    cardView.backgroundColor = [UIColor clearColor];
+    
+    if (IS_STANDARD_IPHONE_6_PLUS){
+        cardView.frame = CGRectMake(0, -128, self.view.frame.size.width, 560);
+    }
+    
+    
+    cardView.backgroundColor = [UIColor yellowColor];
     
     return cardView;
     

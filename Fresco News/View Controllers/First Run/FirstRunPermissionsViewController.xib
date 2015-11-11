@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -71,24 +72,21 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czW-gd-5KD" userLabel="Permissions Container">
                     <rect key="frame" x="0.0" y="82" width="375" height="188"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9NW-UK-BYt" userLabel="CameraIcon">
-                            <rect key="frame" x="50" y="0.0" width="48" height="48"/>
-                            <animations/>
-                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <state key="normal" backgroundImage="cameraOffIcon">
-                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="MYY-jC-3fn"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ign-ev-LVd" userLabel="LocaitonIcon">
                             <rect key="frame" x="50" y="67" width="48" height="48"/>
                             <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="ign-ev-LVd" secondAttribute="height" multiplier="1:1" id="HFg-kb-LyZ"/>
+                            </constraints>
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <state key="normal" backgroundImage="locationOffIcon">
                                 <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="HFg-kb-LyZ"/>
+                                </mask>
+                            </variation>
                             <connections>
                                 <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="cTQ-xw-PQ0"/>
                             </connections>
@@ -111,17 +109,6 @@
                             </variation>
                             <connections>
                                 <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="wGL-Me-9bh"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-V7-WUx" userLabel="NotifIcon">
-                            <rect key="frame" x="50" y="132" width="48" height="48"/>
-                            <animations/>
-                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <state key="normal" backgroundImage="notificationOffIcon">
-                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="DLt-YY-aAo"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIu-dE-q8k">
@@ -164,6 +151,50 @@
                                 <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="vSI-qG-PQ4"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-V7-WUx" userLabel="NotifIcon">
+                            <rect key="frame" x="50" y="132" width="48" height="48"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="de1-cg-3yL"/>
+                                <constraint firstAttribute="width" secondItem="jnT-V7-WUx" secondAttribute="height" multiplier="1:1" id="dfb-Ah-zwm"/>
+                                <constraint firstAttribute="width" constant="48" id="j5R-dK-10A"/>
+                            </constraints>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal" backgroundImage="notificationOffIcon">
+                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="de1-cg-3yL"/>
+                                    <exclude reference="dfb-Ah-zwm"/>
+                                    <exclude reference="j5R-dK-10A"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="DLt-YY-aAo"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9NW-UK-BYt" userLabel="CameraIcon">
+                            <rect key="frame" x="50" y="0.0" width="48" height="48"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="48" id="AAa-66-OMY"/>
+                                <constraint firstAttribute="width" secondItem="9NW-UK-BYt" secondAttribute="height" multiplier="1:1" id="DID-Re-jrG"/>
+                                <constraint firstAttribute="height" constant="48" id="inP-Zl-3UH"/>
+                            </constraints>
+                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal" backgroundImage="cameraOffIcon">
+                                <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="DID-Re-jrG"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="MYY-jC-3fn"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -171,21 +202,27 @@
                         <constraint firstItem="jnT-V7-WUx" firstAttribute="top" secondItem="ign-ev-LVd" secondAttribute="bottom" constant="17" id="0NH-ag-fLh"/>
                         <constraint firstItem="9NW-UK-BYt" firstAttribute="leading" secondItem="czW-gd-5KD" secondAttribute="leading" constant="50" id="0qr-vO-2q8"/>
                         <constraint firstAttribute="bottom" secondItem="CIu-dE-q8k" secondAttribute="bottom" constant="16" id="6Hq-i3-id9"/>
+                        <constraint firstItem="jnT-V7-WUx" firstAttribute="width" secondItem="9NW-UK-BYt" secondAttribute="width" id="9hx-R8-MOQ"/>
                         <constraint firstItem="ign-ev-LVd" firstAttribute="top" secondItem="9NW-UK-BYt" secondAttribute="bottom" constant="19" id="Bvn-qt-DOd"/>
                         <constraint firstItem="WB7-qc-Ok6" firstAttribute="centerX" secondItem="KiT-VP-211" secondAttribute="centerX" id="GWD-4p-UTv"/>
                         <constraint firstItem="KiT-VP-211" firstAttribute="leading" secondItem="9NW-UK-BYt" secondAttribute="trailing" constant="50" id="Hq6-iz-O1g"/>
                         <constraint firstItem="9NW-UK-BYt" firstAttribute="top" secondItem="czW-gd-5KD" secondAttribute="top" id="IpH-CA-5Ia"/>
                         <constraint firstItem="WB7-qc-Ok6" firstAttribute="centerY" secondItem="ign-ev-LVd" secondAttribute="centerY" id="K72-AU-sLp"/>
+                        <constraint firstItem="ign-ev-LVd" firstAttribute="height" secondItem="9NW-UK-BYt" secondAttribute="height" id="QA1-9R-mm6"/>
                         <constraint firstItem="jnT-V7-WUx" firstAttribute="leading" secondItem="ign-ev-LVd" secondAttribute="leading" id="QQy-7b-FPm"/>
                         <constraint firstItem="CIu-dE-q8k" firstAttribute="leading" secondItem="jnT-V7-WUx" secondAttribute="trailing" constant="35" id="RfE-mi-hg8"/>
                         <constraint firstItem="CIu-dE-q8k" firstAttribute="centerY" secondItem="jnT-V7-WUx" secondAttribute="centerY" id="ZdR-vc-UEe"/>
                         <constraint firstItem="ign-ev-LVd" firstAttribute="leading" secondItem="9NW-UK-BYt" secondAttribute="leading" id="aOX-G1-Xip"/>
+                        <constraint firstItem="jnT-V7-WUx" firstAttribute="height" secondItem="9NW-UK-BYt" secondAttribute="height" id="akx-e7-2cO"/>
                         <constraint firstItem="CIu-dE-q8k" firstAttribute="centerX" secondItem="KiT-VP-211" secondAttribute="centerX" id="bId-rU-fcR"/>
                         <constraint firstItem="KiT-VP-211" firstAttribute="centerY" secondItem="9NW-UK-BYt" secondAttribute="centerY" id="n7G-ne-Waa"/>
+                        <constraint firstAttribute="bottom" secondItem="jnT-V7-WUx" secondAttribute="bottom" constant="8" id="ntC-Xj-4vn"/>
                         <constraint firstItem="KiT-VP-211" firstAttribute="top" secondItem="czW-gd-5KD" secondAttribute="top" constant="8" id="tKi-C4-aLO"/>
+                        <constraint firstItem="ign-ev-LVd" firstAttribute="width" secondItem="9NW-UK-BYt" secondAttribute="width" id="xDO-U8-mX9"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
+                            <exclude reference="ntC-Xj-4vn"/>
                             <exclude reference="Hq6-iz-O1g"/>
                         </mask>
                     </variation>
