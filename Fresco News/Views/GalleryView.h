@@ -61,8 +61,9 @@
  *
  *  @param url      URL of the video
  *  @param postCell Cell to play in
+ *  @param muted    Starting audio status of player
  */
 
-- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell;
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted;
 
 @end

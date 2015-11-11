@@ -305,7 +305,7 @@
                     
                     self.playingIndex = visibleIndexPath;
                     
-                    [cell.galleryView setUpPlayerWithUrl:postCell.post.video cell:postCell];
+                    [cell.galleryView setUpPlayerWithUrl:postCell.post.video cell:postCell muted:YES];
                     
                 }
                 

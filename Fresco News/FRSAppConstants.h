@@ -76,11 +76,20 @@ enum FRSErrorCodes {
 #define BASE_PATH                           @""
 
 #ifdef DEBUG
-    #define BASE_URL                        @"http://alpha.fresconews.com"
-    #define BASE_API                        @"http://staging.fresconews.com/v1/"
-    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
+
+#define BASE_URL                        @"https://fresconews.com"
+#define BASE_API                        @"https://api.fresconews.com/v1/"
+#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
+#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
+
+
+//
+//    #define BASE_URL                        @"http://alpha.fresconews.com"
+//    #define BASE_API                        @"http://staging.fresconews.com/v1/"
+//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+//    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
 #else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
@@ -98,7 +107,6 @@ enum FRSErrorCodes {
 #define TWITTER_CONSUMER_SECRET             [KEYS_DICTIONARY objectForKey:@"TwitterConsumerSecret"]
 #define TWITTER_USERS_SHOW_URL              @"https://api.twitter.com/1.1/users/show.json?"
 #define TWITTER_VERIFY_URL                  @"https://api.twitter.com/1.1/account/verify_credentials.json"
-
 
 
 /* Float/Int Values */
