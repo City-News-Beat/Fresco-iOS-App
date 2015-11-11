@@ -26,54 +26,72 @@
 
 @property (nonatomic, strong) UIView *containerView;
 
-/*
-** CardIOView for camera viewport
-*/
 
+/**
+ *  CardIOView for camera viewport
+ */
 @property (nonatomic, strong, readwrite) CardIOView *cardIOView;
 
-/*
-** UITextField for card number
-*/
+/**
+ *   UITextField for card number
+ */
 
 @property (strong, nonatomic) BKCardNumberField *cardNumberField;
 
-/*
-** UITextField for expiration field
-*/
+
+/**
+ *  UITextField for expiration field
+ */
 
 @property (strong, nonatomic) BKCardExpiryField *expireField;
 
-/*
-** UITextField for CCV fiekd
-*/
+/**
+ *  UITextField for CCV fiekd
+ */
 
 @property (strong, nonatomic) BKCardNumberField *CCVField;
 
-/*
-** UIButton for `Save Card` action
-*/
+/**
+ *  UIButton for `Save Card` action
+ */
 
 @property (strong, nonatomic) FRSSaveButton *saveCardButton;
 
-
-/*
-** UILabel for user message
-*/
+/**
+ *  UILabel for user message
+ */
 
 @property (strong, nonatomic) UILabel *userMessage;
 
-/*
-** Set of all textfields
-*/
+/**
+ *  Set of all textfields
+ */
 
 @property (strong, nonatomic) NSArray *textFieldCollection;
 
+/**
+ *  Date picker
+ */
+
 @property (strong, nonatomic) UIDatePicker *dobbyPicker;
+
+/**
+ *  Label that looks like a button that represents date picker sattus
+ */
 
 @property (strong, nonatomic) FRSLabel *dobbyPickerLabel;
 
+/**
+ *  State property for if the picker is selected
+ */
+
 @property (assign, nonatomic) BOOL pickerSelected;
+
+/**
+ *  Stripe powered image
+ */
+
+@property (strong, nonatomic) UIImageView *stripePower;
 
 @end
 
@@ -125,6 +143,18 @@
     /* Save Card Button */
     self.saveCardButton = [[FRSSaveButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height - 46 - 44, self.view.frame.size.width, 46) andTitle:@"Save Card"];
     
+    self.stripePower = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"stripe"]];
+    self.stripePower.contentMode = UIViewContentModeScaleAspectFit;
+    
+    if(IS_IPHONE_5){
+        self.stripePower.frame = CGRectMake(0, 0, 100, 18);
+        self.stripePower.center = CGPointMake(self.view.center.x, CGRectGetMinY(self.saveCardButton.frame) - 16);
+    }
+    else{
+        self.stripePower.frame = CGRectMake(0, 0, 120, 40);
+        self.stripePower.center = CGPointMake(self.view.center.x, CGRectGetMinY(self.saveCardButton.frame) - 24);
+    }
+    
     /* DOB Picker */
     self.dobbyPicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(
                                                                     0,
@@ -161,6 +191,7 @@
     userLabel.center = CGPointMake(self.view.center.x, CGRectGetMaxY(self.dobbyPickerLabel.frame) + 20);
 
     [self.view addSubview:userLabel];
+    [self.view addSubview:self.stripePower];
     [self.view addSubview:self.saveCardButton];
     [self.view addSubview:self.containerView];
     [self.view addSubview:self.dobbyPicker];

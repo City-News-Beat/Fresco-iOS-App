@@ -114,25 +114,38 @@ typedef enum : NSUInteger {
 
 
 - (void)configureViews{
+    
+    self.saveChangesbutton.enabled = NO;
 
     //Set text fields with user data
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
     self.textfieldEmail.text = [FRSDataManager sharedManager].currentUser.email;
     
-    self.saveChangesbutton.enabled = NO;
+    //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
+    singleTap.numberOfTapsRequired = 1;
     
-    [self.addCardButton setTitleColor:[UIColor textInputBlackColor] forState:UIControlStateHighlighted];
     
-    // Radius slider values
-    self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
+    //Make the profile image interactive
+    [self.profileImageView addGestureRecognizer:singleTap];
+    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
+    self.profileImageView.clipsToBounds = YES;
     
-    // Update the slider label
-    [self sliderValueChanged:self.radiusStepper];
-    
-    //Update social connect buttons
+    //Update social connect buttons with proper states
     [self updateLinkingStatus];
     
+    //Set up social icons
+    [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
+    [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
+        
+    //Update radius slider value for user
+    self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
+    
+    //Update the slider label
+    [self sliderValueChanged:self.radiusStepper];
+
+    //Stuff to do afer initial neccessary configurations
     dispatch_async(dispatch_get_main_queue(), ^{
         
         //Checks if the user's primary login is through social, then disable the email and password fields
@@ -152,7 +165,6 @@ typedef enum : NSUInteger {
         
         [self.scrollView setNeedsLayout];
         [self.scrollView layoutIfNeeded];
-        [self getYolked];
         
         if (!self.picker)
             self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
@@ -172,18 +184,6 @@ typedef enum : NSUInteger {
              success:nil failure:nil];
         }
         
-        //TapGestureRecognizer for the profile picture, to bring up the MediaPickerController
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
-        singleTap.numberOfTapsRequired = 1;
-        
-        //Make the profile image interactive
-        [self.profileImageView addGestureRecognizer:singleTap];
-        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
-        self.profileImageView.clipsToBounds = YES;
-        
-        [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
-        [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
-        
         UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
         caret.contentMode = UIViewContentModeScaleAspectFit;
         caret.frame = CGRectMake(
@@ -194,6 +194,8 @@ typedef enum : NSUInteger {
                                  );
         
         [self.addCardButton addSubview:caret];
+        
+        [self getYolked];
         
     });
     
@@ -210,33 +212,28 @@ typedef enum : NSUInteger {
 
 
 - (void)getYolked{
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-       
-        UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
-        
-        egg.frame = CGRectMake(0, 0, self.view.frame.size.width / 1.3, 220);
-        egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
-        egg.contentMode = UIViewContentModeScaleAspectFit;
-        
-        
-        UILabel *version = [[UILabel alloc] init];
-        version.numberOfLines = 0;
-        version.frame = CGRectMake(0, 0, 65, 70);
-        version.center = CGPointMake(self.navigationController.toolbar.frame.size.width / 2, self.scrollView.contentSize.height + 100);
-        version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
-        version.text = [NSString
-                        stringWithFormat:@"Build %@\n\nVersion %@",
-                        [[NSBundle mainBundle]infoDictionary][@"CFBundleVersion"],
-                        [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
-        version.textColor = [UIColor textHeaderBlackColor];
-        version.textAlignment = NSTextAlignmentCenter;
-        
-        [self.scrollView addSubview:version];
-        [self.scrollView addSubview:egg];
-        
-    });
     
+    UIImageView *egg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"egg"]];
+    
+    egg.frame = CGRectMake(0, 0, self.view.frame.size.width / 1.3, 220);
+    egg.center = CGPointMake(self.view.bounds.size.width/2 , -400);
+    egg.contentMode = UIViewContentModeScaleAspectFit;
+    
+    
+    UILabel *version = [[UILabel alloc] init];
+    version.numberOfLines = 0;
+    version.frame = CGRectMake(0, 0, 65, 70);
+    version.center = CGPointMake(self.navigationController.toolbar.frame.size.width / 2, self.scrollView.contentSize.height + 100);
+    version.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:12];
+    version.text = [NSString
+                    stringWithFormat:@"Build %@\n\nVersion %@",
+                    [[NSBundle mainBundle]infoDictionary][@"CFBundleVersion"],
+                    [[NSBundle mainBundle]infoDictionary][@"CFBundleShortVersionString"]];
+    version.textColor = [UIColor textHeaderBlackColor];
+    version.textAlignment = NSTextAlignmentCenter;
+    
+    [self.scrollView addSubview:version];
+    [self.scrollView addSubview:egg];
     
 }
 
