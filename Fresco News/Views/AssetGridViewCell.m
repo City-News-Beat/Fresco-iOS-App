@@ -48,6 +48,7 @@
 }
 
 -(void)configureForVideoAssetWithDuration:(NSTimeInterval)duration{
+    
     UILabel *lengthLabel = [[UILabel alloc] init];
     lengthLabel.text = [self stringWithDuration:duration];
     lengthLabel.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:11];

@@ -245,8 +245,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
-    
-   
+
     
 }
 
@@ -258,6 +257,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
 
     //Restart location manager updating
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateForeground];
+    [FRSLocationManager sharedManager].stopLocationUpdates = NO;
     [FRSLocationManager sharedManager].delegate = self;
     
     
@@ -269,13 +269,18 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     ///Call update block to check for orientation on load
     [self orientationDidChange];
     
-    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        BOOL authorized = status == PHAuthorizationStatusAuthorized? YES : NO;
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            
+            BOOL authorized = status == PHAuthorizationStatusAuthorized? YES : NO;
+            
+            [self configureDoneButtonAndImageViewForAuthorized:authorized];
+            
+        }];
         
-        [self configureDoneButtonAndImageViewForAuthorized:authorized];
-        
-    }];
+    });
+    
 }
 
 
@@ -1463,7 +1468,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
                 
                 //Check if in range
-                if(!(distanceInMiles < [self.defaultAssignment.radius floatValue])){
+                if(distanceInMiles < [assignment.radius floatValue]){
             
                     self.defaultAssignment = assignment;
                     
