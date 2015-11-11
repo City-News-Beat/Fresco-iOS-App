@@ -150,7 +150,8 @@
                                    animated:YES completion:nil];
             }
             
-            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         }];
         
     }
@@ -188,7 +189,8 @@
                                  completion:nil];
             }
         
-            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         
         }];
         
@@ -226,7 +228,8 @@
                                  completion:nil];
             }
             
-            [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         }];
     }
 }

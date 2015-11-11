@@ -29,25 +29,41 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 <animations/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <variation key="heightClass=compact" fixedFrame="YES">
-                                                    <rect key="frame" x="154" y="124" width="240" height="128"/>
-                                                </variation>
-                                                <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                                                    <rect key="frame" x="170" y="120" width="226" height="135"/>
-                                                </variation>
                                             </imageView>
                                         </subviews>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="lgp-bo-kKi" firstAttribute="centerY" secondItem="cTB-sE-bUt" secondAttribute="centerY" id="WWy-EX-bkg"/>
+                                            <constraint firstItem="lgp-bo-kKi" firstAttribute="centerY" secondItem="cTB-sE-bUt" secondAttribute="centerY" id="c2Y-f5-sYO"/>
+                                            <constraint firstItem="lgp-bo-kKi" firstAttribute="centerX" secondItem="cTB-sE-bUt" secondAttribute="centerX" id="mIu-Yi-twB"/>
+                                            <constraint firstItem="lgp-bo-kKi" firstAttribute="centerX" secondItem="cTB-sE-bUt" secondAttribute="centerX" id="sMm-Ab-kBM"/>
+                                        </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="lgp-bo-kKi"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <exclude reference="WWy-EX-bkg"/>
+                                                <exclude reference="c2Y-f5-sYO"/>
+                                                <exclude reference="mIu-Yi-twB"/>
+                                                <exclude reference="sMm-Ab-kBM"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
                                             <mask key="subviews">
                                                 <include reference="lgp-bo-kKi"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <include reference="WWy-EX-bkg"/>
+                                                <include reference="mIu-Yi-twB"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=compact-widthClass=regular">
+                                            <mask key="constraints">
+                                                <include reference="c2Y-f5-sYO"/>
+                                                <include reference="sMm-Ab-kBM"/>
                                             </mask>
                                         </variation>
                                         <connections>
