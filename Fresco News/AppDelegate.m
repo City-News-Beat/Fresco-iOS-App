@@ -62,8 +62,7 @@
     
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
         
-        //Method will refresh current user and beging background location updates
-        [[FRSDataManager sharedManager] refreshUser:nil];
+        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
     
     }
     
@@ -78,6 +77,17 @@
     }
     
     return YES;
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application{
+    
+    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+}
+
+-(void)applicationWillTerminate:(UIApplication *)application{
+    
+    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    
 }
 
 

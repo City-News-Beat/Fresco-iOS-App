@@ -9,6 +9,7 @@
 #import "FRSLocationManager.h"
 #import "FRSDataManager.h"
 #import "FRSAssignment.h"
+@import Parse;
 
 @interface FRSLocationManager ()
 
@@ -43,6 +44,7 @@
 
 - (void)setupLocationMonitoringForState:(LocationManagerState)state
 {
+    
     /* How to debug background location updates, in the simulator
      1. Pause at beginning of didFinishLaunchingWithOptions (if necessary for steps 2 and/or 3 below)
      2. Xcode/scheme location simulation should be disabled, i.e. Select "Don't Simulate Location" from the pulldown
@@ -58,9 +60,19 @@
     
     self.allowsBackgroundLocationUpdates = YES;
 
+    self.managerState = state;
+    self.stopLocationUpdates = NO;
+    
+    
+    
+    //Checks to see if there is a logged in user 
+    
     
     if(state == LocationManagerStateBackground){
         
+        if (![[FRSDataManager sharedManager] isLoggedIn])
+            return;
+    
         self.pausesLocationUpdatesAutomatically = YES;
         self.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         
@@ -79,6 +91,7 @@
         [[UIApplication sharedApplication] setScheduledLocalNotifications:@[notification]];
         
     }
+    
     else if(state == LocationManagerStateForeground){
         
         self.desiredAccuracy = kCLLocationAccuracyBest;
@@ -95,8 +108,12 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+ 
+//    NSLog(@"manager state = %@, sef.stopLocationUpdates=%@", self.managerState, self.stopLocationUpdates)
     
     if(self.managerState == LocationManagerStateBackground && !self.stopLocationUpdates){
+    
+        NSLog(@"DID UPDATE LOCATIONS");
     
         [self pingUserLocationToServer:locations];
     

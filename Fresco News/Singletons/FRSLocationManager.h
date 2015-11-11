@@ -39,4 +39,7 @@ typedef enum : NSUInteger {
 
 @property (assign, nonatomic) BOOL stopLocationUpdates;
 
+
+- (void)pingUserLocationToServer:(NSArray *)locations;
+
 @end

@@ -453,8 +453,6 @@
                     
                 }];
                 
-                [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-                
             }
             //Failed refresh and log in
             else{
