@@ -315,4 +315,15 @@
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
+-(BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier
+{
+    
+    if (extensionPointIdentifier == UIApplicationKeyboardExtensionPointIdentifier)
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
 @end
