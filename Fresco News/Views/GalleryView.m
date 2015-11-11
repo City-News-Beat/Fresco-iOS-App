@@ -285,7 +285,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
     [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
-        
+    
     return cell;
 }
 
@@ -482,6 +482,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         //If a url
         if (postCell.post.video) {
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:NO];
+            [UIView animateWithDuration:.5 animations:^{
+                postCell.mutedImage.alpha = 0.0f;
+            }];
         }
         //If a local asset
         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
