@@ -67,6 +67,8 @@
     
     [super viewDidLoad];
     
+    [self setFrescoNavigationBar];
+    
     //Set delegates
     self.assignmentsMap.delegate = self;
     self.scrollView.delegate = self;
@@ -75,8 +77,6 @@
     self.operatingRadius = 0;
     self.operatingLat = 0;
     self.operatingLon = 0;
-
-    [self setFrescoNavigationBar];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -85,10 +85,27 @@
         self.detailViewWrapper.layer.shadowOpacity = 0.26;
         self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
         
-    });
+        
+        //Check for location permission
+        [self requestAlwaysAuthorization];
     
-    //Check for location permission
-    [self requestAlwaysAuthorization];
+        [self updateNotificationBanner];
+
+        //Run updates for assignments
+        [self updateAssignments];
+
+        if (!self.picker)
+            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+
+        //If we have an assignment set, present it
+        if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
+
+            [self presentCurrentAssignmentWithAnimation:YES];
+            
+        }
+            
+    });
+
     
     //Set up action sheet for navigation
     self.navigationSheet = [[UIActionSheet alloc]
@@ -107,30 +124,6 @@
 
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    
-    [self updateNotificationBanner];
-    
-    //Run updates for assignments
-    [self updateAssignments];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (!self.picker)
-            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
-        
-    });
-    
-    //If we have an assignment set, present it
-    if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
-    
-        [self presentCurrentAssignmentWithAnimation:YES];
-        
-    }
-    
-}
 
 - (void)dealloc{
 

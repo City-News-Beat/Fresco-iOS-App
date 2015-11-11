@@ -60,6 +60,13 @@
         [self handlePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
+        
+        //Method will refresh current user and beging background location updates
+        [[FRSDataManager sharedManager] refreshUser:nil];
+    
+    }
+    
     //Check if we've launched the app before or if the app is the iPhone 4s/4
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UD_HAS_LAUNCHED_BEFORE] || IS_IPHONE_4S){
         [self registerForPushNotifications];
@@ -107,12 +114,6 @@
     [FBSDKAppEvents activateApp];
 }
 
--(void)applicationDidEnterBackground:(UIApplication *)application {
-
-    //Method will refresh current user and beging background location updates
-    [[FRSDataManager sharedManager] refreshUser:nil];
-    
-}
 
 #pragma mark - Apperance Delegate Methods
 

@@ -107,7 +107,7 @@ enum FRSErrorCodes {
 
 #define MAX_VIDEO_LENGTH                    30.0
 #define MAX_ASSET_AGE                       -3600 * 24
-#define LOCATION_UPDATE_INTERVAL            60
+#define LOCATION_UPDATE_INTERVAL            30
 #define MAX_ASSET_COUNT                     8
 #define kMetersInAMile                      1609.34
 #define kDegreesInAMile                     69.0

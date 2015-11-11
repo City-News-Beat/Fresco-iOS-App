@@ -139,11 +139,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
 {
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        //Cleans up the video player if playing
-        [self cleanUpVideoPlayer];
-        
-        
+    
         //update UI in main thread.
         //Start animating the indicator
         postCell.photoIndicatorView.color = [UIColor whiteColor];
@@ -152,35 +150,41 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             postCell.photoIndicatorView.alpha = 1.0f;
         }];
         
-        
-        self.sharedPlayer = [AVPlayer playerWithURL:url];
-        
-        //Set up the AVPlayerItem
-        [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
-        
-        self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
-        
-        self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
-        
-        self.sharedLayer.frame = postCell.imageView.bounds;
-        
-        [postCell.imageView.layer addSublayer:self.sharedLayer];
-        
-        self.sharedPlayer.muted = YES;
-        
-        self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-        
-        //Bring play/pause button to front, so it can be visible on click
-        [postCell bringSubviewToFront:postCell.playPause];
-        
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[self.sharedPlayer currentItem]];
-        
-        self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
     });
+    
+    //Cleans up the video player if playing
+    [self cleanUpVideoPlayer];
+    
+    NSLog(@"Video Started");
+    
+    self.sharedPlayer = [AVPlayer playerWithURL:url];
+    
+    //Set up the AVPlayerItem
+    [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
+    
+    self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
+    
+    self.sharedLayer.videoGravity  = AVLayerVideoGravityResizeAspectFill;
+    
+    self.sharedLayer.frame = postCell.imageView.bounds;
+    
+    [postCell.imageView.layer addSublayer:self.sharedLayer];
+    
+    self.sharedPlayer.muted = YES;
+    
+    self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+    
+    //Bring play/pause button to front, so it can be visible on click
+    [postCell bringSubviewToFront:postCell.playPause];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidReachEnd:)
+                                                 name:AVPlayerItemDidPlayToEndTimeNotification
+                                               object:[self.sharedPlayer currentItem]];
+    
+    self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
+    
 }
 
 /*
@@ -190,7 +194,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     //Check if we have the right notif for the AVPlayer
-    if (object == self.sharedPlayer.currentItem && [keyPath isEqualToString:@"status"]) {
+    if ([keyPath isEqualToString:@"status"]) {
         
         //DISABLE THE UIACTIVITY INDICATOR HERE
         if (self.sharedPlayer.currentItem.status == AVPlayerStatusReadyToPlay) {
@@ -239,6 +243,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 /**
  *  Cleans up notificaiton observer on the AVPlayers item
  */
+
 - (void)removeObserverForPlayer{
 
     @try{
@@ -265,6 +270,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         
         }
     }
+
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -473,8 +479,10 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //If the cell has a video
     if([postCell.post isVideo]){
         
+        //If a url
         if (postCell.post.video)
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+        //If a local asset
         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
             
             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {

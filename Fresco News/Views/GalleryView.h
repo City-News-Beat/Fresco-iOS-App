@@ -51,7 +51,7 @@
 
 
 /**
- *  Cleans up video player, stops playing
+ *  Cleans up video player, and stops playing
  */
 
 - (void)cleanUpVideoPlayer;
@@ -60,7 +60,7 @@
  *  Set up video player in passed PostCollectionViewCell
  *
  *  @param url      URL of the video
- *  @param postCell cell to play in
+ *  @param postCell Cell to play in
  */
 
 - (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell;

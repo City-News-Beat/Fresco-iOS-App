@@ -290,7 +290,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     dispatch_async(self.sessionQueue, ^{
         
-#warning possible race conditions, needs investigation
+    #warning possible race conditions, needs investigation
         
         switch ( self.setupResult )
         {
@@ -328,7 +328,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                         
                     }]];
                     
-//                    [self presentViewController:alertCon animated:YES completion:nil];
+                    [self presentViewController:alertCon animated:YES completion:nil];
                     
                 });
                 break;
@@ -337,18 +337,17 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
                     
-//                    [self presentViewController:[FRSAlertViewManager
-//                                                 alertControllerWithTitle:@"Some issues with your camera"
-//                                                 message:@"Unable to capture photos or videos"
-//                                                 action:DISMISS handler:nil]
-//                                       animated:YES
-//                                     completion:nil];
+                    [self presentViewController:[FRSAlertViewManager
+                                                 alertControllerWithTitle:@"Some issues with your camera"
+                                                 message:@"We were unable to capture photos or videos. Please check your app settings in order to enable your camera."
+                                                 action:DISMISS handler:nil]
+                                       animated:YES
+                                     completion:nil];
                 });
                 break;
             }
         }
     });
-
 
 }
 
@@ -407,11 +406,15 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     });
 }
 
+
 /**
- *Checks the results of the assets fetch and appropriate configures the states of both the done button and the imageview
+ *  Checks the results of the assets fetch and appropriate configures the states of both the done button and the imageview
+ *
+ *  @param authorized If the user has authorized photos access
  */
 
 -(void)configureDoneButtonAndImageViewForAuthorized:(BOOL)authorized{
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!authorized){
             
