@@ -97,6 +97,8 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resignKeyboard) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -686,6 +688,12 @@
         
         [self.locationManager stopUpdatingLocation];
     }
+}
+
+#pragma mark - NSNotification Listener
+
+-(void)resignKeyboard{
+    [self.captionTextView resignFirstResponder];
 }
 
 
