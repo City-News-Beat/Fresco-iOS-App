@@ -240,7 +240,7 @@
             
             UIAlertAction *cancelAction = [UIAlertAction
                                            actionWithTitle:@"Close"
-                                           style:UIAlertActionStyleCancel
+                                           style:UIAlertActionStyleDefault
                                            handler:^(UIAlertAction *action)
                                            {
                                                
