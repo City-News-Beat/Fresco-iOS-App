@@ -267,9 +267,14 @@ enum FRSErrorCodes {
 #define NOTIF_PENDING                       NSLocalizedString(@"Notifications Pending", nil)
 #define NOTIF_ENABLED                       NSLocalizedString(@"Notifications Enabled", nil)
 
-#define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Enable Camera", nil)
-#define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"It seems like your camera isn't enabled. Please go to the settings for Fresco to enable the camera.", nil)
+#define ENABLE_CAMERA_TITLE                 NSLocalizedString(@"Camera disabled", nil)
+#define ENABLE_CAMERA_SETTINGS              NSLocalizedString(@"We can't open your camera! Please give us permission to use the camera in Settings", nil)
 
+#define ENABLE_LOCATION_TITLE               NSLocalizedString(@"Location disabled", nil)
+#define ENABLE_LOCATION_SETTINGS            NSLocalizedString(@"Fresco needs your device location to verify photos. Give us permission to use your location in Settings to open the camera.", nil)
+
+#define ENABLE_CAMERA_LOCATION_TITLE        NSLocalizedString(@"No permission", nil)
+#define ENABLE_CAMERA_LOCATION_SETTINGS     NSLocalizedString(@"Fresco needs to use your camera and device location. Please give us permission to use your location and camera in Settings.", nil)
 
 
 /*  First Run Radius */

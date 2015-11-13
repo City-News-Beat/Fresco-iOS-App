@@ -40,7 +40,6 @@
     return self;
 }
 
-
 #pragma mark - fetching
 
 - (void)fetchGalleryAssets{

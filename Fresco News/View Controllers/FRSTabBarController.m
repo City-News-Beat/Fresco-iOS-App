@@ -20,6 +20,7 @@
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
 #import "UIViewController+Additions.h"
+#import "FRSLocationManager.h"
 #import "FRSAlertViewManager.h"
 
 @implementation FRSTabBarController
@@ -60,7 +61,7 @@
 {
     //Camera
     if ([item.title isEqualToString:@"Camera"]) {
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied) {
+        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
             [self presentCamera];
         }
     }
@@ -211,24 +212,45 @@
     }
     else if(vc == nil){
         
-        //Check if we have permission to use the camera
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied) {
+        //Check for permissions
+        
+        
+        BOOL cameraDisabled = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied;
+        BOOL locationDisabled = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied;
+        
+        if (cameraDisabled || locationDisabled){
+            
+            NSString *title;
+            NSString *message;
+            
+            if (cameraDisabled && locationDisabled){
+                title = ENABLE_CAMERA_LOCATION_TITLE;
+                message = ENABLE_CAMERA_LOCATION_SETTINGS;
+            }
+            else if (cameraDisabled && !locationDisabled){
+                title = ENABLE_CAMERA_TITLE;
+                message = ENABLE_CAMERA_SETTINGS;
+            }
+            else {
+                title = ENABLE_LOCATION_TITLE;
+                message = ENABLE_LOCATION_SETTINGS;
+            }
             
             UIAlertController *alertCon = [FRSAlertViewManager
-                                           alertControllerWithTitle:ENABLE_CAMERA_TITLE
-                                           message:ENABLE_CAMERA_SETTINGS
-                                           action:DISMISS handler:nil];
+                                           alertControllerWithTitle:title
+                                           message:message
+                                           action:@"Close" handler:nil];
             
-            [alertCon addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+            [alertCon addAction:[UIAlertAction actionWithTitle:@"Enable" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
                 
             }]];
             
-            [self presentViewController:alertCon animated:YES completion:nil];
+            [self presentViewController:alertCon animated:NO completion:nil];
             
             return NO;
-        
+            
         }
     }
     

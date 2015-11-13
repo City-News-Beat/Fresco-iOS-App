@@ -1113,7 +1113,9 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                     GPSDictionary = [[[FRSLocationManager sharedManager].location EXIFMetadata] mutableCopy];
                 
                 //Add the modified Data back into the image’s metadata
-                [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                if (GPSDictionary) {
+                    [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                }
                 
                 CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
                 
