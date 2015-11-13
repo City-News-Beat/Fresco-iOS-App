@@ -1492,7 +1492,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         // NSLog(@"Starting timer...");
         self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(restartLocationUpdates) userInfo:nil repeats:YES];
     }
-    
 }
 
 /**

@@ -78,8 +78,8 @@
     self.operatingLat = 0;
     self.operatingLon = 0;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
+//    dispatch_async(dispatch_get_main_queue(), ^{
+    
         //Configure the assignment detail view
         self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
         self.detailViewWrapper.layer.shadowOpacity = 0.26;
@@ -104,7 +104,7 @@
             
         }
             
-    });
+//    });
 
     
     //Set up action sheet for navigation
@@ -147,7 +147,7 @@
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             
             // If the status is denied or only granted for when in use, display an alert
-            if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+            if  (status == kCLAuthorizationStatusDenied) {
                 
                 [((UIButton *)[self.view viewWithTag:3]) setTitle:LOC_DISABLED_BANNER forState:UIControlStateNormal];
                 
@@ -791,7 +791,7 @@
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     
     // If the status is denied or only granted for when in use, display an alert
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+    if (status == kCLAuthorizationStatusDenied) {
         
         UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:CASUAL_LOC_DISABLED

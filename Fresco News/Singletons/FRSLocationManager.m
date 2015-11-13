@@ -82,7 +82,7 @@
         
         [self startMonitoringSignificantLocationChanges];
         
-        //        Uncomment for local notifications while testing
+//                Uncomment for local notifications while testing
 //        UILocalNotification *notification = [[UILocalNotification alloc] init];
 //        notification.alertBody = @"Started";
 //        notification.soundName = UILocalNotificationDefaultSoundName;
@@ -111,11 +111,10 @@
  
 //    NSLog(@"manager state = %@, sef.stopLocationUpdates=%@", self.managerState, self.stopLocationUpdates)
     
-    if(self.managerState == LocationManagerStateBackground && !self.stopLocationUpdates){
-    
-        NSLog(@"DID UPDATE LOCATIONS");
-    
-        [self pingUserLocationToServer:locations];
+    if(!self.stopLocationUpdates){
+
+        if (locations)
+            [self pingUserLocationToServer:locations];
     
     }
 
@@ -166,6 +165,8 @@
         
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
+        
+        NSLog(@"CURRENT LOC = %ld %ld", self.location.coordinate.latitude, self.location.coordinate.longitude);
         
         [[FRSDataManager sharedManager] updateUserLocation:params block:^(BOOL sucess, NSError *error) {
             
