@@ -113,7 +113,7 @@ enum FRSErrorCodes {
 
 #pragma mark - Float/Int Values
 
-#define MAX_VIDEO_LENGTH                    30.0
+#define MAX_VIDEO_LENGTH                    60.0
 #define MAX_ASSET_AGE                       -3600 * 24
 #define LOCATION_UPDATE_INTERVAL            30
 #define MAX_ASSET_COUNT                     8

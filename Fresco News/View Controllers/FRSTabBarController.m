@@ -236,18 +236,28 @@
                 message = ENABLE_LOCATION_SETTINGS;
             }
             
-            UIAlertController *alertCon = [FRSAlertViewManager
-                                           alertControllerWithTitle:title
-                                           message:message
-                                           action:@"Close" handler:nil];
+            UIAlertController *alertCon = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             
-            [alertCon addAction:[UIAlertAction actionWithTitle:@"Enable" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                
-            }]];
+            UIAlertAction *cancelAction = [UIAlertAction
+                                           actionWithTitle:@"Close"
+                                           style:UIAlertActionStyleCancel
+                                           handler:^(UIAlertAction *action)
+                                           {
+                                               
+                                           }];
             
-            [self presentViewController:alertCon animated:NO completion:nil];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:@"Enable"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                                       }];
+            
+            [alertCon addAction:cancelAction];
+            [alertCon addAction:okAction];
+            
+            [self presentViewController:alertCon animated:YES completion:nil];
             
             return NO;
             
