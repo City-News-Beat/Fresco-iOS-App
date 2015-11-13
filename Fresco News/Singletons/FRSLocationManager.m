@@ -80,6 +80,8 @@
         
         [self requestAlwaysAuthorization];
         
+        NSLog(@"START MONITORING");
+        
         [self startMonitoringSignificantLocationChanges];
         
 //                Uncomment for local notifications while testing
@@ -104,6 +106,7 @@
     
 }
 
+
 #pragma mark - Location Delegate Methods
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -112,7 +115,7 @@
 //    NSLog(@"manager state = %@, sef.stopLocationUpdates=%@", self.managerState, self.stopLocationUpdates)
     
     if(!self.stopLocationUpdates){
-
+        
         if (locations)
             [self pingUserLocationToServer:locations];
     
@@ -166,7 +169,7 @@
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
         
-        NSLog(@"CURRENT LOC = %ld %ld", self.location.coordinate.latitude, self.location.coordinate.longitude);
+//        NSLog(@"CURRENT LOC = %ld %ld", self.location.coordinate.latitude, self.location.coordinate.longitude);
         
         [[FRSDataManager sharedManager] updateUserLocation:params block:^(BOOL sucess, NSError *error) {
             

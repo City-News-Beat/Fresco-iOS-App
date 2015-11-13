@@ -81,11 +81,13 @@
 
 -(void)applicationDidEnterBackground:(UIApplication *)application{
     
+    NSLog(@"DID ENTER BACKGROUND");
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
+    NSLog(@"DID TERMINATE");
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
     
 }
