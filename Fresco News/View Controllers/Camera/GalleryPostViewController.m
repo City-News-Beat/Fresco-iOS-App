@@ -44,6 +44,8 @@
 @property (strong, nonatomic) UITapGestureRecognizer *socialTipTap;
 @property (strong, nonatomic) UITapGestureRecognizer *submitTap;
 
+@property (strong, nonatomic) UITapGestureRecognizer *resignKeyboardGR;
+
 @end
 
 @implementation GalleryPostViewController
@@ -92,10 +94,14 @@
     self.submitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)];
     [self.navigationController.toolbar addGestureRecognizer:self.submitTap];
     
+    self.resignKeyboardGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignKeyboard)];
+    
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resignKeyboard) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
 }
 
@@ -566,6 +572,10 @@
     if ([textView.text isEqualToString:WHATS_HAPPENING])
         textView.text = @"";
     
+    if (textView == self.captionTextView){
+        [self.view addGestureRecognizer:self.resignKeyboardGR];
+    }
+    
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -574,6 +584,12 @@
         textView.text = WHATS_HAPPENING;
     
     return YES;
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView{
+    if (textView == self.captionTextView){
+        [self.view removeGestureRecognizer:self.resignKeyboardGR];
+    }
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -686,6 +702,12 @@
         
         [self.locationManager stopUpdatingLocation];
     }
+}
+
+#pragma mark - NSNotification Listener
+
+-(void)resignKeyboard{
+    [self.captionTextView resignFirstResponder];
 }
 
 

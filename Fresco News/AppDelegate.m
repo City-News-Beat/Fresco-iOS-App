@@ -62,8 +62,7 @@
     
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
         
-        //Method will refresh current user and beging background location updates
-        [[FRSDataManager sharedManager] refreshUser:nil];
+        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
     
     }
     
@@ -78,6 +77,17 @@
     }
     
     return YES;
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application{
+    
+    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+}
+
+-(void)applicationWillTerminate:(UIApplication *)application{
+    
+    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    
 }
 
 
@@ -303,6 +313,17 @@
 
     // Must be called when finished
     completionHandler(UIBackgroundFetchResultNewData);
+}
+
+-(BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier
+{
+    
+    if (extensionPointIdentifier == UIApplicationKeyboardExtensionPointIdentifier)
+    {
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

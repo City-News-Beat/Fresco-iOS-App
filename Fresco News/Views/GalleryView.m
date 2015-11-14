@@ -72,13 +72,13 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                     if([postCell.post isVideo]){
                         
                         if(postCell.post.video) {
-                            [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+                            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:YES];
                         }
                         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
                             
                             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                                 
-                                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
+                                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES];
                                 
                             }];
                         }
@@ -137,7 +137,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - AVPlayer
 
-- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted
 {
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -170,7 +170,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     [postCell.imageView.layer addSublayer:self.sharedLayer];
     
-    self.sharedPlayer.muted = YES;
+    self.sharedPlayer.muted = muted;
     
     self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
     
@@ -285,7 +285,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     PostCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PostCollectionViewCell identifier] forIndexPath:indexPath];
     
     [cell setPost:[self.gallery.posts objectAtIndex:indexPath.item]];
-        
+    
     return cell;
 }
 
@@ -480,14 +480,18 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     if([postCell.post isVideo]){
         
         //If a url
-        if (postCell.post.video)
-            [self setUpPlayerWithUrl:postCell.post.video cell:postCell];
+        if (postCell.post.video) {
+            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:NO];
+            [UIView animateWithDuration:.5 animations:^{
+                postCell.mutedImage.alpha = 0.0f;
+            }];
+        }
         //If a local asset
         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
             
             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                 
-                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell];
+                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES];
                 
             }];
         }

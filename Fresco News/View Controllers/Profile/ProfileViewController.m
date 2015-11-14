@@ -40,7 +40,10 @@
     self.initialUpdate = NO;
     
     //Set up `handleAPIKeyAvailable` so if there's no reachability, the profile will automatically be updated when there is
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIKeyAvailable:) name:NOTIF_API_KEY_AVAILABLE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(populateProfile) name:NOTIF_API_KEY_AVAILABLE object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(populateProfile) name:NOTIF_UPLOAD_COMPLETE object:nil];
+
     
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
@@ -145,10 +148,6 @@
  ** API Key for user is now available, run update on profile view
  */
 
-- (void)handleAPIKeyAvailable:(NSNotification *)notification
-{
-    [self populateProfile];
-}
 
 #pragma mark - Data Loading
 

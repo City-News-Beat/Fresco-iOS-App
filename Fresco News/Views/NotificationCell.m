@@ -52,12 +52,17 @@
         
         [self.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
   
-        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
-            [self.firstButton setTitle:VIEW forState:UIControlStateNormal];
-        else
-            [self.firstButton setTitle:VIEW_ASSIGNMENT forState:UIControlStateNormal];
+        [self.firstButton setTitle:@"" forState:UIControlStateNormal];
+        [self.secondButton setTitle:@"" forState:UIControlStateNormal];
+        self.timeElapsed.text = @"Expired";
         
-        [self.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
+        
+//        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+//            [self.firstButton setTitle:VIEW forState:UIControlStateNormal];
+//        else
+//            [self.firstButton setTitle:VIEW_ASSIGNMENT forState:UIControlStateNormal];
+//        
+//        [self.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
         
     }
     else if ([_notification.type isEqualToString:@"use"]) {

@@ -99,7 +99,7 @@
         timer = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.notificationsPermissionsImage setBackgroundImage:[UIImage imageNamed:@"notificationOnIcon"] forState:UIControlStateNormal];;
+            [self.notificationsPermissionsImage setBackgroundImage:[UIImage imageNamed:@"notificationOnIcon"] forState:UIControlStateNormal];
             [self.notificationsPermissionsLabel setTitle:NOTIF_ENABLED forState:UIControlStateNormal];
         });
     }

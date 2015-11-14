@@ -453,8 +453,6 @@
                     
                 }];
                 
-                [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-                
             }
             //Failed refresh and log in
             else{
@@ -911,6 +909,7 @@
         
     
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if(responseBlock) responseBlock(nil, error);
