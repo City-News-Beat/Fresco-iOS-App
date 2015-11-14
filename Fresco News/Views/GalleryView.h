@@ -62,8 +62,9 @@
  *  @param url      URL of the video
  *  @param postCell Cell to play in
  *  @param muted    Starting audio status of player
+ *  @param buffer   Tells the player to buffer the video i.e. loading from data, otherwise from local asset
  */
 
-- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted;
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted buffer:(BOOL)buffer;
 
 @end

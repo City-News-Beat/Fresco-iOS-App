@@ -51,30 +51,20 @@
     if([_notification.type isEqualToString:@"assignment"]) {
         
         [self.image setImage:[UIImage imageNamed:@"assignmentWarningIcon"]];
+  
+        [self.firstButton setTitle:@"" forState:UIControlStateNormal];
+        [self.secondButton setTitle:@"" forState:UIControlStateNormal];
+        self.timeElapsed.text = @"Expired";
         
         
-        if (_notification.meta[@"expiration_time"]){
-            if(([_notification.meta[@"expiration_time"] doubleValue]/1000 - [[NSDate date] timeIntervalSince1970]) <= 0) {
-                
-                self.firstButton.hidden = YES;
-                self.secondButton.hidden = YES;
-                self.timeElapsed.text = @"Expired";
-            }
-            
-        }
-        else {
-            self.firstButton.hidden = NO;
-            self.secondButton.hidden = NO;
-            if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
-                [self.firstButton setTitle:VIEW forState:UIControlStateNormal];
-            else
-                [self.firstButton setTitle:VIEW_ASSIGNMENT forState:UIControlStateNormal];
-            
-            [self.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
-        }
+//        if (IS_IPHONE_5 || IS_ZOOMED_IPHONE_6)
+//            [self.firstButton setTitle:VIEW forState:UIControlStateNormal];
+//        else
+//            [self.firstButton setTitle:VIEW_ASSIGNMENT forState:UIControlStateNormal];
+//        
+//        [self.secondButton setTitle:OPEN_IN_MAPS forState:UIControlStateNormal];
         
     }
-    
     else if ([_notification.type isEqualToString:@"use"]) {
         
         //Hide the second button

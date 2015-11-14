@@ -3,7 +3,7 @@
 //  Fresco
 //
 //  Created by Team Fresco on 2/9/14.
-//  Copyright (c) 2014 TapMedia LLC. All rights reserved.
+//  Copyright (c) 2014 Fresco News, Inc. All rights reserved.
 //
 
 @import Foundation;
