@@ -72,13 +72,13 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                     if([postCell.post isVideo]){
                         
                         if(postCell.post.video) {
-                            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:YES];
+                            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:YES buffer:YES];
                         }
                         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
                             
                             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                                 
-                                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES];
+                                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES buffer:NO];
                                 
                             }];
                         }
@@ -137,7 +137,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 #pragma mark - AVPlayer
 
-- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted
+- (void)setUpPlayerWithUrl:(NSURL *)url cell:(PostCollectionViewCell *)postCell muted:(BOOL)muted buffer:(BOOL)buffer
 {
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -155,12 +155,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     //Cleans up the video player if playing
     [self cleanUpVideoPlayer];
     
-    NSLog(@"Video Started");
-    
     self.sharedPlayer = [AVPlayer playerWithURL:url];
-    
-    //Set up the AVPlayerItem
-    [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
     
     self.sharedLayer = [AVPlayerLayer playerLayerWithPlayer:self.sharedPlayer];
     
@@ -168,15 +163,31 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     self.sharedLayer.frame = postCell.imageView.bounds;
     
-    [postCell.imageView.layer addSublayer:self.sharedLayer];
-    
-    self.sharedPlayer.muted = muted;
-    
     self.sharedPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+    
+    if(buffer){
+        
+        //Set up the AVPlayerItem
+        [self.sharedPlayer.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
+        self.sharedPlayer.muted = muted;
+        
+    }
+    else{
+        
+        [self.sharedPlayer play];
+        NSLog(@"Video Started");
+        
+    }
+    
+    //dispatch adding sublayer to main UI thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+       
+        [postCell.imageView.layer addSublayer:self.sharedLayer];
+        
+    });
     
     //Bring play/pause button to front, so it can be visible on click
     [postCell bringSubviewToFront:postCell.playPause];
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerItemDidReachEnd:)
@@ -207,6 +218,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             postCell.playingVideo = YES;
             
             [self.sharedPlayer play];
+
+            NSLog(@"Video Started");
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -481,7 +494,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         
         //If a url
         if (postCell.post.video) {
-            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:NO];
+            [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:NO buffer:YES];
             [UIView animateWithDuration:.5 animations:^{
                 postCell.mutedImage.alpha = 0.0f;
             }];
@@ -491,7 +504,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             
             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                 
-                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES];
+                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES buffer:NO];
                 
             }];
         }
