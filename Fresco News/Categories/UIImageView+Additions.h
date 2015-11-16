@@ -14,4 +14,5 @@
 + (UIImageView *)UIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode;
 
 
+
 @end
