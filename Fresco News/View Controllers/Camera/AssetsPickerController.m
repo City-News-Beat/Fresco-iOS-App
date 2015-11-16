@@ -36,6 +36,7 @@
     }
     return indexPaths;
 }
+
 @end
 
 @interface AssetsPickerController ()
@@ -104,7 +105,6 @@ static CGSize AssetGridThumbnailSize;
     }
     
     return self;
-
 }
 
 -(void)setupImageCachingAndCollectionView{
