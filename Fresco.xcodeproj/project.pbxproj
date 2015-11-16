@@ -78,7 +78,7 @@
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807881BFA59DB00490E73 /* FRSCameraViewController.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
-		65C807901BFA73D600490E73 /* FRSRoundedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078F1BFA73D600490E73 /* FRSRoundedView.m */; };
+		65C807931BFA969F00490E73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807921BFA969F00490E73 /* FRSAVSessionManager.m */; };
 		65FB75A81BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */; };
 		BC1CA8BB1BA72F3300DDB9FB /* CALayer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
@@ -333,8 +333,8 @@
 		65C807891BFA59DB00490E73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
 		65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Helpers.m"; path = "Categories/UIView+Helpers.m"; sourceTree = "<group>"; };
-		65C8078E1BFA73D600490E73 /* FRSRoundedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRoundedView.h; sourceTree = "<group>"; };
-		65C8078F1BFA73D600490E73 /* FRSRoundedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRoundedView.m; sourceTree = "<group>"; };
+		65C807911BFA969F00490E73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAVSessionManager.h; path = Singletons/FRSAVSessionManager.h; sourceTree = "<group>"; };
+		65C807921BFA969F00490E73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAVSessionManager.m; path = Singletons/FRSAVSessionManager.m; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
 		7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -769,6 +769,8 @@
 		1EDA44DF1AA4CD0D0082E08D /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
+				65C807911BFA969F00490E73 /* FRSAVSessionManager.h */,
+				65C807921BFA969F00490E73 /* FRSAVSessionManager.m */,
 				651FDD871BF1110A007A4F16 /* FRSGalleryAssetsManager.h */,
 				651FDD881BF1110A007A4F16 /* FRSGalleryAssetsManager.m */,
 				1EDA45141AA500EE0082E08D /* FRSDataManager.h */,
@@ -1133,8 +1135,6 @@
 		E79ACC621BB4558C005EF7E6 /* FRSKit */ = {
 			isa = PBXGroup;
 			children = (
-				65C8078E1BFA73D600490E73 /* FRSRoundedView.h */,
-				65C8078F1BFA73D600490E73 /* FRSRoundedView.m */,
 				E76C1DF61BD539C10073A4D6 /* FRSProgressView.h */,
 				E76C1DF71BD539C10073A4D6 /* FRSProgressView.m */,
 				BCE22C951BB1B35600F2C07C /* FRSRefreshControl.h */,
@@ -1657,12 +1657,12 @@
 				E796FA181B0E54B6002B30C4 /* FRSAssignment.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				1EDA45031AA4D0730082E08D /* FRSUser.m in Sources */,
+				65C807931BFA969F00490E73 /* FRSAVSessionManager.m in Sources */,
 				1E35928A1AC3329900F60348 /* PostCollectionViewCell.m in Sources */,
 				1E407AD11AB090FD006F4965 /* FRSStory.m in Sources */,
 				E7C112031B681C7F009C637C /* FRSAlertViewManager.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				E66F17711AEE9D7E0032CA71 /* FirstRunRadiusViewController.m in Sources */,
-				65C807901BFA73D600490E73 /* FRSRoundedView.m in Sources */,
 				32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */,
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */,
