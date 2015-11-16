@@ -76,6 +76,7 @@
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		651FDD891BF1110A007A4F16 /* FRSGalleryAssetsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 651FDD881BF1110A007A4F16 /* FRSGalleryAssetsManager.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807881BFA59DB00490E73 /* FRSCameraViewController.m */; };
 		65FB75A81BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */; };
 		BC1CA8BB1BA72F3300DDB9FB /* CALayer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
@@ -327,6 +328,8 @@
 		52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.beta.xcconfig"; sourceTree = "<group>"; };
 		651FDD871BF1110A007A4F16 /* FRSGalleryAssetsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSGalleryAssetsManager.h; path = Singletons/FRSGalleryAssetsManager.h; sourceTree = "<group>"; };
 		651FDD881BF1110A007A4F16 /* FRSGalleryAssetsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSGalleryAssetsManager.m; path = Singletons/FRSGalleryAssetsManager.m; sourceTree = "<group>"; };
+		65C807881BFA59DB00490E73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
+		65C807891BFA59DB00490E73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
 		7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -869,6 +872,8 @@
 		1EFD22941B2B1C5E0049B940 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				65C807881BFA59DB00490E73 /* FRSCameraViewController.m */,
+				65C807891BFA59DB00490E73 /* FRSCameraViewController.h */,
 				423A14531AB327CA0030DAF4 /* FRSCamViewController.h */,
 				423A14541AB327CA0030DAF4 /* FRSCamViewController.m */,
 			);
@@ -1613,6 +1618,7 @@
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				E76C1DF81BD539C10073A4D6 /* FRSProgressView.m in Sources */,
+				65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */,
 				651FDD891BF1110A007A4F16 /* FRSGalleryAssetsManager.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunPersonalViewController.m in Sources */,
 				BCE22C971BB1B35600F2C07C /* FRSRefreshControl.m in Sources */,
