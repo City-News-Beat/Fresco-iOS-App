@@ -15,7 +15,7 @@
 @import Crashlytics;
 
 #import "AppDelegate.h"
-#import <AFNetworkActivityLogger.h>
+#import "AFNetworkActivityLogger.h"
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "FRSUser.h"
 #import "FRSDataManager.h"
@@ -25,7 +25,7 @@
 #import "FRSCamViewController.h"
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
-#import <Stripe.h>
+#import "Stripe.h"
 
 @interface AppDelegate ()
 

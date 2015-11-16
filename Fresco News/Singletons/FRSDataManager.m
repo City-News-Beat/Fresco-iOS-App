@@ -8,7 +8,7 @@
 
 @import Parse;
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <NSArray+F.h>
+#import "NSArray+F.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "FRSDataManager.h"

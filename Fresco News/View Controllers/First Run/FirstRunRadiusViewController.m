@@ -14,7 +14,7 @@
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
 #import "UIView+Border.h"
-#import <DBImageColorPicker.h>
+#import <DBImageColorPicker/DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
 

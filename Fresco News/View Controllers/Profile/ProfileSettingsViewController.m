@@ -24,7 +24,7 @@
 #import "ProfilePaymentSettingsViewController.h"
 #import "FRSSaveButton.h"
 #import "UIView+Border.h"
-#import <DBImageColorPicker.h>
+#import "DBImageColorPicker.h"
 
 typedef enum : NSUInteger {
     SocialExists,

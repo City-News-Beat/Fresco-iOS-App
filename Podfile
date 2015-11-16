@@ -1,17 +1,29 @@
+platform :ios, '8.0'
+use_frameworks!
+
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '8.0'
+def shared_pods
+	pod 'AFNetworking'
+end
 
-link_with 'Fresco WatchKit Extension', 'Fresco'
+target 'Fresco' do
+	shared_pods
+	pod 'AFNetworking'
+	pod 'STKWebKitViewController'
+	pod 'AFNetworkActivityLogger'
+	pod 'BTBadgeView'
+	pod 'Mantle', '~>1.5.1'
+	pod 'Functional.m'
+	pod 'GRKGradientView'
+	pod 'DBImageColorPicker'
+	pod 'CardIO'
+	pod 'Stripe'
+	pod 'BKMoneyKit'
+end
 
-pod 'STKWebKitViewController'
-pod 'AFNetworking'
-pod 'AFNetworkActivityLogger'
-pod 'BTBadgeView'
-pod 'Mantle', '~>1.5.1'
-pod 'Functional.m'
-pod 'GRKGradientView'
-pod 'DBImageColorPicker'
-pod 'CardIO'
-pod 'Stripe'
-pod 'BKMoneyKit'
+target 'Fresco WatchKit Extension' do
+	shared_pods
+end
+
+	

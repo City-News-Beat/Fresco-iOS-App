@@ -7,7 +7,7 @@
 //
 
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import <STKWebKitViewController.h>
+#import "STKWebKitViewController.h"
 #import "MTLModel+Additions.h"
 #import "FRSDataManager.h"
 #import "FRSPost.h"

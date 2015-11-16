@@ -10,7 +10,7 @@
 @import FBSDKCoreKit;
 @import AssetsLibrary;
 @import Photos;
-#import <AFNetworking.h>
+#import "AFNetworking.h"
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "GalleryPostViewController.h"
 #import "GalleryView.h"

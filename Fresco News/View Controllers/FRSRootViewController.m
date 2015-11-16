@@ -19,7 +19,7 @@
 #import "TOSViewController.h"
 #import "FRSOnboardViewConroller.h"
 #import "AssetsPickerController.h"
-#import <BTBadgeView.h>
+#import "BTBadgeView.h"
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 

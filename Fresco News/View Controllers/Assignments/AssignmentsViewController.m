@@ -18,7 +18,7 @@
 #import "AssignmentOnboardViewController.h"
 #import "FRSLocationManager.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import <DBImageColorPicker.h>
+#import "DBImageColorPicker.h"
 
 #define kSCROLL_VIEW_INSET 75
 
