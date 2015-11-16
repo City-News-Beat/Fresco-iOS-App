@@ -23,6 +23,9 @@
 #import "FRSLocationManager.h"
 #import "FRSAlertViewManager.h"
 
+
+#import "FRSCameraViewController.h"
+
 @implementation FRSTabBarController
 
 #pragma mark - Initialization
@@ -71,7 +74,9 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+//    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    
+    FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
     
     [self presentViewController:vc animated:YES completion:nil];
 

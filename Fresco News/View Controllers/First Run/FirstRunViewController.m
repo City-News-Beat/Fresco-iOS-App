@@ -16,7 +16,7 @@
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
 #import "NSString+Validation.h"
-#import "UIView+Border.h"
+#import "UIView+Helpers.h"
 #import "FirstRunPageViewController.h"
 #import "FRSSocialButton.h"
 

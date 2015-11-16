@@ -23,7 +23,7 @@
 #import "NSString+Validation.h"
 #import "ProfilePaymentSettingsViewController.h"
 #import "FRSSaveButton.h"
-#import "UIView+Border.h"
+#import "UIView+Helpers.h"
 #import "DBImageColorPicker.h"
 
 typedef enum : NSUInteger {

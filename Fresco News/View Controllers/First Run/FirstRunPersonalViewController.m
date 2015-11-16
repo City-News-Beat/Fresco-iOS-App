@@ -11,7 +11,7 @@
 #import "FirstRunPersonalViewController.h"
 #import "FRSDataManager.h"
 #import "FRSBackButton.h"
-#import "UIView+Border.h"
+#import "UIView+Helpers.h"
 #import "FirstRunPageViewController.h"
 @import FBSDKLoginKit;
 @import FBSDKCoreKit;

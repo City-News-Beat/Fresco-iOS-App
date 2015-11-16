@@ -13,7 +13,7 @@
 #import "NSString+Validation.h"
 #import "FRSSocialButton.h"
 #import "FRSBackButton.h"
-#import "UIView+Border.h"
+#import "UIView+Helpers.h"
 
 @interface FirstRunAccountViewController () <UITextFieldDelegate, UITextViewDelegate>
 

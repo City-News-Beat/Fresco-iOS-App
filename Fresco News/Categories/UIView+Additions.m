@@ -33,7 +33,23 @@
     [self.layer addSublayer:topBorder];
     [self.layer addSublayer:bottomBorder];
     [self.layer addSublayer:leftBorder];
-    
+}
+
+- (void)centerHorizontallyInView:(UIView *)superView{
+    CGRect oldFrame = self.frame;
+    NSInteger xOrigin = (superView.frame.size.width - self.frame.size.width)/2;
+    self.frame = CGRectMake(xOrigin, oldFrame.origin.y, oldFrame.size.width, oldFrame.size.height);
+}
+
+-(void)centerVerticallyInView:(UIView *)superView{
+    CGRect oldFrame = self.frame;
+    NSInteger yOrigin = (superView.frame.size.height - self.frame.size.height)/2;
+    self.frame = CGRectMake(oldFrame.origin.x, yOrigin, oldFrame.size.width, oldFrame.size.height);
+}
+
+-(void)addBorderWithWidth:(CGFloat)width color:(UIColor *)color{
+    self.layer.borderColor = color.CGColor;
+    self.layer.borderWidth = width;
 }
 
 @end

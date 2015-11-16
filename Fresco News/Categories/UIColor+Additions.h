@@ -52,4 +52,8 @@
 
 +(UIColor *)frescoShadowColor;
 
++(UIColor *)frescoDefaultBackgroundColor;
+
++(UIColor *)frescoDropShadowColor;
+
 @end
