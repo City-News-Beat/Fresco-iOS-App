@@ -24,7 +24,6 @@
 #import "UIColor+Additions.h"
 
 #import "UIView+Helpers.h"
-#import "FRSRoundedView.h"
 
 
 #define ICON_WIDTH 24
@@ -41,10 +40,9 @@
 @property (strong, nonatomic) UIView *bottomContainer;
 
 @property (strong, nonatomic) UIButton *apertureButton;
+
 @property (strong, nonatomic) UIButton *previewButton;
 @property (strong, nonatomic) UIImageView *previewBackgroundIV;
-
-//@property (strong, nonatomic) FRSRoundedView *previewView;
 
 @property (strong, nonatomic) UIView *recordingModeToggleView;
 @property (strong, nonatomic) UIImageView *cameraIV;
@@ -141,18 +139,17 @@
         NSNumber *old = [change objectForKey:@"old"];
         
         if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
-            self.whiteView.alpha = 0.3;
+            self.whiteView.alpha = 0.4;
         }
         else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ // Was highlighted and now unhighlighted
             self.whiteView.alpha = 0.0;
         }
         else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
-            self.whiteView.alpha = 0.3;
+            self.whiteView.alpha = 0.4;
         }
         else {
             self.whiteView.alpha = 0.0;
         }
-
     }
 }
 
@@ -169,8 +166,6 @@
     [self.apertureButton addDropShadowWithColor:[UIColor frescoDropShadowColor] path:nil];
 
     [self.bottomContainer addSubview:self.apertureButton];
-    
-//    self.apertureButton.backgroundColor = [UIColor blueColor]; //For testing purposes
 }
 
 -(void)configureFlashButton{
@@ -186,23 +181,13 @@
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
     [self.flashButton setImage:[UIImage imageNamed:@"temp-flash"] forState:UIControlStateNormal];
+    [self.flashButton setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateHighlighted];
     [self.bottomContainer addSubview:self.flashButton];
-
-    
-//    self.flashIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, ICON_WIDTH, ICON_WIDTH)];
-//    [self.flashIV centerVerticallyInView:self.bottomContainer];
-//    self.flashIV.contentMode = UIViewContentModeScaleAspectFit;
-//    self.flashIV.userInteractionEnabled = YES;
-//    self.flashIV.image = [UIImage imageNamed:@"flash-on"];
-//    
-//    [self.bottomContainer addSubview:self.flashIV];
-    
-//    self.flashIV.backgroundColor = [UIColor greenColor]; //For testing purposes
     
 }
 
 -(void)configureToggleView{
-    self.recordingModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewButton.frame.origin.y, ICON_WIDTH, self.previewButton.frame.size.height)];
+    self.recordingModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y, ICON_WIDTH, self.previewBackgroundIV.frame.size.height)];
     self.recordingModeToggleView.userInteractionEnabled = YES;
     [self.bottomContainer addSubview:self.recordingModeToggleView];
     
