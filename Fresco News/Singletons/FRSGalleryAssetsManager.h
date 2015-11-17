@@ -28,10 +28,11 @@
 #pragma mark - Fetching
 
 /**
- *  Fetches gallery assets that are less than a day old
+ *  Fetches gallery assets that are less than a day old in the background.
+ *  @param completion  Completion handler which is called on the main queue
  */
 
--(void)fetchGalleryAssets;
+-(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion;
 
 
 

@@ -114,7 +114,7 @@
 }
 
 +(UIColor *)frescoDropShadowColor{
-    return [UIColor colorWithWhite:0 alpha:0.4];
+    return [UIColor colorWithWhite:0 alpha:0.3];
 }
 
 
