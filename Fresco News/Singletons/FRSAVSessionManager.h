@@ -8,11 +8,32 @@
 
 #import <Foundation/Foundation.h>
 
+@import AVFoundation;
+
+
+typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
+    FRSAVStatusAuthorized,
+    FRSAVStatusDenied,
+    FRSAVStatusNotDetermined
+};
+
 @interface FRSAVSessionManager : NSObject
+
+@property (nonatomic) FRSAVAuthStatus authStatus;
+
+@property (nonatomic, readonly) BOOL AVSetupSuccess;
+
+@property (strong, nonatomic) AVCaptureSession *session;
+
+@property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
 
 +(instancetype)defaultManager;
 
+-(void)startCaptureSession;
 
+-(void)configureOrientationForPreview:(UIView *)preview;
+
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange;
 
 
 @end
