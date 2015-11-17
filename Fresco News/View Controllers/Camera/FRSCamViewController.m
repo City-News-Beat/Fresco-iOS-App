@@ -194,7 +194,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                 previewLayer.connection.videoOrientation = initialVideoOrientation;
                 
             });
-            
         }
         else {
             NSLog( @"Could not add video device input to the session" );
@@ -290,7 +289,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     
     dispatch_async(self.sessionQueue, ^{
         
-    #warning possible race conditions, needs investigation
         
         switch ( self.setupResult )
         {
@@ -1382,7 +1380,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             [device unlockForConfiguration];
         }
         else {
-            NSLog( @"Could not lock device for configuration: %@", error );
+            NSLog( @"Could not lock device for configuration: %@", error.localizedDescription );
         }
     } );
 }
