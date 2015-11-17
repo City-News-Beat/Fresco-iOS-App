@@ -42,15 +42,18 @@
 
 #pragma mark - fetching
 
-- (void)fetchGalleryAssets{
+- (void)fetchGalleryAssetsInBackgroundWithCompletion:(void (^)())completion{
     //Photos fetch
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
     
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PHFetchOptions *options = [[PHFetchOptions alloc] init];
+        
+        options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+        
 #if TARGET_IPHONE_SIMULATOR
-    
+        
 #else
+<<<<<<< 1c13997b6b3036bed0c8f8da5f1bddb2750a6410
     //Set maximumum 1 day of age
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
@@ -66,12 +69,37 @@
         //Check if there is a location, and if the video is less than the MAX_VIDEO_LENGTH
         if (asset.location != nil && asset.duration <= MAX_VIDEO_LENGTH) {
             [filteredAssets addObject:asset];
+=======
+        //Set maximumum 1 day of age
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+        components.day -= 1; //1 day
+        NSDate *lastDay  = [calendar dateFromComponents:components];
+        options.predicate = [NSPredicate predicateWithFormat:@"(creationDate >= %@)", lastDay];
+#endif
+        
+        PHFetchResult *results = [PHAsset fetchAssetsWithOptions:options];
+        NSMutableArray *filteredAssets = [NSMutableArray new];
+        
+        [results enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+            //Check if there is a location, and if the video is less than the MAX_VIDEO_LENGTH
+            if (asset.location != nil && asset.duration < MAX_VIDEO_LENGTH) {
+                [filteredAssets addObject:asset];
+            }
+        }];
+        
+        PHAssetCollection *assetCollectionWithLocation = [PHAssetCollection transientAssetCollectionWithAssets:filteredAssets title:@"Assets with location data"];
+        
+        self.fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollectionWithLocation options:nil];
+        
+        if (completion){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion();
+            });
+            
+>>>>>>> new aperture images and ui configuration changed to include shadows, colors, corner radii
         }
-    }];
-    
-    PHAssetCollection *assetCollectionWithLocation = [PHAssetCollection transientAssetCollectionWithAssets:filteredAssets title:@"Assets with location data"];
-    
-    self.fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollectionWithLocation options:nil];
+    });
 }
 
 #pragma mark - PHPhotoLibraryChangeObserver delegate method

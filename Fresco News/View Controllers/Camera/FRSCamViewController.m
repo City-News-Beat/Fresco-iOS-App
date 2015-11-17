@@ -243,7 +243,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     });
     
     
-    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:nil];
 
     
 }
@@ -1271,15 +1271,17 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
                         NSLog( @"Could not save movie to photo library: %@", error );
                     }
                     
-                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
-                    PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
-                    
-                    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
                         
-                        [self toggleRecentPhotoViewWithImage:result];
+                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.doneButtonImageView.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                            
+                            [self toggleRecentPhotoViewWithImage:result];
+                        }];
+                        
+                        cleanup();
                     }];
                     
-                    cleanup();
                 }];
             }
             else {

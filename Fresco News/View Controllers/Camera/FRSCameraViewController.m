@@ -50,6 +50,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (strong, nonatomic) UIView *bottomContainer;
 
+@property (strong, nonatomic) UIView *aperatureShadowView;
+@property (strong, nonatomic) UIView *apertureBackground;
 @property (strong, nonatomic) UIButton *apertureButton;
 
 @property (strong, nonatomic) UIButton *previewButton;
@@ -101,13 +103,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [self addObservers];
     
+    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+        [self updatePreviewButtonWithAsset];
+    }];
+    
     //TEMPORARY
-    dispatch_async(dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_main_queue(), ^{
         UIButton *close = [[UIButton alloc] initWithFrame:CGRectMake(15, 0, 50, 50)];
         close.backgroundColor = [UIColor orangeColor];
         [close addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
         [self.bottomContainer addSubview:close];
-    });
+//    });
     
     // Do any additional setup after loading the view.
 }
@@ -147,10 +153,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 #pragma mark - UI configuration methods
 
 -(void)configureUI{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self configurePreview];
-        [self configureBottomContainer];
-    });
+    
+    [self configurePreview];
+    [self configureBottomContainer];
 }
 
 -(void)configurePreview{
@@ -170,33 +175,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.view addSubview:self.preview];
 }
 
--(void)handleTapToFocus:(UITapGestureRecognizer *)gr{
-    CGPoint devicePoint = [self.captureVideoPreviewLayer captureDevicePointOfInterestForPoint:[gr locationInView:gr.view]];
+-(void)updatePreviewButtonWithAsset{
+    PHAsset *asset = [self.assetsManager.fetchResult firstObject];
     
-    CGPoint rawPoint = [gr locationInView:gr.view];
-    [self playFocusAnimationAtPoint:rawPoint];
-    
-    [self.sessionManager focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
-    
-}
-
--(void)playFocusAnimationAtPoint:(CGPoint)devicePoint{
-    UIView *square = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
-    square.backgroundColor = [UIColor clearColor];
-    square.layer.borderColor = [UIColor brandDarkColor].CGColor;
-    square.layer.borderWidth = 4.0;
-    square.alpha = 1.0;
-    square.center = devicePoint;
-    
-    [self.preview addSubview:square];
-    
-    [UIView animateWithDuration:0.2 animations:^{
-        square.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    } completion:^(BOOL finished) {
-        [square removeFromSuperview];
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewButton.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+        if (!result){
+            
+        }
+        else {
+            [self.previewButton setImage:result forState:UIControlStateNormal];
+        }
     }];
 }
-
 
 -(void)configureBottomContainer{
     
@@ -221,14 +211,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.previewBackgroundIV centerVerticallyInView:self.bottomContainer];
     self.previewBackgroundIV.userInteractionEnabled = YES;
     [self.bottomContainer addSubview:self.previewBackgroundIV];
-    [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoDropShadowColor] path:nil];
+    [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
     
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    [self.previewButton setBackgroundImage:[UIImage imageNamed:@"twitter-b"] forState:UIControlStateNormal];
-    [self.previewButton setBackgroundImage:[UIImage imageNamed:@"twitter-b"] forState:UIControlStateHighlighted];
     [self.previewButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
     [self.previewButton clipAsCircle];
@@ -266,27 +254,36 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)configureApertureButton{
-    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.apertureButton centerVerticallyInView:self.bottomContainer];
-    [self.apertureButton centerHorizontallyInView:self.bottomContainer];
     
+    self.aperatureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+    [self.aperatureShadowView centerHorizontallyInView:self.bottomContainer];
+    [self.aperatureShadowView centerVerticallyInView:self.bottomContainer];
+    [self.aperatureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.bottomContainer addSubview:self.aperatureShadowView];
+    
+    self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+    self.apertureBackground.backgroundColor = [UIColor goldStatusBarColor];
+    self.apertureBackground.layer.cornerRadius = APERTURE_WIDTH/2.;
+    self.apertureBackground.layer.masksToBounds = YES;
+    [self.aperatureShadowView addSubview:self.apertureBackground];
+    
+    
+    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     
-    [self.apertureButton setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
-    [self.apertureButton setImage:[UIImage imageNamed:@"video-recording-icon"] forState:UIControlStateHighlighted];
-    
-    [self.apertureButton addDropShadowWithColor:[UIColor frescoDropShadowColor] path:nil];
+    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
+//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-i"] forState:UIControlStateHighlighted];
+    [self.apertureBackground addSubview:self.apertureButton];
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.bottomContainer addSubview:self.apertureButton];
 }
 
 -(void)configureFlashButton{
     
     
     // We start at the edge of the aperture button and then center the view between the aperture button and the recordModeToggleView
-    NSInteger apertureEdge = self.apertureButton.frame.origin.x + self.apertureButton.frame.size.width;
+    NSInteger apertureEdge = self.aperatureShadowView.frame.origin.x + self.aperatureShadowView.frame.size.width;
     NSInteger xOrigin = apertureEdge + (self.view.frame.size.width - apertureEdge - SIDE_PAD - (ICON_WIDTH * 2))/2;
     
     
@@ -373,6 +370,34 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateApp:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
+#pragma mark - Camera focus
+
+-(void)handleTapToFocus:(UITapGestureRecognizer *)gr{
+    CGPoint devicePoint = [self.captureVideoPreviewLayer captureDevicePointOfInterestForPoint:[gr locationInView:gr.view]];
+    
+    CGPoint rawPoint = [gr locationInView:gr.view];
+    [self playFocusAnimationAtPoint:rawPoint];
+    
+    [self.sessionManager focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
+    
+}
+
+-(void)playFocusAnimationAtPoint:(CGPoint)devicePoint{
+    UIView *square = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
+    square.backgroundColor = [UIColor clearColor];
+    square.layer.borderColor = [UIColor brandDarkColor].CGColor;
+    square.layer.borderWidth = 4.0;
+    square.alpha = 1.0;
+    square.center = devicePoint;
+    
+    [self.preview addSubview:square];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        square.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    } completion:^(BOOL finished) {
+        [square removeFromSuperview];
+    }];
+}
 
 
 

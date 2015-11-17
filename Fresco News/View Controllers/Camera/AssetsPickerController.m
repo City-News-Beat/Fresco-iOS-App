@@ -88,14 +88,14 @@ static CGSize AssetGridThumbnailSize;
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == PHAuthorizationStatusAuthorized){
-                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssets];
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+                        if(self.assetsFetchResults.count == 0){
+                            [self configureAuxiliaryView:width andHeight:height authorized:YES];
+                        }
+                        [self setupImageCachingAndCollectionView];
+
+                    }];
                     self.assetsFetchResults = [FRSGalleryAssetsManager sharedManager].fetchResult;
-                    
-                    if(self.assetsFetchResults.count == 0){
-                        [self configureAuxiliaryView:width andHeight:height authorized:YES];
-                    }
-                    [self setupImageCachingAndCollectionView];
-                    
                 }
                 else{
                     [self configureAuxiliaryView:width andHeight:height authorized:NO];
