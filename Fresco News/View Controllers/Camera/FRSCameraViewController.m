@@ -25,6 +25,8 @@
 #import "UIColor+Additions.h"
 #import "UIView+Helpers.h"
 
+//Models
+#import "FRSAssignment.h"
 
 
 
@@ -40,7 +42,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 };
 
 
-@interface FRSCameraViewController ()
+@interface FRSCameraViewController () <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
@@ -70,6 +72,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) FRSCaptureMode captureMode;
 @property (nonatomic) UIDeviceOrientation currentOrientation;
+
+@property (strong, nonatomic) FRSAssignment *defaultAssignment;
 
 
 @end
@@ -106,6 +110,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
         [self updatePreviewButtonWithAsset];
     }];
+    
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
+    self.locationManager.delegate = self;
     
     //TEMPORARY
 //    dispatch_async(dispatch_get_main_queue(), ^{
@@ -546,6 +553,38 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.previewButton removeObserver:self forKeyPath:@"highlighted" context:nil];
 }
 
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    
+    [self.locationManager stopUpdatingLocation];
+
+    if (self.locationManager.location && self.defaultAssignment == nil) {
+        
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+            
+            if([responseObject firstObject] != nil){
+                
+                FRSAssignment *assignment = [responseObject firstObject];
+                
+                CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
+                
+                //Check if in range
+                if(distanceInMiles < [assignment.radius floatValue]){
+                    
+                    self.defaultAssignment = assignment;
+                    
+//                    [self toggleAssignmentLabel:YES];
+                    
+                }
+                
+            }
+            
+        }];
+    }
+    
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
+    
+}
 
 /*
 #pragma mark - Navigation
