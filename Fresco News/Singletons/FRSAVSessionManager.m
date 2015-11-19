@@ -11,8 +11,7 @@
 
 @interface FRSAVSessionManager()
 
-@property (strong, nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
-@property (strong, nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+
 
 @property (nonatomic, readwrite) BOOL AVSetupSuccess;
 
