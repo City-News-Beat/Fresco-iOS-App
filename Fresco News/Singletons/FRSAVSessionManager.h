@@ -27,6 +27,9 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
 
+@property (strong, nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
+@property (strong, nonatomic) AVCaptureStillImageOutput *stillImageOutput;
+
 +(instancetype)defaultManager;
 
 -(void)startCaptureSession;
