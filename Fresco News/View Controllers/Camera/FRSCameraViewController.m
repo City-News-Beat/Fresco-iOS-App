@@ -111,7 +111,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self addObservers];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
-        [self updatePreviewButtonWithAsset];
+            [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    status == PHAuthorizationStatusAuthorized ? [self updatePreviewButtonWithAsset] : [self updatePreviewButtonWithImage:[UIImage imageNamed:@"camera-roll"]];
+                });
+            }];
     }];
     
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
@@ -149,6 +153,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.locationManager stopLocationUpdates];
+    [self.locationManager stopMonitoringSignificantLocationChanges];
+}
+
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.preview.alpha == 0){
@@ -172,8 +182,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO)];
     self.preview.backgroundColor = [UIColor blackColor];
     
-    CALayer *viewLayer = self.preview.layer;
-    self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
+    CALayer *viewLayer = self.preview.layer;     self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
     self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
     [viewLayer addSublayer:self.captureVideoPreviewLayer];
@@ -190,9 +199,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewButton.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
         if (!result){
-            
+            self.previewBackgroundIV.alpha = 0;
         }
         else {
+            self.previewBackgroundIV.alpha = 1.0;
             [self.previewButton setImage:result forState:UIControlStateNormal];
         }
     }];
@@ -200,6 +210,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.previewBackgroundIV.alpha = 1.0;
         [self.previewButton setImage:image forState:UIControlStateNormal];
     });
 }
@@ -226,6 +237,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewBackgroundIV.image = [UIImage imageNamed:@"white-background-circle"];
     [self.previewBackgroundIV centerVerticallyInView:self.bottomContainer];
     self.previewBackgroundIV.userInteractionEnabled = YES;
+    self.previewBackgroundIV.alpha = 0.0;
     [self.bottomContainer addSubview:self.previewBackgroundIV];
     [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
@@ -564,8 +576,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     
-    [self.locationManager stopUpdatingLocation];
+    
+    if (self.locationManager.managerState == LocationManagerStateForeground)
+        [self.locationManager stopUpdatingLocation];
 
+    NSLog(@"did update locations in camera");
+    
     if (self.locationManager.location && self.defaultAssignment == nil) {
         
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
