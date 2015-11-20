@@ -1299,6 +1299,7 @@
 				E71F0E2D1B0B936200186BAD /* Resources */,
 				395E7450C362C2EE73B2E1E7 /* Copy Pods Resources */,
 				178F3B64671E5CBE4F8EBF55 /* Embed Pods Frameworks */,
+				651B592D1BFFA74A001BCC5C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1473,6 +1474,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		651B592D1BFFA74A001BCC5C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then\nrm -fr Frameworks\nfi";
 		};
 		795C43D7E48F825023E7D453 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

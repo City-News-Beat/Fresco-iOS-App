@@ -323,7 +323,10 @@
                     block(nil, error);
                 }
                 else{
-                    block(user, error);
+
+                        block(user, error);
+
+                    
                 }
             
             }];

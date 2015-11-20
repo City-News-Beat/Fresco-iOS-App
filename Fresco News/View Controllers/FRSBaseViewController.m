@@ -107,8 +107,8 @@
         
         [button setTitle:@"" forState:UIControlStateNormal];
         
-        if(button.imageView.image)
-            [button setImage:nil forState:UIControlStateNormal];
+//        if(button.imageView.image)
+//            [button setImage:nil forState:UIControlStateNormal];
         
         CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
         
@@ -130,32 +130,30 @@
     if(login == LoginFresco){
 
         [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
-            
-            self.view.userInteractionEnabled = YES;
-            
-            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.view.userInteractionEnabled = YES;
                 
-                [self transferUser];
-                
-            }
-            else{
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
+                if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
+                    
+                    [self transferUser];
+                    
+                }
+                else{
                 
                     [button setTitle:LOGIN forState:UIControlStateNormal];
                     [self hideActivityIndicator];
                     [self revertScreenToNormal:self.view];
                     
-                });
+                    [self presentViewController:[FRSAlertViewManager
+                                                 alertControllerWithTitle:LOGIN_ERROR
+                                                 message:INVALID_CREDENTIALS action:nil]
+                                       animated:YES completion:nil];
+                    
+                }
                 
-                [self presentViewController:[FRSAlertViewManager
-                                             alertControllerWithTitle:LOGIN_ERROR
-                                             message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:nil];
-            }
-            
-            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
-                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+                if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+                    [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+            });
         }];
         
     }
