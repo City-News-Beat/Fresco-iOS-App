@@ -55,7 +55,10 @@
     if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
         
         //We're on the first page
-        if(self.index == 0 && ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid])){
+        if(self.index == 0 &&
+           (([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]) &&
+            [[FRSDataManager sharedManager] isLoggedIn]
+        )){
             
             [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 2 withDirection:UIPageViewControllerNavigationDirectionForward];
         }

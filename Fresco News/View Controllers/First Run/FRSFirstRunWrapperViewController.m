@@ -127,7 +127,6 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
     
-    
     [self.progressView updateProgressViewForIndex:self.pagedViewController.currentIndex
                                        fromIndex:self.pagedViewController.previousIndex];
     
