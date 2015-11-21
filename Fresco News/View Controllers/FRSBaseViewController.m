@@ -53,7 +53,18 @@
 
     //Move to next page
     if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
-        [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 1 withDirection:UIPageViewControllerNavigationDirectionForward];
+        
+        //We're on the first page
+        if(self.index == 0 && ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid])){
+            
+            [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 2 withDirection:UIPageViewControllerNavigationDirectionForward];
+        }
+        else{
+            
+            [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 1 withDirection:UIPageViewControllerNavigationDirectionForward];
+            
+        }
+
     }
     
 }
@@ -78,7 +89,6 @@
     if ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]){
         
         [self navigateToNextIndex];
-        
         
     }
     //User is valid and exists i.e. send them back to the app
