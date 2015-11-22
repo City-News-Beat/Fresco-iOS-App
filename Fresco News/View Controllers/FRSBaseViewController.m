@@ -152,10 +152,14 @@
                     
                 }
                 else{
-                
-                    [button setTitle:LOGIN forState:UIControlStateNormal];
-                    [self hideActivityIndicator];
-                    [self revertScreenToNormal:self.view];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+
+                        [button setTitle:LOGIN forState:UIControlStateNormal];
+                        [self hideActivityIndicator];
+                        [self revertScreenToNormal:self.view];
+                            
+                    });
                     
                     [self presentViewController:[FRSAlertViewManager
                                                  alertControllerWithTitle:LOGIN_ERROR
