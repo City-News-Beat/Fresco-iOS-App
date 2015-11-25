@@ -26,7 +26,6 @@
 
 @property (nonatomic, assign) BOOL disableEndlessScroll;
 
-
 @end
 
 @implementation ProfileViewController
@@ -44,7 +43,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(populateProfile) name:NOTIF_UPLOAD_COMPLETE object:nil];
 
-    
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         
         if(self.disableEndlessScroll)

@@ -135,7 +135,7 @@
         self.containerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 300);
     }
     
-    self.containerView.backgroundColor = [UIColor blueColor];
+    self.containerView.backgroundColor = [UIColor frescoGreyBackgroundColor];
     self.containerView.clipsToBounds = YES;
     
     /* CardIO View */

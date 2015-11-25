@@ -9,6 +9,7 @@
 #import "TOSViewController.h"
 #import "FRSDataManager.h"
 #import "FRSRootViewController.h"
+#import "FRSFirstRunWrapperViewController.h"
 #import "UIViewController+Additions.h"
 
 @interface TOSViewController ()
@@ -39,7 +40,9 @@
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    if(![self.presentingViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 
 }
 

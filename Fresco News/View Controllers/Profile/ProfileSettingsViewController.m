@@ -126,7 +126,6 @@ typedef enum : NSUInteger {
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected)];
     singleTap.numberOfTapsRequired = 1;
     
-    
     //Make the profile image interactive
     [self.profileImageView addGestureRecognizer:singleTap];
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
@@ -144,57 +143,56 @@ typedef enum : NSUInteger {
     
     //Update the slider label
     [self sliderValueChanged:self.radiusStepper];
-
-    //Stuff to do afer initial neccessary configurations
+    
+    //Checks if the user's primary login is through social, then disable the email and password fields
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+       && [FRSDataManager sharedManager].currentUser.email == nil){
+        
+        [self.view viewWithTag:100].hidden = YES;
+        [self.view viewWithTag:101].hidden = YES;
+        [[self.view viewWithTag:100] removeFromSuperview];
+        [[self.view viewWithTag:101] removeFromSuperview];
+        
+        CGFloat y = -self.view.frame.size.height/8;
+        self.constraintAccountVerticalTop.constant = y;
+        self.constraintAccountVerticalBottom.constant = 0;
+        
+    }
+    
+    [self.scrollView setNeedsLayout];
+    [self.scrollView layoutIfNeeded];
+    
+    if (!self.picker)
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    
+    for (UIView *view in self.viewsWithShadows) {
+        
+        [view addBorderWithWidth:1.0f];
+        
+    }
+    
+    //Update the profile image
+    if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
+        
+        [self.profileImageView
+         setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
+         placeholderImage:[UIImage imageNamed:@"user"]
+         success:nil failure:nil];
+    }
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
+    caret.contentMode = UIViewContentModeScaleAspectFit;
+    caret.frame = CGRectMake(
+                             [[UIScreen mainScreen] bounds].size.width - 30,
+                             (self.addCardButton.frame.size.height / 2) - 7.5,
+                             15,
+                             15
+                             );
+    
+    [self.addCardButton addSubview:caret];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        //Checks if the user's primary login is through social, then disable the email and password fields
-        if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-           && [FRSDataManager sharedManager].currentUser.email == nil){
-            
-            [self.view viewWithTag:100].hidden = YES;
-            [self.view viewWithTag:101].hidden = YES;
-            [[self.view viewWithTag:100] removeFromSuperview];
-            [[self.view viewWithTag:101] removeFromSuperview];
-            
-            CGFloat y = -self.view.frame.size.height/8;
-            self.constraintAccountVerticalTop.constant = y;
-            self.constraintAccountVerticalBottom.constant = 0;
-            
-        }
-        
-        [self.scrollView setNeedsLayout];
-        [self.scrollView layoutIfNeeded];
-        
-        if (!self.picker)
-            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
-        
-        for (UIView *view in self.viewsWithShadows) {
-            
-            [view addBorderWithWidth:1.0f];
-            
-        }
-        
-        //Update the profile image
-        if ([FRSDataManager sharedManager].currentUser.avatar != nil) {
-            
-            [self.profileImageView
-             setImageWithURLRequest:[NSURLRequest requestWithURL:[[FRSDataManager sharedManager].currentUser avatarUrl]]
-             placeholderImage:[UIImage imageNamed:@"user"]
-             success:nil failure:nil];
-        }
-        
-        UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
-        caret.contentMode = UIViewContentModeScaleAspectFit;
-        caret.frame = CGRectMake(
-                                 [[UIScreen mainScreen] bounds].size.width - 30,
-                                 (self.addCardButton.frame.size.height / 2) - 7.5,
-                                 15,
-                                 15
-                                 );
-        
-        [self.addCardButton addSubview:caret];
-        
+
         [self getYolked];
         
     });

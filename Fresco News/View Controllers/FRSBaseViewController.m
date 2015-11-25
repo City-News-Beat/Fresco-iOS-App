@@ -55,7 +55,10 @@
     if([self.parentViewController isKindOfClass:[FirstRunPageViewController class]]){
         
         //We're on the first page
-        if(self.index == 0 && ([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid])){
+        if(self.index == 0 &&
+           (([PFUser currentUser].isNew || ![[FRSDataManager sharedManager] currentUserValid]) &&
+            [[FRSDataManager sharedManager] isLoggedIn]
+        )){
             
             [((FirstRunPageViewController *)self.parentViewController) moveToViewAtIndex:self.index + 2 withDirection:UIPageViewControllerNavigationDirectionForward];
         }
@@ -117,9 +120,6 @@
         
         [button setTitle:@"" forState:UIControlStateNormal];
         
-//        if(button.imageView.image)
-//            [button setImage:nil forState:UIControlStateNormal];
-        
         CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
@@ -140,30 +140,33 @@
     if(login == LoginFresco){
 
         [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.view.userInteractionEnabled = YES;
+
+            self.view.userInteractionEnabled = YES;
+            
+            if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
                 
-                if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
-                    
-                    [self transferUser];
-                    
-                }
-                else{
+                [self transferUser];
                 
-                    [button setTitle:LOGIN forState:UIControlStateNormal];
-                    [self hideActivityIndicator];
-                    [self revertScreenToNormal:self.view];
-                    
-                    [self presentViewController:[FRSAlertViewManager
-                                                 alertControllerWithTitle:LOGIN_ERROR
-                                                 message:INVALID_CREDENTIALS action:nil]
-                                       animated:YES completion:nil];
-                    
-                }
+            }
+            else{
                 
-                if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
-                    [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
-            });
+
+                [button setTitle:@"Login" forState:UIControlStateNormal];
+                [self hideActivityIndicator];
+                [self revertScreenToNormal:self.view];
+                        
+
+                
+                [self presentViewController:[FRSAlertViewManager
+                                             alertControllerWithTitle:LOGIN_ERROR
+                                             message:INVALID_CREDENTIALS action:nil]
+                                   animated:YES completion:nil];
+                
+            }
+            
+            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
+                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+
         }];
         
     }
