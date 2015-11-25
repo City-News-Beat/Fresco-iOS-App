@@ -7,8 +7,8 @@
 //
 
 @import CoreLocation;
-@import FBSDKLoginKit;
 @import FBSDKCoreKit;
+@import FBSDKLoginKit;
 @import Parse;
 @import AVFoundation;
 @import Fabric;
@@ -26,6 +26,8 @@
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
 #import "Stripe.h"
+
+
 
 @interface AppDelegate ()
 
@@ -124,6 +126,8 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [FBSDKAppEvents activateApp];
+    
+    NSLog( @"### running FB sdk version: %@", [FBSDKSettings sdkVersion] );
     
     NSLog(@"APPLICATION DID BECOME ACTIVE");
     

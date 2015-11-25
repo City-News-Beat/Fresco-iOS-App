@@ -22,9 +22,6 @@
 		1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B741AA799750057AC16 /* UIColor+Additions.m */; };
 		1E408B7A1AA7A4580057AC16 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B791AA7A4580057AC16 /* BaseNavigationController.m */; };
 		1E408B7D1AA7C4ED0057AC16 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */; };
-		1E4983B11AFBBD8800924F59 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */; };
-		1E4983B21AFBBD8800924F59 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */; };
-		1E4983B31AFBBD8800924F59 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */; };
 		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
 		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
 		1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B81AFBCDEA00924F59 /* StoreKit.framework */; };
@@ -237,9 +234,6 @@
 		1E408B791AA7A4580057AC16 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseNavigationController.m; path = "Base Classes/BaseNavigationController.m"; sourceTree = "<group>"; };
 		1E408B7B1AA7C4DC0057AC16 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Additions.h"; path = "Categories/UIViewController+Additions.h"; sourceTree = "<group>"; };
 		1E408B7C1AA7C4ED0057AC16 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Additions.m"; path = "Categories/UIViewController+Additions.m"; sourceTree = "<group>"; };
-		1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		1E4983B41AFBCD9900924F59 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
 		1E4983B81AFBCDEA00924F59 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -489,11 +483,8 @@
 				1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */,
 				1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */,
 				E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */,
-				1E4983B11AFBBD8800924F59 /* FBSDKCoreKit.framework in Frameworks */,
 				1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */,
-				1E4983B31AFBBD8800924F59 /* FBSDKShareKit.framework in Frameworks */,
 				1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */,
-				1E4983B21AFBBD8800924F59 /* FBSDKLoginKit.framework in Frameworks */,
 				42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */,
 				E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */,
 				C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */,
@@ -539,9 +530,6 @@
 				1E4983B81AFBCDEA00924F59 /* StoreKit.framework */,
 				1E4983B41AFBCD9900924F59 /* Parse.framework */,
 				1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */,
-				1E4983AE1AFBBD8800924F59 /* FBSDKCoreKit.framework */,
-				1E4983AF1AFBBD8800924F59 /* FBSDKLoginKit.framework */,
-				1E4983B01AFBBD8800924F59 /* FBSDKShareKit.framework */,
 				E65C24581AE6E328001A5208 /* MapKit.framework */,
 				42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */,
 				96C32138EB19F136689A3D6B /* libPods.a */,

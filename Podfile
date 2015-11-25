@@ -20,6 +20,10 @@ target 'Fresco' do
 	pod 'CardIO'
 	pod 'Stripe'
 	pod 'BKMoneyKit'
+	pod 'FBSDKLoginKit'
+	pod 'FBSDKCoreKit'
+	pod 'FBSDKShareKit'
+
 end
 
 target 'Fresco WatchKit Extension' do
