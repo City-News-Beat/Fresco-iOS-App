@@ -6,12 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "cameraOffIcon@1x.png",
+      "filename" : "camera24K3@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "cameraOffIcon@3x.png",
+      "filename" : "camera24K3@3x.png",
       "scale" : "3x"
     }
   ],
