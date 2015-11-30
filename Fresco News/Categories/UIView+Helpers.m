@@ -65,7 +65,12 @@
  */
 
 -(void)addDropShadowWithColor:(UIColor *)color path:(UIBezierPath *)path{
-    self.layer.shadowColor = color.CGColor;
+    if (color == nil){
+        self.layer.shadowColor = nil;
+    }
+    else {
+        self.layer.shadowColor = color.CGColor;
+    }
     self.layer.shadowOffset = CGSizeMake(1, 2);
     self.layer.shadowOpacity = 1.0;
     self.layer.shadowRadius = 2.0;
