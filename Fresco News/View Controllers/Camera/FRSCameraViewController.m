@@ -52,7 +52,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (strong, nonatomic) UIView *preview;
 
-@property (strong, nonatomic) UIView *bottomContainer;
+@property (strong, nonatomic) UIView *bottomClearContainer;
+@property (strong, nonatomic) UIView *bottomOpaqueContainer;
 
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
@@ -123,14 +124,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
     self.locationManager.delegate = self;
     
-    //TEMPORARY
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        UIButton *close = [[UIButton alloc] initWithFrame:CGRectMake(15, 0, 50, 50)];
-        close.backgroundColor = [UIColor orangeColor];
-        [close addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [self.bottomContainer addSubview:close];
-//    });
-    
     // Do any additional setup after loading the view.
 }
 
@@ -175,7 +168,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 #pragma mark - UI configuration methods
 
 -(void)configureUI{
-    
     [self configurePreview];
     [self configureBottomContainer];
 }
@@ -220,9 +212,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)configureBottomContainer{
     
-    self.bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
-    self.bottomContainer.backgroundColor = [UIColor frescoDefaultBackgroundColor];
-    [self.view addSubview:self.bottomContainer];
+    
+    self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
+    self.bottomOpaqueContainer.backgroundColor = [UIColor frescoDefaultBackgroundColor];
+    [self.view addSubview:self.bottomOpaqueContainer];
+    
+    self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
+    self.bottomClearContainer.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.bottomClearContainer];
     
     [self configureNextSection];
     [self configureApertureButton];
@@ -233,18 +230,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)configureNextSection{
     
-//    self.previewView = [[FRSRoundedView alloc] initWithImage:[UIImage imageNamed:@"twitter-b"] borderWidth:4.0];
-//    self.previewView.frame = CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH);
-//    [self.previewView centerVerticallyInView:self.bottomContainer];
-    
     self.previewBackgroundIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     self.previewBackgroundIV.image = [UIImage imageNamed:@"white-background-circle"];
-    [self.previewBackgroundIV centerVerticallyInView:self.bottomContainer];
+    [self.previewBackgroundIV centerVerticallyInView:self.bottomClearContainer];
     self.previewBackgroundIV.userInteractionEnabled = YES;
     self.previewBackgroundIV.alpha = 0.0;
-    [self.bottomContainer addSubview:self.previewBackgroundIV];
+    [self.bottomClearContainer addSubview:self.previewBackgroundIV];
     [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    
+
     
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
@@ -256,12 +249,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [self.previewBackgroundIV addSubview:self.previewButton];
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-    self.whiteView.backgroundColor = [UIColor whiteColor];
-    self.whiteView.alpha = 0;
-    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
-    self.whiteView.clipsToBounds = YES;
-    [self.previewBackgroundIV addSubview:self.whiteView];
+//    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
+//    self.whiteView.backgroundColor = [UIColor whiteColor];
+//    self.whiteView.alpha = 0;
+//    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
+//    self.whiteView.clipsToBounds = YES;
+//    [self.previewBackgroundIV addSubview:self.whiteView];
+    
+    self.nextButton = [UIButton alloc] initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)
+    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
@@ -302,10 +298,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureApertureButton{
     
     self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.apertureShadowView centerHorizontallyInView:self.bottomContainer];
-    [self.apertureShadowView centerVerticallyInView:self.bottomContainer];
+    [self.apertureShadowView centerHorizontallyInView:self.bottomClearContainer];
+    [self.apertureShadowView centerVerticallyInView:self.bottomClearContainer];
     [self.apertureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    [self.bottomContainer addSubview:self.apertureShadowView];
+    [self.bottomClearContainer addSubview:self.apertureShadowView];
     
     self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
     self.apertureBackground.layer.cornerRadius = APERTURE_WIDTH/2.;
@@ -342,17 +338,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     
     self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, 0, ICON_WIDTH, ICON_WIDTH)];
-    [self.flashButton centerVerticallyInView:self.bottomContainer];
+    [self.flashButton centerVerticallyInView:self.bottomClearContainer];
+    [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
-    [self.bottomContainer addSubview:self.flashButton];
+    [self.bottomClearContainer addSubview:self.flashButton];
     
 }
 
 -(void)configureToggleView{
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
     self.captureModeToggleView.userInteractionEnabled = YES;
-    [self.bottomContainer addSubview:self.captureModeToggleView];
+    [self.bottomClearContainer addSubview:self.captureModeToggleView];
     
     [self configureCameraButton];
     [self configureVideoButton];
@@ -367,8 +364,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ICON_WIDTH, ICON_WIDTH)];
     self.cameraIV.contentMode = UIViewContentModeCenter;
     self.cameraIV.userInteractionEnabled = YES;
+    [self.cameraIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.captureModeToggleView addSubview:self.cameraIV];
-    
 
 }
 
@@ -380,6 +377,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.videoIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, yOrigin, ICON_WIDTH, ICON_WIDTH)];
     self.videoIV.userInteractionEnabled = YES;
     self.videoIV.contentMode = UIViewContentModeCenter;
+    [self.videoIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.captureModeToggleView addSubview:self.videoIV];
     
 //    self.videoIV.backgroundColor = [UIColor orangeColor]; //For testing purposes;
@@ -387,8 +385,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)setAppropriateIconsForCaptureState{
     if (self.captureMode == FRSCaptureModePhoto){
-        
-//        [self runSpinAnimationOnView:self.apertureButton duration:0.3 rotations:3 repeat:0];
         [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
@@ -398,7 +394,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
             
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            self.flashButton.layer.shadowOpacity = 0.0;
+            self.cameraIV.layer.shadowOpacity = 0.0;
+            self.videoIV.layer.shadowOpacity = 0.0;
+        }];
         
     }
     else {
@@ -408,13 +408,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
-            self.cameraIV.image = [UIImage imageNamed:@"camera-off"];
-            self.videoIV.image = [UIImage imageNamed:@"video-on"];
-        } completion:nil];
+            self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
+            self.videoIV.image = [UIImage imageNamed:@"video-vid-on"];
+        } completion:^(BOOL finished) {
+            self.flashButton.layer.shadowOpacity = 1.0;
+            self.cameraIV.layer.shadowOpacity = 1.0;
+            self.videoIV.layer.shadowOpacity = 1.0;
+        }];
     }
 }
 
 -(void)animateShutterExpansionWithColor:(UIColor *)color{
+    
     self.apertureAnimationView.backgroundColor = color;
     self.apertureAnimationView.alpha = 1.0;
     
@@ -431,17 +436,27 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }];
 }
 
-- (void) runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat;
-{
-    CABasicAnimation* rotationAnimation;
-    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * rotations];
-    rotationAnimation.duration = duration;
-    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    rotationAnimation.cumulative = YES;
-    rotationAnimation.repeatCount = repeat;
+-(void)adjustFramesForCaptureState{
     
-    [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+    NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height)/2;
+    NSInteger offset = topToAperture - 10;
+    
+    if (self.captureMode == FRSCaptureModePhoto){
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+            self.captureVideoPreviewLayer.frame = self.preview.bounds;
+            self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
+            self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
+        } completion:nil];
+    }
+    else {
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+            self.captureVideoPreviewLayer.frame = self.preview.bounds;
+            self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
+            self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
+        } completion:nil];
+    }
 }
 
 -(void)rotateApp:(NSNotification *)notif{
@@ -459,8 +474,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             break;
         case UIDeviceOrientationLandscapeRight:
             break;
-            
-            
         default:
             break;
     }
@@ -487,6 +500,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
     
     [self setAppropriateIconsForCaptureState];
+    [self adjustFramesForCaptureState];
     
 }
 
