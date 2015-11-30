@@ -54,7 +54,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (strong, nonatomic) UIView *bottomContainer;
 
-@property (strong, nonatomic) UIView *aperatureShadowView;
+@property (strong, nonatomic) UIView *apertureShadowView;
+@property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
 @property (strong, nonatomic) UIButton *apertureButton;
 
@@ -300,16 +301,22 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)configureApertureButton{
     
-    self.aperatureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    [self.aperatureShadowView centerHorizontallyInView:self.bottomContainer];
-    [self.aperatureShadowView centerVerticallyInView:self.bottomContainer];
-    [self.aperatureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    [self.bottomContainer addSubview:self.aperatureShadowView];
+    self.apertureShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
+    [self.apertureShadowView centerHorizontallyInView:self.bottomContainer];
+    [self.apertureShadowView centerVerticallyInView:self.bottomContainer];
+    [self.apertureShadowView addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.bottomContainer addSubview:self.apertureShadowView];
     
     self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
     self.apertureBackground.layer.cornerRadius = APERTURE_WIDTH/2.;
     self.apertureBackground.layer.masksToBounds = YES;
-    [self.aperatureShadowView addSubview:self.apertureBackground];
+    [self.apertureShadowView addSubview:self.apertureBackground];
+    
+    self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
+    self.apertureAnimationView.layer.cornerRadius = 8/2;
+    self.apertureAnimationView.layer.masksToBounds = YES;
+    self.apertureAnimationView.alpha = 0.0;
+    [self.apertureBackground addSubview:self.apertureAnimationView];
     
     
     self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
@@ -330,7 +337,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureFlashButton{
     
     // We start at the edge of the aperture button and then center the view between the aperture button and the recordModeToggleView
-    NSInteger apertureEdge = self.aperatureShadowView.frame.origin.x + self.aperatureShadowView.frame.size.width;
+    NSInteger apertureEdge = self.apertureShadowView.frame.origin.x + self.apertureShadowView.frame.size.width;
     NSInteger xOrigin = apertureEdge + (self.view.frame.size.width - apertureEdge - SIDE_PAD - (ICON_WIDTH * 2))/2;
     
     
@@ -381,8 +388,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)setAppropriateIconsForCaptureState{
     if (self.captureMode == FRSCaptureModePhoto){
         
-        
-        [self runSpinAnimationOnView:self.apertureButton duration:0.3 rotations:3 repeat:0];
+//        [self runSpinAnimationOnView:self.apertureButton duration:0.3 rotations:3 repeat:0];
+        [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
@@ -390,18 +397,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
-        
-            self.apertureBackground.backgroundColor = [UIColor goldStatusBarColor];
             
         } completion:nil];
-
+        
     }
     else {
-        
-        [self runSpinAnimationOnView:self.apertureButton duration:0.3 rotations:-3 repeat:0];
-        
+        [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
+       
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-            self.apertureBackground.backgroundColor = [UIColor redCircleStrokeColor];
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
@@ -409,6 +412,23 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             self.videoIV.image = [UIImage imageNamed:@"video-on"];
         } completion:nil];
     }
+}
+
+-(void)animateShutterExpansionWithColor:(UIColor *)color{
+    self.apertureAnimationView.backgroundColor = color;
+    self.apertureAnimationView.alpha = 1.0;
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureAnimationView.frame = CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH);
+        self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH/2,0;
+        
+    } completion:^(BOOL finished) {
+        self.apertureAnimationView.alpha = 0.0;
+        self.apertureAnimationView.frame = CGRectMake(0, 0, 8, 8);
+        self.apertureAnimationView.center = self.apertureBackground.center;
+        self.apertureAnimationView.layer.cornerRadius = 4;
+        self.apertureBackground.backgroundColor = color;
+    }];
 }
 
 - (void) runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat;
