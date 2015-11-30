@@ -173,7 +173,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)configurePreview{
-    self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO)];
+    self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO)];
     self.preview.backgroundColor = [UIColor blackColor];
     
     CALayer *viewLayer = self.preview.layer;
@@ -242,21 +242,28 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    [self.previewButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    
     
     [self.previewButton clipAsCircle];
     
-    
     [self.previewBackgroundIV addSubview:self.previewButton];
     
-//    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-//    self.whiteView.backgroundColor = [UIColor whiteColor];
-//    self.whiteView.alpha = 0;
-//    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
-//    self.whiteView.clipsToBounds = YES;
-//    [self.previewBackgroundIV addSubview:self.whiteView];
+    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
+    self.whiteView.backgroundColor = [UIColor whiteColor];
+    self.whiteView.alpha = 0.7;
+    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
+    self.whiteView.clipsToBounds = YES;
+    [self.previewBackgroundIV addSubview:self.whiteView];
     
-    self.nextButton = [UIButton alloc] initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)
+    
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
+    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
+    [self.previewBackgroundIV addSubview:self.nextButton];
+    [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    
     
 }
 
@@ -267,30 +274,28 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         NSNumber *old = [change objectForKey:@"old"];
         
         if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.4;
-            else if (object == self.apertureButton){
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:0.7];
-            }
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 0.7;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 0.7;
         }
         else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ // Was highlighted and now unhighlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.0;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:1.0];
-                
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 1.0;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 1.0;
         }
         else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.4;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:0.7];
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 0.7;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 0.7;
         }
         else {
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.0;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:1.0];
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 1.0;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 1.0;
         }
     }
 }
@@ -342,6 +347,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
+    [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
     
 }
@@ -389,7 +395,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateHighlighted];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -406,7 +412,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateHighlighted];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
             self.videoIV.image = [UIImage imageNamed:@"video-vid-on"];
@@ -443,7 +449,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
@@ -486,7 +492,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self captureStillImage];
     }
     else {
-        
+//        [self captureStillImage];
     }
 }
 
@@ -544,132 +550,132 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 #pragma mark - Capture data processing
 
 -(void)captureStillImage{
-//    dispatch_async(self.sessionManager.sessionQueue, ^{
-//        
-//        if(self.capturingImage)
-//            return;
-//        else
-//            self.capturingImage = YES;
-//        
-//        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-//        
-//        // Update the orientation on the still image output video connection before capturing.
-//        connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
-//        
-//        // Capture a still image.
-//        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-//            
-//            self.capturingImage = NO;
-//            
-//            if (imageDataSampleBuffer ) {
-//                
-//                NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-//                
-//                CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
-//                
-//                //make the metadata dictionary mutable so we can add properties to it
-//                NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
-//                
-//                NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
-//                
-//                if(!GPSDictionary)
-//                    GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
-//    
-//                
-//                //Add the modified Data back into the image’s metadata
-//                if (GPSDictionary) {
-//                    [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
-//                }
-//                
-//                CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
-//                
-//                //this will be the data CGImageDestinationRef will write into
-//                NSMutableData *newImageData = [NSMutableData data];
-//                
-//                CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
-//                
-//                if(!destination)
-//                    NSLog(@"***Could not create image destination ***");
-//                
-//                //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-//                CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
-//                
-//                //tell the destination to write the image data and metadata into our data object.
-//                //It will return false if something goes wrong
-//                BOOL success = NO;
-//                success = CGImageDestinationFinalize(destination);
-//                
-//                if(!success){
-//                    NSLog(@"***Could not create data from image destination ***");
-//                    return;
-//                }
-//                
-//                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-//                    
-//                    if (status == PHAuthorizationStatusAuthorized ) {
-//                        
-//                        // Note that creating an asset from a UIImage discards the metadata.
-//                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-//                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-//                        if ([PHAssetCreationRequest class]) {
-//                            
-//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                
-//                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
-//                                
-//                            } completionHandler:^( BOOL success, NSError *error ) {
-//                                
-//                                if (!success) {
-//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                }
-//                                else {
-//                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-//                                }
-//                            }];
-//                        }
-//                        else {
-//                            
-//                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-//                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-//                            
-//                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-//                            
-//                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                
-//                                NSError *error = nil;
-//                                
-//                                [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-//                                
-//                                if ( error ) {
-//                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-//                                }
-//                                else {
-//                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-//                                }
-//                                
-//                            } completionHandler:^( BOOL success, NSError *error ) {
-//                                
-//                                if (!success ) {
-//                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                }
-//                                else {
-//                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-//                                    
-//                                }
-//                                
-//                                // Delete the temporary file.
-//                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-//                                
-//                            }];
-//                        }
-//                    }
-//                }];
-//            }
-//            else {
-//                NSLog( @"Could not capture still image: %@", error );
-//            }
-//        }];
-//    });
+    dispatch_async(self.sessionManager.sessionQueue, ^{
+        
+        if(self.capturingImage)
+            return;
+        else
+            self.capturingImage = YES;
+        
+        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
+        
+        // Update the orientation on the still image output video connection before capturing.
+        connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
+        
+        // Capture a still image.
+        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
+            
+            self.capturingImage = NO;
+            
+            if (imageDataSampleBuffer ) {
+                
+                NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                
+                CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
+                
+                //make the metadata dictionary mutable so we can add properties to it
+                NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                
+                NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                
+                if(!GPSDictionary)
+                    GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+    
+                
+                //Add the modified Data back into the image’s metadata
+                if (GPSDictionary) {
+                    [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                }
+                
+                CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
+                
+                //this will be the data CGImageDestinationRef will write into
+                NSMutableData *newImageData = [NSMutableData data];
+                
+                CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
+                
+                if(!destination)
+                    NSLog(@"***Could not create image destination ***");
+                
+                //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+                CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
+                
+                //tell the destination to write the image data and metadata into our data object.
+                //It will return false if something goes wrong
+                BOOL success = NO;
+                success = CGImageDestinationFinalize(destination);
+                
+                if(!success){
+                    NSLog(@"***Could not create data from image destination ***");
+                    return;
+                }
+                
+                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                    
+                    if (status == PHAuthorizationStatusAuthorized ) {
+                        
+                        // Note that creating an asset from a UIImage discards the metadata.
+                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                        if ([PHAssetCreationRequest class]) {
+                            
+                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                
+                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
+                                
+                            } completionHandler:^( BOOL success, NSError *error ) {
+                                
+                                if (!success) {
+                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                }
+                                else {
+                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                }
+                            }];
+                        }
+                        else {
+                            
+                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                            
+                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                            
+                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                
+                                NSError *error = nil;
+                                
+                                [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                
+                                if ( error ) {
+                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                }
+                                else {
+                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                }
+                                
+                            } completionHandler:^( BOOL success, NSError *error ) {
+                                
+                                if (!success ) {
+                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                }
+                                else {
+                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                    
+                                }
+                                
+                                // Delete the temporary file.
+                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                                
+                            }];
+                        }
+                    }
+                }];
+            }
+            else {
+                NSLog( @"Could not capture still image: %@", error );
+            }
+        }];
+    });
 }
 
 - (void)didReceiveMemoryWarning {
