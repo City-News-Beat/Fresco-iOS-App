@@ -256,8 +256,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 //    self.whiteView.clipsToBounds = YES;
 //    [self.previewBackgroundIV addSubview:self.whiteView];
     
-    self.nextButton = [UIButton alloc] initWithFrame:CGRectMake(0, 0, <#CGFloat width#>, <#CGFloat height#>)
-    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
@@ -343,8 +341,47 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
     [self.bottomClearContainer addSubview:self.flashButton];
+    [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
+-(void)flashButtonTapped{
+    
+    NSLog(@"flash button tapped!");
+    
+    [self flash:YES];
+    
+}
+
+-(void)flash:(BOOL)on {
+    
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    if ([device hasTorch] && [device hasFlash]) {
+        
+        [device lockForConfiguration:nil];
+        
+        if (on) {
+            
+            [device setTorchMode:AVCaptureTorchModeOn];
+            [device setFlashMode:AVCaptureFlashModeOn];
+            
+            //self.torchIsOn = YES
+            
+        } else {
+            
+            [device setTorchMode:AVCaptureTorchModeOff];
+            [device setFlashMode:AVCaptureFlashModeOff];
+            
+            //self.torchIsOn = NO
+            
+        }
+        
+        [device unlockForConfiguration];
+        
+    }
+}
+
 
 -(void)configureToggleView{
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
