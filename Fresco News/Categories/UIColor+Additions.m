@@ -106,7 +106,7 @@
 }
 
 +(UIColor *)frescoShadowColor {
-    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.15];
 }
 
 +(UIColor *)frescoDefaultBackgroundColor{

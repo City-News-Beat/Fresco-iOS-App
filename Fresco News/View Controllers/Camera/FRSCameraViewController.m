@@ -300,7 +300,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
-//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-i"] forState:UIControlStateHighlighted];
+
     [self.apertureBackground addSubview:self.apertureButton];
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
