@@ -73,6 +73,8 @@
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		651FDD891BF1110A007A4F16 /* FRSGalleryAssetsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 651FDD881BF1110A007A4F16 /* FRSGalleryAssetsManager.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		657F3EA51C0CC1C3009AE08F /* FRSButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA41C0CC1C3009AE08F /* FRSButton.m */; };
+		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807881BFA59DB00490E73 /* FRSCameraViewController.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65C807931BFA969F00490E73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807921BFA969F00490E73 /* FRSAVSessionManager.m */; };
@@ -323,6 +325,10 @@
 		52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.beta.xcconfig"; sourceTree = "<group>"; };
 		651FDD871BF1110A007A4F16 /* FRSGalleryAssetsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSGalleryAssetsManager.h; path = Singletons/FRSGalleryAssetsManager.h; sourceTree = "<group>"; };
 		651FDD881BF1110A007A4F16 /* FRSGalleryAssetsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSGalleryAssetsManager.m; path = Singletons/FRSGalleryAssetsManager.m; sourceTree = "<group>"; };
+		657F3EA31C0CC1C3009AE08F /* FRSButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSButton.h; path = "Base Classes/FRSButton.h"; sourceTree = "<group>"; };
+		657F3EA41C0CC1C3009AE08F /* FRSButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSButton.m; path = "Base Classes/FRSButton.m"; sourceTree = "<group>"; };
+		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
+		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
 		65C807881BFA59DB00490E73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		65C807891BFA59DB00490E73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
@@ -596,6 +602,8 @@
 		1E408B771AA7A40A0057AC16 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
+				657F3EA31C0CC1C3009AE08F /* FRSButton.h */,
+				657F3EA41C0CC1C3009AE08F /* FRSButton.m */,
 				1E408B781AA7A4580057AC16 /* BaseNavigationController.h */,
 				1E408B791AA7A4580057AC16 /* BaseNavigationController.m */,
 			);
@@ -1209,6 +1217,8 @@
 		E7E582EF1BBDC0B200287324 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */,
+				657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */,
 				65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */,
 				65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */,
 				BC1CA8B91BA72F3300DDB9FB /* CALayer+Additions.h */,
@@ -1575,6 +1585,7 @@
 				E76DE0331BB1DC6200F572D5 /* AppDelegate+Additions.m in Sources */,
 				E78428121B57F4010090DFCC /* OnboardPageCellController.m in Sources */,
 				E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */,
+				657F3EA51C0CC1C3009AE08F /* FRSButton.m in Sources */,
 				1E407AD91AB09FFF006F4965 /* FRSGallery.m in Sources */,
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
@@ -1624,6 +1635,7 @@
 				32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */,
+				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,

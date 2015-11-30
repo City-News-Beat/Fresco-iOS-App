@@ -54,7 +54,7 @@
 
 + (UIColor *)redCircleStrokeColor {
 //  b50218
-    return [UIColor colorWithRed:0.71 green:0.01 blue:0.09 alpha:1.00];
+    return [UIColor colorWithRed:208/255.0 green:2/255.0 blue:27/255.0 alpha:1.00];
 }
 
 + (UIColor *)goldStatusBarColor {
