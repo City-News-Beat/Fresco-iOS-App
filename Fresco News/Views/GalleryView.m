@@ -484,10 +484,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
                                @"gallery" : self.gallery.galleryID
                                };
-        
-        if (dict){
+        if (dict)
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
-        }
         
         
     }
@@ -506,8 +504,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         else if (postCell.post.image.asset.mediaType == PHAssetMediaTypeVideo){
             
             [[PHImageManager defaultManager] requestAVAssetForVideo:postCell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                
-                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES buffer:NO];
+                if (((AVURLAsset *)asset).URL && postCell)
+                    [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:postCell muted:YES buffer:NO];
                 
             }];
         }

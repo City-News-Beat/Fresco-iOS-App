@@ -158,7 +158,8 @@
             
             NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
             
-            [((StoriesViewController *)vc).tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            if (((StoriesViewController *)vc).tableView.numberOfSections > 0)
+                [((StoriesViewController *)vc).tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
             
         }
         else{
