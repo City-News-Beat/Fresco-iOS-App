@@ -369,9 +369,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
             
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+
         }
         
     } else {
@@ -487,10 +492,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
+<<<<<<< 7eadce7d7df0671e0e08e1e8862af51deae626b7
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
 <<<<<<< d559ed36929ca368725c055449d6c7679ddba025
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateHighlighted];
 =======
+=======
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+>>>>>>> flash and torch logic and UI complete
 //            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
 >>>>>>> swapped assets with new bounding boxes
             
