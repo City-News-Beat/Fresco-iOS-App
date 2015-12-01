@@ -128,6 +128,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.locationManager.delegate = self;
     
     // Do any additional setup after loading the view.
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -361,6 +362,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)flashButtonTapped {
     
+    if (self.cameraEnabled == NO){
+    
     if (self.flashIsOn == NO) {
 
         [self torch:YES];
@@ -369,6 +372,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         [self torch:NO];
 
+    }
+        
     }
     
 }
@@ -381,13 +386,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         [device lockForConfiguration:nil];
         
-        if (on && (self.cameraEnabled == NO)) {
+        if (on) {
             
             [device setTorchMode:AVCaptureTorchModeOn];
             
             self.flashIsOn = YES;
             
-        } else if (!on && (self.cameraEnabled == YES)) {
+        } else {
             
             [device setTorchMode:AVCaptureTorchModeOff];
             
