@@ -62,6 +62,10 @@
     self.allowsBackgroundLocationUpdates = YES;
     }
     
+    
+    
+    
+    
     self.managerState = state;
     self.stopLocationUpdates = NO;
     
