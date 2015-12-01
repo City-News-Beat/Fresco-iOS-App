@@ -82,7 +82,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) BOOL capturingImage;
 
 @property (nonatomic) BOOL flashIsOn;
-@property (nonatomic) BOOL cameraEnabled;
+@property (nonatomic) BOOL torchIsOn;
+
+@property (nonatomic) BOOL cameraDisabled;
 
 
 @end
@@ -129,6 +131,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     // Do any additional setup after loading the view.
     
+    self.cameraDisabled = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -362,15 +365,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)flashButtonTapped {
     
-    if (self.cameraEnabled == NO){
+    if (self.cameraDisabled == YES){
     
-    if (self.flashIsOn == NO) {
+    if (self.torchIsOn == NO) {
 
         [self torch:YES];
+        NSLog(@"torch enabled = %d", self.torchIsOn);
         
     } else {
         
         [self torch:NO];
+        NSLog(@"torch disabled = %d", self.torchIsOn);
 
     }
         
@@ -382,7 +387,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    if ([device hasTorch] && [device hasFlash]) {
+    if ([device hasTorch]) {
         
         [device lockForConfiguration:nil];
         
@@ -390,13 +395,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             
             [device setTorchMode:AVCaptureTorchModeOn];
             
-            self.flashIsOn = YES;
+            self.torchIsOn = YES;
             
         } else {
             
             [device setTorchMode:AVCaptureTorchModeOff];
             
-            self.flashIsOn = NO;
+            self.torchIsOn = NO;
             
         }
         
@@ -404,6 +409,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
     }
 }
+
+
 
 
 -(void)configureToggleView{
@@ -554,11 +561,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
-        self.cameraEnabled = NO;
+        self.cameraDisabled = YES;
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
-        self.cameraEnabled = YES;
+        self.cameraDisabled = NO;
     }
     
     [self setAppropriateIconsForCaptureState];
