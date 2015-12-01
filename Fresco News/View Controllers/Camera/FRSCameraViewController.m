@@ -353,52 +353,55 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)flashButtonTapped {
-    
     if (self.cameraDisabled == YES){
-    
-    if (self.torchIsOn == NO) {
-
-        [self torch:YES];
-        NSLog(@"torch enabled = %d", self.torchIsOn);
+        if (self.torchIsOn == NO) {
+            [self torch:YES];
+            NSLog(@"torch enabled = %d", self.torchIsOn);
+        } else {
+            [self torch:NO];
+            NSLog(@"torch disabled = %d", self.torchIsOn);
+        }
         
     } else {
-        
-        [self torch:NO];
-        NSLog(@"torch disabled = %d", self.torchIsOn);
-
+        if (self.flashIsOn == NO ) {
+            [self flash:YES];
+            NSLog(@"flash enabled = %d", self.flashIsOn);
+        } else {
+            [self flash:NO];
+            NSLog(@"flash disabled = %d", self.flashIsOn);
+        }
     }
-        
-    }
-    
 }
 
 -(void)torch:(BOOL)on{
-    
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
     if ([device hasTorch]) {
-        
         [device lockForConfiguration:nil];
-        
         if (on) {
-            
             [device setTorchMode:AVCaptureTorchModeOn];
-            
             self.torchIsOn = YES;
-            
         } else {
-            
             [device setTorchMode:AVCaptureTorchModeOff];
-            
             self.torchIsOn = NO;
-            
         }
-        
         [device unlockForConfiguration];
-        
     }
 }
 
+-(void)flash:(BOOL)on{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasFlash]) {
+        [device lockForConfiguration:nil];
+        if (on) {
+            [device setFlashMode:AVCaptureFlashModeOn];
+            self.flashIsOn = YES;
+        } else {
+            [device setFlashMode:AVCaptureFlashModeOff];
+            self.flashIsOn = NO;
+        }
+        [device unlockForConfiguration];
+    }
+}
 
 
 
