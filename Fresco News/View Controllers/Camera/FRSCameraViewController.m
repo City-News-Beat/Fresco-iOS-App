@@ -563,6 +563,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)toggleCaptureMode{
     
+    /* Disables torch when returning from video toggle and torch is enabled */
+    [self torch:NO];
+    
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
         self.cameraDisabled = YES;
@@ -571,10 +574,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.captureMode = FRSCaptureModePhoto;
         self.cameraDisabled = NO;
     }
-    
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
-    
 }
 
 #pragma mark - Notifications and Observers
