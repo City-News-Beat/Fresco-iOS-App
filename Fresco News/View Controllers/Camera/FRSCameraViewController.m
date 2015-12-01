@@ -358,9 +358,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
             
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+
         }
         
     } else {
@@ -471,7 +476,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
 //            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
