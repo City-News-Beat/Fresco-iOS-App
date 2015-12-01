@@ -82,6 +82,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) BOOL capturingImage;
 
 @property (nonatomic) BOOL flashIsOn;
+@property (nonatomic) BOOL cameraEnabled;
 
 
 @end
@@ -347,45 +348,37 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
--(void)flashButtonTapped{
+-(void)flashButtonTapped {
     
     if (self.flashIsOn == NO) {
-        
-        NSLog(@"FLASH IS ON : %d", self.flashIsOn);
-        
-        [self flash:YES];
+
+        [self torch:YES];
         
     } else {
         
-        NSLog(@"FLASH IS OFF : %d", self.flashIsOn);
-        
-        [self flash:NO];
+        [self torch:NO];
 
     }
     
 }
 
--(void)flash:(BOOL)on {
+-(void)torch:(BOOL)on{
     
-    /* Flash is disabled by default */
-
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
     if ([device hasTorch] && [device hasFlash]) {
         
         [device lockForConfiguration:nil];
         
-        if (on) {
+        if (on && (self.cameraEnabled == NO)) {
             
             [device setTorchMode:AVCaptureTorchModeOn];
-            [device setFlashMode:AVCaptureFlashModeOn];
             
             self.flashIsOn = YES;
             
-        } else {
+        } else if (!on && (self.cameraEnabled == YES)) {
             
             [device setTorchMode:AVCaptureTorchModeOff];
-            [device setFlashMode:AVCaptureFlashModeOff];
             
             self.flashIsOn = NO;
             
@@ -545,9 +538,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
+        self.cameraEnabled = NO;
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
+        self.cameraEnabled = YES;
     }
     
     [self setAppropriateIconsForCaptureState];
