@@ -479,13 +479,16 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     PostCollectionViewCell *postCell = (PostCollectionViewCell *) [self.collectionPosts cellForItemAtIndexPath:visibleIndexPath];
     
     if(self.gallery.galleryID){
-    
-        NSDictionary *dict = @{
-                              @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
-                              @"gallery" : self.gallery.galleryID
-                              };
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
+        NSDictionary *dict = @{
+                               @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                               @"gallery" : self.gallery.galleryID
+                               };
+        
+        if (dict){
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
+        }
+        
         
     }
     
