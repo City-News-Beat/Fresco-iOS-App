@@ -368,6 +368,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         if (self.torchIsOn == NO) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
+            
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
@@ -377,9 +378,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
+
         } else {
             [self flash:NO];
             NSLog(@"flash disabled = %d", self.flashIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+
         }
     }
 }
@@ -458,8 +465,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
+<<<<<<< d559ed36929ca368725c055449d6c7679ddba025
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateHighlighted];
+=======
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+>>>>>>> swapped assets with new bounding boxes
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -476,7 +488,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+<<<<<<< d559ed36929ca368725c055449d6c7679ddba025
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateHighlighted];
+=======
+//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+>>>>>>> swapped assets with new bounding boxes
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
             self.videoIV.image = [UIImage imageNamed:@"video-vid-on"];
