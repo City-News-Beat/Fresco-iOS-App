@@ -7,6 +7,8 @@
 //
 
 @import AVFoundation;
+@import FBSDKShareKit;
+
 
 #import "FRSTabBarController.h"
 #import "UIViewController+Additions.h"
@@ -23,6 +25,8 @@
 #import "FRSLocationManager.h"
 #import "FRSAlertViewManager.h"
 
+
+
 @implementation FRSTabBarController
 
 #pragma mark - Initialization
@@ -34,6 +38,7 @@
         [self setupTabBarAppearances];
         
         self.delegate = self;
+        
 
     }
     
@@ -43,9 +48,35 @@
 - (void)viewDidLoad{
 
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(galleryUploadComplete:) name:@"Gallery Upload Done" object:nil];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 
+}
+
+-(void)galleryUploadComplete:(NSNotification *)sender{
+    NSDictionary *info = sender.userInfo;
+    NSString *url = info[@"url"];
+    NSString *title = info[@"title"];
+    if (!url || !title) return;
+    
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    content.contentURL = [NSURL URLWithString:url];
+    content.contentTitle = title;
+    
+    FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
+    dialog.fromViewController = self;
+    dialog.shareContent = content;
+    dialog.mode = FBSDKShareDialogModeNative; // if you don't set this before canShow call, canShow would always return YES
+    if (![dialog canShow]) {
+        // fallback presentation when there is no FB app
+        dialog.mode = FBSDKShareDialogModeFeedBrowser;
+    }
+    [dialog show];
+
+//    [FBSDKShareDialog showFromViewController:self
+//                                 withContent:content
+//                                    delegate:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{

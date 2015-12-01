@@ -11,7 +11,16 @@
 #import "FRSAssignment.h"
 #import "FRSPost.h"
 
+@protocol FRSUploadManagerDelegate <NSObject>
+
+-(void)uploadCompleteWithCrossPostString:(NSString *)string;
+
+@end
+
 @interface FRSUploadManager : AFHTTPSessionManager
+
+@property (weak, nonatomic) NSObject <FRSUploadManagerDelegate> *delegate;
+
 
 /**
  *  Shared accessor for manager

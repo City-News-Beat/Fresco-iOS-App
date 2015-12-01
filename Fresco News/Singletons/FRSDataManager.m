@@ -390,8 +390,12 @@
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile" ] block:^(PFUser *user, NSError *error) {
     
         [self socialLoginWithUser:user error:error block:resultBlock withNetwork:@"Facebook"];
+        
+        [PFFacebookUtils logInInBackgroundWithPublishPermissions:@[@"publish_actions"] block:^(PFUser * _Nullable user, NSError * _Nullable error) {
+        }];
     
     }];
+    
 }
 
 /*

@@ -7,8 +7,9 @@
 //
 
 @import UIKit;
+#import "FRSUploadManager.h"
 
-@interface FRSTabBarController : UITabBarController  <UITabBarDelegate, UITabBarControllerDelegate, UIAlertViewDelegate>
+@interface FRSTabBarController : UITabBarController  <UITabBarDelegate, UITabBarControllerDelegate, UIAlertViewDelegate,FRSUploadManagerDelegate>
 
 - (void)returnToGalleryPost;
 
