@@ -58,14 +58,14 @@
     // NSLog(@"Background launch via UIApplicationLaunchOptionsLocationKey");
     self.delegate = self;
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9) {
-    self.allowsBackgroundLocationUpdates = YES;
+//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9) {
+//    self.allowsBackgroundLocationUpdates = YES;
+//    }
+    
+    if([self respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]){
+        [self setAllowsBackgroundLocationUpdates:YES];
     }
-    
-    
-    
-    
-    
+
     self.managerState = state;
     self.stopLocationUpdates = NO;
     
