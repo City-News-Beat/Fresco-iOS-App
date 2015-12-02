@@ -81,6 +81,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) BOOL capturingImage;
 
+@property (nonatomic) BOOL flashIsOn;
+@property (nonatomic) BOOL torchIsOn;
+
+@property (nonatomic) BOOL cameraDisabled;
+
 
 @end
 
@@ -125,6 +130,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.locationManager.delegate = self;
     
     // Do any additional setup after loading the view.
+    
+    self.cameraDisabled = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -264,7 +271,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.previewBackgroundIV addSubview:self.nextButton];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
-    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
@@ -349,8 +355,74 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.flashButton.clipsToBounds = YES;
     [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
+    [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
+-(void)flashButtonTapped {
+    if (self.cameraDisabled == YES){
+        if (self.torchIsOn == NO) {
+            [self torch:YES];
+            NSLog(@"torch enabled = %d", self.torchIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+
+        } else {
+            [self torch:NO];
+            NSLog(@"torch disabled = %d", self.torchIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+
+        }
+        
+    } else {
+        if (self.flashIsOn == NO ) {
+            [self flash:YES];
+            NSLog(@"flash enabled = %d", self.flashIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
+
+        } else {
+            [self flash:NO];
+            NSLog(@"flash disabled = %d", self.flashIsOn);
+            
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+
+        }
+    }
+}
+
+-(void)torch:(BOOL)on{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasTorch]) {
+        [device lockForConfiguration:nil];
+        if (on) {
+            [device setTorchMode:AVCaptureTorchModeOn];
+            self.torchIsOn = YES;
+        } else {
+            [device setTorchMode:AVCaptureTorchModeOff];
+            self.torchIsOn = NO;
+        }
+        [device unlockForConfiguration];
+    }
+}
+
+-(void)flash:(BOOL)on{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([device hasFlash]) {
+        [device lockForConfiguration:nil];
+        if (on) {
+            [device setFlashMode:AVCaptureFlashModeOn];
+            self.flashIsOn = YES;
+        } else {
+            [device setFlashMode:AVCaptureFlashModeOff];
+            self.flashIsOn = NO;
+        }
+        [device unlockForConfiguration];
+    }
+}
+
+
 
 -(void)configureToggleView{
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
@@ -394,8 +466,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateHighlighted];
+
+            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -411,8 +485,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
-            [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateHighlighted];
+
+            [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
             self.videoIV.image = [UIImage imageNamed:@"video-vid-on"];
@@ -498,16 +573,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)toggleCaptureMode{
     
+    /* Disables torch when returning from video toggle and torch is enabled */
+    [self torch:NO];
+    
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
+        self.cameraDisabled = YES;
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
+        self.cameraDisabled = NO;
     }
-    
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
-    
 }
 
 #pragma mark - Notifications and Observers
