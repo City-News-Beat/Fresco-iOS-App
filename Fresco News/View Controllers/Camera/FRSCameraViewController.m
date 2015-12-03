@@ -222,7 +222,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)configurePreview{
-    self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO)];
+    self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO)];
     self.preview.backgroundColor = [UIColor blackColor];
     
     CALayer *viewLayer = self.preview.layer;
@@ -291,19 +291,27 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    [self.previewButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    
     
     [self.previewButton clipAsCircle];
     
-    
     [self.previewBackgroundIV addSubview:self.previewButton];
     
-//    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-//    self.whiteView.backgroundColor = [UIColor whiteColor];
-//    self.whiteView.alpha = 0;
-//    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
-//    self.whiteView.clipsToBounds = YES;
-//    [self.previewBackgroundIV addSubview:self.whiteView];
+    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
+    self.whiteView.backgroundColor = [UIColor whiteColor];
+    self.whiteView.alpha = 0.7;
+    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
+    self.whiteView.clipsToBounds = YES;
+    [self.previewBackgroundIV addSubview:self.whiteView];
+    
+    
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
+    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
+    [self.previewBackgroundIV addSubview:self.nextButton];
+    [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     
 }
 
@@ -314,30 +322,28 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         NSNumber *old = [change objectForKey:@"old"];
         
         if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.4;
-            else if (object == self.apertureButton){
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:0.7];
-            }
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 0.7;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 0.7;
         }
         else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ // Was highlighted and now unhighlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.0;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:1.0];
-                
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 1.0;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 1.0;
         }
         else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.4;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:0.7];
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 0.7;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 0.7;
         }
         else {
-            if (object == self.previewButton)
-                self.whiteView.alpha = 0.0;
-            else if (object == self.apertureButton)
-                self.apertureBackground.backgroundColor = [self.apertureBackground.backgroundColor colorWithAlphaComponent:1.0];
+            if (object == self.nextButton)
+                self.previewBackgroundIV.alpha = 1.0;
+            else if (object == self.flashButton)
+                self.flashButton.alpha = 1.0;
         }
     }
 }
@@ -389,6 +395,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
+    [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
     [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
@@ -511,8 +518,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
+
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
 //            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
+
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -528,6 +537,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
+
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
 //            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
@@ -566,7 +576,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
@@ -609,7 +619,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self captureStillImage];
     }
     else {
-        
+//        [self captureStillImage];
     }
 }
 
