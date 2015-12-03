@@ -89,8 +89,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) BOOL cameraDisabled;
 
-@property (strong, nonatomic) FRSRootViewController *frsRootViewController;
-
 
 @end
 
@@ -138,13 +136,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.cameraDisabled = NO;
     
-    
-    
-    
-    
-    self.frsRootViewController = [[FRSRootViewController alloc] init];
-    
-    self.view.window.rootViewController = self.frsRootViewController;
+
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
@@ -163,13 +155,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     NSLog(@"dismissVC");
     
-//    [self.frsRootViewController setRootViewControllerToTabBar];
-    
-    [self dismissViewControllerAnimated:NO completion:^{
-    
-        //
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 
 }
 
