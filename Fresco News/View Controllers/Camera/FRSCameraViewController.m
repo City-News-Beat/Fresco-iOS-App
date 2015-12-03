@@ -289,6 +289,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.previewBackgroundIV addSubview:self.nextButton];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
 <<<<<<< c63c73faac37c4193d406d073b37e6014d68e9b9
 =======
@@ -1018,7 +1019,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
--(void)handleDoneButtonTapped{
+-(void)handlePreviewButtonTapped{
     
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
     
