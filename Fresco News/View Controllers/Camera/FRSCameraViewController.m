@@ -832,10 +832,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)dealloc{
-
-    [self.previewButton removeObserver:self forKeyPath:@"highlighted"];
+    [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
     [self.apertureButton removeObserver:self forKeyPath:@"highlighted"];
-    
+    [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
 }
 
 
