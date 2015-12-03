@@ -30,8 +30,10 @@
 #import "FRSAssignment.h"
 #import "CLLocation+EXIFGPS.h"
 
-//Root View Controller
 #import "FRSRootViewController.h"
+#import "FRSUploadManager.h"
+#import "FRSTabBarController.h"
+
 
 
 
@@ -89,6 +91,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) BOOL cameraDisabled;
 
+@property (nonatomic, strong) FRSTabBarController *tabBarController;
+
 
 @end
 
@@ -140,7 +144,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
-               action:@selector(dismissVC)
+               action:@selector(dismissAndReturnToPreviousTab)
      forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"×" forState:UIControlStateNormal];
     button.frame = CGRectMake(8, 8, 40, 40);
@@ -157,6 +161,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [self dismissViewControllerAnimated:YES completion:nil];
 
+}
+
+- (void)dismissAndReturnToPreviousTab
+{
+    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
+    
+    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+    
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -805,8 +820,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)dealloc{
 
-    [self.previewButton removeObserver:self forKeyPath:@"highlighted"];
+    [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
     [self.apertureButton removeObserver:self forKeyPath:@"highlighted"];
+    [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
     
 }
 
