@@ -30,6 +30,9 @@
 #import "FRSAssignment.h"
 #import "CLLocation+EXIFGPS.h"
 
+//Root View Controller
+#import "FRSRootViewController.h"
+
 
 
 #define ICON_WIDTH 24
@@ -86,6 +89,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) BOOL cameraDisabled;
 
+@property (strong, nonatomic) FRSRootViewController *frsRootViewController;
+
 
 @end
 
@@ -135,6 +140,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     
     
+    
+    
+    self.frsRootViewController = [[FRSRootViewController alloc] init];
+    
+    self.view.window.rootViewController = self.frsRootViewController;
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
                action:@selector(dismissVC)
@@ -147,11 +158,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
+
 -(void)dismissVC{
     
     NSLog(@"dismissVC");
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self.frsRootViewController setRootViewControllerToTabBar];
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+    
+        //
+        
+    }];
 
 }
 
@@ -181,6 +199,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [super viewWillDisappear:animated];
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
+    
+
 }
 
 -(void)fadeInPreview{
@@ -788,7 +808,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)dealloc{
-    [self.previewButton removeObserver:self forKeyPath:@"highlighted" context:nil];
+
+    [self.previewButton removeObserver:self forKeyPath:@"highlighted"];
+    [self.apertureButton removeObserver:self forKeyPath:@"highlighted"];
+    
 }
 
 
