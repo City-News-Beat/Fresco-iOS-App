@@ -65,10 +65,17 @@
 
 -(void)startCaptureSession{
     dispatch_async(self.sessionQueue, ^{
-        if (self.authStatus == FRSAVStatusDenied || self.authStatus == FRSAVStatusNotDetermined){
-            self.AVSetupSuccess = NO;
-            return;
+        if (self.authStatus == FRSAVStatusNotDetermined){
+            dispatch_suspend(self.sessionQueue);
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
+                dispatch_resume( self.sessionQueue );
+                [self startCaptureSession];
+            }];
         }
+        else if (self.authStatus == FRSAVStatusDenied){
+            return; //theoretically should never be called, becuase you can't get in without access to camera.
+        }
+        
         else self.AVSetupSuccess = YES;
         
         if (![self videoInputDevice])
@@ -93,30 +100,33 @@
     else self.AVSetupSuccess = NO;
     
     //AUDIO INPUT
+    NSError *error;
+    
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
-    AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:nil];
+    AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
+    
+    NSLog(@"%@", error.localizedDescription);
     
     if ([self.session canAddInput:audioDeviceInput])
         [self.session addInput:audioDeviceInput];
-    else self.AVSetupSuccess = NO;
+    else
+        self.AVSetupSuccess = NO;
     
     //VIDEO OUTPUT
-    AVCaptureMovieFileOutput *movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
-    if ( [self.session canAddOutput:movieFileOutput] ) {
-        [self.session addOutput:movieFileOutput];
-        AVCaptureConnection *connection = [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+    self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
+    if ( [self.session canAddOutput:self.movieFileOutput] ) {
+        [self.session addOutput:self.movieFileOutput];
+        AVCaptureConnection *connection = [self.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
         if ( connection.isVideoStabilizationSupported ) {
             connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
         }
-        self.movieFileOutput = movieFileOutput;
     } else self.AVSetupSuccess = NO;
     
     //PHOTO OUTPUT
-    AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-    if ( [self.session canAddOutput:stillImageOutput] ) {
-        stillImageOutput.outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
-        [self.session addOutput:stillImageOutput];
-        self.stillImageOutput = stillImageOutput;
+    self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+    if ( [self.session canAddOutput:self.stillImageOutput] ) {
+        self.stillImageOutput.outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
+        [self.session addOutput:self.stillImageOutput];
     } else self.AVSetupSuccess = NO;
 }
 

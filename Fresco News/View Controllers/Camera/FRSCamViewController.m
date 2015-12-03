@@ -288,7 +288,7 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     [super viewDidAppear:animated];
     
     dispatch_async(self.sessionQueue, ^{
-        
+
         
         switch ( self.setupResult )
         {
@@ -438,7 +438,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         }
     });
 }
-
 
 #pragma mark KVO and Notifications
 
@@ -1292,7 +1291,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
     else {
         cleanup();
     }
-    
 }
 
 #pragma mark - Device Configuration

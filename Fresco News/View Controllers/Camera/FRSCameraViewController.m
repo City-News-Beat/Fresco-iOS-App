@@ -8,6 +8,9 @@
 
 #import "FRSCameraViewController.h"
 
+#import "BaseNavigationController.h"
+#import "AssetsPickerController.h"
+
 //Apple APIs
 @import Photos;
 @import AVFoundation;
@@ -47,7 +50,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 };
 
 
-@interface FRSCameraViewController () <CLLocationManagerDelegate>
+@interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
@@ -87,10 +90,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) BOOL flashIsOn;
 @property (nonatomic) BOOL torchIsOn;
 
-@property (nonatomic) BOOL cameraDisabled;
+@property (strong, nonatomic) NSTimer *videoTimer;
 
-@property (strong, nonatomic) FRSRootViewController *frsRootViewController;
-
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @end
 
@@ -136,16 +138,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     // Do any additional setup after loading the view.
     
-    self.cameraDisabled = NO;
-    
-    
-    
-    
-    
-    self.frsRootViewController = [[FRSRootViewController alloc] init];
-    
-    self.view.window.rootViewController = self.frsRootViewController;
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
                action:@selector(dismissVC)
@@ -156,21 +148,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     button.alpha = .5;
     [self.view addSubview:button];
     
-}
-
-
--(void)dismissVC{
-    
-    NSLog(@"dismissVC");
-    
-//    [self.frsRootViewController setRootViewControllerToTabBar];
-    
-    [self dismissViewControllerAnimated:NO completion:^{
-    
-        //
-        
-    }];
-
 }
 
 
@@ -416,7 +393,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 //                         forKey:@"torchIsOn"];
     
     
-    if (self.cameraDisabled == YES){
+    if (self.captureMode == FRSCaptureModeVideo){
         if (self.torchIsOn == NO) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
@@ -633,7 +610,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self captureStillImage];
     }
     else {
-//        [self captureStillImage];
+        [self toggleVideoRecording];
     }
 }
 
@@ -644,11 +621,31 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
-        self.cameraDisabled = YES;
+        
+        [self.sessionManager.session beginConfiguration];
+        
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+        }
+        
+        [self.sessionManager.session commitConfiguration];
+        
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
-        self.cameraDisabled = NO;
+        
+        [self.sessionManager.session beginConfiguration];
+        
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+        }
+        
+        [self.sessionManager.session commitConfiguration];
+        
     }
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
@@ -822,10 +819,140 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     });
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)toggleVideoRecording{
+    if (self.sessionManager.movieFileOutput.isRecording) {
+        
+        //Clear the timer so it doesn't re-run
+        [self.videoTimer invalidate];
+        self.videoTimer = nil;
+        
+        self.captureModeToggleView.alpha = 1.0;
+        
+    }
+    else {
+        
+        self.captureModeToggleView.alpha = 0.0;
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        
+    }
+    
+    dispatch_async(self.sessionManager.sessionQueue, ^{
+        
+        if (!self.sessionManager.movieFileOutput.isRecording) {
+            
+            AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (movieConnection.active) {
+                
+                AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+                item.keySpace = AVMetadataKeySpaceCommon;
+                item.key = AVMetadataCommonKeyLocation;
+                item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", [FRSLocationManager sharedManager].location.coordinate.latitude, [FRSLocationManager sharedManager].location.coordinate.longitude];
+                self.sessionManager.movieFileOutput.metadata = @[item];
+                
+                if ( [UIDevice currentDevice].isMultitaskingSupported ) {
+                    // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
+                    // callback is not received until AVCam returns to the foreground unless you request background execution time.
+                    // This also ensures that there will be time to write the file to the photo library when AVCam is backgrounded.
+                    // To conclude this background execution, -endBackgroundTask is called in
+                    // -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:] after the recorded file has been saved.
+                    self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+                }
+                
+                // Update the orientation on the movie file output video connection before starting recording.
+                AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+                AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.captureVideoPreviewLayer;
+                connection.videoOrientation = previewLayer.connection.videoOrientation;
+                
+                // Start recording to a temporary file.
+                NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
+                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                
+            }
+            
+        }
+        else {
+            [self.sessionManager.movieFileOutput stopRecording];
+        }
+    });
 }
+
+- (void)videoEnded:(NSTimer *)timer{
+    [self toggleVideoRecording];
+}
+
+#pragma mark - File Output Delegate
+
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
+{
+    // Note that currentBackgroundRecordingID is used to end the background task associated with this recording.
+    // This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's isRecording property
+    // is back to NO — which happens sometime after this method returns.
+    // Note: Since we use a unique file path for each recording, a new recording will not overwrite a recording currently being saved.
+    UIBackgroundTaskIdentifier currentBackgroundRecordingID = self.backgroundRecordingID;
+    self.backgroundRecordingID = UIBackgroundTaskInvalid;
+    
+    dispatch_block_t cleanup = ^{
+        [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
+        if ( currentBackgroundRecordingID != UIBackgroundTaskInvalid ) {
+            [[UIApplication sharedApplication] endBackgroundTask:currentBackgroundRecordingID];
+        }
+    };
+    
+    BOOL success = YES;
+    
+    if ( error ) {
+        NSLog( @"Movie file finishing error: %@", error );
+        success = [error.userInfo[AVErrorRecordingSuccessfullyFinishedKey] boolValue];
+    }
+    if ( success ) {
+        // Check authorization status.
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            if ( status == PHAuthorizationStatusAuthorized ) {
+                // Save the movie file to the photo library and cleanup.
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    // In iOS 9 and later, it's possible to move the file into the photo library without duplicating the file data.
+                    // This avoids using double the disk space during save, which can make a difference on devices with limited free disk space.
+                    if ( [PHAssetResourceCreationOptions class] ) {
+                        PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
+                        options.shouldMoveFile = YES;
+                        PHAssetCreationRequest *changeRequest = [PHAssetCreationRequest creationRequestForAsset];
+                        [changeRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
+                    }
+                    else {
+                        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                        
+                    }
+                } completionHandler:^( BOOL success, NSError *error ) {
+                    if ( ! success ) {
+                        NSLog( @"Could not save movie to photo library: %@", error );
+                    }
+                    
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
+                        
+                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                            
+                            [self updatePreviewButtonWithImage:result];
+                        }];
+                        
+                        cleanup();
+                    }];
+                    
+                }];
+            }
+            else {
+                cleanup();
+            }
+        }];
+    }
+    else {
+        cleanup();
+    }
+}
+
 
 -(void)close{
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -872,6 +999,38 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
     
+}
+
+
+#pragma mark - Navigation
+
+-(void)dismissVC{
+    
+    NSLog(@"dismissVC");
+    
+    //    [self.frsRootViewController setRootViewControllerToTabBar];
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+        
+        //
+        
+    }];
+    
+}
+
+-(void)handleDoneButtonTapped{
+    
+    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+    
+    navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self presentViewController:navVC animated:NO completion:nil];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 /*
