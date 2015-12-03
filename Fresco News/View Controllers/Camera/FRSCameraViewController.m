@@ -132,7 +132,29 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     // Do any additional setup after loading the view.
     
     self.cameraDisabled = NO;
+    
+    
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self
+               action:@selector(dismissVC)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:@"×" forState:UIControlStateNormal];
+    button.frame = CGRectMake(8, 8, 40, 40);
+    button.backgroundColor = [UIColor redColor];
+    button.alpha = .5;
+    [self.view addSubview:button];
+    
 }
+
+-(void)dismissVC{
+    
+    NSLog(@"dismissVC");
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -364,6 +386,16 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)flashButtonTapped {
+
+//    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
+//    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
+//                         forKey:@"flashIsOn"];
+//    
+//    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
+//    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
+//                         forKey:@"torchIsOn"];
+    
+    
     if (self.cameraDisabled == YES){
         if (self.torchIsOn == NO) {
             [self torch:YES];
