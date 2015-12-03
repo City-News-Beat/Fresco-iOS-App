@@ -127,7 +127,8 @@
     if ( [self.session canAddOutput:self.stillImageOutput] ) {
         self.stillImageOutput.outputSettings = @{AVVideoCodecKey : AVVideoCodecJPEG};
         [self.session addOutput:self.stillImageOutput];
-    } else self.AVSetupSuccess = NO;
+    } else
+        self.AVSetupSuccess = NO;
 }
 
 -(AVCaptureDeviceInput *)videoInputDevice{

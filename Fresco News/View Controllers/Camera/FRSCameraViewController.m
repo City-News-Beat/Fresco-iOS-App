@@ -94,6 +94,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
+@property (nonatomic) BOOL firstTime;
+
 @end
 
 @implementation FRSCameraViewController
@@ -108,6 +110,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
+        
+        self.firstTime = YES;
     }
     return self;
 }
@@ -118,7 +122,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     [super viewDidLoad];
-    
+
     [self configureUI];
     
     [self.sessionManager startCaptureSession];
@@ -147,7 +151,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     button.backgroundColor = [UIColor redColor];
     button.alpha = .5;
     [self.view addSubview:button];
-    
 }
 
 
@@ -168,8 +171,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -182,11 +183,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.preview.alpha == 0){
-            [UIView animateWithDuration:0.4 animations:^{
-                self.preview.alpha = 1.0;
-            }];
-        }
+        NSLog(@"FADE IN PREVIEW CALLED");
+            self.preview.alpha = 1.0;
     });
 }
 
@@ -225,6 +223,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         else {
             self.previewBackgroundIV.alpha = 1.0;
             [self.previewButton setImage:result forState:UIControlStateNormal];
+            if (!self.firstTime) {
+                [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+            }
+            self.firstTime = NO;
         }
     }];
 }
@@ -283,9 +285,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
-    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+    [self.nextButton setTitle:@"" forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
     [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.previewBackgroundIV addSubview:self.nextButton];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -686,6 +687,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         
+        if (!connection){
+            [self.sessionManager.session beginConfiguration];
+            
+            //Change the preset to display properly
+            if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
+                //Set the session preset to photo, the default mode we enter in as
+                [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            }
+            
+            [self.sessionManager.session commitConfiguration];
+        }
+        
+        connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         // Update the orientation on the still image output video connection before capturing.
         connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
         
@@ -827,6 +841,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         if (!self.sessionManager.movieFileOutput.isRecording) {
             
             AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (!movieConnection){
+                [self.sessionManager.session beginConfiguration];
+
+                if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+                    //Set the session preset to photo, the default mode we enter in as
+                    [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+                }
+                
+                [self.sessionManager.session commitConfiguration];
+            }
+            
+            movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
             
             if (movieConnection.active) {
                 
