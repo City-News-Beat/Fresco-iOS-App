@@ -142,6 +142,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.cameraDisabled = NO;
     
+    [self configureDismissButton];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -222,15 +224,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }];
 }
 
+
 -(void)configureDismissButton{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self
                action:@selector(dismissAndReturnToPreviousTab)
      forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"×" forState:UIControlStateNormal];
-    button.frame = CGRectMake(8, 8, 40, 40);
-    button.backgroundColor = [UIColor redColor];
-    button.alpha = .5;
+    UIImage *close = [UIImage imageNamed:@"close"];
+    [button setImage:close forState:UIControlStateNormal];
+    button.frame = CGRectMake(12, 10, 24, 24);
     [self.view addSubview:button];
 }
 
