@@ -155,14 +155,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 
--(void)dismissVC{
-    
-    NSLog(@"dismissVC");
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-}
-
 - (void)dismissAndReturnToPreviousTab
 {
     [[FRSUploadManager sharedManager] resetDraftGalleryPost];
@@ -613,11 +605,70 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
 }
 
+-(void)animateShutter{
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
+    view.backgroundColor = [UIColor clearColor];
+    view.layer.borderColor = [UIColor blueColor].CGColor;
+    view.layer.borderWidth = 4;
+    [self.apertureBackground addSubview:view];
+    view.layer.cornerRadius = view.frame.size.width/2;
+    
+    [UIView animateWithDuration:0.15
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         
+                         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/2);
+                         
+                     }
+                     completion:nil];
+    
+
+    
+        [UIView animateWithDuration:0.075
+                              delay:0.0
+                            options: UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             
+                             self.apertureButton.transform = CGAffineTransformMakeScale(1.12, 1.12);
+                             
+                         }
+                         completion:^(BOOL finished){
+                            
+                             [UIView animateWithDuration:0.075
+                                                   delay:0.0
+                                                 options: UIViewAnimationOptionCurveEaseInOut
+                                              animations:^{
+                                                  
+                                                  self.apertureButton.transform = CGAffineTransformMakeScale(0.99, 0.99);
+                                                  
+                                              } completion:^(BOOL finished) {
+                                                  
+                                                  [UIView animateWithDuration:0.075
+                                                                        delay:0.0
+                                                                      options: UIViewAnimationOptionCurveEaseInOut
+                                                                   animations:^{
+                                                                       
+                                                                       self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+
+                                                                       
+                                                                   } completion:nil];
+                                                  
+                                                  
+                                              }];
+                         }];
+    
+}
+
 #pragma mark - Button action handlers
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
+    
+    [self animateShutter];
+    
     if (self.captureMode == FRSCaptureModePhoto){
-        [self captureStillImage];
+//        [self captureStillImage];
     }
     else {
 //        [self captureStillImage];
