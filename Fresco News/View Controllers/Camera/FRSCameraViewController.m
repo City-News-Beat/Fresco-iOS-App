@@ -64,6 +64,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
 @property (strong, nonatomic) UIImageView *apetureImageView;
+@property (strong, nonatomic) UIView *apertureMask;
 @property (strong, nonatomic) UIButton *apertureButton;
 
 @property (strong, nonatomic) UIButton *previewButton;
@@ -361,12 +362,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureAnimationView.alpha = 0.0;
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
-    view.backgroundColor = [UIColor clearColor];
-    view.layer.borderColor = [UIColor blueColor].CGColor;
-    view.layer.borderWidth = 4;
-    [self.apertureBackground addSubview:view];
-    view.layer.cornerRadius = view.frame.size.width/2;
+    self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
+    self.apertureMask.backgroundColor = [UIColor clearColor];
+    self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
+   self.apertureMask.layer.borderWidth = 4.2;
+    [self.apertureBackground addSubview:self.apertureMask];
+    self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width/2;
     
     self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     
@@ -375,14 +376,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apetureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     [self.apertureButton addSubview:self.apetureImageView];
-    
-//    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
 
-//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
-//    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
-    
-
-    [self.apertureBackground addSubview:self.apertureButton];
+    [self.apertureMask addSubview:self.apertureButton];
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -620,50 +615,39 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)animateShutter{
     
-    [UIView animateWithDuration:0.15
+    [UIView animateWithDuration:0.175
                           delay:0.0
-                        options: UIViewAnimationOptionCurveEaseOut
+                        options: UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          
-                         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/2);
+                         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-1);
                          
                      }
                      completion:nil];
     
 
     
-        [UIView animateWithDuration:0.075
+        [UIView animateWithDuration:0.1
                               delay:0.0
-                            options: UIViewAnimationOptionCurveEaseOut
+                            options: UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              
-                             self.apertureButton.transform = CGAffineTransformMakeScale(1.12, 1.12);
+                             self.apertureButton.transform = CGAffineTransformMakeScale(2.5, 2.5);
                              
                          }
                          completion:^(BOOL finished){
                             
-                             [UIView animateWithDuration:0.075
+                             [UIView animateWithDuration:0.1
                                                    delay:0.0
                                                  options: UIViewAnimationOptionCurveEaseInOut
                                               animations:^{
                                                   
-                                                  self.apertureButton.transform = CGAffineTransformMakeScale(0.99, 0.99);
+                                                  self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                                                   
-                                              } completion:^(BOOL finished) {
-                                                  
-                                                  [UIView animateWithDuration:0.075
-                                                                        delay:0.0
-                                                                      options: UIViewAnimationOptionCurveEaseInOut
-                                                                   animations:^{
-                                                                       
-                                                                       self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
-
-                                                                       
-                                                                   } completion:nil];
+                                              } completion:nil];
                                                   
                                                   
                                               }];
-                         }];
     
 }
 
@@ -689,14 +673,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
         self.cameraDisabled = YES;
+        
+        self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
+        
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
         self.cameraDisabled = NO;
+
     }
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
 }
+
 
 #pragma mark - Notifications and Observers
 
