@@ -377,7 +377,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.apertureButton addSubview:self.apertureImageView];
 
     [self.apertureMask addSubview:self.apertureButton];
-    
+        
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
 }
@@ -458,6 +458,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 
 -(void)configureToggleView{
+    
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
     self.captureModeToggleView.userInteractionEnabled = YES;
     [self.bottomClearContainer addSubview:self.captureModeToggleView];
@@ -526,6 +527,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             self.videoIV.layer.shadowOpacity = 1.0;
         }];
     }
+    
 }
 
 -(void)animateShutterExpansionWithColor:(UIColor *)color{
@@ -544,6 +546,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.apertureAnimationView.layer.cornerRadius = 4;
         self.apertureBackground.backgroundColor = color;
     }];
+    
 }
 
 -(void)adjustFramesForCaptureState{
@@ -617,6 +620,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     if (self.captureMode == FRSCaptureModePhoto){
 //        [self captureStillImage];
         [self animateShutter];
+        
     }
     else {
 //        [self captureStillImage];
@@ -638,6 +642,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     else {
         self.captureMode = FRSCaptureModePhoto;
         self.cameraDisabled = NO;
+        self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
+
     }
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
