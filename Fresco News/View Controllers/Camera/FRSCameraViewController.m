@@ -63,7 +63,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
-@property (strong, nonatomic) UIImageView *apetureImageView;
+@property (strong, nonatomic) UIImageView *apertureImageView;
 @property (strong, nonatomic) UIView *apertureMask;
 @property (strong, nonatomic) UIButton *apertureButton;
 
@@ -257,8 +257,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)configureBottomContainer{
-    
-    
     self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
     self.bottomOpaqueContainer.backgroundColor = [UIColor frescoDefaultBackgroundColor];
     [self.view addSubview:self.bottomOpaqueContainer];
@@ -288,7 +286,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    
     
     [self.previewButton clipAsCircle];
     
@@ -373,11 +370,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     
-    self.apetureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
-    [self.apetureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
-    self.apetureImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
+    [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
+    self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
-    [self.apertureButton addSubview:self.apetureImageView];
+    [self.apertureButton addSubview:self.apertureImageView];
 
     [self.apertureMask addSubview:self.apertureButton];
     
@@ -405,44 +402,25 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)flashButtonTapped {
-
-//    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
-//    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
-//                         forKey:@"flashIsOn"];
-//    
-//    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
-//    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
-//                         forKey:@"torchIsOn"];
-    
-    
     if (self.cameraDisabled == YES){
         if (self.torchIsOn == NO) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
-            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
-
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
-            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
-
         }
-        
     } else {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
-            
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
-
         } else {
             [self flash:NO];
             NSLog(@"flash disabled = %d", self.flashIsOn);
-            
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-
         }
     }
 }
@@ -512,8 +490,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.videoIV.contentMode = UIViewContentModeCenter;
     [self.videoIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.captureModeToggleView addSubview:self.videoIV];
-    
-//    self.videoIV.backgroundColor = [UIColor orangeColor]; //For testing purposes;
+
 }
 
 -(void)setAppropriateIconsForCaptureState{
@@ -523,8 +500,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
 
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
-
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -542,7 +517,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
 
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
-//            [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateHighlighted];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
             self.videoIV.image = [UIImage imageNamed:@"video-vid-on"];
@@ -616,40 +590,23 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)animateShutter{
+    [UIView animateWithDuration:0.175 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-1);
+    } completion:nil];
     
-    [UIView animateWithDuration:0.175
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-1);
-                         
-                     }
-                     completion:nil];
-    
+    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureButton.transform = CGAffineTransformMakeScale(2.5, 2.5);
+    }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                             self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+                         } completion:nil];
+                     }];
+}
 
+-(void)animateRecord{
     
-        [UIView animateWithDuration:0.1
-                              delay:0.0
-                            options: UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             
-                             self.apertureButton.transform = CGAffineTransformMakeScale(2.5, 2.5);
-                             
-                         }
-                         completion:^(BOOL finished){
-                            
-                             [UIView animateWithDuration:0.1
-                                                   delay:0.0
-                                                 options: UIViewAnimationOptionCurveEaseInOut
-                                              animations:^{
-                                                  
-                                                  self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
-                                                  
-                                              } completion:nil];
-                                                  
-                                                  
-                                              }];
+    NSLog(@"animateRecord");
     
 }
 
@@ -657,13 +614,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
-    [self animateShutter];
-    
     if (self.captureMode == FRSCaptureModePhoto){
 //        [self captureStillImage];
+        [self animateShutter];
     }
     else {
 //        [self captureStillImage];
+        [self animateRecord];
     }
 }
 
@@ -675,14 +632,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
         self.cameraDisabled = YES;
-        
+        self.apertureImageView.alpha = 1;
         self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
-        
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
         self.cameraDisabled = NO;
-
     }
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
@@ -867,11 +822,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)dealloc{
-
     [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
     [self.apertureButton removeObserver:self forKeyPath:@"highlighted"];
     [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-    
 }
 
 
