@@ -63,6 +63,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
+@property (strong, nonatomic) UIImageView *apetureImageView;
 @property (strong, nonatomic) UIButton *apertureButton;
 
 @property (strong, nonatomic) UIButton *previewButton;
@@ -140,32 +141,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.cameraDisabled = NO;
     
-
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self
-               action:@selector(dismissAndReturnToPreviousTab)
-     forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"×" forState:UIControlStateNormal];
-    button.frame = CGRectMake(8, 8, 40, 40);
-    button.backgroundColor = [UIColor redColor];
-    button.alpha = .5;
-    [self.view addSubview:button];
-    
 }
-
-
-- (void)dismissAndReturnToPreviousTab
-{
-    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-    
-    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
-    
-    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -244,6 +220,31 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         }
     }];
 }
+
+-(void)configureDismissButton{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self
+               action:@selector(dismissAndReturnToPreviousTab)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:@"×" forState:UIControlStateNormal];
+    button.frame = CGRectMake(8, 8, 40, 40);
+    button.backgroundColor = [UIColor redColor];
+    button.alpha = .5;
+    [self.view addSubview:button];
+}
+
+
+- (void)dismissAndReturnToPreviousTab
+{
+    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
+    
+    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+    
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -360,13 +361,25 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureAnimationView.alpha = 0.0;
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
+    view.backgroundColor = [UIColor clearColor];
+    view.layer.borderColor = [UIColor blueColor].CGColor;
+    view.layer.borderWidth = 4;
+    [self.apertureBackground addSubview:view];
+    view.layer.cornerRadius = view.frame.size.width/2;
     
     self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
-    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-
     
-    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
-    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
+    self.apetureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
+    [self.apetureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
+    self.apetureImageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    [self.apertureButton addSubview:self.apetureImageView];
+    
+//    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+
+//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
+//    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
     
 
     [self.apertureBackground addSubview:self.apertureButton];
@@ -606,13 +619,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)animateShutter{
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
-    view.backgroundColor = [UIColor clearColor];
-    view.layer.borderColor = [UIColor blueColor].CGColor;
-    view.layer.borderWidth = 4;
-    [self.apertureBackground addSubview:view];
-    view.layer.cornerRadius = view.frame.size.width/2;
     
     [UIView animateWithDuration:0.15
                           delay:0.0
