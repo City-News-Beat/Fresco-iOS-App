@@ -695,7 +695,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 
--(void)animateShutter{
+-(void)animateShutterWithCompletion:(void(^)())completion{
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -708,12 +708,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                          completion:^(BOOL finished){
                              [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
-                             } completion:nil];
+                             } completion:^(BOOL finished){
+                                 completion();
+                             }];
                          }];
     });
-    
-
 }
+
 
 
 
@@ -846,145 +847,132 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         else
             self.capturingImage = YES;
         
-        [self animateShutter];
-        
-        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-        
-        if (!connection){
-            [self.sessionManager.session beginConfiguration];
+        [self animateShutterWithCompletion:^{
+            AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
             
-            //Change the preset to display properly
-            if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
-                //Set the session preset to photo, the default mode we enter in as
-                [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
-            }
+            // Update the orientation on the still image output video connection before capturing.
+            connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
             
-            [self.sessionManager.session commitConfiguration];
-        }
-        
-        connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-        // Update the orientation on the still image output video connection before capturing.
-        connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
-        
-        // Capture a still image.
-        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-            self.capturingImage = NO;
-            
-            
-            if (imageDataSampleBuffer){
-                NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+            // Capture a still image.
+            [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
+                self.capturingImage = NO;
                 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
-                    if (imageNSData) {
-                        
-                        CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
-                        
-                        //make the metadata dictionary mutable so we can add properties to it
-                        NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
-                        
-                        NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
-                        
-                        if(!GPSDictionary)
-                            GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
-                        
-                        
-                        //Add the modified Data back into the image’s metadata
-                        if (GPSDictionary) {
-                            [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
-                        }
-                        
-                        CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
-                        
-                        //this will be the data CGImageDestinationRef will write into
-                        NSMutableData *newImageData = [NSMutableData data];
-                        
-                        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
-                        
-                        if(!destination)
-                            NSLog(@"***Could not create image destination ***");
-                        
-                        //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-                        CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
-                        
-                        //tell the destination to write the image data and metadata into our data object.
-                        //It will return false if something goes wrong
-                        BOOL success = NO;
-                        success = CGImageDestinationFinalize(destination);
-                        
-                        if(!success){
-                            NSLog(@"***Could not create data from image destination ***");
-                            return;
-                        }
-                        
-                        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                
+                if (imageDataSampleBuffer){
+                    NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+                        if (imageNSData) {
                             
-                            if (status == PHAuthorizationStatusAuthorized ) {
-                                
-                                // Note that creating an asset from a UIImage discards the metadata.
-                                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-                                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-                                if ([PHAssetCreationRequest class]) {
-                                    
-                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                        
-                                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
-                                        
-                                    } completionHandler:^( BOOL success, NSError *error ) {
-                                        
-                                        if (!success) {
-                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                        }
-                                        else {
-                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-                                        }
-                                    }];
-                                }
-                                else {
-                                    
-                                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-                                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-                                    
-                                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-                                    
-                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                        
-                                        NSError *error = nil;
-                                        
-                                        [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-                                        
-                                        if ( error ) {
-                                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-                                        }
-                                        else {
-                                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-                                        }
-                                        
-                                    } completionHandler:^( BOOL success, NSError *error ) {
-                                        
-                                        if (!success ) {
-                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                        }
-                                        else {
-                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-                                            
-                                        }
-                                        
-                                        // Delete the temporary file.
-                                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-                                        
-                                    }];
-                                }
+                            CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
+                            
+                            //make the metadata dictionary mutable so we can add properties to it
+                            NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                            
+                            NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                            
+                            if(!GPSDictionary)
+                                GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+                            
+                            
+                            //Add the modified Data back into the image’s metadata
+                            if (GPSDictionary) {
+                                [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
                             }
-                        }];
-                    }
-                    else {
-                        NSLog( @"Could not capture still image: %@", error );
-                    }
-                });
-            }
-            else {
-                NSLog( @"Could not capture still image: %@", error );
-            }
+                            
+                            CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
+                            
+                            //this will be the data CGImageDestinationRef will write into
+                            NSMutableData *newImageData = [NSMutableData data];
+                            
+                            CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
+                            
+                            if(!destination)
+                                NSLog(@"***Could not create image destination ***");
+                            
+                            //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+                            CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
+                            
+                            //tell the destination to write the image data and metadata into our data object.
+                            //It will return false if something goes wrong
+                            BOOL success = NO;
+                            success = CGImageDestinationFinalize(destination);
+                            
+                            if(!success){
+                                NSLog(@"***Could not create data from image destination ***");
+                                return;
+                            }
+                            
+                            [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                                
+                                if (status == PHAuthorizationStatusAuthorized ) {
+                                    
+                                    // Note that creating an asset from a UIImage discards the metadata.
+                                    // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                                    // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                                    if ([PHAssetCreationRequest class]) {
+                                        
+                                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                            
+                                            [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
+                                            
+                                        } completionHandler:^( BOOL success, NSError *error ) {
+                                            
+                                            if (!success) {
+                                                NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                            }
+                                            else {
+                                                [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            }
+                                        }];
+                                    }
+                                    else {
+                                        
+                                        NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                                        NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                                        
+                                        NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                                        
+                                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                            
+                                            NSError *error = nil;
+                                            
+                                            [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                            
+                                            if ( error ) {
+                                                NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                            }
+                                            else {
+                                                [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                            }
+                                            
+                                        } completionHandler:^( BOOL success, NSError *error ) {
+                                            
+                                            if (!success ) {
+                                                NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                            }
+                                            else {
+                                                [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                                
+                                            }
+                                            
+                                            // Delete the temporary file.
+                                            [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                                            
+                                        }];
+                                    }
+                                }
+                            }];
+                        }
+                        else {
+                            NSLog( @"Could not capture still image: %@", error );
+                        }
+                    });
+                }
+                else {
+                    NSLog( @"Could not capture still image: %@", error );
+                }
+            }];
         }];
     });
 }
