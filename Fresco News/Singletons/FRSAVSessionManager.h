@@ -34,6 +34,8 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 
 -(void)startCaptureSession;
 
+-(void)clearCaptureSession;
+
 -(void)configureOrientationForPreview:(UIView *)preview;
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange;

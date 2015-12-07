@@ -61,6 +61,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIView *bottomClearContainer;
 @property (strong, nonatomic) UIView *bottomOpaqueContainer;
 
+@property (strong, nonatomic) UIView *topContainer;
+
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
@@ -75,8 +77,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIImageView *videoIV;
 
 @property (strong, nonatomic) UIButton *flashButton;
-
 @property (strong, nonatomic) UIButton *nextButton;
+@property (strong, nonatomic) UIButton *closeButton;
+
+@property (strong, nonatomic) UIImageView *locationIV;
+@property (strong, nonatomic) UILabel *assignmentLabel;
 
 @property (strong, nonatomic) UIView *whiteView;
 
@@ -141,16 +146,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.locationManager.delegate = self;
     
     // Do any additional setup after loading the view.
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self
-               action:@selector(dismissVC)
-     forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"×" forState:UIControlStateNormal];
-    button.frame = CGRectMake(8, 8, 40, 40);
-    button.backgroundColor = [UIColor redColor];
-    button.alpha = .5;
-    [self.view addSubview:button];
 }
 
 
@@ -177,6 +172,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [super viewWillDisappear:animated];
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
+    [self.sessionManager clearCaptureSession];
     
 
 }
@@ -194,6 +190,38 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureUI{
     [self configurePreview];
     [self configureBottomContainer];
+    [self configureTopContainer];
+}
+
+-(void)configureTopContainer{
+    
+    self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 24)];
+    self.topContainer.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.topContainer];
+    
+    self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
+    [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
+    [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.closeButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.topContainer addSubview:self.closeButton];
+    
+    self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
+    self.locationIV.contentMode = UIViewContentModeScaleAspectFit;
+    self.locationIV.image = [UIImage imageNamed:@"crosshairs-icon"];
+    [self.locationIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.topContainer addSubview:self.locationIV];
+    
+    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
+    self.assignmentLabel.textColor = [UIColor whiteColor];
+    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+    self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
+    [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.topContainer addSubview:self.assignmentLabel];
+    
+}
+
+-(NSInteger)assignmentLabelWidth{
+    return self.view.frame.size.width - self.closeButton.frame.size.width - self.locationIV.frame.size.width - 10 - 17 - 7 - 12;
 }
 
 -(void)configurePreview{
@@ -222,8 +250,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         }
         else {
             self.previewBackgroundIV.alpha = 1.0;
+            self.whiteView.alpha = 0.0;
             [self.previewButton setImage:result forState:UIControlStateNormal];
             if (!self.firstTime) {
+                self.whiteView.alpha = 0.7;
                 [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
             }
             self.firstTime = NO;
@@ -278,7 +308,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     self.whiteView.backgroundColor = [UIColor whiteColor];
-    self.whiteView.alpha = 0.7;
+    self.whiteView.alpha = 0.0;
     self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
     self.whiteView.clipsToBounds = YES;
     [self.previewBackgroundIV addSubview:self.whiteView];

@@ -63,6 +63,11 @@
     }
 }
 
+-(void)clearCaptureSession{
+    [self.session stopRunning];
+    self.session = nil;
+}
+
 -(void)startCaptureSession{
     dispatch_async(self.sessionQueue, ^{
         if (self.authStatus == FRSAVStatusNotDetermined){
