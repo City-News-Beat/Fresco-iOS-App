@@ -697,19 +697,21 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)animateShutter{
     
-
-    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
-    } completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
+        }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut animations:^{
+                                 self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+                             } completion:nil];
+                         }];
+    });
     
-    [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
-    }
-                     completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut animations:^{
-                             self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
-                         } completion:nil];
-                     }];
 
 }
 
@@ -719,23 +721,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
-    
     if (self.captureMode == FRSCaptureModePhoto){
-
+        
         [self captureStillImage];
     }
     else {
-        if (!self.isRecording){
-            
-            self.isRecording = NO;
-            [self runVideoRecordAnimation];
-            
-        } else {
-            [self stopRecordingAnimation];
-        }
+        [self toggleVideoRecording];
+        
     }
     
-    NSLog(@"self.isRecording = %d", self.isRecording);
 
 }
 
@@ -760,7 +754,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     /* Disable mask for transition animation */
     self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
 
-    
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
         //        self.cameraDisabled = YES;
@@ -770,6 +763,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.apertureMask.layer.borderColor = [UIColor redCircleStrokeColor].CGColor;
         });
+        
+        [self.sessionManager.session beginConfiguration];
+        
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+        }
+        
+        [self.sessionManager.session commitConfiguration];
+        
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
@@ -782,9 +786,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self.sessionManager.session beginConfiguration];
         
         //Change the preset to display properly
-        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
             //Set the session preset to photo, the default mode we enter in as
-            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
         }
         
         [self.sessionManager.session commitConfiguration];
@@ -989,18 +993,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.sessionManager.movieFileOutput.isRecording) {
         
-        [self stopRecordingAnimation];
-        
         //Clear the timer so it doesn't re-run
         [self.videoTimer invalidate];
         self.videoTimer = nil;
-        self.captureModeToggleView.alpha = 1.0;
+        
+        [self stopRecordingAnimation];
         
     }
     else {
-        self.captureModeToggleView.alpha = 0.0;
         self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
-        
     }
     
     dispatch_async(self.sessionManager.sessionQueue, ^{
@@ -1176,9 +1177,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                     //                    [self toggleAssignmentLabel:YES];
                     
                 }
-                
             }
-            
         }];
     }
     
@@ -1198,17 +1197,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 - (void)runVideoRecordAnimation{
     
-
-//    if (self.isRecording){
-//        [self stopRecordingAnimation];
-////        self.isRecording = NO;
-//        
-//        return;
-//        
-//    } else {
-//        self.isRecording = YES;
-        
-        NSLog(@"self.isRecording = %d", self.isRecording);
+    self.captureModeToggleView.alpha = 0.0;
         
         [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
@@ -1217,25 +1206,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
         }
-                         completion:^(BOOL finished){
-                             [UIView animateWithDuration:0.25 delay:2.05 options: UIViewAnimationOptionCurveEaseOut animations:^{
-                                 self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
-                             } completion:nil];
-                         }];
+                         completion:nil];
 
-//=======
-//    if (self.isRecording){
-//        [self stopRecordingAnimation];
-//        return;
-//    } else {
-//        self.isRecording = YES;
-//        
-//        NSLog(@"self.isRecording = %d", self.isRecording);
-//        /* Aperture image should animate */
-//        self.apertureImageView.alpha = 0;
-//        
-//>>>>>>> e84489c680e81781ea42ec018ce79e63dc176acf
-        // Set up the shape of the circle
         int radius = 30;
         self.circleLayer = [CAShapeLayer layer];
         // Make a circular shape
@@ -1256,7 +1228,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         // Configure animation
         CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        drawAnimation.duration = 2; // for testing purposes
+        drawAnimation.duration = MAX_VIDEO_LENGTH; // for testing purposes
         //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
         drawAnimation.repeatCount         = 1.0;  // Animate only once..
         
@@ -1269,9 +1241,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         // Add the animation to the circle
         [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-
-        self.captureModeToggleView.alpha = 1.0;
-        [self stopRecordingAnimation];
     
 //    }
 
@@ -1280,7 +1249,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)stopRecordingAnimation {
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
         [UIView animateWithDuration:0.15
                               delay:0.0
@@ -1289,13 +1258,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                              
                              self.circleLayer.opacity = 0;
                              
-                             self.apertureImageView.alpha = 1;
-                             self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
-                             
+                             self.apertureButton.alpha = 1;
+                             self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                          }
                          completion:^(BOOL finished) {
                              [self.circleLayer removeFromSuperlayer];
-                             self.isRecording = NO;
                              
                          }];
         
@@ -1304,12 +1271,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                             options: UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              
-                             self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
+                             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI);
                              
                              
                          }
                          completion:^(BOOL finished){
-                             
+                             self.captureModeToggleView.alpha = 1.0;
                          }];
     });
 }
