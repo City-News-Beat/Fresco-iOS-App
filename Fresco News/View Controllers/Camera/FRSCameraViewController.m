@@ -8,6 +8,10 @@
 
 #import "FRSCameraViewController.h"
 
+
+#import "BaseNavigationController.h"
+#import "AssetsPickerController.h"
+
 //Apple APIs
 @import Photos;
 @import AVFoundation;
@@ -35,6 +39,9 @@
 #import "FRSTabBarController.h"
 
 
+//Root View Controller
+#import "FRSRootViewController.h"
+
 
 
 #define ICON_WIDTH 24
@@ -49,7 +56,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 };
 
 
-@interface FRSCameraViewController () <CLLocationManagerDelegate>
+
+@interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
@@ -60,11 +68,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIView *bottomClearContainer;
 @property (strong, nonatomic) UIView *bottomOpaqueContainer;
 
+
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
 @property (strong, nonatomic) UIView *apertureBackground;
 @property (strong, nonatomic) UIImageView *apertureImageView;
 @property (strong, nonatomic) UIView *apertureMask;
+
+@property (strong, nonatomic) UIView *topContainer;
+
 @property (strong, nonatomic) UIButton *apertureButton;
 
 @property (strong, nonatomic) UIButton *previewButton;
@@ -78,6 +90,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (strong, nonatomic) UIButton *flashButton;
 
 @property (strong, nonatomic) UIButton *nextButton;
+@property (strong, nonatomic) UIButton *closeButton;
+
+@property (strong, nonatomic) UIImageView *locationIV;
+@property (strong, nonatomic) UILabel *assignmentLabel;
 
 @property (strong, nonatomic) UIView *whiteView;
 
@@ -91,14 +107,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) BOOL flashIsOn;
 @property (nonatomic) BOOL torchIsOn;
 
-@property (nonatomic) BOOL cameraDisabled;
-
 @property (nonatomic, strong) FRSTabBarController *tabBarController;
 
 @property (strong, nonatomic) CAShapeLayer *circleLayer;
 
 @property (nonatomic) BOOL isRecording;
 
+@property (strong, nonatomic) NSTimer *videoTimer;
+
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
+
+@property (nonatomic) BOOL firstTime;
 
 @end
 
@@ -114,6 +133,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
+
+        
+        self.firstTime = YES;
+
     }
     return self;
 }
@@ -124,7 +147,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     [super viewDidLoad];
-    
+
+
     [self configureUI];
 
     
@@ -144,6 +168,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.locationManager.delegate = self;
     
     // Do any additional setup after loading the view.
+
     
     self.cameraDisabled = NO;
     
@@ -168,25 +193,24 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
-    
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
+
+    [self.sessionManager clearCaptureSession];
     
 
 }
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.preview.alpha == 0){
-            [UIView animateWithDuration:0.4 animations:^{
-                self.preview.alpha = 1.0;
-            }];
-        }
+
+        NSLog(@"FADE IN PREVIEW CALLED");
+            self.preview.alpha = 1.0;
     });
 }
 
@@ -196,7 +220,38 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureUI{
     [self configurePreview];
     [self configureBottomContainer];
-    [self configureDismissButton];
+    [self configureTopContainer];
+}
+
+-(void)configureTopContainer{
+    
+    self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 24)];
+    self.topContainer.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.topContainer];
+    
+    self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
+    [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
+    [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.closeButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.topContainer addSubview:self.closeButton];
+    
+    self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
+    self.locationIV.contentMode = UIViewContentModeScaleAspectFit;
+    self.locationIV.image = [UIImage imageNamed:@"crosshairs-icon"];
+    [self.locationIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.topContainer addSubview:self.locationIV];
+    
+    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
+    self.assignmentLabel.textColor = [UIColor whiteColor];
+    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+    self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
+    [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    [self.topContainer addSubview:self.assignmentLabel];
+    
+}
+
+-(NSInteger)assignmentLabelWidth{
+    return self.view.frame.size.width - self.closeButton.frame.size.width - self.locationIV.frame.size.width - 10 - 17 - 7 - 12;
 }
 
 -(void)configurePreview{
@@ -225,23 +280,17 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         }
         else {
             self.previewBackgroundIV.alpha = 1.0;
+
+            self.whiteView.alpha = 0.0;
             [self.previewButton setImage:result forState:UIControlStateNormal];
+            if (!self.firstTime) {
+                self.whiteView.alpha = 0.7;
+                [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+            }
+            self.firstTime = NO;
         }
     }];
 }
-
-
--(void)configureDismissButton{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self
-               action:@selector(dismissAndReturnToPreviousTab)
-     forControlEvents:UIControlEventTouchUpInside];
-    UIImage *close = [UIImage imageNamed:@"close"];
-    [button setImage:close forState:UIControlStateNormal];
-    button.frame = CGRectMake(12, 10, 24, 24);
-    [self.view addSubview:button];
-}
-
 
 - (void)dismissAndReturnToPreviousTab
 {
@@ -254,7 +303,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
     dispatch_async(dispatch_get_main_queue(), ^{
         self.previewBackgroundIV.alpha = 1.0;
@@ -263,6 +311,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)configureBottomContainer{
+
     self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
     self.bottomOpaqueContainer.backgroundColor = [UIColor frescoDefaultBackgroundColor];
     [self.view addSubview:self.bottomOpaqueContainer];
@@ -293,28 +342,29 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
     
+
     [self.previewButton clipAsCircle];
     
     [self.previewBackgroundIV addSubview:self.previewButton];
     
     self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     self.whiteView.backgroundColor = [UIColor whiteColor];
-    self.whiteView.alpha = 0.7;
+
+    self.whiteView.alpha = 0.0;
+    
     self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
     self.whiteView.clipsToBounds = YES;
     [self.previewBackgroundIV addSubview:self.whiteView];
     
     
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
-    /* Nota-Bold has not been added to the project */
-    self.nextButton.titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:13.0];
-    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+
+    [self.nextButton setTitle:@"" forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
     [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.previewBackgroundIV addSubview:self.nextButton];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-
+    [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -370,6 +420,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureAnimationView.alpha = 0.0;
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
+
     self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
     self.apertureMask.backgroundColor = [UIColor clearColor];
     self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
@@ -386,7 +437,21 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.apertureButton addSubview:self.apertureImageView];
 
     [self.apertureMask addSubview:self.apertureButton];
-        
+//        
+//=======
+//    
+//    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
+//    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+//
+//    
+//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
+//    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
+//    
+//
+//    [self.apertureBackground addSubview:self.apertureButton];
+//    
+//>>>>>>> 97a0ccb8a862368e56875c9feb62ba4a16252c1e
+    
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
 }
@@ -411,25 +476,45 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)flashButtonTapped {
-    if (self.cameraDisabled == YES){
+
+//    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
+//    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
+//                         forKey:@"flashIsOn"];
+//    
+//    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
+//    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
+//                         forKey:@"torchIsOn"];
+    
+    
+    if (self.captureMode == FRSCaptureModeVideo){
         if (self.torchIsOn == NO) {
             [self torch:YES];
             NSLog(@"torch enabled = %d", self.torchIsOn);
+            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
+
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
+            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
+
         }
+        
     } else {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
+
+            
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
+
         } else {
             [self flash:NO];
             NSLog(@"flash disabled = %d", self.flashIsOn);
+            
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+
         }
     }
 }
@@ -467,7 +552,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 
 -(void)configureToggleView{
-    
+
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
     self.captureModeToggleView.userInteractionEnabled = YES;
     [self.bottomClearContainer addSubview:self.captureModeToggleView];
@@ -510,6 +595,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
 
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
+
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -536,7 +622,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             self.videoIV.layer.shadowOpacity = 1.0;
         }];
     }
-    
+
 }
 
 -(void)animateShutterExpansionWithColor:(UIColor *)color{
@@ -555,7 +641,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.apertureAnimationView.layer.cornerRadius = 4;
         self.apertureBackground.backgroundColor = color;
     }];
-    
+
 }
 
 -(void)adjustFramesForCaptureState{
@@ -601,6 +687,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
 }
 
+
 -(void)animateShutter{
     
     [UIView animateWithDuration:0.375 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -640,6 +727,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         }
     }
 }
+//=======
+//#pragma mark - Button action handlers
+//
+//-(void)handleApertureButtonTapped:(UIButton *)button{
+//    if (self.captureMode == FRSCaptureModePhoto){
+//        [self captureStillImage];
+//    }
+//    else {
+//        [self toggleVideoRecording];
+//>>>>>>> 97a0ccb8a862368e56875c9feb62ba4a16252c1e
+//    }
+//}
 
 -(void)toggleCaptureMode{
     
@@ -648,23 +747,34 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
-        self.cameraDisabled = YES;
+//        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
         self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
-        self.cameraDisabled = NO;
+//        self.cameraDisabled = NO;
         /* Delay is used to change color of mask after animation completes */
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
         });
+
+        
+        [self.sessionManager.session beginConfiguration];
+        
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+        }
+        
+        [self.sessionManager.session commitConfiguration];
         
     }
+    
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
 }
-
 
 #pragma mark - Notifications and Observers
 
@@ -715,6 +825,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         
+        if (!connection){
+            [self.sessionManager.session beginConfiguration];
+            
+            //Change the preset to display properly
+            if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
+                //Set the session preset to photo, the default mode we enter in as
+                [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+            }
+            
+            [self.sessionManager.session commitConfiguration];
+        }
+        
+        connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         // Update the orientation on the still image output video connection before capturing.
         connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
         
@@ -834,10 +957,154 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     });
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)toggleVideoRecording{
+    if (self.sessionManager.movieFileOutput.isRecording) {
+        
+        //Clear the timer so it doesn't re-run
+        [self.videoTimer invalidate];
+        self.videoTimer = nil;
+        
+        self.captureModeToggleView.alpha = 1.0;
+        
+    }
+    else {
+        
+        self.captureModeToggleView.alpha = 0.0;
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        
+    }
+    
+    dispatch_async(self.sessionManager.sessionQueue, ^{
+        
+        if (!self.sessionManager.movieFileOutput.isRecording) {
+            
+            AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (!movieConnection){
+                [self.sessionManager.session beginConfiguration];
+
+                if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+                    //Set the session preset to photo, the default mode we enter in as
+                    [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+                }
+                
+                [self.sessionManager.session commitConfiguration];
+            }
+            
+            movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (movieConnection.active) {
+                
+                AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+                item.keySpace = AVMetadataKeySpaceCommon;
+                item.key = AVMetadataCommonKeyLocation;
+                item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", [FRSLocationManager sharedManager].location.coordinate.latitude, [FRSLocationManager sharedManager].location.coordinate.longitude];
+                self.sessionManager.movieFileOutput.metadata = @[item];
+                
+                if ( [UIDevice currentDevice].isMultitaskingSupported ) {
+                    // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
+                    // callback is not received until AVCam returns to the foreground unless you request background execution time.
+                    // This also ensures that there will be time to write the file to the photo library when AVCam is backgrounded.
+                    // To conclude this background execution, -endBackgroundTask is called in
+                    // -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:] after the recorded file has been saved.
+                    self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+                }
+                
+                // Update the orientation on the movie file output video connection before starting recording.
+                AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+                AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.captureVideoPreviewLayer;
+                connection.videoOrientation = previewLayer.connection.videoOrientation;
+                
+                // Start recording to a temporary file.
+                NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
+                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                
+            }
+            
+        }
+        else {
+            [self.sessionManager.movieFileOutput stopRecording];
+        }
+    });
 }
+
+- (void)videoEnded:(NSTimer *)timer{
+    [self toggleVideoRecording];
+}
+
+#pragma mark - File Output Delegate
+
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
+{
+    // Note that currentBackgroundRecordingID is used to end the background task associated with this recording.
+    // This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's isRecording property
+    // is back to NO — which happens sometime after this method returns.
+    // Note: Since we use a unique file path for each recording, a new recording will not overwrite a recording currently being saved.
+    UIBackgroundTaskIdentifier currentBackgroundRecordingID = self.backgroundRecordingID;
+    self.backgroundRecordingID = UIBackgroundTaskInvalid;
+    
+    dispatch_block_t cleanup = ^{
+        [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
+        if ( currentBackgroundRecordingID != UIBackgroundTaskInvalid ) {
+            [[UIApplication sharedApplication] endBackgroundTask:currentBackgroundRecordingID];
+        }
+    };
+    
+    BOOL success = YES;
+    
+    if ( error ) {
+        NSLog( @"Movie file finishing error: %@", error );
+        success = [error.userInfo[AVErrorRecordingSuccessfullyFinishedKey] boolValue];
+    }
+    if ( success ) {
+        // Check authorization status.
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            if ( status == PHAuthorizationStatusAuthorized ) {
+                // Save the movie file to the photo library and cleanup.
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    // In iOS 9 and later, it's possible to move the file into the photo library without duplicating the file data.
+                    // This avoids using double the disk space during save, which can make a difference on devices with limited free disk space.
+                    if ( [PHAssetResourceCreationOptions class] ) {
+                        PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
+                        options.shouldMoveFile = YES;
+                        PHAssetCreationRequest *changeRequest = [PHAssetCreationRequest creationRequestForAsset];
+                        [changeRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
+                    }
+                    else {
+                        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                        
+                    }
+                } completionHandler:^( BOOL success, NSError *error ) {
+                    if ( ! success ) {
+                        NSLog( @"Could not save movie to photo library: %@", error );
+                    }
+                    
+                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
+                        
+                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                            
+                            [self updatePreviewButtonWithImage:result];
+                        }];
+                        
+                        cleanup();
+                    }];
+                    
+                }];
+            }
+            else {
+                cleanup();
+            }
+        }];
+    }
+    else {
+        cleanup();
+    }
+}
+
+
 
 -(void)close{
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -885,6 +1152,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
     
 }
+
 
 - (void)runVideoRecordAnimation{
     
@@ -976,7 +1244,23 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                              
                          }];
     });
+}
+
+#pragma mark - Navigation
+
+-(void)handlePreviewButtonTapped{
     
+    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+    
+    navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self presentViewController:navVC animated:NO completion:nil];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 /*

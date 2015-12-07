@@ -8,6 +8,7 @@
 
 @import Parse;
 @import FBSDKCoreKit;
+@import FBSDKShareKit;
 @import AssetsLibrary;
 @import Photos;
 #import "AFNetworking.h"
@@ -24,7 +25,7 @@
 #import "FRSRootViewController.h"
 #import "FRSUploadManager.h"
 
-@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
+@interface GalleryPostViewController () <UITextViewDelegate, UIAlertViewDelegate, CLLocationManagerDelegate, FRSUploadManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
 @property (weak, nonatomic) IBOutlet FRSSocialButton *twitterButton;
@@ -547,10 +548,10 @@
     NSNumber * facebookPost = [NSNumber numberWithBool:NO];
     NSNumber * twitterPost = [NSNumber numberWithBool:NO];
     
-    if (self.twitterButton.selected) facebookPost = [NSNumber numberWithBool:YES];
+    if (self.twitterButton.selected) twitterPost = [NSNumber numberWithBool:YES];
 
-    if (self.facebookButton.selected) twitterPost = [NSNumber numberWithBool:YES];
-    
+    if (self.facebookButton.selected) facebookPost = [NSNumber numberWithBool:YES];
+    [FRSUploadManager sharedManager].delegate = self;
     [[FRSUploadManager sharedManager] uploadGallery:self.gallery
                                      withAssignment:self.defaultAssignment
                                     withSocialOptions:@{
@@ -562,6 +563,8 @@
     [self returnToTabBarWithPrevious:YES];
 
 }
+
+
 
 #pragma mark - UITextViewDelegate
 

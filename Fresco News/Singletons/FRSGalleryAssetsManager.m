@@ -53,21 +53,22 @@
 #if TARGET_IPHONE_SIMULATOR
         
 #else
-        //Set maximumum 1 day of age
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
-        components.day -= 1; //1 day
-        NSDate *lastDay  = [calendar dateFromComponents:components];
-        options.predicate = [NSPredicate predicateWithFormat:@"(creationDate >= %@)", lastDay];
+
+    //Set maximumum 1 day of age
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+    components.day -= 7; //one week
+    NSDate *lastWeek  = [calendar dateFromComponents:components];
+    options.predicate = [NSPredicate predicateWithFormat:@"(creationDate >= %@)", lastWeek];
 #endif
-        
-        PHFetchResult *results = [PHAsset fetchAssetsWithOptions:options];
-        NSMutableArray *filteredAssets = [NSMutableArray new];
-        
-        [results enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
-            //Check if there is a location, and if the video is less than the MAX_VIDEO_LENGTH
-            if (asset.location != nil && asset.duration < MAX_VIDEO_LENGTH) {
-                [filteredAssets addObject:asset];
+    
+    PHFetchResult *results = [PHAsset fetchAssetsWithOptions:options];
+    NSMutableArray *filteredAssets = [NSMutableArray new];
+    
+    [results enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+        //Check if there is a location, and if the video is less than the MAX_VIDEO_LENGTH
+        if (asset.location != nil && asset.duration <= MAX_VIDEO_LENGTH) {
+            [filteredAssets addObject:asset];
             }
         }];
         
@@ -79,7 +80,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion();
             });
-            
+
         }
     });
 }

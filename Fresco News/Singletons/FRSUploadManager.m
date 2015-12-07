@@ -7,6 +7,7 @@
 //
 
 @import FBSDKCoreKit;
+@import FBSDKShareKit;
 @import Photos;
 
 #import "FRSUploadManager.h"
@@ -14,6 +15,8 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+
+
 
 @interface FRSUploadManager()
 
@@ -194,11 +197,16 @@
     //Run social psot now that we have the gallery id back
     NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: %@/gallery/%@", BASE_URL, gallery.galleryID];
     
+    NSString *title = @"Just posted a gallery to @fresconews:";
+    NSString *url = [NSString stringWithFormat:@"%@/gallery/%@", BASE_URL, gallery.galleryID];
+    
     if(((NSNumber *)socialOptions[@"twitter"]).boolValue)
         [self postToTwitter:crossPostString];
     
-    if(((NSNumber *)socialOptions[@"facebook"]).boolValue)
-        [self postToFacebook:crossPostString];
+    if(((NSNumber *)socialOptions[@"facebook"]).boolValue){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Gallery Upload Done" object:nil userInfo:@{@"title" : title, @"url" : url}];
+    }
+//        [self postToFacebook:crossPostString];
     
     [self resetDraftGalleryPost];
 
@@ -284,19 +292,25 @@
 }
 
 - (void)postToFacebook:(NSString *)string{
+    
+    
+    
+    
+    
+    
 
     // TODO: Fix [[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"] ) {
-    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
-                                       parameters: @{@"message" : string}
-                                       HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-        if (error) {
-            // TODO: Notify the user
-            NSLog(@"Error crossposting to Facebook");
-        }
-        else {
-            NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
-        }
-    }];
+//    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed"
+//                                       parameters: @{@"message" : string}
+//                                       HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+//        if (error) {
+//            // TODO: Notify the user
+//            NSLog(@"Error crossposting to Facebook");
+//        }
+//        else {
+//            NSLog(@"Success crossposting to Facebook: Post id: %@", result[@"id"]);
+//        }
+//    }];
 
 }
 
