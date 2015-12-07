@@ -63,6 +63,7 @@
     }
 }
 
+
 -(void)clearCaptureSession{
     [self.session stopRunning];
     self.session = nil;
@@ -105,6 +106,7 @@
     else self.AVSetupSuccess = NO;
     
     //AUDIO INPUT
+
     NSError *error;
     
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
