@@ -26,6 +26,8 @@
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
 
+@property (strong, nonatomic) FRSAssignment *nearestAssignment;
+
 @end
 
 @implementation FRSLocationManager

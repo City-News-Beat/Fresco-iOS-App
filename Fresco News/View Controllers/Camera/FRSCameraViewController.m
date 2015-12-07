@@ -100,8 +100,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) FRSCaptureMode captureMode;
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
-@property (strong, nonatomic) FRSAssignment *defaultAssignment;
-
 @property (nonatomic) BOOL capturingImage;
 
 @property (nonatomic) BOOL flashIsOn;
@@ -133,10 +131,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
-
+        
         
         self.firstTime = YES;
-
+        
     }
     return self;
 }
@@ -155,17 +153,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self addObservers];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
-            [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    status == PHAuthorizationStatusAuthorized ? [self updatePreviewButtonWithAsset] : [self updatePreviewButtonWithImage:[UIImage imageNamed:@"camera-roll"]];
-                });
-            }];
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                status == PHAuthorizationStatusAuthorized ? [self updatePreviewButtonWithAsset] : [self updatePreviewButtonWithImage:[UIImage imageNamed:@"camera-roll"]];
+            });
+        }];
     }];
-    
-    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
-    self.locationManager.delegate = self;
-    
-    // Do any additional setup after loading the view.
 
     
     self.isRecording = NO;
@@ -185,11 +178,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     else {
         
     }
+    
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
+    self.locationManager.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -197,16 +193,16 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [super viewWillDisappear:animated];
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
-
+    
     [self.sessionManager clearCaptureSession];
     
 }
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         NSLog(@"FADE IN PREVIEW CALLED");
-            self.preview.alpha = 1.0;
+        self.preview.alpha = 1.0;
     });
 }
 
@@ -228,12 +224,16 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
     [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
     [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+
+    [self.closeButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
+
     [self.topContainer addSubview:self.closeButton];
     
     self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
     self.locationIV.contentMode = UIViewContentModeScaleAspectFit;
     self.locationIV.image = [UIImage imageNamed:@"crosshairs-icon"];
     [self.locationIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    self.locationIV.alpha = 0.0;
     [self.topContainer addSubview:self.locationIV];
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
@@ -242,6 +242,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
     
 }
@@ -276,14 +277,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         }
         else {
             self.previewBackgroundIV.alpha = 1.0;
-
-            self.whiteView.alpha = 0.0;
-            [self.previewButton setImage:result forState:UIControlStateNormal];
-            if (!self.firstTime) {
-                self.whiteView.alpha = 0.7;
-                [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+            
+            if (self.firstTime){ //This is the first time the preview button is being created
+                [self.previewButton setImage:result forState:UIControlStateNormal];
+                self.firstTime = NO;
             }
-            self.firstTime = NO;
         }
     }];
 }
@@ -300,14 +298,48 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
+    
+    [self.assetsManager fetchGalleryAssetsInBackgroundWithCompletion:nil];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.previewBackgroundIV.alpha = 1.0;
-        [self.previewButton setImage:image forState:UIControlStateNormal];
+        
+        UIImageView *temp = [[UIImageView alloc] initWithFrame:self.previewButton.frame];
+        temp.image = image;
+        [temp clipAsCircle];
+        temp.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        
+        if (self.nextButton){ //The next button has been animated in once
+            [self.previewBackgroundIV insertSubview:temp belowSubview:self.nextButton];
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+            } completion:^(BOOL finished) {
+                [self.previewButton setImage:image forState:UIControlStateNormal];
+                [temp removeFromSuperview];
+            }];
+        }
+        else { //First time the next button has been animated
+            [self.previewBackgroundIV addSubview:temp];
+            
+            [self createNextButtonWithFrame:self.previewButton.frame];
+            self.nextButton.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            [self.previewBackgroundIV addSubview:self.nextButton];
+            
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                
+                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                self.nextButton.alpha = 0.7;
+            } completion:^(BOOL finished) {
+                [self.previewButton setImage:image forState:UIControlStateNormal];
+                [temp removeFromSuperview];
+            }];
+        }
     });
 }
 
 -(void)configureBottomContainer{
-
+    
     self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
     self.bottomOpaqueContainer.backgroundColor = [UIColor frescoDefaultBackgroundColor];
     [self.view addSubview:self.bottomOpaqueContainer];
@@ -332,36 +364,26 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewBackgroundIV.alpha = 0.0;
     [self.bottomClearContainer addSubview:self.previewBackgroundIV];
     [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-
+    
     
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-    
-
+    [self.previewButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.previewButton clipAsCircle];
-    
     [self.previewBackgroundIV addSubview:self.previewButton];
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-    self.whiteView.backgroundColor = [UIColor whiteColor];
+}
 
-    self.whiteView.alpha = 0.0;
-    
-    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
-    self.whiteView.clipsToBounds = YES;
-    [self.previewBackgroundIV addSubview:self.whiteView];
-    
-    
-    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
-
-    [self.nextButton setTitle:@"" forState:UIControlStateNormal];
+-(void)createNextButtonWithFrame:(CGRect)frame{
+    self.nextButton = [[UIButton alloc] initWithFrame:frame];
+    [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.nextButton setBackgroundColor:[UIColor whiteColor]];
+    [self.nextButton clipAsCircle];
     [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
-    [self.previewBackgroundIV addSubview:self.nextButton];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
@@ -416,11 +438,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureAnimationView.alpha = 0.0;
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
-
+    
     self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
     self.apertureMask.backgroundColor = [UIColor clearColor];
     self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
-   self.apertureMask.layer.borderWidth = 4.2;
+    self.apertureMask.layer.borderWidth = 4.2;
     [self.apertureBackground addSubview:self.apertureMask];
     self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width/2;
     
@@ -431,22 +453,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     [self.apertureButton addSubview:self.apertureImageView];
-
+    
     [self.apertureMask addSubview:self.apertureButton];
-//        
-//=======
-//    
-//    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
-//    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-//
-//    
-//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
-//    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
-//    
-//
-//    [self.apertureBackground addSubview:self.apertureButton];
-//    
-//>>>>>>> 97a0ccb8a862368e56875c9feb62ba4a16252c1e
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -472,14 +480,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)flashButtonTapped {
-
-//    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
-//    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
-//                         forKey:@"flashIsOn"];
-//    
-//    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
-//    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
-//                         forKey:@"torchIsOn"];
+    
+    //    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
+    //    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
+    //                         forKey:@"flashIsOn"];
+    //
+    //    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
+    //    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
+    //                         forKey:@"torchIsOn"];
     
     
     if (self.captureMode == FRSCaptureModeVideo){
@@ -488,28 +496,29 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             NSLog(@"torch enabled = %d", self.torchIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
-
+            
         } else {
             [self torch:NO];
             NSLog(@"torch disabled = %d", self.torchIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
-
+            
         }
         
     } else {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
+
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
-
+            
         } else {
             [self flash:NO];
             NSLog(@"flash disabled = %d", self.flashIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-
+            
         }
     }
 }
@@ -547,7 +556,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 
 -(void)configureToggleView{
-
+    
     self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
     self.captureModeToggleView.userInteractionEnabled = YES;
     [self.bottomClearContainer addSubview:self.captureModeToggleView];
@@ -567,7 +576,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.cameraIV.userInteractionEnabled = YES;
     [self.cameraIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.captureModeToggleView addSubview:self.cameraIV];
-
+    
 }
 
 -(void)configureVideoButton{
@@ -580,7 +589,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.videoIV.contentMode = UIViewContentModeCenter;
     [self.videoIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.captureModeToggleView addSubview:self.videoIV];
-
+    
 }
 
 -(void)setAppropriateIconsForCaptureState{
@@ -588,9 +597,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         [self animateShutterExpansionWithColor:[UIColor goldStatusBarColor]];
         
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-
+            
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-
+            
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
@@ -604,9 +613,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
     else {
         [self animateShutterExpansionWithColor:[UIColor redCircleStrokeColor]];
-       
+        
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-
+            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
             
             self.cameraIV.image = [UIImage imageNamed:@"camera-vid-off"];
@@ -617,7 +626,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             self.videoIV.layer.shadowOpacity = 1.0;
         }];
     }
-
+    
 }
 
 -(void)animateShutterExpansionWithColor:(UIColor *)color{
@@ -636,7 +645,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.apertureAnimationView.layer.cornerRadius = 4;
         self.apertureBackground.backgroundColor = color;
     }];
-
+    
 }
 
 -(void)adjustFramesForCaptureState{
@@ -644,9 +653,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height)/2;
     NSInteger offset = topToAperture - 10;
     
+    CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+    
     if (self.captureMode == FRSCaptureModePhoto){
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
+            self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
@@ -654,8 +666,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
     else {
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            self.captureVideoPreviewLayer.frame = self.preview.bounds;
+            self.preview.frame = bigPreviewFrame;
+            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:nil];
@@ -667,7 +679,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationPortrait:
-//            NSLog(@"from %lu to lu", self.currentOrientation, [UIDevice currentDevice].orientation)
+            //            NSLog(@"from %lu to lu", self.currentOrientation, [UIDevice currentDevice].orientation)
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             
@@ -685,6 +697,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)animateShutter{
     
+
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
     } completion:nil];
@@ -697,6 +710,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                              self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                          } completion:nil];
                      }];
+
 }
 
 
@@ -707,22 +721,18 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     
     if (self.captureMode == FRSCaptureModePhoto){
-//        [self captureStillImage];
-        [self animateShutter];
-        
-    } else {
 
-        [self toggleVideoRecording];
-//        if (!self.isRecording){
-//            
-//        self.isRecording = NO;
-//            
-//        [self runVideoRecordAnimation];
-//            
-//        } else {
-//            
-//            [self stopRecordingAnimation];
-//        }
+        [self captureStillImage];
+    }
+    else {
+        if (!self.isRecording){
+            
+            self.isRecording = NO;
+            [self runVideoRecordAnimation];
+            
+        } else {
+            [self stopRecordingAnimation];
+        }
     }
     
     NSLog(@"self.isRecording = %d", self.isRecording);
@@ -753,7 +763,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
-//        self.cameraDisabled = YES;
+        //        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
         
         /* Delay is used to change color of mask after animation completes */
@@ -763,15 +773,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
-//        self.cameraDisabled = NO;
-        
-        
-
         /* Delay is used to change color of mask after animation completes */
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
         });
-
+        
         
         [self.sessionManager.session beginConfiguration];
         
@@ -836,6 +842,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         else
             self.capturingImage = YES;
         
+        [self animateShutter];
+        
         AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         
         if (!connection){
@@ -856,112 +864,119 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         // Capture a still image.
         [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-            
             self.capturingImage = NO;
             
-            if (imageDataSampleBuffer ) {
-                
+            
+            if (imageDataSampleBuffer){
                 NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 
-                CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
-                
-                //make the metadata dictionary mutable so we can add properties to it
-                NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
-                
-                NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
-                
-                if(!GPSDictionary)
-                    GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
-    
-                
-                //Add the modified Data back into the image’s metadata
-                if (GPSDictionary) {
-                    [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
-                }
-                
-                CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
-                
-                //this will be the data CGImageDestinationRef will write into
-                NSMutableData *newImageData = [NSMutableData data];
-                
-                CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
-                
-                if(!destination)
-                    NSLog(@"***Could not create image destination ***");
-                
-                //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-                CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
-                
-                //tell the destination to write the image data and metadata into our data object.
-                //It will return false if something goes wrong
-                BOOL success = NO;
-                success = CGImageDestinationFinalize(destination);
-                
-                if(!success){
-                    NSLog(@"***Could not create data from image destination ***");
-                    return;
-                }
-                
-                [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-                    
-                    if (status == PHAuthorizationStatusAuthorized ) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+                    if (imageNSData) {
                         
-                        // Note that creating an asset from a UIImage discards the metadata.
-                        // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-                        // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-                        if ([PHAssetCreationRequest class]) {
-                            
-                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                
-                                [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
-                                
-                            } completionHandler:^( BOOL success, NSError *error ) {
-                                
-                                if (!success) {
-                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                }
-                                else {
-                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-                                }
-                            }];
+                        CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
+                        
+                        //make the metadata dictionary mutable so we can add properties to it
+                        NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                        
+                        NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                        
+                        if(!GPSDictionary)
+                            GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+                        
+                        
+                        //Add the modified Data back into the image’s metadata
+                        if (GPSDictionary) {
+                            [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
                         }
-                        else {
+                        
+                        CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
+                        
+                        //this will be the data CGImageDestinationRef will write into
+                        NSMutableData *newImageData = [NSMutableData data];
+                        
+                        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
+                        
+                        if(!destination)
+                            NSLog(@"***Could not create image destination ***");
+                        
+                        //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+                        CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
+                        
+                        //tell the destination to write the image data and metadata into our data object.
+                        //It will return false if something goes wrong
+                        BOOL success = NO;
+                        success = CGImageDestinationFinalize(destination);
+                        
+                        if(!success){
+                            NSLog(@"***Could not create data from image destination ***");
+                            return;
+                        }
+                        
+                        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
                             
-                            NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-                            NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-                            
-                            NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-                            
-                            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                            if (status == PHAuthorizationStatusAuthorized ) {
                                 
-                                NSError *error = nil;
-                                
-                                [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-                                
-                                if ( error ) {
-                                    NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-                                }
-                                else {
-                                    [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-                                }
-                                
-                            } completionHandler:^( BOOL success, NSError *error ) {
-                                
-                                if (!success ) {
-                                    NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                }
-                                else {
-                                    [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                // Note that creating an asset from a UIImage discards the metadata.
+                                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                                if ([PHAssetCreationRequest class]) {
                                     
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                        
+                                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
+                                        
+                                    } completionHandler:^( BOOL success, NSError *error ) {
+                                        
+                                        if (!success) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                        }
+                                    }];
                                 }
-                                
-                                // Delete the temporary file.
-                                [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-                                
-                            }];
-                        }
+                                else {
+                                    
+                                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                                    
+                                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                                    
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                        
+                                        NSError *error = nil;
+                                        
+                                        [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                        
+                                        if ( error ) {
+                                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                        }
+                                        else {
+                                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                        }
+                                        
+                                    } completionHandler:^( BOOL success, NSError *error ) {
+                                        
+                                        if (!success ) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            
+                                        }
+                                        
+                                        // Delete the temporary file.
+                                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                                        
+                                    }];
+                                }
+                            }
+                        }];
                     }
-                }];
+                    else {
+                        NSLog( @"Could not capture still image: %@", error );
+                    }
+                });
             }
             else {
                 NSLog( @"Could not capture still image: %@", error );
@@ -979,13 +994,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         //Clear the timer so it doesn't re-run
         [self.videoTimer invalidate];
         self.videoTimer = nil;
-        
         self.captureModeToggleView.alpha = 1.0;
         
-//        [self stopRecordingAnimation];
-        
-    } else {
-        
+    }
+    else {
         self.captureModeToggleView.alpha = 0.0;
         self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
         
@@ -999,7 +1011,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             
             if (!movieConnection){
                 [self.sessionManager.session beginConfiguration];
-
+                
                 if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
                     //Set the session preset to photo, the default mode we enter in as
                     [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
@@ -1143,10 +1155,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     if (self.locationManager.managerState == LocationManagerStateForeground)
         [self.locationManager stopUpdatingLocation];
-
+    
     NSLog(@"did update locations in camera");
     
-    if (self.locationManager.location && self.defaultAssignment == nil) {
+    if (self.locationManager.location) {
         
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
@@ -1159,9 +1171,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                 //Check if in range
                 if(distanceInMiles < [assignment.radius floatValue]){
                     
-                    self.defaultAssignment = assignment;
+                    [self updateLocationLabelWithAssignment:assignment];
                     
-//                    [self toggleAssignmentLabel:YES];
+                    //                    [self toggleAssignmentLabel:YES];
                     
                 }
                 
@@ -1174,9 +1186,19 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
+-(void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment{
+    
+    self.assignmentLabel.text = [assignment.title uppercaseString];
+    
+    self.locationIV.alpha = 1.0;
+    self.assignmentLabel.alpha = 1.0;
+    
+}
+
 
 - (void)runVideoRecordAnimation{
     
+
 //    if (self.isRecording){
 //        [self stopRecordingAnimation];
 ////        self.isRecording = NO;
@@ -1201,11 +1223,24 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                              } completion:nil];
                          }];
 
+//=======
+//    if (self.isRecording){
+//        [self stopRecordingAnimation];
+//        return;
+//    } else {
+//        self.isRecording = YES;
+//        
+//        NSLog(@"self.isRecording = %d", self.isRecording);
+//        /* Aperture image should animate */
+//        self.apertureImageView.alpha = 0;
+//        
+//>>>>>>> e84489c680e81781ea42ec018ce79e63dc176acf
         // Set up the shape of the circle
         int radius = 30;
         self.circleLayer = [CAShapeLayer layer];
         // Make a circular shape
         
+
         self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                                            cornerRadius:radius].CGPath;
         
@@ -1234,10 +1269,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         // Add the animation to the circle
         [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+
         self.captureModeToggleView.alpha = 1.0;
         [self stopRecordingAnimation];
     
 //    }
+
     
 }
 
@@ -1254,7 +1291,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                              
                              self.apertureImageView.alpha = 1;
                              self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
- 
+                             
                          }
                          completion:^(BOOL finished) {
                              [self.circleLayer removeFromSuperlayer];
@@ -1294,14 +1331,14 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+/*er
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
