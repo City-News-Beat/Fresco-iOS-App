@@ -675,23 +675,47 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)rotateApp:(NSNotification *)notif{
-    NSLog(@"orientation from %lu to %lu", self.currentOrientation, [UIDevice currentDevice].orientation);
+
+UIDeviceOrientation o = [UIDevice currentDevice].orientation;
+
+CGFloat angle = 0;
     
-    switch ([UIDevice currentDevice].orientation) {
-        case UIDeviceOrientationPortrait:
-            //            NSLog(@"from %lu to lu", self.currentOrientation, [UIDevice currentDevice].orientation)
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            
-            break;
-        case UIDeviceOrientationLandscapeLeft:
-            
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            break;
-        default:
-            break;
+    if ( o == UIDeviceOrientationLandscapeLeft ){
+        
+    self.closeButton.transform = CGAffineTransformMakeTranslation((self.view.center.x + self.view.center.x) - ICON_WIDTH, 0);
+        
+    angle = M_PI_2;
+    
+    } else if ( o == UIDeviceOrientationLandscapeRight ){
+        
+    angle = -M_PI_2;
+        
+    } else if ( o == UIDeviceOrientationPortraitUpsideDown ){
+        
+    angle = M_PI;
+
+    }else if ( o == UIDeviceOrientationPortrait ){
+        
+        NSLog(@"portrait");
+        
+        self.closeButton.transform = CGAffineTransformMakeTranslation(0, 0);
+        
     }
+    
+    
+
+    
+[UIView beginAnimations:@"scale" context:nil];
+[UIView setAnimationDuration:0.2];
+    
+    
+    self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+    self.videoIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+    self.flashButton.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+    self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+    self.previewBackgroundIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+
+
 }
 
 
