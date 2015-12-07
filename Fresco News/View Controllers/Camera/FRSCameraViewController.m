@@ -100,8 +100,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic) FRSCaptureMode captureMode;
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
-@property (strong, nonatomic) FRSAssignment *defaultAssignment;
-
 @property (nonatomic) BOOL capturingImage;
 
 @property (nonatomic) BOOL flashIsOn;
@@ -164,13 +162,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             }];
     }];
     
-    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
-    self.locationManager.delegate = self;
-    
-    // Do any additional setup after loading the view.
-
-    
-    self.cameraDisabled = NO;
+    // Do any additional setup after loading the view
     
     self.isRecording = NO;
     
@@ -189,6 +181,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     else {
         
     }
+    
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
+    self.locationManager.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -239,6 +234,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.locationIV.contentMode = UIViewContentModeScaleAspectFit;
     self.locationIV.image = [UIImage imageNamed:@"crosshairs-icon"];
     [self.locationIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    self.locationIV.alpha = 0.0;
     [self.topContainer addSubview:self.locationIV];
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
@@ -246,6 +242,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
+    self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
     
 }
@@ -307,6 +304,49 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.previewBackgroundIV.alpha = 1.0;
         [self.previewButton setImage:image forState:UIControlStateNormal];
+        
+//        self.previewButton.alpha = 0;
+//        self.whiteView.alpha = 0;
+//        self.nextButton.alpha = 0;
+        UIImageView *tempIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        tempIV.image = image;
+        tempIV.layer.cornerRadius = tempIV.frame.size.width/2;
+        tempIV.clipsToBounds = YES;
+        tempIV.center = self.previewButton.center;
+        tempIV.alpha = 0.0;
+        [self.previewBackgroundIV addSubview:tempIV];
+        
+        self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        self.whiteView.backgroundColor = [UIColor whiteColor];
+        self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
+        self.whiteView.clipsToBounds = YES;
+        [self.previewBackgroundIV addSubview:self.whiteView];
+        
+        if (self.firstTime){
+            self.whiteView.alpha = 0.0;
+        }
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            tempIV.frame = self.previewButton.frame;
+            tempIV.layer.cornerRadius = self.previewButton.frame.size.width/2;
+            tempIV.alpha = 1.0;
+            
+            if (self.firstTime){
+                
+            }
+            
+        } completion:^(BOOL finished) {
+            [self.previewButton setImage:image forState:UIControlStateNormal];
+            [tempIV removeFromSuperview];
+        }];
+        
+        
+        self.whiteView.alpha = 0.0;
+        if (!self.firstTime) {
+            self.whiteView.alpha = 0.7;
+            [self.nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
+        }
+        self.firstTime = NO;
     });
 }
 
@@ -347,14 +387,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [self.previewBackgroundIV addSubview:self.previewButton];
     
-    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
-    self.whiteView.backgroundColor = [UIColor whiteColor];
 
-    self.whiteView.alpha = 0.0;
-    
-    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
-    self.whiteView.clipsToBounds = YES;
-    [self.previewBackgroundIV addSubview:self.whiteView];
+//    self.whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
+//    self.whiteView.backgroundColor = [UIColor whiteColor];
+//    self.whiteView.alpha = 0.0;
+//    self.whiteView.layer.cornerRadius = self.whiteView.frame.size.width/2;
+//    self.whiteView.clipsToBounds = YES;
+//    [self.previewBackgroundIV addSubview:self.whiteView];
     
     
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.previewBackgroundIV.frame.size.width, self.previewBackgroundIV.frame.size.height)];
@@ -437,20 +476,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.apertureButton addSubview:self.apertureImageView];
 
     [self.apertureMask addSubview:self.apertureButton];
-//        
-//=======
-//    
-//    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
-//    self.apertureButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-//
-//    
-//    [self.apertureButton setImage:[UIImage imageNamed:@"camera-iris"] forState:UIControlStateNormal];
-//    [self.apertureButton setImage:[[UIImage imageNamed:@"camera-iris"] tintedImageWithColor:[UIColor colorWithWhite:1.0 alpha:0.7] blendingMode:kCGBlendModeOverlay] forState:UIControlStateHighlighted];
-//    
-//
-//    [self.apertureBackground addSubview:self.apertureButton];
-//    
-//>>>>>>> 97a0ccb8a862368e56875c9feb62ba4a16252c1e
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -1125,7 +1150,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
     NSLog(@"did update locations in camera");
     
-    if (self.locationManager.location && self.defaultAssignment == nil) {
+    if (self.locationManager.location) {
         
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
@@ -1138,7 +1163,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                 //Check if in range
                 if(distanceInMiles < [assignment.radius floatValue]){
                     
-                    self.defaultAssignment = assignment;
+                    [self updateLocationLabelWithAssignment:assignment];
                     
 //                    [self toggleAssignmentLabel:YES];
                     
@@ -1153,6 +1178,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
 }
 
+-(void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment{
+    
+    self.assignmentLabel.text = [assignment.title uppercaseString];
+    
+    self.locationIV.alpha = 1.0;
+    self.assignmentLabel.alpha = 1.0;
+    
+}
+
 
 - (void)runVideoRecordAnimation{
     
@@ -1163,7 +1197,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.isRecording = YES;
 
     NSLog(@"self.isRecording = %d", self.isRecording);
-    
     /* Aperture image should animate */
     self.apertureImageView.alpha = 0;
     
@@ -1171,6 +1204,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     int radius = 30;
     self.circleLayer = [CAShapeLayer layer];
     // Make a circular shape
+
     
     self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                                        cornerRadius:radius].CGPath;
