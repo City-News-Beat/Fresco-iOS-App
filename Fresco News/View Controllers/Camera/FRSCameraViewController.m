@@ -112,7 +112,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.locationManager = [FRSLocationManager sharedManager];
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         
-        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
         
@@ -1014,7 +1014,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     if (self.locationManager.managerState == LocationManagerStateForeground)
         [self.locationManager stopUpdatingLocation];
 
-    NSLog(@"did update locations in camera");
+    NSLog(@"did update locations in camera, %@", self.locationManager.location);
     
     if (self.locationManager.location && self.defaultAssignment == nil) {
         
@@ -1032,16 +1032,11 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                     self.defaultAssignment = assignment;
                     
 //                    [self toggleAssignmentLabel:YES];
-                    
                 }
                 
             }
-            
         }];
     }
-    
-    [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
-    
 }
 
 
@@ -1053,11 +1048,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     //    [self.frsRootViewController setRootViewControllerToTabBar];
     
-    [self dismissViewControllerAnimated:NO completion:^{
-        
-        //
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
