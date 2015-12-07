@@ -148,9 +148,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     [super viewDidLoad];
 
-
     [self configureUI];
-
     
     [self.sessionManager startCaptureSession];
     
@@ -169,8 +167,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     // Do any additional setup after loading the view.
 
-    
-    self.cameraDisabled = NO;
     
     self.isRecording = NO;
     
@@ -197,13 +193,13 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    
     [super viewWillDisappear:animated];
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
 
     [self.sessionManager clearCaptureSession];
     
-
 }
 
 -(void)fadeInPreview{
@@ -232,7 +228,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
     [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
     [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-    [self.closeButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.topContainer addSubview:self.closeButton];
     
     self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
@@ -243,7 +238,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
-    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+//    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+    self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     [self.topContainer addSubview:self.assignmentLabel];
@@ -505,7 +501,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
-
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
 
@@ -690,15 +685,15 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)animateShutter{
     
-    [UIView animateWithDuration:0.375 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/2);
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
     } completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
     }
                      completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                         [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut animations:^{
                              self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                          } completion:nil];
                      }];
@@ -710,23 +705,30 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
+    
     if (self.captureMode == FRSCaptureModePhoto){
 //        [self captureStillImage];
         [self animateShutter];
         
-    }
-    else {
+    } else {
 
-        if (!self.isRecording){
-            
-        self.isRecording = NO;
-        [self runVideoRecordAnimation];
-            
-        } else {
-            [self stopRecordingAnimation];
-        }
+        [self toggleVideoRecording];
+//        if (!self.isRecording){
+//            
+//        self.isRecording = NO;
+//            
+//        [self runVideoRecordAnimation];
+//            
+//        } else {
+//            
+//            [self stopRecordingAnimation];
+//        }
     }
+    
+    NSLog(@"self.isRecording = %d", self.isRecording);
+
 }
+
 //=======
 //#pragma mark - Button action handlers
 //
@@ -745,17 +747,28 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     /* Disables torch when returning from video toggle and torch is enabled */
     [self torch:NO];
     
+    /* Disable mask for transition animation */
+    self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
+
+    
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
 //        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
-        self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
+        
+        /* Delay is used to change color of mask after animation completes */
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.apertureMask.layer.borderColor = [UIColor redCircleStrokeColor].CGColor;
+        });
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
 //        self.cameraDisabled = NO;
+        
+        
+
         /* Delay is used to change color of mask after animation completes */
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
         });
 
@@ -958,7 +971,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)toggleVideoRecording{
+    
     if (self.sessionManager.movieFileOutput.isRecording) {
+        
+        [self stopRecordingAnimation];
         
         //Clear the timer so it doesn't re-run
         [self.videoTimer invalidate];
@@ -966,8 +982,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         
         self.captureModeToggleView.alpha = 1.0;
         
-    }
-    else {
+//        [self stopRecordingAnimation];
+        
+    } else {
         
         self.captureModeToggleView.alpha = 0.0;
         self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
@@ -1020,6 +1037,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                 NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
                 [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
                 [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self runVideoRecordAnimation];
+                });
                 
             }
             
@@ -1156,63 +1177,73 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 - (void)runVideoRecordAnimation{
     
-    if (self.isRecording){
-        [self stopRecordingAnimation];
-        return;
-    } else {
-        self.isRecording = YES;
-
-    NSLog(@"self.isRecording = %d", self.isRecording);
-    
-    /* Aperture image should animate */
-    self.apertureImageView.alpha = 0;
-    
-    // Set up the shape of the circle
-    int radius = 30;
-    self.circleLayer = [CAShapeLayer layer];
-    // Make a circular shape
-    
-    self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
-                                                       cornerRadius:radius].CGPath;
-    
-    self.circleLayer.position = CGPointMake (CGRectGetMidX(self.apertureBackground.frame)-30, 6);
-    
-    // Configure the apperence of the circle
-    self.circleLayer.fillColor = [UIColor clearColor].CGColor;
-    self.circleLayer.strokeColor = [UIColor whiteColor].CGColor;
-    self.circleLayer.lineWidth = 4;
-    
-    // Add to parent layer
-    [self.apertureBackground.layer addSublayer:self.circleLayer];
-    
-    // Configure animation
-    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration = 2; // for testing purposes
-//    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
-    drawAnimation.repeatCount         = 1.0;  // Animate only once..
-    
-    // Animate from no part of the stroke being drawn to the entire stroke being drawn
-    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
-    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
-    
-    // Experiment with timing to get the appearence to look the way you want
-    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    
-    // Add the animation to the circle
-    [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    
-    [self stopRecordingAnimation];
+//    if (self.isRecording){
+//        [self stopRecordingAnimation];
+////        self.isRecording = NO;
+//        
+//        return;
+//        
+//    } else {
+//        self.isRecording = YES;
         
-    }
+        NSLog(@"self.isRecording = %d", self.isRecording);
+        
+        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
+        }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.25 delay:2.05 options: UIViewAnimationOptionCurveEaseOut animations:^{
+                                 self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+                             } completion:nil];
+                         }];
 
+        // Set up the shape of the circle
+        int radius = 30;
+        self.circleLayer = [CAShapeLayer layer];
+        // Make a circular shape
+        
+        self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                                           cornerRadius:radius].CGPath;
+        
+        self.circleLayer.position = CGPointMake (CGRectGetMidX(self.apertureBackground.frame)-30, 6);
+        
+        // Configure the apperence of the circle
+        self.circleLayer.fillColor = [UIColor clearColor].CGColor;
+        self.circleLayer.strokeColor = [UIColor whiteColor].CGColor;
+        self.circleLayer.lineWidth = 4;
+        
+        // Add to parent layer
+        [self.apertureBackground.layer addSublayer:self.circleLayer];
+        
+        // Configure animation
+        CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        drawAnimation.duration = 2; // for testing purposes
+        //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
+        drawAnimation.repeatCount         = 1.0;  // Animate only once..
+        
+        // Animate from no part of the stroke being drawn to the entire stroke being drawn
+        drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+        drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+        
+        // Experiment with timing to get the appearence to look the way you want
+        drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        
+        // Add the animation to the circle
+        [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+        self.captureModeToggleView.alpha = 1.0;
+        [self stopRecordingAnimation];
+    
+//    }
+    
 }
 
 -(void)stopRecordingAnimation {
     
-    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        self.apertureImageView.transform = CGAffineTransformMakeScale(.00001, .00001);
         
         [UIView animateWithDuration:0.15
                               delay:0.0
@@ -1220,8 +1251,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                          animations:^{
                              
                              self.circleLayer.opacity = 0;
-                             self.apertureImageView.alpha = 1;
                              
+                             self.apertureImageView.alpha = 1;
                              self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
  
                          }
