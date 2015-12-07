@@ -282,36 +282,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
                 [self.previewButton setImage:result forState:UIControlStateNormal];
                 self.firstTime = NO;
             }
-            //            else {
-            //                if (self.nextButton.alpha == 0.7){ //The next button has been animated in once
-            //
-            //                }
-            //                else { //First the next button has been animated
-            //                    UIImageView *temp = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
-            //                    temp.center = self.previewButton.center;
-            //                    temp.image = result;
-            //                    temp.layer.cornerRadius = 10/2;
-            //                    temp.clipsToBounds = YES;
-            //                    [self.previewBackgroundIV addSubview:temp];
-            //
-            //                    [self createNextButtonWithFrame:temp.frame];
-            //                    [self.previewBackgroundIV addSubview:self.nextButton];
-            //
-            //
-            //                    [UIView animateWithDuration:0.3 animations:^{
-            //                        temp.frame = self.previewButton.frame;
-            //                        temp.layer.cornerRadius = self.previewButton.frame.size.width/2;
-            //
-            //                        self.nextButton.frame = self.previewButton.frame;
-            //                        self.nextButton.layer.cornerRadius = self.previewButton.frame.size.width/2;
-            //                        self.nextButton.alpha = 0.7;
-            //
-            //                    } completion:^(BOOL finished) {
-            //                        [self.previewButton setImage:result forState:UIControlStateNormal];
-            //                        [temp removeFromSuperview];
-            //                    }];
-            //                }
-            //            }
         }
     }];
 }
@@ -328,6 +298,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 }
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
+    
+    [self.assetsManager fetchGalleryAssetsInBackgroundWithCompletion:nil];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.previewBackgroundIV.alpha = 1.0;
         
@@ -396,6 +369,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    [self.previewButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.previewButton clipAsCircle];
     [self.previewBackgroundIV addSubview:self.previewButton];
     
@@ -679,9 +653,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height)/2;
     NSInteger offset = topToAperture - 10;
     
+    CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+    
     if (self.captureMode == FRSCaptureModePhoto){
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
+            self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
@@ -689,8 +666,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     }
     else {
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            self.captureVideoPreviewLayer.frame = self.preview.bounds;
+            self.preview.frame = bigPreviewFrame;
+            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:nil];
