@@ -308,14 +308,31 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.assetsManager fetchGalleryAssetsInBackgroundWithCompletion:nil];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.previewBackgroundIV.alpha = 1.0;
-        
         UIImageView *temp = [[UIImageView alloc] initWithFrame:self.previewButton.frame];
         temp.image = image;
         [temp clipAsCircle];
         temp.transform = CGAffineTransformMakeScale(0.01, 0.01);
         
-        if (self.nextButton){ //The next button has been animated in once
+        if (self.previewBackgroundIV.alpha <= 0){
+            [self.previewBackgroundIV addSubview:temp];
+            
+            [self createNextButtonWithFrame:self.previewButton.frame];
+            self.nextButton.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            [self.previewBackgroundIV addSubview:self.nextButton];
+            
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                self.previewBackgroundIV.alpha = 1.0;
+                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                self.nextButton.alpha = 0.7;
+            } completion:^(BOOL finished) {
+                [self.previewButton setImage:image forState:UIControlStateNormal];
+                [temp removeFromSuperview];
+            }];
+        }
+        
+        else if (self.nextButton){ //The next button has been animated in once
+            self.previewBackgroundIV.alpha = 1.0;
             [self.previewBackgroundIV insertSubview:temp belowSubview:self.nextButton];
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
@@ -325,6 +342,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
             }];
         }
         else { //First time the next button has been animated
+            self.previewBackgroundIV.alpha = 1.0;
             [self.previewBackgroundIV addSubview:temp];
             
             [self createNextButtonWithFrame:self.previewButton.frame];
