@@ -36,6 +36,10 @@
 
 @property (strong, nonatomic) NSTimer *timer;
 
+@property (strong, nonatomic) UIMutableApplicationShortcutItem *assignmentAction;
+
+@property NSNumber *assignments;
+
 @end
 
 @implementation AppDelegate
@@ -78,6 +82,8 @@
         [self.frsRootViewController setRootViewControllerToOnboard];
         self.frsRootViewController.onboardVisited = YES;
     }
+    
+    [self createItemsWithIcons];
     
     return YES;
 }
@@ -331,4 +337,59 @@
     return YES;
 }
 
+
+- (void)createItemsWithIcons {
+    
+    // create icon with custom images
+    UIApplicationShortcutIcon *camera = [UIApplicationShortcutIcon iconWithTemplateImageName:@"camera"];
+    UIApplicationShortcutIcon *video = [UIApplicationShortcutIcon iconWithTemplateImageName:@"video"];
+    UIApplicationShortcutIcon *map = [UIApplicationShortcutIcon iconWithTemplateImageName:@"map"];
+
+    
+    
+    // create dynamic shortcut items
+    UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"camera" localizedTitle:@"Camera" localizedSubtitle:@"" icon:camera userInfo:nil];
+
+    
+    
+    
+    // add all items to an array
+    NSArray *items = @[item1];
+    
+    // add the array to our app
+    [UIApplication sharedApplication].shortcutItems = items;
+    
+}
+
+
+
+/* Called from FRSLocationManager */
+- (void)updateAssignmentCount:(NSNotification *)notification {
+    
+    self.assignments = (NSNumber *)notification.object;
+    
+}
+
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
+    
+    /* Dismiss any view controller presented modally */
+    [self.frsRootViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    /* Link shortcut items to designated view controllers */
+    if ([shortcutItem.localizedTitle isEqual: @"Take photo"]) {
+        
+        [self.frsRootViewController setRootViewControllerToCamera];
+        
+    } else if ([shortcutItem.localizedTitle isEqual: @"Assignments"]) {
+        
+        [self.frsRootViewController setRootViewControllerToAssignments];
+        
+    } else if ([shortcutItem.localizedTitle isEqual: @"Take video"]) {
+        
+        [self.frsRootViewController setRootViewControllerToCamera];
+        
+    }
+    
+}
 @end
