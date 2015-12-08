@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureTopContainer{
     
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 24)];
-    self.topContainer.backgroundColor = [UIColor redColor];
+    self.topContainer.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.topContainer];
     
     self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
@@ -237,7 +237,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.topContainer addSubview:self.locationIV];
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
-    self.assignmentLabel.textColor = [UIColor whiteColor];
+    self.assignmentLabel.textColor = [UIColor clearColor];
 //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
@@ -680,66 +680,129 @@ UIDeviceOrientation o = [UIDevice currentDevice].orientation;
 
 CGFloat angle = 0;
     
-    [UIView beginAnimations:@"omar" context:nil];
-    [UIView setAnimationDuration:0.2];
-    
-    
+    NSInteger labelWidth;
+    NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
     
     if ( o == UIDeviceOrientationLandscapeLeft ){
-        
         angle = M_PI_2;
-
-    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
         
+        labelWidth = self.captureVideoPreviewLayer.frame.size.height;
+        
+        [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.topContainer.alpha = 0;
+            
+        } completion:nil];
+        
+            
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
+                
+            } completion:^(BOOL finished) {
+                
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    self.topContainer.alpha = 1;
+                    
+                } completion:nil];
+                
+            }];
+        
+
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
         angle = -M_PI_2;
 
-        self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x + (ICON_WIDTH), (self.view.center.x + (ICON_WIDTH))),angle);
-
+        labelWidth = self.captureVideoPreviewLayer.frame.size.height;
         
-    NSLog(@"landscape right");
-        
-//    self.closeButton.transform = CGAffineTransformMakeTranslation(0, (self.view.center.x + self.view.center.x) + (ICON_WIDTH)*3);
+        [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.topContainer.alpha = 0;
+            
+        } completion:nil];
 
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH ))),angle);
+                
+                
+                
+            } completion:^(BOOL finished) {
+                
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    self.topContainer.alpha = 1;
+                    
+                } completion:nil];
+            }];
+        
+
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))),angle);
+                
+                
+            } completion:^(BOOL finished) {
+                
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    self.topContainer.alpha = 1;
+                    
+                } completion:nil];
+            }];
         
         
     } else if ( o == UIDeviceOrientationPortraitUpsideDown ){
-        angle = M_PI;
-//        self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
 
-//        self.closeButton.transform = CGAffineTransformMakeTranslation((self.view.center.x + self.view.center.x) - (ICON_WIDTH)*2, (self.view.center.x + self.view.center.x) + (ICON_WIDTH)*3);
+        /* no longer supported */
+        labelWidth = self.captureVideoPreviewLayer.frame.size.width;
+        
+        return;
+        
+    } else if ( o == UIDeviceOrientationPortrait ){
+        
+        labelWidth = self.captureVideoPreviewLayer.frame.size.width;
 
+        [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.topContainer.alpha = 0;
+            
+        } completion:nil];
         
-
-    }else if ( o == UIDeviceOrientationPortrait ){
-//        self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
-
         
-        NSLog(@"portrait");
+        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(0, 0), angle);
+            
+        } completion:^(BOOL finished) {
+            
+            [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                self.topContainer.alpha = 1;
+                
+            } completion:nil];
+        }];
         
-//        self.closeButton.transform = CGAffineTransformMakeTranslation(0, 0);
-        
+    } else {
+        return;
     }
-    
-    
-
-//    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(160.0f-self.topContainer.center.x, 240.0f-self.topContainer.center.y),angle);
 
     
-//    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x / ICON_WIDTH, self.view.center.y / ICON_WIDTH), angle);
     
-    
-    
+    [UIView beginAnimations:@"omar" context:nil];
+    [UIView setAnimationDuration:0.2];
+
     self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.videoIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.flashButton.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.previewBackgroundIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-
+    [UIView commitAnimations];
     
+    self.assignmentLabel.frame = CGRectMake(self.assignmentLabel.frame.origin.x, self.assignmentLabel.frame.origin.y, labelWidth - offset, self.assignmentLabel.frame.size.height);
+ 
 }
-
 
 -(void)animateShutterWithCompletion:(void(^)())completion{
     
