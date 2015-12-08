@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.topContainer addSubview:self.locationIV];
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
-    self.assignmentLabel.textColor = [UIColor clearColor];
+    self.assignmentLabel.textColor = [UIColor whiteColor];
 //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
