@@ -183,7 +183,6 @@
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
                 
             }
-            
         });
 
     else{

@@ -135,7 +135,6 @@
         [self performNecessaryFetch:NO withResponseBlock:^(BOOL success, NSError *error) {
             [self.galleriesViewController.tableView reloadData];
         }];
-        
     }
 }
 

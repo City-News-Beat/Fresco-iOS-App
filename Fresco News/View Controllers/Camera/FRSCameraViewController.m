@@ -127,8 +127,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
         self.sessionManager = [FRSAVSessionManager defaultManager];
         self.locationManager = [FRSLocationManager sharedManager];
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-        
-        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
         self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
         
@@ -141,8 +140,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 - (void)viewDidLoad {
     
-    //hide status bar before view is loaded.
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     [super viewDidLoad];
 
@@ -167,6 +164,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    //hide status bar before view is loaded.
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     self.isPresented = YES;
     
@@ -205,8 +205,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSLog(@"FADE IN PREVIEW CALLED");
-        self.preview.alpha = 1.0;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.preview.alpha = 1.0;
+        }];
+        
     });
 }
 

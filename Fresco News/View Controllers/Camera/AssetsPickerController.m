@@ -177,6 +177,9 @@ static CGSize AssetGridThumbnailSize;
 
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
     if([self.navigationController.presentingViewController isKindOfClass:[FRSCameraViewController class]])
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(returnToCamera)];
     
