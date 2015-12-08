@@ -744,18 +744,18 @@ CGFloat angle = 0;
 -(void)animateShutterWithCompletion:(void(^)())completion{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
         } completion:nil];
         
-        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
             self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
         }
                          completion:^(BOOL finished){
-                             [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut animations:^{
+                             [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                              } completion:^(BOOL finished){
-                                 completion();
+//                                 completion();
                              }];
                          }];
     });
@@ -890,21 +890,25 @@ CGFloat angle = 0;
         
         if(self.capturingImage)
             return;
-        else
+        else {
             self.capturingImage = YES;
+            self.previewButton.userInteractionEnabled = NO;
+            self.nextButton.userInteractionEnabled = NO;
+        }
         
-        [self animateShutterWithCompletion:^{
             AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
             
             // Update the orientation on the still image output video connection before capturing.
             connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
             
             // Capture a still image.
+        
+            [self animateShutterWithCompletion:nil];
             [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-                self.capturingImage = NO;
-                
                 
                 if (imageDataSampleBuffer){
+                    
+                    
                     NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                     
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
@@ -946,6 +950,12 @@ CGFloat angle = 0;
                             
                             if(!success){
                                 NSLog(@"***Could not create data from image destination ***");
+                                
+                                
+                                self.capturingImage = NO;
+                                self.previewButton.userInteractionEnabled = YES;
+                                self.nextButton.userInteractionEnabled = YES;
+                                
                                 return;
                             }
                             
@@ -966,9 +976,15 @@ CGFloat angle = 0;
                                             
                                             if (!success) {
                                                 NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                                self.capturingImage = NO;
+                                                self.previewButton.userInteractionEnabled = YES;
+                                                self.nextButton.userInteractionEnabled = YES;
                                             }
                                             else {
                                                 [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                                self.capturingImage = NO;
+                                                self.previewButton.userInteractionEnabled = YES;
+                                                self.nextButton.userInteractionEnabled = YES;
                                             }
                                         }];
                                     }
@@ -1002,6 +1018,10 @@ CGFloat angle = 0;
                                                 
                                             }
                                             
+                                            self.capturingImage = NO;
+                                            self.previewButton.userInteractionEnabled = YES;
+                                            self.nextButton.userInteractionEnabled = YES;
+                                            
                                             // Delete the temporary file.
                                             [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
                                             
@@ -1018,7 +1038,6 @@ CGFloat angle = 0;
                 else {
                     NSLog( @"Could not capture still image: %@", error );
                 }
-            }];
         }];
     });
 }
