@@ -352,6 +352,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.bottomClearContainer.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.bottomClearContainer];
     
+    self.bottomOpaqueContainer.layer.shadowOffset = CGSizeMake(0, -1);
+    self.bottomOpaqueContainer.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.12].CGColor;
+    self.bottomOpaqueContainer.layer.shadowOpacity = 1.0;
+    
     [self configureNextSection];
     [self configureApertureButton];
     [self configureFlashButton];
