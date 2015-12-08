@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)configureTopContainer{
     
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 24)];
-    self.topContainer.backgroundColor = [UIColor clearColor];
+    self.topContainer.backgroundColor = [UIColor redColor];
     [self.view addSubview:self.topContainer];
     
     self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
@@ -680,33 +680,55 @@ UIDeviceOrientation o = [UIDevice currentDevice].orientation;
 
 CGFloat angle = 0;
     
+    [UIView beginAnimations:@"omar" context:nil];
+    [UIView setAnimationDuration:0.2];
+    
+    
+    
     if ( o == UIDeviceOrientationLandscapeLeft ){
         
-    self.closeButton.transform = CGAffineTransformMakeTranslation((self.view.center.x + self.view.center.x) - ICON_WIDTH, 0);
+        angle = M_PI_2;
+
+    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
         
-    angle = M_PI_2;
-    
+        
     } else if ( o == UIDeviceOrientationLandscapeRight ){
+        angle = -M_PI_2;
+
+        self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x + (ICON_WIDTH), (self.view.center.x + (ICON_WIDTH))),angle);
+
         
-    angle = -M_PI_2;
+    NSLog(@"landscape right");
+        
+//    self.closeButton.transform = CGAffineTransformMakeTranslation(0, (self.view.center.x + self.view.center.x) + (ICON_WIDTH)*3);
+
+        
         
     } else if ( o == UIDeviceOrientationPortraitUpsideDown ){
+        angle = M_PI;
+//        self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
+
+//        self.closeButton.transform = CGAffineTransformMakeTranslation((self.view.center.x + self.view.center.x) - (ICON_WIDTH)*2, (self.view.center.x + self.view.center.x) + (ICON_WIDTH)*3);
+
         
-    angle = M_PI;
 
     }else if ( o == UIDeviceOrientationPortrait ){
+//        self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+
         
         NSLog(@"portrait");
         
-        self.closeButton.transform = CGAffineTransformMakeTranslation(0, 0);
+//        self.closeButton.transform = CGAffineTransformMakeTranslation(0, 0);
         
     }
     
     
 
+//    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(160.0f-self.topContainer.center.x, 240.0f-self.topContainer.center.y),angle);
+
     
-[UIView beginAnimations:@"scale" context:nil];
-[UIView setAnimationDuration:0.2];
+//    self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x / ICON_WIDTH, self.view.center.y / ICON_WIDTH), angle);
+    
     
     
     self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
@@ -715,7 +737,7 @@ CGFloat angle = 0;
     self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.previewBackgroundIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
 
-
+    
 }
 
 

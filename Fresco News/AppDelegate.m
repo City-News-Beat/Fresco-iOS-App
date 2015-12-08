@@ -27,6 +27,8 @@
 #import "UIColor+Additions.h"
 #import "Stripe.h"
 
+#import "FRSCameraViewController.h"
+
 
 
 @interface AppDelegate ()
