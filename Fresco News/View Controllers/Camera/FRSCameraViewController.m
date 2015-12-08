@@ -467,7 +467,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.apertureMask addSubview:self.apertureButton];
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.apertureButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
 }
 
 
@@ -1214,7 +1213,6 @@ CGFloat angle = 0;
 
 -(void)dealloc{
     [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-    [self.apertureButton removeObserver:self forKeyPath:@"highlighted"];
     [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
 }
 
