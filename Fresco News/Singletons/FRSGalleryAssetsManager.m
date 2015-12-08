@@ -57,7 +57,7 @@
     //Set maximumum 1 day of age
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
-    components.day -= 1; //one week
+    components.day -= 1;
     NSDate *lastWeek  = [calendar dateFromComponents:components];
     options.predicate = [NSPredicate predicateWithFormat:@"(creationDate >= %@)", lastWeek];
 #endif

@@ -71,8 +71,6 @@
     self.managerState = state;
     self.stopLocationUpdates = NO;
     
-    
-    
     //Checks to see if there is a logged in user 
     
     
