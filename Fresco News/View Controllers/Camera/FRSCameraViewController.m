@@ -962,7 +962,7 @@ CGFloat angle = 0;
             AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
             
             // Update the orientation on the still image output video connection before capturing.
-            connection.videoOrientation = self.captureVideoPreviewLayer.connection.videoOrientation;
+            connection.videoOrientation = [self orientationFromDeviceOrientaton];
             
             // Capture a still image.
         
@@ -1158,8 +1158,7 @@ CGFloat angle = 0;
                 
                 // Update the orientation on the movie file output video connection before starting recording.
                 AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-                AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.captureVideoPreviewLayer;
-                connection.videoOrientation = previewLayer.connection.videoOrientation;
+                connection.videoOrientation = [self orientationFromDeviceOrientaton];
                 
                 // Start recording to a temporary file.
                 NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
@@ -1412,6 +1411,21 @@ CGFloat angle = 0;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(AVCaptureVideoOrientation)orientationFromDeviceOrientaton{
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            return AVCaptureVideoOrientationLandscapeRight;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            return AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        case UIDeviceOrientationPortrait:
+            return AVCaptureVideoOrientationPortrait;
+        default:
+            return AVCaptureVideoOrientationPortraitUpsideDown;
+    }
 }
 
 /*er
