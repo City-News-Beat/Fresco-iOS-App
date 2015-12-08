@@ -492,7 +492,7 @@
         if(!error){
             
             if(user.userID != nil){
-                
+                                
                 [dM tieUserToInstallation];
                 
                 dM.currentUser = user;
