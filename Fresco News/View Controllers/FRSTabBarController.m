@@ -12,7 +12,7 @@
 
 #import "FRSTabBarController.h"
 #import "UIViewController+Additions.h"
-#import "FRSCamViewController.h"
+
 #import "HighlightsViewController.h"
 #import "AssignmentsViewController.h"
 #import "ProfileViewController.h"
@@ -102,7 +102,6 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-//    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
     
     FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
     
@@ -112,10 +111,11 @@
 
 - (void)returnToGalleryPost
 {
-    FRSCamViewController *vc = (FRSCamViewController *)[[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"cameraVC"];
+    
+    FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
     
     [self presentViewController:vc animated:NO completion:^{
-        [vc doneButtonTapped:nil];
+        [vc handlePreviewButtonTapped];
     }];
 }
 
@@ -174,9 +174,14 @@
         
         if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
             
-            NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
             
-            [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            UITableView *tv = ((HighlightsViewController *)vc).galleriesViewController.tableView;
+            
+            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 1000) {
+            
+                NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
+                [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            }
             
         }
         else{

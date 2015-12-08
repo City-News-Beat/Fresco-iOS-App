@@ -44,6 +44,7 @@ static CGFloat kCellHeight = 44.0f;
 @property (weak, nonatomic) IBOutlet UITableView *galleryTable;
 @property (weak, nonatomic) IBOutlet UIView *galleryHeader;
 
+
 @end
 
 @implementation GalleryViewController

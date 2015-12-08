@@ -13,7 +13,7 @@
 #import "FRSTabBarController.h"
 #import "FRSFirstRunWrapperViewController.h"
 #import "NotificationsViewController.h"
-#import "FRSCamViewController.h"
+
 #import "OnboardPageViewController.h"
 #import "BaseNavigationController.h"
 #import "TOSViewController.h"

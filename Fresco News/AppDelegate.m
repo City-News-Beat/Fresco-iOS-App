@@ -22,7 +22,6 @@
 #import "FRSLocationManager.h"
 #import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
-#import "FRSCamViewController.h"
 #import "AppDelegate+Additions.h"
 #import "UIColor+Additions.h"
 #import "Stripe.h"
@@ -99,16 +98,7 @@
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {
-    if ([self.window.rootViewController.presentedViewController isKindOfClass: [FRSCamViewController class]])
-    {
-        FRSCamViewController *cam = (FRSCamViewController *) self.window.rootViewController.presentedViewController;
-        
-        if (cam.isPresented)
-            return UIInterfaceOrientationMaskAll;
-        else
-            return UIInterfaceOrientationMaskPortrait;
-    }
-    else return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 

@@ -10,7 +10,7 @@
 #import "AssetGridViewCell.h"
 #import "FRSGallery.h"
 #import "GalleryPostViewController.h"
-#import "FRSCamViewController.h"
+#import "FRSCameraViewController.h"
 #import "FRSRootViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSGalleryAssetsManager.h"
@@ -177,7 +177,7 @@ static CGSize AssetGridThumbnailSize;
 
     [super viewWillAppear:animated];
     
-    if([self.navigationController.presentingViewController isKindOfClass:[FRSCamViewController class]])
+    if([self.navigationController.presentingViewController isKindOfClass:[FRSCameraViewController class]])
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(returnToCamera)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
@@ -586,8 +586,7 @@ static CGSize AssetGridThumbnailSize;
 
 - (void)cancel{
     
-    if([self.presentingViewController isKindOfClass:[FRSCamViewController class]])
-       ((FRSCamViewController *)self.presentingViewController).isPresented = NO;
+    if([self.presentingViewController isKindOfClass:[FRSCameraViewController class]]) {
     
     FRSTabBarController *tabBarController;
     
@@ -600,7 +599,8 @@ static CGSize AssetGridThumbnailSize;
     tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
-
+    
+    }
 }
 
 /**

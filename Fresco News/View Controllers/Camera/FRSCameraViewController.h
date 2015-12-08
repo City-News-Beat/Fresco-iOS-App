@@ -10,4 +10,8 @@
 
 @interface FRSCameraViewController : UIViewController
 
+@property (nonatomic) BOOL isPresented;
+
+-(void)handlePreviewButtonTapped;
+
 @end

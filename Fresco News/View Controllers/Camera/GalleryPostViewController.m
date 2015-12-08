@@ -18,7 +18,7 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import "FRSTabBarController.h"
-#import "FRSCamViewController.h"
+#import "FRSCameraViewController.h"
 #import "FRSDataManager.h"
 #import "FirstRunViewController.h"
 #import "FRSSocialButton.h"
@@ -239,9 +239,9 @@
     FRSTabBarController *tabBarController;
     
     //Check if we're coming from the camera
-    if([self.presentingViewController isKindOfClass:[FRSCamViewController class]]){
+    if([self.presentingViewController isKindOfClass:[FRSCameraViewController class]]){
 
-        ((FRSCamViewController *)self.presentingViewController).isPresented = NO;
+        ((FRSCameraViewController *)self.presentingViewController).isPresented = NO;
         
         tabBarController = ((FRSRootViewController *)self.presentingViewController.presentingViewController).tbc;
 

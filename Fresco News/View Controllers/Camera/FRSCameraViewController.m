@@ -168,6 +168,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    self.isPresented = YES;
+    
     if (self.sessionManager.AVSetupSuccess){
         dispatch_async(self.sessionManager.sessionQueue, ^{
             //        [self addObservers];
@@ -195,6 +197,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
     [self.sessionManager clearCaptureSession];
+    
+    self.isPresented = NO;
     
 }
 

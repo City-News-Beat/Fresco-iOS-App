@@ -1004,8 +1004,8 @@
         <image name="backCamera" width="28" height="44"/>
         <image name="delete-small-white" width="14" height="14"/>
         <image name="facebook" width="20" height="20"/>
-        <image name="flash-off" width="12" height="21"/>
-        <image name="flash-on" width="12" height="21"/>
+        <image name="flash-off" width="24" height="24"/>
+        <image name="flash-on" width="24" height="24"/>
         <image name="rotate" width="226" height="135"/>
         <image name="shutter-1" width="118" height="118"/>
         <image name="social-tip" width="142" height="76"/>
