@@ -14,6 +14,7 @@
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
 #import "UIView+Border.h"
+#import "FRSBaseViewController.h"
 #import <DBImageColorPicker/DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
@@ -122,9 +123,18 @@
         }
         else{
             
-            [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+            FRSBaseViewController *parentVC = ((FRSBaseViewController *)self.parentViewController.parentViewController);
             
-        
+            //Check if there is not a presenting VC, then navigate by setting a the root VC
+            if(parentVC.presentingViewController == nil){
+                [self navigateToMainApp];
+            }
+            //Otherwise dismiss modally
+            else{
+                [parentVC dismissViewControllerAnimated:YES completion:nil];
+            }
+
+
         }
 
     }];
