@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 
 +(instancetype)defaultManager;
 
--(void)startCaptureSession;
+-(void)startCaptureSessionAndRun:(BOOL)run;
 
 -(void)clearCaptureSession;
 

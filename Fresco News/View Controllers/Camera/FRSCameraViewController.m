@@ -145,8 +145,6 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
     [self configureUI];
     
-    [self.sessionManager startCaptureSession];
-    
     [self addObservers];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
@@ -170,15 +168,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     self.isPresented = YES;
     
-    if (self.sessionManager.AVSetupSuccess){
-        dispatch_async(self.sessionManager.sessionQueue, ^{
-            //        [self addObservers];
-            [self.sessionManager.session startRunning];
-            [self fadeInPreview];
-        });
-    }
-    else {
-        
+    if (!self.sessionManager.session.isRunning){
+        [self.sessionManager startCaptureSessionAndRun:YES];
     }
     
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
@@ -187,7 +178,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
+    [self fadeInPreview];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

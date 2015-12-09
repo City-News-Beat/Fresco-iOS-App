@@ -65,8 +65,10 @@
 
 
 -(void)clearCaptureSession{
-    [self.session stopRunning];
-    self.session = nil;
+    
+    dispatch_async(self.sessionQueue, ^{
+            [self.session stopRunning];
+    });
 }
 
 -(void)startCaptureSession{
@@ -95,6 +97,39 @@
         
         
         [self.session commitConfiguration];
+    });
+}
+
+-(void)startCaptureSessionAndRun:(BOOL)run{
+    dispatch_async(self.sessionQueue, ^{
+        if (self.authStatus == FRSAVStatusNotDetermined){
+            dispatch_suspend(self.sessionQueue);
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
+                dispatch_resume( self.sessionQueue );
+                [self startCaptureSession];
+            }];
+        }
+        else if (self.authStatus == FRSAVStatusDenied){
+            return; //theoretically should never be called, becuase you can't get in without access to camera.
+        }
+        
+        else self.AVSetupSuccess = YES;
+        
+        if (![self videoInputDevice])
+            return;
+        
+        [self.session beginConfiguration];
+        
+        [self configureInputsOutputs];
+        
+        self.session.sessionPreset = AVCaptureSessionPresetPhoto;
+        
+        
+        [self.session commitConfiguration];
+        
+        if (run){
+            [self.session startRunning];
+        }
     });
 }
 
@@ -136,6 +171,7 @@
         [self.session addOutput:self.stillImageOutput];
     } else
         self.AVSetupSuccess = NO;
+    
 }
 
 -(AVCaptureDeviceInput *)videoInputDevice{
