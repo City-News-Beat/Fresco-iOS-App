@@ -44,10 +44,10 @@
  *
  *  @param currentIndex  The current index (The one just traveled to)
  *  @param previousIndex The previous index of the progress view (The one it just came from)
+ *  @param completionBlock Optional completion block signaling end of animation
  */
 
-- (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex;
-
+- (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex withCompletionBlock:(void(^)())responseBlock;
 
 /**
  *  Toggles the user's ability to tap the progress button for time sensitive tasks such as logging in.

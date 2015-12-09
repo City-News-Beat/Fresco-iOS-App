@@ -129,7 +129,8 @@
 - (void)updateStateWithIndex:(NSInteger)index{
     
     [self.progressView updateProgressViewForIndex:self.pagedViewController.currentIndex
-                                       fromIndex:self.pagedViewController.previousIndex];
+                                       fromIndex:self.pagedViewController.previousIndex
+                              withCompletionBlock:nil];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -138,7 +139,7 @@
         
         //Index 0 = the first page
         //Index 2 = the first page after signing up
-        if(self.backButton.alpha > 0 || (index == 0 || index == 2)){
+        if(index == 0 || index == 2){
             alpha = 0.0f;
         }
         else{

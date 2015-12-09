@@ -84,7 +84,9 @@
 
 - (void)updateStateWithIndex:(NSInteger)index{
     
-   [self.frsProgressView updateProgressViewForIndex:self.pagedViewController.currentIndex fromIndex:self.pagedViewController.previousIndex];
+   [self.frsProgressView updateProgressViewForIndex:self.pagedViewController.currentIndex
+                                          fromIndex:self.pagedViewController.previousIndex
+                                withCompletionBlock:nil];
         
 }
 

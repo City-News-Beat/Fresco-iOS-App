@@ -413,11 +413,15 @@ typedef void(^myCompletion)(BOOL);
 }
 
 
-- (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex{
+- (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex withCompletionBlock:(void(^)())responseBlock {
     
     if(currentIndex - previousIndex > 1){
         
-        [self updateProgressViewForIndex:currentIndex-1 fromIndex:previousIndex];
+        [self updateProgressViewForIndex:currentIndex-1 fromIndex:previousIndex withCompletionBlock:^{
+            
+            [self updateProgressViewForIndex:currentIndex fromIndex:previousIndex+1 withCompletionBlock:nil];
+            
+        }];
     
     }
 
@@ -455,6 +459,8 @@ typedef void(^myCompletion)(BOOL);
                 
                 [self toggleCircles:(currentIndex == 1)];
                 
+                if(responseBlock) responseBlock();
+                
             }];
         });
     }
@@ -484,6 +490,8 @@ typedef void(^myCompletion)(BOOL);
         
         //Animate the progress view to the percentage filled
         [self animateProgressViewAtPercent:((float)(currentIndex + 1) / (self.pageCount + 1))];
+        
+        if(responseBlock) responseBlock();
         
     }
 
