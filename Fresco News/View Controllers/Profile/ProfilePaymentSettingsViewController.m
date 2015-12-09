@@ -250,16 +250,11 @@
 
     /* CardIO View */
     
-    
-    
     CardIOView *cardView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -120, self.view.frame.size.width, 500)];
     
     if (IS_STANDARD_IPHONE_6_PLUS){
         cardView.frame = CGRectMake(0, -128, self.view.frame.size.width, 560);
     }
-    
-    
-    cardView.backgroundColor = [UIColor yellowColor];
     
     return cardView;
     
