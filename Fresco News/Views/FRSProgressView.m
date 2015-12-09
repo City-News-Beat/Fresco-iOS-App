@@ -414,6 +414,12 @@ typedef void(^myCompletion)(BOOL);
 
 
 - (void)updateProgressViewForIndex:(NSInteger)currentIndex fromIndex:(NSInteger)previousIndex{
+    
+    if(currentIndex - previousIndex > 1){
+        
+        [self updateProgressViewForIndex:currentIndex-1 fromIndex:previousIndex];
+    
+    }
 
     //This condition tells us we have the first index disabled
     // and we are not at the "first" page of the progress view

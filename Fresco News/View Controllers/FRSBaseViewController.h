@@ -70,4 +70,11 @@ typedef enum : NSUInteger {
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info;
 
+
+/**
+ * Enables next button found in the parent of the parent (FRSFirstRunWrapperViewController)
+ */
+
+- (void)enableNextButton;
+
 @end

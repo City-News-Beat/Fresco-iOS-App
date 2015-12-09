@@ -108,12 +108,6 @@
 
 - (void)performLogin:(LoginType)login button:(UIButton *)button withLoginInfo:(NSDictionary *)info{
     
-    if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]]){
-        
-        [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:YES];
-        
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
 
         self.view.userInteractionEnabled = NO;
@@ -150,23 +144,19 @@
             }
             else{
                 
-
                 [button setTitle:@"Login" forState:UIControlStateNormal];
                 [self hideActivityIndicator];
                 [self revertScreenToNormal:self.view];
-                        
-
                 
                 [self presentViewController:[FRSAlertViewManager
                                              alertControllerWithTitle:LOGIN_ERROR
                                              message:INVALID_CREDENTIALS action:nil]
-                                   animated:YES completion:nil];
+                                   animated:YES completion:^{
+                                       [self enableNextButton];
+                                   }];
                 
             }
             
-            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
-                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
-
         }];
         
     }
@@ -201,12 +191,11 @@
                                              message:FACEBOOK_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:nil];
+                                 completion:^{
+                                     [self enableNextButton];
+                                 }];
             }
-        
-            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
-                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
-        
+            
         }];
         
     }
@@ -240,16 +229,13 @@
                                              message:TWITTER_ERROR
                                              action:DISMISS]
                                    animated:YES
-                                 completion:nil];
+                                 completion:^{
+                                     [self enableNextButton];
+                                 }];
             }
-            
-            if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]])
-                [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
         }];
     }
 }
-
-
 
 - (void)hideActivityIndicator{
 
@@ -331,6 +317,16 @@
         }];
         
     });
+}
+
+- (void)enableNextButton{
+    
+    if([self.parentViewController.parentViewController isKindOfClass:[FRSFirstRunWrapperViewController class]]){
+    
+        //Re-enable button
+        [((FRSFirstRunWrapperViewController *)self.parentViewController.parentViewController).progressView disableUserInteraction:NO];
+    
+    }
 }
 
 @end

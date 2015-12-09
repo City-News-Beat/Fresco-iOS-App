@@ -22,9 +22,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *containerPageView;
 
-@property (strong, nonatomic) FRSProgressView *frsProgressView;
-
-
 /*
 ** UI Elements
 */
@@ -77,6 +74,8 @@
 #pragma mark - FRSProgressView Delegate
 
 -(void)nextButtonTapped{
+    
+    [self.frsProgressView disableUserInteraction:YES];
     
     [self.pagedViewController shouldMoveToViewAtIndex:self.pagedViewController.currentIndex];
 
