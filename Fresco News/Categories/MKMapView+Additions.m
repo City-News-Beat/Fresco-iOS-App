@@ -50,19 +50,42 @@
 
 #pragma mark - User Location
 
++ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius withLocation:(CLLocationCoordinate2D)coordinate{
+    
+    
+    FRSMKCircle *circle;
+    
+    if (radius) {
+        
+        circle = [FRSMKCircle circleWithCenterCoordinate:coordinate radius:[radius doubleValue] * kMetersInAMile];
+        
+    } else { //Set the radius to the horizontal accuracy
+        
+        CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
+        
+        circle = [FRSMKCircle circleWithCenterCoordinate:coordinate radius:accuracyRadius];
+        
+    }
+    
+    circle.identifier = FRSUserCircle;
+    
+    return circle;
+}
+
+
 + (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius {
     
     MKUserLocation *userLocation = mapView.userLocation;
     
     FRSMKCircle *circle;
-
+    
     if (radius) {
         
         circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:[radius doubleValue] * kMetersInAMile];
-    
+        
     } else { //Set the radius to the horizontal accuracy
         
-       CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
+        CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
         
         circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:accuracyRadius];
         
@@ -73,26 +96,47 @@
     return circle;
 }
 
-- (void)updateUserLocationCircleWithRadius:(CGFloat)radius
-{
-    CLLocationCoordinate2D coordinate = self.userLocation.location.coordinate;
+-(void)updateLocationCircleWithCoordinate:(CLLocationCoordinate2D)coordinate withRadius:(CGFloat)radius{
+    
+    if (!coordinate.latitude || !coordinate.longitude) return;
     
     [self zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
-                                      lon:[NSNumber numberWithDouble:coordinate.longitude]
-                               withRadius:[NSNumber numberWithDouble:radius] withAnimation:YES];
+                        lon:[NSNumber numberWithDouble:coordinate.longitude]
+                 withRadius:[NSNumber numberWithDouble:radius] withAnimation:YES];
     
-    [self userRadiusUpdated:[NSNumber numberWithDouble:radius]];
+    [self userRadiusUpdated:[NSNumber numberWithDouble:radius] withLocation:coordinate];
+    
 }
 
-- (void)userRadiusUpdated:(NSNumber *)radius{
-
+-(void)userRadiusUpdated:(NSNumber *)radius withLocation:(CLLocationCoordinate2D)coordiante{
     for (id<MKOverlay>overlay in self.overlays) {
         
         if ([overlay isKindOfClass:[FRSMKCircle class]]) {
-        
+            
             //Remove the overlay from view
             [self removeOverlay:overlay];
+            
+        }
+    }
+    
+    //Create new one with updated user location
+    [self addOverlay:[MKMapView userRadiusForMap:self withRadius:radius withLocation:coordiante]];
+}
 
+- (void)updateUserLocationCircleWithRadius:(CGFloat)radius
+{
+    [self updateLocationCircleWithCoordinate:self.userLocation.coordinate withRadius:radius];
+}
+
+- (void)userRadiusUpdated:(NSNumber *)radius{
+    
+    for (id<MKOverlay>overlay in self.overlays) {
+        
+        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+            
+            //Remove the overlay from view
+            [self removeOverlay:overlay];
+            
         }
     }
     
@@ -107,9 +151,9 @@
     if(!image && [[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]){
         
         image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]]];
-    
+        
     }
-
+    
     //Check if image is set after first conidition, otherwise return nil
     if(image)
         return [[DBImageColorPicker alloc] initFromImage:image withBackgroundType:DBImageColorPickerBackgroundTypeDefault];
@@ -120,7 +164,7 @@
 #pragma mark - Circle Rendering
 
 + (MKCircleRenderer *)radiusRendererForOverlay:(id<MKOverlay>)overlay withImagePicker:(DBImageColorPicker *)picker{
-
+    
     MKCircleRenderer *circleView = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     
     if ([overlay isKindOfClass:[FRSMKCircle class]]) {
@@ -130,7 +174,7 @@
         if (circleForUserRadius.identifier == FRSUserCircle) { // making sure it's a user
             
             if (picker){ // if a picker is passed
-
+                
                 [circleView setFillColor:picker.secondaryTextColor];
                 
             }
@@ -145,7 +189,7 @@
     circleView.alpha = .26;
     
     return circleView;
-
+    
 }
 
 - (void)updateRadiusColor{
@@ -186,7 +230,7 @@
 - (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type{
     
     NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
-   
+    
     MKAnnotationView *annotationView = (MKAnnotationView *)[self dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (!annotationView) {
@@ -213,7 +257,7 @@
 
 
 - (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation {
-
+    
     MKAnnotationView *annotationView = [self dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
     
     if (!annotationView) {
@@ -221,11 +265,11 @@
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
         
         annotationView.centerOffset = CGPointMake(-14, -15 + 3); // math is account for 18 width and 5 x, 18 height and 3 y w, 3 pts shadow
-
+        
         UIImageView *whiteLayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dot-user-blank"]];
         
         UIImageView *profileImageView = [MKMapView imagePinViewForAnnotationType:FRSUserAnnotation];
-
+        
         [profileImageView.layer addPulsingAnimation];
         
         [whiteLayerImageView addSubview:profileImageView];

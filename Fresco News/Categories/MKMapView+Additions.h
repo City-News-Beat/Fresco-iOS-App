@@ -50,6 +50,8 @@ typedef enum : NSInteger {
 
 - (void)updateUserLocationCircleWithRadius:(CGFloat)radius;
 
+-(void)updateLocationCircleWithCoordinate:(CLLocationCoordinate2D)coordinate withRadius:(CGFloat)radius;
+
 /**
  *  Finds user annotaiton in map, and reset to the passed image
  *

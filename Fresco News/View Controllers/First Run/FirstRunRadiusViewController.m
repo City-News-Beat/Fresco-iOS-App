@@ -13,12 +13,8 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
-
 #import "UIView+Helpers.h"
-
-
 #import "FRSBaseViewController.h"
-
 #import <DBImageColorPicker/DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
@@ -33,6 +29,8 @@
 
 @property (strong, nonatomic) DBImageColorPicker *picker;
 
+@property (nonatomic) BOOL hasLocation;
+
 @end
 
 @implementation FirstRunRadiusViewController
@@ -40,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [self sliderValueChanged:self.radiusStepper];
     
     [[self.view viewWithTag:100] addBorderWithWidth:1.0f];
@@ -53,7 +51,7 @@
 {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         // CGFloat roundedValue = [self roundedValueForSlider:slider];
         CGFloat roundedValue = [MKMapView roundedValueForRadiusSlider:slider];
         
@@ -77,11 +75,22 @@
     });
 }
 
+-(void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error{
+    
+    if (!self.ranUserUpdate){
+        self.hasLocation = NO;
+        [self.mapviewRadius updateLocationCircleWithCoordinate:CLLocationCoordinate2DMake(40.7117, -74.0125) withRadius:self.radiusStepper.value];
+        self.ranUserUpdate = YES;
+    }
+}
+
 - (IBAction)sliderTouchUpInside:(UISlider *)slider
 {
     self.radiusStepper.value = [MKMapView roundedValueForRadiusSlider:slider];
-    
-    [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value];
+    if (self.hasLocation)
+        [self.mapviewRadius updateUserLocationCircleWithRadius:self.radiusStepper.value];
+    else
+        [self.mapviewRadius updateLocationCircleWithCoordinate:CLLocationCoordinate2DMake(40.7117, -74.0125) withRadius:self.radiusStepper.value];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -89,10 +98,11 @@
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
     if(!self.ranUserUpdate){
+        self.hasLocation = YES;
         [mapView updateUserLocationCircleWithRadius:self.radiusStepper.value];
         self.ranUserUpdate = YES;
     }
-
+    
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
@@ -136,11 +146,11 @@
             else{
                 [parentVC dismissViewControllerAnimated:YES completion:nil];
             }
-
+            
         }
-
+        
     }];
-
+    
 }
 
 
