@@ -116,7 +116,9 @@
                                          alertControllerWithTitle:ERROR
                                          message:NOTIF_RADIUS_ERROR_MSG action:DISMISS]
                                animated:YES
-                             completion:nil];
+                             completion:^{
+                                 [self enableNextButton];
+                             }];
         }
         else{
             

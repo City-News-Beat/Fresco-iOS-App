@@ -133,11 +133,12 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        //Back button management
         CGFloat alpha;
         
         //Index 0 = the first page
         //Index 2 = the first page after signing up
-        if(self.backButton.alpha > 0 && (index == 0 || index == 2)){
+        if(self.backButton.alpha > 0 || (index == 0 || index == 2)){
             alpha = 0.0f;
         }
         else{

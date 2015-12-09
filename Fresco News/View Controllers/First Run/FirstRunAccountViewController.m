@@ -184,7 +184,9 @@
                                      alertControllerWithTitle:@"Invalid Email"
                                      message:@"Please enter a valid email" action:DISMISS]
                            animated:YES
-                         completion:nil];
+                         completion:^{
+                             [self enableNextButton];
+                         }];
         
         return;
     
@@ -195,7 +197,9 @@
                                      alertControllerWithTitle:@"Invalid Password"
                                      message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
                            animated:YES
-                         completion:nil];
+                         completion:^{
+                             [self enableNextButton];
+                         }];
         
         return;
 
@@ -215,7 +219,9 @@
                                      alertControllerWithTitle:ERROR
                                      message:PASSWORD_ERROR_TITLE action:DISMISS]
                            animated:YES
-                         completion:nil];
+                         completion:^{
+                             [self enableNextButton];
+                         }];
 
     }
     else {
@@ -247,6 +253,8 @@
                 [self navigateToNextIndex];
                 
             }
+            
+            [self enableNextButton];
             
          }];
     }
