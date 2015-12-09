@@ -82,12 +82,15 @@
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed{
     
     if(!completed) return;
-    
+
     NSUInteger index = ((FRSBaseViewController *)[self.viewControllers firstObject]).index;
     
     self.previousIndex = self.currentIndex;
     
     self.currentIndex = index;
+    
+    //Re-enable button
+    [((FRSFirstRunWrapperViewController *)self.parentViewController).progressView disableUserInteraction:NO];
 
     [(FRSFirstRunWrapperViewController *)self.parentViewController updateStateWithIndex:self.currentIndex];
     
@@ -148,10 +151,14 @@
     NSArray *controllers = @[viewController];
     
     __weak typeof(self) weakSelf = self;
+    
+    FRSFirstRunWrapperViewController *parentVC = (FRSFirstRunWrapperViewController *)weakSelf.parentViewController;
 
     [self setViewControllers:controllers direction:direction animated:YES completion:^(BOOL finished) {
         
-        [(FRSFirstRunWrapperViewController *)weakSelf.parentViewController updateStateWithIndex:weakSelf.currentIndex];
+        [parentVC updateStateWithIndex:weakSelf.currentIndex];
+        
+        [parentVC.progressView disableUserInteraction:NO];
         
     }];
 }
@@ -159,13 +166,15 @@
 
 - (void)shouldMoveToViewAtIndex:(NSInteger)index{
     
+    //Account Page
     if(index == 2){
     
         FirstRunAccountViewController *vc = self.viewControllers[0];
         
         [vc processLogin];
-    
+        
     }
+    //First/Last name page
     else if(index == 3){
         
         FirstRunPersonalViewController *vc = self.viewControllers[0];
@@ -173,11 +182,13 @@
         [vc saveInfo];
         
     }
+    //Permissions Page
     else if(index == 4){
         
         [self moveToViewAtIndex:index withDirection:UIPageViewControllerNavigationDirectionForward];
         
     }
+    //Radius page
     else if(index == 5){
         
         FirstRunRadiusViewController *vc = self.viewControllers[0];

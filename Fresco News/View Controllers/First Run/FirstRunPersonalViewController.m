@@ -166,6 +166,7 @@
                 [self navigateToNextIndex];
                 
             }
+                        
         }];
         
     }
@@ -177,6 +178,7 @@
                                      action:nil]
                            animated:YES
                          completion:nil];
+        
     }
 
 }

@@ -177,11 +177,7 @@
 }
 
 - (void)processLogin {
-    
-    if(_signUpRunning) return;
-    
-    _signUpRunning = YES;
-    
+
     if (![self.emailField.text isValidEmail]){
     
         [self presentViewController:[FRSAlertViewManager
@@ -189,8 +185,6 @@
                                      message:@"Please enter a valid email" action:DISMISS]
                            animated:YES
                          completion:nil];
-        
-        _signUpRunning = NO;
         
         return;
     
@@ -202,8 +196,6 @@
                                      message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
                            animated:YES
                          completion:nil];
-
-        _signUpRunning = NO;
         
         return;
 
@@ -224,8 +216,6 @@
                                      message:PASSWORD_ERROR_TITLE action:DISMISS]
                            animated:YES
                          completion:nil];
-        
-        _signUpRunning = NO;
 
     }
     else {
@@ -257,8 +247,6 @@
                 [self navigateToNextIndex];
                 
             }
-            
-            _signUpRunning = NO;
             
          }];
     }

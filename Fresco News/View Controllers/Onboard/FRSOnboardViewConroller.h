@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSProgressView.h"
 
 @interface FRSOnboardViewConroller : UIViewController
 
 - (void)updateStateWithIndex:(NSInteger)index;
+
+@property (strong, nonatomic) FRSProgressView *frsProgressView;
 
 @end

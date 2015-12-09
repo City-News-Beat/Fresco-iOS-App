@@ -106,9 +106,6 @@
 
 - (void)save {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-    
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(BOOL success, NSError *error) {
@@ -133,7 +130,6 @@
             else{
                 [parentVC dismissViewControllerAnimated:YES completion:nil];
             }
-
 
         }
 

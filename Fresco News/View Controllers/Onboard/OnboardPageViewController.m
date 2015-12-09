@@ -70,22 +70,22 @@
         
         OnboardPageCellController *viewController = [self viewControllerAtIndex:self.currentIndex];
         
+        if(![self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]) return;
+    
+        FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *) self.parentViewController;
+        
         if(viewController == nil) return;
         
         NSArray *controllers = @[viewController];
-        
-        //Update the dots on the next button
-        if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]) {
-        
-            FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *) self.parentViewController;
-            
-            [parentVC updateStateWithIndex:self.currentIndex];
-             
-        }
     
         [self setViewControllers:controllers direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:^(BOOL finished){
             
+            //Update the dots on the next button
+            [parentVC updateStateWithIndex:self.currentIndex];
+            
             [viewController performAnimation];
+            
+            [parentVC.frsProgressView disableUserInteraction:NO];
             
             if(finished) _runningNextPage = NO;
             
@@ -148,10 +148,11 @@
     
     self.currentIndex = ((OnboardPageCellController *)[self.viewControllers firstObject]).animationState;
     
-    
     if([self.parentViewController isKindOfClass:[FRSOnboardViewConroller class]]){
         
         FRSOnboardViewConroller *parentVC = (FRSOnboardViewConroller *)self.parentViewController;
+        
+        [parentVC.frsProgressView disableUserInteraction:NO];
         
         [parentVC updateStateWithIndex:self.currentIndex];
         

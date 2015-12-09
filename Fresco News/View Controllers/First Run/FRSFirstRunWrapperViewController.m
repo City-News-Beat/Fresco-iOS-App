@@ -85,8 +85,7 @@
     
     NSInteger index = self.pagedViewController.currentIndex -1;
 
-    [self.pagedViewController moveToViewAtIndex:index
-                                  withDirection:UIPageViewControllerNavigationDirectionReverse];
+    [self.pagedViewController moveToViewAtIndex:index withDirection:UIPageViewControllerNavigationDirectionReverse];
     
     //Index 0 = the first page
     //Index 2 = the first page after signing up
@@ -101,6 +100,8 @@
 
 -(void)nextButtonTapped{
     
+    [self.progressView disableUserInteraction:YES];
+
     //If we're on the first page or the last page
     if(self.pagedViewController.currentIndex == 0){
 
