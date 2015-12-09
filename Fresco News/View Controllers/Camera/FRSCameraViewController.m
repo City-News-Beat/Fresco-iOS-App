@@ -169,7 +169,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.isPresented = YES;
     
     if (!self.sessionManager.session.isRunning){
-        [self.sessionManager startCaptureSessionAndRun:YES];
+        [self.sessionManager startCaptureSessionAndRun:YES withCompletion:^{
+            [self configurePreviewLayer];
+        }];
     }
     
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
@@ -252,17 +254,21 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO)];
     self.preview.backgroundColor = [UIColor blackColor];
     
-    CALayer *viewLayer = self.preview.layer;
-    self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
-    self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
-    [viewLayer addSublayer:self.captureVideoPreviewLayer];
-    self.captureVideoPreviewLayer.frame = self.preview.bounds;
-    
     UITapGestureRecognizer *focusGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapToFocus:)];
     [self.preview addGestureRecognizer:focusGR];
     
     [self.view addSubview:self.preview];
+}
+
+-(void)configurePreviewLayer{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CALayer *viewLayer = self.preview.layer;
+        self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
+        self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+        [viewLayer addSublayer:self.captureVideoPreviewLayer];
+        self.captureVideoPreviewLayer.frame = self.preview.bounds;
+    });
 }
 
 -(void)updatePreviewButtonWithAsset{
@@ -889,19 +895,21 @@ CGFloat angle = 0;
 }
 
 -(void)playFocusAnimationAtPoint:(CGPoint)devicePoint{
-    UIView *square = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
-    square.backgroundColor = [UIColor clearColor];
-    square.layer.borderColor = [UIColor brandDarkColor].CGColor;
-    square.layer.borderWidth = 4.0;
-    square.alpha = 1.0;
-    square.center = devicePoint;
+    UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
+    circle.backgroundColor = [UIColor clearColor];
+    circle.layer.borderColor = [UIColor whiteColor].CGColor;
+    circle.layer.borderWidth = 4.0;
+    circle.alpha = 1.0;
+    circle.center = devicePoint;
+    circle.layer.cornerRadius = circle.frame.size.height/2;
+    circle.clipsToBounds = YES;
     
-    [self.preview addSubview:square];
+    [self.preview addSubview:circle];
     
-    [UIView animateWithDuration:0.2 animations:^{
-        square.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        circle.transform = CGAffineTransformMakeScale(0.6, 0.6);
     } completion:^(BOOL finished) {
-        [square removeFromSuperview];
+        [circle removeFromSuperview];
     }];
 }
 

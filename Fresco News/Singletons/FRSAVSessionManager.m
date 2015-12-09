@@ -38,13 +38,6 @@
     return _sessionQueue;
 }
 
--(AVCaptureSession *)session{
-    if (!_session){
-        _session = [[AVCaptureSession alloc] init];
-    }
-    return _session;
-}
-
 -(FRSAVAuthStatus)authStatus{
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
@@ -65,48 +58,22 @@
 
 
 -(void)clearCaptureSession{
+    dispatch_async(self.sessionQueue, ^{
+        [self.session stopRunning];
+        _session = nil;
+    });
+}
+
+-(void)startCaptureSessionAndRun:(BOOL)run withCompletion:(void(^)())completion{
+    
+    self.session = [[AVCaptureSession alloc] init];
     
     dispatch_async(self.sessionQueue, ^{
-            [self.session stopRunning];
-    });
-}
-
--(void)startCaptureSession{
-    dispatch_async(self.sessionQueue, ^{
         if (self.authStatus == FRSAVStatusNotDetermined){
             dispatch_suspend(self.sessionQueue);
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
                 dispatch_resume( self.sessionQueue );
-                [self startCaptureSession];
-            }];
-        }
-        else if (self.authStatus == FRSAVStatusDenied){
-            return; //theoretically should never be called, becuase you can't get in without access to camera.
-        }
-        
-        else self.AVSetupSuccess = YES;
-        
-        if (![self videoInputDevice])
-            return;
-        
-        [self.session beginConfiguration];
-        
-        [self configureInputsOutputs];
-        
-        self.session.sessionPreset = AVCaptureSessionPresetPhoto;
-        
-        
-        [self.session commitConfiguration];
-    });
-}
-
--(void)startCaptureSessionAndRun:(BOOL)run{
-    dispatch_async(self.sessionQueue, ^{
-        if (self.authStatus == FRSAVStatusNotDetermined){
-            dispatch_suspend(self.sessionQueue);
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
-                dispatch_resume( self.sessionQueue );
-                [self startCaptureSession];
+                [self startCaptureSessionAndRun:run withCompletion:completion];
             }];
         }
         else if (self.authStatus == FRSAVStatusDenied){
@@ -130,6 +97,7 @@
         if (run){
             [self.session startRunning];
         }
+        if (completion) completion();
     });
 }
 
