@@ -13,7 +13,12 @@
 #import "FirstRunRadiusViewController.h"
 #import "FRSDataManager.h"
 #import "TOSViewController.h"
+
 #import "UIView+Helpers.h"
+
+
+#import "FRSBaseViewController.h"
+
 #import <DBImageColorPicker/DBImageColorPicker.h>
 
 @interface FirstRunRadiusViewController () <MKMapViewDelegate>
@@ -105,9 +110,6 @@
 
 - (void)save {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-    
     NSDictionary *updateParams = @{@"radius" : [NSNumber numberWithInt:(int)self.radiusStepper.value]};
     
     [[FRSDataManager sharedManager] updateFrescoUserWithParams:updateParams withImageData:nil block:^(BOOL success, NSError *error) {
@@ -118,13 +120,23 @@
                                          alertControllerWithTitle:ERROR
                                          message:NOTIF_RADIUS_ERROR_MSG action:DISMISS]
                                animated:YES
-                             completion:nil];
+                             completion:^{
+                                 [self enableNextButton];
+                             }];
         }
         else{
             
-            [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+            FRSBaseViewController *parentVC = ((FRSBaseViewController *)self.parentViewController.parentViewController);
             
-        
+            //Check if there is not a presenting VC, then navigate by setting a the root VC
+            if(parentVC.presentingViewController == nil){
+                [self navigateToMainApp];
+            }
+            //Otherwise dismiss modally
+            else{
+                [parentVC dismissViewControllerAnimated:YES completion:nil];
+            }
+
         }
 
     }];

@@ -157,7 +157,9 @@
                                              message:NAME_ERROR_MSG
                                              action:nil]
                                    animated:YES
-                                 completion:nil];
+                                 completion:^{
+                                     [self enableNextButton];
+                                 }];
             }
             else {
                 
@@ -166,6 +168,7 @@
                 [self navigateToNextIndex];
                 
             }
+                        
         }];
         
     }
@@ -176,7 +179,10 @@
                                      message:NAME_PROMPT
                                      action:nil]
                            animated:YES
-                         completion:nil];
+                         completion:^{
+                             [self enableNextButton];
+                         }];
+        
     }
 
 }
