@@ -8,9 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
+    FRSCaptureModePhoto,
+    FRSCaptureModeVideo
+};
+
 @interface FRSCameraViewController : UIViewController
 
 @property (nonatomic) BOOL isPresented;
+
+@property (nonatomic) FRSCaptureMode captureMode;
+
+
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
 
 -(void)handlePreviewButtonTapped;
 

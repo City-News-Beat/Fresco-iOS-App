@@ -20,6 +20,7 @@
 #import "FRSOnboardViewConroller.h"
 #import "AssetsPickerController.h"
 #import "BTBadgeView.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 
@@ -123,7 +124,12 @@
 
 - (void)setRootViewControllerToCamera{
     
-    [self.tbc presentCamera];
+    [self.tbc presentCameraForCaptureMode:FRSCaptureModePhoto];
+}
+
+-(void)setRootViewControllerToCameraForVideo{
+    [self.tbc presentCameraForCaptureMode:FRSCaptureModeVideo];
+
 }
 
 - (void)setRootViewControllerToHighlights{

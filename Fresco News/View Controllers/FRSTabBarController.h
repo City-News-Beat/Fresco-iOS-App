@@ -8,12 +8,13 @@
 
 @import UIKit;
 #import "FRSUploadManager.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSTabBarController : UITabBarController  <UITabBarDelegate, UITabBarControllerDelegate, UIAlertViewDelegate,FRSUploadManagerDelegate>
 
 - (void)returnToGalleryPost;
 
-- (void)presentCamera;
+- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
 
 - (void)presentAssignments;
 

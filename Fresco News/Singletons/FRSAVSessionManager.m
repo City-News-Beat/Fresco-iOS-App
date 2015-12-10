@@ -64,7 +64,7 @@
     });
 }
 
--(void)startCaptureSessionAndRun:(BOOL)run withCompletion:(void(^)())completion{
+-(void)startCaptureSessionForCaptureMode:(FRSCaptureMode)captureMode withCompletion:(void(^)())completion{
     
     self.session = [[AVCaptureSession alloc] init];
     
@@ -73,7 +73,7 @@
             dispatch_suspend(self.sessionQueue);
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
                 dispatch_resume( self.sessionQueue );
-                [self startCaptureSessionAndRun:run withCompletion:completion];
+                [self startCaptureSessionForCaptureMode:captureMode withCompletion:completion];
             }];
         }
         else if (self.authStatus == FRSAVStatusDenied){
@@ -89,14 +89,16 @@
         
         [self configureInputsOutputs];
         
-        self.session.sessionPreset = AVCaptureSessionPresetPhoto;
-        
+        if (captureMode == FRSCaptureModePhoto)
+            self.session.sessionPreset = AVCaptureSessionPresetPhoto;
+        else
+            self.session.sessionPreset = AVCaptureSessionPresetHigh;
         
         [self.session commitConfiguration];
         
-        if (run){
-            [self.session startRunning];
-        }
+
+        [self.session startRunning];
+
         if (completion) completion();
     });
 }

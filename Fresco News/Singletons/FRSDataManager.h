@@ -152,7 +152,9 @@
 
 - (void)disableFrescoUser:(FRSAPISuccessBlock)responseBlock;
 
-- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock;
+//- (void)updateUserLocation:(NSDictionary *)inputParams block:(FRSAPISuccessBlock)responseBlock;
+
+-(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion;
 
 #pragma mark - Galleries
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "FRSCameraViewController.h"
+
 @import AVFoundation;
 
 
@@ -32,7 +34,7 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 
 +(instancetype)defaultManager;
 
--(void)startCaptureSessionAndRun:(BOOL)run withCompletion:(void(^)())completion;
+-(void)startCaptureSessionForCaptureMode:(FRSCaptureMode)captureMode withCompletion:(void(^)())completion;
 
 -(void)clearCaptureSession;
 

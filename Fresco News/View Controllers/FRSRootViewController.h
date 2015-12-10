@@ -26,6 +26,8 @@
 
 - (void)setRootViewControllerToCamera;
 
+- (void)setRootViewControllerToCameraForVideo;
+
 - (void)setRootViewControllerToHighlights;
 
 - (void)setRootViewControllerToAssignments;

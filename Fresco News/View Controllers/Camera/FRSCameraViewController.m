@@ -50,11 +50,6 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4/3
 
-typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
-    FRSCaptureModePhoto,
-    FRSCaptureModeVideo
-};
-
 
 
 @interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
@@ -97,7 +92,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (strong, nonatomic) UIView *whiteView;
 
-@property (nonatomic) FRSCaptureMode captureMode;
+
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
 @property (nonatomic) BOOL capturingImage;
@@ -121,19 +116,30 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @implementation FRSCameraViewController
 
--(instancetype)init{
+//-(instancetype)init{
+//    self = [super init];
+//    if (self){
+//        self.sessionManager = [FRSAVSessionManager defaultManager];
+//        self.locationManager = [FRSLocationManager sharedManager];
+//        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
+//        self.currentOrientation = [UIDevice currentDevice].orientation;
+//        
+//        
+//        self.firstTime = YES;
+//        
+//    }
+//    return self;
+//}
+
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode{
     self = [super init];
     if (self){
         self.sessionManager = [FRSAVSessionManager defaultManager];
         self.locationManager = [FRSLocationManager sharedManager];
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-
-        self.captureMode = FRSCaptureModePhoto;
         self.currentOrientation = [UIDevice currentDevice].orientation;
-        
-        
+        self.captureMode = captureMode;
         self.firstTime = YES;
-        
     }
     return self;
 }
@@ -169,7 +175,8 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     self.isPresented = YES;
     
     if (!self.sessionManager.session.isRunning){
-        [self.sessionManager startCaptureSessionAndRun:YES withCompletion:^{
+        
+        [self.sessionManager startCaptureSessionForCaptureMode:self.captureMode withCompletion:^{
             [self configurePreviewLayer];
         }];
     }

@@ -38,7 +38,7 @@
 
 @property (strong, nonatomic) UIMutableApplicationShortcutItem *assignmentAction;
 
-@property NSNumber *assignments;
+@property NSNumber *numAssignments;
 
 @end
 
@@ -359,7 +359,6 @@
     
     // add the array to our app
     [UIApplication sharedApplication].shortcutItems = items;
-    
 }
 
 
@@ -367,7 +366,7 @@
 /* Called from FRSLocationManager */
 - (void)updateAssignmentCount:(NSNotification *)notification {
     
-    self.assignments = (NSNumber *)notification.object;
+    self.numAssignments = (NSNumber *)notification.object;
     
 }
 
@@ -388,10 +387,9 @@
         
     } else if ([shortcutItem.localizedTitle isEqual: @"Take video"]) {
         
-        [self.frsRootViewController setRootViewControllerToCamera];
+        [self.frsRootViewController setRootViewControllerToCameraForVideo];
         
     }
-    
 }
 
 

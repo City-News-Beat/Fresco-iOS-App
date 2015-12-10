@@ -25,33 +25,32 @@
 #import "FRSLocationManager.h"
 #import "FRSAlertViewManager.h"
 
-#import "FRSCameraViewController.h"
 
 @implementation FRSTabBarController
 
 #pragma mark - Initialization
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
-
+    
     if(self = [super initWithCoder:aDecoder]){
-
+        
         [self setupTabBarAppearances];
         
         self.delegate = self;
         
-
+        
     }
     
     return self;
 }
 
 - (void)viewDidLoad{
-
+    
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(galleryUploadComplete:) name:@"Gallery Upload Done" object:nil];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-
+    
 }
 
 -(void)galleryUploadComplete:(NSNotification *)sender{
@@ -73,10 +72,10 @@
         dialog.mode = FBSDKShareDialogModeFeedBrowser;
     }
     [dialog show];
-
-//    [FBSDKShareDialog showFromViewController:self
-//                                 withContent:content
-//                                    delegate:nil];
+    
+    //    [FBSDKShareDialog showFromViewController:self
+    //                                 withContent:content
+    //                                    delegate:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -93,19 +92,20 @@
     //Camera
     if ([item.title isEqualToString:@"Camera"]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-            [self presentCamera];
+            [self presentCameraForCaptureMode:FRSCaptureModePhoto];
         }
     }
 }
 
-- (void)presentCamera
-{
-    [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
-    
-    FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
-    
-    [self presentViewController:vc animated:YES completion:nil];
-    
+- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode{
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
+        
+        FRSCameraViewController *vc = [[FRSCameraViewController alloc] initWithCaptureMode:captureMode];
+        
+        [self presentViewController:vc animated:YES completion:nil];
+        
+    }
 }
 
 - (void)presentAssignments {
@@ -141,7 +141,7 @@
         [self setViewControllers: tabbarViewControllers];
         
     }
-
+    
     NSArray *highlightedTabNames = @[@"tab-home-highlighted",
                                      @"tab-stories-highlighted",
                                      @"tab-camera-highlighted",
@@ -170,9 +170,9 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
-
+    
     UIViewController *vc = [viewController.childViewControllers firstObject];
     
     if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
@@ -183,7 +183,7 @@
             UITableView *tv = ((HighlightsViewController *)vc).galleriesViewController.tableView;
             
             if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 1000) {
-            
+                
                 NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
                 [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
             }
@@ -192,7 +192,7 @@
         else{
             [vc.navigationController popViewControllerAnimated:YES];
         }
-
+        
         return NO;
     }
     else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
@@ -218,10 +218,10 @@
         return NO;
     }
     else if ([vc isMemberOfClass:[ProfileViewController class]]) {
-    
+        
         //Check if we are already at this tab
         if(tabBarController.selectedIndex == 4){
-        
+            
             if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
                 
                 NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
@@ -243,7 +243,7 @@
         }
         //Otherwise check for log in, and present the login screen otherwise
         else{
-        
+            
             if(![[FRSDataManager sharedManager] isLoggedIn]){
                 
                 FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
