@@ -175,7 +175,6 @@
         NSDictionary *params = @{@"lat" : @(self.location.coordinate.latitude),
                                  @"lon" : @(self.location.coordinate.longitude)};
         
-        NSLog(@"CURRENT LOC = %ld %ld", self.location.coordinate.latitude, self.location.coordinate.longitude);
         
         [[FRSDataManager sharedManager] updateUserLocation:params completion:^(NSDictionary *response, NSError *error) {
             

@@ -1379,7 +1379,6 @@ CGFloat angle = 0;
         [self toggleVideoRecording];
     }
     
-    
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
     
     navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
