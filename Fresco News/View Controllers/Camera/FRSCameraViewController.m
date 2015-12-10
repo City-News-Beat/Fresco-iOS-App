@@ -151,6 +151,9 @@
 
     [self configureUI];
     
+    [self setAppropriateIconsForCaptureState];
+    [self adjustFramesForCaptureState];
+    
     [self addObservers];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
