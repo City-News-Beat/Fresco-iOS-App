@@ -133,7 +133,6 @@
 		E7A2C1CA1BDA90F2000A7266 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A2C1C91BDA90F2000A7266 /* FRSUploadManager.m */; };
 		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 		E7AAC0A31B4DED29003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
-		E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */; };
 		E7AD1CC61BBB35D000F940D5 /* FRSSocialButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AD1CC51BBB35D000F940D5 /* FRSSocialButton.m */; };
 		E7AD1CC91BBB35D900F940D5 /* FRSSaveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AD1CC81BBB35D900F940D5 /* FRSSaveButton.m */; };
 		E7B733231B13E3F2009C26D0 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = E7B733221B13E3F2009C26D0 /* FRSNotification.m */; };
@@ -434,7 +433,6 @@
 		E7A2C1C91BDA90F2000A7266 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSUploadManager.m; path = Singletons/FRSUploadManager.m; sourceTree = "<group>"; };
 		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKRelativeDate.h; path = Categories/WKRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKRelativeDate.m; path = Categories/WKRelativeDate.m; sourceTree = "<group>"; };
-		E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ShutterImages.xcassets; sourceTree = "<group>"; };
 		E7AD1CC41BBB35D000F940D5 /* FRSSocialButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSocialButton.h; sourceTree = "<group>"; };
 		E7AD1CC51BBB35D000F940D5 /* FRSSocialButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocialButton.m; sourceTree = "<group>"; };
 		E7AD1CC71BBB35D900F940D5 /* FRSSaveButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSaveButton.h; sourceTree = "<group>"; };
@@ -884,7 +882,6 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E7AC3F061B6BD86F00CF9DE4 /* ShutterImages.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1411,7 +1408,6 @@
 				E78428131B57F4010090DFCC /* OnboardPageCellController.xib in Resources */,
 				E7E582F81BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib in Resources */,
 				E7E582EC1BBDA84500287324 /* FirstRunPersonalViewController.xib in Resources */,
-				E7AC3F071B6BD86F00CF9DE4 /* ShutterImages.xcassets in Resources */,
 				E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */,
 				E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
