@@ -15,4 +15,6 @@
 
 - (void)presentCamera;
 
+- (void)presentAssignments;
+
 @end

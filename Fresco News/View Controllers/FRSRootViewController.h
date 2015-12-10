@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Fresco. All rights reserved.
 //
 
-//quick ations
-
 #import <UIKit/UIKit.h>
 
 @class FRSTabBarController;

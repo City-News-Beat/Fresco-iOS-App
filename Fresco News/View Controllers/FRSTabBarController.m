@@ -102,16 +102,21 @@
 {
     [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-    
     FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
     
     [self presentViewController:vc animated:YES completion:nil];
+    
+}
 
+- (void)presentAssignments {
+    
+    /* Opens view controller in tab bar at index 3 (AssignmentsViewController) */
+    [self setSelectedIndex:3];
+    
 }
 
 - (void)returnToGalleryPost
 {
-    
     FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
     
     [self presentViewController:vc animated:NO completion:^{

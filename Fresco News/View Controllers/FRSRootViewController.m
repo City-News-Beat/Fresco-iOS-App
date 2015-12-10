@@ -106,6 +106,14 @@
     
 }
 
+
+- (void)setRootViewControllerToAssignments{
+    
+    [self.tbc presentAssignments];
+    
+}
+
+
 - (void)setRootViewControllerUpload{
     
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];

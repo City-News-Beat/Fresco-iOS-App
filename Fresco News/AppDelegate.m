@@ -347,14 +347,12 @@
     
     
     // create dynamic shortcut items
-    UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-camera" localizedTitle:@"Camera" localizedSubtitle:@"" icon:camera userInfo:nil];
+    UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-camera" localizedTitle:@"Take photo" localizedSubtitle:@"" icon:camera userInfo:nil];
     
-    UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-video" localizedTitle:@"Video" localizedSubtitle:@"" icon:video userInfo:nil];
+    UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-video" localizedTitle:@"Take video" localizedSubtitle:@"" icon:video userInfo:nil];
     
     UIMutableApplicationShortcutItem *item3 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-map" localizedTitle:@"Assignments" localizedSubtitle:@"" icon:map userInfo:nil];
-    
-    
-    
+
     
     // add all items to an array
     NSArray *items = @[item1, item2, item3];
@@ -393,6 +391,7 @@
         [self.frsRootViewController setRootViewControllerToCamera];
         
     }
+    
 }
 
 
