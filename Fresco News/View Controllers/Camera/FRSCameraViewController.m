@@ -468,6 +468,8 @@
     [self.apertureShadowView addSubview:self.apertureBackground];
     
     self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
+    [self.apertureAnimationView centerHorizontallyInView:self.apertureBackground];
+    [self.apertureAnimationView centerVerticallyInView:self.apertureBackground];
     self.apertureAnimationView.layer.cornerRadius = 8/2;
     self.apertureAnimationView.layer.masksToBounds = YES;
     self.apertureAnimationView.alpha = 0.0;
@@ -477,7 +479,7 @@
     self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
     self.apertureMask.backgroundColor = [UIColor clearColor];
     self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
-    self.apertureMask.layer.borderWidth = 4.2;
+    self.apertureMask.layer.borderWidth = 4.0;
     [self.apertureBackground addSubview:self.apertureMask];
     self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width/2;
     
@@ -670,7 +672,7 @@
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.apertureAnimationView.frame = CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH);
-        self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH/2,0;
+        self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH/2.0;
         
     } completion:^(BOOL finished) {
         self.apertureAnimationView.alpha = 0.0;
@@ -678,6 +680,7 @@
         self.apertureAnimationView.center = self.apertureBackground.center;
         self.apertureAnimationView.layer.cornerRadius = 4;
         self.apertureBackground.backgroundColor = color;
+        self.apertureMask.layer.borderColor = color.CGColor;
     }];
     
 }
@@ -847,9 +850,6 @@ CGFloat angle = 0;
         self.apertureImageView.alpha = 1;
         
         /* Delay is used to change color of mask after animation completes */
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.apertureMask.layer.borderColor = [UIColor redCircleStrokeColor].CGColor;
-        });
         
         [self.sessionManager.session beginConfiguration];
         
@@ -865,9 +865,6 @@ CGFloat angle = 0;
     else {
         self.captureMode = FRSCaptureModePhoto;
         /* Delay is used to change color of mask after animation completes */
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
-        });
         
         
         [self.sessionManager.session beginConfiguration];

@@ -83,7 +83,7 @@
         self.frsRootViewController.onboardVisited = YES;
     }
     
-    [self createItemsWithIcons];
+//    [self createItemsWithIcons];
     
     return YES;
 }
@@ -106,7 +106,6 @@
 {
     return UIInterfaceOrientationMaskPortrait;
 }
-
 
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
