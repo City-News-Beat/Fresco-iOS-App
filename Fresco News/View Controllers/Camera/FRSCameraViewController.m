@@ -123,10 +123,10 @@
 //        self.locationManager = [FRSLocationManager sharedManager];
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
 //        self.currentOrientation = [UIDevice currentDevice].orientation;
-//        
-//        
+//
+//
 //        self.firstTime = YES;
-//        
+//
 //    }
 //    return self;
 //}
@@ -148,7 +148,7 @@
     
     
     [super viewDidLoad];
-
+    
     [self configureUI];
     
     [self setAppropriateIconsForCaptureState];
@@ -163,7 +163,7 @@
             });
         }];
     }];
-
+    
     
     self.isRecording = NO;
     
@@ -233,9 +233,9 @@
     self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
     [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
     [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
-
+    
     [self.closeButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
-
+    
     [self.topContainer addSubview:self.closeButton];
     
     self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
@@ -247,7 +247,7 @@
     
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
-//    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
+    //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
@@ -545,7 +545,7 @@
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
-
+            
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
             
@@ -712,8 +712,8 @@
 }
 
 -(void)rotateApp:(NSNotification *)notif{
-UIDeviceOrientation o = [UIDevice currentDevice].orientation;
-CGFloat angle = 0;
+    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
+    CGFloat angle = 0;
     NSInteger labelWidth;
     NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
     if ( o == UIDeviceOrientationLandscapeLeft ){
@@ -722,13 +722,13 @@ CGFloat angle = 0;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.topContainer.alpha = 0;
         } completion:nil];
-            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.topContainer.alpha = 1;
-                } completion:nil];
-            }];
+        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.topContainer.alpha = 1;
+            } completion:nil];
+        }];
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
         angle = -M_PI_2;
@@ -736,22 +736,22 @@ CGFloat angle = 0;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.topContainer.alpha = 0;
         } completion:nil];
-            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH ))),angle);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.topContainer.alpha = 1;
-                } completion:nil];
-            }];
-            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                
-                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))),angle);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.topContainer.alpha = 1;
-                } completion:nil];
-            }];
-
+        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH ))),angle);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.topContainer.alpha = 1;
+            } completion:nil];
+        }];
+        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))),angle);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.topContainer.alpha = 1;
+            } completion:nil];
+        }];
+        
     } else if ( o == UIDeviceOrientationPortraitUpsideDown ){
         /* no longer supported */
         labelWidth = self.captureVideoPreviewLayer.frame.size.width;
@@ -798,7 +798,7 @@ CGFloat angle = 0;
                              [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
                              } completion:^(BOOL finished){
-//                                 completion();
+                                 //                                 completion();
                              }];
                          }];
     });
@@ -820,7 +820,7 @@ CGFloat angle = 0;
         
     }
     
-
+    
 }
 
 //=======
@@ -843,7 +843,7 @@ CGFloat angle = 0;
     
     /* Disable mask for transition animation */
     self.apertureMask.layer.borderColor = [UIColor clearColor].CGColor;
-
+    
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
         //        self.cameraDisabled = YES;
@@ -913,11 +913,11 @@ CGFloat angle = 0;
     
     [self.preview addSubview:circle];
     
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         circle.alpha = 1.0;
         circle.transform = CGAffineTransformMakeScale(0.6, 0.6);
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2
+        [UIView animateWithDuration:0.3
                               delay:0.0
                             options: UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -946,148 +946,148 @@ CGFloat angle = 0;
             self.nextButton.userInteractionEnabled = NO;
         }
         
-            AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-            
-            // Update the orientation on the still image output video connection before capturing.
-            connection.videoOrientation = [self orientationFromDeviceOrientaton];
-            
-            // Capture a still image.
+        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
         
-            [self animateShutterWithCompletion:nil];
-            [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
+        // Update the orientation on the still image output video connection before capturing.
+        connection.videoOrientation = [self orientationFromDeviceOrientaton];
+        
+        // Capture a still image.
+        
+        [self animateShutterWithCompletion:nil];
+        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
+            
+            if (imageDataSampleBuffer){
                 
-                if (imageDataSampleBuffer){
-                    
-                    
-                    NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                    
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
-                        if (imageNSData) {
+                
+                NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+                    if (imageNSData) {
+                        
+                        CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
+                        
+                        //make the metadata dictionary mutable so we can add properties to it
+                        NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                        
+                        NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                        
+                        if(!GPSDictionary)
+                            GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+                        
+                        
+                        //Add the modified Data back into the image’s metadata
+                        if (GPSDictionary) {
+                            [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                        }
+                        
+                        CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
+                        
+                        //this will be the data CGImageDestinationRef will write into
+                        NSMutableData *newImageData = [NSMutableData data];
+                        
+                        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
+                        
+                        if(!destination)
+                            NSLog(@"***Could not create image destination ***");
+                        
+                        //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+                        CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
+                        
+                        //tell the destination to write the image data and metadata into our data object.
+                        //It will return false if something goes wrong
+                        BOOL success = NO;
+                        success = CGImageDestinationFinalize(destination);
+                        
+                        if(!success){
+                            NSLog(@"***Could not create data from image destination ***");
                             
-                            CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
                             
-                            //make the metadata dictionary mutable so we can add properties to it
-                            NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                            self.capturingImage = NO;
+                            self.previewButton.userInteractionEnabled = YES;
+                            self.nextButton.userInteractionEnabled = YES;
                             
-                            NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                            return;
+                        }
+                        
+                        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
                             
-                            if(!GPSDictionary)
-                                GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
-                            
-                            
-                            //Add the modified Data back into the image’s metadata
-                            if (GPSDictionary) {
-                                [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
-                            }
-                            
-                            CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
-                            
-                            //this will be the data CGImageDestinationRef will write into
-                            NSMutableData *newImageData = [NSMutableData data];
-                            
-                            CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
-                            
-                            if(!destination)
-                                NSLog(@"***Could not create image destination ***");
-                            
-                            //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-                            CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
-                            
-                            //tell the destination to write the image data and metadata into our data object.
-                            //It will return false if something goes wrong
-                            BOOL success = NO;
-                            success = CGImageDestinationFinalize(destination);
-                            
-                            if(!success){
-                                NSLog(@"***Could not create data from image destination ***");
+                            if (status == PHAuthorizationStatusAuthorized ) {
                                 
-                                
-                                self.capturingImage = NO;
-                                self.previewButton.userInteractionEnabled = YES;
-                                self.nextButton.userInteractionEnabled = YES;
-                                
-                                return;
-                            }
-                            
-                            [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-                                
-                                if (status == PHAuthorizationStatusAuthorized ) {
+                                // Note that creating an asset from a UIImage discards the metadata.
+                                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                                if ([PHAssetCreationRequest class]) {
                                     
-                                    // Note that creating an asset from a UIImage discards the metadata.
-                                    // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-                                    // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-                                    if ([PHAssetCreationRequest class]) {
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                                         
-                                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                            
-                                            [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
-                                            
-                                        } completionHandler:^( BOOL success, NSError *error ) {
-                                            
-                                            if (!success) {
-                                                NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                                self.capturingImage = NO;
-                                                self.previewButton.userInteractionEnabled = YES;
-                                                self.nextButton.userInteractionEnabled = YES;
-                                            }
-                                            else {
-                                                [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-                                                self.capturingImage = NO;
-                                                self.previewButton.userInteractionEnabled = YES;
-                                                self.nextButton.userInteractionEnabled = YES;
-                                            }
-                                        }];
-                                    }
-                                    else {
+                                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
                                         
-                                        NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-                                        NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                                    } completionHandler:^( BOOL success, NSError *error ) {
                                         
-                                        NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-                                        
-                                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                            
-                                            NSError *error = nil;
-                                            
-                                            [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-                                            
-                                            if ( error ) {
-                                                NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-                                            }
-                                            else {
-                                                [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-                                            }
-                                            
-                                        } completionHandler:^( BOOL success, NSError *error ) {
-                                            
-                                            if (!success ) {
-                                                NSLog( @"Error occurred while saving image to photo library: %@", error );
-                                            }
-                                            else {
-                                                [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-                                                
-                                            }
-                                            
+                                        if (!success) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
                                             self.capturingImage = NO;
                                             self.previewButton.userInteractionEnabled = YES;
                                             self.nextButton.userInteractionEnabled = YES;
-                                            
-                                            // Delete the temporary file.
-                                            [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-                                            
-                                        }];
-                                    }
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            self.capturingImage = NO;
+                                            self.previewButton.userInteractionEnabled = YES;
+                                            self.nextButton.userInteractionEnabled = YES;
+                                        }
+                                    }];
                                 }
-                            }];
-                        }
-                        else {
-                            NSLog( @"Could not capture still image: %@", error );
-                        }
-                    });
-                }
-                else {
-                    NSLog( @"Could not capture still image: %@", error );
-                }
+                                else {
+                                    
+                                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                                    
+                                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                                    
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                        
+                                        NSError *error = nil;
+                                        
+                                        [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                        
+                                        if ( error ) {
+                                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                        }
+                                        else {
+                                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                        }
+                                        
+                                    } completionHandler:^( BOOL success, NSError *error ) {
+                                        
+                                        if (!success ) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            
+                                        }
+                                        
+                                        self.capturingImage = NO;
+                                        self.previewButton.userInteractionEnabled = YES;
+                                        self.nextButton.userInteractionEnabled = YES;
+                                        
+                                        // Delete the temporary file.
+                                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                                        
+                                    }];
+                                }
+                            }
+                        }];
+                    }
+                    else {
+                        NSLog( @"Could not capture still image: %@", error );
+                    }
+                });
+            }
+            else {
+                NSLog( @"Could not capture still image: %@", error );
+            }
         }];
     });
 }
@@ -1299,52 +1299,52 @@ CGFloat angle = 0;
 - (void)runVideoRecordAnimation{
     
     self.captureModeToggleView.alpha = 0.0;
-        
-        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
-        } completion:nil];
-        
-        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
-        }
-                         completion:nil];
-
-        int radius = 30;
-        self.circleLayer = [CAShapeLayer layer];
-        // Make a circular shape
-        
-
-        self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
-                                                           cornerRadius:radius].CGPath;
-        
-        self.circleLayer.position = CGPointMake (CGRectGetMidX(self.apertureBackground.frame)-30, 6);
-        
-        // Configure the apperence of the circle
-        self.circleLayer.fillColor = [UIColor clearColor].CGColor;
-        self.circleLayer.strokeColor = [UIColor whiteColor].CGColor;
-        self.circleLayer.lineWidth = 4;
-        
-        // Add to parent layer
-        [self.apertureBackground.layer addSublayer:self.circleLayer];
-        
-        // Configure animation
-        CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        drawAnimation.duration = MAX_VIDEO_LENGTH; // for testing purposes
-        //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
-        drawAnimation.repeatCount         = 1.0;  // Animate only once..
-        
-        // Animate from no part of the stroke being drawn to the entire stroke being drawn
-        drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
-        drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
-        
-        // Experiment with timing to get the appearence to look the way you want
-        drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        
-        // Add the animation to the circle
-        [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
     
-//    }
-
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
+    }
+                     completion:nil];
+    
+    int radius = 30;
+    self.circleLayer = [CAShapeLayer layer];
+    // Make a circular shape
+    
+    
+    self.circleLayer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                                       cornerRadius:radius].CGPath;
+    
+    self.circleLayer.position = CGPointMake (CGRectGetMidX(self.apertureBackground.frame)-30, 6);
+    
+    // Configure the apperence of the circle
+    self.circleLayer.fillColor = [UIColor clearColor].CGColor;
+    self.circleLayer.strokeColor = [UIColor whiteColor].CGColor;
+    self.circleLayer.lineWidth = 4;
+    
+    // Add to parent layer
+    [self.apertureBackground.layer addSublayer:self.circleLayer];
+    
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration = MAX_VIDEO_LENGTH; // for testing purposes
+    //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
+    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+    
+    // Animate from no part of the stroke being drawn to the entire stroke being drawn
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+    
+    // Experiment with timing to get the appearence to look the way you want
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    // Add the animation to the circle
+    [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    
+    //    }
+    
     
 }
 
