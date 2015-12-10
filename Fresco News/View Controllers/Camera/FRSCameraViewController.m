@@ -1375,6 +1375,11 @@ CGFloat angle = 0;
 
 -(void)handlePreviewButtonTapped{
     
+    if (self.sessionManager.movieFileOutput.isRecording){
+        [self toggleVideoRecording];
+    }
+    
+    
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
     
     navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
