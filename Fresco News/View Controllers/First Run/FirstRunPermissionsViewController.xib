@@ -67,7 +67,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czW-gd-5KD" userLabel="Permissions Container">
-                    <rect key="frame" x="0.0" y="82" width="375" height="188"/>
+                    <rect key="frame" x="0.0" y="82" width="375" height="188.5"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ign-ev-LVd" userLabel="LocaitonIcon">
                             <rect key="frame" x="50" y="67" width="48" height="48"/>
@@ -85,63 +85,6 @@
                             </variation>
                             <connections>
                                 <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="cTQ-xw-PQ0"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WB7-qc-Ok6">
-                            <rect key="frame" x="147.5" y="75" width="123" height="32"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="148" id="DXZ-kZ-g42"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                            <state key="normal" title="Enable Location">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="DXZ-kZ-g42"/>
-                                </mask>
-                            </variation>
-                            <connections>
-                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="wGL-Me-9bh"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIu-dE-q8k">
-                            <rect key="frame" x="133" y="140" width="152" height="32"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="180" id="MP6-f3-3dg"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                            <state key="normal" title="Enable Notifications">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="MP6-f3-3dg"/>
-                                </mask>
-                            </variation>
-                            <connections>
-                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="gkJ-PX-2NM"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KiT-VP-211">
-                            <rect key="frame" x="150.5" y="8" width="117" height="32"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="263" id="YbK-Eo-8cm"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                            <state key="normal" title="Enable Camera">
-                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="YbK-Eo-8cm"/>
-                                </mask>
-                            </variation>
-                            <connections>
-                                <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="vSI-qG-PQ4"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-V7-WUx" userLabel="NotifIcon">
@@ -184,6 +127,63 @@
                             </variation>
                             <connections>
                                 <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="MYY-jC-3fn"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WB7-qc-Ok6">
+                            <rect key="frame" x="150" y="74" width="131" height="33"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="148" id="DXZ-kZ-g42"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Enable Location">
+                                <color key="titleColor" red="0.0" green="0.2784313725" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" red="0.49803921568627452" green="0.49803921568627452" blue="0.49803921568627452" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="DXZ-kZ-g42"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="enableLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="wGL-Me-9bh"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIu-dE-q8k">
+                            <rect key="frame" x="133" y="139" width="164" height="33"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="MP6-f3-3dg"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Enable Notifications">
+                                <color key="titleColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" red="0.49803921568627452" green="0.49803921568627452" blue="0.49803921568627452" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="MP6-f3-3dg"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="enableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="gkJ-PX-2NM"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KiT-VP-211">
+                            <rect key="frame" x="153" y="8" width="124" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="263" id="YbK-Eo-8cm"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Enable Camera">
+                                <color key="titleColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" red="0.49803921568627452" green="0.49803921568627452" blue="0.49803921568627452" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="YbK-Eo-8cm"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="cameraButtonTapped:" destination="-1" eventType="touchUpInside" id="vSI-qG-PQ4"/>
                             </connections>
                         </button>
                     </subviews>
