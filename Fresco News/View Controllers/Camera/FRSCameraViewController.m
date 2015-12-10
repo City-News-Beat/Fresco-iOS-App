@@ -905,8 +905,8 @@ CGFloat angle = 0;
     UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
     circle.backgroundColor = [UIColor clearColor];
     circle.layer.borderColor = [UIColor whiteColor].CGColor;
-    circle.layer.borderWidth = 4.0;
-    circle.alpha = 1.0;
+    circle.layer.borderWidth = 1.0;
+    circle.alpha = 0.0;
     circle.center = devicePoint;
     circle.layer.cornerRadius = circle.frame.size.height/2;
     circle.clipsToBounds = YES;
@@ -914,9 +914,20 @@ CGFloat angle = 0;
     [self.preview addSubview:circle];
     
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        circle.alpha = 1.0;
         circle.transform = CGAffineTransformMakeScale(0.6, 0.6);
     } completion:^(BOOL finished) {
-        [circle removeFromSuperview];
+        [UIView animateWithDuration:0.2
+                              delay:0.0
+                            options: UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             circle.alpha = 0;
+                         }
+                         completion:^(BOOL finished){
+                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                 [circle removeFromSuperview];
+                             });
+                         }];
     }];
 }
 
