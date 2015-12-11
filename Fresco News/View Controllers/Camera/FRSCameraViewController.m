@@ -1264,8 +1264,6 @@
     if (self.locationManager.managerState == LocationManagerStateForeground)
         [self.locationManager stopUpdatingLocation];
     
-    NSLog(@"did update locations in camera");
-    
     if (self.locationManager.location) {
         
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
