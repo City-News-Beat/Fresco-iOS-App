@@ -36,9 +36,7 @@
     //Check if the app visited onboard, then go straight to updating
     
     if(((FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController).onboardVisited){
-    
         [self initialUpdate];
-    
     }
     
     [self initialUpdate];
@@ -92,6 +90,10 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Data Loading

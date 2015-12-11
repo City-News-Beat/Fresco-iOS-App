@@ -142,6 +142,7 @@
     self.dispatchIndex = nil;
     
     for(GalleryTableViewCell *cell in [self.tableView visibleCells]){
+        NSLog(@"stop playing");
         [cell.galleryView cleanUpVideoPlayer];
     }
 

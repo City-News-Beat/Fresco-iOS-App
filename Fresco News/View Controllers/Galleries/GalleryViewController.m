@@ -29,11 +29,13 @@ static CGFloat kCellHeight = 44.0f;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+
+
 /*
 ** View for posts
 */
-
 @property (weak, nonatomic) IBOutlet GalleryView *galleryView;
+
 
 /*
 ** Gallery View Properties, in order of appearance

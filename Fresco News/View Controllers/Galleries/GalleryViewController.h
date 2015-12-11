@@ -15,5 +15,7 @@
 
 @property (nonatomic, strong) FRSGallery *gallery;
 
+
+
 @end
 
