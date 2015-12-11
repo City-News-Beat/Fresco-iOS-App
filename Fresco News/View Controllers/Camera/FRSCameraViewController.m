@@ -329,9 +329,9 @@
             [self.previewBackgroundIV addSubview:self.nextButton];
             
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
+                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
                 self.previewBackgroundIV.alpha = 1.0;
-                self.nextButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
+                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
                 self.nextButton.alpha = 0.7;
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
@@ -343,7 +343,7 @@
             self.previewBackgroundIV.alpha = 1.0;
             [self.previewBackgroundIV insertSubview:temp belowSubview:self.nextButton];
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
+                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
                 [temp removeFromSuperview];
@@ -354,17 +354,15 @@
             [self.previewBackgroundIV addSubview:temp];
             
             [self createNextButtonWithFrame:self.previewButton.frame];
-            self.nextButton.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
+            self.nextButton.transform = CGAffineTransformMakeScale(0.001, 0.001);
             [self.previewBackgroundIV addSubview:self.nextButton];
             
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 
-                self.nextButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
+                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
                 self.nextButton.alpha = 0.7;
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
-                [temp removeFromSuperview];
             }];
         }
     });
@@ -468,6 +466,8 @@
     self.apertureBackground.layer.cornerRadius = APERTURE_WIDTH/2.;
     self.apertureBackground.layer.masksToBounds = YES;
     [self.apertureShadowView addSubview:self.apertureBackground];
+    
+    self.apertureBackground.backgroundColor = [UIColor blueColor];
     
     self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
     [self.apertureAnimationView centerHorizontallyInView:self.apertureBackground];
@@ -790,15 +790,15 @@
 -(void)animateShutterWithCompletion:(void(^)())completion{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
         } completion:nil];
         
-        [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
             self.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
         }
                          completion:^(BOOL finished){
-                             [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+                             [UIView animateWithDuration:0.15 delay:0.06 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                              } completion:^(BOOL finished){
                                  //                                 completion();

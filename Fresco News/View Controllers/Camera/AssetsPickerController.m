@@ -149,7 +149,7 @@ static CGSize AssetGridThumbnailSize;
     // Register cell class and prepare each cell for re-use for efficiency.
     [self.collectionView registerClass:[AssetGridViewCell class] forCellWithReuseIdentifier:CellReuseIdentifier];
     // Make background view clear
-    [self.collectionView setBackgroundColor:[UIColor clearColor]];
+    [self.collectionView setBackgroundColor:[UIColor whiteColor]];
     
     // Add collection view as subview to our root view.
     [self.view addSubview:self.collectionView];
@@ -250,6 +250,9 @@ static CGSize AssetGridThumbnailSize;
             if (asset.mediaType == PHAssetMediaTypeVideo){
                 [cell configureForVideoAssetWithDuration:asset.duration];
             }
+            cell.layer.shouldRasterize = YES;
+            cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+            
         }
     }];
     
