@@ -201,6 +201,8 @@
     
     [self.sessionManager clearCaptureSession];
     
+    [_captureVideoPreviewLayer removeFromSuperlayer];
+    
     self.isPresented = NO;
     
 }
@@ -277,7 +279,7 @@
         self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
         [viewLayer addSublayer:self.captureVideoPreviewLayer];
-        self.captureVideoPreviewLayer.frame = self.preview.bounds;
+        self.captureVideoPreviewLayer.frame = self.preview.frame;
     });
 }
 
@@ -691,7 +693,7 @@
     NSInteger offset = topToAperture - 10;
     
     CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * PHOTO_FRAME_RATIO);
+    CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
     
     if (self.captureMode == FRSCaptureModePhoto){
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -772,10 +774,11 @@
     } else {
         return;
     }
+    
     [UIView beginAnimations:@"omar" context:nil];
     [UIView setAnimationDuration:0.2];
     self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-    self.apertureBackground.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+//    self.apertureBackground.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.videoIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.flashButton.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
@@ -1101,6 +1104,7 @@
         self.videoTimer = nil;
         
         [self stopRecordingAnimation];
+        self.previewBackgroundIV.alpha = 1.0;
         
     }
     else {
@@ -1308,6 +1312,8 @@
         self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
     }
                      completion:nil];
+    
+    self.previewBackgroundIV.alpha = 0.0;
     
     int radius = 30;
     self.circleLayer = [CAShapeLayer layer];

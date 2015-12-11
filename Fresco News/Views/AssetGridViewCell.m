@@ -27,7 +27,6 @@
     self.selectedView.backgroundColor = [UIColor assetOverlayColor];
     self.selectedView.hidden = NO;
     
-    
     UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.selectedView.frame) - 30 , 8, 22, 22)];
     shadowView.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
     shadowView.layer.shadowOffset = CGSizeMake(0, 3);
@@ -44,7 +43,6 @@
     
     [self addSubview:self.selectedView];
     [self addSubview:photoImageView];
-
 }
 
 -(void)configureForVideoAssetWithDuration:(NSTimeInterval)duration{
