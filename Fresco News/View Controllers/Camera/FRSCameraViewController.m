@@ -250,8 +250,7 @@
     self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
     //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
-    self.assignmentLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
-    self.assignmentLabel.text = [@"This is a test label with some text bitch" uppercaseString];
+    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
@@ -320,19 +319,19 @@
         UIImageView *temp = [[UIImageView alloc] initWithFrame:self.previewButton.frame];
         temp.image = image;
         [temp clipAsCircle];
-        temp.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        temp.transform = CGAffineTransformMakeScale(0.000001, 0.000001);
         
         if (self.previewBackgroundIV.alpha <= 0){
             [self.previewBackgroundIV addSubview:temp];
             
             [self createNextButtonWithFrame:self.previewButton.frame];
-            self.nextButton.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            self.nextButton.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
             [self.previewBackgroundIV addSubview:self.nextButton];
             
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 self.previewBackgroundIV.alpha = 1.0;
-                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                self.nextButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 self.nextButton.alpha = 0.7;
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
@@ -344,7 +343,7 @@
             self.previewBackgroundIV.alpha = 1.0;
             [self.previewBackgroundIV insertSubview:temp belowSubview:self.nextButton];
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
                 [temp removeFromSuperview];
@@ -355,13 +354,13 @@
             [self.previewBackgroundIV addSubview:temp];
             
             [self createNextButtonWithFrame:self.previewButton.frame];
-            self.nextButton.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            self.nextButton.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
             [self.previewBackgroundIV addSubview:self.nextButton];
             
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                temp.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                temp.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 
-                self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
+                self.nextButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                 self.nextButton.alpha = 0.7;
             } completion:^(BOOL finished) {
                 [self.previewButton setImage:image forState:UIControlStateNormal];
@@ -418,7 +417,8 @@
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nextButton setBackgroundColor:[UIColor whiteColor]];
     [self.nextButton clipAsCircle];
-    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
+//    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
+    [self.nextButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15]];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -795,11 +795,11 @@
         } completion:nil];
         
         [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
-            self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
+            self.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
         }
                          completion:^(BOOL finished){
                              [UIView animateWithDuration:0.25 delay:0.07 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
-                                 self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+                                 self.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                              } completion:^(BOOL finished){
                                  //                                 completion();
                              }];
@@ -957,6 +957,7 @@
         // Capture a still image.
         
         [self animateShutterWithCompletion:nil];
+        
         [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
             
             if (imageDataSampleBuffer){
@@ -1155,7 +1156,7 @@
                 NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
                 NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
                 [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+//                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self runVideoRecordAnimation];
@@ -1309,7 +1310,7 @@
     } completion:nil];
     
     [UIView animateWithDuration:0.25 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.apertureButton.transform = CGAffineTransformMakeScale(4, 4);
+        self.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
     }
                      completion:nil];
     
@@ -1366,7 +1367,7 @@
                              self.circleLayer.opacity = 0;
                              
                              self.apertureButton.alpha = 1;
-                             self.apertureButton.transform = CGAffineTransformMakeScale(1, 1);
+                             self.apertureButton.transform = CGAffineTransformMakeScale(1.000, 1.000);
                          }
                          completion:^(BOOL finished) {
                              [self.circleLayer removeFromSuperlayer];
