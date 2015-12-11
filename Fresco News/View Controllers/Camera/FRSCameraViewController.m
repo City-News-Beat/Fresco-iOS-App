@@ -212,9 +212,9 @@
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-//        [UIView animateWithDuration:0.2 animations:^{
-            self.preview.alpha = 1.0;
-//        }];
+        //        [UIView animateWithDuration:0.2 animations:^{
+        self.preview.alpha = 1.0;
+        //        }];
         
     });
 }
@@ -416,7 +416,7 @@
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nextButton setBackgroundColor:[UIColor whiteColor]];
     [self.nextButton clipAsCircle];
-//    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
+    //    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.nextButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15]];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -790,18 +790,18 @@
 -(void)animateShutterWithCompletion:(void(^)())completion{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.apertureButton.transform = CGAffineTransformMakeRotation(M_PI/-2);
         } completion:nil];
         
-        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.apertureButton.transform = CGAffineTransformMakeScale(4.00, 4.00);
         }
                          completion:^(BOOL finished){
-                             [UIView animateWithDuration:0.15 delay:0.06 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
+                             [UIView animateWithDuration:0.15 delay:0.06 options: UIViewAnimationOptionCurveEaseOut animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                              } completion:^(BOOL finished){
-                                self.apertureButton.frame = self.originalApertureFrame;
+                                 self.apertureButton.frame = self.originalApertureFrame;
                              }];
                          }];
     });
@@ -960,12 +960,14 @@
         
         [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
             
-            if (imageDataSampleBuffer){
-                
-                
-                NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+            CMSampleBufferRef copy = NULL;
+            CMSampleBufferCreateCopy(NULL, imageDataSampleBuffer, &copy);
+            
+            if (copy){
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+                    NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:copy];
+                    
                     if (imageNSData) {
                         
                         CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
@@ -1004,7 +1006,6 @@
                         
                         if(!success){
                             NSLog(@"***Could not create data from image destination ***");
-                            
                             
                             self.capturingImage = NO;
                             self.previewButton.userInteractionEnabled = YES;
@@ -1156,7 +1157,7 @@
                 NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
                 NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
                 [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-//                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self runVideoRecordAnimation];
