@@ -183,14 +183,14 @@
             [self configurePreviewLayer];
         }];
     }
-    
-    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
-    self.locationManager.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self fadeInPreview];
+    
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
+    self.locationManager.delegate = self;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -210,9 +210,9 @@
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [UIView animateWithDuration:0.3 animations:^{
+//        [UIView animateWithDuration:0.2 animations:^{
             self.preview.alpha = 1.0;
-        }];
+//        }];
         
     });
 }
@@ -237,7 +237,6 @@
     [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
     [self.closeButton addTarget:self action:@selector(dismissAndReturnToPreviousTab) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.topContainer addSubview:self.closeButton];
     
     self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.closeButton.frame.origin.x + self.closeButton.frame.size.width + 17, 1, 22, 22)];
@@ -784,6 +783,7 @@
     self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.previewBackgroundIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     [UIView commitAnimations];
+    
     self.assignmentLabel.frame = CGRectMake(self.assignmentLabel.frame.origin.x, self.assignmentLabel.frame.origin.y, labelWidth - offset, self.assignmentLabel.frame.size.height);
 }
 
@@ -1293,11 +1293,16 @@
 
 -(void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment{
     
-    self.assignmentLabel.text = [assignment.title uppercaseString];
-    
-    self.locationIV.alpha = 1.0;
-    self.assignmentLabel.alpha = 1.0;
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!assignment.title)
+            return;
+        self.assignmentLabel.text = [assignment.title uppercaseString];
+        
+        [UIView animateWithDuration:0.15 animations:^{
+            self.locationIV.alpha = 1.0;
+            self.assignmentLabel.alpha = 1.0;
+        }];
+    });
 }
 
 
