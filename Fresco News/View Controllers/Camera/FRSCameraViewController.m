@@ -112,6 +112,8 @@
 
 @property (nonatomic) BOOL firstTime;
 
+@property (nonatomic) CGRect originalApertureFrame;
+
 @end
 
 @implementation FRSCameraViewController
@@ -484,7 +486,8 @@
     [self.apertureBackground addSubview:self.apertureMask];
     self.apertureMask.layer.cornerRadius = self.apertureMask.frame.size.width/2;
     
-    self.apertureButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
+    self.originalApertureFrame = CGRectMake(4, 4, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8);
+    self.apertureButton = [[UIButton alloc] initWithFrame:self.originalApertureFrame];
     
     self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
@@ -777,7 +780,6 @@
     [UIView beginAnimations:@"omar" context:nil];
     [UIView setAnimationDuration:0.2];
     self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-//    self.apertureBackground.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.videoIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.flashButton.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
     self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
@@ -801,7 +803,7 @@
                              [UIView animateWithDuration:0.15 delay:0.06 options: UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowAnimatedContent animations:^{
                                  self.apertureButton.transform = CGAffineTransformMakeScale(1.00, 1.00);
                              } completion:^(BOOL finished){
-                                 //                                 completion();
+                                self.apertureButton.frame = self.originalApertureFrame;
                              }];
                          }];
     });
