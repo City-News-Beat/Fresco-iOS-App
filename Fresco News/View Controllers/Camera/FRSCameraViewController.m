@@ -248,7 +248,7 @@
     self.locationIV.alpha = 0.0;
     [self.topContainer addSubview:self.locationIV];
     
-    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
+    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(12 + 24 + 17 + 22 + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
     //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
@@ -259,7 +259,7 @@
 }
 
 -(NSInteger)assignmentLabelWidth{
-    return self.view.frame.size.width - self.closeButton.frame.size.width - self.locationIV.frame.size.width - 10 - 17 - 7 - 12;
+    return [UIScreen mainScreen].bounds.size.width - 24 - 22 - 10 - 17 - 7 - 12;
 }
 
 -(void)configurePreview{
@@ -507,7 +507,6 @@
     NSInteger apertureEdge = self.apertureShadowView.frame.origin.x + self.apertureShadowView.frame.size.width;
     NSInteger xOrigin = apertureEdge + (self.view.frame.size.width - apertureEdge - SIDE_PAD - (ICON_WIDTH * 2))/2;
     
-    
     self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, 0, ICON_WIDTH, ICON_WIDTH)];
     [self.flashButton centerVerticallyInView:self.bottomClearContainer];
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
@@ -516,7 +515,6 @@
     [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
     [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    
 }
 
 -(void)flashButtonTapped {
