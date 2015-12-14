@@ -83,7 +83,7 @@
         self.frsRootViewController.onboardVisited = YES;
     }
     
-//    [self createItemsWithIcons];
+    [self createItemsWithIcons];
     
     return YES;
 }
@@ -353,7 +353,6 @@
         UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-video" localizedTitle:@"Take video" localizedSubtitle:@"" icon:video userInfo:nil];
         
         UIMutableApplicationShortcutItem *item3 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-map" localizedTitle:@"Assignments" localizedSubtitle:@"" icon:map userInfo:nil];
-        
         
         // add all items to an array
         NSArray *items = @[item1, item2, item3];

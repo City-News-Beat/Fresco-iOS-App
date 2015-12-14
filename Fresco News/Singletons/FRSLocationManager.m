@@ -178,8 +178,8 @@
         
         [[FRSDataManager sharedManager] updateUserLocation:params completion:^(NSDictionary *response, NSError *error) {
             
-            if(response){
-                [self updateAssignemntsQuickActionWithResponse:response];
+            if (error){
+                NSLog(@"Error updating user location %@", error.localizedDescription);
             }
             
         }];
@@ -214,52 +214,6 @@
                                                              repeats:YES];
     }
 
-}
-
--(void)updateAssignemntsQuickActionWithResponse:(NSDictionary *)response{
-    
-    NSArray *assignments = response[@"data"][@"assignments_nearby"];
-    
-    //DEBUG
-    
-    NSInteger rand = arc4random_uniform(5);
-    
-    NSMutableArray *array = [NSMutableArray new];
-    
-    for (NSInteger i = 0; i < rand; i++){
-        [array addObject:[NSString stringWithFormat:@"%lu klasdf", i]];
-    }
-    
-    assignments = [array copy];
-    
-    //end debug
-    
-    if (!assignments) return;
-    
-    NSArray *shortcutItems = [[UIApplication sharedApplication] shortcutItems];
-    
-    if (shortcutItems.count != 3) return;
-    
-    NSString *title = @"Assignments";
-    NSString *subtitle;
-    UIApplicationShortcutIcon *map = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-map"];
-    
-    if ([assignments count] == 0){
-        subtitle = @"";
-    }
-    else if ([assignments count] == 1){
-        subtitle = assignments[0];
-    }
-    else {
-        subtitle = [NSString stringWithFormat:@"%ld nearby", assignments.count];
-    }
-    
-    UIApplicationShortcutItem *aItem = [[UIMutableApplicationShortcutItem alloc] initWithType:@"quick-action-map" localizedTitle:title localizedSubtitle:subtitle icon:map userInfo:nil];
-    if (!aItem) return;
-    
-    NSArray *newItems = @[shortcutItems[0], shortcutItems[1], aItem];
-    [[UIApplication sharedApplication] setShortcutItems:newItems];
-    
 }
 
 /**
