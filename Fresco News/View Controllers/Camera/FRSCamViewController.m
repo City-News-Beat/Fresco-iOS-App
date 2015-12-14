@@ -346,7 +346,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
             }
         }
     });
-
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -400,7 +399,6 @@ typedef NS_ENUM( NSInteger, FRSCamSetupResult ) {
         
         //Adds gesture to the settings icon to segue to the ProfileSettingsViewController
         [self.rotateImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(animateRotateImageView:)]];
-        
     });
 }
 
