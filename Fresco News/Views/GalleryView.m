@@ -485,8 +485,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                @"gallery" : self.gallery.galleryID
                                };
         if (dict)
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:dict];
-        
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:nil userInfo:dict];
         
     }
     

@@ -182,7 +182,7 @@
             
             UITableView *tv = ((HighlightsViewController *)vc).galleriesViewController.tableView;
             
-            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 1000) {
+            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000) {
                 
                 NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
                 [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -200,8 +200,8 @@
         if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
             
             NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
-            
-            if (((StoriesViewController *)vc).tableView.numberOfSections > 0)
+            UITableView *tv = ((StoriesViewController *)vc).tableView;
+            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000)
                 [((StoriesViewController *)vc).tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
             
         }
@@ -226,8 +226,9 @@
                 
                 NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
                 
-                if (((ProfileViewController *)vc).galleriesViewController.galleries){
-                    
+                UITableView *tv = ((ProfileViewController *)vc).galleriesViewController.tableView;
+                
+                if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000){
                     [((ProfileViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
                 }
                 

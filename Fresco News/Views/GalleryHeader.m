@@ -170,11 +170,11 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 - (void)updateGalleryHeader:(NSNotification *)notif{
     
     //Check if the notification is in a valid format
-    if(notif.object[@"postIndex"] && notif.object[@"gallery"]){
+    if(notif.userInfo[@"postIndex"] && notif.userInfo[@"gallery"]){
     
-        if([notif.object[@"gallery"] isEqualToString:self.gallery.galleryID]){
+        if([notif.userInfo[@"gallery"] isEqualToString:self.gallery.galleryID]){
          
-            [self galleryHeaderUpdateAnimationWithIndex:[(NSNumber *)notif.object[@"postIndex"] integerValue]];
+            [self galleryHeaderUpdateAnimationWithIndex:[(NSNumber *)notif.userInfo[@"postIndex"] integerValue]];
             
         }
     }
