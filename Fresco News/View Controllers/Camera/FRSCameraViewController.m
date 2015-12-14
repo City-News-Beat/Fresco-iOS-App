@@ -173,7 +173,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
     //hide status bar before view is loaded.
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
@@ -188,6 +187,8 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    
+
     [super viewDidAppear:animated];
     [self fadeInPreview];
     
@@ -206,8 +207,8 @@
     [_captureVideoPreviewLayer removeFromSuperlayer];
     
     self.isPresented = NO;
-    
 }
+
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -463,7 +464,7 @@
     [self.bottomClearContainer addSubview:self.apertureShadowView];
     
     self.apertureBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
-    self.apertureBackground.layer.cornerRadius = APERTURE_WIDTH/2.;
+    self.apertureBackground.layer.cornerRadius = self.apertureBackground.frame.size.width/2.;
     self.apertureBackground.layer.masksToBounds = YES;
     [self.apertureShadowView addSubview:self.apertureBackground];
     
@@ -782,11 +783,14 @@
     
     [UIView beginAnimations:@"omar" context:nil];
     [UIView setAnimationDuration:0.2];
-    self.cameraIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-    self.videoIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-    self.flashButton.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-    self.apertureImageView.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
-    self.previewBackgroundIV.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.cameraIV.center.x / ICON_WIDTH, self.cameraIV.center.y / ICON_WIDTH), angle);
+    
+    CGAffineTransform rotation = CGAffineTransformMakeRotation(angle);
+    self.cameraIV.transform = rotation;
+    self.videoIV.transform = rotation;
+    self.flashButton.transform = rotation;
+    self.apertureBackground.transform = rotation;
+    self.previewBackgroundIV.transform = rotation;
+
     [UIView commitAnimations];
     
     self.assignmentLabel.frame = CGRectMake(self.assignmentLabel.frame.origin.x, self.assignmentLabel.frame.origin.y, labelWidth - offset, self.assignmentLabel.frame.size.height);
@@ -913,7 +917,7 @@
     UIView *circle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
     circle.backgroundColor = [UIColor clearColor];
     circle.layer.borderColor = [UIColor whiteColor].CGColor;
-    circle.layer.borderWidth = 1.0;
+    circle.layer.borderWidth = 2.0;
     circle.alpha = 0.0;
     circle.center = devicePoint;
     circle.layer.cornerRadius = circle.frame.size.height/2;

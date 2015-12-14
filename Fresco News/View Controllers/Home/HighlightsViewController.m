@@ -120,7 +120,7 @@
 
 - (void)performNecessaryFetchWithRefresh:(BOOL)refresh withResponseBlock:(FRSRefreshResponseBlock)responseBlock{
     
-    NSDictionary *params = @{@"offset" : @0, @"stories" : @"true", @"hide" : @"1"};
+    NSDictionary *params = @{@"offset" : @0, @"stories" : @"true", @"hide" : HIDE_NUMBER};
         
     [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:refresh withResponseBlock:^(id responseObject, NSError *error){
     
