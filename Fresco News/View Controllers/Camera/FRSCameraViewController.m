@@ -234,7 +234,7 @@
     self.topContainer.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.topContainer];
     
-    self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(12, 0, 24, 24)];
+    self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5, -7, 38, 38)];
     [self.closeButton setImage:[UIImage imageNamed:@"x-icon-light"] forState:UIControlStateNormal];
     [self.closeButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
@@ -400,7 +400,6 @@
     [self.bottomClearContainer addSubview:self.previewBackgroundIV];
     [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
-    
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
@@ -507,7 +506,9 @@
     NSInteger apertureEdge = self.apertureShadowView.frame.origin.x + self.apertureShadowView.frame.size.width;
     NSInteger xOrigin = apertureEdge + (self.view.frame.size.width - apertureEdge - SIDE_PAD - (ICON_WIDTH * 2))/2;
     
-    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, 0, ICON_WIDTH, ICON_WIDTH)];
+    NSInteger sidePad = 7;
+    
+    self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin - sidePad, -sidePad, ICON_WIDTH + sidePad * 2, ICON_WIDTH + sidePad * 2)];
     [self.flashButton centerVerticallyInView:self.bottomClearContainer];
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -595,7 +596,7 @@
 
 -(void)configureToggleView{
     
-    self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - SIDE_PAD - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 3, ICON_WIDTH, self.previewBackgroundIV.frame.size.height + 3)];
+    self.captureModeToggleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (SIDE_PAD * 2) - ICON_WIDTH, self.previewBackgroundIV.frame.origin.y - 4, ICON_WIDTH + SIDE_PAD * 2, self.previewBackgroundIV.frame.size.height + 6)];
     self.captureModeToggleView.userInteractionEnabled = YES;
     [self.bottomClearContainer addSubview:self.captureModeToggleView];
     
@@ -609,7 +610,7 @@
 -(void)configureCameraButton{
     
     //we offset the y by 2 pixels because the image has top padding on top and we want to align the content of the image.
-    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ICON_WIDTH, ICON_WIDTH)];
+    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, ICON_WIDTH, ICON_WIDTH)];
     self.cameraIV.contentMode = UIViewContentModeCenter;
     self.cameraIV.userInteractionEnabled = YES;
     [self.cameraIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
@@ -620,9 +621,9 @@
 -(void)configureVideoButton{
     
     //The ending y coordinate of the thumbnail icon minus the height of the video icon. We add because the image asset itself has bottom padding and we want to align the content of the image.
-    NSInteger yOrigin = self.captureModeToggleView.frame.size.height - ICON_WIDTH + 4;
+    NSInteger yOrigin = self.captureModeToggleView.frame.size.height - ICON_WIDTH + 1;
     
-    self.videoIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, yOrigin, ICON_WIDTH, ICON_WIDTH)];
+    self.videoIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, yOrigin, ICON_WIDTH, ICON_WIDTH)];
     self.videoIV.userInteractionEnabled = YES;
     self.videoIV.contentMode = UIViewContentModeCenter;
     [self.videoIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
