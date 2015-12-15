@@ -67,7 +67,6 @@
     //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
-
 }
 
 
@@ -150,12 +149,29 @@
     
     //Check fields first
     if([self.emailField.text isValidEmail]){
+        
+        NSString *rawEmail = self.emailField.text;
+        
+        NSArray *comps = [rawEmail componentsSeparatedByString:@"@"];
+        NSString *namePart;
+        NSString *addressPart;
+        
+        if (comps.count > 1){
+            namePart = comps[0];
+            addressPart = comps[1];
+        }
+        
+        NSArray *plusComps = [namePart componentsSeparatedByString:@"+"];
+        namePart = plusComps[0];
+        
+        namePart = [namePart stringByReplacingOccurrencesOfString:@"." withString:@""];
+        
+        NSString *strippedEmail = [[NSString stringWithFormat:@"%@@%@", namePart, addressPart] lowercaseString];
     
         [self performLogin:LoginFresco button:self.loginButton
-             withLoginInfo:@{@"email" : self.emailField.text,
+             withLoginInfo:@{@"email" : strippedEmail,
                              @"password" : self.passwordField.text
                              }];
-    
     }
     else {
         
@@ -165,7 +181,6 @@
                                        animated:YES completion:nil];
     
     }
-
 }
 
 /**
@@ -176,8 +191,18 @@
 
 - (IBAction)signUpButtonAction:(id)sender
 {
+    
     self.email = self.emailField.text;
+    
+    if (self.email){
+        [[NSUserDefaults standardUserDefaults] setObject:self.email forKey:@"USER_EMAIL_TEMP"];
+    }
+    
     self.password = self.passwordField.text;
+    
+    if (self.password){
+        [[NSUserDefaults standardUserDefaults] setObject:self.password forKey:@"USER_PASSWORD_TEMP"];
+    }
     
     [self navigateToNextIndex];
     

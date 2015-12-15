@@ -52,13 +52,19 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
-
-    //we may prepopulate these either during pushing or backing
-    if (self.email)
-        self.emailField.text = self.email;
     
-    if (self.password)
+    self.email = [[NSUserDefaults standardUserDefaults] objectForKey:@"USER_EMAIL_TEMP"];
+    self.password = [[NSUserDefaults standardUserDefaults] objectForKey:@"USER_PASSWORD_TEMP"];
+    //we may prepopulate these either during pushing or backing
+    if (self.email) {
+        self.emailField.text = self.email;
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"USER_EMAIL_TEMP"];
+    }
+    
+    if (self.password) {
         self.passwordField.text = self.password;
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"USER_PASSWORD_TEMP"];
+    }
 
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyNext;
@@ -207,11 +213,30 @@
     //Both fields valid
     
     // save this to allow backing to the VC
-    self.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    self.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *rawEmail = self.emailField.text;
     
-    NSString *confirmPassword = [self.confirmPasswordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *comps = [rawEmail componentsSeparatedByString:@"@"];
+    NSString *namePart;
+    NSString *addressPart;
+    
+    if (comps.count > 1){
+        namePart = comps[0];
+        addressPart = comps[1];
+    }
+    
+    NSArray *plusComps = [namePart componentsSeparatedByString:@"+"];
+    namePart = plusComps[0];
+    
+    namePart = [namePart stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    NSString *strippedEmail = [[NSString stringWithFormat:@"%@@%@", namePart, addressPart] lowercaseString];
+    
+    self.email = strippedEmail;
+    
+    self.password = self.passwordField.text;
+    
+    NSString *confirmPassword = self.confirmPasswordField.text;
     
     if (![self.password isEqualToString:confirmPassword]) {
         

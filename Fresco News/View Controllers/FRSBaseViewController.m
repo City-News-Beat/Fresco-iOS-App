@@ -133,7 +133,7 @@
 
     if(login == LoginFresco){
 
-        [[FRSDataManager sharedManager] loginUser:info[@"email"] password:info[@"password"] block:^(PFUser *user, NSError *error) {
+        [[FRSDataManager sharedManager] loginUser:[info[@"email"] lowercaseString] password:info[@"password"] block:^(PFUser *user, NSError *error) {
 
             self.view.userInteractionEnabled = YES;
             
