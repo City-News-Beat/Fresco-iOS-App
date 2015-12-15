@@ -56,6 +56,13 @@
     progress.frame = CGRectMake(0, 62 , [[UIScreen mainScreen] bounds].size.width, 2.5);
     progress.tintColor = [UIColor whiteColor];
     
+    progress.frame = CGRectMake(0, 61.5, [[UIScreen mainScreen] bounds].size.width, 2.);
+    progress.tintColor = [UIColor whiteColor];
+    progress.layer.shadowRadius = 0.5;
+    progress.layer.shadowOffset = CGSizeMake(0, -.5);
+    progress.layer.shadowColor = [UIColor frescoShadowColor].CGColor;
+    progress.layer.shadowOpacity = 1.0;
+    
     self.progressView = progress;
     
     [self.tbc.view addSubview:self.progressView];
