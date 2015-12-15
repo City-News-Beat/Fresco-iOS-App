@@ -638,14 +638,14 @@ static CGSize AssetGridThumbnailSize;
         return;
     }
     
-    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
-    
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Media"
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:nil
-                                                                            action:nil];
-    
+//    GalleryPostViewController *vc = [[UIStoryboard storyboardWithName:@"Camera" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"galleryPost"];
+    GalleryPostViewController *vc = [[GalleryPostViewController alloc] init];
     vc.gallery = gallery;
+    
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Media"
+//                                                                             style:UIBarButtonItemStylePlain
+//                                                                            target:nil
+//                                                                            action:nil];
     
     [self.navigationController pushViewController:vc animated:YES];
 

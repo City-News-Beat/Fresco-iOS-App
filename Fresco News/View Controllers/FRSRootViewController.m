@@ -53,7 +53,7 @@
     //Add progress indicator
     UIProgressView *progress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     
-    progress.frame = CGRectMake(0, 62 , [[UIScreen mainScreen] bounds].size.width, 2.5);
+    progress.frame = CGRectMake(0, 62, [[UIScreen mainScreen] bounds].size.width, 2);
     progress.tintColor = [UIColor whiteColor];
     
     progress.frame = CGRectMake(0, 61.5, [[UIScreen mainScreen] bounds].size.width, 2.);

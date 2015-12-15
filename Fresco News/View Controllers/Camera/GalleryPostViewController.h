@@ -1,12 +1,11 @@
 //
-//  GalleryPostViewController.h
-//  FrescoNews
+//  GallleryPostViewController.h
+//  Fresco
 //
-//  Created by Joshua Lerner on 4/19/15.
-//  Copyright (c) 2015 Fresco. All rights reserved.
+//  Created by Daniel Sun on 12/15/15.
+//  Copyright © 2015 Fresco. All rights reserved.
 //
 
-@import UIKit;
 #import "FRSBaseViewController.h"
 
 @class FRSGallery;

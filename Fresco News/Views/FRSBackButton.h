@@ -27,5 +27,6 @@
  */
 
 + (FRSBackButton *)createBackButton;
++ (FRSBackButton *)createLightBackButtonWithTitle:(NSString *)title;
 
 @end

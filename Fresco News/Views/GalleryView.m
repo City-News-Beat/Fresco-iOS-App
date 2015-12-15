@@ -374,7 +374,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                     cell.playPause.alpha = 0.0f;
                     cell.playPause.transform = CGAffineTransformMakeScale(2, 2);
                 }];
-                
             }
             
         });
