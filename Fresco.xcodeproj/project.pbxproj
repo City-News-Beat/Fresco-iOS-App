@@ -75,6 +75,8 @@
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		657F3EA51C0CC1C3009AE08F /* FRSButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA41C0CC1C3009AE08F /* FRSButton.m */; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
+		65C6EA511C21CD74005581A4 /* GalleryPostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C6EA501C21CD74005581A4 /* GalleryPostCollectionViewCell.m */; };
+		65C6EA541C21E309005581A4 /* FRSAssignmentChoiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C6EA531C21E309005581A4 /* FRSAssignmentChoiceCell.m */; };
 		65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807881BFA59DB00490E73 /* FRSCameraViewController.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65C807931BFA969F00490E73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807921BFA969F00490E73 /* FRSAVSessionManager.m */; };
@@ -328,6 +330,10 @@
 		657F3EA41C0CC1C3009AE08F /* FRSButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSButton.m; path = "Base Classes/FRSButton.m"; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
+		65C6EA4F1C21CD74005581A4 /* GalleryPostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GalleryPostCollectionViewCell.h; sourceTree = "<group>"; };
+		65C6EA501C21CD74005581A4 /* GalleryPostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GalleryPostCollectionViewCell.m; sourceTree = "<group>"; };
+		65C6EA521C21E309005581A4 /* FRSAssignmentChoiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentChoiceCell.h; sourceTree = "<group>"; };
+		65C6EA531C21E309005581A4 /* FRSAssignmentChoiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentChoiceCell.m; sourceTree = "<group>"; };
 		65C807881BFA59DB00490E73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		65C807891BFA59DB00490E73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
@@ -564,6 +570,8 @@
 		1E3592871AC3327000F60348 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				65C6EA4F1C21CD74005581A4 /* GalleryPostCollectionViewCell.h */,
+				65C6EA501C21CD74005581A4 /* GalleryPostCollectionViewCell.m */,
 				1E3592881AC3329900F60348 /* PostCollectionViewCell.h */,
 				1E3592891AC3329900F60348 /* PostCollectionViewCell.m */,
 			);
@@ -611,6 +619,8 @@
 		1EA27AA21AF14256003137CE /* Assignments */ = {
 			isa = PBXGroup;
 			children = (
+				65C6EA521C21E309005581A4 /* FRSAssignmentChoiceCell.h */,
+				65C6EA531C21E309005581A4 /* FRSAssignmentChoiceCell.m */,
 				1EA27AA31AF142AA003137CE /* ScrollViewWithPassthrough.h */,
 				1EA27AA41AF142AA003137CE /* ScrollViewWithPassthrough.m */,
 				E73E100B1B0F963800763240 /* AssignmentAnnotation.h */,
@@ -1615,6 +1625,7 @@
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
+				65C6EA541C21E309005581A4 /* FRSAssignmentChoiceCell.m in Sources */,
 				E76C1DF81BD539C10073A4D6 /* FRSProgressView.m in Sources */,
 				65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */,
 				651FDD891BF1110A007A4F16 /* FRSGalleryAssetsManager.m in Sources */,
@@ -1663,6 +1674,7 @@
 				E72711BF1B430234001967A1 /* ProfileViewController.m in Sources */,
 				BCB74A601BA9FDE1002B18A6 /* FRSMKCircle.m in Sources */,
 				E7D27A9E1B5FFF5900A08B51 /* FRSMotionView.m in Sources */,
+				65C6EA511C21CD74005581A4 /* GalleryPostCollectionViewCell.m in Sources */,
 				E60266CE1AEA1BEE0055A5C6 /* FirstRunPermissionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

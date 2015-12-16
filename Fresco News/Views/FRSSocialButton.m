@@ -32,17 +32,18 @@
     if(network == SocialNetworkFacebook){
     
         [self setImage: [UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+        [self setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateHighlighted];
         
     }
     else if(network == SocialNetworkTwitter){
     
         [self setImage: [UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+        [self setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateHighlighted];
         
     }
     
     [self setImageEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
     [self setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-    
 }
 
 

@@ -1,13 +1,13 @@
 //
-//  PostCollectionViewCell.m
-//  FrescoNews
+//  GalleryPostCollectionViewCell.m
+//  Fresco
 //
-//  Created by Fresco News on 3/25/15.
-//  Copyright (c) 2015 Fresco. All rights reserved.
+//  Created by Daniel Sun on 12/16/15.
+//  Copyright © 2015 Fresco. All rights reserved.
 //
 
+#import "GalleryPostCollectionViewCell.h"
 
-#import "PostCollectionViewCell.h"
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
@@ -16,7 +16,7 @@
 
 static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
-@interface PostCollectionViewCell ()
+@interface GalleryPostCollectionViewCell ()
 
 @property (nonatomic, strong) UIImageView *transcodeImage;
 
@@ -26,7 +26,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 @end
 
-@implementation PostCollectionViewCell
+@implementation GalleryPostCollectionViewCell
 
 + (NSString *)identifier
 {
@@ -38,7 +38,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     [[self imageView] setImage:nil];
     
     [[self imageView] cancelImageRequestOperation];
-
+    
     [self.photoIndicatorView removeFromSuperview];
     
     [self.mutedImage removeFromSuperview];
@@ -49,17 +49,17 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 {
     _post = post;
     
-    __weak PostCollectionViewCell *weakSelf = self;
-
+    __weak GalleryPostCollectionViewCell *weakSelf = self;
+    
     if (_post.postID) {
-
+        
         CGRect spinnerFrame = CGRectMake(weakSelf.frame.size.width/2, weakSelf.frame.size.height/2, 0, 0);
         
         self.photoIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.photoIndicatorView.frame = spinnerFrame;
         [self addSubview:weakSelf.photoIndicatorView];
         [self bringSubviewToFront:weakSelf.photoIndicatorView];
-
+        
         if(weakSelf.post.isVideo) {
             
             //Set up for play/pause button
@@ -81,21 +81,21 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             weakSelf.mutedImage.clipsToBounds = NO;
             weakSelf.mutedImage.alpha = 1;
             weakSelf.mutedImage.image = [UIImage imageNamed:@"volume-off"];
-    
-           
+            
+            
             //Add subviews and bring to the front so they don't get hidden
             [weakSelf addSubview:weakSelf.playPause];
             [weakSelf addSubview:weakSelf.mutedImage];
             [weakSelf bringSubviewToFront:weakSelf.playPause];
             [weakSelf bringSubviewToFront:weakSelf.mutedImage];
-
+            
         }
-    
+        
         //back to the main thread for the UI call
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.photoIndicatorView startAnimating];
         });
-    
+        
         [weakSelf.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post.image mediumImageUrl]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             
             weakSelf.imageView.image = image;
@@ -106,7 +106,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.photoIndicatorView stopAnimating];
             });
-
+            
         } failure:nil];
         
     }
@@ -129,10 +129,10 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     self.transcodeLabel.hidden = YES;
     self.transcodeImage.hidden = YES;
-
+    
     [self.transcodeImage removeFromSuperview];
     [self.transcodeLabel removeFromSuperview];
-
+    
 }
 
 @end

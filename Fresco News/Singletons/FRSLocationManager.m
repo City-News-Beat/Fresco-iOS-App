@@ -11,6 +11,9 @@
 #import "FRSAssignment.h"
 @import Parse;
 
+#import "FRSDataManager.h"
+#import "FRSUser.h"
+
 @interface FRSLocationManager ()
 
 /**
@@ -117,16 +120,26 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
- 
-//    NSLog(@"manager state = %@, sef.stopLocationUpdates=%@", self.managerState, self.stopLocationUpdates)
+    
+    //    NSLog(@"manager state = %@, sef.stopLocationUpdates=%@", self.managerState, self.stopLocationUpdates)
     
     if(!self.stopLocationUpdates){
         
-        if (locations)
+        if (locations) {
             [self pingUserLocationToServer:locations];
-    
+            
+            CLLocation *location = [locations lastObject];
+            
+            if ([FRSDataManager sharedManager].currentUser.notificationRadius){
+                
+                [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+                    if (responseObject){
+                        self.nearbyAssignments = responseObject;
+                    }
+                }];
+            }
+        }
     }
-
 }
 
 

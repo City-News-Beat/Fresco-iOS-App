@@ -13,5 +13,8 @@
 @interface GalleryPostViewController : FRSBaseViewController
 
 @property (strong, nonatomic) FRSGallery *gallery;
+@property (strong, nonatomic) NSArray *nearbyAssignments;
+
+
 
 @end

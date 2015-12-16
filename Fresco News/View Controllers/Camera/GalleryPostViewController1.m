@@ -359,7 +359,6 @@
 //        [[NSUserDefaults standardUserDefaults] setBool:button.selected forKey:@"facebookButtonSelected"];
 //    
 //    }
-//
 //}
 //
 //- (IBAction)linkAssignmentButtonTapped:(id)sender

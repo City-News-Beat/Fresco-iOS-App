@@ -1275,9 +1275,11 @@
     
     if (self.locationManager.location) {
         
-        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:20 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
             if([responseObject firstObject] != nil){
+                
+                [FRSLocationManager sharedManager].nearbyAssignments = responseObject;
                 
                 FRSAssignment *assignment = [responseObject firstObject];
                 
