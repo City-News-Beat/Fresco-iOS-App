@@ -49,6 +49,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 @property (strong, nonatomic) FRSSocialButton *facebookButton;
 @property (strong, nonatomic) FRSSocialButton *twitterButton;
+@property (strong, nonatomic) UIView *socialContainer;
 
 @property (strong, nonatomic) UITextView *captionTextView;
 
@@ -402,9 +403,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 -(void)configureSocialButtons{
     
-    UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - self.navigationController.toolbar.frame.size.height - 46, self.view.frame.size.width, 46)];
-    whiteView.backgroundColor = [UIColor whiteBackgroundColor];
-    [self.view addSubview:whiteView];
+    self.socialContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - self.navigationController.toolbar.frame.size.height - 46, self.view.frame.size.width, 46)];
+    self.socialContainer.backgroundColor = [UIColor whiteBackgroundColor];
+    [self.view addSubview:self.socialContainer];
     
     self.twitterButton = [[FRSSocialButton alloc] init];
     self.twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
@@ -414,7 +415,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.twitterButton setFrame:CGRectMake(0, 0, self.view.frame.size.width/2, 46)];
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
     [self.twitterButton addTarget:self action:@selector(handleTwitterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [whiteView addSubview:self.twitterButton];
+    [self.socialContainer addSubview:self.twitterButton];
     
     self.facebookButton = [[FRSSocialButton alloc] init];
     self.facebookButton.backgroundColor = [UIColor colorWithRed:59/255.0 green:89/255.0 blue:152/255.0 alpha:1.0];
@@ -424,7 +425,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.facebookButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.facebookButton addTarget:self action:@selector(handleFacebookButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
-    [whiteView addSubview:self.facebookButton];
+    [self.socialContainer addSubview:self.facebookButton];
     
 }
 
@@ -688,7 +689,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                           delay:0
                         options:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] animations:^{
                             
-                            CGRect viewFrame = self.view.frame;
+                            CGRect viewFrame = self.scrollView.frame;
                             
                             CGRect toolBarFrame = self.navigationController.toolbar.frame;
                             
@@ -700,7 +701,10 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
-                                self.view.frame = viewFrame;
+//                                self.scrollView.frame = viewFrame;
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:YES];
+                                self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+                                [self scrollViewDidScroll:self.scrollView];
                                 
                             }
                             else if ([notification.name isEqualToString:UIKeyboardWillHideNotification])  {
@@ -711,7 +715,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
-                                self.view.frame = viewFrame;
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:YES];
+                                self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+                                [self scrollViewDidScroll:self.scrollView];
                                 
                             }
                             
@@ -858,6 +864,74 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 -(void)submitGalleryPost:(id)sender{
     
+//    [self updateSocialTipView];
+    
+    //First check if the caption is valid
+    if([self.captionTextView.text isEqualToString:WHATS_HAPPENING] || [self.captionTextView.text  isEqual: @""]){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (![self.captionTextView isFirstResponder]) {
+                CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+                animation.duration = 0.8;
+                animation.values = @[@(-8), @(8), @(-6), @(6), @(-4), @(4), @(-2), @(2), @(0)];
+                [self.captionTextView.layer addAnimation:animation forKey:@"shake"];
+            }
+            
+        });
+        
+        return;
+        
+    }
+    //Check if there are less than the max amount of posts
+    else if([self.gallery.posts count] > MAX_ASSET_COUNT){
+        
+        [self presentViewController:[FRSAlertViewManager
+                                     alertControllerWithTitle:ERROR
+                                     message:MAX_POST_ERROR
+                                     action:nil]
+                           animated:YES
+                         completion:nil];
+        
+        return;
+        
+    }
+    //Check if the user is logged in before proceeding, send to sign up otherwise
+    else if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
+        
+        [self presentFirstRun];
+        
+        return;
+    }
+    
+    
+    /**
+     *** All conditions passed for upload
+     **/
+    
+    [self disableUploadControls:YES];
+    
+    self.gallery.caption = self.captionTextView.text;
+    
+    NSNumber * facebookPost = [NSNumber numberWithBool:NO];
+    NSNumber * twitterPost = [NSNumber numberWithBool:NO];
+    
+    if (self.twitterButton.selected) twitterPost = [NSNumber numberWithBool:YES];
+    
+    if (self.facebookButton.selected) facebookPost = [NSNumber numberWithBool:YES];
+    
+    [FRSUploadManager sharedManager].delegate = self;
+    
+    [[FRSUploadManager sharedManager] uploadGallery:self.gallery
+                                     withAssignment:self.selectedAssignment
+                                  withSocialOptions:@{
+                                                      @"facebook" : facebookPost,
+                                                      @"twitter" : twitterPost
+                                                      }
+                                  withResponseBlock:nil];
+    
+    [self returnToTabBarWithPrevious:YES];
 }
 /*
  #pragma mark - Navigation
