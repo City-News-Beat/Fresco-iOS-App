@@ -503,10 +503,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     label.textAlignment = NSTextAlignmentCenter;
     [self.socialTipView addSubview:label];
     
-    
     [self.socialTipView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)]];
     [self.view addSubview:self.socialTipView];
-//    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
+    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
 }
 
 #pragma mark - Scroll View Delegate
@@ -530,7 +529,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             else {
                 self.zoomCell.imageView.frame = CGRectMake(offset/2.0, 0, self.view.frame.size.width + (-offset), [self heightForCollectionView] + (-offset));
             }
-            
             
             return;
         };
