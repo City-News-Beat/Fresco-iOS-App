@@ -407,17 +407,19 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.view addSubview:whiteView];
     
     self.twitterButton = [[FRSSocialButton alloc] init];
-    self.twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:0.54];
+    self.twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
     [self.twitterButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.twitterButton setTitle:@"Twitter" forState:UIControlStateNormal];
+    self.twitterButton.alpha = 0.54;
     [self.twitterButton setFrame:CGRectMake(0, 0, self.view.frame.size.width/2, 46)];
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
     [self.twitterButton addTarget:self action:@selector(handleTwitterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [whiteView addSubview:self.twitterButton];
     
     self.facebookButton = [[FRSSocialButton alloc] init];
-    self.facebookButton.backgroundColor = [UIColor colorWithRed:59/255.0 green:89/255.0 blue:152/255.0 alpha:0.54];
+    self.facebookButton.backgroundColor = [UIColor colorWithRed:59/255.0 green:89/255.0 blue:152/255.0 alpha:1.0];
     [self.facebookButton setTitle:@"Facebook" forState:UIControlStateNormal];
+    self.facebookButton.alpha = 0.54;
     [self.facebookButton setFrame:CGRectMake(self.view.frame.size.width/2, 0, self.view.frame.size.width/2, 46)];
     [self.facebookButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.facebookButton addTarget:self action:@selector(handleFacebookButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -427,7 +429,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 }
 
 -(void)configureTextView{
-    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 12, self.view.frame.size.width - 22, 100)];
+    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 12, self.view.frame.size.width - 22, 80)];
     self.captionTextView.delegate = self;
     self.captionTextView.text = WHATS_HAPPENING;
     self.captionTextView.textColor = [UIColor colorWithWhite:0 alpha:0.26];
@@ -643,6 +645,14 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self toggleToolbarAppearance];
     
     [[NSUserDefaults standardUserDefaults] setObject:textView.text forKey:@"captionStringInProgress"];
+    
+    NSInteger difference = textView.contentSize.height - textView.frame.size.height;
+    
+    if (difference > 0){
+        textView.frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textView.frame.size.width, textView.frame.size.height + difference);
+        [self updateScrollViewContentSize];
+        [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + difference) animated:YES];
+    }
 }
 
 #pragma mark - UIToolBar Appearance
