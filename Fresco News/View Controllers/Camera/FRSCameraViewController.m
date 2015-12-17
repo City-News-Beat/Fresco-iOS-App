@@ -249,7 +249,7 @@
     self.locationIV.alpha = 0.0;
     [self.topContainer addSubview:self.locationIV];
     
-    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(12 + 24 + 17 + 22 + 7, 0, [self assignmentLabelWidth], 24)];
+    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(12 + 24 + 17 + 22 + 7 + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
     //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
@@ -260,7 +260,7 @@
 }
 
 -(NSInteger)assignmentLabelWidth{
-    return [UIScreen mainScreen].bounds.size.width - 24 - 22 - 10 - 17 - 7 - 12;
+    return [UIScreen mainScreen].bounds.size.width - 24 - 22 - 10 - 17 - 7 - 12 - 7;
 }
 
 -(void)configurePreview{
@@ -1278,6 +1278,7 @@
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
             if([responseObject firstObject] != nil){
+                
                 
                 [FRSLocationManager sharedManager].nearbyAssignments = responseObject;
                 

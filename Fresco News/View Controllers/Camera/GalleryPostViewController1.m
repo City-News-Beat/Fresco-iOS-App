@@ -76,7 +76,7 @@
 //    self.title = @"Create a Gallery";
 //    
 //    self.navigationController.navigationBar.tintColor = [UIColor textHeaderBlackColor];
-//    
+//    
 //    [self.galleryView setGallery:self.gallery shouldBeginPlaying:YES withDynamicAspectRatio:NO];
 //    
 //    self.captionTextView.delegate = self;

@@ -799,8 +799,25 @@
                                             <action selector="facebookButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="RfE-qu-Rd5"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" alpha="0.54000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="FRSSocialButton">
+                                        <rect key="frame" x="0.0" y="777" width="300" height="46"/>
+                                        <color key="backgroundColor" red="0.33333333329999998" green="0.67450980390000004" blue="0.93333333330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <inset key="imageEdgeInsets" minX="-19" minY="2" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Twitter" image="twitter">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected" title="Twitter"/>
+                                        <connections>
+                                            <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
+                                        </connections>
+                                    </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="social-tip" translatesAutoresizingMaskIntoConstraints="NO" id="DUq-AH-QMm">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <rect key="frame" x="180" y="641" width="240" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="146" id="M5A-2M-XkJ">
                                                 <variation key="widthClass=compact" constant="75"/>
@@ -841,23 +858,6 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <button opaque="NO" alpha="0.54000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znr-ql-7SW" userLabel="Twitter Button" customClass="FRSSocialButton">
-                                        <rect key="frame" x="0.0" y="777" width="300" height="46"/>
-                                        <color key="backgroundColor" red="0.33333333329999998" green="0.67450980390000004" blue="0.93333333330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="46" id="O4K-1a-aIo"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <inset key="imageEdgeInsets" minX="-19" minY="2" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Twitter" image="twitter">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="selected" title="Twitter"/>
-                                        <connections>
-                                            <action selector="twitterButtonTapped:" destination="DwB-O9-wIu" eventType="touchUpInside" id="dtO-kV-iLB"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
