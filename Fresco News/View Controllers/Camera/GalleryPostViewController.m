@@ -391,6 +391,12 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     if (indexPath.row == 0)
         cell.isSelectedAssignment = YES;
+
+    if (indexPath.row == self.nearbyAssignments.count){
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
+        view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
+        [cell addSubview:view];
+    }
     
     [cell configureCell];
 }
@@ -457,7 +463,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 }
 
 -(void)configureTextView{
-    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 12, self.view.frame.size.width - 22, 76)];
+    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76)];
     self.captionTextView.delegate = self;
     self.captionTextView.text = WHATS_HAPPENING;
     self.captionTextView.textColor = [UIColor colorWithWhite:0 alpha:0.26];
@@ -467,11 +473,11 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 }
 
 -(void)updateScrollViewContentSize{
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCV.frame.size.height + self.assignmentTV.frame.size.height + self.captionTextView.frame.size.height + 24);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCV.frame.size.height + self.assignmentTV.frame.size.height + self.captionTextView.frame.size.height + 15);
 }
 
 -(void)configureSocialTipView{
-    self.socialTipView = [[UIView alloc] initWithFrame:CGRectMake(0, self.socialContainer.frame.origin.y - 42, 260, 42)];
+    self.socialTipView = [[UIView alloc] initWithFrame:CGRectMake(0, self.socialContainer.frame.origin.y - 48, 260, 42)];
     [self.socialTipView centerHorizontallyInView:self.view];
 
     UIView *rectangle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.socialTipView.frame.size.width, 32)];

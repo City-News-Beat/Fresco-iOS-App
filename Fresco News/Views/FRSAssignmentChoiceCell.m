@@ -60,6 +60,8 @@
         self.titleLabel.text = self.assignment.title;
     else
         self.titleLabel.text = @"No assignment";
+    
+    
 }
 
 -(void)clearCell{
