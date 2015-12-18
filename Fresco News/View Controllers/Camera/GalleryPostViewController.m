@@ -354,6 +354,12 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     self.assignmentTV.scrollEnabled = NO;
     [self.scrollView addSubview:self.assignmentTV];
     
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTV.frame.size.height - 0.5, self.assignmentTV.frame.size.width, 0.5)];
+    view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
+    [self.assignmentTV addSubview:view];
+    
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -391,12 +397,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     if (indexPath.row == 0)
         cell.isSelectedAssignment = YES;
-
-    if (indexPath.row == self.nearbyAssignments.count){
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
-        view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
-        [cell addSubview:view];
-    }
     
     [cell configureCell];
 }

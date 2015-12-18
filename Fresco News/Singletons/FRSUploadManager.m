@@ -82,7 +82,8 @@
     NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
                                   @"caption" : gallery.caption ?: [NSNull null],
                                   @"posts" : [post constructPostMetaDataWithFileName:filename],
-                                  @"assignment" : assignment.assignmentId ?: [NSNull null] };
+                                  @"assignment" : assignment.assignmentId ?: [NSNull null],
+                                  @"count" : @(self.postCount)};
     
     
     //Send request for image data

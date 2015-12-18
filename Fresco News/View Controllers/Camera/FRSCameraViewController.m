@@ -402,12 +402,13 @@
     [self.previewBackgroundIV addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     
     self.previewButton = [[UIButton alloc] initWithFrame:CGRectMake(4, 4, PREVIEW_WIDTH - 8, PREVIEW_WIDTH - 8)];
+    self.previewButton.contentMode = UIViewContentModeScaleAspectFill;
     self.previewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
     self.previewButton.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+    self.previewButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.previewButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.previewButton clipAsCircle];
     [self.previewBackgroundIV addSubview:self.previewButton];
-    
 }
 
 -(void)createNextButtonWithFrame:(CGRect)frame{
