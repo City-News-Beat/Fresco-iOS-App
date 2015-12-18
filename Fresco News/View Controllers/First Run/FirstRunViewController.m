@@ -197,6 +197,7 @@
                                        animated:YES completion:nil];
         
         FRSAlertView *alertView = [[FRSAlertView alloc] init];
+        
         [self.view addSubview:alertView];
         
     }
