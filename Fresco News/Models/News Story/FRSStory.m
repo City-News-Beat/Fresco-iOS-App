@@ -59,4 +59,5 @@
 {
     return [MTLModel postsJSONTransformer];
 }
+
 @end

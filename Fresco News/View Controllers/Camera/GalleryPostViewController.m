@@ -76,6 +76,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 @property (nonatomic) NSIndexPath *playingIndex;
 
+@property (nonatomic) CGFloat keyboardOffset;
+
 @end
 
 @implementation GalleryPostViewController
@@ -511,7 +513,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     [self.socialTipView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)]];
     [self.view addSubview:self.socialTipView];
-    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
+//    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
 }
 
 #pragma mark - Scroll View Delegate
@@ -771,6 +773,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
+                                self.keyboardOffset = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                
                                 //                                self.scrollView.frame = viewFrame;
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:YES];
@@ -787,8 +791,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:NO];
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
-                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, MAX(self.scrollView.contentOffset.y - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height, 0)) animated:YES];
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 1.0;
