@@ -169,6 +169,9 @@
     
     self.isRecording = NO;
     
+    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
+    self.locationManager.delegate = self;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -187,18 +190,16 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    
 
     [super viewDidAppear:animated];
     [self fadeInPreview];
     
-    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
-    self.locationManager.delegate = self;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
+    
     [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
@@ -794,7 +795,7 @@
 
     [UIView commitAnimations];
     
-    self.assignmentLabel.frame = CGRectMake(self.assignmentLabel.frame.origin.x, self.assignmentLabel.frame.origin.y, labelWidth - offset, self.assignmentLabel.frame.size.height);
+    self.assignmentLabel.frame = CGRectMake(12 + 24 + 17 + 22 + 7 + 7, 0 , labelWidth - offset, 24);
 }
 
 -(void)animateShutterWithCompletion:(void(^)())completion{
