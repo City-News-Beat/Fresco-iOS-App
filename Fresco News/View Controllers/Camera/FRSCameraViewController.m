@@ -92,7 +92,6 @@
 
 @property (strong, nonatomic) UIView *whiteView;
 
-
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
 @property (nonatomic) BOOL capturingImage;
@@ -250,18 +249,16 @@
     self.locationIV.alpha = 0.0;
     [self.topContainer addSubview:self.locationIV];
     
-    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(12 + 24 + 17 + 22 + 7 + 7, 0, [self assignmentLabelWidth], 24)];
+    self.assignmentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24)];
     self.assignmentLabel.textColor = [UIColor whiteColor];
-    //    self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     self.assignmentLabel.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     [self.assignmentLabel addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.assignmentLabel.alpha = 0.0;
     [self.topContainer addSubview:self.assignmentLabel];
-    
 }
 
 -(NSInteger)assignmentLabelWidth{
-    return [UIScreen mainScreen].bounds.size.width - 24 - 22 - 10 - 17 - 7 - 12 - 7;
+    return self.view.frame.size.width - 24 - 22 - 10 - 17 - 7 - 12 - 7;
 }
 
 -(void)configurePreview{
@@ -724,7 +721,7 @@
 -(void)rotateApp:(NSNotification *)notif{
     UIDeviceOrientation o = [UIDevice currentDevice].orientation;
     CGFloat angle = 0;
-    NSInteger labelWidth;
+    NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
     NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
     if ( o == UIDeviceOrientationLandscapeLeft ){
         angle = M_PI_2;
@@ -1310,6 +1307,7 @@
         if (!assignment.title)
             return;
         self.assignmentLabel.text = [assignment.title uppercaseString];
+        self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, [self assignmentLabelWidth], 24);
         
         [UIView animateWithDuration:0.15 animations:^{
             self.locationIV.alpha = 1.0;
