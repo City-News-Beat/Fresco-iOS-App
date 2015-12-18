@@ -67,7 +67,7 @@
 		32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CA6FF41B45974F00242E1E /* TOSViewController.m */; };
 		4214BC241AE438E6006BEBA7 /* GalleryPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */; };
 		423A14551AB327CA0030DAF4 /* FRSCamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423A14541AB327CA0030DAF4 /* FRSCamViewController.m */; };
-		424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController.m */; };
+		424323DB1AB3D64900646278 /* FRSTabBarController1.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController1.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42D3DDD01AB6370800AA8CC4 /* CameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */; };
@@ -82,6 +82,9 @@
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65C807931BFA969F00490E73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C807921BFA969F00490E73 /* FRSAVSessionManager.m */; };
 		65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237AF1C249DC3002182DE /* FRSAppDelegate.m */; };
+		65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B21C24A94E002182DE /* FRSTabBarController.m */; };
+		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
+		65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65F237B81C24B21F002182DE /* Images_3.xcassets */; };
 		65FB75A81BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */; };
 		BC1CA8BB1BA72F3300DDB9FB /* CALayer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1CA8BA1BA72F3300DDB9FB /* CALayer+Additions.m */; };
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
@@ -317,8 +320,8 @@
 		4214BC231AE438E6006BEBA7 /* GalleryPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GalleryPostViewController.m; path = Camera/GalleryPostViewController.m; sourceTree = "<group>"; };
 		423A14531AB327CA0030DAF4 /* FRSCamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCamViewController.h; sourceTree = "<group>"; };
 		423A14541AB327CA0030DAF4 /* FRSCamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSCamViewController.m; path = "Fresco News/View Controllers/Camera/FRSCamViewController.m"; sourceTree = SOURCE_ROOT; };
-		424323D91AB3D64900646278 /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
-		424323DA1AB3D64900646278 /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
+		424323D91AB3D64900646278 /* FRSTabBarController1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController1.h; sourceTree = "<group>"; };
+		424323DA1AB3D64900646278 /* FRSTabBarController1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController1.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42D3DDCE1AB6370800AA8CC4 /* CameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraPreviewView.h; sourceTree = "<group>"; };
 		42D3DDCF1AB6370800AA8CC4 /* CameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraPreviewView.m; sourceTree = "<group>"; };
@@ -344,6 +347,11 @@
 		65C807921BFA969F00490E73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAVSessionManager.m; path = Singletons/FRSAVSessionManager.m; sourceTree = "<group>"; };
 		65F237AE1C249DC3002182DE /* FRSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppDelegate.h; sourceTree = "<group>"; };
 		65F237AF1C249DC3002182DE /* FRSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAppDelegate.m; sourceTree = "<group>"; };
+		65F237B11C24A94E002182DE /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
+		65F237B21C24A94E002182DE /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
+		65F237B51C24AACF002182DE /* UIColor+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Fresco.h"; path = "Categories/UIColor+Fresco.h"; sourceTree = "<group>"; };
+		65F237B61C24AACF002182DE /* UIColor+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Fresco.m"; path = "Categories/UIColor+Fresco.m"; sourceTree = "<group>"; };
+		65F237B81C24B21F002182DE /* Images_3.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images_3.xcassets; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
 		7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -710,6 +718,7 @@
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
+				65F237B81C24B21F002182DE /* Images_3.xcassets */,
 			);
 			path = "Fresco News";
 			sourceTree = "<group>";
@@ -764,6 +773,7 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				65F237B41C24A954002182DE /* Tab Bar */,
 				E795AD061BE90B8F00367A99 /* FRSKit */,
 				E784280E1B57F3E30090DFCC /* Onboard */,
 				1E1AC1AA1B2602D5003BECE0 /* FirstRun */,
@@ -860,6 +870,8 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				65F237B51C24AACF002182DE /* UIColor+Fresco.h */,
+				65F237B61C24AACF002182DE /* UIColor+Fresco.m */,
 				E7E582F01BBDC0CA00287324 /* Foundation */,
 				E7E582EF1BBDC0B200287324 /* UIKit */,
 			);
@@ -914,6 +926,15 @@
 				6501D56B1C249604001F54EF /* Model.xcdatamodeld */,
 			);
 			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		65F237B41C24A954002182DE /* Tab Bar */ = {
+			isa = PBXGroup;
+			children = (
+				65F237B11C24A94E002182DE /* FRSTabBarController.h */,
+				65F237B21C24A94E002182DE /* FRSTabBarController.m */,
+			);
+			name = "Tab Bar";
 			sourceTree = "<group>";
 		};
 		BE77E1E79885C4C61AC87E44 /* Pods */ = {
@@ -1129,8 +1150,8 @@
 				E6B8124D1AD488C200FD9936 /* FRSBaseViewController.m */,
 				1E1AC1AC1B2771C7003BECE0 /* FRSRootViewController.h */,
 				1E1AC1AD1B2771C7003BECE0 /* FRSRootViewController.m */,
-				424323D91AB3D64900646278 /* FRSTabBarController.h */,
-				424323DA1AB3D64900646278 /* FRSTabBarController.m */,
+				424323D91AB3D64900646278 /* FRSTabBarController1.h */,
+				424323DA1AB3D64900646278 /* FRSTabBarController1.m */,
 			);
 			name = FRSKit;
 			sourceTree = "<group>";
@@ -1442,6 +1463,7 @@
 				E7E582F81BBDC30A00287324 /* FRSFirstRunWrapperViewController.xib in Resources */,
 				E7E582EC1BBDA84500287324 /* FirstRunPersonalViewController.xib in Resources */,
 				E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */,
+				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				E7C43DB51BC419CC0083CBF0 /* FirstRunRadiusViewController.xib in Resources */,
@@ -1620,7 +1642,7 @@
 				1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */,
 				1EDA45011AA4D0730082E08D /* FRSTag.m in Sources */,
 				E7A2C1CA1BDA90F2000A7266 /* FRSUploadManager.m in Sources */,
-				424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */,
+				424323DB1AB3D64900646278 /* FRSTabBarController1.m in Sources */,
 				E7BFA2E51B18CFB100B820C0 /* GalleryViewController.m in Sources */,
 				E7D27AA01B5FFF5900A08B51 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
 				E7C43DBE1BC59BFB0083CBF0 /* AssetGridViewCell.m in Sources */,
@@ -1649,8 +1671,10 @@
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
+				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				E76C1DF81BD539C10073A4D6 /* FRSProgressView.m in Sources */,
+				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				65C8078A1BFA59DB00490E73 /* FRSCameraViewController.m in Sources */,
 				651FDD891BF1110A007A4F16 /* FRSGalleryAssetsManager.m in Sources */,
 				E66F176B1AEE9D150032CA71 /* FirstRunPersonalViewController.m in Sources */,

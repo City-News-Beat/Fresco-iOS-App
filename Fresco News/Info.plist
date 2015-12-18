@@ -114,13 +114,17 @@
 	<string>Fresco servers use location to notify you when there is an assignment nearby. This location data is secure and anonymous.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Fresco uses location to automatically verify photos and videos before they are posted.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Nota-Normal.otf</string>
+		<string>Nota-Medium.otf</string>
+		<string>Nota-Bold.otf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
 		<string>remote-notification</string>
 	</array>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -162,11 +166,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Nota-Normal.otf</string>
-		<string>Nota-Medium.otf</string>
-		<string>Nota-Bold.otf</string>
-	</array>
 </dict>
 </plist>

@@ -8,6 +8,9 @@
 
 #import "FRSAppDelegate.h"
 
+
+#import "FRSTabBarController.h"
+
 @implementation FRSAppDelegate
 
 
@@ -19,6 +22,7 @@
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     
     
+    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
     
     return YES;

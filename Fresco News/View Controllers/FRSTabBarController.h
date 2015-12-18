@@ -1,16 +1,19 @@
 //
-//  TabBarController.h
-//  FrescoNews
+//  FRSTabBarController.h
+//  Fresco
 //
-//  Created by Fresco News on 3/13/15.
-//  Copyright (c) 2015 Fresco. All rights reserved.
+//  Created by Daniel Sun on 12/18/15.
+//  Copyright © 2015 Fresco. All rights reserved.
 //
 
-@import UIKit;
-#import "FRSUploadManager.h"
+#import <UIKit/UIKit.h>
+
 #import "FRSCameraViewController.h"
 
-@interface FRSTabBarController : UITabBarController  <UITabBarDelegate, UITabBarControllerDelegate, UIAlertViewDelegate,FRSUploadManagerDelegate>
+@interface FRSTabBarController : UITabBarController
+
+
+@property (nonatomic) NSInteger lastActiveIndex;
 
 - (void)returnToGalleryPost;
 

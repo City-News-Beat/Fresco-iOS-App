@@ -12,12 +12,12 @@
         <relationship name="story" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="galleries" inverseEntity="FRSStory" syncable="YES"/>
     </entity>
     <entity name="FRSNotification" syncable="YES">
-        <attribute name="body" optional="YES" syncable="YES"/>
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="isSeen" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="meta" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="notificationType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" optional="YES" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="FRSPost" syncable="YES">

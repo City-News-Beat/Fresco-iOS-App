@@ -166,7 +166,6 @@
         }];
     }];
     
-    
     self.isRecording = NO;
     
 }
@@ -187,8 +186,6 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    
-
     [super viewDidAppear:animated];
     [self fadeInPreview];
     
@@ -212,11 +209,7 @@
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        //        [UIView animateWithDuration:0.2 animations:^{
         self.preview.alpha = 1.0;
-        //        }];
-        
     });
 }
 
@@ -306,9 +299,10 @@
 {
     [[FRSUploadManager sharedManager] resetDraftGalleryPost];
     
-    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.presentingViewController;
     
-    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    [tabBarController setSelectedIndex:tabBarController.lastActiveIndex];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

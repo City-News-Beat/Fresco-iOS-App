@@ -1,316 +1,149 @@
 //
-//  TabBarController.m
-//  FrescoNews
+//  FRSTabBarController.m
+//  Fresco
 //
-//  Created by Fresco News on 3/13/15.
-//  Copyright (c) 2015 Fresco. All rights reserved.
+//  Created by Daniel Sun on 12/18/15.
+//  Copyright © 2015 Fresco. All rights reserved.
 //
-
-@import AVFoundation;
-@import FBSDKShareKit;
-
 
 #import "FRSTabBarController.h"
-#import "UIViewController+Additions.h"
+#import "UIColor+Fresco.h"
 
-#import "HighlightsViewController.h"
-#import "AssignmentsViewController.h"
-#import "ProfileViewController.h"
-#import "StoriesViewController.h"
-#import "NotificationsViewController.h"
-#import "FRSFirstRunWrapperViewController.h"
-#import "FRSDataManager.h"
-#import "FRSRootViewController.h"
-#import "UIViewController+Additions.h"
-#import "FRSLocationManager.h"
-#import "FRSAlertViewManager.h"
 
+@interface FRSTabBarController ()
+
+@end
 
 @implementation FRSTabBarController
 
-#pragma mark - Initialization
-
--(id)initWithCoder:(NSCoder *)aDecoder{
-    
-    if(self = [super initWithCoder:aDecoder]){
-        
-        [self setupTabBarAppearances];
-        
-        self.delegate = self;
-        
-        
-    }
-    
-    return self;
-}
-
-- (void)viewDidLoad{
-    
+- (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(galleryUploadComplete:) name:@"Gallery Upload Done" object:nil];
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    [self configureAppearance];
+    [self configureViewControllers];
     
-}
-
--(void)galleryUploadComplete:(NSNotification *)sender{
-    NSDictionary *info = sender.userInfo;
-    NSString *url = info[@"url"];
-    NSString *title = info[@"title"];
-    if (!url || !title) return;
+    [self configureTabBarItems];
     
-    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-    content.contentURL = [NSURL URLWithString:url];
-    content.contentTitle = title;
-    
-    FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
-    dialog.fromViewController = self;
-    dialog.shareContent = content;
-    dialog.mode = FBSDKShareDialogModeNative; // if you don't set this before canShow call, canShow would always return YES
-    if (![dialog canShow]) {
-        // fallback presentation when there is no FB app
-        dialog.mode = FBSDKShareDialogModeFeedBrowser;
-    }
-    [dialog show];
-    
-    //    [FBSDKShareDialog showFromViewController:self
-    //                                 withContent:content
-    //                                    delegate:nil];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-    
-}
-
-
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    //Camera
-    if ([item.title isEqualToString:@"Camera"]) {
-        if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-            [self presentCameraForCaptureMode:FRSCaptureModePhoto];
-        }
-    }
-}
-
-- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode{
-    {
-        [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
-        
-        FRSCameraViewController *vc = [[FRSCameraViewController alloc] initWithCaptureMode:captureMode];
-        
-        [self presentViewController:vc animated:YES completion:nil];
-        
-    }
-}
-
-- (void)presentAssignments {
-    
-    /* Opens view controller in tab bar at index 3 (AssignmentsViewController) */
-    [self setSelectedIndex:3];
-    
-}
-
-- (void)returnToGalleryPost
-{
-    FRSCameraViewController *vc = [[FRSCameraViewController alloc] init];
-    
-    [self presentViewController:vc animated:NO completion:^{
-        [vc handlePreviewButtonTapped];
+    [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+        vc.title = nil;
+        vc.tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
     }];
+    
+    [self configureIrisItem];
+    
+    // Do any additional setup after loading the view.
 }
 
-#pragma mark - TabBarController Appearence
+-(void)configureAppearance{
+    [self.tabBar setBarTintColor:[UIColor frescoTabBarColor]];
+}
 
-- (void)setupTabBarAppearances
-{
-    if(IS_IPHONE_4S){
-        
-        NSMutableArray *tabbarViewControllers = [NSMutableArray arrayWithArray: [self viewControllers]];
-        
-        [tabbarViewControllers removeObjectAtIndex:4];
-        
-        [tabbarViewControllers removeObjectAtIndex:3];
-        
-        [tabbarViewControllers removeObjectAtIndex:2];
-        
-        [self setViewControllers: tabbarViewControllers];
-        
-    }
+-(void)configureTabBarItems{
     
-    NSArray *highlightedTabNames = @[@"tab-home-highlighted",
-                                     @"tab-stories-highlighted",
-                                     @"tab-camera-highlighted",
-                                     @"tab-assignments-highlighted",
-                                     @"tab-profile-highlighted"];
+    UITabBarItem *item0 = [self.tabBar.items objectAtIndex:0];
+    item0.image = [[UIImage imageNamed:@"tab-bar-home"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item0.selectedImage = [[UIImage imageNamed:@"tab-bar-home-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    UITabBar *tabBar = self.tabBar;
+    UITabBarItem *item1 = [self.tabBar.items objectAtIndex:1];
+    item1.image = [[UIImage imageNamed:@"tab-bar-story"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item1.selectedImage = [[UIImage imageNamed:@"tab-bar-story-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    int i = 0;
+    UITabBarItem *item2 = [self.tabBar.items objectAtIndex:2];
+    item2.image = [[UIImage imageNamed:@"tab-bar-iris"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item2.selectedImage = [[UIImage imageNamed:@"tab-bar-iris"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    for (UITabBarItem *item in tabBar.items) {
-        if (i == 2) {
-            item.image = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.selectedImage = [[UIImage imageNamed:@"tab-camera"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            item.imageInsets = UIEdgeInsetsMake(5.5, 0, -5.5, 0);
-        }
-        else {
-            item.selectedImage = [UIImage imageNamed:highlightedTabNames[i]];
-        }
-        ++i;
-    }
+    UITabBarItem *item3 = [self.tabBar.items objectAtIndex:3];
+    item3.image = [[UIImage imageNamed:@"tab-bar-assign"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item3.selectedImage = [[UIImage imageNamed:@"tab-bar-assign-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
+    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+}
+
+-(void)configureViewControllers{
+    UIViewController *vc = [[UIViewController alloc] init];
+    UIViewController *vc1 = [[UIViewController alloc] init];
+    UIViewController *vc2 = [[UIViewController alloc] init];
+    UIViewController *vc3 = [[UIViewController alloc] init];
+    UIViewController *vc4 = [[UIViewController alloc] init];
+    
+    self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
+}
+
+-(void)configureIrisItem{
+    
+    CGFloat origin = self.view.frame.size.width * 2/5;
+    CGFloat width = self.view.frame.size.width/5;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(origin, 0, width, 50)];
+    view.backgroundColor = [UIColor frescoOrangeColor];
+    [self.tabBar insertSubview:view atIndex:0];
     
 }
 
-#pragma mark - TabBarController Delegate
 
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
-{
+#pragma mark Delegate
+
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VIEW_DISMISS object:nil];
-    
-    UIViewController *vc = [viewController.childViewControllers firstObject];
-    
-    if ([vc isMemberOfClass:[HighlightsViewController class]] && tabBarController.selectedIndex == 0) {
-        
-        if([[vc.navigationController visibleViewController] isKindOfClass:[HighlightsViewController class]]){
-            
-            
-            UITableView *tv = ((HighlightsViewController *)vc).galleriesViewController.tableView;
-            
-            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000) {
-                
-                NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
-                [((HighlightsViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
-            }
-            
-        }
-        else{
-            [vc.navigationController popViewControllerAnimated:YES];
-        }
-        
-        return NO;
+    switch ([self.tabBar.items indexOfObject:item]) {
+        case 0:
+            [self handleHomeTabPressed];
+            break;
+        case 1:
+            [self handleStoryTabPressed];
+            break;
+        case 2:
+            [self handleCameraTabPressed];
+            break;
+        case 3:
+            [self handleAssignmentTabPressed];
+            break;
+        case 4:
+            [self handleProfileTabPressed];
+            break;
+        default:
+            break;
     }
-    else if ([vc isMemberOfClass:[StoriesViewController class]] && tabBarController.selectedIndex == 1) {
-        
-        if([[vc.navigationController visibleViewController] isKindOfClass:[StoriesViewController class]]){
-            
-            NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
-            UITableView *tv = ((StoriesViewController *)vc).tableView;
-            if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000)
-                [((StoriesViewController *)vc).tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
-            
-        }
-        else{
-            [vc.navigationController popViewControllerAnimated:YES];
-        }
-        
-        return NO;
-    }
-    else if ([vc isMemberOfClass:[AssignmentsViewController class]] && tabBarController.selectedIndex == 3) {
-        //Zoom to location
-        ((AssignmentsViewController *)vc).centeredUserLocation = NO;
-        [((AssignmentsViewController *)vc) zoomToCurrentLocation];
-        return NO;
-    }
-    else if ([vc isMemberOfClass:[ProfileViewController class]]) {
-        
-        //Check if we are already at this tab
-        if(tabBarController.selectedIndex == 4){
-            
-            if([[vc.navigationController visibleViewController] isKindOfClass:[ProfileViewController class]]){
-                
-                NSIndexPath *top = [NSIndexPath indexPathForItem:NSNotFound inSection:0];
-                
-                UITableView *tv = ((ProfileViewController *)vc).galleriesViewController.tableView;
-                
-                if ([tv numberOfRowsInSection:0] > 0 && [tv numberOfRowsInSection:0] < 10000){
-                    [((ProfileViewController *)vc).galleriesViewController.tableView scrollToRowAtIndexPath:top atScrollPosition:UITableViewScrollPositionTop animated:YES];
-                }
-                
-            }
-            else{
-                
-                
-                [vc.navigationController popViewControllerAnimated:YES];
-            }
-            
-            return NO;
-            
-        }
-        //Otherwise check for log in, and present the login screen otherwise
-        else{
-            
-            if(![[FRSDataManager sharedManager] isLoggedIn]){
-                
-                FRSFirstRunWrapperViewController *vc = [[FRSFirstRunWrapperViewController alloc] init];
-                
-                [self presentViewController:vc animated:YES completion:nil];
-                
-                return NO;
-            }
-        }
-    }
-    else if(vc == nil){
-        
-        //Check for permissions
-        
-        
-        BOOL cameraDisabled = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] == AVAuthorizationStatusDenied;
-        BOOL locationDisabled = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied;
-        
-        if (cameraDisabled || locationDisabled){
-            
-            NSString *title;
-            NSString *message;
-            
-            if (cameraDisabled && locationDisabled){
-                title = ENABLE_CAMERA_LOCATION_TITLE;
-                message = ENABLE_CAMERA_LOCATION_SETTINGS;
-            }
-            else if (cameraDisabled && !locationDisabled){
-                title = ENABLE_CAMERA_TITLE;
-                message = ENABLE_CAMERA_SETTINGS;
-            }
-            else {
-                title = ENABLE_LOCATION_TITLE;
-                message = ENABLE_LOCATION_SETTINGS;
-            }
-            
-            UIAlertController *alertCon = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *cancelAction = [UIAlertAction
-                                           actionWithTitle:@"Close"
-                                           style:UIAlertActionStyleDefault
-                                           handler:^(UIAlertAction *action)
-                                           {
-                                               
-                                           }];
-            
-            UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:@"Enable"
-                                       style:UIAlertActionStyleDefault
-                                       handler:^(UIAlertAction *action)
-                                       {
-                                           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                                       }];
-            
-            [alertCon addAction:cancelAction];
-            [alertCon addAction:okAction];
-            
-            [self presentViewController:alertCon animated:YES completion:nil];
-            
-            return NO;
-            
-        }
-    }
-    
-    return YES;
-    
 }
+
+-(void)handleHomeTabPressed{
+    self.lastActiveIndex = 0;
+}
+
+-(void)handleStoryTabPressed{
+    self.lastActiveIndex = 1;
+}
+
+-(void)handleCameraTabPressed{
+    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
+    [self presentViewController:camVC animated:YES completion:nil];
+}
+
+-(void)handleAssignmentTabPressed{
+    self.lastActiveIndex = 3;
+}
+
+-(void)handleProfileTabPressed{
+    self.lastActiveIndex = 4;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end
