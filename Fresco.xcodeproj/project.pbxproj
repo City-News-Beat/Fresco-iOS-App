@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072A9F3C1C2475C400F8CCE0 /* FRSAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072A9F3B1C2475C400F8CCE0 /* FRSAlertView.swift */; };
 		07535A4B1BBB03A500AD604C /* FRSBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4A1BBB03A500AD604C /* FRSBackButton.m */; };
 		07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4D1BBB054600AD604C /* UIImageView+Additions.m */; };
 		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
@@ -204,6 +205,8 @@
 /* Begin PBXFileReference section */
 		05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
+		072A9F3A1C2475C300F8CCE0 /* Fresco-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fresco-Bridging-Header.h"; sourceTree = "<group>"; };
+		072A9F3B1C2475C400F8CCE0 /* FRSAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSAlertView.swift; sourceTree = "<group>"; };
 		07535A491BBB03A500AD604C /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBackButton.h; sourceTree = "<group>"; };
 		07535A4A1BBB03A500AD604C /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBackButton.m; sourceTree = "<group>"; };
 		07535A4C1BBB054600AD604C /* UIImageView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Additions.h"; path = "Categories/UIImageView+Additions.h"; sourceTree = "<group>"; };
@@ -1128,6 +1131,8 @@
 		E79ACC621BB4558C005EF7E6 /* FRSKit */ = {
 			isa = PBXGroup;
 			children = (
+				072A9F3B1C2475C400F8CCE0 /* FRSAlertView.swift */,
+				072A9F3A1C2475C300F8CCE0 /* Fresco-Bridging-Header.h */,
 				E76C1DF61BD539C10073A4D6 /* FRSProgressView.h */,
 				E76C1DF71BD539C10073A4D6 /* FRSProgressView.m */,
 				BCE22C951BB1B35600F2C07C /* FRSRefreshControl.h */,
@@ -1337,6 +1342,7 @@
 		1EDA44A81AA4CCC70082E08D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Fresco;
 				TargetAttributes = {
@@ -1633,6 +1639,7 @@
 				07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */,
+				072A9F3C1C2475C400F8CCE0 /* FRSAlertView.swift in Sources */,
 				1EDA44BC1AA4CCC70082E08D /* HighlightsViewController.m in Sources */,
 				1EA6F2E11AB8DE3000E74E68 /* GalleryHeader.m in Sources */,
 				E73E100D1B0F963800763240 /* AssignmentAnnotation.m in Sources */,
@@ -1838,6 +1845,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = .dev;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -1855,6 +1863,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1866,6 +1876,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = "";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -1883,6 +1894,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -2084,6 +2096,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = .beta;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2101,6 +2114,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Beta;
