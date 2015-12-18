@@ -7,6 +7,9 @@
 //
 
 #import "FRSTabBarController.h"
+
+#import "FRSOnboardingViewController.h"
+
 #import "UIColor+Fresco.h"
 
 
@@ -62,7 +65,7 @@
 }
 
 -(void)configureViewControllers{
-    UIViewController *vc = [[UIViewController alloc] init];
+    UIViewController *vc = [[FRSOnboardingViewController alloc] init];
     UIViewController *vc1 = [[UIViewController alloc] init];
     UIViewController *vc2 = [[UIViewController alloc] init];
     UIViewController *vc3 = [[UIViewController alloc] init];

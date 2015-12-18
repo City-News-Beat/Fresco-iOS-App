@@ -20,6 +20,10 @@
 
 +(UIColor *)frescoDarkTextColor;
 
++(UIColor *)frescoMediumTextColor;
+
++(UIColor *)frescoLightTextColor;
+
 +(UIColor *)frescoGreenColor;
 
 
