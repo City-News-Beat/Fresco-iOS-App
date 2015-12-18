@@ -8,11 +8,13 @@
 
 import UIKit
 
+
+
 protocol FRSAlertViewDelegate:class {
     func DidPressButtonAtIndex(index: Int)
 }
 
-class FRSAlertView: UIView {
+@objc class FRSAlertView: UIView {
     let overlayView = UIView (frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height))
     let alertView = UIView (frame: CGRectMake(0, 0, 0, 0))
     let titleLabel = UILabel (frame: CGRectMake(0, 0, 0, 44))
@@ -75,7 +77,15 @@ class FRSAlertView: UIView {
         bodyLabel.alpha = 0.54
         bodyLabel.textAlignment = NSTextAlignment.Center
         bodyLabel.text = body as String
-        bodyLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight);
+        
+        if #available(iOS 8.2, *) {
+            bodyLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
+        } else {
+            // Fallback on earlier versions
+//            bodyLabel.font = UIFont.fontNamesForFamilyName("")
+//            bodyLabel.font = UIFont.init(name: "", size: 15)
+        };
+        
         bodyLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         bodyLabel.numberOfLines = 0
         bodyLabel.sizeToFit()

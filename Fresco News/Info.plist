@@ -162,7 +162,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIViewEdgeAntialiasing</key>
-	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Nota-Normal.otf</string>
+		<string>Nota-Medium.otf</string>
+		<string>Nota-Bold.otf</string>
+	</array>
 </dict>
 </plist>

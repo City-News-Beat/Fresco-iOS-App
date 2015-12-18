@@ -20,6 +20,9 @@
 #import "FirstRunPageViewController.h"
 #import "FRSSocialButton.h"
 
+#import "Fresco-Swift.h"
+
+
 @interface FirstRunViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *buttons;
@@ -40,6 +43,8 @@
 @end
 
 @implementation FirstRunViewController
+
+
 
 - (void)viewDidLoad {
     
@@ -67,6 +72,17 @@
     //Set return buttons
     self.emailField.returnKeyType = UIReturnKeyNext;
     self.passwordField.returnKeyType = UIReturnKeyGo;
+    
+    
+    for (NSString* family in [UIFont familyNames])
+    {
+        NSLog(@"%@", family);
+        
+        for (NSString* name in [UIFont fontNamesForFamilyName: family])
+        {
+            NSLog(@"%@", name);
+        }
+    }
 }
 
 
@@ -179,7 +195,10 @@
                                      alertControllerWithTitle:LOGIN_ERROR
                                      message:LOGIN_PROMPT action:nil]
                                        animated:YES completion:nil];
-    
+        
+        FRSAlertView *alertView = [[FRSAlertView alloc] init];
+        [self.view addSubview:alertView];
+        
     }
 }
 

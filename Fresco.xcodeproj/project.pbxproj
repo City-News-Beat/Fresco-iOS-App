@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		072A9F3C1C2475C400F8CCE0 /* FRSAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072A9F3B1C2475C400F8CCE0 /* FRSAlertView.swift */; };
+		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
+		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
+		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
 		07535A4B1BBB03A500AD604C /* FRSBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4A1BBB03A500AD604C /* FRSBackButton.m */; };
 		07535A4E1BBB054600AD604C /* UIImageView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07535A4D1BBB054600AD604C /* UIImageView+Additions.m */; };
 		0766F4B31B97494A00B7CBB4 /* FRSOnboardViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766F4B11B97494A00B7CBB4 /* FRSOnboardViewConroller.m */; };
@@ -207,6 +210,9 @@
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
 		072A9F3A1C2475C300F8CCE0 /* Fresco-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fresco-Bridging-Header.h"; sourceTree = "<group>"; };
 		072A9F3B1C2475C400F8CCE0 /* FRSAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FRSAlertView.swift; sourceTree = "<group>"; };
+		072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
+		072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
+		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
 		07535A491BBB03A500AD604C /* FRSBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBackButton.h; sourceTree = "<group>"; };
 		07535A4A1BBB03A500AD604C /* FRSBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBackButton.m; sourceTree = "<group>"; };
 		07535A4C1BBB054600AD604C /* UIImageView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Additions.h"; path = "Categories/UIImageView+Additions.h"; sourceTree = "<group>"; };
@@ -516,6 +522,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072A9F3D1C24914F00F8CCE0 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */,
+				072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */,
+				072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -885,6 +901,7 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				072A9F3D1C24914F00F8CCE0 /* Fonts */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1416,12 +1433,15 @@
 				E7E582EC1BBDA84500287324 /* FirstRunPersonalViewController.xib in Resources */,
 				E7446FA01BBDE20200D0A19B /* FirstRunPermissionsViewController.xib in Resources */,
 				E7E582EE1BBDB55800287324 /* FirstRunViewController.xib in Resources */,
+				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				1EDA44C21AA4CCC70082E08D /* Main.storyboard in Resources */,
 				E7C43DB51BC419CC0083CBF0 /* FirstRunRadiusViewController.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
+				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				42C926771B18AB1200774A37 /* Camera.storyboard in Resources */,
 				0766F4B41B97494A00B7CBB4 /* FRSOnboardViewConroller.xib in Resources */,
+				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 				E74B111E1BACCC6E003E01A1 /* ProfileSettingsViewController.xib in Resources */,
 				BC47F6FD1B94A9AB00969034 /* TOSViewController.xib in Resources */,
 			);
@@ -1849,7 +1869,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1880,7 +1901,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2100,7 +2122,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
