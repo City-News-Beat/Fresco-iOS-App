@@ -12,7 +12,9 @@
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
-@interface FRSOnboardingViewController () <UIScrollViewDelegate>
+#import "FRSContentActionsBar.h"
+
+@interface FRSOnboardingViewController () <UIScrollViewDelegate, FRSContentActionsBarDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -38,10 +40,21 @@
 
 #pragma mark - UI Configuration
 
+-(NSString *)titleForActionButton{
+    return @"READ MORE";
+}
+
+-(UIColor *)colorForActionButton{
+    return [UIColor blueColor];
+}
+
 -(void)configureUI{
     [self configureScrollView];
     [self configureOnboardingViews];
     [self configurePageControl];
+    
+    FRSContentActionsBar *bar = [[FRSContentActionsBar alloc] initWithOrigin:(CGPointMake(0, 400)) delegate:self];
+    [self.view addSubview:bar];
     
 }
 
