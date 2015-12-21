@@ -12,6 +12,9 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
+#import "FRSSignUpViewController.h"
+
+
 #import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSAppDelegate
@@ -24,11 +27,10 @@
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     
-    [self determineAppPath];
+//    [self determineAppPath];
+//    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
-    
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
-//    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
     
     return YES;
 }
@@ -93,7 +95,7 @@
 
 -(void)configureWindow{
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor whiteBackgroundColor];
+    self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 }
 

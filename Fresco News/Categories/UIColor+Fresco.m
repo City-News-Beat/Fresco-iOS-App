@@ -27,7 +27,7 @@
 }
 
 +(UIColor *)frescoGreenColor{
-    return [UIColor colorWithRed:76/255.0 green:215/255.0 blue:100/255.0 alpha:1.0];
+    return [UIColor colorWithRed:76/255.0 green:216/255.0 blue:100/255.0 alpha:1.0];
 }
 
 +(UIColor *)frescoDarkTextColor{
