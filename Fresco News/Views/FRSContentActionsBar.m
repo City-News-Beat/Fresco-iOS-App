@@ -74,7 +74,10 @@
     [self addSubview:self.repostLabel];
     
     self.repostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height)];
-    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateSelected];
+    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateHighlighted];
+    [self.repostButton addTarget:self action:@selector(handleRepostTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.repostButton];
     
 }
@@ -92,12 +95,22 @@
     
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
-    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateSelected];
+    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateHighlighted];
     self.likeButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.likeButton.contentMode = UIViewContentModeScaleAspectFit;
+    [self.likeButton addTarget:self action:@selector(handleLikeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.likeButton];
 }
 
+-(void)handleRepostTapped{
+    
+}
+
+-(void)handleLikeButtonTapped{
+    
+}
 
 
 
