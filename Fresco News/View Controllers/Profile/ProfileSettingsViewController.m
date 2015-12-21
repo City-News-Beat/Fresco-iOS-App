@@ -130,6 +130,7 @@ typedef enum : NSUInteger {
     [self.profileImageView addGestureRecognizer:singleTap];
     self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
     self.profileImageView.clipsToBounds = YES;
+    self.profileImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     //Update social connect buttons with proper states
     [self updateLinkingStatus];

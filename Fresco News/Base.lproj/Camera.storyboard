@@ -893,6 +893,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="qOm-qu-iOS"/>
                                         <exclude reference="6TH-J8-SM8"/>
                                         <exclude reference="DX4-Oh-Ihs"/>
                                         <exclude reference="IlT-sd-mh1"/>
@@ -900,7 +901,6 @@
                                         <exclude reference="cdf-eO-Ew9"/>
                                         <exclude reference="iJ8-M4-cjv"/>
                                         <exclude reference="pVI-Q1-yds"/>
-                                        <exclude reference="qOm-qu-iOS"/>
                                         <exclude reference="OCC-jg-pGc"/>
                                         <exclude reference="TSh-3i-Su1"/>
                                     </mask>

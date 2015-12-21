@@ -1,4 +1,4 @@
-//
+
 //  AssignmentsViewController.m
 //  FrescoNews
 //
@@ -122,6 +122,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNotificationBanner) name:UIApplicationWillEnterForegroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
 
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self updateNotificationBanner];
 }
 
 
@@ -640,7 +645,7 @@
             [self.detailViewWrapper setFrame:newFrame];
             
         } completion:^(BOOL finished) {
-            self.detailViewWrapper.hidden = YES;
+//            self.detailViewWrapper.hidden = YES;
         }];
 
     });
