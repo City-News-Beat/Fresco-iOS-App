@@ -7,6 +7,8 @@
 //
 
 #import "FRSPost.h"
+#import "FRSGallery.h"
+#import "FRSUser.h"
 
 @implementation FRSPost
 

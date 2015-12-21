@@ -15,15 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSGallery (CoreDataProperties)
 
+@property (nullable, nonatomic, retain) id articles;
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSString *caption;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
 @property (nullable, nonatomic, retain) NSDate *editedDate;
-@property (nullable, nonatomic, retain) NSString *uid;
-@property (nullable, nonatomic, retain) NSString *visibility;
-@property (nullable, nonatomic, retain) id articles;
 @property (nullable, nonatomic, retain) id relatedStories;
 @property (nullable, nonatomic, retain) id tags;
+@property (nullable, nonatomic, retain) NSString *uid;
+@property (nullable, nonatomic, retain) NSString *visibility;
 @property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;

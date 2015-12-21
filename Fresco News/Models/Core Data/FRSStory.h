@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class FRSUser;
+@class FRSGallery, FRSUser;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -1,5 +1,5 @@
 //
-//  FRSPost.h
+//  FRSArticle.h
 //  Fresco
 //
 //  Created by Daniel Sun on 12/21/15.
@@ -9,11 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class FRSGallery, FRSUser;
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSPost : NSManagedObject
+@interface FRSArticle : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -21,4 +19,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "FRSPost+CoreDataProperties.h"
+#import "FRSArticle+CoreDataProperties.h"

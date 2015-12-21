@@ -28,28 +28,28 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) id profileImage;
 @property (nullable, nonatomic, retain) NSString *uid;
 @property (nullable, nonatomic, retain) NSString *username;
-@property (nullable, nonatomic, retain) NSSet<NSManagedObject *> *galleries;
+@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
-@property (nullable, nonatomic, retain) NSSet<NSManagedObject *> *stories;
+@property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
 
 @end
 
 @interface FRSUser (CoreDataGeneratedAccessors)
 
-- (void)addGalleriesObject:(NSManagedObject *)value;
-- (void)removeGalleriesObject:(NSManagedObject *)value;
-- (void)addGalleries:(NSSet<NSManagedObject *> *)values;
-- (void)removeGalleries:(NSSet<NSManagedObject *> *)values;
+- (void)addGalleriesObject:(FRSGallery *)value;
+- (void)removeGalleriesObject:(FRSGallery *)value;
+- (void)addGalleries:(NSSet<FRSGallery *> *)values;
+- (void)removeGalleries:(NSSet<FRSGallery *> *)values;
 
 - (void)addPostsObject:(FRSPost *)value;
 - (void)removePostsObject:(FRSPost *)value;
 - (void)addPosts:(NSSet<FRSPost *> *)values;
 - (void)removePosts:(NSSet<FRSPost *> *)values;
 
-- (void)addStoriesObject:(NSManagedObject *)value;
-- (void)removeStoriesObject:(NSManagedObject *)value;
-- (void)addStories:(NSSet<NSManagedObject *> *)values;
-- (void)removeStories:(NSSet<NSManagedObject *> *)values;
+- (void)addStoriesObject:(FRSStory *)value;
+- (void)removeStoriesObject:(FRSStory *)value;
+- (void)addStories:(NSSet<FRSStory *> *)values;
+- (void)removeStories:(NSSet<FRSStory *> *)values;
 
 @end
 

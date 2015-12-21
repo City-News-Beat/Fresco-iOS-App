@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "UIColor+Additions.h"
-#import "FRSAlertViewManager.h"
+//#import "FRSAlertViewManager.h"
 
 /*
 ** Add four spaces in between sections

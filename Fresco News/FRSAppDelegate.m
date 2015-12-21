@@ -12,6 +12,8 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
+#import <MagicalRecord/MagicalRecord.h>
+
 @implementation FRSAppDelegate
 
 
@@ -21,6 +23,7 @@
     
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
+    [self configureCoreDataStack];
     
     
     self.window.rootViewController = [[FRSTabBarController alloc] init];
@@ -43,7 +46,7 @@
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
-    
+    [MagicalRecord cleanUp];
 }
 
 #pragma mark - Push Notifications
@@ -70,6 +73,11 @@
 
 -(void)configureThirdPartyApplicationsWithOptions:(NSDictionary *)options{
     
+}
+
+-(void)configureCoreDataStack{
+    [MagicalRecord setupAutoMigratingCoreDataStack];
+    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
 }
 
 

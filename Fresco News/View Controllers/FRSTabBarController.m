@@ -120,8 +120,8 @@
 }
 
 -(void)handleCameraTabPressed{
-    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
-    [self presentViewController:camVC animated:YES completion:nil];
+//    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
+//    [self presentViewController:camVC animated:YES completion:nil];
 }
 
 -(void)handleAssignmentTabPressed{

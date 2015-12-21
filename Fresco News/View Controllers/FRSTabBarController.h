@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "FRSCameraViewController.h"
-
 @interface FRSTabBarController : UITabBarController
 
 
@@ -17,7 +15,7 @@
 
 - (void)returnToGalleryPost;
 
-- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
+//- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
 
 - (void)presentAssignments;
 

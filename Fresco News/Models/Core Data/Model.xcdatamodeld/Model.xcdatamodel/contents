@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
+    <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
+        <attribute name="faviconStringUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stringUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="FRSAssignment" representedClassName="FRSAssignment" syncable="YES">
+        <attribute name="active" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="expirationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="radius" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="FRSGallery" representedClassName="FRSGallery" syncable="YES">
         <attribute name="articles" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="byline" optional="YES" attributeType="String" syncable="YES"/>
@@ -69,5 +85,7 @@
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="210"/>
         <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="150"/>
         <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
+        <element name="FRSArticle" positionX="-981" positionY="144" width="128" height="90"/>
+        <element name="FRSAssignment" positionX="-972" positionY="153" width="128" height="180"/>
     </elements>
 </model>

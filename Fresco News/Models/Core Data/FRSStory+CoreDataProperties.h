@@ -21,16 +21,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *title;
 @property (nullable, nonatomic, retain) NSString *uid;
 @property (nullable, nonatomic, retain) FRSUser *creator;
-@property (nullable, nonatomic, retain) NSSet<NSManagedObject *> *galleries;
+@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @end
 
 @interface FRSStory (CoreDataGeneratedAccessors)
 
-- (void)addGalleriesObject:(NSManagedObject *)value;
-- (void)removeGalleriesObject:(NSManagedObject *)value;
-- (void)addGalleries:(NSSet<NSManagedObject *> *)values;
-- (void)removeGalleries:(NSSet<NSManagedObject *> *)values;
+- (void)addGalleriesObject:(FRSGallery *)value;
+- (void)removeGalleriesObject:(FRSGallery *)value;
+- (void)addGalleries:(NSSet<FRSGallery *> *)values;
+- (void)removeGalleries:(NSSet<FRSGallery *> *)values;
 
 @end
 

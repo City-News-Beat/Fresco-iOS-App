@@ -7,6 +7,7 @@
 //
 
 #import "FRSStory.h"
+#import "FRSGallery.h"
 #import "FRSUser.h"
 
 @implementation FRSStory

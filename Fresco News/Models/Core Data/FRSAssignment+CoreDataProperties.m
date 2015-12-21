@@ -1,5 +1,5 @@
 //
-//  FRSGallery+CoreDataProperties.m
+//  FRSAssignment+CoreDataProperties.m
 //  Fresco
 //
 //  Created by Daniel Sun on 12/21/15.
@@ -9,21 +9,18 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "FRSGallery+CoreDataProperties.h"
+#import "FRSAssignment+CoreDataProperties.h"
 
-@implementation FRSGallery (CoreDataProperties)
+@implementation FRSAssignment (CoreDataProperties)
 
-@dynamic articles;
-@dynamic byline;
+@dynamic uid;
+@dynamic title;
 @dynamic caption;
+@dynamic active;
+@dynamic location;
+@dynamic radius;
 @dynamic createdDate;
 @dynamic editedDate;
-@dynamic relatedStories;
-@dynamic tags;
-@dynamic uid;
-@dynamic visibility;
-@dynamic creator;
-@dynamic posts;
-@dynamic stories;
+@dynamic expirationDate;
 
 @end
