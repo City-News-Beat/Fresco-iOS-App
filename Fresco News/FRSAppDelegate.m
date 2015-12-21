@@ -23,12 +23,12 @@
     
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
-    [self configureCoreDataStack];
+    
+    [self determineAppPath];
     
     
     self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
-    
     
     return YES;
 }
@@ -62,6 +62,32 @@
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     
 }
+
+#pragma mark - App Path
+
+-(void)determineAppPath{
+
+    NSString *versionString = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    NSArray *versionComps = [versionString componentsSeparatedByString:@"."];
+    NSInteger firstVersionNum = [[versionComps firstObject] integerValue];
+    
+    if (firstVersionNum < 3){ //This is a legacy user from prior to the redesign and persistance layer
+        [self configureCoreDataStack];
+        
+    }
+    else if (firstVersionNum == 3){ //This is the current high level version number we are working with.
+        [self configureCoreDataStack];
+        
+        
+        
+    }
+    else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
+        
+    }
+    
+    
+}
+
 
 #pragma mark - Config
 

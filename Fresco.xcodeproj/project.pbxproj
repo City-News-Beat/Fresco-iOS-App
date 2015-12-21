@@ -49,6 +49,9 @@
 		65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FCA1C286DCF00839149 /* FRSGallery.m */; };
 		65135FDB1C286DCF00839149 /* FRSPost+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FCC1C286DCF00839149 /* FRSPost+CoreDataProperties.m */; };
 		65135FDC1C286DCF00839149 /* FRSPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FCE1C286DCF00839149 /* FRSPost.m */; };
+		65135FE61C2875B600839149 /* FRSDataValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FE51C2875B600839149 /* FRSDataValidator.m */; };
+		65135FEB1C2884A900839149 /* FRSSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FEA1C2884A900839149 /* FRSSignUpViewController.m */; };
+		65135FEE1C2884B300839149 /* FRSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FED1C2884B300839149 /* FRSLoginViewController.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
@@ -208,6 +211,12 @@
 		65135FCC1C286DCF00839149 /* FRSPost+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "FRSPost+CoreDataProperties.m"; path = "Core Data/FRSPost+CoreDataProperties.m"; sourceTree = "<group>"; };
 		65135FCD1C286DCF00839149 /* FRSPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSPost.h; path = "Core Data/FRSPost.h"; sourceTree = "<group>"; };
 		65135FCE1C286DCF00839149 /* FRSPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSPost.m; path = "Core Data/FRSPost.m"; sourceTree = "<group>"; };
+		65135FE41C2875B600839149 /* FRSDataValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDataValidator.h; path = Utilities/FRSDataValidator.h; sourceTree = "<group>"; };
+		65135FE51C2875B600839149 /* FRSDataValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDataValidator.m; path = Utilities/FRSDataValidator.m; sourceTree = "<group>"; };
+		65135FE91C2884A900839149 /* FRSSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSignUpViewController.h; path = ../FRSSignUpViewController.h; sourceTree = "<group>"; };
+		65135FEA1C2884A900839149 /* FRSSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSignUpViewController.m; path = ../FRSSignUpViewController.m; sourceTree = "<group>"; };
+		65135FEC1C2884B300839149 /* FRSLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSLoginViewController.h; path = ../FRSLoginViewController.h; sourceTree = "<group>"; };
+		65135FED1C2884B300839149 /* FRSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSLoginViewController.m; path = ../FRSLoginViewController.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
@@ -386,6 +395,7 @@
 		1EDA44B21AA4CCC70082E08D /* Fresco News */ = {
 			isa = PBXGroup;
 			children = (
+				65135FE71C2875B900839149 /* Utilities */,
 				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
@@ -577,6 +587,33 @@
 			name = FRSPost;
 			sourceTree = "<group>";
 		};
+		65135FE71C2875B900839149 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				65135FE41C2875B600839149 /* FRSDataValidator.h */,
+				65135FE51C2875B600839149 /* FRSDataValidator.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		65135FEF1C2884BC00839149 /* Sign up */ = {
+			isa = PBXGroup;
+			children = (
+				65135FE91C2884A900839149 /* FRSSignUpViewController.h */,
+				65135FEA1C2884A900839149 /* FRSSignUpViewController.m */,
+			);
+			name = "Sign up";
+			sourceTree = "<group>";
+		};
+		65135FF01C2884C100839149 /* Log in */ = {
+			isa = PBXGroup;
+			children = (
+				65135FEC1C2884B300839149 /* FRSLoginViewController.h */,
+				65135FED1C2884B300839149 /* FRSLoginViewController.m */,
+			);
+			name = "Log in";
+			sourceTree = "<group>";
+		};
 		65F237B41C24A954002182DE /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +723,8 @@
 		E784280E1B57F3E30090DFCC /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
+				65135FEF1C2884BC00839149 /* Sign up */,
+				65135FF01C2884C100839149 /* Log in */,
 				65F237BD1C24C0E4002182DE /* FRSOnboardingViewController.h */,
 				65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */,
 				65F237C01C24C28D002182DE /* FRSOnboardOneView.h */,
@@ -1051,14 +1090,17 @@
 			files = (
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
+				65135FE61C2875B600839149 /* FRSDataValidator.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Additions.m in Sources */,
 				65135FDB1C286DCF00839149 /* FRSPost+CoreDataProperties.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
+				65135FEE1C2884B300839149 /* FRSLoginViewController.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				65135FD91C286DCF00839149 /* FRSGallery+CoreDataProperties.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
+				65135FEB1C2884A900839149 /* FRSSignUpViewController.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				65135FCF1C286DCF00839149 /* FRSArticle+CoreDataProperties.m in Sources */,

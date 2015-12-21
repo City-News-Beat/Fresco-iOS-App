@@ -19,8 +19,7 @@
 }
 
 +(UIColor *)frescoBackgroundColorDark{
-//    return [UIColor colorWithRed:<#(CGFloat)#> green:<#(CGFloat)#> blue:<#(CGFloat)#> alpha:]
-    return [UIColor new];
+    return [UIColor colorWithRed:242/255. green:242/255. blue:237/255. alpha:1];
 }
 
 +(UIColor *)frescoBackgroundColorLight{

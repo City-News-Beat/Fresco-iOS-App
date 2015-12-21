@@ -10,4 +10,6 @@
 
 @interface FRSDataValidator : NSObject
 
++(BOOL)isNonNullObject:(id)object;
+
 @end

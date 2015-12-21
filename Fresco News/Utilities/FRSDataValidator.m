@@ -10,4 +10,27 @@
 
 @implementation FRSDataValidator
 
++(BOOL)isNonNullObject:(id)object{
+    if ([[object class] isSubclassOfClass:[NSDictionary class]]){
+        return [FRSDataValidator validateDictionary:(NSDictionary *)object];
+    }
+    else {
+        return (![object isEqual:[NSNull null]] && object);
+    }
+}
+
++(BOOL)validateDictionary:(NSDictionary *)dict{
+    if (!dict || [dict isEqual:[NSNull null]]) return NO;
+    
+    else {
+        for (NSString *key in [dict allKeys]){
+            if ([dict[key] isEqual:[NSNull null]]){
+                return NO;
+            }
+        }
+    }
+    
+    return YES;
+}
+
 @end
