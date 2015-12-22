@@ -58,6 +58,8 @@
     
     self.addPhotoImageView.userInteractionEnabled = YES;
     self.addPhotoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.height/2;
+    self.addPhotoImageView.clipsToBounds = YES;
     
 }
 
@@ -302,7 +304,7 @@
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
     [self presentViewController:picker animated:YES completion:^{
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         self.addPhotoImageView.layer.cornerRadius = self.addPhotoImageView.frame.size.width / 2;
         self.addPhotoImageView.clipsToBounds = YES;
     }];
