@@ -12,6 +12,9 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
+
+#import "TestViewController.h"
+
 #import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSAppDelegate
@@ -26,8 +29,9 @@
     [self configureCoreDataStack];
     
     
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
+//    self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+    self.window.rootViewController = [[TestViewController alloc] init];
     
     
     return YES;
@@ -67,7 +71,7 @@
 
 -(void)configureWindow{
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor whiteBackgroundColor];
+    self.window.backgroundColor = [UIColor whiteColor]; // used to be [UIColor whiteBackgroundColor];
     [self.window makeKeyAndVisible];
 }
 

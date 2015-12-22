@@ -23,6 +23,7 @@ target 'Fresco' do
 	pod 'FBSDKLoginKit'
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
+	pod ‘MagicalRecord’
 
 end
 

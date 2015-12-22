@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIColor+Additions.h"
+
 //#import "FRSAlertViewManager.h"
 
 /*
