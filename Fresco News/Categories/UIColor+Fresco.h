@@ -30,5 +30,7 @@
 
 +(UIColor *)frescoBlueColor;
 
++(UIColor *)frescoShadowColor;
+
 
 @end

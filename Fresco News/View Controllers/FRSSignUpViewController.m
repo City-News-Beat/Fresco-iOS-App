@@ -98,7 +98,7 @@
     self.usernameTF.delegate = self;
     [self.scrollView addSubview:self.usernameTF];
     
-    [self.usernameTF addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
+    [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configureEmailAddressField{
@@ -107,7 +107,7 @@
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
@@ -115,7 +115,7 @@
     self.emailTF.delegate = self;
     [backgroundView addSubview:self.emailTF];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configurePasswordField{
@@ -129,7 +129,7 @@
     self.passwordTF.delegate = self;
     [backgroundView addSubview:self.passwordTF];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configureNotificationSection{
@@ -161,9 +161,9 @@
     [toggle addTarget:self action:@selector(handleToggleSwitched:) forControlEvents:UIControlEventValueChanged];
     [backgroundView addSubview:toggle];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 61.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
     
 }
 
@@ -196,7 +196,7 @@
     
     [self.scrollView addSubview:self.mapView];
     
-    [self.mapView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    [self.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.y += self.mapView.frame.size.height;
 }
@@ -229,7 +229,7 @@
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.promoTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
     self.promoTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Promo" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
@@ -237,7 +237,7 @@
     self.promoTF.delegate = self;
     [backgroundView addSubview:self.promoTF];
     
-    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
+    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
     
     self.y += backgroundView.frame.size.height + 12;
     
@@ -261,7 +261,7 @@
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
     
-    [self.bottomBar addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.createAccountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 167, 0, 167, 44)];
     [self.createAccountButton setTitle:@"CREATE MY ACCOUNT" forState:UIControlStateNormal];
@@ -295,12 +295,6 @@
     [googleButton setImage:[UIImage imageNamed:@"google-icon-filled"] forState:UIControlStateSelected];
     [googleButton addTarget:self action:@selector(googleTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:googleButton];
-}
-
--(UIView *)lineAtPoint:(CGPoint)point{
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, self.scrollView.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    return line;
 }
 
 #pragma TextField Delegate

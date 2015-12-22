@@ -50,4 +50,18 @@
 
 -(void)addDropShadowWithColor:(UIColor *)color path:(UIBezierPath *)path;
 
+
+/**
+ 
+ *Adds a shadow with the supplied color, radius, and offset
+ *
+ *@param color Color of shadow. If nil, default color will be applied
+ *@param radius Radius of shadow. If nil, default radius of 2 will be applied
+ *@param offset Offset of shadow. Required to be passed in
+ *
+*/
+-(void)addShadowWithColor:(UIColor *)color radius:(CGFloat)radius offset:(CGSize)offset;
+
++(UIView *)lineAtPoint:(CGPoint)point;
+
 @end

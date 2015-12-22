@@ -80,5 +80,21 @@
     }
 }
 
+-(void)addShadowWithColor:(UIColor *)color radius:(CGFloat)radius offset:(CGSize)offset{
+    UIColor *shadowColor = color ? : [UIColor frescoShadowColor];
+    CGFloat shadowRadius = radius ? : 2;
+    
+    self.layer.shadowColor = shadowColor.CGColor;
+    self.layer.shadowOpacity = 1.0;
+    self.layer.shadowRadius = shadowRadius;
+    self.layer.shadowOffset = offset;
+}
+
++(UIView *)lineAtPoint:(CGPoint)point{
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    return line;
+}
+
 
 @end

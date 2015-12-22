@@ -12,8 +12,13 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
-#import "FRSSignUpViewController.h"
 
+
+
+
+
+#import "FRSSignUpViewController.h"
+#import "FRSSetupProfileViewController.h"
 
 #import <MagicalRecord/MagicalRecord.h>
 
@@ -30,7 +35,7 @@
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSetupProfileViewController alloc] init]];
     
     return YES;
 }
@@ -58,7 +63,7 @@
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-
+    
 }
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
@@ -79,7 +84,6 @@
     }
     else if (firstVersionNum == 3){ //This is the current high level version number we are working with.
         [self configureCoreDataStack];
-        
         
         
     }

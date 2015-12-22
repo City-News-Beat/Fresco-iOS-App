@@ -50,4 +50,8 @@
     return [UIColor colorWithWhite:0.0 alpha:0.26];
 }
 
++(UIColor *)frescoShadowColor {
+    return [UIColor colorWithWhite:0 alpha:0.15];
+}
+
 @end
