@@ -30,6 +30,8 @@
 
 @property (strong, nonatomic) UIButton *createAccountButton;
 
+@property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
+
 @end
 
 @implementation FRSSignUpViewController
@@ -61,13 +63,11 @@
 }
 
 -(void)configureScrollView{
-    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 108)];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
-    
 }
 
 -(void)configureTextFields{
@@ -82,9 +82,7 @@
     self.usernameTF.delegate = self;
     [self.scrollView addSubview:self.usernameTF];
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.scrollView.frame.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [self.usernameTF addSubview:bottomLine];
+    [self.usernameTF addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configureEmailAddressField{
@@ -93,9 +91,7 @@
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.scrollView.frame.size.width, 0.5)];
-    topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [backgroundView addSubview:topLine];
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
@@ -103,9 +99,7 @@
     self.emailTF.delegate = self;
     [backgroundView addSubview:self.emailTF];
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.scrollView.frame.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [backgroundView addSubview:bottomLine];
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configurePasswordField{
@@ -119,9 +113,7 @@
     self.passwordTF.delegate = self;
     [backgroundView addSubview:self.passwordTF];
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.scrollView.frame.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [backgroundView addSubview:bottomLine];
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configureNotificationSection{
@@ -153,13 +145,9 @@
     [toggle addTarget:self action:@selector(handleToggleSwitched:) forControlEvents:UIControlEventValueChanged];
     [backgroundView addSubview:toggle];
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.scrollView.frame.size.width, 0.5)];
-    topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [backgroundView addSubview:topLine];
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 61.5, self.scrollView.frame.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [backgroundView addSubview:bottomLine];
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 61.5)]];
     
 }
 
@@ -168,7 +156,6 @@
     NSInteger height = 240;
     if (IS_STANDARD_IPHONE_6) height = 280;
     if (IS_STANDARD_IPHONE_6_PLUS) height = 310;
-    
     
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 254, self.scrollView.frame.size.width, height)];
     self.mapView.delegate = self;
@@ -185,9 +172,7 @@
     
     [self.scrollView addSubview:self.mapView];
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, height - 0.5, self.scrollView.frame.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [self.mapView addSubview:bottomLine];
+    [self.mapView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
 }
 
 -(void)configureSliderSection{
@@ -201,7 +186,6 @@
     [self.radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
     [backgroundView addSubview:self.radiusSlider];
 
-    
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
     smallIV.image = [UIImage imageNamed:@"radius-small"];
     [backgroundView addSubview:smallIV];
@@ -222,9 +206,7 @@
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.bottomBar.frame.size.width, 0.5)];
-    topLine.backgroundColor = [UIColor frescoBackgroundColorDark];
-    [self.bottomBar addSubview:topLine];
+    [self.bottomBar addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.createAccountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 167, 0, 167, 44)];
     [self.createAccountButton setTitle:@"CREATE MY ACCOUNT" forState:UIControlStateNormal];
@@ -233,17 +215,51 @@
     [self.createAccountButton setTitleColor:[UIColor frescoMediumTextColor] forState:UIControlStateHighlighted];
     [self.createAccountButton addTarget:self action:@selector(createAccount) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.createAccountButton];
+}
+
+-(UIView *)lineAtPoint:(CGPoint)point{
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, self.scrollView.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    return line;
+}
+
+#pragma TextField Delegate
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (!self.dismissGR)
+        self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     
+    [self.view addGestureRecognizer:self.dismissGR];
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    [self.view removeGestureRecognizer:self.dismissGR];
 }
 
 #pragma mark Action Logic 
 
 -(void)handleToggleSwitched:(UISwitch *)toggle{
-    
+    if (toggle.on){
+        
+    }
+    else {
+        
+    }
 }
 
 -(void)createAccount{
     
+}
+
+-(void)dismissKeyboard{
+    [self.usernameTF resignFirstResponder];
+    [self.emailTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
