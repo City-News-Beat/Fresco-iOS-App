@@ -35,7 +35,7 @@
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSetupProfileViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
     
     return YES;
 }

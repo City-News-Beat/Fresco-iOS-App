@@ -8,6 +8,10 @@
 
 #import "FRSSignUpViewController.h"
 
+//View Controllers
+#import "FRSSetupProfileViewController.h"
+
+//Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
@@ -48,6 +52,16 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationItem.title = @"SIGN UP";
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.navigationItem.title = @"";
+}
+
 -(void)addNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -73,7 +87,7 @@
 -(void)configureNavigationBar{
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    self.navigationItem.title = @"SIGN UP";
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
 }
 
@@ -327,7 +341,8 @@
 }
 
 -(void)createAccount{
-    
+    FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)facebookTapped{
