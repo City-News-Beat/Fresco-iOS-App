@@ -17,7 +17,10 @@
 - (void)prepareForReuse{
 
     self.notification = nil;
-
+    
+    self.firstButton.hidden = NO;
+    self.secondButton.hidden = NO;
+    
 }
 
 - (void)setNotification:(FRSNotification *)notif{
@@ -60,7 +63,6 @@
                 self.secondButton.hidden = YES;
                 self.timeElapsed.text = @"Expired";
             }
-            
         }
         else {
             self.firstButton.hidden = NO;
