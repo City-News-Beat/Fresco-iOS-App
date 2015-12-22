@@ -12,6 +12,9 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
+#define ALERT_WIDTH 270
+#define MESSAGE_WIDTH 238
+
 @interface FRSAlertView ()
 
 @property (strong, nonatomic) UIView* overlayView;
@@ -36,6 +39,8 @@
         
         self.delegate = delegate;
         
+        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
+        
         /* Dark Overlay */
         CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
         CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
@@ -44,17 +49,12 @@
         self.overlayView.alpha = .26;
         [self addSubview:(self.overlayView)];
         
-        /* Alert Box */
+        //        /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        self.layer.shadowColor = [UIColor blackColor].CGColor;
-        self.layer.shadowOffset = CGSizeMake(0, 4);
-        self.layer.shadowRadius = 2;
-        self.layer.shadowOpacity = 0.1;
-        self.layer.cornerRadius = 2;
-        self.layer.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 270)/2, ([UIScreen mainScreen].bounds.size.height/2) - self.height/2, 270, self.height);
+
         
         /* Title Label */
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.text = title;
@@ -62,64 +62,64 @@
         [self addSubview:self.titleLabel];
         
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - 238)/2, 164, 238, self.height - 132)];
-        self.messageLabel.text = message;
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        self.messageLabel.adjustsFontSizeToFitWidth = YES;
         
-        NSString *labelText = message;
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
+        
         self.messageLabel.attributedText = attributedString ;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
+        self.messageLabel.backgroundColor = [UIColor redColor];
+        [self.messageLabel sizeToFit];
+        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
         
         /* Action Shadow */
-        self.buttonShadow = [[UIButton alloc] initWithFrame:CGRectMake(0, self.height - 44, 270, 1)];
-        self.buttonShadow.backgroundColor = [UIColor blackColor];
-        self.buttonShadow.alpha = .12;
-        [self addSubview:self.buttonShadow];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
+        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         
         if ([cancelTitle  isEqual: @""]){
-        /* Single Action Button */
-        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.frame = CGRectMake(0, self.height - 44, 270, 44);
-        [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
-        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-        [self addSubview:self.actionButton];
+            /* Single Action Button */
+            self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
+            self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, ALERT_WIDTH, 44);
+            [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
+            [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+            [self addSubview:self.actionButton];
         } else {
             /* Left Action */
             self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-            self.actionButton.frame = CGRectMake(0, self.height - 44, 85, 44);
+            self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 85, 44);
             [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
             [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
             [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self addSubview:self.actionButton];
-            [self adjustFrameForActionCount:1];
             
             /* Right Action */
             self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            self.cancelButton.frame = CGRectMake(169, self.height - 44, 101, 44);
+            self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
             [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
             [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
             [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
             [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self.cancelButton sizeToFit];
-            [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.height - 44, self.cancelButton.frame.size.width + 32, 44)];
+            [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
             [self addSubview:self.cancelButton];
-            [self adjustFrameForActionCount:2];
+            
         }
-
+        [self adjustFrame];
+        [self addShadowAndClip];
+        
         [self animateIn];
- 
+        
     }
     return self;
 }
@@ -131,19 +131,23 @@
     
 }
 
--(void)adjustFrameForActionCount:(NSInteger)count {
-    self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height;
-    self.layer.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 270)/2, ([UIScreen mainScreen].bounds.size.height/2) - self.height/2, 270, self.height);
-    self.buttonShadow.frame = CGRectMake(0, self.height - 44, 270, 1);
+-(void)adjustFrame{
+    self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
+    
+    UIViewController* vc = (UIViewController *)self.delegate;
+    
+    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
+    NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2;
+    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+    
+}
 
-    if (count == 1){
-        self.actionButton.frame = CGRectMake(0, self.height - 44, 270, 44);
-    } else if (count == 2){
-        self.actionButton.frame = CGRectMake(0, self.height - 44, 85, 44);
-        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.height - 44, self.cancelButton.frame.size.width + 32, 44)];
-
-    }
-
+-(void)addShadowAndClip{
+    self.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(0, 4);
+    self.layer.shadowRadius = 2;
+    self.layer.shadowOpacity = 0.1;
+    self.layer.cornerRadius = 2;
 }
 
 
@@ -166,7 +170,7 @@
                           delay:0.0
                         options: UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-        
+                         
                          self.alpha = 1;
                          self.titleLabel.alpha = 1;
                          self.cancelButton.alpha = 1;
