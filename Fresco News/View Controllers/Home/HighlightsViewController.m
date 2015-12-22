@@ -15,7 +15,7 @@
 #import "GalleryTableViewCell.h"
 #import "AssignmentsViewController.h"
 
-#define HIDE_NUMBER @2
+#define HIDE_NUMBER @3
 
 @interface HighlightsViewController ()
 
@@ -57,7 +57,7 @@
         // append data to data source, insert new cells at the end of table view
         NSNumber *num = [NSNumber numberWithInteger:[self.galleriesViewController.galleries count]];
         
-        NSDictionary *params = @{@"offset" : num, @"hide" : HIDE_NUMBER, @"stories" : @"true"};
+        NSDictionary *params = @{@"offset" : num, @"hide" : HIDE_NUMBER, @"stories" : @"true"}; //HIDE NUMBER
         
         //Make request for more posts, append to galleries array
         [[FRSDataManager sharedManager] getGalleries:params shouldRefresh:NO withResponseBlock:^(id responseObject, NSError *error) {
