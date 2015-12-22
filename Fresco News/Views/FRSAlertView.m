@@ -83,6 +83,7 @@
         /* Action Shadow */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:line];
         
         if ([cancelTitle  isEqual: @""]){
             /* Single Action Button */

@@ -35,7 +35,7 @@
 
 -(void)alert{
     
-    FRSAlertView *alertView = [[FRSAlertView alloc] initWithTitle:@"ANONYMITY" message:@"Short titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort titleShort title77" actionTitle:@"CANCEL" cancelTitle:@"POST ANONYMOUSLY" delegate:self];
+    FRSAlertView *alertView = [[FRSAlertView alloc] initWithTitle:@"ANONYMITY" message:@"When you post a gallery anonymously, it will be invisible to the public on Fresco. News outlets can still purchase your photos and videos, but they will not credit you by name in their reporting." actionTitle:@"CANCEL" cancelTitle:@"POST ANONYMOUSLY" delegate:self];
     
     [alertView show];
 //    [self.view addSubview:alertView];
