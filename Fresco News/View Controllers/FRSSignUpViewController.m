@@ -43,9 +43,7 @@
     [super viewDidLoad];
     [self configureUI];
     
-    
     [self addNotifications];
-    
     
     // Do any additional setup after loading the view.
 }
@@ -272,6 +270,31 @@
     [self.createAccountButton setTitleColor:[UIColor frescoMediumTextColor] forState:UIControlStateHighlighted];
     [self.createAccountButton addTarget:self action:@selector(createAccount) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.createAccountButton];
+    
+    [self addSocialButtonsToBottomBar];
+}
+
+-(void)addSocialButtonsToBottomBar{
+    UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
+    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
+    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:facebookButton];
+    
+    UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(facebookButton.frame.origin.x + facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
+    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
+    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:twitterButton];
+    
+    UIButton *googleButton = [[UIButton alloc] initWithFrame:CGRectMake(twitterButton.frame.origin.x + twitterButton.frame.size.width, 1, 24 + 18, 24+18)];
+    [googleButton setImage:[UIImage imageNamed:@"google-icon"] forState:UIControlStateNormal];
+    [googleButton setImage:[UIImage imageNamed:@"google-icon-filled"] forState:UIControlStateHighlighted];
+    [googleButton setImage:[UIImage imageNamed:@"google-icon-filled"] forState:UIControlStateSelected];
+    [googleButton addTarget:self action:@selector(googleTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:googleButton];
 }
 
 -(UIView *)lineAtPoint:(CGPoint)point{
@@ -310,6 +333,18 @@
 }
 
 -(void)createAccount{
+    
+}
+
+-(void)facebookTapped{
+    
+}
+
+-(void)twitterTapped{
+    
+}
+
+-(void)googleTapped{
     
 }
 
