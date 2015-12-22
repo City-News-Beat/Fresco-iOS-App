@@ -23,6 +23,8 @@
 @property (strong, nonatomic) UIButton* cancelButton;
 @property (strong, nonatomic) UIButton* actionButton;
 
+@property CGFloat height;
+
 
 @end
 
@@ -31,6 +33,7 @@
 -(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle delegate:(id)delegate{
     self = [super init];
     if (self){
+        
         
         CGFloat height = 223;
         
@@ -55,7 +58,7 @@
         
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
-        self.titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
+        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.text = title;
         self.titleLabel.alpha = .87;
@@ -65,12 +68,20 @@
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - 238)/2, 44, 238, height - 96)];
         self.messageLabel.text = message;
         self.messageLabel.alpha = .54;
-        self.messageLabel.textAlignment = NSTextAlignmentCenter;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
         self.messageLabel.adjustsFontSizeToFitWidth = YES;
+        
+        NSString *labelText = message;
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:2];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];
+        self.messageLabel.attributedText = attributedString ;
+        self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.messageLabel];
+
         
         /* Action Shadow */
         self.buttonShadow = [[UIButton alloc] initWithFrame:CGRectMake(0, height - 44, 270, 1)];
@@ -85,7 +96,7 @@
         self.actionButton.frame = CGRectMake(0, height - 44, 270, 44);
         [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
-        [self.actionButton.titleLabel setFont:[UIFont fontWithName:@"Nota-Bold" size:15]];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
         } else {
             /* Left Action */
@@ -94,7 +105,7 @@
             self.actionButton.frame = CGRectMake(0, height - 44, 85, 44);
             [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
             [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
-            [self.actionButton.titleLabel setFont:[UIFont fontWithName:@"Nota-Bold" size:15]];
+            [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self addSubview:self.actionButton];
             
             /* Right Action */
@@ -103,7 +114,7 @@
             [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
             [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
             [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
-            [self.cancelButton.titleLabel setFont:[UIFont fontWithName:@"Nota-Bold" size:15]];
+            [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self.cancelButton sizeToFit];
             [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, height - 44, self.cancelButton.frame.size.width + 32, 44)];
             [self addSubview:self.cancelButton];
@@ -126,9 +137,9 @@
 }
 
 -(void)show{
+    /* keyWindow places the view above all. Add overlay view first, and then alertView*/
     [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
-
 }
 
 -(void)adjustFrame{
@@ -137,6 +148,7 @@
 
 
 -(void)cancelTapped{
+    [self animateOut];
 }
 
 -(void)actionTapped{
@@ -146,6 +158,7 @@
 
 -(void)animateIn{
     
+    /* Set default state before animating in */
     self.transform = CGAffineTransformMakeScale(1.175, 1.175);
     self.alpha = 0;
     
