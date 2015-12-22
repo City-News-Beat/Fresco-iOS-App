@@ -59,11 +59,7 @@
 -(void)configureNavigationBar{
     self.navigationItem.title = @"SETUP YOUR PROFILE";
     
-    UIImage *backImg = [UIImage imageNamed:@"back-arrow-light"];
-    backImg = [backImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    self.navigationController.navigationBar.backIndicatorImage = backImg;
-    self.navigationController.navigationBar.backIndicatorTransitionMaskImage = backImg;
 }
 
 -(void)configureScrollView{

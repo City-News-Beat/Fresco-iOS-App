@@ -12,6 +12,7 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
+#import "FRSNavigationController.h"
 
 
 
@@ -35,7 +36,7 @@
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
+    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
     
     return YES;
 }

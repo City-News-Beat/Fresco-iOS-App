@@ -72,8 +72,7 @@
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
-    [self configureNavigationBar];
+
     [self configureScrollView];
     [self configureTextFields];
     [self configureNotificationSection];
@@ -83,14 +82,6 @@
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
 }
-
--(void)configureNavigationBar{
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
-}
-
 
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -110,6 +101,7 @@
     self.usernameTF = [[UITextField alloc] initWithFrame:CGRectMake(48, 24, self.scrollView.frame.size.width - 2 * 48, 44)];
     self.usernameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"@username" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont notaMediumWithSize:17]}];
     self.usernameTF.delegate = self;
+    self.usernameTF.textColor = [UIColor frescoDarkTextColor];
     [self.scrollView addSubview:self.usernameTF];
     
     [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -127,6 +119,7 @@
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.emailTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.emailTF.delegate = self;
+    self.emailTF.textColor = [UIColor frescoDarkTextColor];
     [backgroundView addSubview:self.emailTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -141,6 +134,8 @@
     self.passwordTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.passwordTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.passwordTF.delegate = self;
+    self.passwordTF.textColor = [UIColor frescoDarkTextColor];
+    self.passwordTF.secureTextEntry = YES;
     [backgroundView addSubview:self.passwordTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -323,10 +318,31 @@
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:self.dismissGR];
+    
+    if (textField == self.usernameTF){
+        if ([self.usernameTF.text isEqualToString:@""]){
+            self.usernameTF.text = @"@";
+        }
+    }
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
+        return NO;
+    }
+    return YES;
+}
+
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     [self.view removeGestureRecognizer:self.dismissGR];
+    
+    if (textField == self.usernameTF){
+        if ([self.usernameTF.text isEqualToString:@"@"]){
+            self.usernameTF.text = @"";
+        }
+    }
 }
 
 #pragma mark Action Logic 
