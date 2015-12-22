@@ -34,9 +34,6 @@
     self = [super init];
     if (self){
         
-        
-        CGFloat height = 223;
-        
         self.delegate = delegate;
         
         /* Dark Overlay */
@@ -54,7 +51,7 @@
         self.layer.shadowRadius = 2;
         self.layer.shadowOpacity = 0.1;
         self.layer.cornerRadius = 2;
-        self.layer.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 270)/2, ([UIScreen mainScreen].bounds.size.height/2) - height/2, 270, height);
+        self.layer.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 270)/2, ([UIScreen mainScreen].bounds.size.height/2) - self.height/2, 270, self.height);
         
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
@@ -65,7 +62,7 @@
         [self addSubview:self.titleLabel];
         
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - 238)/2, 44, 238, height - 96)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - 238)/2, 164, 238, self.height - 132)];
         self.messageLabel.text = message;
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -81,10 +78,9 @@
         self.messageLabel.attributedText = attributedString ;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.messageLabel];
-
         
         /* Action Shadow */
-        self.buttonShadow = [[UIButton alloc] initWithFrame:CGRectMake(0, height - 44, 270, 1)];
+        self.buttonShadow = [[UIButton alloc] initWithFrame:CGRectMake(0, self.height - 44, 270, 1)];
         self.buttonShadow.backgroundColor = [UIColor blackColor];
         self.buttonShadow.alpha = .12;
         [self addSubview:self.buttonShadow];
@@ -93,7 +89,7 @@
         /* Single Action Button */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.frame = CGRectMake(0, height - 44, 270, 44);
+        self.actionButton.frame = CGRectMake(0, self.height - 44, 270, 44);
         [self.actionButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -102,36 +98,28 @@
             /* Left Action */
             self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-            self.actionButton.frame = CGRectMake(0, height - 44, 85, 44);
+            self.actionButton.frame = CGRectMake(0, self.height - 44, 85, 44);
             [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
             [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
             [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self addSubview:self.actionButton];
+            [self adjustFrameForActionCount:1];
             
             /* Right Action */
             self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            self.cancelButton.frame = CGRectMake(169, height - 44, 101, 44);
+            self.cancelButton.frame = CGRectMake(169, self.height - 44, 101, 44);
             [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
             [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
             [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
             [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self.cancelButton sizeToFit];
-            [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, height - 44, self.cancelButton.frame.size.width + 32, 44)];
+            [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.height - 44, self.cancelButton.frame.size.width + 32, 44)];
             [self addSubview:self.cancelButton];
+            [self adjustFrameForActionCount:2];
         }
 
         [self animateIn];
-        
-//        [self configureTitleLabel:]
-//        [self configureBodyLabel:]
-        
-//        [self adjustFrame];
-        
-        
-
-        
-
-        
+ 
     }
     return self;
 }
@@ -140,10 +128,22 @@
     /* keyWindow places the view above all. Add overlay view first, and then alertView*/
     [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
+    
 }
 
--(void)adjustFrame{
-//    self.frame = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>);
+-(void)adjustFrameForActionCount:(NSInteger)count {
+    self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height;
+    self.layer.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 270)/2, ([UIScreen mainScreen].bounds.size.height/2) - self.height/2, 270, self.height);
+    self.buttonShadow.frame = CGRectMake(0, self.height - 44, 270, 1);
+
+    if (count == 1){
+        self.actionButton.frame = CGRectMake(0, self.height - 44, 270, 44);
+    } else if (count == 2){
+        self.actionButton.frame = CGRectMake(0, self.height - 44, 85, 44);
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.height - 44, self.cancelButton.frame.size.width + 32, 44)];
+
+    }
+
 }
 
 
