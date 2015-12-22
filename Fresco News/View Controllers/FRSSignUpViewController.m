@@ -102,6 +102,7 @@
     self.usernameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"@username" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont notaMediumWithSize:17]}];
     self.usernameTF.delegate = self;
     self.usernameTF.textColor = [UIColor frescoDarkTextColor];
+    self.usernameTF.font = [UIFont notaMediumWithSize:17];
     [self.scrollView addSubview:self.usernameTF];
     
     [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -120,6 +121,7 @@
     self.emailTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.emailTF.delegate = self;
     self.emailTF.textColor = [UIColor frescoDarkTextColor];
+    self.emailTF.font = [UIFont systemFontOfSize:15];
     [backgroundView addSubview:self.emailTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -135,6 +137,7 @@
     self.passwordTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.passwordTF.delegate = self;
     self.passwordTF.textColor = [UIColor frescoDarkTextColor];
+    self.passwordTF.font = [UIFont systemFontOfSize:15];
     self.passwordTF.secureTextEntry = YES;
     [backgroundView addSubview:self.passwordTF];
     
@@ -378,15 +381,19 @@
 -(void)handleKeyboardWillShow:(NSNotification *)sender{
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
+    NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
+    NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
+    
+    CGPoint point = self.scrollView.contentOffset;
     if (self.promoTF.isFirstResponder){
-        NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
-        NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
-        
-        [UIView animateWithDuration:0.15 animations:^{
-            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
-            [self.scrollView setContentOffset:CGPointMake(0, yOffset) animated:NO];
-        }];
+        point = CGPointMake(0, yOffset);
     }
+    
+    [UIView animateWithDuration:0.15 animations:^{
+        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
+        [self.scrollView setContentOffset:point animated:NO];
+    }];
+    
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
