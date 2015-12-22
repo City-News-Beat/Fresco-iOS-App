@@ -22,6 +22,7 @@
 @property (strong, nonatomic) UITextField *usernameTF;
 @property (strong, nonatomic) UITextField *emailTF;
 @property (strong, nonatomic) UITextField *passwordTF;
+@property (strong, nonatomic) UITextField *promoTF;
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) UISlider *radiusSlider;
@@ -32,6 +33,8 @@
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
 
+@property (nonatomic) NSInteger y;
+
 @end
 
 @implementation FRSSignUpViewController
@@ -40,27 +43,42 @@
     [super viewDidLoad];
     [self configureUI];
     
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    self.navigationItem.title = @"SIGN UP";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
+    
+    [self addNotifications];
+    
     
     // Do any additional setup after loading the view.
 }
+
+-(void)addNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+}
+
 
 #pragma mark - UI 
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
+    [self configureNavigationBar];
     [self configureScrollView];
     [self configureTextFields];
     [self configureNotificationSection];
     [self configureMapView];
     [self configureSliderSection];
+    [self configurePromoSection];
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
 }
+
+-(void)configureNavigationBar{
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    self.navigationItem.title = @"SIGN UP";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
+}
+
 
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -157,7 +175,15 @@
     if (IS_STANDARD_IPHONE_6) height = 280;
     if (IS_STANDARD_IPHONE_6_PLUS) height = 310;
     
-    self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 254, self.scrollView.frame.size.width, height)];
+    
+    //Up until this point all the ui elements were static heights
+    //The map height is dependent on the iPhone size now
+    //We use a variable for easy tracking of the y-origin of subsequent elements
+    //Eventually it will also be used to adjust the content size of the scroll view
+    self.y = 254;
+    
+    
+    self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, height)];
     self.mapView.delegate = self;
     self.mapView.zoomEnabled = NO;
     self.mapView.scrollEnabled = NO;
@@ -173,11 +199,13 @@
     [self.scrollView addSubview:self.mapView];
     
     [self.mapView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    
+    self.y += self.mapView.frame.size.height;
 }
 
 -(void)configureSliderSection{
     
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.origin.y + self.mapView.frame.size.height, self.scrollView.frame.size.width, 56)];
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 56)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
@@ -193,12 +221,41 @@
     UIImageView *bigIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 12 - 24, 16, 24, 24)];
     bigIV.image = [UIImage imageNamed:@"radius-large"];
     [backgroundView addSubview:bigIV];
+    
+    self.y += backgroundView.frame.size.height + 12;
+}
+
+-(void)configurePromoSection{
+    
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 44)];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.scrollView addSubview:backgroundView];
+    
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, -0.5)]];
+    
+    self.promoTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
+    self.promoTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Promo" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    self.promoTF.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.promoTF.delegate = self;
+    [backgroundView addSubview:self.promoTF];
+    
+    [backgroundView addSubview:[self lineAtPoint:CGPointMake(0, 43.5)]];
+    
+    self.y += backgroundView.frame.size.height + 12;
+    
+    UILabel *promoDescription = [[UILabel alloc] initWithFrame:CGRectMake(16, self.y, self.scrollView.frame.size.width - 2 * 16, 28)];
+    promoDescription.numberOfLines = 0;
+    promoDescription.text = @"If you use a friend’s promo code, you’ll get $20 when you respond to an assignment for the first time.";
+    promoDescription.font = [UIFont systemFontOfSize:12];
+    promoDescription.textColor = [UIColor frescoMediumTextColor];
+    [promoDescription sizeToFit];
+    [self.scrollView addSubview:promoDescription];
+    
+    self.y += promoDescription.frame.size.height + 24;
 }
 
 -(void)adjustScrollViewContentSize{
-    
-    //56 is the size of the slider background view, 8 is the bottom y padding, 44 is the size of the bottom bar
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, 254 + self.mapView.frame.size.height + 56 + 8);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.y);
 }
 
 -(void)configureBottomBar{
@@ -254,6 +311,30 @@
 
 -(void)createAccount{
     
+}
+
+#pragma mark - Keyboard
+
+-(void)handleKeyboardWillShow:(NSNotification *)sender{
+    CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    if (self.promoTF.isFirstResponder){
+        NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
+        NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
+        
+        [UIView animateWithDuration:0.15 animations:^{
+            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
+            [self.scrollView setContentOffset:CGPointMake(0, yOffset) animated:NO];
+        }];
+    }
+}
+
+-(void)handleKeyboardWillHide:(NSNotification *)sender{
+    if (self.scrollView.frame.size.height < self.view.frame.size.height - 108){
+        [UIView animateWithDuration:0.15 animations:^{
+            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.view.frame.size.height - 44);
+        }];
+    }
 }
 
 -(void)dismissKeyboard{
