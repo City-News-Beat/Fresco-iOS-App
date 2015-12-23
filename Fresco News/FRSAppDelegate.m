@@ -30,8 +30,8 @@
     
     
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
-//    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
-    self.window.rootViewController = [[TestViewController alloc] init];
+    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+//    self.window.rootViewController = [[TestViewController alloc] init];
     
     
     return YES;

@@ -75,7 +75,6 @@
         
         self.messageLabel.attributedText = attributedString ;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
-        self.messageLabel.backgroundColor = [UIColor redColor];
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
