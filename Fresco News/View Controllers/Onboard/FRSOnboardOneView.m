@@ -27,12 +27,13 @@
 -(instancetype)initWithOrigin:(CGPoint)origin{
     self = [super initWithFrame:CGRectMake(origin.x, origin.y, 320, 288)];
     if (self){
-        [self configureGlobeIV];
+        [self configureIV];
     }
     return self;
 }
 
--(void)configureGlobeIV{
+-(void)configureIV{
+    
     NSInteger width = 189.6;
     CGFloat xOrigin = 67.7;
     CGFloat yOrigin = 52.3;
@@ -46,15 +47,25 @@
     self.globeIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin, yOrigin, width, width)];
     self.globeIV.image = [UIImage imageNamed:@"earth"];
     [self addSubview:self.globeIV];
+    
+    self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160, 27, 55, 55)];
+    self.flagOne.image = [UIImage imageNamed:@"assignment-right"];
+    [self addSubview:self.flagOne];
 
+    self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55, 60, 55, 55)];
+    self.flagTwo.image = [UIImage imageNamed:@"assignment-left"];
+    [self addSubview:self.flagTwo];
+    
+    self.flagThree = [[UIImageView alloc] initWithFrame: CGRectMake(105, 137, 55, 55)];
+    self.flagThree.image = [UIImage imageNamed:@"assignment-left"];
+    [self addSubview:self.flagThree];
+    
+    self.flagFour = [[UIImageView alloc] initWithFrame: CGRectMake(200, 160, 55, 55)];
+    self.flagFour.image = [UIImage imageNamed:@"assignment-right"];
+    [self addSubview:self.flagFour];
+    
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+
 
 @end

@@ -10,4 +10,6 @@
 
 @interface FRSOnboardTwoView : UIView
 
+-(instancetype)initWithOrigin:(CGPoint)origin;
+
 @end

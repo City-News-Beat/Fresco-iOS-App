@@ -10,4 +10,6 @@
 
 @interface FRSOnboardThreeView : UIView
 
+-(instancetype)initWithOrigin:(CGPoint)origin;
+
 @end

@@ -10,9 +10,6 @@
 
 @interface FRSOnboardOneView : UIView
 
-
 -(instancetype)initWithOrigin:(CGPoint)origin;
-
--(void)performAnimation;
 
 @end

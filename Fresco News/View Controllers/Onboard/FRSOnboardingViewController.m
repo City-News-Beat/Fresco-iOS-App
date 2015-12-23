@@ -9,6 +9,9 @@
 #import "FRSOnboardingViewController.h"
 
 #import "FRSOnboardOneView.h"
+#import "FRSOnboardTwoView.h"
+#import "FRSOnboardThreeView.h"
+
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
 
@@ -55,18 +58,18 @@
     
     FRSContentActionsBar *bar = [[FRSContentActionsBar alloc] initWithOrigin:(CGPointMake(0, 400)) delegate:self];
     [self.view addSubview:bar];
-    
+        
 }
 
 -(void)configureScrollView{
-    
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 288)];
-    self.scrollView.backgroundColor = [UIColor blueColor];
+    self.scrollView.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.scrollView.frame.size.height);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.delegate = self;
     [self.view addSubview:self.scrollView];
+    
 }
 
 -(void)configureOnboardingViews{
@@ -76,10 +79,10 @@
     FRSOnboardOneView *viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
     [self.scrollView addSubview:viewOne];
     
-    FRSOnboardOneView *viewTwo = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
+    FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
     [self.scrollView addSubview:viewTwo];
     
-    FRSOnboardOneView *viewThree = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
+    FRSOnboardThreeView *viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
     [self.scrollView addSubview:viewThree];
 }
 
