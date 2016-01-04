@@ -51,6 +51,7 @@
     
     self.actionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 1, 108, self.frame.size.height)];
     [self.actionButton setTitleColor:[self.delegate colorForActionButton] forState:UIControlStateNormal];
+    [self.actionButton setTitleColor:[[self.delegate colorForActionButton] colorWithAlphaComponent:0.7]  forState:UIControlStateHighlighted];
     [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
     [self.actionButton addTarget:self.delegate action:@selector(didTapActionButton) forControlEvents:UIControlEventTouchUpInside];

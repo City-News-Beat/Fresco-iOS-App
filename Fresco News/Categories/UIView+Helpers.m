@@ -79,6 +79,9 @@
     if (path){
         self.layer.shadowPath = path.CGPath;
     }
+    
+    self.layer.shouldRasterize = YES;
+    self.layer.rasterizationScale = [UIScreen mainScreen].scale;
 }
 
 -(void)addShadowWithColor:(UIColor *)color radius:(CGFloat)radius offset:(CGSize)offset{
