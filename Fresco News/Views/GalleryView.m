@@ -479,12 +479,14 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     if(self.gallery.galleryID){
         
-        NSDictionary *dict = @{
-                               @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
-                               @"gallery" : self.gallery.galleryID
-                               };
-        if (dict)
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:nil userInfo:dict];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary *dict = @{
+                                   @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                                   @"gallery" : self.gallery.galleryID
+                                   };
+            if (dict)
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:nil userInfo:dict];
+        });
         
     }
     
