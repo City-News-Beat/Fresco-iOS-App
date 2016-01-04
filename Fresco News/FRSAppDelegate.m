@@ -20,6 +20,7 @@
 
 #import "FRSSignUpViewController.h"
 #import "FRSSetupProfileViewController.h"
+#import "TempViewController.h"
 
 #import <MagicalRecord/MagicalRecord.h>
 
@@ -36,7 +37,7 @@
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
     
-    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSSignUpViewController alloc] init]];
+    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[TempViewController alloc] init]];
     
     return YES;
 }

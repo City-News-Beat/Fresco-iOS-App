@@ -33,4 +33,16 @@
     return YES;
 }
 
++(BOOL)isValidEmail:(NSString *)email{
+    return [email isEqualToString:@""] ? NO : YES;
+}
+
++(BOOL)isValidPassword:(NSString *)password{
+    return [password isEqualToString:@""] ? NO : YES;
+}
+
++(BOOL)isValidUserName:(NSString *)userName {
+    return [userName isEqualToString:@""] ? NO : YES;
+}
+
 @end

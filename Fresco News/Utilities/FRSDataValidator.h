@@ -12,4 +12,10 @@
 
 +(BOOL)isNonNullObject:(id)object;
 
++(BOOL)isValidEmail:(NSString *)email;
+
++(BOOL)isValidUserName:(NSString *)userName;
+
++(BOOL)isValidPassword:(NSString *)password;
+
 @end

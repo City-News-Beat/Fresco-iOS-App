@@ -15,6 +15,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import "FRSDataValidator.h"
 
 @import MapKit;
 
@@ -278,12 +279,23 @@
     self.createAccountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 167, 0, 167, 44)];
     [self.createAccountButton setTitle:@"CREATE MY ACCOUNT" forState:UIControlStateNormal];
     [self.createAccountButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-    [self.createAccountButton setTitleColor:[UIColor frescoMediumTextColor] forState:UIControlStateHighlighted];
+    [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
     [self.createAccountButton addTarget:self action:@selector(createAccount) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:self.createAccountButton];
     
     [self addSocialButtonsToBottomBar];
+}
+
+-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
+    if (controlState == UIControlStateNormal){
+        [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.createAccountButton.enabled = NO;
+    }
+    else {
+        [self.createAccountButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
+        self.createAccountButton.enabled = YES;
+    }
 }
 
 -(void)addSocialButtonsToBottomBar{
@@ -329,6 +341,26 @@
     }
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    [self.view removeGestureRecognizer:self.dismissGR];
+    
+    if (textField == self.usernameTF){
+        if ([self.usernameTF.text isEqualToString:@"@"]){
+            self.usernameTF.text = @"";
+        }
+    }
+    
+    UIControlState controlState;
+    
+    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
+        controlState = UIControlStateHighlighted;
+    else
+        controlState = UIControlStateNormal;
+    
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
+}
+
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
@@ -338,15 +370,6 @@
 }
 
 
--(void)textFieldDidEndEditing:(UITextField *)textField{
-    [self.view removeGestureRecognizer:self.dismissGR];
-    
-    if (textField == self.usernameTF){
-        if ([self.usernameTF.text isEqualToString:@"@"]){
-            self.usernameTF.text = @"";
-        }
-    }
-}
 
 #pragma mark Action Logic 
 
@@ -405,9 +428,7 @@
 }
 
 -(void)dismissKeyboard{
-    [self.usernameTF resignFirstResponder];
-    [self.emailTF resignFirstResponder];
-    [self.passwordTF resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {

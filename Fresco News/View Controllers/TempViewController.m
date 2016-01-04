@@ -8,7 +8,11 @@
 
 #import "TempViewController.h"
 
-@interface TempViewController ()
+#import "FRSGalleryView.h"
+
+@interface TempViewController () <FRSGalleryViewDataSource>
+
+@property (strong, nonatomic) FRSGalleryView * galleryView;
 
 @end
 
@@ -16,7 +20,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 500) gallery:nil dataSource:self];
+    self.galleryView.dataSource = self;
+    [self.view addSubview:self.galleryView];
     // Do any additional setup after loading the view.
+}
+
+- (NSInteger)heightForImageView{
+    return 200;
+}
+
+-(NSInteger)numberOfLinesForTextView{
+    return 6;
 }
 
 - (void)didReceiveMemoryWarning {

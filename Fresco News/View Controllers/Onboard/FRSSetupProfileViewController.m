@@ -306,7 +306,6 @@
     [self.bioTV resignFirstResponder];
 }
 
-
 #pragma mark - UIImagePicker
 
 -(void)presentImagePickerController{
@@ -333,7 +332,9 @@
         self.profileIV.image = selectedImage;
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
     
 }
 

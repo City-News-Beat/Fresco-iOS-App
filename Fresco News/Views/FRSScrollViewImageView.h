@@ -10,4 +10,6 @@
 
 @interface FRSScrollViewImageView : UIImageView
 
+@property (nonatomic) NSInteger indexInScrollView;
+
 @end

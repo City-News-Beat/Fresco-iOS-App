@@ -48,6 +48,14 @@
     self.frame = CGRectMake(oldFrame.origin.x, yOrigin, oldFrame.size.width, oldFrame.size.height);
 }
 
+-(void)setOriginWithPoint:(CGPoint)origin{
+    self.frame = CGRectMake(origin.x, origin.y, self.frame.size.width, self.frame.size.height);
+}
+
+-(void)setSizeWithSize:(CGSize)size{
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, size.height);
+}
+
 -(void)addBorderWithWidth:(CGFloat)width color:(UIColor *)color{
     self.layer.borderColor = color.CGColor;
     self.layer.borderWidth = width;
@@ -57,13 +65,6 @@
     self.layer.cornerRadius = self.frame.size.width/2.0;
     self.clipsToBounds = YES;
 }
-
-/**
- *  Adds drop shadow with radius 2, opacity 1, and an offset of (1,2).
- *
- *  @param color Color of Shadow
- *  @param path  Optional property (can be nil) for the path of the shadow
- */
 
 -(void)addDropShadowWithColor:(UIColor *)color path:(UIBezierPath *)path{
     if (color == nil){
