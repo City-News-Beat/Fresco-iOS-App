@@ -325,9 +325,9 @@ enum FRSErrorCodes {
 #define MAIN_HEADER_2                       NSLocalizedString(@"Submit your photos and videos", nil)
 #define MAIN_HEADER_3                       NSLocalizedString(@"See your work in the news", nil)
 
-#define SUB_HEADER_1                        NSLocalizedString(@"Keep an eye out, or use Fresco to view a map of nearby events being covered by news outlets", nil)
-#define SUB_HEADER_2                        NSLocalizedString(@"Your media is visible not only to Fresco users, but to our news organization partners in need of visual coverage", nil)
-#define SUB_HEADER_3                        NSLocalizedString(@"We notify you when your photos and videos are used, and you'll get paid if you took them for an assignment", nil)
+#define SUB_HEADER_1                        NSLocalizedString(@"Use Fresco’s map to browse and accept paid assignments from news outlets.", nil)
+#define SUB_HEADER_2                        NSLocalizedString(@"Your work can be seen by Fresco users and reporters around the world.", nil)
+#define SUB_HEADER_3                        NSLocalizedString(@"When your media is used we’ll tell you who used it and send you a payment!", nil)
 
 
 /* Highlights */

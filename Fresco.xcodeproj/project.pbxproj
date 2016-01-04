@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */; };
 		070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */; };
+		070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66D11C2B395D00AB3D9D /* OEParallax.m */; };
 		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
@@ -144,6 +145,8 @@
 		070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardTwoView.m; sourceTree = "<group>"; };
 		070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardThreeView.h; sourceTree = "<group>"; };
 		070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardThreeView.m; sourceTree = "<group>"; };
+		070D66D01C2B395D00AB3D9D /* OEParallax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEParallax.h; path = "View Controllers/Onboard/OEParallax.h"; sourceTree = "<group>"; };
+		070D66D11C2B395D00AB3D9D /* OEParallax.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OEParallax.m; path = "View Controllers/Onboard/OEParallax.m"; sourceTree = "<group>"; };
 		072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
 		072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
@@ -338,6 +341,15 @@
 			name = Fonts;
 			sourceTree = "<group>";
 		};
+		074393EF1C3AC56E0007CFF0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				070D66D01C2B395D00AB3D9D /* OEParallax.h */,
+				070D66D11C2B395D00AB3D9D /* OEParallax.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,6 +407,7 @@
 		1EDA44B21AA4CCC70082E08D /* Fresco News */ = {
 			isa = PBXGroup;
 			children = (
+				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
@@ -1085,6 +1098,7 @@
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
+				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,

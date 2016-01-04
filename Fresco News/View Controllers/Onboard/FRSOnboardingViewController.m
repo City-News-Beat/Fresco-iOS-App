@@ -14,6 +14,7 @@
 
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
+#import "UIFont+Fresco.h"
 
 #import "FRSContentActionsBar.h"
 
@@ -55,19 +56,20 @@
     [self configureScrollView];
     [self configureOnboardingViews];
     [self configurePageControl];
+    [self configureLogo];
+    [self configureActionBar];
     
-    FRSContentActionsBar *bar = [[FRSContentActionsBar alloc] initWithOrigin:(CGPointMake(0, 400)) delegate:self];
-    [self.view addSubview:bar];
-        
+    self.view.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
 }
 
 -(void)configureScrollView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 288)];
-    self.scrollView.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 220, self.view.frame.size.width, 295)];
+//    self.scrollView.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.scrollView.frame.size.height);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.delegate = self;
+    self.scrollView.clipsToBounds = NO;
     [self.view addSubview:self.scrollView];
     
 }
@@ -100,10 +102,60 @@
     }
     
     [self.pageControl centerHorizontallyInView:self.view];
-    self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.x, self.view.frame.size.height - 44 - offset, self.pageControl.frame.size.width, self.pageControl.frame.size.height);
+    self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.x, self.view.frame.size.height - 44 - offset, self.pageControl.frame.size.width, self.pageControl.frame.size.height - 32);
     [self.view addSubview:self.pageControl];
     
 }
+
+-(void)configureLogo{
+    
+    UIImageView *logo =[[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
+    logo.image=[UIImage imageNamed:@"largeLogo"];
+    [self.view addSubview:logo];
+
+}
+
+-(void)configureActionBar{
+
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 44)];
+    [self.view addSubview:container];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoLightTextColor];
+    [self.view addSubview:line];
+    
+    
+    UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
+    logIn.frame = CGRectMake(-5, 0, 85, 44);
+    [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
+    logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
+    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+    logIn.backgroundColor = [UIColor redColor];
+    [container addSubview:logIn];
+    
+    UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
+    signUp.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
+    [signUp setTitle:@"SIGN UP" forState:UIControlStateNormal];
+    signUp.titleLabel.font = [UIFont notaBoldWithSize:15];
+    [signUp setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [signUp addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
+    signUp.backgroundColor = [UIColor greenColor];
+    [container addSubview:signUp];
+    
+}
+
+#pragma mark - UIButton Actions
+
+-(void)logIn{
+    //Gets called but does not always fade the titleLabel
+    NSLog(@"logIn");
+}
+
+-(void)signUp{
+    NSLog(@"signUp");
+}
+
 
 
 #pragma mark - UIScrollView Delegate

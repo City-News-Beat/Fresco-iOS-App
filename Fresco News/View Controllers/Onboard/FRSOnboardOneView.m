@@ -9,6 +9,9 @@
 #import "FRSOnboardOneView.h"
 
 #import "FRSAppConstants.h"
+#import "UIFont+Fresco.h"
+
+#import "OEParallax.h"
 
 @interface FRSOnboardOneView()
 
@@ -27,9 +30,43 @@
 -(instancetype)initWithOrigin:(CGPoint)origin{
     self = [super initWithFrame:CGRectMake(origin.x, origin.y, 320, 288)];
     if (self){
+        [self configureText];
         [self configureIV];
+        
+//        [OEParallax createParallaxFromView:self.flagOne withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
+//        [OEParallax createParallaxFromView:self.flagTwo withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
+//        [OEParallax createParallaxFromView:self.flagThree withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
+//        [OEParallax createParallaxFromView:self.flagFour withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
+        
+//        [OEParallax createParallaxFromView:self.globeIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+
     }
     return self;
+}
+
+-(void)configureText{
+    
+    CGFloat screenWidth = self.bounds.size.width;
+    CGFloat screenHeight = self.bounds.size.height;
+    
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2 - 144, -(screenHeight/10), 288, 67)];
+    container.backgroundColor = [UIColor blueColor];
+    [self addSubview:container];
+
+    UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(144-109, 0, 218, 19)]; //144 = containerWidth/2, 109 = headerWidth/2
+    header.backgroundColor = [UIColor redColor];
+    [header setText:MAIN_HEADER_1];
+    [header setFont:[UIFont notaBoldWithSize:17]];
+    [container addSubview:header];
+    
+    UILabel *subHeader = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, 288, 40)]; //144 = containerWidth/2, 109 = headerWidth/2
+    subHeader.backgroundColor = [UIColor redColor];
+    [subHeader setText:SUB_HEADER_1];
+    [subHeader setFont:[UIFont systemFontOfSize:15]];
+    subHeader.textAlignment = NSTextAlignmentCenter;
+    subHeader.numberOfLines = 2;
+    [container addSubview:subHeader];
+    
 }
 
 -(void)configureIV{

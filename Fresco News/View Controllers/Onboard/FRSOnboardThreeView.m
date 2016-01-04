@@ -55,16 +55,13 @@
     self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
     [self addSubview:self.rightArrowIV];
     
-    self.televisionIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 143, 28, 26)];
+    self.televisionIV = [[UIImageView alloc] initWithFrame:CGRectMake(46, 193, 88, 72)];
     self.televisionIV.image = [UIImage imageNamed:@"television"];
     [self addSubview:self.televisionIV];
     
-    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 143, 28, 26)];
+    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 193, 80, 72)];
     self.newspaperIV.image = [UIImage imageNamed:@"newspaper"];
     [self addSubview:self.newspaperIV];
-    
-    
-    
     
 }
 
