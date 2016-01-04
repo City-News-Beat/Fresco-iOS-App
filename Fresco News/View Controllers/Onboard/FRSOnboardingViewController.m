@@ -63,7 +63,7 @@
 }
 
 -(void)configureScrollView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 220, self.view.frame.size.width, 295)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
 //    self.scrollView.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.scrollView.frame.size.height);
     self.scrollView.pagingEnabled = YES;
@@ -124,14 +124,12 @@
     line.backgroundColor = [UIColor frescoLightTextColor];
     [self.view addSubview:line];
     
-    
     UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
     logIn.frame = CGRectMake(-5, 0, 85, 44);
     [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
     logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
     [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
-    logIn.backgroundColor = [UIColor redColor];
     [container addSubview:logIn];
     
     UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -140,10 +138,15 @@
     signUp.titleLabel.font = [UIFont notaBoldWithSize:15];
     [signUp setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [signUp addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
-    signUp.backgroundColor = [UIColor greenColor];
     [container addSubview:signUp];
     
+//    /* DEBUG */
+//    signUp.backgroundColor = [UIColor greenColor];
+//    logIn.backgroundColor = [UIColor redColor];
+
 }
+
+
 
 #pragma mark - UIButton Actions
 

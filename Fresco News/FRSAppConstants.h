@@ -322,7 +322,7 @@ enum FRSErrorCodes {
 #pragma mark - Onboarding
 
 #define MAIN_HEADER_1                       NSLocalizedString(@"Find breaking news around you", nil)
-#define MAIN_HEADER_2                       NSLocalizedString(@"Submit your photos and videos", nil)
+#define MAIN_HEADER_2                       NSLocalizedString(@"Send in your photos and videos", nil)
 #define MAIN_HEADER_3                       NSLocalizedString(@"See your work in the news", nil)
 
 #define SUB_HEADER_1                        NSLocalizedString(@"Use Fresco’s map to browse and accept paid assignments from news outlets.", nil)
