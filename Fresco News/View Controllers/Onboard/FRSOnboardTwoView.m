@@ -26,20 +26,14 @@
     if (self){
         [self configureText];
         [self configureIV];
-        
-        [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
-
+        [self configureParallax];
     }
     return self;
 }
 
 -(void)configureText{
-    
     CGFloat screenWidth = self.bounds.size.width;
-    
     CGFloat offset;
-    
-    
     
     if (IS_IPHONE_5){
         offset = 138;
@@ -71,26 +65,21 @@
     //    container.backgroundColor = [UIColor blueColor];
     //    header.backgroundColor = [UIColor redColor];
     //    subHeader.backgroundColor = [UIColor redColor];
-    
 }
 
 -(void)configureIV{
-    
     NSInteger width = 144;
     NSInteger height = 96;
     CGFloat xOrigin = self.frame.size.width/2;
     CGFloat yOrigin = 23;
-
     CGFloat offset;
     CGFloat camWidth = 80;
     CGFloat camHeight = 72;
-    
     
     if (IS_IPHONE_5){
         width = 160;
         xOrigin = 80.5;
         yOrigin = 69.6;
-        
         offset = 263;
     } else if (IS_STANDARD_IPHONE_6){
         offset = 263;
@@ -99,8 +88,6 @@
         camWidth = 96;
         camHeight = 86.4;
     }
-    
-    
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
@@ -116,7 +103,10 @@
     self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - camWidth/2, 194, camWidth, camHeight)];
     self.cameraIV.image = [UIImage imageNamed:@"camera"];
     [container addSubview:self.cameraIV];
-    
+}
+
+-(void)configureParallax{
+    [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
 }
 
 @end

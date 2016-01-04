@@ -7,11 +7,9 @@
 //
 
 #import "FRSOnboardOneView.h"
-
 #import "FRSAppConstants.h"
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
-
 #import "OEParallax.h"
 
 @interface FRSOnboardOneView()
@@ -26,28 +24,19 @@
 
 @implementation FRSOnboardOneView
 
-
-
 -(instancetype)initWithOrigin:(CGPoint)origin{
     self = [super initWithFrame:CGRectMake(origin.x, origin.y, 320, 288)];
     if (self){
         [self configureText];
         [self configureIV];
         [self animate];
+        [self configureParallax];
         
-        [OEParallax createParallaxFromView:self.flagOne withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
-        [OEParallax createParallaxFromView:self.flagTwo withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
-        [OEParallax createParallaxFromView:self.flagThree withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
-        [OEParallax createParallaxFromView:self.flagFour withMaxX:22.5 withMinX:-22.5 withMaxY:22.5 withMinY:-22.5];
-        
-    }
-    return self;
+    } return self;
 }
 
 -(void)configureText{
-    
     CGFloat screenWidth = self.bounds.size.width;
-    
     CGFloat offset;
     
     if (IS_IPHONE_5){
@@ -58,10 +47,9 @@
         offset = 172;
     }
     
-    
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2 - 144, offset, 288, 67)];
     [self addSubview:container];
-
+    
     UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(144-109, 0, 218, 19)]; //144 = containerWidth/2, 109 = headerWidth/2
     [header setText:MAIN_HEADER_1];
     [header setTextColor:[UIColor frescoDarkTextColor]];
@@ -77,10 +65,10 @@
     subHeader.numberOfLines = 2;
     [container addSubview:subHeader];
     
-//    /* DEBUG */
-//    container.backgroundColor = [UIColor blueColor];
-//    header.backgroundColor = [UIColor redColor];
-//    subHeader.backgroundColor = [UIColor redColor];
+    //    /* DEBUG */
+    //    container.backgroundColor = [UIColor blueColor];
+    //    header.backgroundColor = [UIColor redColor];
+    //    subHeader.backgroundColor = [UIColor redColor];
     
 }
 
@@ -111,13 +99,11 @@
     self.globeIV.image = [UIImage imageNamed:@"earth"];
     [container addSubview:self.globeIV];
     
-    
-    
     self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160 - (55/2), 27 + (55/2), 55, 55)];
     self.flagOne.image = [UIImage imageNamed:@"assignment-right"];
     self.flagOne.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagOne];
-
+    
     self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55 + (55/2), 60 + (55/2), 55, 55)];
     self.flagTwo.image = [UIImage imageNamed:@"assignment-left"];
     self.flagTwo.layer.anchorPoint = CGPointMake(1, 1);
@@ -133,152 +119,72 @@
     self.flagFour.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagFour];
     
-//    /* DEBUG */
-//    self.flagOne.backgroundColor = [UIColor blueColor];
-//    self.flagTwo.backgroundColor = [UIColor greenColor];
-//    self.flagThree.backgroundColor = [UIColor purpleColor];
-//    self.flagFour.backgroundColor = [UIColor orangeColor];
+    //    /* DEBUG */
+    //    self.flagOne.backgroundColor = [UIColor blueColor];
+    //    self.flagTwo.backgroundColor = [UIColor greenColor];
+    //    self.flagThree.backgroundColor = [UIColor purpleColor];
+    //    self.flagFour.backgroundColor = [UIColor orangeColor];
 }
 
 - (void)animate {
-    
     self.globeIV.alpha = 1;
     self.flagTwo.transform = CGAffineTransformMakeScale(0, 0);
     self.flagThree.transform = CGAffineTransformMakeScale(0, 0);
     self.flagOne.transform = CGAffineTransformMakeScale(0, 0);
     self.flagFour.transform = CGAffineTransformMakeScale(0, 0);
     
+    [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.globeIV.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.25 delay:-0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.flagTwo.alpha = 1;
+            self.flagTwo.transform = CGAffineTransformMakeScale(1.15, 1.15);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.flagTwo.transform = CGAffineTransformMakeScale(1, 1);
+            }completion:nil];
+        }]; }];
     
-    [UIView animateWithDuration:0.35
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-                         self.globeIV.transform = CGAffineTransformMakeTranslation(0, 0);
-                         
-                     }
-     
-                     completion:^(BOOL finished) {
-                         
-                         [UIView animateWithDuration:0.25
-                                               delay:-0.1
-                          
-                                             options:UIViewAnimationOptionCurveEaseInOut
-                                          animations:^{
-                                              self.flagTwo.alpha = 1;
-                                              self.flagTwo.transform = CGAffineTransformMakeScale(1.15, 1.15);
-                                              
-                                          }
-                          
-                                          completion:^(BOOL finished) {
-                                              
-                                              [UIView animateWithDuration:0.15
-                                                                    delay:0.0
-                                               
-                                                                  options:UIViewAnimationOptionCurveEaseOut
-                                                               animations:^{
-                                                                   self.flagTwo.transform = CGAffineTransformMakeScale(1, 1);
-                                                                   
-                                                                   
-                                                               }
-                                               
-                                                               completion:^(BOOL finished) {
-                                                                   
-                                                               }];
-                                              
-                                          }];
-                         
-                     }];
+    [UIView animateWithDuration:0.25 delay:0.15 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.flagOne.alpha = 1;
+        self.flagOne.transform = CGAffineTransformMakeScale(1.15, 1.15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.flagOne.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
     
-    // BUBBLE 2
+    [UIView animateWithDuration:0.25 delay:0.4 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.flagThree.alpha = 1;
+        self.flagThree.transform = CGAffineTransformMakeScale(1.15, 1.15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.flagThree.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
     
-    [UIView animateWithDuration:0.25
-                          delay:0.15
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.flagOne.alpha = 1;
-                         self.flagOne.transform = CGAffineTransformMakeScale(1.15, 1.15);
-                         
-                     }
-     
-                     completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15
-                                               delay:0.0
-                                             options:UIViewAnimationOptionCurveEaseOut
-                                          animations:^{
-                                              self.flagOne.transform = CGAffineTransformMakeScale(1, 1);
-                                              
-                                          }
-                          
-                                          completion:^(BOOL finished) {
-                                              
-                                          }];
-                         
-                     }];
-    
-    
-    // BUBBLE 3
-    
-    [UIView animateWithDuration:0.25
-                          delay:0.4
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         self.flagThree.alpha = 1;
-                         self.flagThree.transform = CGAffineTransformMakeScale(1.15, 1.15);
-                         
-                     }
-     
-                     completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.15
-                                               delay:0.0
-                                             options:UIViewAnimationOptionCurveEaseOut
-                                          animations:^{
-                                              self.flagThree.transform = CGAffineTransformMakeScale(1, 1);
-                                              
-                                          }
-                          
-                                          completion:^(BOOL finished) {
-                                              
-                                          }];
-                         
-                     }];
-    
-    
-    // BUBBLE 4
-    
-    [UIView animateWithDuration:0.25
-                          delay:0.65
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.flagFour.alpha = 1;
-                         self.flagFour.transform = CGAffineTransformMakeScale(1.15, 1.15);
-                         
-                     }
-     
-                     completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.2
-                                               delay:0.0
-                                             options:UIViewAnimationOptionCurveEaseOut
-                                          animations:^{
-                                              self.flagFour.transform = CGAffineTransformMakeScale(1, 1);
-                                              
-                                          }
-                          
-                                          completion:^(BOOL finished) {
-                                              
-                                          }];
-                         
-                     }];
-    
+    [UIView animateWithDuration:0.25 delay:0.65 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.flagFour.alpha = 1;
+        self.flagFour.transform = CGAffineTransformMakeScale(1.15, 1.15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.flagFour.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
+}
+
+-(void)configureParallax{
+    [OEParallax createParallaxFromView:self.flagOne withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
+    [OEParallax createParallaxFromView:self.flagTwo withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
+    [OEParallax createParallaxFromView:self.flagThree withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
+    [OEParallax createParallaxFromView:self.flagFour withMaxX:22.5 withMinX:-22.5 withMaxY:22.5 withMinY:-22.5];
 }
 
 -(void)reset{
-    
     self.flagOne.alpha = 0;
     self.flagTwo.alpha = 0;
     self.flagThree.alpha = 0;
     self.flagFour.alpha = 0;
-    
 }
 
 

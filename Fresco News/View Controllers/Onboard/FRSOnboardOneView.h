@@ -15,5 +15,4 @@
 -(void)animate;
 -(void)reset;
 
-
 @end
