@@ -37,9 +37,9 @@
         
         [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
 
-        [OEParallax createParallaxFromView:self.cashOneIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
-        [OEParallax createParallaxFromView:self.cashTwoIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
-        [OEParallax createParallaxFromView:self.cashThreeIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+//        [OEParallax createParallaxFromView:self.cashOneIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+//        [OEParallax createParallaxFromView:self.cashTwoIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+//        [OEParallax createParallaxFromView:self.cashThreeIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
 
     }
     return self;
@@ -132,7 +132,7 @@
     [container addSubview:self.newspaperIV];
 
     
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin, width, height)];
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin-5, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
     [container addSubview:self.cloudIV];
     

@@ -105,7 +105,7 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
     
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin, width, height)];
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin-5, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"cloud"];
     [container addSubview:self.cloudIV];
     

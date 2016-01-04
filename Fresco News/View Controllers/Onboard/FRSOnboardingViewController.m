@@ -47,7 +47,7 @@
     
     [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
     
-    // Do any additional setup after loading the view.
+[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
 
 #pragma mark - UI Configuration
@@ -187,13 +187,13 @@
     
     if (self.page == 0){
         [self.viewOne animate];
+        
     } else if (self.page == 1){
         [self.viewOne reset];
     } else if (self.page == 2) {
         [self.viewThree animate];
-    }
-    
-}
+        
+}}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
