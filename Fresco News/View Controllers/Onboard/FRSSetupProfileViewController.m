@@ -12,7 +12,7 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
-@interface FRSSetupProfileViewController () <UITextFieldDelegate, UITextViewDelegate>
+@interface FRSSetupProfileViewController () <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *topContainer;
@@ -27,6 +27,8 @@
 @property (strong, nonatomic) UITextField *locationTF;
 @property (strong, nonatomic) UITextView *bioTV;
 
+@property (strong, nonatomic) UIImagePickerController *imagePicker;
+
 @property (nonatomic) NSInteger y;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
@@ -40,6 +42,7 @@
     
     [self configureUI];
     [self addNotifications];
+    [self configureImagePicker];
     // Do any additional setup after loading the view.
 }
 
@@ -47,6 +50,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
+
+-(void)configureImagePicker{
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    self.imagePicker.delegate = self;
+    self.imagePicker.allowsEditing = YES;
+}
+
+#pragma mark - UI Elements
 
 - (void)configureUI{
     [self configureNavigationBar];
@@ -100,6 +111,7 @@
     [self.profileIV clipAsCircle];
     [self.profileIV addBorderWithWidth:8 color:[UIColor whiteColor]];
     self.profileIV.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.profileIV.userInteractionEnabled = YES;
     
     [self.profileShadow addSubview:self.profileIV];
 }
@@ -113,6 +125,7 @@
     self.cameraButton = [[UIButton alloc] initWithFrame:CGRectMake(x, self.profileShadow.frame.origin.y + self.profileShadow.frame.size.height + 22 , 128, 24)];
     [self.cameraButton setImage:[UIImage imageNamed:@"camera-icon-profile"] forState:UIControlStateNormal];
     [self.cameraButton setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
+    [self.cameraButton addTarget:self action:@selector(presentCameraImagePicker) forControlEvents:UIControlEventTouchUpInside];
     [self.cameraButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.cameraButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [self.topContainer addSubview:self.cameraButton];
@@ -129,6 +142,7 @@
     self.photosButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, self.cameraButton.frame.origin.y, 128, 24)];
     [self.photosButton setImage:[UIImage imageNamed:@"photo-icon-profile"] forState:UIControlStateNormal];
     [self.photosButton setTitle:@"OPEN PHOTOS" forState:UIControlStateNormal];
+    [self.photosButton addTarget:self action:@selector(presentImagePickerController) forControlEvents:UIControlEventTouchUpInside];
     [self.photosButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.photosButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [self.topContainer addSubview:self.photosButton];
@@ -183,12 +197,14 @@
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
     self.bioTV.delegate = self;
-    self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.bioTV.textColor = [UIColor frescoMediumTextColor];
     self.bioTV.textContainer.lineFragmentPadding = 0;
     self.bioTV.textContainerInset = UIEdgeInsetsZero;
+    self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
+    self.bioTV.textColor = [UIColor frescoMediumTextColor];
     self.bioTV.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    
+    
     [backgroundView addSubview:self.bioTV];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, backgroundView.frame.size.height - 0.5)]];
@@ -219,6 +235,8 @@
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:self.dismissGR];
+    
+    
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
@@ -232,12 +250,22 @@
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:self.dismissGR];
-
+    
+    if (textView.attributedText){
+        textView.attributedText = nil;
+        textView.textColor = [UIColor frescoMediumTextColor];
+    }
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{
     [self.view removeGestureRecognizer:self.dismissGR];
+    
+    if ([[textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]){
+        textView.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    }
 }
+
+
 
 #pragma mark - Keyboard
 
@@ -258,12 +286,10 @@
         point = CGPointMake(0, self.topContainer.frame.size.height / 2 + 44 * 2);
     }
     
-    
     [UIView animateWithDuration:0.15 animations:^{
         self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
         [self.scrollView setContentOffset:point animated:NO];
     }];
-    
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
@@ -280,6 +306,36 @@
     [self.bioTV resignFirstResponder];
 }
 
+
+#pragma mark - UIImagePicker
+
+-(void)presentImagePickerController{
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+}
+
+-(void)presentCameraImagePicker{
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    UIImage *selectedImage;
+    if ([info valueForKey:UIImagePickerControllerEditedImage]){
+        selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
+    }
+    else if ([info valueForKey:UIImagePickerControllerOriginalImage]){
+        selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    }
+    
+    if (selectedImage){
+        self.profileIV.image = selectedImage;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
