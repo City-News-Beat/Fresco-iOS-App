@@ -35,13 +35,11 @@
         [self configureIV];
         [self animate];
         
-//        [OEParallax createParallaxFromView:self.flagOne withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
-//        [OEParallax createParallaxFromView:self.flagTwo withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
-//        [OEParallax createParallaxFromView:self.flagThree withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
-//        [OEParallax createParallaxFromView:self.flagFour withMaxX:30 withMinX:-30 withMaxY:30 withMinY:-30];
+        [OEParallax createParallaxFromView:self.flagOne withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
+        [OEParallax createParallaxFromView:self.flagTwo withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
+        [OEParallax createParallaxFromView:self.flagThree withMaxX:27.5 withMinX:-27.5 withMaxY:27.5 withMinY:-27.5];
+        [OEParallax createParallaxFromView:self.flagFour withMaxX:22.5 withMinX:-22.5 withMaxY:22.5 withMinY:-22.5];
         
-//        [OEParallax createParallaxFromView:self.globeIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
-
     }
     return self;
 }
@@ -273,6 +271,14 @@
     
 }
 
+-(void)reset{
+    
+    self.flagOne.alpha = 0;
+    self.flagTwo.alpha = 0;
+    self.flagThree.alpha = 0;
+    self.flagFour.alpha = 0;
+    
+}
 
 
 @end

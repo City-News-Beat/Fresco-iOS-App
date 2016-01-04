@@ -18,6 +18,8 @@
 
 #import "FRSContentActionsBar.h"
 
+#import "OEParallax.h"
+
 @interface FRSOnboardingViewController () <UIScrollViewDelegate, FRSContentActionsBarDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -26,7 +28,13 @@
 
 @property (strong, nonatomic) UIPageControl *pageControl;
 
+@property (strong, nonatomic) FRSOnboardThreeView *viewThree;
+@property (strong, nonatomic) FRSOnboardOneView *viewOne;
 
+@property (strong, nonatomic) UIImageView *logo;
+
+
+@property NSInteger page;
 
 @end
 
@@ -37,7 +45,7 @@
 
     [self configureUI];
     
-    
+    [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
     
     // Do any additional setup after loading the view.
 }
@@ -78,14 +86,14 @@
     
     NSInteger offset = (self.scrollView.frame.size.width - 320)/2;
     
-    FRSOnboardOneView *viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
-    [self.scrollView addSubview:viewOne];
+    self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
+    [self.scrollView addSubview:self.viewOne];
     
     FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
     [self.scrollView addSubview:viewTwo];
     
-    FRSOnboardThreeView *viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
-    [self.scrollView addSubview:viewThree];
+    self.viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
+    [self.scrollView addSubview:self.viewThree];
 }
 
 -(void)configurePageControl{
@@ -109,9 +117,9 @@
 
 -(void)configureLogo{
     
-    UIImageView *logo =[[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
-    logo.image=[UIImage imageNamed:@"largeLogo"];
-    [self.view addSubview:logo];
+    self.logo =[[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
+    self.logo.image=[UIImage imageNamed:@"largeLogo"];
+    [self.view addSubview:self.logo];
 
 }
 
@@ -163,9 +171,28 @@
 
 #pragma mark - UIScrollView Delegate
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+//    self.page = self.scrollView.contentOffset.x/self.scrollView.frame.size.width;
+//    self.pageControl.currentPage = self.page;
+//    NSLog(@"page = %ld", self.page);
+    
+}
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSInteger page = self.scrollView.contentOffset.x/self.scrollView.frame.size.width;
-    self.pageControl.currentPage = page;
+    
+    self.page = self.scrollView.contentOffset.x/self.scrollView.frame.size.width;
+    self.pageControl.currentPage = self.page;
+    NSLog(@"page = %ld", self.page);
+    
+    if (self.page == 0){
+        [self.viewOne animate];
+    } else if (self.page == 1){
+        [self.viewOne reset];
+    } else if (self.page == 2) {
+        [self.viewThree animate];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

@@ -9,6 +9,7 @@
 #import "FRSOnboardTwoView.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
+#import "OEParallax.h"
 
 @interface FRSOnboardTwoView()
 
@@ -25,6 +26,9 @@
     if (self){
         [self configureText];
         [self configureIV];
+        
+        [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
+
     }
     return self;
 }

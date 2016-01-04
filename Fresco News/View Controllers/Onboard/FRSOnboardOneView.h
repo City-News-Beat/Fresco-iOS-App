@@ -12,4 +12,8 @@
 
 -(instancetype)initWithOrigin:(CGPoint)origin;
 
+-(void)animate;
+-(void)reset;
+
+
 @end

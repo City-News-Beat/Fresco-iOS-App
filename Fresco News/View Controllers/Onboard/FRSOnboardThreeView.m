@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIImageView+Helpers.h"
+#import "OEParallax.h"
 
 @interface FRSOnboardThreeView()
 
@@ -32,9 +33,13 @@
         [self configureText];
         [self configureIV];
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self animate];
-        });
+//        [self animate];
+        
+        [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
+
+        [OEParallax createParallaxFromView:self.cashOneIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+        [OEParallax createParallaxFromView:self.cashTwoIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+        [OEParallax createParallaxFromView:self.cashThreeIV withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
 
     }
     return self;
@@ -72,10 +77,10 @@
     subHeader.numberOfLines = 2;
     [container addSubview:subHeader];
     
-    //    /* DEBUG */
-    //    container.backgroundColor = [UIColor blueColor];
-    //    header.backgroundColor = [UIColor redColor];
-    //    subHeader.backgroundColor = [UIColor redColor];
+//    /* DEBUG */
+//    container.backgroundColor = [UIColor blueColor];
+//    header.backgroundColor = [UIColor redColor];
+//    subHeader.backgroundColor = [UIColor redColor];
     
 }
 
@@ -106,18 +111,16 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
     
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin, width, height)];
-    self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
-    [container addSubview:self.cloudIV];
-    
     self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 - 30, 143, 28, 26)];
     self.leftArrowIV.image = [UIImage imageNamed:@"upload"];
     self.leftArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 +2);
+    self.leftArrowIV.layer.shouldRasterize = YES;
     [container addSubview:self.leftArrowIV];
     
     self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 143, 28, 26)];
     self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
     self.rightArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
+    self.rightArrowIV.layer.shouldRasterize = YES;
     [container addSubview:self.rightArrowIV];
     
     self.televisionIV = [[UIImageView alloc] initWithFrame:CGRectMake(46, 193, 88, 72)];
@@ -129,33 +132,45 @@
     [container addSubview:self.newspaperIV];
 
     
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin, width, height)];
+    self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
+    [container addSubview:self.cloudIV];
+    
     /** Create cash1 image view */
     self.cashOneIV = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(205, 36, 35, 24)
                                    andContentMode:UIViewContentModeScaleToFill];
+    self.cashOneIV.layer.shouldRasterize = YES;
     self.cashOneIV.transform = CGAffineTransformMakeRotation(.13);
     
     [container addSubview:self.cashOneIV];
-    
     
     /** Create cash2 image view */
     self.cashTwoIV = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(45, 60, 35, 24)
                                    andContentMode:UIViewContentModeScaleToFill];
+    self.cashTwoIV.layer.shouldRasterize = YES;
     self.cashTwoIV.transform = CGAffineTransformMakeRotation(-.785);
     
-    [self addSubview:self.cashTwoIV];
-    
+    [container addSubview:self.cashTwoIV];
     
     /** Create cash3 image view */
     self.cashThreeIV = [UIImageView UIImageViewWithName:@"cash"
                                          andFrame:CGRectMake(228, 114, 35, 24)
                                    andContentMode:UIViewContentModeScaleToFill];
+    self.cashThreeIV.layer.shouldRasterize = YES;
     self.cashThreeIV.transform = CGAffineTransformMakeRotation(.785);
     
-    [self addSubview:self.cashThreeIV];
+    [container addSubview:self.cashThreeIV];
     
+    self.cashOneIV.alpha = 0;
+    self.cashTwoIV.alpha = 0;
+    self.cashThreeIV.alpha = 0;
+
 }
+
+
+
 
 - (void)animate {
     
@@ -176,6 +191,8 @@
     [self animateCash2];
     
     [self animateCash3];
+    
+    NSLog(@"animate");
     
 }
 
@@ -355,15 +372,6 @@
                      completion:nil];
 }
 
-+ (UIImageView *)UIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode{
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-    imageView.image = [UIImage imageNamed:imageName];
-    imageView.contentMode = contentMode;
-    
-    
-    return imageView;
-    
-}
+
 
 @end
