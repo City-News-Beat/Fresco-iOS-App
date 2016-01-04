@@ -111,25 +111,26 @@
     self.globeIV.image = [UIImage imageNamed:@"earth"];
     [container addSubview:self.globeIV];
     
-    self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160, 27, 55, 55)];
+    
+    
+    self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160 - (55/2), 27 + (55/2), 55, 55)];
     self.flagOne.image = [UIImage imageNamed:@"assignment-right"];
-//    self.flagOne.layer.anchorPoint = CGPointMake(-.01, 1);
+    self.flagOne.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagOne];
 
-    self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55, 60, 55, 55)];
+    self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55 + (55/2), 60 + (55/2), 55, 55)];
     self.flagTwo.image = [UIImage imageNamed:@"assignment-left"];
-//    self.flagTwo.layer.anchorPoint = CGPointMake(1, 1);
-
+    self.flagTwo.layer.anchorPoint = CGPointMake(1, 1);
     [container addSubview:self.flagTwo];
     
-    self.flagThree = [[UIImageView alloc] initWithFrame: CGRectMake(105, 137, 55, 55)];
+    self.flagThree = [[UIImageView alloc] initWithFrame: CGRectMake(105 + (55/2), 137 + (55/2), 55, 55)];
     self.flagThree.image = [UIImage imageNamed:@"assignment-left"];
-//    self.flagThree.layer.anchorPoint = CGPointMake(1, 1);
+    self.flagThree.layer.anchorPoint = CGPointMake(1, 1);
     [container addSubview:self.flagThree];
     
-    self.flagFour = [[UIImageView alloc] initWithFrame: CGRectMake(200, 160, 55, 55)];
+    self.flagFour = [[UIImageView alloc] initWithFrame: CGRectMake(200 - (55/2), 160 + (55/2), 55, 55)];
     self.flagFour.image = [UIImage imageNamed:@"assignment-right"];
-//    self.flagFour.layer.anchorPoint = CGPointMake(-.01, 1);
+    self.flagFour.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagFour];
     
 //    /* DEBUG */

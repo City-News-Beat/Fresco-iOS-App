@@ -185,15 +185,18 @@
     self.pageControl.currentPage = self.page;
     NSLog(@"page = %ld", self.page);
     
+    
+    
     if (self.page == 0){
         [self.viewOne animate];
-        
     } else if (self.page == 1){
         [self.viewOne reset];
     } else if (self.page == 2) {
         [self.viewThree animate];
-        
-}}
+    }
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
