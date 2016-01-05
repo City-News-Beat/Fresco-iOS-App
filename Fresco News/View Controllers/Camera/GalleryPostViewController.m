@@ -450,14 +450,19 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 }
 
 -(void)adjustTableViewFrame{
+    
+    NSInteger height = self.nearbyAssignments.count ? (self.nearbyAssignments.count + 1) * 44 : 0;
+    
     self.assignmentTV.frame = CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, (self.nearbyAssignments.count + 1) * 44);
     self.captionTextView.frame = CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76);
     [self updateScrollViewContentSize];
     
     [self.tvSeparatorLine removeFromSuperview];
-    self.tvSeparatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTV.frame.size.height - 0.5, self.assignmentTV.frame.size.width, 0.5)];
-    self.tvSeparatorLine.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
-    [self.assignmentTV addSubview:self.tvSeparatorLine];
+    if (height){
+        self.tvSeparatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTV.frame.size.height - 0.5, self.assignmentTV.frame.size.width, 0.5)];
+        self.tvSeparatorLine.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
+        [self.assignmentTV addSubview:self.tvSeparatorLine];
+    }
 }
 
 -(void)configureSocialButtons{
