@@ -84,6 +84,7 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.contentSize = CGSizeMake(5 * self.frame.size.width, self.scrollView.frame.size.height);
     [self addSubview:self.scrollView];
+    
 }
 
 -(void)configureImageViews{
@@ -96,6 +97,11 @@
         imageView.indexInScrollView = i;
         [self.scrollView addSubview:imageView];
     }
+    
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+    [self addSubview:topLine];
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
@@ -192,7 +198,6 @@
     self.textView.text = @"It was a humorously perilous business for both of us. For, before we proceed further, it must be said that the monkey-rope was fast at both ends; fast to Queequeg's broad canvas belt, and fast to my narrow leather one. So that for better or for worse, we two, for the time, were wedded; and should poor Queequeg sink to rise...";
     self.textView.delegate = self;
     [self addSubview:self.textView];
-    
 }
 
 -(void)configureActionsBar{

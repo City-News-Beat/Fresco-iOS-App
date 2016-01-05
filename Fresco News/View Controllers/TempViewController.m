@@ -31,7 +31,6 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
@@ -41,15 +40,24 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
     
-    // Do any additional setup after loading the view.
+//     Do any additional setup after loading the view.
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    self.navigationController.hidesBarsOnSwipe = YES;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.navigationController.isNavigationBarHidden;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return 10;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return 1;
 }
 
 -(FRSGalleryCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
@@ -66,6 +74,19 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     [cell configureCell];
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (section == 9) return [UIView new];
+    
+    UIView *blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
+    blankView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    return blankView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (section == 9) return 0;
+    return 20;
 }
 
 -(NSInteger)numberOfLinesForTextView{

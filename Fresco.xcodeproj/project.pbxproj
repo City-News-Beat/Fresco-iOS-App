@@ -55,6 +55,8 @@
 		65678E8E1C2A0E9A00D186B1 /* FRSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65678E8D1C2A0E9A00D186B1 /* FRSNavigationController.m */; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		658835751C3B165F00A6019A /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 658835741C3B165F00A6019A /* FRSGalleryCell.m */; };
+		65885BE31C3C69CB0033706D /* FRSScrollingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65885BE21C3C69CB0033706D /* FRSScrollingViewController.m */; };
+		65885BE91C3C6DF40033706D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65885BE81C3C6DF40033706D /* ViewController.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65DBF4E81C3ADEB30056DB0B /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DBF4E71C3ADEB30056DB0B /* FRSGalleryView.m */; };
 		65DBF4EB1C3AE3210056DB0B /* FRSScrollViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DBF4EA1C3AE3210056DB0B /* FRSScrollViewImageView.m */; };
@@ -226,6 +228,10 @@
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
 		658835731C3B165F00A6019A /* FRSGalleryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryCell.h; sourceTree = "<group>"; };
 		658835741C3B165F00A6019A /* FRSGalleryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryCell.m; sourceTree = "<group>"; };
+		65885BE11C3C69CB0033706D /* FRSScrollingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSScrollingViewController.h; sourceTree = "<group>"; };
+		65885BE21C3C69CB0033706D /* FRSScrollingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollingViewController.m; sourceTree = "<group>"; };
+		65885BE71C3C6DF40033706D /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		65885BE81C3C6DF40033706D /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
 		65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Helpers.m"; path = "Categories/UIView+Helpers.m"; sourceTree = "<group>"; };
 		65DBF4E61C3ADEB30056DB0B /* FRSGalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryView.h; sourceTree = "<group>"; };
@@ -474,8 +480,12 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				65885BE71C3C6DF40033706D /* ViewController.h */,
+				65885BE81C3C6DF40033706D /* ViewController.m */,
 				65DBF4EC1C3AEE510056DB0B /* TempViewController.h */,
 				65DBF4ED1C3AEE510056DB0B /* TempViewController.m */,
+				65885BE11C3C69CB0033706D /* FRSScrollingViewController.h */,
+				65885BE21C3C69CB0033706D /* FRSScrollingViewController.m */,
 				65678E8F1C2A0E9F00D186B1 /* Navigation */,
 				65F237B41C24A954002182DE /* Tab Bar */,
 				E784280E1B57F3E30090DFCC /* Onboard */,
@@ -1145,6 +1155,7 @@
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
+				65885BE31C3C69CB0033706D /* FRSScrollingViewController.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
@@ -1160,6 +1171,7 @@
 				65DBF4EE1C3AEE510056DB0B /* TempViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				658835751C3B165F00A6019A /* FRSGalleryCell.m in Sources */,
+				65885BE91C3C6DF40033706D /* ViewController.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 			);
