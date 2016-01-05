@@ -453,7 +453,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     NSInteger height = self.nearbyAssignments.count ? (self.nearbyAssignments.count + 1) * 44 : 0;
     
-    self.assignmentTV.frame = CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, (self.nearbyAssignments.count + 1) * 44);
+    self.assignmentTV.frame = CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, height);
     self.captionTextView.frame = CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76);
     [self updateScrollViewContentSize];
     
