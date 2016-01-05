@@ -719,7 +719,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
     
-    if ([textView.text isEqualToString:@""])
+    if ([[textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""])
         textView.text = WHATS_HAPPENING;
     
     return YES;
@@ -734,6 +734,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound) {
+        return YES;
+    }
+    else if([text isEqualToString:@"\n"]) {
         return YES;
     }
     
