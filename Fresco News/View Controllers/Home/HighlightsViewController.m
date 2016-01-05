@@ -14,6 +14,7 @@
 #import "GalleryHeader.h"
 #import "GalleryTableViewCell.h"
 #import "AssignmentsViewController.h"
+#import "AppDelegate.h"
 
 #define HIDE_NUMBER @3
 
@@ -40,6 +41,8 @@
     }
     
     [self initialUpdate];
+    
+    [((AppDelegate *)[[UIApplication sharedApplication] delegate]) registerForPushNotifications];
     
     self.galleriesViewController.endlessScrollBlock = ^void(FRSAPISuccessBlock responseBlock){
         

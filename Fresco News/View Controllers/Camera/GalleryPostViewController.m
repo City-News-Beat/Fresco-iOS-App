@@ -47,6 +47,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 @property (strong, nonatomic) UICollectionView *galleryCV;
 @property (strong, nonatomic) UIScrollView *scrollView;
 
+@property (strong, nonatomic) UIView *tvSeparatorLine;
+
 @property (strong, nonatomic) UIView *topBar;
 @property (strong, nonatomic) FRSBackButton *backButton;
 
@@ -166,6 +168,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                 for (FRSAssignment *assignment in responseObject) {
                     if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
                         self.nearbyAssignments = @[assignment];
+                        self.selectedAssignment = assignment;
                         [self adjustTableViewFrame];
                         [self.assignmentTV reloadData];
                         return;
@@ -383,12 +386,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self adjustTableViewFrame];
     [self.scrollView addSubview:self.assignmentTV];
     
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTV.frame.size.height - 0.5, self.assignmentTV.frame.size.width, 0.5)];
-    view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
-    [self.assignmentTV addSubview:view];
-    
-    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -456,6 +453,11 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     self.assignmentTV.frame = CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, (self.nearbyAssignments.count + 1) * 44);
     self.captionTextView.frame = CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76);
     [self updateScrollViewContentSize];
+    
+    [self.tvSeparatorLine removeFromSuperview];
+    self.tvSeparatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTV.frame.size.height - 0.5, self.assignmentTV.frame.size.width, 0.5)];
+    self.tvSeparatorLine.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.12];
+    [self.assignmentTV addSubview:self.tvSeparatorLine];
 }
 
 -(void)configureSocialButtons{
@@ -652,8 +654,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
         [self.galleryCV setCollectionViewLayout:self.flowLayout];
         
     }
-    
-    
     
 }
 

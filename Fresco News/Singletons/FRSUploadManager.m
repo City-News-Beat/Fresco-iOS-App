@@ -170,8 +170,10 @@
                     
                     //Signal to update the profile when upload is finished i.e. finished with the last post
                     if(i == gallery.posts.count -1){
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
+                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                        });
                     }
                     
                     //Signal that upload is done to semaphore
@@ -187,11 +189,12 @@
         });
 
     else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
+            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+        });
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-        
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
-    
     }
     
     //Run social psot now that we have the gallery id back
@@ -334,13 +337,14 @@
         NSProgress *progress = (NSProgress *)object;
         
         NSNumber *fractionCompleted = [NSNumber numberWithDouble:((progress.fractionCompleted + (float)self.currentPostIndex) / self.postCount)];
-        
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:NOTIF_UPLOAD_PROGRESS
-         object:nil
-         userInfo:@{
-                    @"fractionCompleted" : fractionCompleted
-                    }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:NOTIF_UPLOAD_PROGRESS
+             object:nil
+             userInfo:@{
+                        @"fractionCompleted" : fractionCompleted
+                        }];
+        });
         
     }
     else {
