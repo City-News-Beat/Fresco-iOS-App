@@ -1274,12 +1274,11 @@
     
     if (self.locationManager.location) {
         
+        NSLog(@"%@", [FRSLocationManager sharedManager].currentLocation);
+        
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
             
             if([responseObject firstObject] != nil){
-                
-                
-                [FRSLocationManager sharedManager].nearbyAssignments = responseObject;
                 
                 FRSAssignment *assignment = [responseObject firstObject];
                 
@@ -1289,8 +1288,6 @@
                 if(distanceInMiles < [assignment.radius floatValue]){
                     
                     [self updateLocationLabelWithAssignment:assignment];
-                    
-                    //                    [self toggleAssignmentLabel:YES];
                     
                 }
             }

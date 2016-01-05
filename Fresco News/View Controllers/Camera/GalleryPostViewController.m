@@ -33,6 +33,8 @@
 #import "FRSLocationManager.h"
 #import "UIView+Helpers.h"
 
+#import "FRSDataManager.h"
+
 typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     scrollViewDirectionUp,
     scrollViewDirectionDown
@@ -85,7 +87,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.nearbyAssignments = [FRSLocationManager sharedManager].nearbyAssignments;
+    [self fetchNearbyAssignments];
     
     [self customizeNavBar];
     [self configureUI];
@@ -102,7 +104,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     self.resignKeyboardGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignKeyboard)];
     [self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(submitGalleryPost:)]];
-    
     
     // Do any additional setup after loading the view.
 }
@@ -149,6 +150,32 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.topBar addSubview:cancelButton];
 }
 
+-(void)fetchNearbyAssignments{
+    
+//    NSMutableArray *locations = [NSMutableArray new];
+    
+    [[FRSDataManager sharedManager] getAssignmentsWithinRadius:50 ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+        
+        // Find a photo that is within an assignment radius
+        for (FRSPost *post in self.gallery.posts) {
+            
+            CLLocation *location = post.image.asset.location;
+            
+            if(location != nil){
+                
+                for (FRSAssignment *assignment in responseObject) {
+                    if ([assignment.locationObject distanceFromLocation:location] / kMetersInAMile <= [assignment.radius floatValue] ) {
+                        self.nearbyAssignments = @[assignment];
+                        [self adjustTableViewFrame];
+                        [self.assignmentTV reloadData];
+                        return;
+                    }
+                }
+            }
+        }
+    }];
+}
+
 -(void)configureUI{
     self.view.backgroundColor = [UIColor whiteBackgroundColor];
     
@@ -166,7 +193,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - self.navigationController.toolbar.frame.size.height - 46)];
     self.scrollView.backgroundColor = [UIColor whiteBackgroundColor];
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 10);
     self.scrollView.clipsToBounds = NO;
     self.scrollView.delegate = self;
     [self.view insertSubview:self.scrollView belowSubview:self.topBar];
@@ -227,7 +254,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     }
     return self.view.frame.size.width * 3/4;
 }
-
 
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -348,12 +374,13 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 #pragma mark - Table View
 
 -(void)configureTableView{
-    self.assignmentTV = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, [self heightForTableView])];
+    self.assignmentTV = [[UITableView alloc] init];
     self.assignmentTV.backgroundColor = [UIColor whiteBackgroundColor];
     self.assignmentTV.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.assignmentTV.delegate = self;
     self.assignmentTV.dataSource = self;
     self.assignmentTV.scrollEnabled = NO;
+    [self adjustTableViewFrame];
     [self.scrollView addSubview:self.assignmentTV];
     
     
@@ -388,8 +415,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     if (!cell){
         cell = [[FRSAssignmentChoiceCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell" assignment:assignment];
     }
-    
-    
     
     return cell;
 }
@@ -427,13 +452,10 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     }
 }
 
--(NSInteger)heightForTableView{
-    if (!self.nearbyAssignments.count){
-        return 0;
-    }
-    else {
-        return (self.nearbyAssignments.count + 1) * 44;
-    }
+-(void)adjustTableViewFrame{
+    self.assignmentTV.frame = CGRectMake(0, self.galleryCV.frame.size.height, self.scrollView.frame.size.width, (self.nearbyAssignments.count + 1) * 44);
+    self.captionTextView.frame = CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76);
+    [self updateScrollViewContentSize];
 }
 
 -(void)configureSocialButtons{
@@ -513,7 +535,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     [self.socialTipView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateSocialTipView)]];
     [self.view addSubview:self.socialTipView];
-//    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
+    
+    self.socialTipView.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:UD_GALLERY_POSTED];
 }
 
 #pragma mark - Scroll View Delegate
@@ -610,6 +633,12 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
         }
         else if (self.scrollViewDirection == scrollViewDirectionUp){
+            [UIView animateWithDuration:0.1 animations:^{
+                self.topBar.alpha = 1.0;
+            }];
+        }
+        
+        if (scrollView.contentOffset.y < 5){
             [UIView animateWithDuration:0.1 animations:^{
                 self.topBar.alpha = 1.0;
             }];
@@ -1008,6 +1037,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                                       @"twitter" : twitterPost
                                                       }
                                   withResponseBlock:nil];
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
     
     [self returnToTabBarWithPrevious:YES];
 }
