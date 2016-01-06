@@ -11,21 +11,16 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
-<<<<<<< HEAD
 #import "TestViewController.h"
 #import "SettingsViewController.h"
-=======
+
 #import "FRSNavigationController.h"
-
-
-
 
 
 #import "FRSSignUpViewController.h"
 #import "FRSSetupProfileViewController.h"
 #import "TempViewController.h"
 #import "ViewController.h"
->>>>>>> 3.0-dan
 
 #import <MagicalRecord/MagicalRecord.h>
 
