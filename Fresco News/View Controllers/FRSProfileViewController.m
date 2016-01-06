@@ -53,6 +53,7 @@
     
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(somethingone)];
     UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(somethingtwo)];
+    editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
     self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
     
@@ -83,12 +84,29 @@
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height)];
-    self.profileIV.image = [UIImage imageNamed:@"liked-heart-filled"];
+    self.profileIV.image = [UIImage imageNamed:@"kobe"];
+    self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     [self.profileIV addBorderWithWidth:4 color:[UIColor whiteColor]];
     self.profileIV.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
+    
+    self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(35, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 12, 24, 24)];
+    self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
+    self.followersIV.contentMode = UIViewContentModeCenter;
+    [self.topContainer addSubview:self.followersIV];
+    
+    self.followersLabel = [[UILabel alloc] init];
+    self.followersLabel.text = @"1.5M";
+    self.followersLabel.textColor = [UIColor whiteColor];
+    self.followersLabel.font = [UIFont notaBoldWithSize:15];
+    [self.followersLabel sizeToFit];
+    self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
+    [self.topContainer addSubview:self.followersLabel];
+    
+    
+    
 }
 
 -(void)configureLabels{
