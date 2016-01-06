@@ -117,13 +117,21 @@
     line.backgroundColor = [UIColor frescoLightTextColor];
     [self.view addSubview:line];
     
+//    UIButton *logIn = [[UIButton alloc] initWithFrame:CGRectMake(-5, 0, 85, 44)];
+//    [logIn setTitle:@"SIGN UP" forState:UIControlStateNormal];
+//    logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
+//    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+//    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+//    [container addSubview:logIn];
+    
     UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
-    logIn.frame = CGRectMake(-5, 0, 85, 44);
+    logIn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
     [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
     logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
-    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+    [logIn setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [logIn addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
     [container addSubview:logIn];
+    
     
     UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
     signUp.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
@@ -158,9 +166,10 @@
 #pragma mark - UIScrollView Delegate
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
     self.page = self.scrollView.contentOffset.x/self.scrollView.frame.size.width;
-    self.pageControl.currentPage = self.page;
-    NSLog(@"page = %ld", self.page);
+    
+    if (self.pageControl.currentPage == self.page) return;
     
     if (self.page == 0){
         [self.viewOne animate];
@@ -169,6 +178,22 @@
     } else if (self.page == 2) {
         [self.viewThree animate];
     }
+    
+    self.pageControl.currentPage = self.page;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
