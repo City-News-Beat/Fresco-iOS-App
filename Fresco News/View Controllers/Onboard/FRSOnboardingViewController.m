@@ -59,6 +59,7 @@
     [self configureLogo];
     [self configureActionBar];
     
+    //check zeplin for official value
     self.view.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
 }
 

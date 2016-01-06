@@ -8,12 +8,11 @@
 
 #import "FRSAppDelegate.h"
 
-
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
-
 #import "TestViewController.h"
+#import "SettingsViewController.h"
 
 #import <MagicalRecord/MagicalRecord.h>
 
@@ -30,8 +29,9 @@
     
     
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
-    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+//    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
 //    self.window.rootViewController = [[TestViewController alloc] init];
+    self.window.rootViewController = [[SettingsViewController alloc] init];
     
     
     return YES;

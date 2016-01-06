@@ -13,7 +13,7 @@
 		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
-		073F624D1C3D71D300E07977 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073F624B1C3D71D300E07977 /* SettingsViewController.m */; };
+		073F62501C3D722400E07977 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073F624F1C3D722400E07977 /* SettingsViewController.m */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
@@ -152,8 +152,8 @@
 		072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
 		072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
-		073F624A1C3D71D300E07977 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = "Fresco News/View Controllers/SettingsViewController.h"; sourceTree = "<group>"; };
-		073F624B1C3D71D300E07977 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = "Fresco News/View Controllers/SettingsViewController.m"; sourceTree = "<group>"; };
+		073F624E1C3D722400E07977 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		073F624F1C3D722400E07977 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
 		074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+Helpers.m"; path = "Categories/UIImageView+Helpers.m"; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
@@ -350,8 +350,8 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				073F624A1C3D71D300E07977 /* SettingsViewController.h */,
-				073F624B1C3D71D300E07977 /* SettingsViewController.m */,
+				073F624E1C3D722400E07977 /* SettingsViewController.h */,
+				073F624F1C3D722400E07977 /* SettingsViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -1108,7 +1108,7 @@
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				079CEF221C2874D500E559F3 /* TestViewController.m in Sources */,
 				65135FD91C286DCF00839149 /* FRSGallery+CoreDataProperties.m in Sources */,
-				073F624D1C3D71D300E07977 /* SettingsViewController.m in Sources */,
+				073F62501C3D722400E07977 /* SettingsViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				65135FCF1C286DCF00839149 /* FRSArticle+CoreDataProperties.m in Sources */,
