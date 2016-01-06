@@ -67,6 +67,8 @@
 		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
 		65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */; };
 		65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A391C3D7DA800B31089 /* FRSDataValidator.m */; };
+		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
+		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
@@ -262,6 +264,10 @@
 		65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollViewImageView.m; sourceTree = "<group>"; };
 		65201A381C3D7DA800B31089 /* FRSDataValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDataValidator.h; path = Utilities/FRSDataValidator.h; sourceTree = "<group>"; };
 		65201A391C3D7DA800B31089 /* FRSDataValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDataValidator.m; path = Utilities/FRSDataValidator.m; sourceTree = "<group>"; };
+		65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
+		65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
+		65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSProfileViewController.h; sourceTree = "<group>"; };
+		65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSProfileViewController.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
@@ -529,6 +535,10 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */,
+				65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */,
+				65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */,
+				65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */,
 				65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */,
 				65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */,
 				65201A201C3D7D1A00B31089 /* FRSSignUpViewController.h */,
@@ -1172,6 +1182,7 @@
 				079CEF221C2874D500E559F3 /* TestViewController.m in Sources */,
 				65135FD91C286DCF00839149 /* FRSGallery+CoreDataProperties.m in Sources */,
 				073F62501C3D722400E07977 /* SettingsViewController.m in Sources */,
+				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */,
@@ -1194,6 +1205,7 @@
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
+				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
 				65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,

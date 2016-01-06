@@ -69,8 +69,7 @@
 
 -(void)configureNavigationBar{
     self.navigationItem.title = @"SETUP YOUR PROFILE";
-    
-    
+
 }
 
 -(void)configureScrollView{
