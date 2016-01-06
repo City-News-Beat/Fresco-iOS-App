@@ -19,8 +19,7 @@
 }
 
 +(UIColor *)frescoBackgroundColorDark{
-//    return [UIColor colorWithRed:<#(CGFloat)#> green:<#(CGFloat)#> blue:<#(CGFloat)#> alpha:]
-    return [UIColor new];
+    return [UIColor colorWithRed:242/255. green:242/255. blue:237/255. alpha:1];
 }
 
 +(UIColor *)frescoBackgroundColorLight{
@@ -28,7 +27,7 @@
 }
 
 +(UIColor *)frescoGreenColor{
-    return [UIColor colorWithRed:76/255.0 green:215/255.0 blue:100/255.0 alpha:1.0];
+    return [UIColor colorWithRed:76/255.0 green:216/255.0 blue:100/255.0 alpha:1.0];
 }
 
 +(UIColor *)frescoDarkTextColor{
@@ -49,6 +48,10 @@
 
 +(UIColor *)frescoLightTextColor{
     return [UIColor colorWithWhite:0.0 alpha:0.26];
+}
+
++(UIColor *)frescoShadowColor {
+    return [UIColor colorWithWhite:0 alpha:0.15];
 }
 
 @end

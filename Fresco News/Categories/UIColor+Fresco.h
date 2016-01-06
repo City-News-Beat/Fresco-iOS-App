@@ -32,5 +32,7 @@
 
 +(UIColor *)frescoDarkTextColor;
 
++(UIColor *)frescoShadowColor;
+
 
 @end

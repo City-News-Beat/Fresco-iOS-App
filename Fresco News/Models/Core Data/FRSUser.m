@@ -11,8 +11,19 @@
 #import "FRSPost.h"
 #import "FRSStory.h"
 
+#import <MagicalRecord/MagicalRecord.h>
+
+
 @implementation FRSUser
 
 // Insert code here to add functionality to your managed object subclass
+
++(FRSUser *)loggedInUser{
+    FRSUser *user = [FRSUser MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"isLoggedIn == %@", @1]];
+    return user;
+}
+
+
+
 
 @end

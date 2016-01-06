@@ -77,19 +77,18 @@ enum FRSErrorCodes {
 
 #ifdef DEBUG
 
-//#define BASE_URL                        @"https://fresconews.com"
-//#define BASE_API                        @"https://api.fresconews.com/v1/"
-//#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-//#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
-//#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
+#define BASE_URL                        @"https://fresconews.com"
+#define BASE_API                        @"https://api.fresconews.com/v1/"
+#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
+#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 
-
-
-    #define BASE_URL                        @"http://dev.fresconews.com"
-    #define BASE_API                        @"http://dev.api.fresconews.com/v1/"
-    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
+//
+//    #define BASE_URL                        @"http://dev.fresconews.com"
+//    #define BASE_API                        @"http://dev.api.fresconews.com/v1/"
+//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+//    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
 #else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
@@ -402,6 +401,10 @@ enum FRSErrorCodes {
 #define IS_IPHONE_4S                       (IS_IPHONE && ([[UIScreen mainScreen] bounds].size.height < 568.0) && ((IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale == [UIScreen mainScreen].scale) || !IS_OS_8_OR_LATER))
 
 #define IS_IPHONE_5                         (IS_IPHONE && ([[UIScreen mainScreen] bounds].size.height == 568.0) && ((IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale == [UIScreen mainScreen].scale) || !IS_OS_8_OR_LATER))
+
+#define IS_IPHONE_6                         (IS_IPHONE && ([[UIScreen mainScreen] bounds].size.height == 667.0))
+
+#define IS_IPHONE_6_PLUS                    (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0)
 
 #define IS_STANDARD_IPHONE_6                (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0  && IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale == [UIScreen mainScreen].scale)
 
