@@ -125,10 +125,10 @@
 //    [container addSubview:logIn];
     
     UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
-    logIn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
+    logIn.frame = CGRectMake(0, 0, 85, 44);
     [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
     logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
-    [logIn setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [logIn addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
     [container addSubview:logIn];
     
@@ -142,8 +142,8 @@
     [container addSubview:signUp];
     
     //    /* DEBUG */
-    //    signUp.backgroundColor = [UIColor greenColor];
-    //    logIn.backgroundColor = [UIColor redColor];
+//        signUp.backgroundColor = [UIColor greenColor];
+//        logIn.backgroundColor = [UIColor redColor];
 }
 
 -(void)configureParallax{
