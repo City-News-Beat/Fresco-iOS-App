@@ -51,7 +51,7 @@
 }
 
 +(UIColor *)frescoShadowColor {
-    return [UIColor colorWithWhite:0 alpha:0.15];
+    return [UIColor colorWithWhite:0 alpha:0.12];
 }
 
 @end

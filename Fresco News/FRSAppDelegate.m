@@ -34,17 +34,15 @@
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     
-
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
 //    self.window.rootViewController = [[TestViewController alloc] init];
-//    self.window.rootViewController = [[SettingsViewController alloc] init];
+    self.window.rootViewController = [[SettingsViewController alloc] init];
 
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
 
-    
-    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
+//    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
     
     return YES;
 }
