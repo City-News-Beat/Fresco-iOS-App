@@ -8,10 +8,13 @@
 
 #import "FRSProfileViewController.h"
 
-@interface FRSProfileViewController ()
+@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UIView *topContainer;
+//@property (strong, nonatomic) UIScrollView *scrollView;
+
+@property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) UIView *profileContainer;
 
 @property (strong, nonatomic) UIView *profileBG;
 @property (strong, nonatomic) UIImageView *profileIV;
@@ -41,7 +44,7 @@
 -(void)configureUI{
     self.view.backgroundColor = [UIColor whiteColor];
     [self configureNavigationBar];
-    [self configureScrollView];
+    [self configureTableView];
     [self configureTopContainer];
 }
 
@@ -59,28 +62,33 @@
     
 }
 
--(void)configureScrollView{
+-(void)configureTableView{
+    
+    [self createProfileSection];
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64)];
-    self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    [self.view addSubview:self.scrollView];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64)];
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:self.tableView];
 }
 
--(void)configureTopContainer{
-    self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 269.5)];
-    self.topContainer.backgroundColor = [UIColor frescoOrangeColor];
-    [self.scrollView addSubview:self.topContainer];
+-(void)createProfileSection{
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 269.5)];
+    self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
     
     [self configureProfileImage];
     [self configureLabels];
-    [self resizeTopContainer];
-    [self configureSectionView];
-    [self addBottomLineToView:self.topContainer];
+    [self resizeProfileContainer];
+//    [self configureSectionView];
+    [self addBottomLineToView:self.profileContainer];
 }
 
 -(void)configureProfileImage{
     self.profileBG = [[UIView alloc] initWithFrame:CGRectMake(16, 12, 96, 96)];
-    [self.topContainer addSubview:self.profileBG];
+    [self.profileContainer addSubview:self.profileBG];
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height)];
@@ -95,7 +103,7 @@
     self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(35, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 12, 24, 24)];
     self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
     self.followersIV.contentMode = UIViewContentModeCenter;
-    [self.topContainer addSubview:self.followersIV];
+    [self.profileContainer addSubview:self.followersIV];
     
     self.followersLabel = [[UILabel alloc] init];
     self.followersLabel.text = @"1.5M";
@@ -103,10 +111,7 @@
     self.followersLabel.font = [UIFont notaBoldWithSize:15];
     [self.followersLabel sizeToFit];
     self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
-    [self.topContainer addSubview:self.followersLabel];
-    
-    
-    
+    [self.profileContainer addSubview:self.followersLabel];
 }
 
 -(void)configureLabels{
@@ -116,13 +121,13 @@
     self.nameLabel.text = @"Kobe Bryant, the GOAT";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
-    [self.topContainer addSubview:self.nameLabel];
+    [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
     self.locationLabel.text = @"Los Angeles, California";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
-    [self.topContainer addSubview:self.locationLabel];
+    [self.profileContainer addSubview:self.locationLabel];
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     self.bioLabel.numberOfLines = 0;
@@ -130,14 +135,14 @@
     self.bioLabel.textColor = [UIColor whiteColor];
     self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-1];
     [self.bioLabel sizeToFit];
-    [self.topContainer addSubview:self.bioLabel];
+    [self.profileContainer addSubview:self.bioLabel];
 }
 
--(void)resizeTopContainer{
+-(void)resizeProfileContainer{
     
     CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6 + 43.5, 160 + 43.5);
     
-    [self.topContainer setSizeWithSize:CGSizeMake(self.topContainer.frame.size.width, height)];
+    [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
 }
 
 -(void)configureSectionView{
@@ -176,6 +181,56 @@
     [self.likesButton setSelected:!self.likesButton.isSelected];
 }
 
+#pragma mark - UITableView Delegate & DataSource
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0){
+        return 0;
+    }
+    else{
+        return 44;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0){
+        return
+    }
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewCell *cell;
+    
+    if (indexPath.row == 0){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
+    }
+    else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+        if (!cell){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
+        }
+    }
+    return cell;
+    
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0){
+
+    }
+    else {
+        
+    }
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+}
 
 
 - (void)didReceiveMemoryWarning {
