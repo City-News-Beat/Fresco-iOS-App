@@ -9,9 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "FRSGalleryView.h"
 
+@class FRSGallery;
+
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDataSource>
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
+
+@property (strong, nonatomic) FRSGallery *gallery;
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier gallery:(FRSGallery *)gallery;
 
 -(void)configureCell;
 

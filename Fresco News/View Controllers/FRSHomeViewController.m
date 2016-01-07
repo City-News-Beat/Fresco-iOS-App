@@ -64,6 +64,7 @@
     if (!cell){
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell" gallery:self.dataSource[indexPath.row]];
     }
+    return cell;
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{

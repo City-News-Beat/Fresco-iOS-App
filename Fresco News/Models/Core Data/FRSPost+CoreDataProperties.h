@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
-@property (nullable, nonatomic, retain) UIImage image;
+@property (nullable, nonatomic, retain) id image;
 @property (nullable, nonatomic, retain) NSString *imageUrl;
 @property (nullable, nonatomic, retain) NSNumber *mediaType;
 @property (nullable, nonatomic, retain) NSString *source;
@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *visibility;
 @property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) FRSGallery *gallery;
+
+
 
 @end
 

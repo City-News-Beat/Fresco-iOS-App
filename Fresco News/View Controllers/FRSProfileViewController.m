@@ -13,7 +13,7 @@
 
 #import <MagicalRecord/MagicalRecord.h>
 
-@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -43,6 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self configureUI];
     [self fetchGalleries];
     
@@ -76,6 +77,7 @@
 #pragma mark - UI Elements
 -(void)configureUI{
     self.view.backgroundColor = [UIColor whiteColor];
+    
     [self configureNavigationBar];
     [self configureTableView];
 }
@@ -91,7 +93,6 @@
     editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
     self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
-    
 }
 
 -(void)configureTableView{
@@ -100,7 +101,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
-    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -262,7 +263,7 @@
     }
     else {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell configureCellWithGallery:self.galleries[indexPath.row]];
+        [galCell configureCell];
     }
 }
 
@@ -286,6 +287,12 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) return;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView == self.tableView){
+        
+    }
 }
 
 #pragma mark - Navigation

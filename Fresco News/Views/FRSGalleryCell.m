@@ -8,9 +8,10 @@
 
 #import "FRSGalleryCell.h"
 
+#import "FRSGallery.h"
+
 #import "UIView+Helpers.h"
 #import "UIColor+Fresco.h"
-
 
 @implementation FRSGalleryCell
 
@@ -24,10 +25,10 @@
     // Configure the view for the selected state
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier gallery:(FRSGallery *)gallery{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self){
-        
+        self.gallery = gallery;
     }
     return self;
 }
