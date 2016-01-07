@@ -17,7 +17,6 @@
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
 
-@property (strong, nonatomic) UITableView *tableView;
 
 @property (strong, nonatomic) UIView *profileContainer;
 
@@ -289,9 +288,22 @@
     if (indexPath.section == 0) return;
 }
 
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
     if (scrollView == self.tableView){
+        [super determineScrollDirection:scrollView];
         
+        if (self.scrollDirection == UIScrollViewScrollDirectionDown){
+            if ([self.tableView.backgroundColor isEqual:[UIColor frescoBackgroundColorDark]]) return;
+            
+            self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
+        else {
+            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
+            
+            self.tableView.backgroundColor = [UIColor frescoOrangeColor];
+        }
     }
 }
 

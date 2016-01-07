@@ -19,9 +19,16 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (strong, nonatomic) UITableView *tableView;
 
+@property (nonatomic) UIScrollViewScrollDirection scrollDirection;
+
+@property (nonatomic) NSInteger prevContentOffY;
+
 -(void)configureTableView;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+
+-(void)determineScrollDirection:(UIScrollView *)scrollView;
+
 
 @end

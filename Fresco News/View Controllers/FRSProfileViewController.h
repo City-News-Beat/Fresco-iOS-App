@@ -6,8 +6,8 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSBaseViewController.h"
+#import "FRSScrollingViewController.h"
 
-@interface FRSProfileViewController : FRSBaseViewController
+@interface FRSProfileViewController : FRSScrollingViewController
 
 @end

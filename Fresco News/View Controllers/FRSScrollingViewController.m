@@ -11,9 +11,7 @@
 
 @interface FRSScrollingViewController () <UIScrollViewDelegate>
 
-@property (nonatomic) UIScrollViewScrollDirection scrollDirection;
 
-@property (nonatomic) NSInteger prevContentOffY;
 
 @end
 
@@ -51,18 +49,15 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
+    
+    
     NSInteger currentContentOffY = scrollView.contentOffset.y ;
     if (currentContentOffY > scrollView.contentSize.height - scrollView.frame.size.height) return; //The user is scrolling down, and is pulling past the furthest point.
     else if (currentContentOffY <= 0) return;
     
     NSInteger difference = currentContentOffY - self.prevContentOffY;
     
-    if (difference < 0){
-        self.scrollDirection = UIScrollViewScrollDirectionUp;
-    }
-    else if (difference> 0){
-        self.scrollDirection = UIScrollViewScrollDirectionDown;
-    }
+    [self determineScrollDirection:scrollView];
     
     [self adjustFramesForDifference:difference forScrollView:scrollView];
     
@@ -115,6 +110,19 @@
 //    }
 }
 
+-(void)determineScrollDirection:(UIScrollView *)scrollView{
+    
+    CGFloat currentContentOffY = scrollView.contentOffset.y;
+    NSInteger difference = currentContentOffY - self.prevContentOffY;
+    
+    if (difference < 0){
+        self.scrollDirection = UIScrollViewScrollDirectionUp;
+    }
+    else if (difference> 0){
+        self.scrollDirection = UIScrollViewScrollDirectionDown;
+    }
+    
+}
 
 /*
 #pragma mark - Navigation
