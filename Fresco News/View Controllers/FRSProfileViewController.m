@@ -9,6 +9,9 @@
 #import "FRSProfileViewController.h"
 
 #import "FRSGalleryCell.h"
+#import "FRSDataManager.h"
+
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -32,6 +35,8 @@
 @property (strong, nonatomic) UIButton *feedButton;
 @property (strong, nonatomic) UIButton *likesButton;
 
+@property (strong, nonatomic) NSArray *galleries;
+
 @end
 
 @implementation FRSProfileViewController
@@ -39,9 +44,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    
+    [self fetchGalleries];
     
     // Do any additional setup after loading the view.
+}
+
+-(void)fetchGalleries{
+    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
+        if (!responseObject.count){
+            return;
+        }
+        
+        NSMutableArray *mArr = [NSMutableArray new];
+        
+        NSArray *galleries = responseObject;
+        for (NSDictionary *dict in galleries){
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            [mArr addObject:gallery];
+        }
+        
+        self.galleries = [mArr copy];
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -192,7 +217,7 @@
         return 1;
     }
     else {
-        return 10;
+        return self.galleries.count;
     }
 }
 
@@ -237,7 +262,7 @@
     }
     else {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell configureCell];
+        [galCell configureCellWithGallery:self.galleries[indexPath.row]];
     }
 }
 

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
 typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
     UIScrollViewScrollDirectionLeft = 0,
@@ -15,7 +15,11 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
     UIScrollViewScrollDirectionDown
 };
 
-@interface FRSScrollingViewController : UIViewController
+@interface FRSScrollingViewController : FRSBaseViewController
+
+@property (strong, nonatomic) UITableView *tableView;
+
+-(void)configureTableView;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;

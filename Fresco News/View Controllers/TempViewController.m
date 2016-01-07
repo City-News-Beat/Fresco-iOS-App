@@ -73,7 +73,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [cell configureCell];
+//    [cell configureCellWithGallery:<#(FRSGallery *)#>];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{

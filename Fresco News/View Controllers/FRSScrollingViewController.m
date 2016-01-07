@@ -7,7 +7,6 @@
 //
 
 #import "FRSScrollingViewController.h"
-
 #import "UIFont+Fresco.h"
 
 @interface FRSScrollingViewController () <UIScrollViewDelegate>
@@ -36,6 +35,13 @@
     
     self.navigationController.navigationBar.topItem.titleView = titleLabel;
     // Do any additional setup after loading the view.
+}
+
+-(void)configureTableView{
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64 - 49)];
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)didReceiveMemoryWarning {
