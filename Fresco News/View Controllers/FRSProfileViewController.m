@@ -36,6 +36,8 @@
 
 @property (strong, nonatomic) NSArray *galleries;
 
+@property (nonatomic) NSInteger count;
+
 @end
 
 @implementation FRSProfileViewController
@@ -103,6 +105,7 @@
     self.tableView.backgroundColor = [UIColor frescoOrangeColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
 }
@@ -182,28 +185,25 @@
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
     [self.feedButton setTitle:@"FEED" forState:UIControlStateNormal];
-    [self.feedButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [self.feedButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [self.feedButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.feedButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.feedButton addTarget:self action:@selector(toggleSelectedTab:) forControlEvents:UIControlEventTouchUpInside];
-    [self.feedButton setSelected:YES];
+    [self.feedButton addTarget:self action:@selector(handleFeedbackButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.feedButton];
     
     self.likesButton = [[UIButton alloc] initWithFrame:CGRectOffset(self.feedButton.frame, self.feedButton.frame.size.width, 0)];
     [self.likesButton setTitle:@"LIKES" forState:UIControlStateNormal];
-    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [self.likesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.likesButton addTarget:self action:@selector(toggleSelectedTab:) forControlEvents:UIControlEventTouchUpInside];
+    [self.likesButton addTarget:self action:@selector(handleLikesButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.likesButton];
 }
 
--(void)toggleSelectedTab:(UIButton *)sender{
-    
-    if (sender.isSelected) return;
-    
-    [self.feedButton setSelected:!self.feedButton.isSelected];
-    [self.likesButton setSelected:!self.likesButton.isSelected];
+-(void)handleFeedbackButtonTapped{
+    NSLog(@"feedback button tapped");
+}
+
+-(void)handleLikesButtonTapped{
+    NSLog(@"likes button tapped");
 }
 
 #pragma mark - UITableView Delegate & DataSource
