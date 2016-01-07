@@ -88,12 +88,13 @@
 }
 
 -(void)configureImageViews{
-    for (NSInteger i = 0; i < 1; i++){
+    for (NSInteger i = 0; i < 5; i++){
         NSInteger xOrigin = i * self.frame.size.width;
         FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self.dataSource heightForImageView])];
         imageView.image = [UIImage imageNamed:@"temp-big"];
         imageView.backgroundColor = [UIColor whiteColor];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.clipsToBounds = YES;
         imageView.indexInScrollView = i;
         [self.scrollView addSubview:imageView];
     }
@@ -193,6 +194,8 @@
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height, self.scrollView.frame.size.width, self.frame.size.height - self.scrollView.frame.size.height - 44)];
     self.textView.textContainerInset = UIEdgeInsetsMake(12, 16, 0, 16);
     self.textView.textColor = [UIColor frescoDarkTextColor];
+    self.textView.editable = NO;
+    self.textView.scrollEnabled = NO;
     self.textView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.textView.font = [UIFont systemFontOfSize:15 weight:-1];
     self.textView.text = @"It was a humorously perilous business for both of us. For, before we proceed further, it must be said that the monkey-rope was fast at both ends; fast to Queequeg's broad canvas belt, and fast to my narrow leather one. So that for better or for worse, we two, for the time, were wedded; and should poor Queequeg sink to rise...";
@@ -204,9 +207,7 @@
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.textView.frame.origin.y + self.textView.frame.size.height) delegate:self];
     [self addSubview:self.actionBar];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.actionBar.frame.size.height - 0.5, self.actionBar.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [self.actionBar addSubview:line];
+    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, self.actionBar.frame.size.height - 0.5)]];
 }
 
 #pragma mark - Action Bar Delegate

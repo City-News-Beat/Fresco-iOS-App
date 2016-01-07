@@ -41,11 +41,12 @@
     self.window.rootViewController = [[SettingsViewController alloc] init];
 
 //    [self determineAppPath];
-//    self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSTabBarController alloc] init];
 
 
     
-    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+//    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+    
     
     return YES;
 }

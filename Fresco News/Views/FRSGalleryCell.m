@@ -8,6 +8,9 @@
 
 #import "FRSGalleryCell.h"
 
+#import "UIView+Helpers.h"
+#import "UIColor+Fresco.h"
+
 
 @implementation FRSGalleryCell
 
@@ -30,13 +33,18 @@
 }
 
 -(void)configureCell{
-    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) gallery:nil dataSource:self];
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:nil dataSource:self];
     self.galleryView.dataSource = self;
     [self addSubview:self.galleryView];
+    
+//    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height - 0.5)]];
+
 }
 
 -(NSInteger)heightForImageView{
-    return 250;
+    return 350;
 }
 
 -(NSInteger)numberOfLinesForTextView{

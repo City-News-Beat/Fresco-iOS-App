@@ -8,6 +8,8 @@
 
 #import "FRSProfileViewController.h"
 
+#import "FRSGalleryCell.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -37,7 +39,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
+    
+    
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
 }
 
 #pragma mark - UI Elements
@@ -45,17 +53,16 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self configureNavigationBar];
     [self configureTableView];
-    [self configureTopContainer];
 }
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
     self.navigationItem.title = @"@aesthetique";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(something)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
     
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(somethingone)];
-    UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(somethingtwo)];
+    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
+    UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
     editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
     self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
@@ -67,7 +74,7 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -82,8 +89,7 @@
     [self configureProfileImage];
     [self configureLabels];
     [self resizeProfileContainer];
-//    [self configureSectionView];
-    [self addBottomLineToView:self.profileContainer];
+
 }
 
 -(void)configureProfileImage{
@@ -140,14 +146,14 @@
 
 -(void)resizeProfileContainer{
     
-    CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6 + 43.5, 160 + 43.5);
+    CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6, 160);
     
     [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
 }
 
 -(void)configureSectionView{
-    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.size.height - 43.5, self.topContainer.frame.size.width, 43.5)];
-    [self.scrollView addSubview:self.sectionView];
+    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 43.5)];
+    self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
     [self.feedButton setTitle:@"FEED" forState:UIControlStateNormal];
@@ -167,12 +173,6 @@
     [self.sectionView addSubview:self.likesButton];
 }
 
--(void)addBottomLineToView:(UIView *)view{
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [view addSubview:line];
-}
-
 -(void)toggleSelectedTab:(UIButton *)sender{
     
     if (sender.isSelected) return;
@@ -187,32 +187,43 @@
     return 2;
 }
 
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section == 0){
+        return 1;
+    }
+    else {
+        return 10;
+    }
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section == 0){
         return 0;
     }
     else{
-        return 44;
+        return 20;
     }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0){
-        return
+    if (indexPath.section == 0){
+        return self.profileContainer.frame.size.height;
+    }
+    else {
+        return 600;
     }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell;
-    
-    if (indexPath.row == 0){
+    if (indexPath.section == 0){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
     }
     else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
         if (!cell){
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         }
     }
     return cell;
@@ -220,17 +231,52 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0){
-
+    if (indexPath.section== 0){
+        [cell addSubview:self.profileContainer];
+        cell.userInteractionEnabled = NO;
     }
     else {
-        
+        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        [galCell configureCell];
     }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
+    UIView *view;
+    
+    if (section == 0){
+        view = [UIView new];
+    }
+    else if (section == 1){
+        [self configureSectionView];
+        
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+        [view addSubview:self.sectionView];
+        [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+    }
+    
+    return view;
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0) return;
+}
+
+#pragma mark - Navigation
+
+-(void)showNotifications{
+    
+}
+
+-(void)showSettings{
+    
+}
+
+-(void)showEditProfile{
+    
+}
+
 
 
 - (void)didReceiveMemoryWarning {

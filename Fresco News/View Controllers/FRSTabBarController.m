@@ -9,6 +9,9 @@
 #import "FRSTabBarController.h"
 
 #import "FRSOnboardingViewController.h"
+#import "FRSNavigationController.h"
+
+#import "FRSProfileViewController.h"
 
 #import "UIColor+Fresco.h"
 
@@ -39,6 +42,7 @@
 
 -(void)configureAppearance{
     [self.tabBar setBarTintColor:[UIColor frescoTabBarColor]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 -(void)configureTabBarItems{
@@ -69,7 +73,7 @@
     UIViewController *vc1 = [[UIViewController alloc] init];
     UIViewController *vc2 = [[UIViewController alloc] init];
     UIViewController *vc3 = [[UIViewController alloc] init];
-    UIViewController *vc4 = [[UIViewController alloc] init];
+    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }

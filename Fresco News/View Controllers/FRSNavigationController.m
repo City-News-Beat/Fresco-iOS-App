@@ -30,6 +30,7 @@
     
     self.navigationBar.backIndicatorImage = backImg;
     self.navigationBar.backIndicatorTransitionMaskImage = backImg;
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     // Do any additional setup after loading the view.
 }
 
