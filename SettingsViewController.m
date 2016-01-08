@@ -45,9 +45,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.bounces = NO;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     [self.view addSubview:self.tableView];
@@ -390,6 +387,7 @@
             switch (indexPath.row) {
                 case 0:
                     [cell configureAssignmentCell];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
                     [cell configureDefaultCellWithTitle:@"Notification radius" withSecondTitle:@"2 mi"];
@@ -468,7 +466,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     
 }
 

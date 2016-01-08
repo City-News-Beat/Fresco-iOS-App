@@ -96,15 +96,14 @@
     notificationSwitch.center = CGPointMake([UIScreen mainScreen].bounds.size.width - notificationSwitch.bounds.size.width/2 - 13.5, notificationSwitch.bounds.size.height/2 + 14);
     [self addSubview:notificationSwitch];
     
-    //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 61, self.bounds.size.width, 1)];
-    //    view.backgroundColor = [UIColor whiteColor];
-    //    [self addSubview:view];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 61, self.bounds.size.width, 1)];
+        view.backgroundColor = [UIColor whiteColor];
+        [self addSubview:view];
     
 }
 
 
 -(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes{
-    
     
     CGFloat leftPadding = 16;
     CGFloat rightPadding = 10;
