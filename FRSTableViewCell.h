@@ -17,10 +17,6 @@
 
 @interface FRSTableViewCell : UITableViewCell
 
-//@property (nonatomic) FRSSettingCellType cellType;
-
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
-
 -(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes;
 
 -(void)configureDefaultCellWithTitle:(NSString *)title withSecondTitle:(NSString *)secondTitle;
@@ -31,7 +27,7 @@
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
--(void)configureEmptyCellSpace;
+-(void)configureEmptyCellSpace:(BOOL)yes;
 
 -(void)configureLogOut;
 

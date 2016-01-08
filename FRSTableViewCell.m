@@ -13,40 +13,9 @@
 
 @interface FRSTableViewCell()
 
-@property (strong, nonatomic) UILabel *descriptionLabel;
-
 @end
 
 @implementation FRSTableViewCell
-
-
--(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
-    
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    
-    if (self){
-        
-        if ([reuseIdentifier isEqualToString:@"default-cell"]){
-            //            [self setupDefaultCell];
-        }
-        else if ([reuseIdentifier isEqualToString:@"profile-cell"]){
-            //            [self setupProfileCell];
-        }
-        else {
-            
-        }
-        
-        self.descriptionLabel = [[UILabel alloc] init];
-        self.descriptionLabel.textColor = [UIColor blackColor];
-        self.descriptionLabel.font = [UIFont fontWithName:@"Arial" size:12];
-        
-        [self addSubview:self.descriptionLabel];
-        
-    }
-    
-    return self;
-}
-
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag{
     
@@ -56,9 +25,10 @@
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(56, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding) - 10, self.frame.size.height)];
     label.text = title;
     label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+//    label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     label.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:label];
-
+    
     if (tag == 1){
         UIImageView *socialIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"twitter-icon-filled"]];
         socialIV.frame = CGRectMake(16, 10 ,24,24);
@@ -75,31 +45,30 @@
         [socialIV sizeToFit];
         [self addSubview:socialIV];
     }
-
- 
 }
 
-
-
-
 -(void)configureAssignmentCell{
-    self.tintColor = [UIColor clearColor];
-    self.textLabel.text = @"ASSIGNMENT NOTIFICATIONS";
-    self.textLabel.font = [UIFont notaBoldWithSize:15];
-    self.detailTextLabel.text = @"We’ll tell you about paid photo ops nearby";
-    self.detailTextLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
-    self.detailTextLabel.frame = CGRectMake(16, 36, self.bounds.size.width, 14);
-    self.detailTextLabel.textColor = [UIColor frescoMediumTextColor];
+    UILabel *textLabel = [UILabel new];
+    textLabel.frame = CGRectMake(16, 15, 185, 17);
+    textLabel.text = @"ASSIGNMENT NOTIFICATIONS";
+    textLabel.font = [UIFont notaBoldWithSize:15];
+    [self addSubview:textLabel];
+    
+    UILabel *detailTextLabel = [UILabel new];
+    detailTextLabel.text = @"We’ll tell you about paid photo ops nearby";
+    detailTextLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    detailTextLabel.frame = CGRectMake(16, 35, self.bounds.size.width, 14);
+    detailTextLabel.textColor = [UIColor frescoMediumTextColor];
+    [self addSubview:detailTextLabel];
     
     UISwitch *notificationSwitch = [[UISwitch alloc] init];
     notificationSwitch.center = self.center;
     notificationSwitch.center = CGPointMake([UIScreen mainScreen].bounds.size.width - notificationSwitch.bounds.size.width/2 - 13.5, notificationSwitch.bounds.size.height/2 + 14);
     [self addSubview:notificationSwitch];
     
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 61, self.bounds.size.width, 1)];
-        view.backgroundColor = [UIColor whiteColor];
-        [self addSubview:view];
-    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 61, self.bounds.size.width, 1)];
+    view.backgroundColor = [UIColor whiteColor];
+    [self addSubview:view];
 }
 
 
@@ -115,10 +84,10 @@
     [self addSubview:label];
     
     if (yes){
-    UIImageView *carrotIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
-    carrotIV.frame = CGRectMake(label.bounds.size.width +leftPadding, label.bounds.size.height/2 -7, 24, 24);
-    [carrotIV sizeToFit];
-    [self addSubview:carrotIV];
+        UIImageView *carrotIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
+        carrotIV.frame = CGRectMake(label.bounds.size.width +leftPadding, label.bounds.size.height/2 -7, 24, 24);
+        [carrotIV sizeToFit];
+        [self addSubview:carrotIV];
     }
     
 }
@@ -145,10 +114,6 @@
     secondLabel.textColor = [UIColor frescoMediumTextColor];
     [self addSubview:secondLabel];
     
-    //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, -1, self.bounds.size.width, 3)];
-    //    view.backgroundColor = [UIColor whiteColor];
-    //    [self addSubview:view];
-    
 }
 
 -(void)configureCellWithUsername:(NSString *)username{
@@ -166,18 +131,10 @@
     carrotIV.frame = CGRectMake(label.bounds.size.width+7, label.bounds.size.height/2 -7, 24, 24);
     [carrotIV sizeToFit];
     [self addSubview:carrotIV];
-    
-}
 
--(void)configureEmptyCellSpace{
-    
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
 }
 
 -(void)configureLogOut{
-    
     
     UILabel *logOut = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - 27, self.bounds.size.height/2 - 6, 54, 17)];
     logOut.text = @"LOG OUT";
@@ -187,6 +144,16 @@
     
 }
 
-
+-(void)configureEmptyCellSpace:(BOOL)yes{
+    
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if(yes){
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 12, self.bounds.size.width, 1)];
+    view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self addSubview:view];
+    }
+}
 
 @end
