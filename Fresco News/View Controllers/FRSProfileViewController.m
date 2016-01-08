@@ -108,6 +108,7 @@
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
+    
 }
 
 -(void)createProfileSection{
@@ -167,7 +168,6 @@
     self.bioLabel.numberOfLines = 0;
     self.bioLabel.text = @"Yo, I'm Kobe Bryant. AKA the Black Mamba. Y'all need to bow down before my greatness. Also I like video games. Like 2K15. I pick the Lakers, and then I just play as myself and never pass the ball and score buckets, bc I'm fucking Kobe Bryant.";
     self.bioLabel.textColor = [UIColor whiteColor];
-    self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-1];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
 }
@@ -180,7 +180,7 @@
 }
 
 -(void)configureSectionView{
-    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 43.5)];
+    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
@@ -193,17 +193,24 @@
     self.likesButton = [[UIButton alloc] initWithFrame:CGRectOffset(self.feedButton.frame, self.feedButton.frame.size.width, 0)];
     [self.likesButton setTitle:@"LIKES" forState:UIControlStateNormal];
     [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    self.likesButton.alpha = 0.7;
     [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.likesButton addTarget:self action:@selector(handleLikesButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.likesButton];
 }
 
 -(void)handleFeedbackButtonTapped{
-    NSLog(@"feedback button tapped");
+    if (self.feedButton.alpha > 0.7) return; //The button is already selected
+    
+    self.feedButton.alpha = 1.0;
+    self.likesButton.alpha = 0.7;
 }
 
 -(void)handleLikesButtonTapped{
-    NSLog(@"likes button tapped");
+    if (self.likesButton.alpha > 0.7) return; //The button is already selected
+    
+    self.likesButton.alpha = 1.0;
+    self.feedButton.alpha = 0.7;
 }
 
 #pragma mark - UITableView Delegate & DataSource
@@ -218,6 +225,7 @@
     }
     else {
         return self.galleries.count;
+//        return 10;
     }
 }
 
@@ -226,7 +234,7 @@
         return 0;
     }
     else{
-        return 20;
+        return 44;
     }
 }
 
@@ -252,7 +260,6 @@
         }
     }
     return cell;
-    
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -21,6 +21,7 @@
 //views
 #import "FRSContentActionsBar.h"
 
+
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionsBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -88,7 +89,7 @@
 }
 
 -(void)configureImageViews{
-    for (NSInteger i = 0; i < 5; i++){
+    for (NSInteger i = 0; i < self.gallery.posts.count; i++){
         NSInteger xOrigin = i * self.frame.size.width;
         FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self.dataSource heightForImageView])];
         imageView.image = [UIImage imageNamed:@"temp-big"];

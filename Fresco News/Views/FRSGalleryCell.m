@@ -36,7 +36,7 @@
 -(void)configureCell{
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:nil dataSource:self];
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery dataSource:self];
     self.galleryView.dataSource = self;
     [self addSubview:self.galleryView];
     

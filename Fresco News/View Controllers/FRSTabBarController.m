@@ -12,6 +12,7 @@
 #import "FRSNavigationController.h"
 
 #import "FRSProfileViewController.h"
+#import "FRSHomeViewController.h"
 
 #import "UIColor+Fresco.h"
 
@@ -69,8 +70,8 @@
 }
 
 -(void)configureViewControllers{
-    UIViewController *vc = [[FRSOnboardingViewController alloc] init];
-    UIViewController *vc1 = [[UIViewController alloc] init];
+    UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
+    UIViewController *vc1 = [[FRSOnboardingViewController alloc] init];
     UIViewController *vc2 = [[UIViewController alloc] init];
     UIViewController *vc3 = [[UIViewController alloc] init];
     UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];

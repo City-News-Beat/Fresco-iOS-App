@@ -9,6 +9,9 @@
 #import "FRSHomeViewController.h"
 
 #import "FRSGalleryCell.h"
+#import "FRSDataManager.h"
+
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -41,6 +44,25 @@
 }
 
 -(void)configureDataSource{
+    
+    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
+        if (!responseObject.count){
+            return;
+        }
+        
+        NSMutableArray *mArr = [NSMutableArray new];
+        
+        NSArray *galleries = responseObject;
+        for (NSDictionary *dict in galleries){
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            [mArr addObject:gallery];
+        }
+        
+        self.highlights = [mArr copy];
+        self.dataSource = [self.highlights copy];
+        [self.tableView reloadData];
+    }];
     
 }
 
@@ -77,8 +99,8 @@
     
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(nonnull UITableViewCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
+    [cell configureCell];
 }
 
 - (void)didReceiveMemoryWarning {

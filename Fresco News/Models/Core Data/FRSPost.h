@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
 @class FRSGallery, FRSUser;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Insert code here to declare functionality of your managed object subclass
 
++(instancetype)postWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict;
 
 @end
