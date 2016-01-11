@@ -1,32 +1,31 @@
 //
-//  FRSUsernameTableViewController.m
+//  FRSEmailViewController.m
 //  Fresco
 //
 //  Created by Omar Elfanek on 1/11/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSUsernameTableViewController.h"
+#import "FRSEmailViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 
-@interface FRSUsernameTableViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface FRSEmailViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
 
 @end
 
-@implementation FRSUsernameTableViewController
+@implementation FRSEmailViewController
 
 -(void)viewDidLoad{
     [super viewDidLoad];
     
     [self configureTableView];
-    
 }
 
 -(void)configureTableView{
-    self.title = @"USERNAME";
+    self.title = @"EMAIL ADDRESS";
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -46,7 +45,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return 2;
 }
 
 
@@ -74,15 +73,25 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username"];
-    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
+    switch (indexPath.row) {
+                case 0:
+                    [cell configureEditableCellWithDefaultText:@"New email"];
+                    break;
+                
+                case 1:
+                    [cell configureEditableCellWithDefaultText:@"Password"];
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109];
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    
 }
-
-
-
-
 
 
 @end

@@ -13,8 +13,9 @@
 #import "FRSAlertView.h"
 
 //view controllers
-#import "FRSUsernameTableViewController.h"
+#import "FRSUsernameViewController.h"
 #import "FRSPromoCodeViewController.h"
+#import "FRSEmailViewController.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -261,13 +262,17 @@
                 case 0:
                     NSLog(@"username");
                 {
-                    FRSUsernameTableViewController *username = [[FRSUsernameTableViewController alloc] init];
+                    FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
                     [self.navigationController pushViewController:username animated:YES];
                     self.navigationItem.title = @"";
                 }
                     break;
                 case 1:
-                    NSLog(@"email");
+                {
+                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
+                    [self.navigationController pushViewController:email animated:YES];
+                    self.navigationItem.title = @"";
+                }
                     break;
                 case 2:
                     NSLog(@"password");

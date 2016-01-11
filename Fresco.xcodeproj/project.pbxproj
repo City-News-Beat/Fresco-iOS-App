@@ -19,7 +19,8 @@
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
 		07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */; };
 		07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */; };
-		07B38BDE1C443C5A00797270 /* FRSUsernameTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BDD1C443C5A00797270 /* FRSUsernameTableViewController.m */; };
+		07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */; };
+		07B38BE11C44562800797270 /* FRSEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BE01C44562800797270 /* FRSEmailViewController.m */; };
 		07F098DF1C400C40000F4CA6 /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */; };
 		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
 		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
@@ -183,8 +184,10 @@
 		07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPromoCodeViewController.h; sourceTree = "<group>"; };
 		07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPromoCodeViewController.m; sourceTree = "<group>"; };
 		07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SanFranciscoText-Light.otf"; sourceTree = "<group>"; };
-		07B38BDC1C443C5A00797270 /* FRSUsernameTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUsernameTableViewController.h; sourceTree = "<group>"; };
-		07B38BDD1C443C5A00797270 /* FRSUsernameTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUsernameTableViewController.m; sourceTree = "<group>"; };
+		07B38BDC1C443C5A00797270 /* FRSUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUsernameViewController.h; sourceTree = "<group>"; };
+		07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUsernameViewController.m; sourceTree = "<group>"; };
+		07B38BDF1C44562800797270 /* FRSEmailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSEmailViewController.h; sourceTree = "<group>"; };
+		07B38BE01C44562800797270 /* FRSEmailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSEmailViewController.m; sourceTree = "<group>"; };
 		07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTableViewCell.h; sourceTree = "<group>"; };
 		07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTableViewCell.m; sourceTree = "<group>"; };
 		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
@@ -414,8 +417,10 @@
 				073F624F1C3D722400E07977 /* FRSSettingsViewController.m */,
 				07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */,
 				07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */,
-				07B38BDC1C443C5A00797270 /* FRSUsernameTableViewController.h */,
-				07B38BDD1C443C5A00797270 /* FRSUsernameTableViewController.m */,
+				07B38BDC1C443C5A00797270 /* FRSUsernameViewController.h */,
+				07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */,
+				07B38BDF1C44562800797270 /* FRSEmailViewController.h */,
+				07B38BE01C44562800797270 /* FRSEmailViewController.m */,
 				07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */,
 				07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */,
 			);
@@ -1229,7 +1234,8 @@
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				65046DFF1C3EE8CA003E02B5 /* FRSDataManager.m in Sources */,
-				07B38BDE1C443C5A00797270 /* FRSUsernameTableViewController.m in Sources */,
+				07B38BE11C44562800797270 /* FRSEmailViewController.m in Sources */,
+				07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,

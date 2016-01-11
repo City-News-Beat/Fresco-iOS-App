@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSUsernameTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSUsernameViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end
