@@ -24,8 +24,8 @@
     
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(56, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding) - 10, self.frame.size.height)];
     label.text = title;
-    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-//    label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
+//    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15];
     label.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:label];
     

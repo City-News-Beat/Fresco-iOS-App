@@ -171,6 +171,9 @@
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES];
                     break;
+                
+                default:
+                    return;
             }
             break;
         case 1:
