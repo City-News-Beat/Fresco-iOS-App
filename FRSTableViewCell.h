@@ -19,6 +19,8 @@
 
 -(void)configureAssignmentCell;
 
+-(void)configureEditableCellWithDefaultText:(NSString *)string;
+
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
 -(void)configureEmptyCellSpace:(BOOL)yes;

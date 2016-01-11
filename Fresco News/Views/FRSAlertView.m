@@ -46,10 +46,10 @@
         CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
         self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
         self.overlayView.backgroundColor = [UIColor blackColor];
-        self.overlayView.alpha = .26;
+        self.overlayView.alpha = 0;
         [self addSubview:(self.overlayView)];
         
-        //        /* Alert Box */
+        /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
 
         

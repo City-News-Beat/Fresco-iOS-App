@@ -11,7 +11,7 @@
 #import "UIColor+Fresco.h"
 
 
-@interface FRSTableViewCell()
+@interface FRSTableViewCell() 
 
 @end
 
@@ -132,7 +132,8 @@
     [carrotIV sizeToFit];
     [self addSubview:carrotIV];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, -1, self.bounds.size.width, 0.5)];
+    view.alpha = 0.5;
     view.backgroundColor = [UIColor frescoLightTextColor];
     [self addSubview:view];
 
@@ -158,6 +159,34 @@
     view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self addSubview:view];
     }
+}
+
+-(void)configureEditableCellWithDefaultText:(NSString *)string{
+    
+    CGFloat leftPadding = 16;
+    CGFloat rightPadding = 10;
+    UITextField *textField  = [[UITextField alloc] initWithFrame:CGRectMake(leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding),44)];
+    textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    textField.placeholder = @"New username";
+    textField.textColor = [UIColor frescoDarkTextColor];
+    textField.tintColor = [UIColor frescoBlueColor];
+    [self addSubview:textField];    
+    
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
+    bottom.alpha = 0.5;
+    bottom.backgroundColor = [UIColor frescoLightTextColor];
+    [self addSubview:bottom];
+    
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if(range.length + range.location > textField.text.length)
+    {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 25;
 }
 
 @end

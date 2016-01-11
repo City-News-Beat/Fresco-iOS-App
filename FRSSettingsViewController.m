@@ -13,7 +13,9 @@
 #import "FRSAlertView.h"
 
 //view controllers
+#import "FRSUsernameTableViewController.h"
 #import "FRSPromoCodeViewController.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -258,6 +260,11 @@
             switch (indexPath.row) {
                 case 0:
                     NSLog(@"username");
+                {
+                    FRSUsernameTableViewController *username = [[FRSUsernameTableViewController alloc] init];
+                    [self.navigationController pushViewController:username animated:YES];
+                    self.navigationItem.title = @"";
+                }
                     break;
                 case 1:
                     NSLog(@"email");
