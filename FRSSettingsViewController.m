@@ -173,7 +173,7 @@
                     break;
                 
                 default:
-                    return;
+                    break;
             }
             break;
         case 1:
