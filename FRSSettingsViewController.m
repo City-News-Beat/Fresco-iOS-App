@@ -12,6 +12,9 @@
 #import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
 
+//view controllers
+#import "FRSPromoCodeViewController.h"
+
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -28,8 +31,6 @@
 
 -(void)configureNavBar{
     self.title = @"SETTINGS";
-    
-
 }
 
 -(void)configureTableView{
@@ -309,6 +310,13 @@
             break;
         case 6:
             NSLog(@"promo");
+            
+        {
+            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
+            [self.navigationController pushViewController:promo animated:YES];
+            self.navigationItem.title = @"";
+        }
+            
             break;
         case 7:
             //Empty
@@ -326,6 +334,9 @@
                     break;
                 case 2:
                     NSLog(@"disable account");
+                {
+                    
+                }
                     break;
             }
             break;

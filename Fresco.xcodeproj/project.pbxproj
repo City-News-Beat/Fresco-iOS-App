@@ -17,6 +17,8 @@
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
+		07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */; };
+		07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */; };
 		07F098DF1C400C40000F4CA6 /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */; };
 		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
 		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
@@ -177,6 +179,9 @@
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		079CEF201C2874D500E559F3 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestViewController.h; path = "Fresco News/View Controllers/TestViewController.h"; sourceTree = SOURCE_ROOT; };
 		079CEF211C2874D500E559F3 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestViewController.m; path = "Fresco News/View Controllers/TestViewController.m"; sourceTree = SOURCE_ROOT; };
+		07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPromoCodeViewController.h; sourceTree = "<group>"; };
+		07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPromoCodeViewController.m; sourceTree = "<group>"; };
+		07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SanFranciscoText-Light.otf"; sourceTree = "<group>"; };
 		07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTableViewCell.h; sourceTree = "<group>"; };
 		07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTableViewCell.m; sourceTree = "<group>"; };
 		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
@@ -391,6 +396,7 @@
 		072A9F3D1C24914F00F8CCE0 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */,
 				072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */,
 				072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */,
 				072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */,
@@ -405,6 +411,8 @@
 				073F624F1C3D722400E07977 /* FRSSettingsViewController.m */,
 				07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */,
 				07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */,
+				07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */,
+				07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -1024,6 +1032,7 @@
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
+				07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
@@ -1231,6 +1240,7 @@
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				65201A1C1C3D7CD800B31089 /* ViewController.m in Sources */,
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
+				07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,

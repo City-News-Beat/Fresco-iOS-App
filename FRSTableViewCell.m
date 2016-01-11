@@ -131,6 +131,10 @@
     carrotIV.frame = CGRectMake(label.bounds.size.width+7, label.bounds.size.height/2 -7, 24, 24);
     [carrotIV sizeToFit];
     [self addSubview:carrotIV];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+    view.backgroundColor = [UIColor frescoLightTextColor];
+    [self addSubview:view];
 
 }
 
@@ -145,7 +149,7 @@
 }
 
 -(void)configureEmptyCellSpace:(BOOL)yes{
-    
+
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     

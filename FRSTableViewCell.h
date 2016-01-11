@@ -8,12 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-//typedef NS_ENUM(NSUInteger, FRSSettingCellType) {
-//    FRSSettingCellTypeDefault = 0,
-//    FRSSettingCellTypeLarge,
-//    FRSSettingCellTypeSocial,
-//};
-
 
 @interface FRSTableViewCell : UITableViewCell
 
