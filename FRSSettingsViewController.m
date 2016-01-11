@@ -1,23 +1,23 @@
 //
-//  SettingsViewController.m
+//  FRSSettingsViewController
 //  Fresco
 //
 //  Created by Omar Elfanek on 1/6/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "SettingsViewController.h"
+#import "FRSSettingsViewController.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSTableViewCell.h"
 
-@interface SettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 
 @end
 
-@implementation SettingsViewController
+@implementation FRSSettingsViewController
 
 -(void)viewDidLoad{
     [super viewDidLoad];

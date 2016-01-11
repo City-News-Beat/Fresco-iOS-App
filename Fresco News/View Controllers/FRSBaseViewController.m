@@ -43,6 +43,30 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)hideTabBarAnimated:(BOOL)animated{
+    if (!self.tabBarController.tabBar) return;
+
+    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height;
+    
+    if (self.tabBarController.tabBar.frame.origin.y == yOrigin) return;
+    
+    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, self.tabBarController.tabBar.frame.size.width, self.tabBarController.tabBar.frame.size.height);
+    } completion:nil];
+}
+
+-(void)showTabBarAnimated:(BOOL)animated{
+    if (!self.tabBarController.tabBar) return;
+    
+    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - self.tabBarController.tabBar.frame.size.height;
+    
+    if (self.tabBarController.tabBar.frame.origin.y == yOrigin) return;
+    
+    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, self.tabBarController.tabBar.frame.size.width, self.tabBarController.tabBar.frame.size.height);
+    } completion:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

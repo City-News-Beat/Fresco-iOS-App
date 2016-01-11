@@ -1,5 +1,5 @@
 //
-//  SettingsViewController.h
+//  FRSSettingsViewController.h
 //  Fresco
 //
 //  Created by Omar Elfanek on 1/6/16.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSettingsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

@@ -8,6 +8,9 @@
 
 #import "FRSProfileViewController.h"
 
+//View Controllers
+#import "FRSSettingsViewController.h"
+
 #import "FRSGalleryCell.h"
 #import "FRSDataManager.h"
 
@@ -51,6 +54,11 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self showTabBarAnimated:YES];
+}
+
 -(void)fetchGalleries{
     [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
         if (!responseObject.count){
@@ -69,10 +77,6 @@
         self.galleries = [mArr copy];
         [self.tableView reloadData];
     }];
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
 }
 
 #pragma mark - UI Elements
@@ -323,7 +327,11 @@
 }
 
 -(void)showSettings{
-    
+    self.navigationController.hidesBottomBarWhenPushed = YES;
+    FRSSettingsViewController *settingsVC = [[FRSSettingsViewController alloc] init];
+    [self.navigationController pushViewController:settingsVC animated:YES];
+    self.navigationItem.title = @"";
+    [self hideTabBarAnimated:YES];
 }
 
 -(void)showEditProfile{

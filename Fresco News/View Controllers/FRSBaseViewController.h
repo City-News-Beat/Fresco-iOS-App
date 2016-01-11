@@ -19,4 +19,8 @@
 
 -(void)removeNavigationBarLine;
 
+-(void)hideTabBarAnimated:(BOOL)animated;
+
+-(void)showTabBarAnimated:(BOOL)animated;
+
 @end

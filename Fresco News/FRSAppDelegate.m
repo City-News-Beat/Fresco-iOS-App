@@ -12,7 +12,7 @@
 #import "FRSOnboardingViewController.h"
 
 #import "TestViewController.h"
-#import "SettingsViewController.h"
+#import "FRSSettingsViewController.h"
 
 #import "FRSNavigationController.h"
 
@@ -35,17 +35,18 @@
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     
+    [self configureCoreDataStack];
+    
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
 //    self.window.rootViewController = [[TestViewController alloc] init];
-//    self.window.rootViewController = [[SettingsViewController alloc] init];
 
 //    [self determineAppPath];
-//    self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSTabBarController alloc] init];
 
 
     
-    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+//    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
     return YES;
 }
