@@ -168,6 +168,7 @@
     UITextField *textField  = [[UITextField alloc] initWithFrame:CGRectMake(leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding),44)];
     textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     textField.placeholder = string;
+    textField.delegate = self;
     textField.textColor = [UIColor frescoDarkTextColor];
     textField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:textField];    
@@ -202,8 +203,6 @@
 -(void)test{
     NSLog(@"test");
 }
-
-
 
 
 @end

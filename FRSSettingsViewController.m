@@ -6,6 +6,8 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
+
 #import "FRSSettingsViewController.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
@@ -16,6 +18,7 @@
 #import "FRSUsernameViewController.h"
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"
+#import "FRSPasswordChangeViewController.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -275,7 +278,11 @@
                 }
                     break;
                 case 2:
-                    NSLog(@"password");
+                {
+                    FRSPasswordChangeViewController *password = [[FRSPasswordChangeViewController alloc] init];
+                    [self.navigationController pushViewController:password animated:YES];
+                    self.navigationItem.title = @"";
+                }
                     break;
                 default:
                     break;
@@ -342,6 +349,7 @@
                 }
                     break;
                 case 1:
+                    [self presentModalMailComposerViewController:YES];
                     NSLog(@"email support");
                     break;
                 case 2:
@@ -366,8 +374,26 @@
 
 
 
+- (void)presentModalMailComposerViewController:(BOOL)animated {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] init];
+        composeViewController.mailComposeDelegate = self;
+        
+        [composeViewController setSubject:@"Help!"];
+        [composeViewController setMessageBody:@"I've fallen and I can't get up!!!" isHTML:YES];
+        [composeViewController setToRecipients:@[@"support@fresconews.com"]];
+        
+        [self presentViewController:composeViewController animated:animated completion:nil];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"<#Cannot Send Mail Message#>", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+    }
+}
 
-
+-(void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 
 
 

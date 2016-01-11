@@ -1,32 +1,32 @@
 //
-//  FRSUsernameTableViewController.m
+//  FRSPasswordChangeViewController.m
 //  Fresco
 //
 //  Created by Omar Elfanek on 1/11/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSUsernameViewController.h"
+#import "FRSPasswordChangeViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 
-@interface FRSUsernameViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface FRSPasswordChangeViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
 
 @end
 
-@implementation FRSUsernameViewController
+@implementation FRSPasswordChangeViewController
 
 -(void)viewDidLoad{
     [super viewDidLoad];
     
     [self configureTableView];
-    
 }
 
 -(void)configureTableView{
-    self.title = @"USERNAME";
+    self.title = @"EMAIL ADDRESS";
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
@@ -45,7 +45,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return 3;
 }
 
 
@@ -73,16 +73,28 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username"];
-    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
+    switch (indexPath.row) {
+        case 0:
+            [cell configureEditableCellWithDefaultText:@"Current password"];
+            break;
+            
+        case 1:
+            [cell configureEditableCellWithDefaultText:@"New password"];
+            break;
+        
+        case 2:
+            [cell configureEditableCellWithDefaultText:@"Confirm new password"];
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+            break;
+            
+        default:
+            break;
+    }
+    
+    
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    
 }
-
-
-
-
-
-
 
 @end

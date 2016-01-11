@@ -21,6 +21,7 @@
 		07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */; };
 		07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */; };
 		07B38BE11C44562800797270 /* FRSEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BE01C44562800797270 /* FRSEmailViewController.m */; };
+		07B38BE41C44598F00797270 /* FRSPasswordChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BE31C44598F00797270 /* FRSPasswordChangeViewController.m */; };
 		07F098DF1C400C40000F4CA6 /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */; };
 		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
 		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
@@ -188,6 +189,8 @@
 		07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUsernameViewController.m; sourceTree = "<group>"; };
 		07B38BDF1C44562800797270 /* FRSEmailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSEmailViewController.h; sourceTree = "<group>"; };
 		07B38BE01C44562800797270 /* FRSEmailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSEmailViewController.m; sourceTree = "<group>"; };
+		07B38BE21C44598F00797270 /* FRSPasswordChangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPasswordChangeViewController.h; sourceTree = "<group>"; };
+		07B38BE31C44598F00797270 /* FRSPasswordChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPasswordChangeViewController.m; sourceTree = "<group>"; };
 		07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTableViewCell.h; sourceTree = "<group>"; };
 		07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTableViewCell.m; sourceTree = "<group>"; };
 		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
@@ -421,6 +424,8 @@
 				07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */,
 				07B38BDF1C44562800797270 /* FRSEmailViewController.h */,
 				07B38BE01C44562800797270 /* FRSEmailViewController.m */,
+				07B38BE21C44598F00797270 /* FRSPasswordChangeViewController.h */,
+				07B38BE31C44598F00797270 /* FRSPasswordChangeViewController.m */,
 				07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */,
 				07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */,
 			);
@@ -1237,6 +1242,7 @@
 				07B38BE11C44562800797270 /* FRSEmailViewController.m in Sources */,
 				07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
+				07B38BE41C44598F00797270 /* FRSPasswordChangeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
