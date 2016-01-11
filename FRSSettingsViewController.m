@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSTableViewCell.h"
+#import "FRSAlertView.h"
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -27,6 +28,8 @@
 
 -(void)configureNavBar{
     self.title = @"SETTINGS";
+    
+
 }
 
 -(void)configureTableView{
@@ -158,6 +161,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
@@ -248,29 +252,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    //    switch (indexPath.section) {
-    //        case 0:
-    //            switch (indexPath.row) {
-    //                case 0:
-    //                    NSLog(@"username");
-    //                    break;
-    //                case 1:
-    //                    NSLog(@"email");
-    //                    break;
-    //                case 2:
-    //                    NSLog(@"password");
-    //                default:
-    //                    break;
-    //            }
-    //            break;
-    //
-    //        case 1:
-    //            NSLog(@"o");
-    //            break;
-    //    }
-    //
-    
-    
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
@@ -283,7 +264,6 @@
                 case 2:
                     NSLog(@"password");
                     break;
-                    
                 default:
                     break;
             }
@@ -336,7 +316,10 @@
         case 8:
             switch (indexPath.row) {
                 case 0:
-                    NSLog(@"logout");
+                {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We’ll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" delegate:self];
+                    [alert show];
+                }
                     break;
                 case 1:
                     NSLog(@"email support");
@@ -352,11 +335,6 @@
         default:
             break;
     }
-    
-    
-    
-    
-    
 }
 
 
