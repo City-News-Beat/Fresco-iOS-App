@@ -23,4 +23,6 @@
 
 -(void)showTabBarAnimated:(BOOL)animated;
 
+-(void)popViewController;
+
 @end

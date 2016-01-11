@@ -101,5 +101,10 @@
     return line;
 }
 
+-(void)addFixedShadow{
+    [self addShadowWithColor:[UIColor frescoShadowColor] radius:0 offset:CGSizeMake(0, 0)];
+    self.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.frame.size.height/3].CGPath;
+}
+
 
 @end

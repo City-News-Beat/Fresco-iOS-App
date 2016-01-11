@@ -22,18 +22,25 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self configureTableView];
-    [self configureNavBar];
-    
 }
 
--(void)configureNavBar{
-    self.title = @"SETTINGS";
+-(void)configureNavigationBar{
+    [super configureNavigationBar];
+    [self configureBackButton];
+    self.navigationItem.title = @"SETTINGS";
+}
+
+-(void)popViewController{
+    [super popViewController];
+    [self showTabBarAnimated:YES];
 }
 
 -(void)configureTableView{
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;

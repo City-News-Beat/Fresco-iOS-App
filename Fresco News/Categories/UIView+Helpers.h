@@ -77,6 +77,8 @@
 */
 -(void)addShadowWithColor:(UIColor *)color radius:(CGFloat)radius offset:(CGSize)offset;
 
+-(void)addFixedShadow;
+
 +(UIView *)lineAtPoint:(CGPoint)point;
 
 @end

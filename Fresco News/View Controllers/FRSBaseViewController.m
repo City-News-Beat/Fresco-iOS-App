@@ -8,8 +8,6 @@
 
 #import "FRSBaseViewController.h"
 
-
-
 @interface FRSBaseViewController ()
 
 @end
@@ -27,6 +25,8 @@
     self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+//    [self configureBackButton];
 }
 
 -(void)removeNavigationBarLine{
@@ -36,7 +36,7 @@
 
 -(void)configureBackButton{
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    self.navigationItem.backBarButtonItem = backItem;
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 -(void)popViewController{

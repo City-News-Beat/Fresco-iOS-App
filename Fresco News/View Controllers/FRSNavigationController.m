@@ -25,11 +25,10 @@
     self.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
     
-    UIImage *backImg = [UIImage imageNamed:@"back-arrow-light"];
-    backImg = [backImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
-    self.navigationBar.backIndicatorImage = backImg;
-    self.navigationBar.backIndicatorTransitionMaskImage = backImg;
+//    UIImage *backImg = [UIImage imageNamed:@"back-arrow-light"];
+//    backImg = [backImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     // Do any additional setup after loading the view.
 }

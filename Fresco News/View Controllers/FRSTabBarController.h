@@ -19,4 +19,6 @@
 
 - (void)presentAssignments;
 
+-(void)setIrisItemColor:(UIColor *)color;
+
 @end

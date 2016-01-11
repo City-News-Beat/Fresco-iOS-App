@@ -13,11 +13,14 @@
 
 #import "FRSProfileViewController.h"
 #import "FRSHomeViewController.h"
+#import "FRSAssignmentsViewController.h"
 
 #import "UIColor+Fresco.h"
 
 
 @interface FRSTabBarController ()
+
+@property (strong, nonatomic) UIView *cameraBackgroundView;
 
 @end
 
@@ -71,9 +74,9 @@
 
 -(void)configureViewControllers{
     UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
-    UIViewController *vc1 = [[FRSOnboardingViewController alloc] init];
+    UIViewController *vc1 = [[UIViewController alloc] init];
     UIViewController *vc2 = [[UIViewController alloc] init];
-    UIViewController *vc3 = [[UIViewController alloc] init];
+    UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
     UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
@@ -84,12 +87,15 @@
     CGFloat origin = self.view.frame.size.width * 2/5;
     CGFloat width = self.view.frame.size.width/5;
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(origin, 0, width, 50)];
-    view.backgroundColor = [UIColor frescoOrangeColor];
-    [self.tabBar insertSubview:view atIndex:0];
+    self.cameraBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(origin, 0, width, 50)];
+    self.cameraBackgroundView.backgroundColor = [UIColor frescoOrangeColor];
+    [self.tabBar insertSubview:self.cameraBackgroundView atIndex:0];
     
 }
 
+-(void)setIrisItemColor:(UIColor *)color{
+    self.cameraBackgroundView.backgroundColor = color;
+}
 
 #pragma mark Delegate
 

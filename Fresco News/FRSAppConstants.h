@@ -57,6 +57,7 @@ enum FRSErrorCodes {
 #define NOTIF_UPLOAD_COMPLETE               @"UploadComplete"
 #define NOTIF_GALLERY_ASSET_CHANGE          @"GalleryAssetsChanged"
 
+#define NOTIF_LOCATIONS_UPDATE              @"DidUpdateLocations"
 
 /* Keys Plist */
 
