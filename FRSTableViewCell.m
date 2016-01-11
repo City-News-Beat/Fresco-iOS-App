@@ -167,7 +167,7 @@
     CGFloat rightPadding = 10;
     UITextField *textField  = [[UITextField alloc] initWithFrame:CGRectMake(leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding),44)];
     textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    textField.placeholder = @"New username";
+    textField.placeholder = string;
     textField.textColor = [UIColor frescoDarkTextColor];
     textField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:textField];    
