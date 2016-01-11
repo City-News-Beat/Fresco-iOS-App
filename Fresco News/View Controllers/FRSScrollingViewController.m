@@ -72,7 +72,7 @@
     
     if (self.scrollDirection == UIScrollViewScrollDirectionUp){ // The user is scrolling up and therefore the navigation bar should come back down.
         toFrame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44);
-        scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64);
+        scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64 - 49);
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
@@ -84,7 +84,7 @@
     }
     else if (self.scrollDirection == UIScrollViewScrollDirectionDown){ //The user is scrolling down and therefore the navigation bar should hide.
         toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
-        scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 20);
+        scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 20 - 49);
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;

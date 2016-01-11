@@ -16,10 +16,14 @@
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
+#import "FRSDateFormatter.h"
+
 #import "FRSScrollViewImageView.h"
 
 //views
 #import "FRSContentActionsBar.h"
+
+#import <Haneke/Haneke.h>
 
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionsBarDelegate, UITextViewDelegate>
@@ -85,18 +89,24 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.contentSize = CGSizeMake(5 * self.frame.size.width, self.scrollView.frame.size.height);
     [self addSubview:self.scrollView];
-    
 }
 
 -(void)configureImageViews{
     for (NSInteger i = 0; i < self.gallery.posts.count; i++){
+        
+        FRSPost *post = [self.gallery.posts allObjects][i];
+        
         NSInteger xOrigin = i * self.frame.size.width;
         FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self.dataSource heightForImageView])];
-        imageView.image = [UIImage imageNamed:@"temp-big"];
-        imageView.backgroundColor = [UIColor whiteColor];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.backgroundColor = [UIColor whiteColor];
         imageView.clipsToBounds = YES;
         imageView.indexInScrollView = i;
+        
+        if (i==0)
+            [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+        
+        
         [self.scrollView addSubview:imageView];
     }
     
@@ -141,7 +151,7 @@
 //    [self.clockIV addShadowWithColor:[UIColor frescoShadowColor] radius:1 offset:CGSizeMake(1, 1)];
     [self addSubview:self.clockIV];
     
-    self.timeLabel = [self galleryInfoLabelWithText:@"2:45 PM" fontSize:13];
+    self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:self.gallery.createdDate] fontSize:13];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
 
@@ -158,7 +168,9 @@
 //    [self.locationIV addShadowWithColor:[UIColor frescoShadowColor] radius:1 offset:CGSizeMake(1, 1)];
     [self addSubview:self.locationIV];
     
-    self.locationLabel = [self galleryInfoLabelWithText:@"New York, USA" fontSize:13];
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    
+    self.locationLabel = [self galleryInfoLabelWithText:post.address fontSize:13];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     
@@ -199,7 +211,7 @@
     self.textView.scrollEnabled = NO;
     self.textView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.textView.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.textView.text = @"It was a humorously perilous business for both of us. For, before we proceed further, it must be said that the monkey-rope was fast at both ends; fast to Queequeg's broad canvas belt, and fast to my narrow leather one. So that for better or for worse, we two, for the time, were wedded; and should poor Queequeg sink to rise...";
+    self.textView.text = self.gallery.caption;
     self.textView.delegate = self;
     [self addSubview:self.textView];
 }
@@ -210,6 +222,7 @@
     
     [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, self.actionBar.frame.size.height - 0.5)]];
 }
+
 
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{

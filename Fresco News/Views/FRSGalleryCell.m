@@ -25,13 +25,6 @@
     // Configure the view for the selected state
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier gallery:(FRSGallery *)gallery{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self){
-        self.gallery = gallery;
-    }
-    return self;
-}
 
 -(void)configureCell{
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -42,6 +35,10 @@
     
 //    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height - 0.5)]];
 
+}
+
+-(void)clearCell{
+    [self.galleryView removeFromSuperview];
 }
 
 -(NSInteger)heightForImageView{

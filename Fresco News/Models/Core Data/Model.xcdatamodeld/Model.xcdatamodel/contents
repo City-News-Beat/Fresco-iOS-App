@@ -40,6 +40,7 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="FRSPost" representedClassName="FRSPost" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="byline" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -80,12 +81,12 @@
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="creator" inverseEntity="FRSStory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="225"/>
-        <element name="FRSNotification" positionX="-990" positionY="135" width="128" height="150"/>
-        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="210"/>
-        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="150"/>
-        <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
         <element name="FRSArticle" positionX="-981" positionY="144" width="128" height="90"/>
         <element name="FRSAssignment" positionX="-972" positionY="153" width="128" height="180"/>
+        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="225"/>
+        <element name="FRSNotification" positionX="-990" positionY="135" width="128" height="150"/>
+        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="225"/>
+        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="150"/>
+        <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
     </elements>
 </model>

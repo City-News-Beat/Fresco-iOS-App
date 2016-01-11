@@ -85,6 +85,8 @@
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
+    [super removeNavigationBarLine];
+    
     self.navigationItem.title = @"@aesthetique";
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];

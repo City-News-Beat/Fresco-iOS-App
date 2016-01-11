@@ -15,4 +15,10 @@
     return [NSDate dateWithTimeIntervalSince1970:seconds];
 }
 
++(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"hh:mm a";
+    return [formatter stringFromDate:date];
+}
+
 @end

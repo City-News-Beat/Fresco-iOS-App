@@ -27,13 +27,23 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
-    if ([FRSDataValidator isNonNullObject:dict]){
         self.uid = dict[@"_id"];
         self.visibility = dict[@"visiblity"];
         self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"]];
         self.imageUrl = dict[@"image"];
         self.byline = dict[@"byline"];
+        self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+}
+
+-(NSString *)shortAddressFromAddress:(NSString *)address{
+    NSArray *comps = [address componentsSeparatedByString:@","];
+    NSMutableString *str = [NSMutableString new];
+    if (comps.count >= 3){
+        [str appendString:comps[0]];
+        [str appendString:@","];
+        [str appendString:comps[2]];
     }
+    return str;
 }
 
 @end

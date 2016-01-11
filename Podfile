@@ -24,6 +24,7 @@ target 'Fresco' do
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
 	pod ‘MagicalRecord’
+	pod 'Haneke'
 
 end
 

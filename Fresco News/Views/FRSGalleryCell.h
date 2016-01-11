@@ -17,8 +17,7 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier gallery:(FRSGallery *)gallery;
-
+-(void)clearCell;
 -(void)configureCell;
 
 @end

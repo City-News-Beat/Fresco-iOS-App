@@ -27,4 +27,5 @@
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery dataSource:(id <FRSGalleryViewDataSource>)dataSource;
 
+
 @end

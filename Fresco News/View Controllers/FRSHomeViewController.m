@@ -20,6 +20,9 @@
 
 @property (strong, nonatomic) NSArray *dataSource;
 
+@property (strong, nonatomic) UIButton *highlightTabButton;
+@property (strong, nonatomic) UIButton *followingTabButton;
+
 @end
 
 @implementation FRSHomeViewController
@@ -27,17 +30,53 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self configureTableView];
-    [self configureDataSource];
+    [self configureUI];
     
     // Do any additional setup after loading the view.
 }
 
+-(void)configureUI{
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    [self configureNavigationBar];
+    [self configureTableView];
+    [self configureDataSource];
+}
+
+-(void)configureNavigationBar{
+    [super configureNavigationBar];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(44, 0, self.view.frame.size.width - 88, 44)];
+    
+    self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width/2, 44)];
+    [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
+    [self.highlightTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.highlightTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.highlightTabButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:self.highlightTabButton];
+    
+    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake(view.frame.size.width/2, 0, view.frame.size.width/2, 44)];
+    [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [self.followingTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.followingTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.followingTabButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:self.followingTabButton];
+    
+    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 48 - 44, -0.5, 48, 44)];
+    searchButton.contentMode = UIViewContentModeCenter;
+    searchButton.imageView.contentMode = UIViewContentModeCenter;
+    [searchButton setImage:[UIImage imageNamed:@"search-icon"] forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:searchButton];
+    
+    self.navigationController.navigationBar.topItem.titleView = view;
+    
+}
+
 -(void)configureTableView{
     [super configureTableView];
-    
+    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64- 49);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
@@ -70,11 +109,11 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return self.dataSource.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.dataSource.count;
+    return 1;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -84,7 +123,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
     if (!cell){
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell" gallery:self.dataSource[indexPath.row]];
+        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
     }
     return cell;
 }
@@ -100,6 +139,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
+    
+    [cell clearCell];
+    
+    cell.gallery = self.dataSource[indexPath.row];
     [cell configureCell];
 }
 

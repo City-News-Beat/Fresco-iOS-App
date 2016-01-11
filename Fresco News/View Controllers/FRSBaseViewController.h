@@ -17,4 +17,6 @@
 
 -(void)configureNavigationBar;
 
+-(void)removeNavigationBarLine;
+
 @end

@@ -11,5 +11,6 @@
 @interface FRSDateFormatter : NSDateFormatter
 
 +(NSDate*)dateFromEpochTime:(id)epochTime;
++(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date;
 
 @end
