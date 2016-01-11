@@ -23,6 +23,8 @@
 #import "ViewController.h"
 #import "FRSProfileViewController.h"
 
+#import "FRSLocationManager.h"
+
 #import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSAppDelegate
@@ -56,7 +58,7 @@
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application{
-    
+    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{

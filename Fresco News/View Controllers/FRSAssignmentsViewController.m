@@ -28,15 +28,16 @@
     // Do any additional setup after loading the view.
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[FRSLocationManager sharedManager] startLocationMonitoringAlways];
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
     
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
 }
 
 
@@ -56,13 +57,14 @@
 
 -(void)didUpdateLocations:(NSNotification *)notification{
     NSArray *locations = notification.userInfo[@"locations"];
+    
+    NSLog(@"Location update notification observed by assignmentsVC");
+    
     if (!locations.count) return;
     
     CLLocation *currentLocation = [locations lastObject];
     
     [self adjustMapRegionWithLocation:currentLocation];
-    
-    
 }
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location{

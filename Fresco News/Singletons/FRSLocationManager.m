@@ -8,9 +8,15 @@
 
 #import "FRSLocationManager.h"
 
+#define TIMER_INTERVAL 10
+
 @interface FRSLocationManager() <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) NSNotificationCenter *notificationCenter;
+
+@property (strong, nonatomic) NSTimer *timer;
+
+@property (strong, nonatomic) NSArray *updatedLocations;
 
 @end
 
@@ -48,25 +54,23 @@
 
 #pragma mark - Monitoring
 
--(void)startLocationMonitoringForBackground{
+-(void)startLocationMonitoringBackground{
     
     if (self.monitoringState == FRSLocationMonitoringStateBackground)
         return;
-    else if (self.monitoringState == FRSLocationMonitoringStateAlways){
+    else if (self.monitoringState == FRSLocationMonitoringStateForeground){
         [self stopUpdatingLocation];
     }
     
     self.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    
-    
     
     [self startMonitoringSignificantLocationChanges];
     
     self.monitoringState = FRSLocationMonitoringStateBackground;
 }
 
--(void)startLocationMonitoringAlways{
-    if (self.monitoringState == FRSLocationMonitoringStateAlways)
+-(void)startLocationMonitoringForeground{
+    if (self.monitoringState == FRSLocationMonitoringStateForeground)
         return;
     else if (self.monitoringState == FRSLocationMonitoringStateBackground){
         [self stopMonitoringSignificantLocationChanges];
@@ -77,15 +81,20 @@
     
     self.desiredAccuracy = kCLLocationAccuracyBest;
     
-    [self startUpdatingLocation];
+    self.monitoringState = FRSLocationMonitoringStateForeground;
     
-    self.monitoringState = FRSLocationMonitoringStateAlways;
+    [self requestLocation];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
 }
 
 -(void)pauseLocationMonitoring{
     [self stopMonitoringSignificantLocationChanges];
     [self stopUpdatingLocation];
+    
     self.monitoringState = FRSLocationMonitoringStateOff;
+    
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 #pragma mark - Authorizaton
@@ -112,15 +121,21 @@
 
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    [self.notificationCenter postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
     if (!locations.count){
-        NSLog(@"FRSLocationManager did not return any locatoins");
+        NSLog(@"FRSLocationManager did not return any locations");
         return;
     }
     
+    [self.notificationCenter postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
-    
+    if (self.monitoringState == FRSLocationMonitoringStateForeground){
+        [self stopUpdatingLocation];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    NSLog(@"FRSLocationManager failed to retrieve locations with error : %@", error.localizedDescription);
 }
 
 @end

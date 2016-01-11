@@ -10,7 +10,7 @@
 
 typedef NS_ENUM(NSInteger, FRSLocationMonitoringState){
     FRSLocationMonitoringStateOff,
-    FRSLocationMonitoringStateAlways,
+    FRSLocationMonitoringStateForeground,
     FRSLocationMonitoringStateBackground
 };
 
@@ -23,9 +23,9 @@ typedef NS_ENUM(NSInteger, FRSLocationMonitoringState){
 
 +(instancetype)sharedManager;
 
--(void)startLocationMonitoringAlways;
+-(void)startLocationMonitoringForeground;
 
--(void)startLocationMonitoringForBackground;
+-(void)startLocationMonitoringBackground;
 
 -(void)pauseLocationMonitoring;
 
