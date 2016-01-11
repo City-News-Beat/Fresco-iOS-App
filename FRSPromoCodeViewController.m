@@ -26,7 +26,7 @@
     self.title = @"PROMO CODES";
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped)];
     
     [self configureLabels];
 }
