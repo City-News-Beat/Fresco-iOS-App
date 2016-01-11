@@ -51,7 +51,6 @@
         
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-
         
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
