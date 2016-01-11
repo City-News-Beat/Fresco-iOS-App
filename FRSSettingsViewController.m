@@ -23,7 +23,6 @@
     [super viewDidLoad];
     [self configureTableView];
     [self configureNavBar];
-    
 }
 
 -(void)configureNavBar{
@@ -33,7 +32,7 @@
 -(void)configureTableView{
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
@@ -171,7 +170,7 @@
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES];
                     break;
-                
+                    
                 default:
                     break;
             }
@@ -248,6 +247,140 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //    switch (indexPath.section) {
+    //        case 0:
+    //            switch (indexPath.row) {
+    //                case 0:
+    //                    NSLog(@"username");
+    //                    break;
+    //                case 1:
+    //                    NSLog(@"email");
+    //                    break;
+    //                case 2:
+    //                    NSLog(@"password");
+    //                default:
+    //                    break;
+    //            }
+    //            break;
+    //
+    //        case 1:
+    //            NSLog(@"o");
+    //            break;
+    //    }
+    //
+    
+    
+    switch (indexPath.section) {
+        case 0:
+            switch (indexPath.row) {
+                case 0:
+                    NSLog(@"username");
+                    break;
+                case 1:
+                    NSLog(@"email");
+                    break;
+                case 2:
+                    NSLog(@"password");
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        case 1:
+            //Empty
+            break;
+        case 2:
+            switch (indexPath.row) {
+                case 1:
+                    NSLog(@"notification radius");
+                    break;
+                case 2:
+                    NSLog(@"debit card");
+                    break;
+                case 3:
+                    NSLog(@"tax");
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 3:
+            //Empty
+            break;
+        case 4:
+            switch (indexPath.row) {
+                case 0:
+                    NSLog(@"twitter");
+                    break;
+                case 1:
+                    NSLog(@"facebook");
+                    break;
+                case 2:
+                    NSLog(@"google");
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 5:
+            //Empty
+            break;
+        case 6:
+            NSLog(@"promo");
+            break;
+        case 7:
+            //Empty
+            break;
+        case 8:
+            switch (indexPath.row) {
+                case 0:
+                    NSLog(@"logout");
+                    break;
+                case 1:
+                    NSLog(@"email support");
+                    break;
+                case 2:
+                    NSLog(@"disable account");
+                    break;
+            }
+            break;
+        case 9:
+            //Empty
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
