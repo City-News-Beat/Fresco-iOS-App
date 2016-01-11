@@ -189,6 +189,20 @@
     return newLength <= 40;
 }
 
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width{
+    
+    UIButton *button = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width - width, 44, width, 44)];
+    [button addTarget:self action:@selector(test) forControlEvents:UIControlStateNormal];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [self addSubview:button];
+    
+}
+-(void)test{
+    NSLog(@"test");
+}
+
 
 
 

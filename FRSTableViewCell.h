@@ -23,6 +23,8 @@
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width;
+
 -(void)configureEmptyCellSpace:(BOOL)yes;
 
 -(void)configureLogOut;

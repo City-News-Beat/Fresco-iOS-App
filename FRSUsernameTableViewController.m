@@ -75,9 +75,12 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [cell configureEditableCellWithDefaultText:@"New username"];
+    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 }
+
+
 
 
 
