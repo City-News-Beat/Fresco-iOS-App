@@ -13,8 +13,8 @@
 @protocol FRSGalleryViewDataSource <NSObject>
 
 -(NSInteger)heightForImageView;
--(NSInteger)numberOfLinesForTextView;
-
+-(BOOL)shouldHaveActionBar;
+-(BOOL)shouldHaveTextLimit;
 
 @end
 
@@ -27,5 +27,7 @@
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery dataSource:(id <FRSGalleryViewDataSource>)dataSource;
 
+
+//Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.
 
 @end

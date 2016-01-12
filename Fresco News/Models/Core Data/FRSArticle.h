@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSArticle : NSManagedObject
 
++(instancetype)articleWithDictionary:(NSDictionary *)dictionary;
+
+-(void)configureWithDictionary:(NSDictionary *)dictionary;
+
 // Insert code here to declare functionality of your managed object subclass
 
 @end

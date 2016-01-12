@@ -8,8 +8,23 @@
 
 #import "FRSArticle.h"
 
+#import <MagicalRecord/MagicalRecord.h>
+
 @implementation FRSArticle
 
++(instancetype)articleWithDictionary:(NSDictionary *)dictionary{
+    FRSArticle *article = [FRSArticle MR_createEntity];
+    [article configureWithDictionary:dictionary];
+    return article;
+}
+
+
+-(void)configureWithDictionary:(NSDictionary *)dictionary{
+    self.title = dictionary[@"title"];
+    self.imageStringURL = dictionary[@"favicon"];
+    self.articleStringURL = dictionary[@"link"];
+    self.source = dictionary[@"source"];
+}
 // Insert code here to add functionality to your managed object subclass
 
 @end

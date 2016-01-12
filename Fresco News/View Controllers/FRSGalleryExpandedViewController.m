@@ -8,13 +8,28 @@
 
 #import "FRSGalleryExpandedViewController.h"
 
-@interface FRSGalleryExpandedViewController ()
+#import "FRSGallery.h"
+#import "FRSGalleryView.h"
+
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDataSource>
+
+@property (strong, nonatomic) FRSGallery *gallery;
+
+@property (strong, nonatomic) FRSGalleryView *galleryView;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @end
 
 @implementation FRSGalleryExpandedViewController
+
+-(instancetype)initWithGallery:(FRSGallery *)gallery{
+    self = [super init];
+    if (self){
+        self.gallery = gallery;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,8 +41,14 @@
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     [self configureNavigationBar];
     [self configureScrollView];
+    [self configureGalleryView];
+    [self configureArticles];
+    [self configureComments];
+    [self configureActionBar];
 }
 
 -(void)configureNavigationBar{
@@ -38,7 +59,27 @@
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.scrollView.delegate = self;
+    [self.view addSubview:self.scrollView];
 }
+
+-(void)configureGalleryView{
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 500) gallery:self.gallery dataSource:self];
+    [self.scrollView addSubview:self.galleryView];
+}
+
+-(void)configureArticles{
+    
+}
+
+-(void)configureComments{
+    
+}
+
+-(void)configureActionBar{
+    
+}
+
 
 
 - (void)didReceiveMemoryWarning {
@@ -46,6 +87,25 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - FRSGalleryView Delegate
+
+-(BOOL)shouldHaveActionBar{
+    return NO;
+}
+
+-(BOOL)shouldHaveTextLimit {
+    return NO;
+}
+
+-(NSInteger)heightForImageView{
+    return 300;
+}
+
+#pragma mark - UIScrollView Delegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [super scrollViewDidScroll:scrollView];
+}
 /*
 #pragma mark - Navigation
 

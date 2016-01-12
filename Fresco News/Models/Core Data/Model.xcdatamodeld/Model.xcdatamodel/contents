@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
-        <attribute name="faviconStringUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stringUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageStringURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="FRSAssignment" representedClassName="FRSAssignment" syncable="YES">
@@ -81,7 +82,7 @@
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="creator" inverseEntity="FRSStory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FRSArticle" positionX="-981" positionY="144" width="128" height="90"/>
+        <element name="FRSArticle" positionX="-981" positionY="144" width="128" height="105"/>
         <element name="FRSAssignment" positionX="-972" positionY="153" width="128" height="180"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="225"/>
         <element name="FRSNotification" positionX="-990" positionY="135" width="128" height="150"/>
