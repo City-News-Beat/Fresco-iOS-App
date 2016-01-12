@@ -73,10 +73,12 @@
 		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
+		659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */; };
 		65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */; };
 		65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB81C44197100BE671F /* FRSLocationManager.m */; };
+		65EBEDC01C4452CA00BE671F /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */; };
 		65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237AF1C249DC3002182DE /* FRSAppDelegate.m */; };
 		65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B21C24A94E002182DE /* FRSTabBarController.m */; };
 		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
@@ -279,6 +281,8 @@
 		65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSProfileViewController.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
+		659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryExpandedViewController.h; sourceTree = "<group>"; };
+		659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryExpandedViewController.m; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
 		65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Helpers.m"; path = "Categories/UIView+Helpers.m"; sourceTree = "<group>"; };
 		65EBEDAF1C4404A800BE671F /* FRSDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDateFormatter.h; path = Utilities/FRSDateFormatter.h; sourceTree = "<group>"; };
@@ -287,6 +291,8 @@
 		65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentsViewController.m; sourceTree = "<group>"; };
 		65EBEDB71C44197100BE671F /* FRSLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSLocationManager.h; path = Singletons/FRSLocationManager.h; sourceTree = "<group>"; };
 		65EBEDB81C44197100BE671F /* FRSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSLocationManager.m; path = Singletons/FRSLocationManager.m; sourceTree = "<group>"; };
+		65EBEDBE1C4452CA00BE671F /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAPIClient.h; path = Networking/FRSAPIClient.h; sourceTree = "<group>"; };
+		65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAPIClient.m; path = Networking/FRSAPIClient.m; sourceTree = "<group>"; };
 		65F237AE1C249DC3002182DE /* FRSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppDelegate.h; sourceTree = "<group>"; };
 		65F237AF1C249DC3002182DE /* FRSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAppDelegate.m; sourceTree = "<group>"; };
 		65F237B11C24A94E002182DE /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
@@ -486,6 +492,7 @@
 		1EDA44B21AA4CCC70082E08D /* Fresco News */ = {
 			isa = PBXGroup;
 			children = (
+				65EBEDBD1C44507600BE671F /* Networking */,
 				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
@@ -552,6 +559,8 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */,
+				659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */,
 				65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */,
 				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
 				65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */,
@@ -713,6 +722,15 @@
 				65135FCE1C286DCF00839149 /* FRSPost.m */,
 			);
 			name = FRSPost;
+			sourceTree = "<group>";
+		};
+		65EBEDBD1C44507600BE671F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				65EBEDBE1C4452CA00BE671F /* FRSAPIClient.h */,
+				65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */,
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 		65F237B41C24A954002182DE /* Tab Bar */ = {
@@ -1197,6 +1215,7 @@
 				1EA27AA81AF147C4003137CE /* MKMapView+Additions.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				65135FDB1C286DCF00839149 /* FRSPost+CoreDataProperties.m in Sources */,
+				65EBEDC01C4452CA00BE671F /* FRSAPIClient.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
@@ -1218,6 +1237,7 @@
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
+				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
 				65135FD31C286DCF00839149 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				65201A2E1C3D7D4C00B31089 /* TempViewController.m in Sources */,

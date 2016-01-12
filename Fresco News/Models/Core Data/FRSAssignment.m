@@ -7,9 +7,36 @@
 //
 
 #import "FRSAssignment.h"
+#import "FRSDateFormatter.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSAssignment
 
 // Insert code here to add functionality to your managed object subclass
+
++(instancetype)assignmentWithDictionary:(NSDictionary *)dictionary{
+    FRSAssignment *assignment = [FRSAssignment MR_createEntity];
+    [assignment configureWithDictionary:dictionary];
+    return assignment;
+}
+
+-(void)configureWithDictionary:(NSDictionary *)dictionary{
+    self.uid = dictionary[@"_id"];
+    self.title = dictionary[@"title"];
+    self.location = dictionary[@"location"][@"geo"][@"coordinates"];
+    self.radius = dictionary[@"location"][@"radius"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
+    self.expirationDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"expiration"] milliseconds:YES];
+    self.caption = dictionary[@"caption"];
+}
+//@property (nullable, nonatomic, retain) NSString *uid;
+//@property (nullable, nonatomic, retain) NSString *title;
+//@property (nullable, nonatomic, retain) NSString *caption;
+//@property (nullable, nonatomic, retain) NSNumber *active;
+//@property (nullable, nonatomic, retain) id location;
+//@property (nullable, nonatomic, retain) NSNumber *radius;
+//@property (nullable, nonatomic, retain) NSDate *createdDate;
+//@property (nullable, nonatomic, retain) NSDate *editedDate;
+//@property (nullable, nonatomic, retain) NSDate *expirationDate;
 
 @end

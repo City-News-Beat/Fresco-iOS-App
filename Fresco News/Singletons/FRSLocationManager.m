@@ -8,7 +8,7 @@
 
 #import "FRSLocationManager.h"
 
-#define TIMER_INTERVAL 10
+#define TIMER_INTERVAL 30
 
 @interface FRSLocationManager() <CLLocationManagerDelegate>
 
@@ -38,8 +38,11 @@
         
         self.monitoringState = FRSLocationMonitoringStateOff;
         
-        self.pausesLocationUpdatesAutomatically = YES;
         self.activityType = CLActivityTypeFitness;
+        
+        if ([self respondsToSelector:@selector(setPausesLocationUpdatesAutomatically:)]){
+            [self setPausesLocationUpdatesAutomatically:YES];
+        }
         
         if([self respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]){
             [self setAllowsBackgroundLocationUpdates:YES];
@@ -83,7 +86,7 @@
     
     self.monitoringState = FRSLocationMonitoringStateForeground;
     
-    [self requestLocation];
+    [self startUpdatingLocation];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
 }
 
@@ -121,7 +124,6 @@
 
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    
     if (!locations.count){
         NSLog(@"FRSLocationManager did not return any locations");
         return;

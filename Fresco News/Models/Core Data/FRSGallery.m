@@ -20,7 +20,7 @@
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.uid = dict[@"_id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"]];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.caption = dict[@"caption"];
     self.byline = dict[@"byline"];
     [self addPostsWithArray:dict[@"posts"]];

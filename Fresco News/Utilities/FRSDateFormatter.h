@@ -10,7 +10,10 @@
 
 @interface FRSDateFormatter : NSDateFormatter
 
-+(NSDate*)dateFromEpochTime:(id)epochTime;
++(NSDate*)dateFromEpochTime:(id)epochTime milliseconds:(BOOL)milliseconds;
 +(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date;
 
+
+//temp
++(NSString *)dateStringFromDate:(NSDate *)date;
 @end

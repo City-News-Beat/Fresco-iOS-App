@@ -10,12 +10,20 @@
 #import "FRSTabBarController.h"
 
 #import "FRSLocationManager.h"
+#import "FRSAPIClient.h"
+
+#import "FRSAssignment.h"
+
+#import "FRSDateFormatter.h"
 
 @import MapKit;
 
 @interface FRSAssignmentsViewController ()
 
 @property (strong, nonatomic) MKMapView *mapView;
+@property (strong, nonatomic) NSArray *assignments;
+
+@property (nonatomic) BOOL isFetching;
 
 @end
 
@@ -28,10 +36,11 @@
     // Do any additional setup after loading the view.
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     
     [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    
     
 }
 
@@ -65,11 +74,33 @@
     CLLocation *currentLocation = [locations lastObject];
     
     [self adjustMapRegionWithLocation:currentLocation];
+    [self fetchAssignmentsNearLocation:currentLocation];
 }
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location{
     MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.15f, 0.15f));
     [self.mapView setRegion:region animated:YES];
+}
+
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location{
+    
+    if (self.isFetching) return;
+    
+    self.isFetching = YES;
+    
+    [[FRSAPIClient new] getAssignmentsWithinRadius:10 ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+        NSArray *assignments = (NSArray *)responseObject;
+        
+        NSMutableArray *mSerializedAssignments = [NSMutableArray new];
+        
+        for (NSDictionary *dict in assignments){
+            [mSerializedAssignments addObject:[FRSAssignment assignmentWithDictionary:dict]];
+        }
+        
+        self.assignments = [mSerializedAssignments copy];
+        
+        self.isFetching = NO;
+    }];
 }
 
 /*

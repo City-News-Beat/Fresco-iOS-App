@@ -98,7 +98,6 @@
     else if (firstVersionNum == 3){ //This is the current high level version number we are working with.
         [self configureCoreDataStack];
         
-        
     }
     else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
         
