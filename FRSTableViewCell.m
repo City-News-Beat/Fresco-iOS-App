@@ -281,6 +281,32 @@
 }
 
 
+-(void)configureDisableAccountCell{
+    //make strong refrences
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
+    UILabel *disableAccountTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 207, 22)];
+    [disableAccountTitleLabel setFont:[UIFont notaMediumWithSize:17]];
+    [disableAccountTitleLabel setTextColor:[UIColor frescoDarkTextColor]];
+    disableAccountTitleLabel.text = @"It doesn’t have to end like this";
+    [self addSubview:disableAccountTitleLabel];
+    
+    
+    UILabel *disableAccountSubtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 52, 288, 29)];
+    [disableAccountSubtitleLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightRegular]];
+    [disableAccountSubtitleLabel setTextColor:[UIColor frescoMediumTextColor]];
+    disableAccountSubtitleLabel.numberOfLines = 2;
+    disableAccountSubtitleLabel.text = @"Just in case you decide to come back, we’ll back up your account for one year before we delete it.";
+    [self addSubview:disableAccountSubtitleLabel];
+
+    
+    UIImageView *sadIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sad-emoticon"]];
+    sadIV.frame = CGRectMake(231, 18, 20, 20);
+    [self addSubview:sadIV];
+    
+    
+}
+
 -(void)clearCell{
     
 }

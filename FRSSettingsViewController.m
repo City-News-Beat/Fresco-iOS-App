@@ -20,6 +20,7 @@
 #import "FRSEmailViewController.h"
 #import "FRSPasswordChangeViewController.h"
 #import "FRSTaxInformationViewController.h"
+#import "FRSDisableAccountViewController.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -463,6 +464,9 @@
                     break;
                 case 2:
                     NSLog(@"disable account");
+                    FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
+                    [self.navigationController pushViewController:disable animated:YES];
+                    self.navigationItem.title = @"";
                 {
                     
                 }
