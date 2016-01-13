@@ -21,6 +21,8 @@
 #import "FRSPasswordChangeViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSDisableAccountViewController.h"
+#import "FRSRadiusViewController.h"
+#import "FRSDebitCardViewController.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -136,125 +138,125 @@
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier;
     
-//    switch (indexPath.section) {
-//        case 0:
-//            switch (indexPath.row) {
-//                case 0:
-//                {
-//                    cellIdentifier = @"username-cell";
-//                    FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
-//                    [self.navigationController pushViewController:username animated:YES];
-//                    self.navigationItem.title = @"";
-//                }
-//                    break;
-//                case 1:
-//                {
-//                    cellIdentifier = @"email-cell";
-//                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
-//                    [self.navigationController pushViewController:email animated:YES];
-//                    self.navigationItem.title = @"";
-//                }
-//                    break;
-//                case 2:
-//                {
-//                    cellIdentifier = @"update-password-cell";
-//                    FRSPasswordChangeViewController *password = [[FRSPasswordChangeViewController alloc] init];
-//                    [self.navigationController pushViewController:password animated:YES];
-//                    self.navigationItem.title = @"";
-//                }
-//                    break;
-//                default:
-//                    break;
-//            }
-//            break;
-//        case 1:
-//            //Empty
-//            break;
-//        case 2:
-//            switch (indexPath.row) {
-//                case 1:
-//                    cellIdentifier = @"assignment-notifications-cell";
-//                    //assignment notif
-//                    break;
-//                case 2:{
-//                    cellIdentifier = @"notification-radius-cell";
-//                    //notif radius
-//                }
-//                    break;
-//                case 3:{
-//                    cellIdentifier = @"debit-card-cell";
-//                    //debit card
-//                }
-//                    break;
-//                case 4:{
-//                    cellIdentifier = @"tax-cell";
-//                    //tax info
-//                }
-//                default:
-//                    break;
-//            }
-//            break;
-//        case 3:
-//            //Empty
-//            break;
-//        case 4:
-//            switch (indexPath.row) {
-//                case 0:{
-//                    cellIdentifier = @"twitter-cell";
-//                    //twitter
-//                }
-//                    break;
-//                case 1:{
-//                    cellIdentifier = @"facebook-cell";
-//                    //facebook
-//                }
-//                    break;
-//                case 2:{
-//                    cellIdentifier = @"google-cell";
-//                    //google
-//                }
-//                    break;
-//                default:
-//                    break;
-//            }
-//            break;
-//        case 5:
-//            //Empty
-//            break;
-//        case 6: {
-//            cellIdentifier = @"promo-codes-cell";
-//            //promo
-//        }
-//            break;
-//        case 7:
-//            //Empty
-//            break;
-//        case 8:
-//            switch (indexPath.row) {
-//                case 0: {
-//                    cellIdentifier = @"logout-cell";
-//                    //logout
-//                }
-//                    break;
-//                case 1: {
-//                    cellIdentifier = @"email-support-cell";
-//                    //email support
-//                }
-//                    break;
-//                case 2: {
-//                    cellIdentifier = @"disable-account-cell";
-//                    //disable account
-//                }
-//                    break;
-//            }
-//            break;
-//        case 9:
-//            //Empty
-//            break;
-//        default:
-//            break;
+    //    switch (indexPath.section) {
+    //        case 0:
+    //            switch (indexPath.row) {
+    //                case 0:
+    //                {
+    //                    cellIdentifier = @"username-cell";
+    //                    FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
+    //                    [self.navigationController pushViewController:username animated:YES];
+    //                    self.navigationItem.title = @"";
+    //                }
+    //                    break;
+    //                case 1:
+    //                {
+    //                    cellIdentifier = @"email-cell";
+    //                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
+    //                    [self.navigationController pushViewController:email animated:YES];
+    //                    self.navigationItem.title = @"";
+    //                }
+    //                    break;
+    //                case 2:
+    //                {
+    //                    cellIdentifier = @"update-password-cell";
+    //                    FRSPasswordChangeViewController *password = [[FRSPasswordChangeViewController alloc] init];
+    //                    [self.navigationController pushViewController:password animated:YES];
+    //                    self.navigationItem.title = @"";
+    //                }
+    //                    break;
+    //                default:
+    //                    break;
+    //            }
+    //            break;
+    //        case 1:
+    //            //Empty
+    //            break;
+    //        case 2:
+    //            switch (indexPath.row) {
+    //                case 1:
+    //                    cellIdentifier = @"assignment-notifications-cell";
+    //                    //assignment notif
+    //                    break;
+    //                case 2:{
+    //                    cellIdentifier = @"notification-radius-cell";
+    //                    //notif radius
+    //                }
+    //                    break;
+    //                case 3:{
+    //                    cellIdentifier = @"debit-card-cell";
+    //                    //debit card
+    //                }
+    //                    break;
+    //                case 4:{
+    //                    cellIdentifier = @"tax-cell";
+    //                    //tax info
+    //                }
+    //                default:
+    //                    break;
+    //            }
+    //            break;
+    //        case 3:
+    //            //Empty
+    //            break;
+    //        case 4:
+    //            switch (indexPath.row) {
+    //                case 0:{
+    //                    cellIdentifier = @"twitter-cell";
+    //                    //twitter
+    //                }
+    //                    break;
+    //                case 1:{
+    //                    cellIdentifier = @"facebook-cell";
+    //                    //facebook
+    //                }
+    //                    break;
+    //                case 2:{
+    //                    cellIdentifier = @"google-cell";
+    //                    //google
+    //                }
+    //                    break;
+    //                default:
+    //                    break;
+    //            }
+    //            break;
+    //        case 5:
+    //            //Empty
+    //            break;
+    //        case 6: {
+    //            cellIdentifier = @"promo-codes-cell";
+    //            //promo
+    //        }
+    //            break;
+    //        case 7:
+    //            //Empty
+    //            break;
+    //        case 8:
+    //            switch (indexPath.row) {
+    //                case 0: {
+    //                    cellIdentifier = @"logout-cell";
+    //                    //logout
+    //                }
+    //                    break;
+    //                case 1: {
+    //                    cellIdentifier = @"email-support-cell";
+    //                    //email support
+    //                }
+    //                    break;
+    //                case 2: {
+    //                    cellIdentifier = @"disable-account-cell";
+    //                    //disable account
+    //                }
+    //                    break;
+    //            }
+    //            break;
+    //        case 9:
+    //            //Empty
+    //            break;
+    //        default:
+    //            break;
     
-//            }}
+    //            }}
     
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -399,10 +401,19 @@
         case 2:
             switch (indexPath.row) {
                 case 1:
-                    NSLog(@"notification radius");
+                {
+                    FRSRadiusViewController *radius = [[FRSRadiusViewController alloc] init];
+                    [self.navigationController pushViewController:radius animated:YES];
+                    self.navigationItem.title = @"";
                     break;
+                }
                 case 2:
-                    NSLog(@"debit card");
+                {
+                    FRSDebitCardViewController *card = [[FRSDebitCardViewController alloc] init];
+                    [self.navigationController pushViewController:card animated:YES];
+                    self.navigationItem.title = @"";
+                    
+                }
                     break;
                 case 3:
                 {

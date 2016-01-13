@@ -17,6 +17,8 @@
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		07607B331C46C76C005A620E /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */; };
 		07607B361C46E111005A620E /* FRSDisableAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07607B351C46E111005A620E /* FRSDisableAccountViewController.m */; };
+		07607B391C46FCEA005A620E /* FRSRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07607B381C46FCEA005A620E /* FRSRadiusViewController.m */; };
+		07607B3C1C46FD96005A620E /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07607B3B1C46FD96005A620E /* FRSDebitCardViewController.m */; };
 		07820D3F1C446D0900298DD9 /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
@@ -185,6 +187,10 @@
 		07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBusinessTypeViewController.m; sourceTree = "<group>"; };
 		07607B341C46E111005A620E /* FRSDisableAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDisableAccountViewController.h; sourceTree = "<group>"; };
 		07607B351C46E111005A620E /* FRSDisableAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDisableAccountViewController.m; sourceTree = "<group>"; };
+		07607B371C46FCEA005A620E /* FRSRadiusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRadiusViewController.h; sourceTree = "<group>"; };
+		07607B381C46FCEA005A620E /* FRSRadiusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRadiusViewController.m; sourceTree = "<group>"; };
+		07607B3A1C46FD96005A620E /* FRSDebitCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDebitCardViewController.h; sourceTree = "<group>"; };
+		07607B3B1C46FD96005A620E /* FRSDebitCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDebitCardViewController.m; sourceTree = "<group>"; };
 		07820D3D1C446D0900298DD9 /* FRSTaxInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTaxInformationViewController.h; sourceTree = "<group>"; };
 		07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTaxInformationViewController.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
@@ -439,6 +445,10 @@
 				07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */,
 				07820D3D1C446D0900298DD9 /* FRSTaxInformationViewController.h */,
 				07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */,
+				07607B371C46FCEA005A620E /* FRSRadiusViewController.h */,
+				07607B381C46FCEA005A620E /* FRSRadiusViewController.m */,
+				07607B3A1C46FD96005A620E /* FRSDebitCardViewController.h */,
+				07607B3B1C46FD96005A620E /* FRSDebitCardViewController.m */,
 				07607B311C46C76C005A620E /* FRSBusinessTypeViewController.h */,
 				07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */,
 				07607B341C46E111005A620E /* FRSDisableAccountViewController.h */,
@@ -1222,10 +1232,12 @@
 			files = (
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
 				079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */,
+				07607B3C1C46FD96005A620E /* FRSDebitCardViewController.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Additions.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				65135FDB1C286DCF00839149 /* FRSPost+CoreDataProperties.m in Sources */,
+				07607B391C46FCEA005A620E /* FRSRadiusViewController.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
