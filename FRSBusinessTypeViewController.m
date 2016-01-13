@@ -105,13 +105,49 @@
         case 7:
             [cell configureCheckBoxCellWithTitle:@"Trust" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
             break;
-
             
         default:
             break;
     }
 }
 
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    switch (indexPath.row) {
+        case 0:
+
+            break;
+        case 1:
+
+            break;
+        case 2:
+
+            break;
+        case 3:
+
+            break;
+        case 4:
+
+            break;
+        case 5:
+
+            break;
+        case 6:
+
+            break;
+        case 7:
+
+            break;
+            
+        default:
+            break;
+    }
+    
+    
+}
 
 
 

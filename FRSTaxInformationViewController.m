@@ -48,7 +48,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-
+    
     switch (section) {
         case 0:
             return 3;
@@ -57,7 +57,7 @@
         case 1:
             return 1;
             break;
-        
+            
         case 2:
             return 3;
             break;
@@ -65,8 +65,8 @@
             break;
     }
     
-return 0;
-
+    return 0;
+    
 }
 
 
@@ -75,11 +75,11 @@ return 0;
     
     
     switch (indexPath.section) {
-
+            
         case 1:
             return 12;
             break;
-
+            
             
         default:
             return 44;
@@ -122,15 +122,18 @@ return 0;
                 case 0:
                     //Make custom editible cell
                     [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
-
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                    
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Name" withTopSeperator:YES withBottomSeperator:YES];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 2:
                     [cell configureEditableCellWithDefaultText:@"Tax ID # (SSN or EIN)" withTopSeperator:NO withBottomSeperator:YES];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 default:
@@ -145,18 +148,21 @@ return 0;
             
         case 2:
             switch (indexPath.row) {
-                    
                 case 0:
                     [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 2:
                     [cell configureEditableCellWithDefaultText:@"City" withTopSeperator:NO withBottomSeperator:YES];
                     [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
                     break;
                     
                 default:
@@ -169,9 +175,8 @@ return 0;
     }
     
     //First cell needs a selection style, see FRSSettingsTableView
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-
+    
+    
     
 }
 
