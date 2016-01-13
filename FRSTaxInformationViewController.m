@@ -7,6 +7,7 @@
 //
 
 #import "FRSTaxInformationViewController.h"
+#import "FRSBusinessTypeViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 
@@ -121,7 +122,6 @@ return 0;
                 case 0:
                     //Make custom editible cell
                     [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
-//                    [cell configureEditableCellWithDefaultText:@"Address"];
 
                     break;
                     
@@ -172,6 +172,33 @@ return 0;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 
+    
+}
+
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    switch (indexPath.section) {
+        case 0:
+            switch (indexPath.row) {
+                case 0:
+                {
+                    FRSBusinessTypeViewController *businessType = [[FRSBusinessTypeViewController alloc] init];
+                    [self.navigationController pushViewController:businessType animated:YES];
+                    self.navigationItem.title = @"";
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            break;
+            
+        default:
+            break;
+    }
     
 }
 

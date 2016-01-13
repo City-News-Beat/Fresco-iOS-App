@@ -29,6 +29,9 @@
 @property (strong, nonatomic) UILabel *rightAlignedDefaultTitleLabel;
 @property (strong, nonatomic) UIImageView *carrotIV;
 
+@property (strong, nonatomic) UIImageView *dynamicCircle;
+@property (strong, nonatomic) UILabel *dynamicTitle;
+
 @property (strong, nonatomic) UILabel *usernameTitleLabel;
 
 @property (strong, nonatomic) UILabel *logOutLabel;
@@ -47,38 +50,38 @@
         
         self.leftPadding = 16;
         self.rightPadding = 10;
-
         
-//        if ([reuseIdentifier isEqualToString:@"username-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"email-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"update-password-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"assignment-notifications-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"notification-radius-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"debit-card-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"tax-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"twitter-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"facebook-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"google-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"promo-codes-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"logout-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"email-support-cell"]){
-//            
-//        } else if ([reuseIdentifier isEqualToString:@"disable-account-cell"]){
-//            
-//        }
-//    }
+        
+        //        if ([reuseIdentifier isEqualToString:@"username-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"email-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"update-password-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"assignment-notifications-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"notification-radius-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"debit-card-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"tax-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"twitter-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"facebook-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"google-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"promo-codes-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"logout-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"email-support-cell"]){
+        //
+        //        } else if ([reuseIdentifier isEqualToString:@"disable-account-cell"]){
+        //
+        //        }
+        //    }
     }
     
     return self;
@@ -137,7 +140,7 @@
 
 
 -(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle{
-
+    
     self.defaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
     self.defaultTitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -159,30 +162,6 @@
     }
 }
 
-//-(void)configureDefaultCellWithTitle:(NSString *)title withSecondTitle:(NSString *)secondTitle{
-//    
-//    CGFloat leftPadding = 16;
-//    CGFloat rightPadding = 10;
-//    
-//    UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (rightPadding+leftPadding) - 10, self.frame.size.height)];
-//    label.text = title;
-//    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-//    [self addSubview:label];
-//    
-//    UIImageView *carrotIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
-//    carrotIV.frame = CGRectMake(label.bounds.size.width +leftPadding, label.bounds.size.height/2 -7, 24, 24);
-//    [carrotIV sizeToFit];
-//    [self addSubview:carrotIV];
-//    
-//    UILabel *secondLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 130, 0, 100, self.frame.size.height)];
-//    secondLabel.textAlignment = NSTextAlignmentRight;
-//    secondLabel.text = secondTitle;
-//    secondLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-//    secondLabel.textColor = [UIColor frescoMediumTextColor];
-//    [self addSubview:secondLabel];
-//    
-//}
-
 -(void)configureCellWithUsername:(NSString *)username{
     
     CGFloat leftPadding = 16;
@@ -198,11 +177,6 @@
     self.carrotIV.frame = CGRectMake(self.usernameTitleLabel.bounds.size.width+7, self.usernameTitleLabel.bounds.size.height/2 -7, 24, 24);
     [self.carrotIV sizeToFit];
     [self addSubview:self.carrotIV];
-    
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, -1, self.bounds.size.width, 0.5)];
-//    view.alpha = 0.5;
-//    view.backgroundColor = [UIColor redColor];
-//    [self addSubview:view];
     
 }
 
@@ -239,17 +213,17 @@
     [self addSubview:self.textField];
     
     if (topSeperator) {
-    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
-    top.alpha = 0.2;
-    top.backgroundColor = [UIColor frescoDarkTextColor];
-    [self addSubview:top];
+        UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+        top.alpha = 0.2;
+        top.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:top];
     }
     
     if (bottomSeperator){
-    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
-    bottom.alpha = 0.2;
-    bottom.backgroundColor = [UIColor frescoDarkTextColor];
-    [self addSubview:bottom];
+        UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
+        bottom.alpha = 0.2;
+        bottom.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:bottom];
     }
 }
 
@@ -269,6 +243,43 @@
     [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [self addSubview:self.rightAlignedButton];
 }
+
+
+-(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected{
+    
+    self.dynamicTitle  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
+    self.dynamicTitle.text = title;
+    self.dynamicTitle.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.dynamicTitle.textColor = [UIColor frescoDarkTextColor];
+    [self addSubview:self.dynamicTitle];
+    
+    self.dynamicCircle =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+    self.dynamicCircle.frame = CGRectMake(self.dynamicTitle.bounds.size.width, self.dynamicTitle.bounds.size.height/2 - 12, 24, 24);
+    [self.dynamicCircle sizeToFit];
+    [self addSubview:self.dynamicCircle];
+    
+    if (topSeperator) {
+        UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+        top.alpha = 0.2;
+        top.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:top];
+    }
+    
+    if (bottomSeperator){
+        UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
+        bottom.alpha = 0.2;
+        bottom.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:bottom];
+    }
+    
+    if (isSelected) {
+
+        self.dynamicCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
+        self.dynamicTitle.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
+    
+    }
+}
+
 
 -(void)clearCell{
     

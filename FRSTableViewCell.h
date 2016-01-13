@@ -27,5 +27,7 @@
 
 -(void)configureLogOut;
 
+-(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
+
 @end
 

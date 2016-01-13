@@ -78,10 +78,38 @@
 
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
-    
+    switch (indexPath.row) {
+        case 0:
+            [cell configureCheckBoxCellWithTitle:@"Individual/Sole Proprietorship" withTopSeperator:YES withBottomSeperator:NO isSelected:YES];
+            break;
+        case 1:
+            [cell configureCheckBoxCellWithTitle:@"Partnership" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 2:
+            [cell configureCheckBoxCellWithTitle:@"LLC (Partnership class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 3:
+            [cell configureCheckBoxCellWithTitle:@"LLC (C class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 4:
+            [cell configureCheckBoxCellWithTitle:@"LLC (S class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 5:
+            [cell configureCheckBoxCellWithTitle:@"C corporation" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 6:
+            [cell configureCheckBoxCellWithTitle:@"S corporation" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+        case 7:
+            [cell configureCheckBoxCellWithTitle:@"Trust" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
+            break;
+
+            
+        default:
+            break;
+    }
 }
 
 
