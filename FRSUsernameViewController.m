@@ -54,6 +54,7 @@
 }
 
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     NSString *cellIdentifier;
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -73,7 +74,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username"];
+    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES];
     [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 

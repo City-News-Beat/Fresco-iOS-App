@@ -25,7 +25,7 @@
 }
 
 -(void)configureTableView{
-    self.title = @"EMAIL ADDRESS";
+    self.title = @"PASSWORD";
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -75,16 +75,16 @@
     
     switch (indexPath.row) {
         case 0:
-            [cell configureEditableCellWithDefaultText:@"Current password"];
+            [cell configureEditableCellWithDefaultText:@"Current password" withTopSeperator:YES withBottomSeperator:YES];
             break;
             
         case 1:
-            [cell configureEditableCellWithDefaultText:@"New password"];
+            [cell configureEditableCellWithDefaultText:@"New password" withTopSeperator:NO withBottomSeperator:YES];
             break;
         
         case 2:
-            [cell configureEditableCellWithDefaultText:@"Confirm new password"];
-            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+            [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES];
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE TAX INFO" withWidth:143];
             break;
             
         default:

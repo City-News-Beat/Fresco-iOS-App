@@ -15,6 +15,8 @@
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
 		073F62501C3D722400E07977 /* FRSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 073F624F1C3D722400E07977 /* FRSSettingsViewController.m */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
+		07607B331C46C76C005A620E /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */; };
+		07820D3F1C446D0900298DD9 /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
 		07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */; };
@@ -178,6 +180,10 @@
 		073F624F1C3D722400E07977 /* FRSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSettingsViewController.m; sourceTree = "<group>"; };
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
 		074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+Helpers.m"; path = "Categories/UIImageView+Helpers.m"; sourceTree = "<group>"; };
+		07607B311C46C76C005A620E /* FRSBusinessTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBusinessTypeViewController.h; sourceTree = "<group>"; };
+		07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBusinessTypeViewController.m; sourceTree = "<group>"; };
+		07820D3D1C446D0900298DD9 /* FRSTaxInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTaxInformationViewController.h; sourceTree = "<group>"; };
+		07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTaxInformationViewController.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		079CEF201C2874D500E559F3 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestViewController.h; path = "Fresco News/View Controllers/TestViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -428,6 +434,10 @@
 				07B38BE31C44598F00797270 /* FRSPasswordChangeViewController.m */,
 				07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */,
 				07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */,
+				07820D3D1C446D0900298DD9 /* FRSTaxInformationViewController.h */,
+				07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */,
+				07607B311C46C76C005A620E /* FRSBusinessTypeViewController.h */,
+				07607B321C46C76C005A620E /* FRSBusinessTypeViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -1243,6 +1253,7 @@
 				07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				07B38BE41C44598F00797270 /* FRSPasswordChangeViewController.m in Sources */,
+				07607B331C46C76C005A620E /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
@@ -1263,6 +1274,7 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
+				07820D3F1C446D0900298DD9 /* FRSTaxInformationViewController.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 			);

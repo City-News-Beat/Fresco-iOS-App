@@ -11,15 +11,13 @@
 
 @interface FRSTableViewCell : UITableViewCell
 
--(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes;
-
--(void)configureDefaultCellWithTitle:(NSString *)title withSecondTitle:(NSString *)secondTitle;
+-(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle;
 
 -(void)configureCellWithUsername:(NSString *)username;
 
 -(void)configureAssignmentCell;
 
--(void)configureEditableCellWithDefaultText:(NSString *)string;
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator;
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
@@ -30,3 +28,4 @@
 -(void)configureLogOut;
 
 @end
+

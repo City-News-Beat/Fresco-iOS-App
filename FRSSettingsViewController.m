@@ -19,6 +19,7 @@
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"
 #import "FRSPasswordChangeViewController.h"
+#import "FRSTaxInformationViewController.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -133,24 +134,127 @@
 
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier;
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    cellIdentifier = @"profile-cell";
-                    break;
-                default:
-                    cellIdentifier = @"default-cell";
-                    break;
-            }
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-        default:
-            break;
-    }
+    
+//    switch (indexPath.section) {
+//        case 0:
+//            switch (indexPath.row) {
+//                case 0:
+//                {
+//                    cellIdentifier = @"username-cell";
+//                    FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
+//                    [self.navigationController pushViewController:username animated:YES];
+//                    self.navigationItem.title = @"";
+//                }
+//                    break;
+//                case 1:
+//                {
+//                    cellIdentifier = @"email-cell";
+//                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
+//                    [self.navigationController pushViewController:email animated:YES];
+//                    self.navigationItem.title = @"";
+//                }
+//                    break;
+//                case 2:
+//                {
+//                    cellIdentifier = @"update-password-cell";
+//                    FRSPasswordChangeViewController *password = [[FRSPasswordChangeViewController alloc] init];
+//                    [self.navigationController pushViewController:password animated:YES];
+//                    self.navigationItem.title = @"";
+//                }
+//                    break;
+//                default:
+//                    break;
+//            }
+//            break;
+//        case 1:
+//            //Empty
+//            break;
+//        case 2:
+//            switch (indexPath.row) {
+//                case 1:
+//                    cellIdentifier = @"assignment-notifications-cell";
+//                    //assignment notif
+//                    break;
+//                case 2:{
+//                    cellIdentifier = @"notification-radius-cell";
+//                    //notif radius
+//                }
+//                    break;
+//                case 3:{
+//                    cellIdentifier = @"debit-card-cell";
+//                    //debit card
+//                }
+//                    break;
+//                case 4:{
+//                    cellIdentifier = @"tax-cell";
+//                    //tax info
+//                }
+//                default:
+//                    break;
+//            }
+//            break;
+//        case 3:
+//            //Empty
+//            break;
+//        case 4:
+//            switch (indexPath.row) {
+//                case 0:{
+//                    cellIdentifier = @"twitter-cell";
+//                    //twitter
+//                }
+//                    break;
+//                case 1:{
+//                    cellIdentifier = @"facebook-cell";
+//                    //facebook
+//                }
+//                    break;
+//                case 2:{
+//                    cellIdentifier = @"google-cell";
+//                    //google
+//                }
+//                    break;
+//                default:
+//                    break;
+//            }
+//            break;
+//        case 5:
+//            //Empty
+//            break;
+//        case 6: {
+//            cellIdentifier = @"promo-codes-cell";
+//            //promo
+//        }
+//            break;
+//        case 7:
+//            //Empty
+//            break;
+//        case 8:
+//            switch (indexPath.row) {
+//                case 0: {
+//                    cellIdentifier = @"logout-cell";
+//                    //logout
+//                }
+//                    break;
+//                case 1: {
+//                    cellIdentifier = @"email-support-cell";
+//                    //email support
+//                }
+//                    break;
+//                case 2: {
+//                    cellIdentifier = @"disable-account-cell";
+//                    //disable account
+//                }
+//                    break;
+//            }
+//            break;
+//        case 9:
+//            //Empty
+//            break;
+//        default:
+//            break;
+    
+//            }}
+    
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -168,7 +272,9 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    
+    //    [cell clearCell];
+    
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
@@ -176,12 +282,11 @@
                     [cell configureCellWithUsername:@"@username"];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"omar@fresconews.com" andCarret:YES];
+                    [cell configureDefaultCellWithTitle:@"omar@fresconews.com" andCarret:YES andRightAlignedTitle:@""];
                     break;
                 case 2:
-                    [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES];
+                    [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@""];
                     break;
-                    
                 default:
                     break;
             }
@@ -196,13 +301,13 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"Notification radius" withSecondTitle:@"2 mi"];
+                    [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"2 mi"];
                     break;
                 case 2:
-                    [cell configureDefaultCellWithTitle:@"Debit card" withSecondTitle:@"VISA (3189)"];
+                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
                     break;
                 case 3:
-                    [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES];
+                    [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES andRightAlignedTitle:@""];
                     break;
                 default:
                     break;
@@ -230,7 +335,7 @@
             [cell configureEmptyCellSpace:NO];
             break;
         case 6:
-            [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES];
+            [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
         case 7:
             [cell configureEmptyCellSpace:NO];
@@ -241,10 +346,10 @@
                     [cell configureLogOut];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"Email support" andCarret:NO];
+                    [cell configureDefaultCellWithTitle:@"Email support" andCarret:NO andRightAlignedTitle:@""];
                     break;
                 case 2:
-                    [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES];
+                    [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@""];
                     break;
             }
             break;
@@ -263,7 +368,6 @@
         case 0:
             switch (indexPath.row) {
                 case 0:
-                    NSLog(@"username");
                 {
                     FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
                     [self.navigationController pushViewController:username animated:YES];
@@ -300,7 +404,12 @@
                     NSLog(@"debit card");
                     break;
                 case 3:
-                    NSLog(@"tax");
+                {
+                    FRSTaxInformationViewController *tax = [[FRSTaxInformationViewController alloc] init];
+                    [self.navigationController pushViewController:tax animated:YES];
+                    self.navigationItem.title = @"";
+                }
+                    
                     break;
                 default:
                     break;
@@ -367,9 +476,6 @@
             break;
     }
 }
-
-
-
 
 
 
