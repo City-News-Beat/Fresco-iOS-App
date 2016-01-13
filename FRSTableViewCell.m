@@ -202,7 +202,7 @@
     }
 }
 
--(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator{
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure{
     
     self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.self.rightPadding+self.leftPadding),44)];
     self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -225,6 +225,11 @@
         bottom.backgroundColor = [UIColor frescoDarkTextColor];
         [self addSubview:bottom];
     }
+    
+    if(secure){
+        self.textField.secureTextEntry = YES;
+    }
+    
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

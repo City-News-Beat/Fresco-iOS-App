@@ -94,15 +94,15 @@
             
             break;
         case 1:
-            [cell configureEditableCellWithDefaultText:@"Username" withTopSeperator:YES withBottomSeperator:YES];
+            [cell configureEditableCellWithDefaultText:@"Username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
             
             break;
         case 2:
-            [cell configureEditableCellWithDefaultText:@"Email address" withTopSeperator:NO withBottomSeperator:YES];
+            [cell configureEditableCellWithDefaultText:@"Email address" withTopSeperator:NO withBottomSeperator:YES isSecure:NO];
             
             break;
         case 3:
-            [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES];
+            [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES];
             
             [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173];
             break;

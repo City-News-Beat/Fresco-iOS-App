@@ -17,7 +17,7 @@
 
 -(void)configureAssignmentCell;
 
--(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator;
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure;
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
@@ -28,7 +28,9 @@
 -(void)configureLogOut;
 
 -(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
+
 -(void)configureDisableAccountCell;
+
 
 @end
 

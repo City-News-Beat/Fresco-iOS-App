@@ -38,6 +38,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -74,7 +75,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES];
+    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
     [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
