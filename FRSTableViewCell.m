@@ -202,7 +202,7 @@
     }
 }
 
--(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure{
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType{
     
     self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.self.rightPadding+self.leftPadding),44)];
     self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -211,6 +211,8 @@
     self.textField.textColor = [UIColor frescoDarkTextColor];
     self.textField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:self.textField];
+    
+    self.textField.keyboardType = keyboardType;
     
     if (topSeperator) {
         UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];

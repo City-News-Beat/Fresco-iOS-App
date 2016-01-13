@@ -17,7 +17,7 @@
 
 -(void)configureAssignmentCell;
 
--(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure;
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 

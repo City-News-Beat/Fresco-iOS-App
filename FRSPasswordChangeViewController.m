@@ -75,16 +75,16 @@
     
     switch (indexPath.row) {
         case 0:
-            [cell configureEditableCellWithDefaultText:@"Current password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES];
+            [cell configureEditableCellWithDefaultText:@"Current password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             break;
             
         case 1:
-            [cell configureEditableCellWithDefaultText:@"New password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES];
+            [cell configureEditableCellWithDefaultText:@"New password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             break;
         
         case 2:
-            [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES];
-            [cell configureCellWithRightAlignedButtonTitle:@"SAVE TAX INFO" withWidth:143];
+            [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
             break;
             
         default:

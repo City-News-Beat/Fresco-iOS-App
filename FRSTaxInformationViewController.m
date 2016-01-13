@@ -126,12 +126,12 @@
                     break;
                     
                 case 1:
-                    [cell configureEditableCellWithDefaultText:@"Name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
+                    [cell configureEditableCellWithDefaultText:@"Name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 2:
-                    [cell configureEditableCellWithDefaultText:@"Tax ID # (SSN or EIN)" withTopSeperator:NO withBottomSeperator:YES isSecure:YES];
+                    [cell configureEditableCellWithDefaultText:@"Tax ID # (SSN or EIN)" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
@@ -148,18 +148,18 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
+                    [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 1:
-                    [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO];
+                    [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                 case 2:
-                    [cell configureEditableCellWithDefaultText:@"City" withTopSeperator:NO withBottomSeperator:YES isSecure:NO];
-                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+                    [cell configureEditableCellWithDefaultText:@"City" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE TAX INFO" withWidth:143];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     break;

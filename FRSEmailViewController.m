@@ -75,11 +75,11 @@
     
     switch (indexPath.row) {
                 case 0:
-                    [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
+                    [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
                     break;
                 
                 case 1:
-                    [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES];
+                    [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
                     [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109];
                     break;
                     

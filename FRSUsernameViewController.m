@@ -75,7 +75,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO];
+    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
     [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
