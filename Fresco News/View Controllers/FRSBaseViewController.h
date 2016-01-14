@@ -13,7 +13,7 @@
 
 @interface FRSBaseViewController : UIViewController
 
--(void)configureBackButton;
+-(void)configureBackButtonAnimated:(BOOL)animated;
 
 -(void)configureNavigationBar;
 

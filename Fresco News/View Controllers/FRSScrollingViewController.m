@@ -11,7 +11,10 @@
 
 @interface FRSScrollingViewController () <UIScrollViewDelegate>
 
+@property (nonatomic) BOOL animatingShow;
+@property (nonatomic) BOOL animatingHide;
 
+@property (nonatomic) BOOL scrollDirectionChanged;
 
 @end
 
@@ -20,6 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    if (self.shouldHaveBackButton){
+        [super configureBackButtonAnimated:NO];
+    }
     
     // Do any additional setup after loading the view.
 }
@@ -68,17 +75,33 @@
     CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64 - 49);
     
     if (animated){
+        
+        if (self.animatingShow) return;
+        if (!self.scrollDirectionChanged) return;
+        
+        self.animatingShow = YES;
+        self.animatingHide = NO;
+        
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
             scrollView.frame = scrollViewFrame;
-            self.navigationController.navigationBar.topItem.titleView.alpha = 1.0;
+            self.navigationItem.titleView.alpha = 1.0;
+            
+            if (self.shouldHaveBackButton){
+                [super configureBackButtonAnimated:YES];
+            }
+            
         } completion:^(BOOL finished) {
-            nil;
+            if (finished)
+                self.animatingShow = NO;
         }];
     }
     else {
         scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
+        if (self.shouldHaveBackButton){
+            [super configureBackButtonAnimated:NO];
+        }
     }
 }
 
@@ -87,17 +110,30 @@
     CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 20 - 49);
     
     if (animated){
+        
+        if (self.animatingHide) return;
+        if (!self.scrollDirectionChanged) return;
+        
+        self.animatingHide = YES;
+        self.animatingShow = NO;
+        
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
             scrollView.frame = scrollViewFrame;
-            self.navigationController.navigationBar.topItem.titleView.alpha = 0.0;
+            self.navigationItem.titleView.alpha = 0.0;
+            if (self.shouldHaveBackButton){
+                [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:YES];
+            }
         } completion:^(BOOL finished) {
-            nil;
+            if (finished) {
+                self.animatingHide = NO;
+            }
         }];
     }
     else {
         scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
+        [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:NO];
     }
 }
 
@@ -121,9 +157,20 @@
     NSInteger difference = currentContentOffY - self.prevContentOffY;
     
     if (difference < 0){
+        if (self.scrollDirection == UIScrollViewScrollDirectionDown)
+            self.scrollDirectionChanged = YES;
+        else
+            self.scrollDirectionChanged = NO;
+        
         self.scrollDirection = UIScrollViewScrollDirectionUp;
     }
     else if (difference> 0){
+        
+        if (self.scrollDirection == UIScrollViewScrollDirectionUp)
+            self.scrollDirectionChanged = YES;
+        else
+            self.scrollDirectionChanged = NO;
+        
         self.scrollDirection = UIScrollViewScrollDirectionDown;
     }
     

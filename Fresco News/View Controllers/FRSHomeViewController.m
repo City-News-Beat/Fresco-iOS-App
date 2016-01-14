@@ -209,6 +209,7 @@
     if (!filteredArray.count) return;
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
+    vc.shouldHaveBackButton = YES;
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";

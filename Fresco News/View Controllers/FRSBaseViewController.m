@@ -34,9 +34,9 @@
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
 
--(void)configureBackButton{
+-(void)configureBackButtonAnimated:(BOOL)animated{
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
-    self.navigationItem.leftBarButtonItem = backItem;
+    [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
 }
 
 -(void)popViewController{

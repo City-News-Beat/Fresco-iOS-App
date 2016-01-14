@@ -23,6 +23,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (nonatomic) NSInteger prevContentOffY;
 
+@property (nonatomic) BOOL shouldHaveBackButton;
+
 -(void)configureTableView;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;

@@ -26,7 +26,7 @@
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
-    [self configureBackButton];
+    [self configureBackButtonAnimated:NO];
     self.navigationItem.title = @"SETTINGS";
 }
 
