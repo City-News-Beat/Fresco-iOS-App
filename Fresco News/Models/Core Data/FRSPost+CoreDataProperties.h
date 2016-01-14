@@ -2,7 +2,7 @@
 //  FRSPost+CoreDataProperties.h
 //  Fresco
 //
-//  Created by Daniel Sun on 1/8/16.
+//  Created by Daniel Sun on 1/14/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSPost (CoreDataProperties)
 
+@property (nullable, nonatomic, retain) NSString *address;
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
 @property (nullable, nonatomic, retain) id image;
@@ -24,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *uid;
 @property (nullable, nonatomic, retain) NSString *videoUrl;
 @property (nullable, nonatomic, retain) NSString *visibility;
-@property (nullable, nonatomic, retain) NSString *address;
+@property (nullable, nonatomic, retain) id coordinates;
+@property (nullable, nonatomic, retain) id meta;
 @property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) FRSGallery *gallery;
 

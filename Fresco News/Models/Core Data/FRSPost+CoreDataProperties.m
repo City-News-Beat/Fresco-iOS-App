@@ -2,7 +2,7 @@
 //  FRSPost+CoreDataProperties.m
 //  Fresco
 //
-//  Created by Daniel Sun on 1/8/16.
+//  Created by Daniel Sun on 1/14/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -13,6 +13,7 @@
 
 @implementation FRSPost (CoreDataProperties)
 
+@dynamic address;
 @dynamic byline;
 @dynamic createdDate;
 @dynamic image;
@@ -22,7 +23,8 @@
 @dynamic uid;
 @dynamic videoUrl;
 @dynamic visibility;
-@dynamic address;
+@dynamic coordinates;
+@dynamic meta;
 @dynamic creator;
 @dynamic gallery;
 

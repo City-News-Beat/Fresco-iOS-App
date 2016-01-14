@@ -27,12 +27,14 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
-        self.uid = dict[@"_id"];
-        self.visibility = dict[@"visiblity"];
-        self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
-        self.imageUrl = dict[@"image"];
-        self.byline = dict[@"byline"];
-        self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.uid = dict[@"_id"];
+    self.visibility = dict[@"visiblity"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.imageUrl = dict[@"image"];
+    self.byline = dict[@"byline"];
+    self.coordinates = dict[@"location"][@"geo"][@"coordinates"];
+    self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.meta = dict[@"meta"];
 }
 
 -(NSString *)shortAddressFromAddress:(NSString *)address{

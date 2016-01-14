@@ -43,10 +43,12 @@
     <entity name="FRSPost" representedClassName="FRSPost" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="byline" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coordinates" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mediaType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="meta" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="videoUrl" optional="YES" attributeType="String" syncable="YES"/>
@@ -86,7 +88,7 @@
         <element name="FRSAssignment" positionX="-972" positionY="153" width="128" height="180"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="225"/>
         <element name="FRSNotification" positionX="-990" positionY="135" width="128" height="150"/>
-        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="225"/>
+        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="255"/>
         <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="150"/>
         <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
     </elements>
