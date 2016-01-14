@@ -30,5 +30,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 -(void)determineScrollDirection:(UIScrollView *)scrollView;
 
+-(void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated;
+-(void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated;
+
 
 @end

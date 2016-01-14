@@ -14,7 +14,6 @@
 
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
--(BOOL)shouldHaveBottomPadding;
 
 @end
 

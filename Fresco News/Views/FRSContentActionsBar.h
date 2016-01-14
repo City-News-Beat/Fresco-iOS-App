@@ -14,7 +14,7 @@
 
 -(UIColor *)colorForActionButton;
 
--(void)didTapActionButton;
+-(void)handleActionButtonTapped;
 
 @end
 

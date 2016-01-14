@@ -218,17 +218,22 @@
     return label;
 }
 
--(void)configureTextView{
-    self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
+-(void)configureCaptionLabel{
+    self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
     self.captionLabel.font = [UIFont systemFontOfSize:15 weight:-1];
     self.captionLabel.text = self.gallery.caption;
+    
+    
+    if ([self.dataSource shouldHaveTextLimit]){
+        self.captionLabel.numberOfLines = 6;
+    } else {
+        self.captionLabel.numberOfLines = 0;
+    }
+    
     [self.captionLabel sizeToFit];
     
-    
-    NSInteger height = [self.dataSource shouldHaveTextLimit] ? MIN(self.captionLabel.frame.size.height, 120) : self.captionLabel.frame.size.height;
-    
-    [self.captionLabel setFrame:CGRectMake(0, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, height)];
+    [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
     
     [self addSubview:self.captionLabel];
 }
@@ -249,7 +254,7 @@
 }
 
 -(void)adjustHeight{
-    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2;
+    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
     if ([self.dataSource shouldHaveActionBar]) height -= TEXTVIEW_TOP_PAD;
     
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
@@ -265,8 +270,8 @@
     return [UIColor frescoBlueColor];
 }
 
--(void)didTapActionButton{
-    
+-(void)handleActionButtonTapped{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
 }
 
 #pragma mark ScrollView Delegate

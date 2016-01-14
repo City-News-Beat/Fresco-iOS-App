@@ -8,6 +8,8 @@
 
 #import "FRSHomeViewController.h"
 
+#import "FRSGalleryExpandedViewController.h"
+
 #import "FRSGalleryCell.h"
 #import "FRSDataManager.h"
 
@@ -30,19 +32,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     [self configureUI];
+    [self addNotificationObservers];
     
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self configureNavigationBar];
 }
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self configureNavigationBar];
     [self configureTableView];
     [self configureDataSource];
 }
+
+-(void)addNotificationObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+}
+
+#pragma mark - UI
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
@@ -71,7 +83,6 @@
     [view addSubview:searchButton];
     
     self.navigationController.navigationBar.topItem.titleView = view;
-    
 }
 
 -(void)configureTableView{
@@ -124,6 +135,7 @@
     FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
     if (!cell){
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
 }
@@ -158,10 +170,11 @@
 
     label.font = [UIFont systemFontOfSize:15 weight:-1];
     label.text = gallery.caption;
+    label.numberOfLines = 6;
 
     [label sizeToFit];
     
-    averageHeight += MIN(label.frame.size.height, 120) + 12 + 44 + 20;
+    averageHeight += label.frame.size.height + 12 + 44 + 20;
     
     return averageHeight;
 }
@@ -188,7 +201,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification{
+    
+    NSArray *filteredArray = [self.dataSource filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    
+    if (!filteredArray.count) return;
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
+    [super showNavBarForScrollView:self.tableView animated:NO];
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
 /*
+ 
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

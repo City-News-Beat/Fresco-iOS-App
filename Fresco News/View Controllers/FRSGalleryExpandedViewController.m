@@ -39,22 +39,39 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
+-(void)configureNavigationBar{
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = @"GALLERY";
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.font = [UIFont notaBoldWithSize:17];
+    [titleLabel sizeToFit];
+    titleLabel.center = self.view.center;
+    titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, 0, titleLabel.frame.size.width, 44);
+    
+    self.navigationItem.titleView = titleLabel;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
+
 -(void)configureUI{
+    
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self configureNavigationBar];
     [self configureScrollView];
     [self configureGalleryView];
     [self configureArticles];
     [self configureComments];
     [self configureActionBar];
+    [self adjustScrollViewContentSize];
 }
 
--(void)configureNavigationBar{
-    [super configureNavigationBar];
-    self.navigationItem.title = @"GALLERY";
-}
 
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
@@ -80,6 +97,9 @@
     
 }
 
+-(void)adjustScrollViewContentSize{
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + 1000);
+}
 
 
 - (void)didReceiveMemoryWarning {

@@ -7,7 +7,10 @@
 //
 
 #import "FRSScrollingViewController.h"
+@class FRSGallery;
 
 @interface FRSGalleryExpandedViewController : FRSScrollingViewController
+
+-(instancetype)initWithGallery:(FRSGallery *)gallery;
 
 @end
