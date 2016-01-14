@@ -22,7 +22,14 @@
 
 +(instancetype)postWithDictionary:(NSDictionary *)dict{
     FRSPost *post = [FRSPost MR_createEntity];
-    [post configureWithDictionary:dict];
+    
+    if (!dict){
+        NSLog(@"does not have dict");
+    }
+    
+    
+    if (dict) [post configureWithDictionary:dict];
+    
     return post;
 }
 
@@ -34,7 +41,11 @@
     self.byline = dict[@"byline"];
     self.coordinates = dict[@"location"][@"geo"][@"coordinates"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
-    self.meta = dict[@"meta"];
+    
+    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
+    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
+    
+    self.meta = @{@"image_height" : height, @"image_width" : width};
 }
 
 -(NSString *)shortAddressFromAddress:(NSString *)address{

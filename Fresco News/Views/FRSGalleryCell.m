@@ -41,12 +41,15 @@
     [self.galleryView removeFromSuperview];
 }
 
--(NSInteger)heightForImageView{
-    return 350;
+
+
+#pragma mark - DataSource For Action Bar
+-(BOOL)shouldHaveActionBar{
+    return YES;
 }
 
--(NSInteger)numberOfLinesForTextView{
-    return 5;
+-(BOOL)shouldHaveTextLimit{
+    return YES;
 }
 
 @end

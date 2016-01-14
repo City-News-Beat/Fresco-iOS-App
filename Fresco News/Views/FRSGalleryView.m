@@ -25,6 +25,8 @@
 
 #import <Haneke/Haneke.h>
 
+#define TEXTVIEW_TOP_PAD 12
+
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionsBarDelegate, UITextViewDelegate>
 
@@ -44,6 +46,10 @@
 
 @property (strong, nonatomic) UIPageControl *pageControl;
 
+@property (strong, nonatomic) NSMutableArray *imageViews;
+
+@property (strong, nonatomic) NSArray *orderedPosts;
+
 @end
 
 @implementation FRSGalleryView
@@ -61,6 +67,7 @@
     if (self){
         self.dataSource = dataSource;
         self.gallery = gallery;
+        self.orderedPosts = [self.gallery.posts allObjects];
         
         [self configureUI];
     }
@@ -78,11 +85,14 @@
     [self configureGalleryInfo];
     
     [self configureTextView];
+
     [self configureActionsBar];
+    
+    [self adjustHeight];
 }
 
 -(void)configureScrollView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self.dataSource heightForImageView])];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight])];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
@@ -92,20 +102,24 @@
 }
 
 -(void)configureImageViews{
+    
+    self.imageViews = [NSMutableArray new];
+    
     for (NSInteger i = 0; i < self.gallery.posts.count; i++){
         
-        FRSPost *post = [self.gallery.posts allObjects][i];
+        FRSPost *post = self.orderedPosts[i];
         
         NSInteger xOrigin = i * self.frame.size.width;
-        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self.dataSource heightForImageView])];
+        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor = [UIColor whiteColor];
         imageView.clipsToBounds = YES;
         imageView.indexInScrollView = i;
         
+        [self.imageViews addObject:imageView];
+        
         if (i==0)
             [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
-        
         
         [self.scrollView addSubview:imageView];
     }
@@ -149,7 +163,7 @@
     self.clockIV.center = self.pageControl.center;
     [self.clockIV setFrame:CGRectMake(21, self.clockIV.frame.origin.y, 16, 16)];
     [self.clockIV addFixedShadow];
-//    [self.clockIV addShadowWithColor:[UIColor frescoShadowColor] radius:1 offset:CGSizeMake(1, 1)];
+
     [self addSubview:self.clockIV];
     
     self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:self.gallery.createdDate] fontSize:13];
@@ -184,7 +198,6 @@
     self.profileIV.image = [UIImage imageNamed:@"profile-icon-light"];
     [self.profileIV addFixedShadow];
     
-//    [self.profileIV addShadowWithColor:[UIColor frescoShadowColor] radius:1 offset:CGSizeMake(1, 1)];
     [self addSubview:self.profileIV];
     
     self.nameLabel = [self galleryInfoLabelWithText:@"Daniel Sun" fontSize:17];
@@ -201,7 +214,7 @@
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
     [label addFixedShadow];
     [label sizeToFit];
-//    [label addShadowWithColor:[UIColor frescoShadowColor] radius:1 offset:CGSizeMake(1, 1)];
+
     return label;
 }
 
@@ -219,10 +232,22 @@
 }
 
 -(void)configureActionsBar{
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.textView.frame.origin.y + self.textView.frame.size.height) delegate:self];
-    [self addSubview:self.actionBar];
     
-    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, self.actionBar.frame.size.height - 0.5)]];
+    if (![self.dataSource shouldHaveActionBar]) {
+        self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
+    }
+    else{
+        self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.textView.frame.origin.y + self.textView.frame.size.height) delegate:self];
+    }
+    
+    [self addSubview:self.actionBar];
+}
+
+-(void)adjustHeight{
+    NSInteger height = [self imageViewHeight] + self.textView.frame.size.height + self.actionBar.frame.size.height + TEXTVIEW_TOP_PAD * 2;
+    if ([self.dataSource shouldHaveActionBar]) height -= TEXTVIEW_TOP_PAD;
+    
+    [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
 }
 
 
@@ -241,11 +266,37 @@
 
 #pragma mark ScrollView Delegate
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    //We add half a screen's width so that the image loading occurs half way through the scroll.
+    NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    
+    
+    if (page >= self.gallery.posts.count) return;
+    
+    FRSScrollViewImageView *imageView = self.imageViews[page];
+    FRSPost *post = self.orderedPosts[page];
+    
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+}
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     NSInteger page = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     self.pageControl.currentPage = page;
 }
 
+-(NSInteger)imageViewHeight{
+    NSInteger totalHeight;
+    
+    for (FRSPost *post in self.gallery.posts){
+        totalHeight += [post.meta[@"imageHeight"] integerValue];
+    }
+    
+    NSInteger averageHeight = totalHeight/self.gallery.posts.count;
+    
+    averageHeight = MAX(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
+    
+    return averageHeight;
+}
 
 
 

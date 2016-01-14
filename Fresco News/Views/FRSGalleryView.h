@@ -12,7 +12,6 @@
 
 @protocol FRSGalleryViewDataSource <NSObject>
 
--(NSInteger)heightForImageView;
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 
@@ -23,6 +22,7 @@
 @property (weak, nonatomic) NSObject <FRSGalleryViewDataSource> *dataSource;
 
 @property (strong, nonatomic) FRSGallery *gallery;
+
 
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery dataSource:(id <FRSGalleryViewDataSource>)dataSource;
