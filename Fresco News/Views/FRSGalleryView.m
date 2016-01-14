@@ -34,7 +34,7 @@
 
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
 
-@property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UILabel *captionLabel;
 
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
@@ -84,7 +84,7 @@
     
     [self configureGalleryInfo];
     
-    [self configureTextView];
+    [self configureCaptionLabel];
 
     [self configureActionsBar];
     
@@ -97,7 +97,7 @@
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.contentSize = CGSizeMake(5 * self.frame.size.width, self.scrollView.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     [self addSubview:self.scrollView];
 }
 
@@ -136,7 +136,7 @@
 
 -(void)configurePageControl{
     self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.numberOfPages = 5;
+    self.pageControl.numberOfPages = self.gallery.posts.count;
     self.pageControl.currentPage = 0;
     
     self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
@@ -219,16 +219,18 @@
 }
 
 -(void)configureTextView{
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height, self.scrollView.frame.size.width, self.frame.size.height - self.scrollView.frame.size.height - 44)];
-    self.textView.textContainerInset = UIEdgeInsetsMake(12, 16, 0, 16);
-    self.textView.textColor = [UIColor frescoDarkTextColor];
-    self.textView.editable = NO;
-    self.textView.scrollEnabled = NO;
-    self.textView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    self.textView.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.textView.text = self.gallery.caption;
-    self.textView.delegate = self;
-    [self addSubview:self.textView];
+    self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
+    self.captionLabel.textColor = [UIColor frescoDarkTextColor];
+    self.captionLabel.font = [UIFont systemFontOfSize:15 weight:-1];
+    self.captionLabel.text = self.gallery.caption;
+    [self.captionLabel sizeToFit];
+    
+    
+    NSInteger height = [self.dataSource shouldHaveTextLimit] ? MIN(self.captionLabel.frame.size.height, 120) : self.captionLabel.frame.size.height;
+    
+    [self.captionLabel setFrame:CGRectMake(0, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, height)];
+    
+    [self addSubview:self.captionLabel];
 }
 
 -(void)configureActionsBar{
@@ -237,14 +239,17 @@
         self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
     }
     else{
-        self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.textView.frame.origin.y + self.textView.frame.size.height) delegate:self];
+        self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
     }
     
     [self addSubview:self.actionBar];
+    
+    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height - 0.5)]];
+    
 }
 
 -(void)adjustHeight{
-    NSInteger height = [self imageViewHeight] + self.textView.frame.size.height + self.actionBar.frame.size.height + TEXTVIEW_TOP_PAD * 2;
+    NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2;
     if ([self.dataSource shouldHaveActionBar]) height -= TEXTVIEW_TOP_PAD;
     
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
@@ -285,15 +290,24 @@
 }
 
 -(NSInteger)imageViewHeight{
-    NSInteger totalHeight;
+    NSInteger totalHeight = 0;
     
     for (FRSPost *post in self.gallery.posts){
-        totalHeight += [post.meta[@"imageHeight"] integerValue];
+        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
+        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+        
+        if (rawHeight == 0 || rawWidth == 0){
+            totalHeight += [UIScreen mainScreen].bounds.size.width;
+        }
+        else {
+            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+            totalHeight += scaledHeight;
+        }
     }
     
     NSInteger averageHeight = totalHeight/self.gallery.posts.count;
     
-    averageHeight = MAX(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
+    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
     return averageHeight;
 }

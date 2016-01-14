@@ -32,8 +32,6 @@
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery dataSource:self];
     self.galleryView.dataSource = self;
     [self addSubview:self.galleryView];
-    
-//    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height - 0.5)]];
 
 }
 
