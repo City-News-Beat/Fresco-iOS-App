@@ -186,11 +186,12 @@
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
                                consumerSecret:TWITTER_CONSUMER_SECRET];
     
-    NSString *yourAppToken = @"{YourAppToken}";
+    NSString *appToken = @"43lq9tvcgnwg";
     NSString *environment = ADJEnvironmentSandbox;
-    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken environment:environment];
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:appToken environment:environment];
+    [adjustConfig setLogLevel:ADJLogLevelVerbose];
     [Adjust appDidLaunch:adjustConfig];
-    
+
 }
 
 - (void)registerForPushNotifications
