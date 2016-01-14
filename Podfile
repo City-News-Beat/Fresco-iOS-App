@@ -23,6 +23,7 @@ target 'Fresco' do
 	pod 'FBSDKLoginKit'
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
+	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
 
 end
 

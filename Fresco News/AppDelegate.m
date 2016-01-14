@@ -26,6 +26,8 @@
 #import "UIColor+Additions.h"
 #import "Stripe.h"
 
+#import "Adjust.h"
+
 #import "FRSCameraViewController.h"
 
 
@@ -183,6 +185,11 @@
     //Twitter Utilities
     [PFTwitterUtils initializeWithConsumerKey:TWITTER_CONSUMER_KEY
                                consumerSecret:TWITTER_CONSUMER_SECRET];
+    
+    NSString *yourAppToken = @"{YourAppToken}";
+    NSString *environment = ADJEnvironmentSandbox;
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken environment:environment];
+    [Adjust appDidLaunch:adjustConfig];
     
 }
 
