@@ -8,6 +8,7 @@
 
 #import "FRSGallery.h"
 #import "FRSPost.h"
+#import "FRSArticle.h"
 #import "FRSStory.h"
 #import "FRSUser.h"
 
@@ -24,6 +25,7 @@
     self.caption = dict[@"caption"];
     self.byline = dict[@"byline"];
     [self addPostsWithArray:dict[@"posts"]];
+    [self addArticlesWithArray:dict[@"articles"]];
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
@@ -31,6 +33,14 @@
         FRSPost *post = [FRSPost postWithDictionary:dict];
         [self addPostsObject:post];
     }
+}
+
+-(void)addArticlesWithArray:(NSArray *)articles{
+    for (NSDictionary * dict in articles){
+        FRSArticle *article = [FRSArticle articleWithDictionary:dict];
+        [self addArticlesObject:article];
+    }
+    
 }
 
 

@@ -8,6 +8,8 @@
 
 #import "FRSArticle.h"
 
+#import "FRSDateFormatter.h"
+
 #import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSArticle
@@ -24,6 +26,8 @@
     self.imageStringURL = dictionary[@"favicon"];
     self.articleStringURL = dictionary[@"link"];
     self.source = dictionary[@"source"];
+    self.uid = dictionary[@"_id"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
 }
 // Insert code here to add functionality to your managed object subclass
 

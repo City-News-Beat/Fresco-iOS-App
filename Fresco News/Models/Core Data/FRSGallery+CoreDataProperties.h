@@ -2,20 +2,20 @@
 //  FRSGallery+CoreDataProperties.h
 //  Fresco
 //
-//  Created by Daniel Sun on 12/21/15.
-//  Copyright © 2015 Fresco. All rights reserved.
+//  Created by Daniel Sun on 1/14/16.
+//  Copyright © 2016 Fresco. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
 //  to delete and recreate this implementation file for your updated model.
 //
 
 #import "FRSGallery.h"
+#import "FRSArticle.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSGallery (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) id articles;
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSString *caption;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
+@property (nullable, nonatomic, retain) NSSet<FRSArticle *> *articles;
 
 @end
 
@@ -41,6 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeStoriesObject:(FRSStory *)value;
 - (void)addStories:(NSSet<FRSStory *> *)values;
 - (void)removeStories:(NSSet<FRSStory *> *)values;
+
+- (void)addArticlesObject:(FRSArticle *)value;
+- (void)removeArticlesObject:(FRSArticle *)value;
+- (void)addArticles:(NSSet<FRSArticle *> *)values;
+- (void)removeArticles:(NSSet<FRSArticle *> *)values;
 
 @end
 
