@@ -23,6 +23,9 @@
         
         if (!error && responseObject) {
             
+            UIViewController *vc = ((FRSRootViewController *)self.window.rootViewController).viewController;
+            if (![[vc class] isSubclassOfClass:[UITabBarController class]]) return;
+            
             //Retreieve Gallery View Controller from storyboard
             UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
             
