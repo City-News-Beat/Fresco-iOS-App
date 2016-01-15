@@ -12,7 +12,7 @@
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 
-@interface FRSDebitCardViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface FRSDebitCardViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
 
@@ -64,7 +64,6 @@
     
     expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
 
-    
     UITextField *securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
     securityCodeTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -75,7 +74,9 @@
     
     securityCodeTextField.keyboardType = UIKeyboardTypeNumberPad;
     
-    
+    cardNumberTextField.delegate = self;
+    securityCodeTextField.delegate = self;
+    expirationDateTextField.delegate = self;
     
     UIImageView *cardNumberCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     cardNumberCheckIV.frame = CGRectMake(self.view.frame.size.width - 30, 10, 24, 24);
@@ -88,9 +89,7 @@
     UIImageView *CVVcheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     CVVcheckIV.frame = CGRectMake(self.view.frame.size.width - 30, 54, 24, 24);
     [container addSubview:CVVcheckIV];
-    
-    
-    
+  
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
     top.alpha = 1;
     top.backgroundColor = [UIColor frescoLightTextColor];
@@ -113,8 +112,41 @@
     [rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
     [self.view addSubview:rightAlignedButton];
-    
 }
 
+
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    return YES;
+}
+
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    
+    [self.view endEditing:YES];
+    return YES;
+}
+
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.view setFrame:CGRectMake(0,-50,self.view.frame.size.width,self.view.frame.size.height)];
+        
+    } completion:nil];
+}
+
+
+-(void)keyboardDidHide:(NSNotification *)notification
+{
+    
+    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.view setFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
+        
+    } completion:nil];
+}
 
 @end
