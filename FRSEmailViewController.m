@@ -80,7 +80,8 @@
                 
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
-                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109];
+//                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109];
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109 withColor:[UIColor frescoLightTextColor]];
                     break;
                     
                 default:

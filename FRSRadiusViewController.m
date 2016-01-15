@@ -9,11 +9,13 @@
 #import "FRSRadiusViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "MKMapView+Additions.h"
+#import "UIView+Helpers.h"
+#import "UIFont+Fresco.h"
 
 
-@interface FRSRadiusViewController()<UITableViewDelegate, UITableViewDataSource>
+@interface FRSRadiusViewController()
 
-@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -22,92 +24,89 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     
+    self.title = @"NOTIFICATION RADIUS";
+    
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
-    [self configureTableView];
-}
-
-
--(void)configureTableView{
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
-    
-    self.title = @"DISABLE MY ACCOUNT";
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    self.tableView.bounces = NO;
-    self.tableView.allowsSelection = NO;
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView.showsVerticalScrollIndicator = NO;
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    [self.tableView setSeparatorColor:[UIColor clearColor]];
-    
-    [self.view addSubview:self.tableView];
+    [self configureView];
     
 }
 
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+-(void)configureView{
+    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 55)];
+    mapView.delegate = self;
+    mapView.zoomEnabled = NO;
+    mapView.scrollEnabled = NO;
+    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
+    
+    MKCoordinateRegion region;
+    region.center.latitude = 40.7118;
+    region.center.longitude = -74.0105;
+    region.span.latitudeDelta = 0.015;
+    region.span.longitudeDelta = 0.015;
+    mapView.region = region;
+    
+    [self.view addSubview:mapView];
+    
+    [mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+        
+    UIView *sliderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, mapView.frame.size.height, self.view.frame.size.width, 55)];
+    sliderContainer.backgroundColor = [UIColor colorWithWhite:1 alpha:.92];
+    [self.view addSubview:sliderContainer];
+    
+    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
+    top.alpha = 0.2;
+    top.backgroundColor = [UIColor frescoDarkTextColor];
+    [sliderContainer addSubview:top];
+    
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 56, self.view.bounds.size.width, 0.5)];
+    bottom.alpha = 0.2;
+    bottom.backgroundColor = [UIColor frescoDarkTextColor];
+    [sliderContainer addSubview:bottom];
+    
+    UISlider *radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.view.frame.size.width - 104, 28)];
+    [radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
+    [radiusSlider setMaximumTrackTintColor:[UIColor frescoSliderGray]];
+    [sliderContainer addSubview:radiusSlider];
+    
+    UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
+    smallIV.image = [UIImage imageNamed:@"radius-small"];
+    [sliderContainer addSubview:smallIV];
+    
+    UIImageView *bigIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 12 - 24, 16, 24, 24)];
+    bigIV.image = [UIImage imageNamed:@"radius-large"];
+    [sliderContainer addSubview:bigIV];
+    
+    UIButton *rightAlignedButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightAlignedButton.frame =CGRectMake(self.view.frame.size.width - 118, mapView.frame.size.height + sliderContainer.frame.size.height, 118, 44);
+    [rightAlignedButton setTitle:@"SAVE RADIUS" forState:UIControlStateNormal];
+    [rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    
+    [self.view addSubview:rightAlignedButton];
+    
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
-}
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    switch (indexPath.row) {
-        case 0:
-            return self.view.frame.size.height/2;
-            break;
-            
-        default:;
-            break;
-    }
-    return 56;
-}
 
--(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSString *cellIdentifier;
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    return cell;
-    
-}
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    switch (indexPath.row) {
-        case 0:
-            [cell configureMapCell];
-
-            
-            break;
-        case 1:
-            [cell configureSliderCell];
-            [cell configureCellWithRightAlignedButtonTitle:@"SAVE RADIUS" withWidth:173];
-
-            
-        default:
-            break;
-    }
-}
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//
+//    switch (indexPath.row) {
+//        case 0:
+//            [cell configureMapCell];
+//
+//            break;
+//        case 1:
+//            [cell configureSliderCell];
+//            break;
+//        case 2:
+//            [cell configureCellWithRightAlignedButtonTitle:@"SAVE RADIUS" withWidth:173 withColor:[UIColor frescoBlueColor]];
+//            break;
+//
+//        default:
+//            break;
+//    }
+//}
 
 
 @end

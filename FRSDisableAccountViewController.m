@@ -48,7 +48,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 4;
+    return 5;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -104,7 +104,10 @@
         case 3:
             [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             
-            [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173];
+//            [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173];
+            break;
+        case 4:
+            [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173 withColor:[UIColor frescoLightTextColor]];
             break;
             
         default:

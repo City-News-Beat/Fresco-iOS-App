@@ -250,11 +250,12 @@
     return newLength <= 40;
 }
 
--(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width{
-    self.rightAlignedButton = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width - width, 44, width, 44)];
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color{
+    self.backgroundColor = [UIColor clearColor];
+    self.rightAlignedButton = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height)];
     [self.rightAlignedButton setTitle:title forState:UIControlStateNormal];
     [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [self.rightAlignedButton setTitleColor:color forState:UIControlStateNormal];
     [self addSubview:self.rightAlignedButton];
 }
 
@@ -321,14 +322,6 @@
 
 -(void)configureSliderCell{
     
-//    UIImageView *smallRadiusIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"radius-small"]];
-//    smallRadiusIV.frame = CGRectMake(12, 10, 24, 24);
-//    [self addSubview:smallRadiusIV];
-//    
-//    UIImageView *largeRadiusIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"radius-large"]];
-//    largeRadiusIV.frame = CGRectMake(self.frame.size.width - 24 - 16, 10, 24, 24);
-//    [self addSubview:largeRadiusIV];
-    
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
     top.alpha = 0.2;
     top.backgroundColor = [UIColor frescoDarkTextColor];
@@ -339,13 +332,9 @@
     bottom.backgroundColor = [UIColor frescoDarkTextColor];
     [self addSubview:bottom];
     
-//    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(52, 0, self.frame.size.width - 104, self.frame.size.height)];
-//    slider.tintColor = [UIColor frescoBlueColor];
-//    [self addSubview:slider];
-    
     UISlider *radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.frame.size.width - 104, 28)];
     [radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
-    [radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
+    [radiusSlider setMaximumTrackTintColor:[UIColor frescoSliderGray]];
     [self addSubview:radiusSlider];
     
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
@@ -355,13 +344,8 @@
     UIImageView *bigIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 24, 16, 24, 24)];
     bigIV.image = [UIImage imageNamed:@"radius-large"];
     [self addSubview:bigIV];
-    
+
 }
-
-
-
-
-
 
 -(void)configureMapCell{
     

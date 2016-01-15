@@ -84,7 +84,8 @@
         
         case 2:
             [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
-            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+//            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143 withColor:[UIColor frescoLightTextColor]];
             break;
             
         default:

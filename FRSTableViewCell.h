@@ -21,7 +21,7 @@
 
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
 
--(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width;
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color;
 
 -(void)configureEmptyCellSpace:(BOOL)yes;
 

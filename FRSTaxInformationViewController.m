@@ -59,7 +59,7 @@
             break;
             
         case 2:
-            return 3;
+            return 4;
             break;
         default:
             break;
@@ -159,10 +159,14 @@
                     
                 case 2:
                     [cell configureEditableCellWithDefaultText:@"City" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE TAX INFO" withWidth:143];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     break;
+                
+                case 3:
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE TAX INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+                    break;
+
                     
                 default:
                     break;

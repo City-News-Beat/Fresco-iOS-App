@@ -23,7 +23,6 @@
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    
 }
 
 @end
