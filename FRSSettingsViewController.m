@@ -449,8 +449,6 @@
             //Empty
             break;
         case 6:
-            NSLog(@"promo");
-            
         {
             FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
             [self.navigationController pushViewController:promo animated:YES];

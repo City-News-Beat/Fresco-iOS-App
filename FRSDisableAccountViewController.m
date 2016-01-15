@@ -28,7 +28,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
     
-    self.title = @"";
+    self.title = @"DISABLE MY ACCOUNT";
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     self.tableView.showsVerticalScrollIndicator = NO;

@@ -8,7 +8,7 @@
 
 @import MapKit;
 #import "DBImageColorPicker.h"
-#import "FRSMKCircle.h"
+//#import "FRSMKCircle.h"
 
 @interface MKMapView (Additions)
 
@@ -154,6 +154,6 @@ typedef enum : NSInteger {
  *  @return <#return value description#>
  */
 
-+ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius;
+//+ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius;
 
 @end

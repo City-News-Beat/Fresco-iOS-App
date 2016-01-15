@@ -9,6 +9,8 @@
 #import "FRSTableViewCell.h"
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
+#import "MKMapView+Additions.h"
+#import "UIView+Helpers.h"
 
 @interface FRSTableViewCell()
 
@@ -39,6 +41,11 @@
 @property (strong, nonatomic) UITextField *textField;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
+
+@property (strong, nonatomic) UILabel *disableAccountTitleLabel;
+@property (strong, nonatomic) UILabel *disableAccountSubtitleLabel;
+@property (strong, nonatomic) UIImageView *sadEmojiIV;
+
 
 @end
 
@@ -280,37 +287,100 @@
     }
     
     if (isSelected) {
-
+        
         self.dynamicCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
         self.dynamicTitle.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
-    
+        
     }
 }
 
 
 -(void)configureDisableAccountCell{
-    //make strong refrences
+    
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    UILabel *disableAccountTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 207, 22)];
-    [disableAccountTitleLabel setFont:[UIFont notaMediumWithSize:17]];
-    [disableAccountTitleLabel setTextColor:[UIColor frescoDarkTextColor]];
-    disableAccountTitleLabel.text = @"It doesn’t have to end like this";
-    [self addSubview:disableAccountTitleLabel];
+    self.disableAccountTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 207, 22)];
+    [self.disableAccountTitleLabel setFont:[UIFont notaMediumWithSize:17]];
+    [self.disableAccountTitleLabel setTextColor:[UIColor frescoDarkTextColor]];
+    self.disableAccountTitleLabel.text = @"It doesn’t have to end like this";
+    [self addSubview:self.disableAccountTitleLabel];
     
+    self.disableAccountSubtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 52, 288, 29)];
+    [self.disableAccountSubtitleLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightRegular]];
+    [self.disableAccountSubtitleLabel setTextColor:[UIColor frescoMediumTextColor]];
+    self.disableAccountSubtitleLabel.numberOfLines = 2;
+    self.disableAccountSubtitleLabel.text = @"Just in case you decide to come back, we’ll back up your account for one year before we delete it.";
+    [self addSubview:self.disableAccountSubtitleLabel];
     
-    UILabel *disableAccountSubtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 52, 288, 29)];
-    [disableAccountSubtitleLabel setFont:[UIFont systemFontOfSize:12 weight:UIFontWeightRegular]];
-    [disableAccountSubtitleLabel setTextColor:[UIColor frescoMediumTextColor]];
-    disableAccountSubtitleLabel.numberOfLines = 2;
-    disableAccountSubtitleLabel.text = @"Just in case you decide to come back, we’ll back up your account for one year before we delete it.";
-    [self addSubview:disableAccountSubtitleLabel];
+    self.sadEmojiIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sad-emoticon"]];
+    self.sadEmojiIV.frame = CGRectMake(231, 18, 20, 20);
+    [self addSubview:self.sadEmojiIV];
+    
+}
 
+
+-(void)configureSliderCell{
     
-    UIImageView *sadIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sad-emoticon"]];
-    sadIV.frame = CGRectMake(231, 18, 20, 20);
-    [self addSubview:sadIV];
+//    UIImageView *smallRadiusIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"radius-small"]];
+//    smallRadiusIV.frame = CGRectMake(12, 10, 24, 24);
+//    [self addSubview:smallRadiusIV];
+//    
+//    UIImageView *largeRadiusIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"radius-large"]];
+//    largeRadiusIV.frame = CGRectMake(self.frame.size.width - 24 - 16, 10, 24, 24);
+//    [self addSubview:largeRadiusIV];
     
+    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+    top.alpha = 0.2;
+    top.backgroundColor = [UIColor frescoDarkTextColor];
+    [self addSubview:top];
+    
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 56, self.bounds.size.width, 0.5)];
+    bottom.alpha = 0.2;
+    bottom.backgroundColor = [UIColor frescoDarkTextColor];
+    [self addSubview:bottom];
+    
+//    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(52, 0, self.frame.size.width - 104, self.frame.size.height)];
+//    slider.tintColor = [UIColor frescoBlueColor];
+//    [self addSubview:slider];
+    
+    UISlider *radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.frame.size.width - 104, 28)];
+    [radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
+    [radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
+    [self addSubview:radiusSlider];
+    
+    UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
+    smallIV.image = [UIImage imageNamed:@"radius-small"];
+    [self addSubview:smallIV];
+    
+    UIImageView *bigIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 24, 16, 24, 24)];
+    bigIV.image = [UIImage imageNamed:@"radius-large"];
+    [self addSubview:bigIV];
+    
+}
+
+
+
+
+
+
+-(void)configureMapCell{
+    
+    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    mapView.delegate = self;
+    mapView.zoomEnabled = NO;
+    mapView.scrollEnabled = NO;
+    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
+    
+    MKCoordinateRegion region;
+    region.center.latitude = 40.7118;
+    region.center.longitude = -74.0105;
+    region.span.latitudeDelta = 0.015;
+    region.span.longitudeDelta = 0.015;
+    mapView.region = region;
+    
+    [self addSubview:mapView];
+    
+    [mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
 }
 
