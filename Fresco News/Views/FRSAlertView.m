@@ -137,7 +137,7 @@
     
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
     NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2 + self.height/2;
-    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+    self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, self.height);
     
 }
 

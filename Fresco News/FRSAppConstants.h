@@ -79,16 +79,15 @@ enum FRSErrorCodes {
 
 #define BASE_URL                        @"https://fresconews.com"
 #define BASE_API                        @"https://api.fresconews.com/v1/"
-#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
-#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
+//#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
+//#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
+//#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 
-//
 //    #define BASE_URL                        @"http://dev.fresconews.com"
 //    #define BASE_API                        @"http://dev.api.fresconews.com/v1/"
-//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-//    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
+    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
+    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
+    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
 #else
     #define BASE_URL                        @"https://fresconews.com"
     #define BASE_API                        @"https://api.fresconews.com/v1/"
