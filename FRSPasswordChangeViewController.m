@@ -45,7 +45,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 4;
 }
 
 
@@ -84,7 +84,9 @@
         
         case 2:
             [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
-//            [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143];
+            break;
+        
+        case 3:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143 withColor:[UIColor frescoLightTextColor]];
             break;
             

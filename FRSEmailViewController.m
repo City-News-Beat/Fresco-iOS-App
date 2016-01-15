@@ -45,7 +45,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 3;
 }
 
 
@@ -74,22 +74,24 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     switch (indexPath.row) {
-                case 0:
-                    [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
-                    break;
-                
-                case 1:
-                    [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
-//                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109];
-            [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109 withColor:[UIColor frescoLightTextColor]];
-                    break;
-                    
-                default:
-                    break;
-            }
+        case 0:
+            [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
+            break;
             
-
-
+        case 1:
+            [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            break;
+        
+        case 2:
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109 withColor:[UIColor frescoLightTextColor]];
+            break;
+            
+        default:
+            break;
+    }
+    
+    
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
 }

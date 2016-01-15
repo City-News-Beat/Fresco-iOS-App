@@ -46,7 +46,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return 2;
 }
 
 
@@ -75,9 +75,26 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+    switch (indexPath.row) {
+        case 0:
+            switch (indexPath.section) {
+                case 0:
+                    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+                    break;
+                default:
+                    break;
+            }
+            break;
+                case 1:
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
+                    break;
+
+            break;
+            
+        default:
+            break;
+    }
 //    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
-    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 }
