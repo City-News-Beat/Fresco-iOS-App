@@ -87,26 +87,4 @@
     
 }
 
-
-
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    switch (indexPath.row) {
-//        case 0:
-//            [cell configureMapCell];
-//
-//            break;
-//        case 1:
-//            [cell configureSliderCell];
-//            break;
-//        case 2:
-//            [cell configureCellWithRightAlignedButtonTitle:@"SAVE RADIUS" withWidth:173 withColor:[UIColor frescoBlueColor]];
-//            break;
-//
-//        default:
-//            break;
-//    }
-//}
-
-
 @end
