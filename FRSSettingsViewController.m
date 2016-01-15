@@ -39,6 +39,10 @@
     [self configureNavBar];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self configureNavBar];
+}
+
 -(void)configureNavBar{
     self.title = @"SETTINGS";
 }
@@ -489,8 +493,6 @@
             break;
     }
 }
-
-
 
 
 - (void)presentModalMailComposerViewController:(BOOL)animated {

@@ -25,12 +25,12 @@
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self configureView];
+    self.title = @"DEBIT CARD";
     
 }
 
 
 -(void)configureView{
-    
     UIView *cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
     cardViewport.backgroundColor = [UIColor redColor];
     cardViewport.alpha = 0.2;
@@ -89,7 +89,7 @@
     UIImageView *CVVcheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     CVVcheckIV.frame = CGRectMake(self.view.frame.size.width - 30, 54, 24, 24);
     [container addSubview:CVVcheckIV];
-  
+    
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
     top.alpha = 1;
     top.backgroundColor = [UIColor frescoLightTextColor];
@@ -116,24 +116,23 @@
 
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
     return YES;
 }
 
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.view endEditing:YES];
     return YES;
 }
 
 
 - (void)keyboardDidShow:(NSNotification *)notification
-{
+{    
     [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-        [self.view setFrame:CGRectMake(0,-50,self.view.frame.size.width,self.view.frame.size.height)];
+        [self.view setFrame:CGRectMake(0, 30, self.view.frame.size.width,self.view.frame.size.height)];
         
     } completion:nil];
 }
