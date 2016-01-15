@@ -113,7 +113,6 @@
         self.dataSource = [self.highlights copy];
         [self.tableView reloadData];
     }];
-    
 }
 
 
@@ -215,6 +214,7 @@
     self.navigationItem.title = @"";
     
     [self.navigationController pushViewController:vc animated:YES];
+    [self hideTabBarAnimated:YES];
     
 }
 

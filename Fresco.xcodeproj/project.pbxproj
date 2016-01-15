@@ -69,8 +69,11 @@
 		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
 		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
 		659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */; };
+		65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525EE1C4988B9004A622B /* FRSCommentsView.m */; };
+		65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */; };
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D789601C4806A000F5C2DD /* FRSPost+CoreDataProperties.m */; };
 		65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DC9BE71C485B20001F450A /* FRSArticle+CoreDataProperties.m */; };
@@ -273,10 +276,16 @@
 		65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
 		65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSProfileViewController.h; sourceTree = "<group>"; };
 		65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSProfileViewController.m; sourceTree = "<group>"; };
+		655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSArticlesTableViewCell.h; sourceTree = "<group>"; };
+		655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSArticlesTableViewCell.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
 		659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryExpandedViewController.h; sourceTree = "<group>"; };
 		659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryExpandedViewController.m; sourceTree = "<group>"; };
+		65A525ED1C4988B9004A622B /* FRSCommentsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentsView.h; sourceTree = "<group>"; };
+		65A525EE1C4988B9004A622B /* FRSCommentsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCommentsView.m; sourceTree = "<group>"; };
+		65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentTableViewCell.h; sourceTree = "<group>"; };
+		65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCommentTableViewCell.m; sourceTree = "<group>"; };
 		65C8078B1BFA6BDA00490E73 /* UIView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Helpers.h"; path = "Categories/UIView+Helpers.h"; sourceTree = "<group>"; };
 		65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Helpers.m"; path = "Categories/UIView+Helpers.m"; sourceTree = "<group>"; };
 		65D7895F1C4806A000F5C2DD /* FRSPost+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FRSPost+CoreDataProperties.h"; path = "Core Data/FRSPost+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -542,6 +551,12 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
+				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
+				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
+				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
+				655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */,
+				655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */,
 				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
 				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
 				65201A321C3D7D7900B31089 /* FRSGalleryCell.h */,
@@ -1235,6 +1250,7 @@
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
+				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
 				65135FD31C286DCF00839149 /* FRSAssignment+CoreDataProperties.m in Sources */,
@@ -1250,6 +1266,7 @@
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
+				65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
@@ -1269,6 +1286,7 @@
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
+				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

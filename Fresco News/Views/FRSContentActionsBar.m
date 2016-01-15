@@ -31,7 +31,7 @@
 
 @implementation FRSContentActionsBar
 
--(instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSContentActionsBarDelegate>)delegate{
+-(instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSContentActionBarDelegate>)delegate{
     self = [super initWithFrame:CGRectMake(origin.x, origin.y, [UIScreen mainScreen].bounds.size.width, 44)];
     if (self){
         
@@ -49,7 +49,12 @@
 
 -(void)configureActionButton{
     
-    self.actionButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 1, 108, self.frame.size.height)];
+    UILabel *temp = [[UILabel alloc] init];
+    temp.font = [UIFont notaBoldWithSize:15];
+    temp.text = [self.delegate titleForActionButton];
+    [temp sizeToFit];
+    
+    self.actionButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 1, temp.frame.size.width, self.frame.size.height)];
     [self.actionButton setTitleColor:[self.delegate colorForActionButton] forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[[self.delegate colorForActionButton] colorWithAlphaComponent:0.7]  forState:UIControlStateHighlighted];
     [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];

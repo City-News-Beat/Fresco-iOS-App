@@ -11,7 +11,7 @@
 
 @class FRSGallery;
 
-@interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDataSource>
+@interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate>
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 

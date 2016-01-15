@@ -8,22 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol FRSContentActionsBarDelegate <NSObject>
+@protocol FRSContentActionBarDelegate;
+
+@interface FRSContentActionsBar : UIView
+
+@property (weak, nonatomic) NSObject <FRSContentActionBarDelegate> *delegate;
+
+-(instancetype)initWithOrigin:(CGPoint)origin delegate:(id <FRSContentActionBarDelegate>)delegate;
+
+@end
+
+@protocol FRSContentActionBarDelegate <NSObject>
 
 -(NSString *)titleForActionButton;
 
 -(UIColor *)colorForActionButton;
 
--(void)handleActionButtonTapped;
+-(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
 
 @end
-
-
-@interface FRSContentActionsBar : UIView
-
-@property (weak, nonatomic) NSObject <FRSContentActionsBarDelegate> *delegate;
-
--(instancetype)initWithOrigin:(CGPoint)origin delegate:(id <FRSContentActionsBarDelegate>)delegate;
-
-@end
-

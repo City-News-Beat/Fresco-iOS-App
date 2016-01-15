@@ -39,7 +39,7 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
-    self.coordinates = dict[@"location"][@"geo"][@"coordinates"];
+//    self.coordinates = dict[@"location"][@"geo"][@"coordinates"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
     
     NSNumber *height = dict[@"meta"][@"height"] ? : @0;

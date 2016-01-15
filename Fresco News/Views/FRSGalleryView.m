@@ -28,7 +28,7 @@
 #define TEXTVIEW_TOP_PAD 12
 
 
-@interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionsBarDelegate, UITextViewDelegate>
+@interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -62,10 +62,10 @@
 }
 */
 
--(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery dataSource:(id <FRSGalleryViewDataSource>)dataSource{
+-(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     if (self){
-        self.dataSource = dataSource;
+        self.delegate = delegate;
         self.gallery = gallery;
         self.orderedPosts = [self.gallery.posts allObjects];
         
@@ -225,7 +225,7 @@
     self.captionLabel.text = self.gallery.caption;
     
     
-    if ([self.dataSource shouldHaveTextLimit]){
+    if ([self.delegate shouldHaveTextLimit]){
         self.captionLabel.numberOfLines = 6;
     } else {
         self.captionLabel.numberOfLines = 0;
@@ -240,7 +240,7 @@
 
 -(void)configureActionsBar{
     
-    if (![self.dataSource shouldHaveActionBar]) {
+    if (![self.delegate shouldHaveActionBar]) {
         self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
     }
     else{
@@ -249,15 +249,16 @@
     
     [self addSubview:self.actionBar];
     
-    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height - 0.5)]];
+    
     
 }
 
 -(void)adjustHeight{
     NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
-    if ([self.dataSource shouldHaveActionBar]) height -= TEXTVIEW_TOP_PAD;
+    if ([self.delegate shouldHaveActionBar]) height -= TEXTVIEW_TOP_PAD;
     
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
+    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height)]];
 }
 
 

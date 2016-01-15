@@ -10,7 +10,7 @@
 @class FRSGallery;
 
 
-@protocol FRSGalleryViewDataSource <NSObject>
+@protocol FRSGalleryViewDelegate <NSObject>
 
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
@@ -19,13 +19,13 @@
 
 @interface FRSGalleryView : UIView
 
-@property (weak, nonatomic) NSObject <FRSGalleryViewDataSource> *dataSource;
+@property (weak, nonatomic) NSObject <FRSGalleryViewDelegate> *delegate;
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
 
 
--(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery dataSource:(id <FRSGalleryViewDataSource>)dataSource;
+-(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 
 
 //Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.

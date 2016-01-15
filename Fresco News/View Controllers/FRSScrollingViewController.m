@@ -72,7 +72,11 @@
 
 -(void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated{
     CGRect toFrame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44);
-    CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64 - 49);
+    
+    NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
+    if (self.hiddenTabBar) height += 49;
+    
+    CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
     
     if (animated){
         
@@ -107,7 +111,11 @@
 
 -(void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated {
     CGRect toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
-    CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 20 - 49);
+    
+    NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
+    if (self.hiddenTabBar) height += 49;
+    
+    CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, height);
     
     if (animated){
         

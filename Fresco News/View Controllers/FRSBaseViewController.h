@@ -13,6 +13,8 @@
 
 @interface FRSBaseViewController : UIViewController
 
+@property (nonatomic) BOOL hiddenTabBar;
+
 -(void)configureBackButtonAnimated:(BOOL)animated;
 
 -(void)configureNavigationBar;
