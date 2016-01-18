@@ -12,9 +12,7 @@
 
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UIButton *searchButton;
-@property (strong, nonatomic) UIView *searchView;
 @property (strong, nonatomic) UITextField *searchTextField;
-
 
 @end
 
@@ -45,15 +43,11 @@
     [self.searchButton addTarget:self action:@selector(searchStories) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:self.searchButton];
     
-    self.searchView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 10, self.view.frame.size.width - 60, 1.5)];
-    self.searchView.backgroundColor = [UIColor whiteColor];
-    self.searchView.alpha = 0;
-    [navBar addSubview:self.searchView];
-    
     self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
     self.searchTextField.tintColor = [UIColor whiteColor];
     self.searchTextField.alpha = 0;
     self.searchTextField.delegate = self;
+    self.searchTextField.textColor = [UIColor whiteColor];
     self.searchTextField.returnKeyType = UIReturnKeySearch;
     [navBar addSubview:self.searchTextField];
     
@@ -79,10 +73,8 @@
 -(void)animateSearch{
     [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.searchButton.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) + 45, 0);
-        self.searchView.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) +40, 0);
         self.searchTextField.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) +40, 0);
         self.searchTextField.alpha = 1;
-        self.searchView.alpha = 0.5;
 
     } completion:nil];
     
@@ -96,9 +88,7 @@
 -(void)hideSearch{
     [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.searchButton.transform = CGAffineTransformMakeTranslation(0, 0);
-        self.searchView.transform = CGAffineTransformMakeTranslation(self.view.frame.size.width, 0);
         self.searchTextField.transform = CGAffineTransformMakeTranslation(self.view.frame.size.width, 0);
-        self.searchView.alpha = 0;
         self.searchTextField.alpha = 0;
     } completion:^(BOOL finished) {
         self.searchTextField.text = @"";
