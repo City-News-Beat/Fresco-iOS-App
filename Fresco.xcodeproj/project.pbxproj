@@ -22,6 +22,7 @@
 		07820D3F1C446D0900298DD9 /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07820D3E1C446D0900298DD9 /* FRSTaxInformationViewController.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
+		07B296781C4D4349006FE3F3 /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B296771C4D4349006FE3F3 /* FRSStoriesViewController.m */; };
 		07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */; };
 		07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */; };
 		07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */; };
@@ -197,6 +198,8 @@
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		079CEF201C2874D500E559F3 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestViewController.h; path = "Fresco News/View Controllers/TestViewController.h"; sourceTree = SOURCE_ROOT; };
 		079CEF211C2874D500E559F3 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestViewController.m; path = "Fresco News/View Controllers/TestViewController.m"; sourceTree = SOURCE_ROOT; };
+		07B296761C4D4349006FE3F3 /* FRSStoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoriesViewController.h; sourceTree = "<group>"; };
+		07B296771C4D4349006FE3F3 /* FRSStoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoriesViewController.m; sourceTree = "<group>"; };
 		07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPromoCodeViewController.h; sourceTree = "<group>"; };
 		07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPromoCodeViewController.m; sourceTree = "<group>"; };
 		07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SanFranciscoText-Light.otf"; sourceTree = "<group>"; };
@@ -611,6 +614,8 @@
 				65201A2C1C3D7D4C00B31089 /* TempViewController.h */,
 				65201A2D1C3D7D4C00B31089 /* TempViewController.m */,
 				079CEF201C2874D500E559F3 /* TestViewController.h */,
+				07B296761C4D4349006FE3F3 /* FRSStoriesViewController.h */,
+				07B296771C4D4349006FE3F3 /* FRSStoriesViewController.m */,
 				079CEF211C2874D500E559F3 /* TestViewController.m */,
 				65201A1A1C3D7CD800B31089 /* ViewController.h */,
 				65201A1B1C3D7CD800B31089 /* ViewController.m */,
@@ -1288,6 +1293,7 @@
 				65201A1C1C3D7CD800B31089 /* ViewController.m in Sources */,
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
 				07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */,
+				07B296781C4D4349006FE3F3 /* FRSStoriesViewController.m in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
