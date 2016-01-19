@@ -212,8 +212,8 @@
 		07B38BE01C44562800797270 /* FRSEmailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSEmailViewController.m; sourceTree = "<group>"; };
 		07B38BE21C44598F00797270 /* FRSPasswordChangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPasswordChangeViewController.h; sourceTree = "<group>"; };
 		07B38BE31C44598F00797270 /* FRSPasswordChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPasswordChangeViewController.m; sourceTree = "<group>"; };
-		07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTableViewCell.h; sourceTree = "<group>"; };
-		07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTableViewCell.m; sourceTree = "<group>"; };
+		07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTableViewCell.h; path = ../FRSTableViewCell.h; sourceTree = "<group>"; };
+		07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTableViewCell.m; path = ../FRSTableViewCell.m; sourceTree = "<group>"; };
 		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 		1E408B761AA79A370057AC16 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		1E4983B41AFBCD9900924F59 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -439,8 +439,6 @@
 			children = (
 				073F624E1C3D722400E07977 /* FRSSettingsViewController.h */,
 				073F624F1C3D722400E07977 /* FRSSettingsViewController.m */,
-				07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */,
-				07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */,
 				07B38BDC1C443C5A00797270 /* FRSUsernameViewController.h */,
 				07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */,
 				07B38BDF1C44562800797270 /* FRSEmailViewController.h */,
@@ -904,6 +902,8 @@
 				65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */,
 				1EA27AA61AF147C4003137CE /* MKMapView+Additions.h */,
 				1EA27AA71AF147C4003137CE /* MKMapView+Additions.m */,
+				07F098DD1C400C40000F4CA6 /* FRSTableViewCell.h */,
+				07F098DE1C400C40000F4CA6 /* FRSTableViewCell.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";

@@ -368,6 +368,80 @@
     
 }
 
+-(void)configureSettingsHeaderCellWithTitle:(NSString *)title{
+    
+    self.defaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 8, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
+    self.defaultTitleLabel.text = title;
+    self.defaultTitleLabel.font = [UIFont notaBoldWithSize:15];
+    self.defaultTitleLabel.textColor = [UIColor frescoMediumTextColor];
+    [self addSubview:self.defaultTitleLabel];
+    
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+}
+
+-(void)configureSearchSeeAllCellWithTitle:(NSString *)title{
+    
+    self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    self.defaultTitleLabel.text = title;
+    self.defaultTitleLabel.textAlignment = NSTextAlignmentCenter;
+    self.defaultTitleLabel.font = [UIFont notaBoldWithSize:15];
+    self.defaultTitleLabel.textColor = [UIColor frescoBlueColor];
+    [self addSubview:self.defaultTitleLabel];
+    self.backgroundColor = [UIColor whiteColor];
+}
+
+
+-(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing{
+    
+    UIImageView *profilePhoto = [[UIImageView alloc] initWithImage:profile];
+    profilePhoto.frame = CGRectMake(16, 12, 32, 32);
+    profilePhoto.layer.cornerRadius = 16;
+    [self addSubview:profilePhoto];
+
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
+    nameLabel.text = nameString;
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    [nameLabel sizeToFit];
+    [self addSubview:nameLabel];
+    
+    
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, self.frame.size.height/2 -5, self.frame.size.width - 64, self.frame.size.height)];
+    usernameLabel.text = username;
+    usernameLabel.font = [UIFont notaRegularWithSize:13];
+    usernameLabel.textColor = [UIColor frescoDarkTextColor];
+    [usernameLabel sizeToFit];
+    [self addSubview:usernameLabel];
+
+    
+    
+    UIImageView *followingImage = [[UIImageView alloc] init];
+    followingImage.frame = CGRectMake(self.frame.size.width -40, 16, 24, 24);
+    [self addSubview:followingImage];
+    
+    if (isFollowing){
+        followingImage.image = [UIImage imageNamed:@"account-check"];
+    } else {
+        followingImage.image = [UIImage imageNamed:@"account-add"];
+    }
+
+}
+
+-(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString {
+    
+    UIImageView *profilePhoto = [[UIImageView alloc] initWithImage:storyPhoto];
+    profilePhoto.frame = CGRectMake(16, 12, 32, 32);
+    profilePhoto.layer.cornerRadius = 16;
+    [self addSubview:profilePhoto];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
+    nameLabel.text = nameString;
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    [self addSubview:nameLabel];
+    
+}
+
 -(void)clearCell{
     
 }

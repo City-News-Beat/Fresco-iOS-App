@@ -281,7 +281,6 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     //    [cell clearCell];
-    
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
@@ -425,7 +424,6 @@
                     [self.navigationController pushViewController:tax animated:YES];
                     self.navigationItem.title = @"";
                 }
-                    
                     break;
                 default:
                     break;

@@ -94,9 +94,7 @@
         default:
             break;
     }
-//    [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
 }
 
 

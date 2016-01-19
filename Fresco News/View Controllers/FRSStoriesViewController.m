@@ -65,7 +65,7 @@
 //    [self animateSearch];
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
-    [self presentViewController:searchVC animated:YES completion:nil];
+    [self presentViewController:searchVC animated:NO completion:nil];
 }
 
 //-(void)animateSearch{
