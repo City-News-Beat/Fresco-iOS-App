@@ -237,7 +237,7 @@
 }
 
 
-#pragma mark - Action Bar Delegate
+#pragma mark - Action Bar Delegate and Methods
 
 -(NSString *)titleForActionButton{
     if (self.addCommentState){
@@ -253,7 +253,13 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-
+    if (self.addCommentState){
+        
+    }
+    else {
+        [self.scrollView setContentOffset:CGPointMake(0, [self toggleActionBarOffsetPoint]) animated:YES];
+        [self scrollViewDidScroll:self.scrollView];
+    }
 }
 
 

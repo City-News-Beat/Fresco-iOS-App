@@ -29,6 +29,7 @@
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
 
+-(void)handleActionButtonTapped;
 
 
 @end

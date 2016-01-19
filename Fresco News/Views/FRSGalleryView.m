@@ -271,7 +271,7 @@
     return [UIColor frescoBlueColor];
 }
 
--(void)handleActionButtonTapped{
+-(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
 }
 

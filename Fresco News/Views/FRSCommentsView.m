@@ -39,16 +39,23 @@
 }
 
 -(void)configureTopButton{
-    self.topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
+    
+    NSInteger height = 45;
+    if (self.comments.count > 5){
+        height = 0;
+    }
+    
+    self.topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height)];
     [self.topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
     [self.topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [self.topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.topButton];
     
-    [self.topButton addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
-    [self.topButton addSubview:[UIView lineAtPoint:CGPointMake(0, self.topButton.frame.size.height - 0.5)]];
-    
+    if (height){
+        [self.topButton addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
+        [self.topButton addSubview:[UIView lineAtPoint:CGPointMake(0, self.topButton.frame.size.height - 0.5)]];
+    }
 }
 
 -(void)configureTableView{
