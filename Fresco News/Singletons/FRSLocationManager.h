@@ -29,4 +29,6 @@ typedef NS_ENUM(NSInteger, FRSLocationMonitoringState){
 
 -(void)pauseLocationMonitoring;
 
+-(BOOL)significantLocationChangeForLocation:(CLLocation *)location;
+
 @end

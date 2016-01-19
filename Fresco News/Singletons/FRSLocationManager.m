@@ -129,6 +129,8 @@
         return;
     }
     
+    if (![self significantLocationChangeForLocation:[locations lastObject]]) return;
+    
     self.lastAcquiredLocation = [locations lastObject];
     
     [self.notificationCenter postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
@@ -136,6 +138,14 @@
     if (self.monitoringState == FRSLocationMonitoringStateForeground){
         [self stopUpdatingLocation];
     }
+}
+
+-(BOOL)significantLocationChangeForLocation:(CLLocation *)location{
+    if (!self.lastAcquiredLocation) return YES;
+    
+    if ([self.lastAcquiredLocation distanceFromLocation:location] > 5.0) return YES;
+    
+    return NO;
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{

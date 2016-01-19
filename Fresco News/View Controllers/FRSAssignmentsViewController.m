@@ -25,6 +25,8 @@
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
 
+@property (strong, nonatomic) NSArray *overlays;
+
 @property (nonatomic) BOOL isFetching;
 
 @property (strong, nonatomic) FRSMapCircle *userCircle;
@@ -84,7 +86,6 @@
 }
 
 
-
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location{
     
     if (self.isFetching) return;
@@ -101,12 +102,13 @@
         }
         
         self.assignments = [mSerializedAssignments copy];
+        [self addAnnotationsForAssignments];
         
         self.isFetching = NO;
     }];
 }
 
-#pragma mark - Region Setting
+#pragma mark - Region
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location{
     MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.01f, 0.01f));
@@ -124,7 +126,143 @@
     [self addUserLocationCircleOverlay];
 }
 
+-(void)addAnnotationsForAssignments{
+    
+    for (id<MKAnnotation> annotation in self.mapView.annotations){
+        [self.mapView removeAnnotation:annotation];
+    }
+    
+    [self removeAllOverlaysIncludingUser:NO];
+    
+    for(FRSAssignment *assignment in self.assignments){
+        
+        [self addAssignmentAnnotation:assignment index:count];
+        count++;
+    }
+}
 
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
+    
+    //Create AssignmentAnnotaiton for passed assignment
+    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
+    
+    //Create center coordinate for the assignment
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]);
+    
+    //Create MKCircle surroudning the annotation
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coord radius:([assignment.radius floatValue] * kMetersInAMile)];
+    
+    [self.assignmentsMap addOverlay:circle];
+    
+    [self.assignmentsMap addAnnotation:annotation];
+}
+//
+//
+//- (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type{
+//    
+//    NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
+//    
+//    MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+//    
+//    if (!annotationView) {
+//        
+//        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+//        
+//        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
+//        
+//        [annotationView setImage:[MKMapView imagePinViewForAnnotationType:FRSAssignmentAnnotation].image];
+//        
+//        annotationView.enabled = YES;
+//        
+//        if (type == FRSAssignmentAnnotation) {
+//            
+//            annotationView.canShowCallout = YES;
+//            
+//            annotationView.rightCalloutAccessoryView = [MKMapView caret];
+//            
+//        }
+//    }
+//    
+//    return annotationView;
+//}
+//
+//
+//- (MKAnnotationView *)setupUserPinForAnnotation:(id <MKAnnotation>)annotation {
+//    
+//    MKAnnotationView *annotationView = [self dequeueReusableAnnotationViewWithIdentifier:USER_IDENTIFIER];
+//    
+//    if (!annotationView) {
+//        
+//        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:USER_IDENTIFIER];
+//        
+//        annotationView.centerOffset = CGPointMake(-14, -15 + 3); // math is account for 18 width and 5 x, 18 height and 3 y w, 3 pts shadow
+//        
+//        UIImageView *whiteLayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dot-user-blank"]];
+//        
+//        UIImageView *profileImageView = [MKMapView imagePinViewForAnnotationType:FRSUserAnnotation];
+//        
+//        [profileImageView.layer addPulsingAnimation];
+//        
+//        [whiteLayerImageView addSubview:profileImageView];
+//        
+//        [annotationView addSubview:whiteLayerImageView];
+//    }
+//    
+//    return annotationView;
+//}
+//
+//
+//+ (UIImageView *)imagePinViewForAnnotationType: (FRSAnnotationType)type {
+//    
+//    UIImageView *customPinView = [[UIImageView alloc] init];
+//    
+//    CGRect frame = CGRectMake(5, 3, 18, 18);
+//    
+//    if (type == FRSAssignmentAnnotation || type == FRSClusterAnnotation) { // is Assignment annotation view
+//        
+//        [customPinView setImage:[UIImage imageNamed:@"dot-assignment"]];
+//        
+//    }
+//    else if (type == FRSUserAnnotation) { // is User annotation view
+//        
+//        if ([[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR] != nil)
+//            [customPinView setImageWithURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_AVATAR]]];
+//        
+//        else
+//            [customPinView setImage:[UIImage imageNamed:@"dot-user-fill"]];
+//    }
+//    
+//    customPinView.frame = frame;
+//    customPinView.layer.masksToBounds = YES;
+//    customPinView.layer.cornerRadius = customPinView.frame.size.width / 2;
+//    
+//    return customPinView;
+//}
+
+//- (void)updateUserPinViewForMapViewWithImage:(UIImage *)image {
+//    
+//    if (image != nil) {
+//        
+//        for (id<MKAnnotation> annotation in self.annotations){
+//            
+//            if (annotation == self.userLocation){
+//                
+//                MKAnnotationView *profileAnnotation = [self viewForAnnotation:annotation];
+//                
+//                if ([profileAnnotation.subviews count] > 0){
+//                    
+//                    if ([(UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]) isKindOfClass:[UIImageView class]]) {
+//                        
+//                        UIImageView *profileImageView = (UIImageView *)(((UIView *)profileAnnotation.subviews[0]).subviews[0]);
+//                        
+//                        [profileImageView setImage:image];
+//                        
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 #pragma mark - Circle Overlays
@@ -147,11 +285,37 @@
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
 {
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
-    circleR.fillColor = [UIColor frescoBlueColor];
-    circleR.alpha = 0.5;
+    
+    if ([overlay isKindOfClass:[FRSMapCircle class]]){
+        FRSMapCircle *circle = (FRSMapCircle *)overlay;
+        
+        if (circle.circleType == FRSMapCircleTypeUser){
+            circleR.fillColor = [UIColor frescoBlueColor];
+            circleR.alpha = 0.5;
+        }
+        else if (circle.circleType == FRSMapCircleTypeAssignment){
+            circleR.fillColor = [UIColor frescoOrangeColor];
+            circleR.alpha = 0.5;
+        }
+    }
     
     return circleR;
 }
+
+-(void)removeAllOverlaysIncludingUser:(BOOL)removeUser{
+    for (id<MKOverlay>overlay in self.mapView.overlays){
+        if ([overlay isKindOfClass:[FRSMapCircle class]]){
+            FRSMapCircle *circle = (FRSMapCircle *)overlay;
+            
+            if (circle.circleType == FRSMapCircleTypeUser){
+                if (!removeUser) continue;
+            };
+            
+            [self.mapView removeOverlay:circle];
+        }
+    }
+}
+
 
 /*
 #pragma mark - Navigation
