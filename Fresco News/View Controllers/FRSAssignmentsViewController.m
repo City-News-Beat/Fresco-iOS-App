@@ -16,14 +16,18 @@
 
 #import "FRSDateFormatter.h"
 
+#import "FRSMapCircle.h"
+
 @import MapKit;
 
-@interface FRSAssignmentsViewController ()
+@interface FRSAssignmentsViewController () <MKMapViewDelegate>
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
 
 @property (nonatomic) BOOL isFetching;
+
+@property (strong, nonatomic) FRSMapCircle *userCircle;
 
 @end
 
@@ -40,8 +44,7 @@
     [super viewWillAppear:animated];
     
     [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-    
-    
+
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -57,6 +60,7 @@
 
 -(void)configureMap{
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
+    self.mapView.delegate = self;
     [self.view addSubview:self.mapView];
 }
 
@@ -75,12 +79,11 @@
     
     [self adjustMapRegionWithLocation:currentLocation];
     [self fetchAssignmentsNearLocation:currentLocation];
+    
+    [self configureAnnotationsForMap];
 }
 
--(void)adjustMapRegionWithLocation:(CLLocation *)location{
-    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.15f, 0.15f));
-    [self.mapView setRegion:region animated:YES];
-}
+
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location{
     
@@ -101,6 +104,53 @@
         
         self.isFetching = NO;
     }];
+}
+
+#pragma mark - Region Setting
+
+-(void)adjustMapRegionWithLocation:(CLLocation *)location{
+    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.01f, 0.01f));
+    
+    [self.mapView setRegion:region animated:YES];
+}
+
+-(void)setInitialMapRegion{
+    [self adjustMapRegionWithLocation:[FRSLocationManager sharedManager].lastAcquiredLocation];
+}
+
+#pragma mark - Annotations
+
+-(void)configureAnnotationsForMap{
+    [self addUserLocationCircleOverlay];
+}
+
+
+
+
+#pragma mark - Circle Overlays
+
+-(void)addUserLocationCircleOverlay{
+    
+    //    CGFloat radius = self.mapView.userLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
+    CGFloat radius = 100;
+    
+    if (self.userCircle){
+        [self.mapView removeOverlay:self.userCircle];
+    }
+    
+    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:[FRSLocationManager sharedManager].lastAcquiredLocation.coordinate radius:radius];
+    self.userCircle.circleType = FRSMapCircleTypeUser;
+    
+    [self.mapView addOverlay:self.userCircle];
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
+{
+    MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
+    circleR.fillColor = [UIColor frescoBlueColor];
+    circleR.alpha = 0.5;
+    
+    return circleR;
 }
 
 /*

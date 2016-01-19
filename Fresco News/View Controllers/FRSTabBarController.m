@@ -18,7 +18,7 @@
 #import "UIColor+Fresco.h"
 
 
-@interface FRSTabBarController ()
+@interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 
@@ -28,6 +28,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.delegate = self;
     
     [self configureAppearance];
     [self configureViewControllers];
@@ -99,54 +101,95 @@
 
 #pragma mark Delegate
 
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
-    
-    switch ([self.tabBar.items indexOfObject:item]) {
-        case 0:
-            [self handleHomeTabPressed];
-            break;
-        case 1:
-            [self handleStoryTabPressed];
-            break;
-        case 2:
-            [self handleCameraTabPressed];
-            break;
-        case 3:
-            [self handleAssignmentTabPressed];
-            break;
-        case 4:
-            [self handleProfileTabPressed];
-            break;
-        default:
-            break;
-    }
-}
-
--(void)handleHomeTabPressed{
-    self.lastActiveIndex = 0;
-}
-
--(void)handleStoryTabPressed{
-    self.lastActiveIndex = 1;
-}
-
--(void)handleCameraTabPressed{
-//    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
-//    [self presentViewController:camVC animated:YES completion:nil];
-}
-
--(void)handleAssignmentTabPressed{
-    self.lastActiveIndex = 3;
-}
-
--(void)handleProfileTabPressed{
-    self.lastActiveIndex = 4;
-}
+//-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+//    
+//    switch ([self.tabBar.items indexOfObject:item]) {
+//        case 0:
+//            [self handleHomeTabPressed];
+//            break;
+//        case 1:
+//            [self handleStoryTabPressed];
+//            break;
+//        case 2:
+//            [self handleCameraTabPressed];
+//            break;
+//        case 3:
+//            [self handleAssignmentTabPressed];
+//            break;
+//        case 4:
+//            [self handleProfileTabPressed];
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//
+//-(void)handleHomeTabPressed{
+//    
+//}
+//
+//-(void)handleStoryTabPressed{
+//    self.lastActiveIndex = 1;
+//}
+//
+//-(void)handleCameraTabPressed{
+////    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
+////    [self presentViewController:camVC animated:YES completion:nil];
+//}
+//
+//-(void)handleAssignmentTabPressed{
+//    self.lastActiveIndex = 3;
+//}
+//
+//-(void)handleProfileTabPressed{
+//    self.lastActiveIndex = 4;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+    
+    
+    UIViewController *selectedVC = viewController;
+    if ([viewController isKindOfClass:[FRSNavigationController class]]){
+        FRSNavigationController *nav = (FRSNavigationController *)viewController;
+        selectedVC = [nav.viewControllers firstObject];
+    }
+    
+    NSInteger index = [self.viewControllers indexOfObject:viewController];
+    
+    switch (index) {
+        case 0:
+            
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            if (self.lastActiveIndex == 3){
+                
+                if (![selectedVC isKindOfClass:[FRSAssignmentsViewController class]]) break;
+                
+                FRSAssignmentsViewController *assignVC = (FRSAssignmentsViewController *)selectedVC;
+                [assignVC setInitialMapRegion];
+            }
+            break;
+        case 4:
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.lastActiveIndex = index;
+    
+    return YES;
+}
+
 
 
 

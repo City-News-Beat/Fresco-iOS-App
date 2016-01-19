@@ -1,17 +1,19 @@
 ////
-////  MKMapView+LegalLabel.m
+////  MKMapView+Helpers.m
 ////  FrescoNews
 ////
 ////  Created by Fresco News on 4/29/15.
 ////  Copyright (c) 2015 Fresco. All rights reserved.
 ////
 //
-//#import "MKMapView+Additions.h"
+//#import "MKMapView+Helpers.h"
 //#import "FRSDataManager.h"
-//#import <AFNetworking/UIImageView+AFNetworking.h>
-//#import "CALayer+Additions.h"
 //
-//@implementation MKMapView (Additions)
+//#import <AFNetworking/UIImageView+AFNetworking.h>
+//
+////#import "CALayer+Additions.h"
+//
+//@implementation MKMapView (Helpers)
 //
 //#pragma mark - Zooming
 //
@@ -50,68 +52,41 @@
 //
 //#pragma mark - User Location
 //
-//+ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius withLocation:(CLLocationCoordinate2D)coordinate{
-//    
-//    
-//    FRSMKCircle *circle;
+//+(FRSMapCircle *)circleInMapView:(MKMapView *)mapView forUserWithRadius:(NSNumber *)radius location:(CLLocationCoordinate2D)location{
+//    FRSMapCircle *circle;
 //    
 //    if (radius) {
 //        
-//        circle = [FRSMKCircle circleWithCenterCoordinate:coordinate radius:[radius doubleValue] * kMetersInAMile];
+//        circle = [FRSMapCircle circleWithCenterCoordinate:location radius:[radius doubleValue] * kMetersInAMile];
 //        
 //    } else { //Set the radius to the horizontal accuracy
 //        
 //        CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
 //        
-//        circle = [FRSMKCircle circleWithCenterCoordinate:coordinate radius:accuracyRadius];
+//        circle = [FRSMapCircle circleWithCenterCoordinate:location radius:accuracyRadius];
 //        
 //    }
 //    
-//    circle.identifier = FRSUserCircle;
+//    circle.circleType = FRSMapCircleTypeUser;
 //    
 //    return circle;
 //}
 //
-//
-//+ (FRSMKCircle *)userRadiusForMap:(MKMapView *)mapView withRadius:(NSNumber *)radius {
+//-(void)updateUserCircleWithLocation:(CLLocationCoordinate2D)location withRadius:(CGFloat)radius{
+//    if (!location.latitude || !location.longitude) return;
 //    
-//    MKUserLocation *userLocation = mapView.userLocation;
-//    
-//    FRSMKCircle *circle;
-//    
-//    if (radius) {
-//        
-//        circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:[radius doubleValue] * kMetersInAMile];
-//        
-//    } else { //Set the radius to the horizontal accuracy
-//        
-//        CGFloat accuracyRadius = (mapView.userLocation.location.horizontalAccuracy > 200) ? 100 : mapView.userLocation.location.horizontalAccuracy;
-//        
-//        circle = [FRSMKCircle circleWithCenterCoordinate:userLocation.coordinate radius:accuracyRadius];
-//        
-//    }
-//    
-//    circle.identifier = FRSUserCircle;
-//    
-//    return circle;
-//}
-//
-//-(void)updateLocationCircleWithCoordinate:(CLLocationCoordinate2D)coordinate withRadius:(CGFloat)radius{
-//    
-//    if (!coordinate.latitude || !coordinate.longitude) return;
-//    
-//    [self zoomToCoordinates:[NSNumber numberWithDouble:coordinate.latitude]
-//                        lon:[NSNumber numberWithDouble:coordinate.longitude]
+//    [self zoomToCoordinates:[NSNumber numberWithDouble:location.latitude]
+//                        lon:[NSNumber numberWithDouble:location.longitude]
 //                 withRadius:[NSNumber numberWithDouble:radius] withAnimation:YES];
 //    
-//    [self userRadiusUpdated:[NSNumber numberWithDouble:radius] withLocation:coordinate];
-//    
+//    [self userRadiusUpdated:[NSNumber numberWithDouble:radius] withLocation:location];
 //}
+//
 //
 //-(void)userRadiusUpdated:(NSNumber *)radius withLocation:(CLLocationCoordinate2D)coordiante{
 //    for (id<MKOverlay>overlay in self.overlays) {
 //        
-//        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+//        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
 //            
 //            //Remove the overlay from view
 //            [self removeOverlay:overlay];
@@ -120,19 +95,19 @@
 //    }
 //    
 //    //Create new one with updated user location
-//    [self addOverlay:[MKMapView userRadiusForMap:self withRadius:radius withLocation:coordiante]];
+//    [self addOverlay:[MKMapView circleInMapView:self forUserWithRadius:radius location:coordiante]];
 //}
 //
-//- (void)updateUserLocationCircleWithRadius:(CGFloat)radius
-//{
-//    [self updateLocationCircleWithCoordinate:self.userLocation.coordinate withRadius:radius];
-//}
+////- (void)updateUserLocationCircleWithRadius:(CGFloat)radius
+////{
+////    [self updateLocationCircleWithCoordinate:self.userLocation.coordinate withRadius:radius];
+////}
 //
 //- (void)userRadiusUpdated:(NSNumber *)radius{
 //    
 //    for (id<MKOverlay>overlay in self.overlays) {
 //        
-//        if ([overlay isKindOfClass:[FRSMKCircle class]]) {
+//        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
 //            
 //            //Remove the overlay from view
 //            [self removeOverlay:overlay];
@@ -141,8 +116,7 @@
 //    }
 //    
 //    //Create new one with updated user location
-//    [self addOverlay:[MKMapView userRadiusForMap:self withRadius:radius]];
-//    
+////    [self addOverlay:[MKMapView userRadiusForMap:self withRadius:radius]];
 //}
 //
 //+ (DBImageColorPicker *)createDBImageColorPickerForUserWithImage:(UIImage *)image{

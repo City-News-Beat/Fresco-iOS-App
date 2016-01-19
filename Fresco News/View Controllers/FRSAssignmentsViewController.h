@@ -10,4 +10,6 @@
 
 @interface FRSAssignmentsViewController : FRSBaseViewController
 
+-(void)setInitialMapRegion;
+
 @end

@@ -129,6 +129,8 @@
         return;
     }
     
+    self.lastAcquiredLocation = [locations lastObject];
+    
     [self.notificationCenter postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
     if (self.monitoringState == FRSLocationMonitoringStateForeground){
