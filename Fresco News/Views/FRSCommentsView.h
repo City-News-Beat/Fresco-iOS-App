@@ -9,13 +9,6 @@
 #import <UIKit/UIKit.h>
 @class FRSGallery;
 
-typedef NS_ENUM(NSUInteger, FRSCommentViewButtonIndex){
-    FRSCommentsViewActionIndex = 0,
-    FRSCommentsViewLikedIndex,
-    FRSCommentsViewReportIndex,
-    FRSCommentsViewShareIndex
-};
-
 
 @protocol FRSCommentsViewDelegate;
 
@@ -23,7 +16,12 @@ typedef NS_ENUM(NSUInteger, FRSCommentViewButtonIndex){
 
 @property (strong, nonatomic) NSArray *comments;
 
+@property (nonatomic) BOOL shouldShowAllComments;
+
 @property (weak, nonatomic) NSObject <FRSCommentsViewDelegate> *delegate;
+
+
+
 
 -(instancetype)initWithComments:(NSArray *)comments;
 
@@ -33,8 +31,6 @@ typedef NS_ENUM(NSUInteger, FRSCommentViewButtonIndex){
 
 
 @protocol FRSCommentsViewDelegate <NSObject>
-
--(void)commentsView:(FRSCommentsView *)commentsView didSelectButtonAtIndex:(FRSCommentViewButtonIndex)index;
 
 -(void)commentsView:(FRSCommentsView *)commentsView didToggleViewMode:(BOOL)showAllComments;
 

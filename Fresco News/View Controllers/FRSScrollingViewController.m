@@ -75,6 +75,7 @@
     
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
     if (self.hiddenTabBar) height += 49;
+    if (self.actionBarVisible) height -= 44;
     
     CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
     
@@ -114,6 +115,7 @@
     
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
     if (self.hiddenTabBar) height += 49;
+    if (self.actionBarVisible) height  -= 44;
     
     CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, height);
     

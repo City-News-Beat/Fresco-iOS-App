@@ -16,6 +16,9 @@
 
 -(instancetype)initWithOrigin:(CGPoint)origin delegate:(id <FRSContentActionBarDelegate>)delegate;
 
+-(void)actionButtonTitleNeedsUpdate;
+
+
 @end
 
 @protocol FRSContentActionBarDelegate <NSObject>
@@ -25,5 +28,7 @@
 -(UIColor *)colorForActionButton;
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
+
+
 
 @end

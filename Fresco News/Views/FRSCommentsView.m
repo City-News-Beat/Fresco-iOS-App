@@ -14,15 +14,14 @@
 #import "UIView+Helpers.h"
 
 #import "FRSCommentTableViewCell.h"
-#import "FRSContentActionsBar.h"
 
-@interface FRSCommentsView() <UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate>
+@interface FRSCommentsView() <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) UIButton *topButton;
 @property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
+//@property (strong, nonatomic) FRSContentActionsBar *actionBar;
 
-@property (nonatomic) BOOL shouldShowAllComments;
+
 
 @end
 
@@ -34,7 +33,6 @@
         self.comments = comments;
         [self configureTopButton];
         [self configureTableView];
-        [self configureActionBar];
         [self adjustFrames];
     }
     return self;
@@ -63,12 +61,7 @@
     [self addSubview:self.tableView];
 }
 
--(void)configureActionBar{
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, 0) delegate:self];
-    [self addSubview:self.actionBar];
-    
-    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
-}
+
 
 #pragma mark - UITableView DataSource Delegate
 
@@ -109,7 +102,6 @@
 
 -(void)adjustFrames{
     self.tableView.frame = CGRectMake(0, self.topButton.frame.size.height, self.frame.size.width, [self tableViewHeight]);
-    self.actionBar.frame = CGRectMake(0, self.tableView.frame.origin.y + self.tableView.frame.size.height, self.actionBar.frame.size.width, self.actionBar.frame.size.height);
 }
 
 -(NSInteger)tableViewHeight{
@@ -128,23 +120,11 @@
     [self.delegate commentsView:self didToggleViewMode:self.shouldShowAllComments];
 }
 
-#pragma mark - Action Bar Delegate
-
--(NSString *)titleForActionButton{
-    return @"ADD A COMMENT";
-}
-
--(UIColor *)colorForActionButton{
-    return [UIColor frescoBlueColor];
-}
-
--(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    [self.delegate commentsView:self didSelectButtonAtIndex:FRSCommentsViewActionIndex];
-}
-
 -(NSInteger)height{
-    return self.topButton.frame.size.height + [self tableViewHeight] + self.actionBar.frame.size.height;
+    return self.topButton.frame.size.height + [self tableViewHeight];
 }
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

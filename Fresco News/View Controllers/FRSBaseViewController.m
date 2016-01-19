@@ -48,7 +48,11 @@
 
     NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height;
     
+    
+    
     if (self.tabBarController.tabBar.frame.origin.y == yOrigin) return;
+    
+    self.hiddenTabBar = YES;
     
     [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, self.tabBarController.tabBar.frame.size.width, self.tabBarController.tabBar.frame.size.height);
@@ -61,6 +65,8 @@
     NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - self.tabBarController.tabBar.frame.size.height;
     
     if (self.tabBarController.tabBar.frame.origin.y == yOrigin) return;
+    
+    self.hiddenTabBar = NO;
     
     [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, self.tabBarController.tabBar.frame.size.width, self.tabBarController.tabBar.frame.size.height);

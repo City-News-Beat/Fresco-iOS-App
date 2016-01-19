@@ -119,7 +119,11 @@
 }
 
 
-
+-(void)actionButtonTitleNeedsUpdate{
+    [self.actionButton setTitle:[self.delegate titleForActionButton] forState:UIControlStateNormal];
+    [self.actionButton sizeToFit];
+    [self.actionButton setSizeWithSize:CGSizeMake(self.actionButton.frame.size.width, self.frame.size.height)];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

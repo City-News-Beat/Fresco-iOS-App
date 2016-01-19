@@ -15,23 +15,27 @@
 
 #import "FRSGalleryView.h"
 #import "FRSCommentsView.h"
+#import "FRSContentActionsBar.h"
 
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 @property (strong, nonatomic) FRSCommentsView *commentsView;
+@property (strong, nonatomic) FRSContentActionsBar *actionBar;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @property (strong, nonatomic) UITableView *articlesTV;
 
 @property (strong, nonatomic) NSArray *orderedArticles;
+
+@property (nonatomic) BOOL addCommentState;
 
 
 @end
@@ -44,6 +48,7 @@
         self.gallery = gallery;
         self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
+        self.actionBarVisible = YES;
     }
     return self;
 }
@@ -90,13 +95,14 @@
     [self configureGalleryView];
     [self configureArticles];
     [self configureComments];
+    [self configureActionBar];
 
     [self adjustScrollViewContentSize];
 }
 
 
 -(void)configureScrollView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64 - 44)];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.scrollView.delegate = self;
     [self.view addSubview:self.scrollView];
@@ -145,6 +151,13 @@
     [self.scrollView addSubview:commentsLabel];
 }
 
+-(void)configureActionBar{
+    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.view.frame.size.height - 64 - 44) delegate:self];
+    [self.view addSubview:self.actionBar];
+    
+    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+}
+
 -(void)adjustScrollViewContentSize{
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentsView.frame.size.height + TOP_PAD * 2);
 }
@@ -173,8 +186,21 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
+    
+    if (scrollView.contentOffset.y >= [self toggleActionBarOffsetPoint] && !self.addCommentState){
+        self.addCommentState = YES;
+        [self.actionBar actionButtonTitleNeedsUpdate];
+    }
+    else if (scrollView.contentOffset.y < [self toggleActionBarOffsetPoint] && self.addCommentState){
+        self.addCommentState = NO;
+        [self.actionBar actionButtonTitleNeedsUpdate];
+    }
+    
 }
 
+-(NSInteger)toggleActionBarOffsetPoint{
+    return self.galleryView.frame.size.height + TOP_PAD + (self.gallery.articles.count * CELL_HEIGHT);
+}
 
 #pragma mark - Articles Table View DataSource Delegate
 
@@ -209,6 +235,28 @@
     [self.commentsView setSizeWithSize:CGSizeMake(self.commentsView.frame.size.width, [self.commentsView height])];
     [self adjustScrollViewContentSize];
 }
+
+
+#pragma mark - Action Bar Delegate
+
+-(NSString *)titleForActionButton{
+    if (self.addCommentState){
+        return @"ADD A COMMENT";
+    }
+    else {
+        return [NSString stringWithFormat:@"6 COMMENTS"];
+    }
+}
+
+-(UIColor *)colorForActionButton{
+    return [UIColor frescoBlueColor];
+}
+
+-(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
+
+}
+
+
 
 #pragma mark - Navigation
 
