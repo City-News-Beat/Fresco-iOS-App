@@ -19,8 +19,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self configureUI];
     // Do any additional setup after loading the view.
 }
+
+#pragma mark - Override Super
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
@@ -51,6 +54,16 @@
     [titleView addSubview:self.followersTab];
     [titleView addSubview:self.followingTab];
     
+}
+
+-(void)popViewController{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UI
+
+-(void)configureUI{
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning {

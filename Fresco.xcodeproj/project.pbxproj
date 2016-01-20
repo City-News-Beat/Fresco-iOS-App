@@ -67,6 +67,7 @@
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
+		6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */; };
 		659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */; };
 		65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525EE1C4988B9004A622B /* FRSCommentsView.m */; };
 		65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */; };
@@ -272,6 +273,8 @@
 		655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSArticlesTableViewCell.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
 		657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Helpers.m"; sourceTree = "<group>"; };
+		6596EC9D1C5031FA0011C18B /* FRSBorderedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBorderedImageView.h; path = Subclasses/FRSBorderedImageView.h; sourceTree = "<group>"; };
+		6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBorderedImageView.m; path = Subclasses/FRSBorderedImageView.m; sourceTree = "<group>"; };
 		659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryExpandedViewController.h; sourceTree = "<group>"; };
 		659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryExpandedViewController.m; sourceTree = "<group>"; };
 		65A525ED1C4988B9004A622B /* FRSCommentsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentsView.h; sourceTree = "<group>"; };
@@ -506,6 +509,7 @@
 				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
+				6596ECA01C5032000011C18B /* Subclasses */,
 				1EDA45041AA4D0B10082E08D /* Categories */,
 				1EDA44DF1AA4CD0D0082E08D /* Singletons */,
 				1EDA44F31AA4D0730082E08D /* Models */,
@@ -737,6 +741,15 @@
 				65135FCE1C286DCF00839149 /* FRSPost.m */,
 			);
 			name = FRSPost;
+			sourceTree = "<group>";
+		};
+		6596ECA01C5032000011C18B /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				6596EC9D1C5031FA0011C18B /* FRSBorderedImageView.h */,
+				6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */,
+			);
+			name = Subclasses;
 			sourceTree = "<group>";
 		};
 		65EBEDBD1C44507600BE671F /* Networking */ = {
@@ -1225,6 +1238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
+				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
 				079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,

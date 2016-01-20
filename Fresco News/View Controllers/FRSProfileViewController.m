@@ -16,6 +16,8 @@
 #import "FRSGalleryCell.h"
 #import "FRSDataManager.h"
 
+#import "FRSBorderedImageView.h"
+
 #import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
@@ -26,7 +28,9 @@
 @property (strong, nonatomic) UIView *profileContainer;
 
 @property (strong, nonatomic) UIView *profileBG;
-@property (strong, nonatomic) UIImageView *profileIV;
+
+//@property (strong, nonatomic) UIImageView *profileIV;
+@property (strong, nonatomic) FRSBorderedImageView *profileIV;
 
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
@@ -34,6 +38,8 @@
 
 @property (strong, nonatomic) UIImageView *followersIV;
 @property (strong, nonatomic) UILabel *followersLabel;
+
+@property (strong, nonatomic) UIButton *followersButton;
 
 @property (strong, nonatomic) UIView *sectionView;
 @property (strong, nonatomic) UIButton *feedButton;
@@ -134,14 +140,25 @@
     [self.profileContainer addSubview:self.profileBG];
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
-    self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height)];
+    
+    self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
     self.profileIV.image = [UIImage imageNamed:@"kobe"];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
-    [self.profileIV addBorderWithWidth:4 color:[UIColor whiteColor]];
-    self.profileIV.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
+//    [self.profileIV addBorderWithWidth:4 color:[UIColor whiteColor]];
+//    self.profileIV.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
+    
+//    self.followersButton = [[UIButton alloc] init];
+//    [self.followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+//    [self.followersButton setTitle:@"125" forState:UIControlStateNormal];
+//    [self.followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+//    [self.followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
+//    [self.followersButton sizeToFit];
+//    self.followersButton.center = self.profileBG.center;
+//    [self.followersButton setOriginWithPoint:CGPointMake(self.followersButton.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
+//    [self.profileContainer addSubview:self.followersButton];
     
     self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(6, 6, 24, 24)];
     self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
@@ -158,7 +175,9 @@
     self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
 //    [self.profileContainer addSubview:self.followersLabel];
     
-    UIView *followersContainer = [[UIView alloc] initWithFrame:CGRectMake(30, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6, 12 + 24 + self.followersLabel.frame.size.width + 7, 12 + 24)];
+    UIView *followersContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + self.followersLabel.frame.size.width + 7, 12 + 24)];
+    followersContainer.center = self.profileBG.center;
+    [followersContainer setOriginWithPoint:CGPointMake(followersContainer.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
     [followersContainer addSubview:self.followersIV];
     [followersContainer addSubview:self.followersLabel];
     [self.profileContainer addSubview:followersContainer];
@@ -269,6 +288,7 @@
     UITableViewCell *cell;
     if (indexPath.section == 0){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
@@ -282,7 +302,6 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section== 0){
         [cell addSubview:self.profileContainer];
-        cell.userInteractionEnabled = NO;
     }
     else {
 //        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;

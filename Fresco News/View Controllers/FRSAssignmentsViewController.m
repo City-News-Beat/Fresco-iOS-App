@@ -130,13 +130,8 @@
     [self.mapView setRegion:region animated:YES];
 }
 
--(void)resetMapToInitalState{
-    self.isOriginalSpan = YES;
-    [self adjustMapRegionWithLocation:[FRSLocationManager sharedManager].lastAcquiredLocation];
-    
-}
-
 -(void)setInitialMapRegion{
+    self.isOriginalSpan = YES;
     [self adjustMapRegionWithLocation:[FRSLocationManager sharedManager].lastAcquiredLocation];
 }
 
