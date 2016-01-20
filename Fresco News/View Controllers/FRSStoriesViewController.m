@@ -47,7 +47,9 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [navBar addSubview:self.titleLabel];
     
-    self.searchButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 48, 19.5, 48, 44)];
+    self.searchButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.searchButton.frame = CGRectMake(self.view.frame.size.width - 48, 19.5, 48, 44);
+    self.searchButton.tintColor = [UIColor whiteColor];
     [self.searchButton setImage:[UIImage imageNamed:@"search-icon"] forState:UIControlStateNormal];
     [self.searchButton addTarget:self action:@selector(searchStories) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:self.searchButton];

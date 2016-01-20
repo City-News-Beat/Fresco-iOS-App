@@ -34,7 +34,8 @@
     navBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:navBar];
     
-    UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(12, navBar.frame.size.height -34, 24, 24)];
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
     [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
     dismissButton.tintColor = [UIColor whiteColor];
     [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
@@ -51,7 +52,8 @@
         [self.searchTextField becomeFirstResponder];
     });
     
-    UIButton *clearButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24)];
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    clearButton.frame = CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24);
     [clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     clearButton.tintColor = [UIColor whiteColor];
     [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
@@ -264,7 +266,6 @@
         default:
             break;
     }
-//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -274,7 +275,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     [self.searchTextField resignFirstResponder];
-  
+    
 }
 
 
