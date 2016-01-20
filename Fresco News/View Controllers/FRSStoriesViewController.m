@@ -52,50 +52,50 @@
     [self.searchButton addTarget:self action:@selector(searchStories) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:self.searchButton];
 
-//    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
-//    self.searchTextField.tintColor = [UIColor whiteColor];
-//    self.searchTextField.alpha = 0;
-//    self.searchTextField.delegate = self;
-//    self.searchTextField.textColor = [UIColor whiteColor];
-//    self.searchTextField.returnKeyType = UIReturnKeySearch;
-//    [navBar addSubview:self.searchTextField];
+    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
+    self.searchTextField.tintColor = [UIColor whiteColor];
+    self.searchTextField.alpha = 0;
+    self.searchTextField.delegate = self;
+    self.searchTextField.textColor = [UIColor whiteColor];
+    self.searchTextField.returnKeyType = UIReturnKeySearch;
+    [navBar addSubview:self.searchTextField];
 }
 
 -(void)searchStories{
 //    [self animateSearch];
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
-    [self presentViewController:searchVC animated:NO completion:nil];
+    [self presentViewController:searchVC animated:YES completion:nil];
 }
 
-//-(void)animateSearch{
-//    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        self.searchButton.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) + 45, 0);
-//        self.searchTextField.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) +40, 0);
-//        self.searchTextField.alpha = 1;
-//
-//    } completion:nil];
-//    
-//    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        self.titleLabel.alpha = 0;
-//    } completion:^(BOOL finished) {
-//        [self.searchTextField becomeFirstResponder];
-//    }];
-//}
-//
-//-(void)hideSearch{
-//    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        self.searchButton.transform = CGAffineTransformMakeTranslation(0, 0);
-//        self.searchTextField.transform = CGAffineTransformMakeTranslation(self.view.frame.size.width, 0);
-//        self.searchTextField.alpha = 0;
-//    } completion:^(BOOL finished) {
-//        self.searchTextField.text = @"";
-//    }];
-//    
-//    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        self.titleLabel.alpha = 1;
-//    } completion:nil];
-//}
+-(void)animateSearch{
+    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.searchButton.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) + 45, 0);
+        self.searchTextField.transform = CGAffineTransformMakeTranslation((-self.view.frame.size.width) +40, 0);
+        self.searchTextField.alpha = 1;
+
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.titleLabel.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.searchTextField becomeFirstResponder];
+    }];
+}
+
+-(void)hideSearch{
+    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.searchButton.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.searchTextField.transform = CGAffineTransformMakeTranslation(self.view.frame.size.width, 0);
+        self.searchTextField.alpha = 0;
+    } completion:^(BOOL finished) {
+        self.searchTextField.text = @"";
+    }];
+    
+    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.titleLabel.alpha = 1;
+    } completion:nil];
+}
 
 -(void)configureTableView{
     self.tableView.delegate = self;

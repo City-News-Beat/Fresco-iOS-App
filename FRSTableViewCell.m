@@ -393,10 +393,10 @@
 
 -(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing{
     
-    UIImageView *profilePhoto = [[UIImageView alloc] initWithImage:profile];
-    profilePhoto.frame = CGRectMake(16, 12, 32, 32);
-    profilePhoto.layer.cornerRadius = 16;
-    [self addSubview:profilePhoto];
+    UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
+    profileIV.frame = CGRectMake(16, 12, 32, 32);
+    profileIV.layer.cornerRadius = 16;
+    [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
     nameLabel.text = nameString;
@@ -405,7 +405,6 @@
     [nameLabel sizeToFit];
     [self addSubview:nameLabel];
     
-    
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, self.frame.size.height/2 -5, self.frame.size.width - 64, self.frame.size.height)];
     usernameLabel.text = username;
     usernameLabel.font = [UIFont notaRegularWithSize:13];
@@ -413,26 +412,25 @@
     [usernameLabel sizeToFit];
     [self addSubview:usernameLabel];
 
-    
-    
-    UIImageView *followingImage = [[UIImageView alloc] init];
-    followingImage.frame = CGRectMake(self.frame.size.width -40, 16, 24, 24);
-    [self addSubview:followingImage];
+    UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    followingButton.frame = CGRectMake(self.frame.size.width - 40, 16, 24, 24);
+    [self addSubview:followingButton];
     
     if (isFollowing){
-        followingImage.image = [UIImage imageNamed:@"account-check"];
+        [followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        followingButton.tintColor = [UIColor frescoOrangeColor];
     } else {
-        followingImage.image = [UIImage imageNamed:@"account-add"];
+        [followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        followingButton.tintColor = [UIColor frescoMediumTextColor];
     }
-
 }
 
 -(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString {
     
-    UIImageView *profilePhoto = [[UIImageView alloc] initWithImage:storyPhoto];
-    profilePhoto.frame = CGRectMake(16, 12, 32, 32);
-    profilePhoto.layer.cornerRadius = 16;
-    [self addSubview:profilePhoto];
+    UIImageView *storyPreviewIV = [[UIImageView alloc] initWithImage:storyPhoto];
+    storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
+    storyPreviewIV.layer.cornerRadius = 16;
+    [self addSubview:storyPreviewIV];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
     nameLabel.text = nameString;
