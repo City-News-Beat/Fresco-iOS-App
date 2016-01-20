@@ -122,7 +122,6 @@
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
-    
 }
 
 -(void)createProfileSection{
@@ -132,7 +131,6 @@
     [self configureProfileImage];
     [self configureLabels];
     [self resizeProfileContainer];
-
 }
 
 -(void)configureProfileImage{
@@ -140,31 +138,17 @@
     [self.profileContainer addSubview:self.profileBG];
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
-    
     self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
     self.profileIV.image = [UIImage imageNamed:@"kobe"];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
-//    [self.profileIV addBorderWithWidth:4 color:[UIColor whiteColor]];
-//    self.profileIV.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
-    
-//    self.followersButton = [[UIButton alloc] init];
-//    [self.followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
-//    [self.followersButton setTitle:@"125" forState:UIControlStateNormal];
-//    [self.followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-//    [self.followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
-//    [self.followersButton sizeToFit];
-//    self.followersButton.center = self.profileBG.center;
-//    [self.followersButton setOriginWithPoint:CGPointMake(self.followersButton.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
-//    [self.profileContainer addSubview:self.followersButton];
     
     self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(6, 6, 24, 24)];
     self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
     self.followersIV.contentMode = UIViewContentModeCenter;
     self.followersIV.userInteractionEnabled = YES;
-//    [self.profileContainer addSubview:self.followersIV];
     
     self.followersLabel = [[UILabel alloc] init];
     self.followersLabel.text = @"1.5M";
@@ -173,7 +157,6 @@
     self.followersLabel.font = [UIFont notaBoldWithSize:15];
     [self.followersLabel sizeToFit];
     self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
-//    [self.profileContainer addSubview:self.followersLabel];
     
     UIView *followersContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + self.followersLabel.frame.size.width + 7, 12 + 24)];
     followersContainer.center = self.profileBG.center;
