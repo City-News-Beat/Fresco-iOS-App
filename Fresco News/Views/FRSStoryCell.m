@@ -24,7 +24,7 @@
 }
 
 - (void)configureCell {
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.backgroundColor = [UIColor purpleColor];
     
     self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) story:self.story delegate:self];
     
