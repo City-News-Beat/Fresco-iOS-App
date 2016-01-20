@@ -24,6 +24,8 @@
 		079CEF221C2874D500E559F3 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEF211C2874D500E559F3 /* TestViewController.m */; };
 		07B296781C4D4349006FE3F3 /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B296771C4D4349006FE3F3 /* FRSStoriesViewController.m */; };
 		07B2967B1C4D71A3006FE3F3 /* FRSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B2967A1C4D71A3006FE3F3 /* FRSSearchViewController.m */; };
+		07B3312D1C4FF76000D643E4 /* FRSStoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B3312C1C4FF76000D643E4 /* FRSStoryView.m */; };
+		07B331301C4FF78500D643E4 /* FRSStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B3312F1C4FF78500D643E4 /* FRSStoryCell.m */; };
 		07B38BD91C441B2E00797270 /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */; };
 		07B38BDB1C44347400797270 /* SanFranciscoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */; };
 		07B38BDE1C443C5A00797270 /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B38BDD1C443C5A00797270 /* FRSUsernameViewController.m */; };
@@ -203,6 +205,10 @@
 		07B296771C4D4349006FE3F3 /* FRSStoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoriesViewController.m; sourceTree = "<group>"; };
 		07B296791C4D71A3006FE3F3 /* FRSSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchViewController.h; sourceTree = "<group>"; };
 		07B2967A1C4D71A3006FE3F3 /* FRSSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchViewController.m; sourceTree = "<group>"; };
+		07B3312B1C4FF76000D643E4 /* FRSStoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryView.h; sourceTree = "<group>"; };
+		07B3312C1C4FF76000D643E4 /* FRSStoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryView.m; sourceTree = "<group>"; };
+		07B3312E1C4FF78500D643E4 /* FRSStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryCell.h; sourceTree = "<group>"; };
+		07B3312F1C4FF78500D643E4 /* FRSStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryCell.m; sourceTree = "<group>"; };
 		07B38BD71C441B2E00797270 /* FRSPromoCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPromoCodeViewController.h; sourceTree = "<group>"; };
 		07B38BD81C441B2E00797270 /* FRSPromoCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPromoCodeViewController.m; sourceTree = "<group>"; };
 		07B38BDA1C44347400797270 /* SanFranciscoText-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SanFranciscoText-Light.otf"; sourceTree = "<group>"; };
@@ -591,6 +597,10 @@
 				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
 				65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */,
 				65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */,
+				07B3312B1C4FF76000D643E4 /* FRSStoryView.h */,
+				07B3312C1C4FF76000D643E4 /* FRSStoryView.m */,
+				07B3312E1C4FF78500D643E4 /* FRSStoryCell.h */,
+				07B3312F1C4FF78500D643E4 /* FRSStoryCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1248,6 +1258,7 @@
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				65135FDB1C286DCF00839149 /* FRSPost+CoreDataProperties.m in Sources */,
 				07607B391C46FCEA005A620E /* FRSRadiusViewController.m in Sources */,
+				07B3312D1C4FF76000D643E4 /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
@@ -1259,6 +1270,7 @@
 				079CEF221C2874D500E559F3 /* TestViewController.m in Sources */,
 				65135FD91C286DCF00839149 /* FRSGallery+CoreDataProperties.m in Sources */,
 				073F62501C3D722400E07977 /* FRSSettingsViewController.m in Sources */,
+				07B331301C4FF78500D643E4 /* FRSStoryCell.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
