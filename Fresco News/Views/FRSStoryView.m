@@ -25,7 +25,7 @@
 #define TEXTVIEW_TOP_PADDING 12
 
 
-@interface FRSStoryView() <UIScrollViewDelegate, FRSContentActionsBarDelegate, UITextViewDelegate>
+@interface FRSStoryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 

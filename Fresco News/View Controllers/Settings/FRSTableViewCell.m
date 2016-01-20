@@ -9,7 +9,7 @@
 #import "FRSTableViewCell.h"
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
-#import "MKMapView+Additions.h"
+
 #import "UIView+Helpers.h"
 
 @interface FRSTableViewCell()
@@ -349,22 +349,22 @@
 
 -(void)configureMapCell{
     
-    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    mapView.delegate = self;
-    mapView.zoomEnabled = NO;
-    mapView.scrollEnabled = NO;
-    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
-    
-    MKCoordinateRegion region;
-    region.center.latitude = 40.7118;
-    region.center.longitude = -74.0105;
-    region.span.latitudeDelta = 0.015;
-    region.span.longitudeDelta = 0.015;
-    mapView.region = region;
-    
-    [self addSubview:mapView];
-    
-    [mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+//    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+//    mapView.delegate = self;
+//    mapView.zoomEnabled = NO;
+//    mapView.scrollEnabled = NO;
+//    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
+//    
+//    MKCoordinateRegion region;
+//    region.center.latitude = 40.7118;
+//    region.center.longitude = -74.0105;
+//    region.span.latitudeDelta = 0.015;
+//    region.span.longitudeDelta = 0.015;
+//    mapView.region = region;
+//    
+//    [self addSubview:mapView];
+//    
+//    [mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
 }
 

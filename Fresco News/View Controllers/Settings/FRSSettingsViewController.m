@@ -37,11 +37,9 @@
     [super viewDidLoad];
     [self configureTableView];
 
-    [self configureNavBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self configureNavBar];
 }
 
 -(void)configureNavigationBar{
