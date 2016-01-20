@@ -17,6 +17,7 @@
 #import "FRSDateFormatter.h"
 
 #import "FRSMapCircle.h"
+#import "FRSAssignmentAnnotation.h"
 
 @import MapKit;
 
@@ -79,7 +80,9 @@
     
     CLLocation *currentLocation = [locations lastObject];
     
-    [self adjustMapRegionWithLocation:currentLocation];
+    if (!self.mapView.userLocation)
+        [self adjustMapRegionWithLocation:currentLocation];
+    
     [self fetchAssignmentsNearLocation:currentLocation];
     
     [self configureAnnotationsForMap];
@@ -111,7 +114,7 @@
 #pragma mark - Region
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location{
-    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.01f, 0.01f));
+    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.1f, 0.1f));
     
     [self.mapView setRegion:region animated:YES];
 }
@@ -124,15 +127,18 @@
 
 -(void)configureAnnotationsForMap{
     [self addUserLocationCircleOverlay];
+    [self addAnnotationsForAssignments];
 }
 
 -(void)addAnnotationsForAssignments{
     
-    for (id<MKAnnotation> annotation in self.mapView.annotations){
-        [self.mapView removeAnnotation:annotation];
-    }
+//    for (id<MKAnnotation> annotation in self.mapView.annotations){
+//        [self.mapView removeAnnotation:annotation];
+//    }
+//    
+//    [self removeAllOverlaysIncludingUser:NO];
     
-    [self removeAllOverlaysIncludingUser:NO];
+    NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments){
         
@@ -144,18 +150,48 @@
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
     //Create AssignmentAnnotaiton for passed assignment
-    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
+//    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
+    FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
     
     //Create center coordinate for the assignment
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.lat floatValue], [assignment.lon floatValue]);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([[assignment.location firstObject] floatValue], [[assignment.location lastObject] floatValue]);
     
     //Create MKCircle surroudning the annotation
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:coord radius:([assignment.radius floatValue] * kMetersInAMile)];
+    FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:100];
+    circle.circleType = FRSMapCircleTypeAssignment;
     
-    [self.assignmentsMap addOverlay:circle];
+    [self.mapView addOverlay:circle];
     
-    [self.assignmentsMap addAnnotation:annotation];
+    [self.mapView addAnnotation:ann];
 }
+
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+//    NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
+    
+    MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
+    
+    if (!annotationView) {
+        
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
+        
+        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
+        
+        [annotationView setImage:[UIImage imageNamed:@"radius-large"]];
+        
+        annotationView.enabled = YES;
+        
+//        if (type == FRSAssignmentAnnotation) {
+//            
+//            annotationView.canShowCallout = YES;
+//            
+//            annotationView.rightCalloutAccessoryView = [MKMapView caret];
+//            
+//        }
+    }
+    
+    return annotationView;
+}
+
 //
 //
 //- (MKAnnotationView *)setupAssignmentPinForAnnotation:(id <MKAnnotation>)annotation withType:(FRSAnnotationType)type{

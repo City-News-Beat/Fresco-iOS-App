@@ -11,7 +11,6 @@
 #import "FRSTabBarController.h"
 #import "FRSOnboardingViewController.h"
 
-#import "TestViewController.h"
 #import "FRSSettingsViewController.h"
 
 #import "FRSNavigationController.h"
@@ -19,8 +18,7 @@
 
 #import "FRSSignUpViewController.h"
 #import "FRSSetupProfileViewController.h"
-#import "TempViewController.h"
-#import "ViewController.h"
+
 #import "FRSProfileViewController.h"
 
 #import "FRSLocationManager.h"

@@ -24,7 +24,9 @@
     self.uid = dictionary[@"_id"];
     self.title = dictionary[@"title"];
     self.location = dictionary[@"location"][@"geo"][@"coordinates"];
+    self.address = dictionary[@"location"][@"address"];
     self.radius = dictionary[@"location"][@"radius"];
+    
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
     self.expirationDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"expiration"] milliseconds:YES];
     self.caption = dictionary[@"caption"];

@@ -10,6 +10,8 @@
 
 //View Controllers
 #import "FRSSettingsViewController.h"
+#import "FRSFollowersViewController.h"
+#import "FRSNavigationController.h"
 
 #import "FRSGalleryCell.h"
 #import "FRSDataManager.h"
@@ -141,18 +143,27 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(35, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 12, 24, 24)];
+    self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(6, 6, 24, 24)];
     self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
     self.followersIV.contentMode = UIViewContentModeCenter;
-    [self.profileContainer addSubview:self.followersIV];
+    self.followersIV.userInteractionEnabled = YES;
+//    [self.profileContainer addSubview:self.followersIV];
     
     self.followersLabel = [[UILabel alloc] init];
     self.followersLabel.text = @"1.5M";
+    self.followersLabel.userInteractionEnabled = YES;
     self.followersLabel.textColor = [UIColor whiteColor];
     self.followersLabel.font = [UIFont notaBoldWithSize:15];
     [self.followersLabel sizeToFit];
     self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
-    [self.profileContainer addSubview:self.followersLabel];
+//    [self.profileContainer addSubview:self.followersLabel];
+    
+    UIView *followersContainer = [[UIView alloc] initWithFrame:CGRectMake(30, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6, 12 + 24 + self.followersLabel.frame.size.width + 7, 12 + 24)];
+    [followersContainer addSubview:self.followersIV];
+    [followersContainer addSubview:self.followersLabel];
+    [self.profileContainer addSubview:followersContainer];
+    
+    [followersContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFollowers)]];
 }
 
 -(void)configureLabels{
@@ -274,8 +285,9 @@
         cell.userInteractionEnabled = NO;
     }
     else {
-        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell configureCell];
+//        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+//        [galCell clearCell];
+//        [galCell configureCell];
     }
 }
 
@@ -338,6 +350,11 @@
     
 }
 
+-(void)showFollowers{
+    FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
+    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+}
 
 
 - (void)didReceiveMemoryWarning {

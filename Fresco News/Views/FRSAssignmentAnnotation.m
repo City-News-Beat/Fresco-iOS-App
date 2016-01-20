@@ -29,8 +29,8 @@
         
         self.assignmentIndex = index;
         self.assignmentId = assignment.uid;
-        self.address = assignment.location[@"address"];
-        self.coordinate = CLLocationCoordinate2DMake([assignment.location[@"latitude"] floatValue], [assignment.location[@"longitude"] floatValue]);
+        self.address = assignment.address;
+        self.coordinate = CLLocationCoordinate2DMake([[assignment.location firstObject] floatValue], [[assignment.location lastObject] floatValue]);
     }
     return self;
 }
