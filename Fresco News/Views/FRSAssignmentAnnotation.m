@@ -30,7 +30,7 @@
         self.assignmentIndex = index;
         self.assignmentId = assignment.uid;
         self.address = assignment.address;
-        self.coordinate = CLLocationCoordinate2DMake([[assignment.location firstObject] floatValue], [[assignment.location lastObject] floatValue]);
+        self.coordinate = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     }
     return self;
 }

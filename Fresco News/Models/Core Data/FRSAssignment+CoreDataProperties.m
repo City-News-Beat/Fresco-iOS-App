@@ -2,7 +2,7 @@
 //  FRSAssignment+CoreDataProperties.m
 //  Fresco
 //
-//  Created by Daniel Sun on 1/19/16.
+//  Created by Daniel Sun on 1/20/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,14 +14,15 @@
 @implementation FRSAssignment (CoreDataProperties)
 
 @dynamic active;
+@dynamic address;
 @dynamic caption;
 @dynamic createdDate;
 @dynamic editedDate;
 @dynamic expirationDate;
-@dynamic location;
 @dynamic radius;
 @dynamic title;
 @dynamic uid;
-@dynamic address;
+@dynamic longitude;
+@dynamic latitude;
 
 @end

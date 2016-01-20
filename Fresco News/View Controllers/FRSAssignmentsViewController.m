@@ -30,6 +30,8 @@
 
 @property (nonatomic) BOOL isFetching;
 
+@property (nonatomic) BOOL isOriginalSpan;
+
 @property (strong, nonatomic) FRSMapCircle *userCircle;
 
 @end
@@ -64,6 +66,7 @@
 -(void)configureMap{
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
+    self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
 
@@ -80,8 +83,7 @@
     
     CLLocation *currentLocation = [locations lastObject];
     
-    if (!self.mapView.userLocation)
-        [self adjustMapRegionWithLocation:currentLocation];
+    [self adjustMapRegionWithLocation:currentLocation];
     
     [self fetchAssignmentsNearLocation:currentLocation];
     
@@ -114,9 +116,24 @@
 #pragma mark - Region
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location{
-    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), MKCoordinateSpanMake(0.1f, 0.1f));
+    
+    //We want to preserve the span if the user modified it.
+    MKCoordinateSpan currentSpan = self.mapView.region.span;
+    
+    if (self.isOriginalSpan){
+        currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
+        self.isOriginalSpan = NO;
+    }
+    
+    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), currentSpan);
     
     [self.mapView setRegion:region animated:YES];
+}
+
+-(void)resetMapToInitalState{
+    self.isOriginalSpan = YES;
+    [self adjustMapRegionWithLocation:[FRSLocationManager sharedManager].lastAcquiredLocation];
+    
 }
 
 -(void)setInitialMapRegion{
@@ -149,12 +166,10 @@
 
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
     
-    //Create AssignmentAnnotaiton for passed assignment
-//    AssignmentAnnotation *annotation = [[AssignmentAnnotation alloc] initWithAssignment:assignment andIndex:index];
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
     
     //Create center coordinate for the assignment
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([[assignment.location firstObject] floatValue], [[assignment.location lastObject] floatValue]);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     
     //Create MKCircle surroudning the annotation
     FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:100];

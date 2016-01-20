@@ -73,11 +73,11 @@
 		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
 		65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */; };
 		65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */; };
-		65D1E4F21C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4F11C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.m */; };
 		65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */; };
 		65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D789601C4806A000F5C2DD /* FRSPost+CoreDataProperties.m */; };
 		65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DC9BE71C485B20001F450A /* FRSArticle+CoreDataProperties.m */; };
 		65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DC9BF31C485B7F001F450A /* FRSGallery+CoreDataProperties.m */; };
+		65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65E860AB1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m */; };
 		65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */; };
 		65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */; };
 		65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB81C44197100BE671F /* FRSLocationManager.m */; };
@@ -284,8 +284,6 @@
 		65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMapCircle.m; sourceTree = "<group>"; };
 		65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentAnnotation.h; sourceTree = "<group>"; };
 		65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentAnnotation.m; sourceTree = "<group>"; };
-		65D1E4F01C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FRSAssignment+CoreDataProperties.h"; path = "Core Data/FRSAssignment+CoreDataProperties.h"; sourceTree = "<group>"; };
-		65D1E4F11C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "FRSAssignment+CoreDataProperties.m"; path = "Core Data/FRSAssignment+CoreDataProperties.m"; sourceTree = "<group>"; };
 		65D1E4F31C4F0675003362D3 /* FRSFollowersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowersViewController.h; sourceTree = "<group>"; };
 		65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowersViewController.m; sourceTree = "<group>"; };
 		65D7895F1C4806A000F5C2DD /* FRSPost+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FRSPost+CoreDataProperties.h"; path = "Core Data/FRSPost+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -294,6 +292,8 @@
 		65DC9BE71C485B20001F450A /* FRSArticle+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "FRSArticle+CoreDataProperties.m"; path = "Core Data/FRSArticle+CoreDataProperties.m"; sourceTree = "<group>"; };
 		65DC9BF21C485B7F001F450A /* FRSGallery+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FRSGallery+CoreDataProperties.h"; path = "Core Data/FRSGallery+CoreDataProperties.h"; sourceTree = "<group>"; };
 		65DC9BF31C485B7F001F450A /* FRSGallery+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "FRSGallery+CoreDataProperties.m"; path = "Core Data/FRSGallery+CoreDataProperties.m"; sourceTree = "<group>"; };
+		65E860AA1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FRSAssignment+CoreDataProperties.h"; path = "Core Data/FRSAssignment+CoreDataProperties.h"; sourceTree = "<group>"; };
+		65E860AB1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "FRSAssignment+CoreDataProperties.m"; path = "Core Data/FRSAssignment+CoreDataProperties.m"; sourceTree = "<group>"; };
 		65EBEDAF1C4404A800BE671F /* FRSDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDateFormatter.h; path = Utilities/FRSDateFormatter.h; sourceTree = "<group>"; };
 		65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDateFormatter.m; path = Utilities/FRSDateFormatter.m; sourceTree = "<group>"; };
 		65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentsViewController.h; sourceTree = "<group>"; };
@@ -687,8 +687,8 @@
 		65135FDF1C286E2700839149 /* FRSAssignment */ = {
 			isa = PBXGroup;
 			children = (
-				65D1E4F01C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.h */,
-				65D1E4F11C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.m */,
+				65E860AA1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.h */,
+				65E860AB1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m */,
 				65135FBD1C286DCF00839149 /* FRSAssignment.h */,
 				65135FBE1C286DCF00839149 /* FRSAssignment.m */,
 			);
@@ -1254,10 +1254,10 @@
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
-				65D1E4F21C4EF2A0003362D3 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
+				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				65046DFF1C3EE8CA003E02B5 /* FRSDataManager.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
