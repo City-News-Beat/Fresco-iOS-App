@@ -8,10 +8,14 @@
 
 #import "FRSFollowersViewController.h"
 
-@interface FRSFollowersViewController ()
+#define CELL_HEIGHT 56
+
+@interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) UIButton *followersTab;
 @property (strong, nonatomic) UIButton *followingTab;
+
+@property (strong, nonatomic) NSArray *dataSourceArray;
 
 @end
 
@@ -71,6 +75,9 @@
 
 -(void)configureTableView{
     [super configureTableView];
+    self.tableView.delegate =self;
+    self.tableView.dataSource = self;
+    
 }
 
 #pragma mark - Tabbing
@@ -89,6 +96,32 @@
     }
 }
 
+
+#pragma mark - UITableView Delegate DataSource
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataSourceArray.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return CELL_HEIGHT;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return nil;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
 
 
 - (void)didReceiveMemoryWarning {
