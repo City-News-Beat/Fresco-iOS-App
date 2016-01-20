@@ -34,5 +34,6 @@
 
 +(UIColor *)frescoShadowColor;
 
++(UIColor *)frescoSliderGray;
 
 @end

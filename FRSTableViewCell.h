@@ -8,27 +8,35 @@
 
 #import <UIKit/UIKit.h>
 
-//typedef NS_ENUM(NSUInteger, FRSSettingCellType) {
-//    FRSSettingCellTypeDefault = 0,
-//    FRSSettingCellTypeLarge,
-//    FRSSettingCellTypeSocial,
-//};
-
 
 @interface FRSTableViewCell : UITableViewCell
 
--(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes;
-
--(void)configureDefaultCellWithTitle:(NSString *)title withSecondTitle:(NSString *)secondTitle;
+-(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle;
 
 -(void)configureCellWithUsername:(NSString *)username;
 
 -(void)configureAssignmentCell;
 
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
+
 -(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
+
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color;
 
 -(void)configureEmptyCellSpace:(BOOL)yes;
 
 -(void)configureLogOut;
 
+-(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
+
+-(void)configureDisableAccountCell;
+-(void)configureSliderCell;
+-(void)configureMapCell;
+
+-(void)configureSettingsHeaderCellWithTitle:(NSString *)title;
+-(void)configureSearchSeeAllCellWithTitle:(NSString *)title;
+-(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)firstName userName:(NSString *)username isFollowing:(BOOL)isFollowing;
+-(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString;
+
 @end
+

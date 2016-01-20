@@ -84,7 +84,6 @@ enum FRSErrorCodes {
 //#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
 //#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 
-//cool
 //    #define BASE_URL                        @"http://dev.fresconews.com"
 //    #define BASE_API                        @"http://dev.api.fresconews.com/v1/"
     #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]

@@ -46,12 +46,11 @@
         CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
         self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
         self.overlayView.backgroundColor = [UIColor blackColor];
-        self.overlayView.alpha = .26;
+        self.overlayView.alpha = 0;
         [self addSubview:(self.overlayView)];
         
-        //        /* Alert Box */
+        /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-
         
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
@@ -137,8 +136,8 @@
     UIViewController* vc = (UIViewController *)self.delegate;
     
     NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
-    NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2;
-    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+    NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2 + self.height/2;
+    self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, self.height);
     
 }
 
