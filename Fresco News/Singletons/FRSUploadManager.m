@@ -189,7 +189,7 @@
                     if(i == gallery.posts.count - 1){
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                            [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
                             self.isUploadingGallery = NO;
                         });
                     }
@@ -207,9 +207,7 @@
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-            
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
-            
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
             self.isUploadingGallery = NO;
         });
         
