@@ -204,8 +204,10 @@
     NSString *truncatedGalleryCaption = [gallery.caption substringWithRange:stringRange];
     
     NSString *dots = @"...";
-    
-    NSLog(@"%@ \n%@/gallery/%@", truncatedGalleryCaption, BASE_URL, gallery.galleryID);
+
+    if (stringRange.length < 106) {
+        dots = @"";
+    }
     
 
     //Run social post now that we have the gallery id back
