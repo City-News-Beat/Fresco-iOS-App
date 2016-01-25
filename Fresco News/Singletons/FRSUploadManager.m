@@ -194,12 +194,23 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
         });
-        
     }
+
     
-    //Run social psot now that we have the gallery id back
-    NSString *crossPostString = [NSString stringWithFormat:@"Just posted a gallery to @fresconews: %@/gallery/%@", BASE_URL, gallery.galleryID];
+    NSRange stringRange = {0, MIN([gallery.caption length], 110)};
     
+    stringRange = [gallery.caption rangeOfComposedCharacterSequencesForRange:stringRange];
+    
+    NSString *truncatedGalleryCaption = [gallery.caption substringWithRange:stringRange];
+    
+    NSString *dots = @"...";
+    
+    NSLog(@"%@ \n%@/gallery/%@", truncatedGalleryCaption, BASE_URL, gallery.galleryID);
+    
+
+    //Run social post now that we have the gallery id back
+    NSString *crossPostString = [NSString stringWithFormat:@"%@%@ \n%@/gallery/%@", truncatedGalleryCaption, dots, BASE_URL, gallery.galleryID];
+ 
     NSString *title = @"Just posted a gallery to @fresconews:";
     NSString *url = [NSString stringWithFormat:@"%@/gallery/%@", BASE_URL, gallery.galleryID];
     
