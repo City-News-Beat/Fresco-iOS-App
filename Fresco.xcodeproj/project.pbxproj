@@ -62,7 +62,6 @@
 		1EDF047D1B0E902900B35858 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF047C1B0E902900B35858 /* NotificationCell.m */; };
 		32C02B7D1B0298A3000BA34A /* ProfileSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C02B7C1B0298A3000BA34A /* ProfileSettingsViewController.m */; };
 		32CA6FF51B45974F00242E1E /* TOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CA6FF41B45974F00242E1E /* TOSViewController.m */; };
-		4214BC241AE438E6006BEBA7 /* GalleryPostViewController1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214BC231AE438E6006BEBA7 /* GalleryPostViewController1.m */; };
 		424323DB1AB3D64900646278 /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424323DA1AB3D64900646278 /* FRSTabBarController.m */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42C926771B18AB1200774A37 /* Camera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42C926751B18AB1200774A37 /* Camera.storyboard */; };
@@ -309,8 +308,6 @@
 		32CA6FF31B45974F00242E1E /* TOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TOSViewController.h; path = "First Run/TOSViewController.h"; sourceTree = "<group>"; };
 		32CA6FF41B45974F00242E1E /* TOSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TOSViewController.m; path = "First Run/TOSViewController.m"; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		4214BC221AE438E6006BEBA7 /* GalleryPostViewController1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GalleryPostViewController1.h; path = Camera/GalleryPostViewController1.h; sourceTree = "<group>"; };
-		4214BC231AE438E6006BEBA7 /* GalleryPostViewController1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GalleryPostViewController1.m; path = Camera/GalleryPostViewController1.m; sourceTree = "<group>"; };
 		424323D91AB3D64900646278 /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
 		424323DA1AB3D64900646278 /* FRSTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTabBarController.m; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1194,8 +1191,6 @@
 			children = (
 				6521BCF51C209A2E000D1ABB /* GalleryPostViewController.h */,
 				6521BCF61C209A2E000D1ABB /* GalleryPostViewController.m */,
-				4214BC221AE438E6006BEBA7 /* GalleryPostViewController1.h */,
-				4214BC231AE438E6006BEBA7 /* GalleryPostViewController1.m */,
 				E7C43DB91BC597560083CBF0 /* AssetsPickerController.h */,
 				E7C43DBA1BC597560083CBF0 /* AssetsPickerController.m */,
 			);
@@ -1626,7 +1621,6 @@
 				E76C1A481B168DDF00FB0B18 /* FRSCluster.m in Sources */,
 				E7D27A9F1B5FFF5900A08B51 /* FRSPhotoBrowserView.m in Sources */,
 				BC1CA8BB1BA72F3300DDB9FB /* CALayer+Additions.m in Sources */,
-				4214BC241AE438E6006BEBA7 /* GalleryPostViewController1.m in Sources */,
 				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,

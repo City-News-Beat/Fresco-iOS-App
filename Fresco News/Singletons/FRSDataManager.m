@@ -15,6 +15,7 @@
 #import "FRSLocationManager.h"
 #import "FRSStory.h"
 #import "FRSAlertViewManager.h"
+#import "AppDelegate+Additions.h"
 
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoTokenKey @"frescoAPIToken"
@@ -26,6 +27,8 @@
 }
 
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
+
+@property (strong, nonatomic) AppDelegate *appDelegate;
 
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
 
@@ -41,6 +44,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[FRSDataManager alloc] init];
+        manager.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     });
     return manager;

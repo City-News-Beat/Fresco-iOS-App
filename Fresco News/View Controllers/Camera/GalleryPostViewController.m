@@ -496,7 +496,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 -(void)configureTextView{
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76)];
     self.captionTextView.delegate = self;
-    self.captionTextView.text = WHATS_HAPPENING;
+    self.captionTextView.text = [self.gallery.caption isEqualToString:@"No Caption"] ? WHATS_HAPPENING : self.captionTextView.text;
     self.captionTextView.textColor = [UIColor colorWithWhite:0 alpha:0.26];
     self.captionTextView.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15];
     self.captionTextView.backgroundColor = [UIColor whiteBackgroundColor];
@@ -1029,6 +1029,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     self.gallery.caption = self.captionTextView.text;
     
+    [self saveGalleryIntoDefaultsInBackground:self.gallery];
+    
     NSNumber * facebookPost = [NSNumber numberWithBool:NO];
     NSNumber * twitterPost = [NSNumber numberWithBool:NO];
     
@@ -1067,6 +1069,20 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
         }
     });
+}
+
+-(void)saveGalleryIntoDefaultsInBackground:(FRSGallery *)gallery{
+    NSMutableArray *assetIDs = [NSMutableArray new];
+    for (FRSPost *post in gallery.posts){
+        NSString *assetID = post.image.asset.localIdentifier;
+        [assetIDs addObject:assetID];
+    }
+    
+    NSString *galleryID = gallery.galleryID ? gallery.galleryID : @"";
+    
+    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assets" : assetIDs, @"caption" : gallery.caption, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
+    
+    [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_UPLOADING_GALLERY_DICT];
 }
 
 #pragma mark - AV Player

@@ -118,10 +118,16 @@
             svc.story = [[FRSStory alloc] initWithDictionary:@{@"title" : navTitle ? navTitle : TODAY_TITLE} error:nil];
             
             [homeVC.navigationController pushViewController:svc animated:YES];
-            
         }
-        
     }];
+}
+
+-(void)fireFailedUploadLocalNotification{
+    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    localNotification.alertBody = @"Wait, we're almost done! Come back to Fresco to finish uploading your gallery.";
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
 

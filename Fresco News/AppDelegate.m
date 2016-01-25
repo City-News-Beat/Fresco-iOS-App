@@ -20,6 +20,8 @@
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
+#import "FRSUploadManager.h"
+
 #import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
 #import "AppDelegate+Additions.h"
@@ -72,7 +74,7 @@
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
         
         [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-    
+        
     }
     
     //Check if we've launched the app before or if the app is the iPhone 4s/4
@@ -98,7 +100,12 @@
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
-    NSLog(@"DID TERMINATE");
+    NSLog(@"WIILL TERMINATE");
+    
+    
+    if ([FRSUploadManager sharedManager].isUploadingGallery)
+        [self fireFailedUploadLocalNotification];
+    
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
     
 }
@@ -312,8 +319,6 @@
         [self openStoryFromPush:userInfo[@"story"]];
         
     }
-    
-    
 }
 
 

@@ -32,6 +32,8 @@
 
 - (void)setRootViewControllerToAssignments;
 
+-(void)setRootViewControllerToGalleryUploadVC;
+
 - (void)hideTabBar;
 
 - (void)showTabBar;

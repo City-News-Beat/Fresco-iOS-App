@@ -140,6 +140,7 @@ enum FRSErrorCodes {
 #define UD_UPDATE_PROFILE                   @"updateProfile"
 #define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
 #define UD_GALLERY_POSTED                   @"galleryPosted"
+#define UD_UPLOADING_GALLERY_DICT           @"uploadingGalleryDictionary"
 
 
 

@@ -21,6 +21,12 @@
 
 @property (weak, nonatomic) NSObject <FRSUploadManagerDelegate> *delegate;
 
+@property (nonatomic) BOOL isUploadingGallery;
+
+-(void)saveUploadingAssetsToDefaults;
+
+
+
 
 /**
  *  Shared accessor for manager

@@ -95,6 +95,16 @@
     
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT]){
+//        NSLog(@"THERE WAS A SAVED DICT");
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"FINISH UPLOADING GALLERY" object:nil];
+//    }
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
 }

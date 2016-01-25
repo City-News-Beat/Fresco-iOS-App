@@ -44,4 +44,7 @@
 
 - (void)openStoryFromPush:(NSString *)storyId;
 
+
+-(void)fireFailedUploadLocalNotification;
+
 @end

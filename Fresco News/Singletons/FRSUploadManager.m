@@ -26,6 +26,19 @@
 
 @property (nonatomic, assign) NSInteger currentPostIndex;
 
+@property (strong, nonatomic) NSMutableArray *uploadingAssetIDs;
+
+/*
+ @{
+    @"gallery_id" : <gallery.galleryId>
+    @"assets" : @[assetId]
+    @"caption" : <caption>
+    @"facebook_selected" : @BOOL
+    @"twitter_selected: @BOOL 
+ }
+*/
+@property (strong, nonatomic) NSMutableDictionary *uploadingDict;
+
 @end
 
 @implementation FRSUploadManager
@@ -86,6 +99,8 @@
                                   @"count" : @(self.postCount)};
     
     
+    self.isUploadingGallery = YES;
+    
     //Send request for image data
     [post dataForPostWithResponseBlock:^(NSData *data, NSError *error) {
         
@@ -122,6 +137,7 @@
                                                       //Run rest of upload
                                                       [self handleGalleryCompletionForGallery:gallery withSocialOptions:socialOptions];
                                                       
+                                                      
                                                   }
                                                   //Gallery ID is missing
                                                   else{
@@ -131,6 +147,8 @@
                                                           responseBlock(NO, nil);
                                                       
                                                       [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_FAILURE object:nil];
+                                                      
+                                                      self.isUploadingGallery = NO;
                                                       
                                                   }
                                                   
@@ -142,7 +160,6 @@
                    forKeyPath:@"fractionCompleted"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
-        
     }];
 }
 
@@ -169,22 +186,21 @@
                 [self uploadPost:gallery.posts[i] withGalleryId:gallery.galleryID withResponseBlock:^(BOOL sucess, NSError *error) {
                     
                     //Signal to update the profile when upload is finished i.e. finished with the last post
-                    if(i == gallery.posts.count -1){
+                    if(i == gallery.posts.count - 1){
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
                             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                            self.isUploadingGallery = NO;
                         });
                     }
                     
                     //Signal that upload is done to semaphore
                     dispatch_semaphore_signal(semaphore);
                     
-                    
                 }];
                 
                 //Call dispatch_semaphore_wait to prevent thread from running
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                
             }
         });
 
@@ -193,6 +209,8 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+            
+            self.isUploadingGallery = NO;
         });
         
     }
@@ -351,6 +369,7 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
+
 
 
 @end

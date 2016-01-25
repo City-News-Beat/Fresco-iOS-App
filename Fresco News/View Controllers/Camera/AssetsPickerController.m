@@ -606,6 +606,8 @@ static CGSize AssetGridThumbnailSize;
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
     
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

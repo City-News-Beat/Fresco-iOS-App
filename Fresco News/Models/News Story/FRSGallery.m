@@ -89,6 +89,7 @@
             #endif
             
             post.image = image;
+            
             post.createdDate = asset.creationDate;
             
             if (asset.mediaType == PHAssetMediaTypeImage) {
