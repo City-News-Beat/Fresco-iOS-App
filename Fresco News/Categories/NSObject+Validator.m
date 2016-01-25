@@ -15,6 +15,7 @@
 }
 
 -(BOOL)isValidDictionaryForKeys:(NSArray *)keys{
+    
     if (![self isKindOfClass:[NSDictionary class]]) return NO;
     
     NSDictionary *dict = (NSDictionary *)self;
@@ -24,6 +25,7 @@
         }
     }
     return YES;
+    
 }
 
 @end
