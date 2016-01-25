@@ -16,6 +16,8 @@
 #import "AssignmentsViewController.h"
 #import "AppDelegate.h"
 
+@import FBSDKCoreKit;
+
 #define HIDE_NUMBER @3
 
 @interface HighlightsViewController ()
@@ -93,6 +95,26 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:@"id,name,email" forKey:@"fields"];
+    
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                  initWithGraphPath:@"me"
+                                  parameters:parameters
+                                  HTTPMethod:@"GET"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                          id result,
+                                          NSError *error) {
+        
+        NSDictionary *response = (NSDictionary *)result;
+        
+        // Handle the result
+    }];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

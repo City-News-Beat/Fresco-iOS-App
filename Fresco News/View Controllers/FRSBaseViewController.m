@@ -161,11 +161,17 @@
         
     }
     else if(login == LoginFacebook){
-        
+        NSLog(@"-[facebook login]-");
         //Facebook icon image
         [self.view viewWithTag:51].hidden = YES;
         
+        
+        
         [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
+            
+            
+            
+            NSLog(@"user.email = %@", user.email);
             
             self.view.userInteractionEnabled = YES;
             

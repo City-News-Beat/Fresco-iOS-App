@@ -7,6 +7,8 @@
 //
 
 @import Parse;
+@import FBSDKCoreKit;
+
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "NSArray+F.h"
 #import <Fabric/Fabric.h>
@@ -15,6 +17,7 @@
 #import "FRSLocationManager.h"
 #import "FRSStory.h"
 #import "FRSAlertViewManager.h"
+
 
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoTokenKey @"frescoAPIToken"
@@ -353,10 +356,17 @@
                             customAttributes:@{}];
                 
                 block(user, error);
+                
+                [self updateEmail];
+                //  [send email in FRSdataManager]
+                
+                
+                
             }
             else{
                 block(nil, error);
             }
+            
         }];
     }
     //Existing user
@@ -378,6 +388,24 @@
     
 }
 
+-(void)updateEmail{
+    
+    NSDictionary *dictionary;
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                  initWithGraphPath:@"/{user-id}"
+                                  parameters:dictionary
+                                  HTTPMethod:@"GET"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                          id result,
+                                          NSError *error) {
+        // Handle the result
+    }];
+    
+    
+
+    
+}
+
 
 /*
 ** Social Login via Facebook
@@ -387,10 +415,11 @@
 {
     assert(resultBlock);
     
-    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile" ] block:^(PFUser *user, NSError *error) {
-    
+    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile", @"email" ] block:^(PFUser *user, NSError *error) {
+        
+        NSLog(@"%@", user);
         [self socialLoginWithUser:user error:error block:resultBlock withNetwork:@"Facebook"];
-    
+        
     }];
     
 }

@@ -288,7 +288,7 @@
 
 - (IBAction)facebookLogin:(id)sender{
     [self performLogin:LoginFacebook button:self.facebookButton withLoginInfo:nil];
-}
+} 
 
 - (IBAction)twitterLogin:(id)sender {
     
