@@ -48,7 +48,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
+
     // Prevent conflict between background music and camera
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord
                                      withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker
@@ -93,14 +93,25 @@
 -(void)applicationDidEnterBackground:(UIApplication *)application{
     
     NSLog(@"DID ENTER BACKGROUND");
-    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    
+    if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)) {
+        NSLog(@"location denied");
+    } else if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse)){
+        NSLog(@"location accepted");
+        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    }
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
     NSLog(@"DID TERMINATE");
-    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
     
+    if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)) {
+        NSLog(@"location denied");
+    } else if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse)){
+        NSLog(@"location accepted");
+        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    }    
 }
 
 

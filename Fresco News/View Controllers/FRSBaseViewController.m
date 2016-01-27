@@ -170,9 +170,6 @@
         [[FRSDataManager sharedManager] loginViaFacebookWithBlock:^(PFUser *user, NSError *error) {
             
             
-            
-            NSLog(@"user.email = %@", user.email);
-            
             self.view.userInteractionEnabled = YES;
             
             if ([[FRSDataManager sharedManager] currentUserIsLoaded]) {
