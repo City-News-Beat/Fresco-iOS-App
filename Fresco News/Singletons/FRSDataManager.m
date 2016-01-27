@@ -410,20 +410,11 @@
         
         [self updateFrescoUserWithParams:@{@"email" : email} withImageData:nil block:^(BOOL sucess, NSError *error) {
             if (error){
-                NSLog(@"Failed to update email for user %@", error.localizedDescription);
+                NSLog(@"Failed to update email for user. Error: %@", error.localizedDescription);
             }
         }];
     }];
 
-    
-//    [self POST:@"user/update" parameters:@{@"email" : email} constructingBodyWithBlock:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-//        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-//        user.email = [parameters objectForKey:@"email"];
-////        [PFUser saveAllInBackground:]
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        
-//    }];
 }
 
 
