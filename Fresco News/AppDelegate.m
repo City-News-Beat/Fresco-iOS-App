@@ -85,7 +85,7 @@
         self.frsRootViewController.onboardVisited = YES;
     }
     
-    [self createItemsWithIcons];
+//    [self createItemsWithIcons];
     
     return YES;
 }

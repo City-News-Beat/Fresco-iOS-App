@@ -90,8 +90,6 @@
     [self.detailViewWrapper addGestureRecognizer:singleFingerTap];
     
     
-    
-    
     //Check for location permission
     [self requestAlwaysAuthorization];
     
@@ -131,7 +129,6 @@
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"touch");
         
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         

@@ -2,6 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take photo</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-camera</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take video</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-video</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Assignments</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-map</string>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
