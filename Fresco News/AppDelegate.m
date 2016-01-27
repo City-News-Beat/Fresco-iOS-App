@@ -193,9 +193,8 @@
                                consumerSecret:TWITTER_CONSUMER_SECRET];
     
     NSString *appToken = @"43lq9tvcgnwg";
-    NSString *environment = ADJEnvironmentSandbox;
+    NSString *environment = ADJEnvironmentSandbox; //CHECK FOR RELEASE
     ADJConfig *adjustConfig = [ADJConfig configWithAppToken:appToken environment:environment];
-    [adjustConfig setLogLevel:ADJLogLevelVerbose];
     [Adjust appDidLaunch:adjustConfig];
 
 }
