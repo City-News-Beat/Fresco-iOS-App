@@ -76,4 +76,6 @@
 
 - (void)resetDraftGalleryPost;
 
+-(void)finishTerminatedGalleryUploadIfNeeded;
+
 @end

@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 @property (strong, nonatomic) GalleryPostCollectionViewCell *zoomCell;
 @property (strong, nonatomic) UICollectionViewFlowLayout *flowLayout;
 
-@property (strong, nonatomic) FRSAssignment *selectedAssignment;
+
 
 @property (strong, nonatomic) UITapGestureRecognizer *resignKeyboardGR;
 
@@ -1037,7 +1037,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     self.gallery.caption = self.captionTextView.text;
     
-    [self saveGalleryIntoDefaultsInBackground:self.gallery];
+    [self saveGallery:self.gallery forAssignment:self.selectedAssignment];
     
     NSNumber * facebookPost = [NSNumber numberWithBool:NO];
     NSNumber * twitterPost = [NSNumber numberWithBool:NO];
@@ -1097,16 +1097,29 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     });
 }
 
--(void)saveGalleryIntoDefaultsInBackground:(FRSGallery *)gallery{
+-(void)saveGallery:(FRSGallery *)gallery forAssignment:(FRSAssignment *)assignment{
     NSMutableArray *assetIDs = [NSMutableArray new];
     for (FRSPost *post in gallery.posts){
         NSString *assetID = post.image.asset.localIdentifier;
         [assetIDs addObject:assetID];
     }
     
-    NSString *galleryID = gallery.galleryID ? gallery.galleryID : @"";
+    /*
+     @{
+     @"gallery_id" : <gallery.galleryId>
+     @"assignment_id" : <assignmentId>
+     @"assets" : @[assetId]
+     @"caption" : <caption>
+     @"facebook_selected" : @BOOL
+     @"twitter_selected: @BOOL
+     }
+     */
     
-    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assets" : assetIDs, @"caption" : gallery.caption, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
+    
+    NSString *galleryID = gallery.galleryID ? gallery.galleryID : @"";
+    NSString *assignmentID = assignment.assignmentId ? : @"";
+    
+    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assignment_id" : assignmentID, @"assets" : assetIDs, @"caption" : gallery.caption, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
     
     [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_UPLOADING_GALLERY_DICT];
 }

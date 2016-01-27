@@ -15,6 +15,7 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import "FRSAppConstants.h"
 
 
 
@@ -28,16 +29,6 @@
 
 @property (strong, nonatomic) NSMutableArray *uploadingAssetIDs;
 
-/*
- @{
-    @"gallery_id" : <gallery.galleryId>
-    @"assets" : @[assetId]
-    @"caption" : <caption>
-    @"facebook_selected" : @BOOL
-    @"twitter_selected: @BOOL 
- }
-*/
-@property (strong, nonatomic) NSMutableDictionary *uploadingDict;
 
 @end
 
@@ -92,12 +83,11 @@
     
     NSString *filename = [NSString stringWithFormat:@"file%@", @(0)];
     
-    NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
+    NSDictionary *parameters = @{ @"owner" : [[PFUser currentUser] objectForKey:@"frescoUserId"],
                                   @"caption" : gallery.caption ?: [NSNull null],
                                   @"posts" : [post constructPostMetaDataWithFileName:filename],
                                   @"assignment" : assignment.assignmentId ?: [NSNull null],
                                   @"count" : @(self.postCount)};
-    
     
     self.isUploadingGallery = YES;
     
@@ -167,6 +157,37 @@
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
     }];
+}
+
+-(void)finishTerminatedGalleryUploadIfNeeded{
+    NSDictionary *galleryDict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT];
+    if (!galleryDict) return;
+    
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    fetchOptions.sortDescriptors = @[
+                                     [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES],
+                                     ];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:galleryDict[@"assets"] options:fetchOptions];
+    
+    NSMutableArray *array = [NSMutableArray new];
+    [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+        [array addObject:asset];
+    }];
+    
+    FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
+    
+    FRSAssignment *assignment = [[FRSAssignment alloc] init];
+    if (![galleryDict[@"assignment_id"] isEqualToString:@""]){
+        assignment.assignmentId = galleryDict[@"assignment_id"];
+    }
+    
+    NSDictionary *socialOptions = @{@"twitter" : galleryDict[@"twitter_selected"], @"facebook" : galleryDict[@"facebook_selected"]};
+    
+    
+    [self uploadGallery:gallery withAssignment:assignment withSocialOptions:socialOptions withResponseBlock:^(BOOL sucess, NSError *error) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
+    }];
+    
 }
 
 /**

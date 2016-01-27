@@ -150,12 +150,19 @@
     [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
         [array addObject:asset];
     }];
+    
+    FRSAssignment *assignment;
+    if (![dict[@"assignment_id"] isEqualToString:@""]){
+        assignment = [[FRSAssignment alloc] init];
+        assignment.assignmentId = dict[@"assignment_id"];
+    }
 
     FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
     
     [self.tbc presentViewController:navVC animated:NO completion:^{
         GalleryPostViewController *postVC = [[GalleryPostViewController alloc] init];
         postVC.gallery = gallery;
+        postVC.selectedAssignment = assignment;
         [navVC pushViewController:postVC animated:NO];
     }];
 }

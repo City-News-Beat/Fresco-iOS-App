@@ -16,6 +16,8 @@
 #import "AssignmentsViewController.h"
 #import "AppDelegate.h"
 
+#import "FRSUploadManager.h"
+
 #define HIDE_NUMBER @3
 
 @interface HighlightsViewController ()
@@ -93,11 +95,14 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
+    
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
+    [FRSDataManager sharedManager];
+    [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
     
 //    if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT]){
 //        NSLog(@"THERE WAS A SAVED DICT");

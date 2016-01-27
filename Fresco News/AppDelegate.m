@@ -100,19 +100,17 @@
     if([FRSUploadManager sharedManager].isUploadingGallery){
         [self fireFailedUploadLocalNotification];
     }
-    
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
     NSLog(@"WIILL TERMINATE");
     
-    
-    if ([FRSUploadManager sharedManager].isUploadingGallery)
+    if ([FRSUploadManager sharedManager].isUploadingGallery) {
         [self fireFailedUploadLocalNotification];
+    }
     
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-    
 }
 
 
