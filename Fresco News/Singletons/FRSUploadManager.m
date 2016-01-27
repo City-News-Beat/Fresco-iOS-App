@@ -160,6 +160,9 @@
 }
 
 -(void)finishTerminatedGalleryUploadIfNeeded{
+    
+    if (![PFUser currentUser]) return;
+    
     NSDictionary *galleryDict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT];
     if (!galleryDict) return;
     
