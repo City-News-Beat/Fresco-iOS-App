@@ -394,6 +394,8 @@
     NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
     [parameters setValue:@"id,name,email" forKey:@"fields"];
     
+    
+    
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
                                   initWithGraphPath:@"me"
                                   parameters:parameters
@@ -402,19 +404,26 @@
                                           id result,
                                           NSError *error) {
         NSString *email = [result objectForKey:@"email"];
-        [PFUser currentUser].email = email;
-        NSLog(@"email = %@", email);
         
+        [PFUser currentUser].email = email;
+        self.currentUser.email = email;
+        
+        [self updateFrescoUserWithParams:@{@"email" : email} withImageData:nil block:^(BOOL sucess, NSError *error) {
+            if (error){
+                NSLog(@"Failed to update email for user %@", error.localizedDescription);
+            }
+        }];
     }];
 
-    [self POST:@"user/update" parameters:parameters constructingBodyWithBlock:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
-        user.email = [parameters objectForKey:@"email"];
-//        [PFUser saveAllInBackground:]
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
+    
+//    [self POST:@"user/update" parameters:@{@"email" : email} constructingBodyWithBlock:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+//        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+//        FRSUser *user = [MTLJSONAdapter modelOfClass:[FRSUser class] fromJSONDictionary:responseObject[@"data"] error:NULL];
+//        user.email = [parameters objectForKey:@"email"];
+////        [PFUser saveAllInBackground:]
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        
+//    }];
 }
 
 
