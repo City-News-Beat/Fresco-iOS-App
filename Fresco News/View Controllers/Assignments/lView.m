@@ -26,38 +26,38 @@
 
 @interface AssignmentsViewController () <UIScrollViewDelegate, MKMapViewDelegate, UIActionSheetDelegate>
 
-    /*
-    ** UI Elements
-    */
+/*
+ ** UI Elements
+ */
 
-    @property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
-    @property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
-    @property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
-    @property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
-    @property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
-    @property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
-    @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-    @property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
-    @property (strong, nonatomic) UIActionSheet *navigationSheet;
-    @property (strong, nonatomic) DBImageColorPicker *picker;
+@property (weak, nonatomic) IBOutlet UIView *storyBreaksView;
+@property (weak, nonatomic) IBOutlet UIView *detailViewWrapper;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentTitle;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentTimeElapsed;
+@property (weak, nonatomic) IBOutlet UILabel *assignmentDescription;
+@property (weak, nonatomic) IBOutlet MKMapView *assignmentsMap;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIView *onboardContainerView;
+@property (strong, nonatomic) UIActionSheet *navigationSheet;
+@property (strong, nonatomic) DBImageColorPicker *picker;
 
-    /*
-    ** Conditioning Variables
-    */
+/*
+ ** Conditioning Variables
+ */
 
-    @property (strong, nonatomic) CLLocation *lastLoc;
+@property (strong, nonatomic) CLLocation *lastLoc;
 
-    @property (assign, nonatomic) BOOL navigateTo;
+@property (assign, nonatomic) BOOL navigateTo;
 
-    @property (assign, nonatomic) BOOL updating;
+@property (assign, nonatomic) BOOL updating;
 
-    @property (assign, nonatomic) BOOL viewingClusters;
+@property (assign, nonatomic) BOOL viewingClusters;
 
-    @property (strong, nonatomic) NSNumber *operatingRadius;
+@property (strong, nonatomic) NSNumber *operatingRadius;
 
-    @property (strong, nonatomic) NSNumber *operatingLat;
+@property (strong, nonatomic) NSNumber *operatingLat;
 
-    @property (strong, nonatomic) NSNumber *operatingLon;
+@property (strong, nonatomic) NSNumber *operatingLon;
 
 @end
 
@@ -78,34 +78,40 @@
     self.operatingLat = 0;
     self.operatingLon = 0;
     
-//    dispatch_async(dispatch_get_main_queue(), ^{
+    //    dispatch_async(dispatch_get_main_queue(), ^{
     
-        //Configure the assignment detail view
-        self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
-        self.detailViewWrapper.layer.shadowOpacity = 0.26;
-        self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
-        
-        
-        //Check for location permission
-        [self requestAlwaysAuthorization];
+    //Configure the assignment detail view
+    self.detailViewWrapper.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.detailViewWrapper.layer.shadowOpacity = 0.26;
+    self.detailViewWrapper.layer.shadowOffset = CGSizeMake(-1, 0);
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.detailViewWrapper addGestureRecognizer:singleFingerTap];
     
-        [self updateNotificationBanner];
-
-        //Run updates for assignments
-        [self updateAssignments];
-
-        if (!self.picker)
-            self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
-
-        //If we have an assignment set, present it
-        if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
-
-            [self presentCurrentAssignmentWithAnimation:YES];
-            
-        }
-            
-//    });
-
+    
+    
+    
+    //Check for location permission
+    [self requestAlwaysAuthorization];
+    
+    [self updateNotificationBanner];
+    
+    //Run updates for assignments
+    [self updateAssignments];
+    
+    if (!self.picker)
+        self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
+    
+    //If we have an assignment set, present it
+    if(self.currentAssignment && self.detailViewWrapper.hidden == YES){
+        
+        [self presentCurrentAssignmentWithAnimation:YES];
+        
+    }
+    
+    //    });
+    
     
     //Set up action sheet for navigation
     self.navigationSheet = [[UIActionSheet alloc]
@@ -117,12 +123,24 @@
     
     
     self.navigationSheet.tag = 100;
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideOnboarding:) name:NOTIF_ONBOARD object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNotificationBanner) name:UIApplicationWillEnterForegroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetPin:) name:NOTIF_IMAGE_SET object:nil];
-
+    
 }
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"touch");
+        
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.scrollView.contentOffset = CGPointMake(0, 10);
+        
+    } completion:nil];
+    
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -131,7 +149,7 @@
 
 
 - (void)dealloc{
-
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
@@ -144,11 +162,11 @@
         if([[FRSDataManager sharedManager] isLoggedIn]
            &&
            [[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] == 0
-        ){
+           ){
             self.storyBreaksView.hidden = NO;
         }
         else{
-        
+            
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             
             // If the status is denied or only granted for when in use, display an alert
@@ -162,7 +180,7 @@
             //Catch all if nothing else is true, hide it
             else
                 self.storyBreaksView.hidden = YES;
-        
+            
         }
         
         
@@ -178,11 +196,11 @@
         UIImage *profileImage = [UIImage imageWithData:profileImageData];
         
         self.picker = [MKMapView createDBImageColorPickerForUserWithImage:profileImage];
-
+        
         [self.assignmentsMap updateUserPinViewForMapViewWithImage:profileImage];
         
         [self.assignmentsMap userRadiusUpdated:nil];
-            
+        
     }
     else {
         
@@ -211,7 +229,7 @@
     if([((UIButton *)sender).titleLabel.text isEqualToString:LOC_DISABLED_BANNER]){
         
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    
+        
     }
     //Default to profile settings action i.e. notification radius not set
     else{
@@ -222,7 +240,7 @@
         [self.navigationController pushViewController:pVC animated:YES];
         
     }
-
+    
     
 }
 
@@ -260,7 +278,7 @@
         if(navigate) self.navigateTo = YES;
         
         if(present) [self presentCurrentAssignmentWithAnimation:animate];
-    
+        
     }
 }
 
@@ -274,7 +292,7 @@
 - (void)presentCurrentAssignmentWithAnimation:(BOOL)animate{
     
     if(self.isViewLoaded){
-    
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             self.assignmentTitle.text= self.currentAssignment.title;
@@ -288,7 +306,7 @@
             self.operatingRadius = 0;
             
             self.detailViewWrapper.hidden = NO;
-     
+            
             CGRect newFrame = CGRectMake(
                                          0,
                                          0,
@@ -310,7 +328,7 @@
 }
 
 - (void)selectCurrentAssignmentAnnotation{
-
+    
     //Loop assignments
     for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
         //Check if it's an AssignmentAnnotation
@@ -318,7 +336,7 @@
             //Check if it's the right one by Assignment Id
             if([((AssignmentAnnotation *)annotation).assignmentId isEqualToString:self.currentAssignment.assignmentId]){
                 //Select id
-               [self.assignmentsMap selectAnnotation:annotation animated:YES];
+                [self.assignmentsMap selectAnnotation:annotation animated:YES];
             }
         }
     }
@@ -334,12 +352,12 @@
         
         //One degree of latitude = 69 miles
         NSNumber *radius = [NSNumber numberWithFloat:self.assignmentsMap.region.span.latitudeDelta * 69];
-    
+        
         //Check if the user moves at least a difference greater than .4
         if((fabsf(radius.floatValue - [self.operatingRadius floatValue]) > .4)){
             
             self.updating = true;
-        
+            
             self.operatingRadius = radius;
             
             self.operatingLat = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.latitude];
@@ -347,82 +365,82 @@
             self.operatingLon = [NSNumber numberWithFloat:self.assignmentsMap.centerCoordinate.longitude];
             
             if([radius integerValue] < 500){
-
+                
                 [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[radius floatValue]
-                 ofLocation:CLLocationCoordinate2DMake(
-                                                       self.assignmentsMap.centerCoordinate.latitude,
-                                                       self.assignmentsMap.centerCoordinate.longitude)
-                 withResponseBlock:^(id responseObject, NSError *error) {
-                    
-                     if (!error) {
-                        
-                        self.viewingClusters = false;
-                         
-                        if([responseObject count] > 0){
-    
-                            NSMutableArray *copy = [[NSMutableArray alloc] init];
-                            
-                            for(FRSAssignment* assignment in responseObject){
-                                [copy addObject:assignment.assignmentId];
-                            }
-                            
-                            if(self.assignments != nil){
-                                
-                                for(FRSAssignment *assignment in self.assignments){
-                                    
-                                    [copy removeObject:assignment.assignmentId];
-                                
-                                }
-                                
-                            }
-                            
-                            if(copy.count > 0
-                               || [self.assignments count] == 0
-                               || self.assignments == nil
-                               || ([self.assignments count]) > [self.assignmentsMap.annotations count])
-                            {
-                                
-                                self.assignments = responseObject;
-                                
-                                [self populateMapWithAnnotations];
-                            
-                            }
-                            
-                        }
-                        else{
-                        
-                            [self clearMapAnnotations];
-                        
-                        }
-                        
-                    }
-                    
-                    self.updating = false;
-                    
-                }];
+                                                                ofLocation:CLLocationCoordinate2DMake(
+                                                                                                      self.assignmentsMap.centerCoordinate.latitude,
+                                                                                                      self.assignmentsMap.centerCoordinate.longitude)
+                                                         withResponseBlock:^(id responseObject, NSError *error) {
+                                                             
+                                                             if (!error) {
+                                                                 
+                                                                 self.viewingClusters = false;
+                                                                 
+                                                                 if([responseObject count] > 0){
+                                                                     
+                                                                     NSMutableArray *copy = [[NSMutableArray alloc] init];
+                                                                     
+                                                                     for(FRSAssignment* assignment in responseObject){
+                                                                         [copy addObject:assignment.assignmentId];
+                                                                     }
+                                                                     
+                                                                     if(self.assignments != nil){
+                                                                         
+                                                                         for(FRSAssignment *assignment in self.assignments){
+                                                                             
+                                                                             [copy removeObject:assignment.assignmentId];
+                                                                             
+                                                                         }
+                                                                         
+                                                                     }
+                                                                     
+                                                                     if(copy.count > 0
+                                                                        || [self.assignments count] == 0
+                                                                        || self.assignments == nil
+                                                                        || ([self.assignments count]) > [self.assignmentsMap.annotations count])
+                                                                     {
+                                                                         
+                                                                         self.assignments = responseObject;
+                                                                         
+                                                                         [self populateMapWithAnnotations];
+                                                                         
+                                                                     }
+                                                                     
+                                                                 }
+                                                                 else{
+                                                                     
+                                                                     [self clearMapAnnotations];
+                                                                     
+                                                                 }
+                                                                 
+                                                             }
+                                                             
+                                                             self.updating = false;
+                                                             
+                                                         }];
                 
             }
             else{
                 
                 [[FRSDataManager sharedManager] getClustersWithinLocation:self.assignmentsMap.centerCoordinate.latitude
-                 lon:self.assignmentsMap.centerCoordinate.longitude
-                 radius:[radius floatValue]
-                 withResponseBlock:^(id responseObject, NSError *error) {
-                    
-                     if (!error) {
-                        
-                        self.viewingClusters = true;
-                        
-                        self.clusters = responseObject;
-                    
-                        [self populateMapWithAnnotations];
-                        
-                    }
-            
-                    self.updating = false;
-                    
-                }];
-            
+                                                                      lon:self.assignmentsMap.centerCoordinate.longitude
+                                                                   radius:[radius floatValue]
+                                                        withResponseBlock:^(id responseObject, NSError *error) {
+                                                            
+                                                            if (!error) {
+                                                                
+                                                                self.viewingClusters = true;
+                                                                
+                                                                self.clusters = responseObject;
+                                                                
+                                                                [self populateMapWithAnnotations];
+                                                                
+                                                            }
+                                                            
+                                                            self.updating = false;
+                                                            
+                                                        }];
+                
             }
         }
     }
@@ -436,7 +454,7 @@
  */
 
 - (void)populateMapWithAnnotations{
-
+    
     NSUInteger count = 0;
     
     if(self.viewingClusters){
@@ -448,19 +466,19 @@
             [self addClusterAnnotation:cluster index:count];
             count++;
         }
-    
+        
     }
     else {
         
         if (self.assignmentsMap.annotations != nil) {
-        
+            
             for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
                 
                 [self.assignmentsMap removeAnnotation:annotation];
                 
             }
-             
-         }
+            
+        }
         
         [self.assignmentsMap removeAllOverlaysButUser];
         
@@ -469,17 +487,17 @@
             [self addAssignmentAnnotation:assignment index:count];
             count++;
         }
-    
-
+        
+        
         // Run this after populating map with assignments, this ensures we have the annotation to select
         if(self.currentAssignment && [self.assignmentsMap.selectedAnnotations count] == 0){
             
             [self selectCurrentAssignmentAnnotation];
             
         }
-    
+        
     }
-
+    
 }
 
 /**
@@ -499,7 +517,7 @@
     
     //Create MKCircle surroudning the annotation
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:coord radius:([assignment.radius floatValue] * kMetersInAMile)];
-
+    
     [self.assignmentsMap addOverlay:circle];
     
     [self.assignmentsMap addAnnotation:annotation];
@@ -527,7 +545,7 @@
  */
 
 - (void)clearMapAnnotations{
-
+    
     if(self.assignmentsMap.annotations != nil){
         
         for (id<MKAnnotation> annotation in self.assignmentsMap.annotations){
@@ -537,14 +555,14 @@
             if (view) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                
+                    
                     [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
                         view.alpha = 0.0;
                     }completion:^(BOOL finished) {
                         [self.assignmentsMap removeAnnotation:annotation];
                         view.alpha = 1.0;
                     }];
-                        
+                    
                 });
                 
             }
@@ -564,38 +582,37 @@
 #pragma mark - ScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
+    
     if (scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.size.height) {
         [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, scrollView.contentSize.height - scrollView.frame.size.height)];
     }
-
 }
 
 #pragma mark - MKMapViewDelegate
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-
+    
     //If the annotiation is for the user's location
     if (annotation == mapView.userLocation) {
-        	
+        
         return [self.assignmentsMap setupUserPinForAnnotation:annotation];
-            
+        
     }
     //If the annotation is for an assignment
     else if ([annotation isKindOfClass:[AssignmentAnnotation class]]){
-
+        
         return [self.assignmentsMap setupAssignmentPinForAnnotation:annotation withType:FRSAssignmentAnnotation];
         
     }
     //If the annotation is for a cluster (multiple assignments into one annotiation)
     else if ([annotation isKindOfClass:[ClusterAnnotation class]]){
-
+        
         return  [self.assignmentsMap setupAssignmentPinForAnnotation:annotation withType:FRSClusterAnnotation];
-
-    
+        
+        
     }
-
+    
     return nil;
     
 }
@@ -607,7 +624,7 @@
         
         //Check if we have an assignment at this index
         if([self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex] != nil){
-        
+            
             //Set the current assignment
             [self setCurrentAssignment:[self.assignments objectAtIndex:((AssignmentAnnotation *) view.annotation).assignmentIndex]
                             navigateTo:NO
@@ -630,7 +647,7 @@
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
-
+    
     self.currentAssignment = nil;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -645,11 +662,11 @@
             [self.detailViewWrapper setFrame:newFrame];
             
         } completion:^(BOOL finished) {
-//            self.detailViewWrapper.hidden = YES;
+            //            self.detailViewWrapper.hidden = YES;
         }];
-
+        
     });
-
+    
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
@@ -683,13 +700,13 @@
     [self zoomToCurrentLocation];
     
     [self.assignmentsMap userRadiusUpdated:nil];
-
+    
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
     
     return [MKMapView radiusRendererForOverlay:overlay withImagePicker:self.picker];
-
+    
 }
 
 #pragma mark - Location Zoom/View Methods
@@ -712,57 +729,57 @@
         //Find nearby assignments in a 20 mile radius
         [[FRSDataManager sharedManager] getAssignmentsWithinRadius:10 ofLocation:self.assignmentsMap.userLocation.coordinate
                                                  withResponseBlock:^(id responseObject, NSError *error)
-        {
-            if (!error) {
-                
-                //If the assignments exists, navigate to the avg location respective to the current location
-                if([responseObject count] > 0) {
-                    
-                    //Don't zoom to user location
-                    runUserLocation = false;
-                    
-                    float avgLat = 0;
-                    
-                    float avgLng = 0;
-
-                    //Add up lat/lng
-                    for(FRSAssignment *assignment in self.assignments){
-                        
-                        avgLat += [assignment.lat floatValue];
-                        
-                        avgLng += [assignment.lon floatValue];
-                        
-                    }
-                    
-                    // Zooming map after delay for effect
-                    MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
-                    
-                    //Get Average location of all assignments and current location
-                    CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
-                                                                                (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
-                                                                                (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
-                                                                                );
-                    
-                    MKCoordinateRegion region = {avgLoc, span};
-                    
-                    MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
-                    
-                    [self.assignmentsMap setRegion:regionThatFits animated:YES];
-                    
-                    self.centeredUserLocation = YES;
-                    
-                    self.assignments = responseObject;
-                    
-                    [self populateMapWithAnnotations];
-                    
-                }
-                
-            }
-            
-        }];
+         {
+             if (!error) {
+                 
+                 //If the assignments exists, navigate to the avg location respective to the current location
+                 if([responseObject count] > 0) {
+                     
+                     //Don't zoom to user location
+                     runUserLocation = false;
+                     
+                     float avgLat = 0;
+                     
+                     float avgLng = 0;
+                     
+                     //Add up lat/lng
+                     for(FRSAssignment *assignment in self.assignments){
+                         
+                         avgLat += [assignment.lat floatValue];
+                         
+                         avgLng += [assignment.lon floatValue];
+                         
+                     }
+                     
+                     // Zooming map after delay for effect
+                     MKCoordinateSpan span = MKCoordinateSpanMake(0.15f, 0.15f);
+                     
+                     //Get Average location of all assignments and current location
+                     CLLocationCoordinate2D avgLoc =  CLLocationCoordinate2DMake(
+                                                                                 (avgLat + self.assignmentsMap.userLocation.location.coordinate.latitude) / (self.assignments.count  +1),
+                                                                                 (avgLng + self.assignmentsMap.userLocation.location.coordinate.longitude) / (self.assignments.count  +1)
+                                                                                 );
+                     
+                     MKCoordinateRegion region = {avgLoc, span};
+                     
+                     MKCoordinateRegion regionThatFits = [self.assignmentsMap regionThatFits:region];
+                     
+                     [self.assignmentsMap setRegion:regionThatFits animated:YES];
+                     
+                     self.centeredUserLocation = YES;
+                     
+                     self.assignments = responseObject;
+                     
+                     [self populateMapWithAnnotations];
+                     
+                 }
+                 
+             }
+             
+         }];
         
     }
-
+    
     if (runUserLocation) {
         
         if (self.assignmentsMap.userLocation.location != nil) {
@@ -789,7 +806,7 @@
 }
 
 
-#pragma mark - Authorization 
+#pragma mark - Authorization
 
 - (void)requestAlwaysAuthorization
 {
@@ -810,7 +827,7 @@
         }]];
         
         [self presentViewController:alertCon animated:YES completion:nil];
-
+        
     }
     // The user has not enabled any location services. Request background authorization.
     else if (status == kCLAuthorizationStatusNotDetermined) {
@@ -832,12 +849,12 @@
         
         //Google Maps
         if(buttonIndex == 0){
-
+            
             NSString *googleMapsURLString = [NSString stringWithFormat:@"comgooglemapsurl://?saddr=%f,%f&daddr=%f,%f",
                                              start.latitude, start.longitude, destination.latitude, destination.longitude];
             
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:googleMapsURLString]];
-                
+            
         }
         //Apple Maps :(
         else if(buttonIndex == 1){
@@ -864,9 +881,9 @@
             [self.view bringSubviewToFront:self.onboardContainerView];
         
     }
-
+    
     return YES;
-
+    
 }
 
 - (void)hideOnboarding:(NSNotification *)notification {
@@ -884,7 +901,7 @@
         
     });
     
-
+    
 }
 
 @end
