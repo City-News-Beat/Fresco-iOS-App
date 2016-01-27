@@ -138,6 +138,8 @@
                                                   //Gallery ID is missing
                                                   else{
                                                       
+                                                      NSLog(@"ERROR upload error %@", uploadError);
+                                                      
                                                       //Send response block back to caller
                                                       if(responseBlock)
                                                           responseBlock(NO, nil);
@@ -299,6 +301,7 @@
         
         NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
             
+            if (uploadError) NSLog(@"ERROR upload error %@", uploadError);
             if(responseBlock)
                 responseBlock(uploadError == nil ? YES : NO, uploadError);
             

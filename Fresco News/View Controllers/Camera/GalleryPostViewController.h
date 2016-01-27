@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSArray *nearbyAssignments;
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
+@property (strong, nonatomic) NSDictionary *socialOptions;
+
 
 
 @end

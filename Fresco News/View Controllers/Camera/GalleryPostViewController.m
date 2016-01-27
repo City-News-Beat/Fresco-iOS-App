@@ -482,6 +482,10 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.twitterButton setFrame:CGRectMake(0, 0, self.view.frame.size.width/2, 46)];
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
     [self.twitterButton addTarget:self action:@selector(handleTwitterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    if (self.socialOptions){
+        self.twitterButton.selected = [self.socialOptions[@"twitter_selected"] boolValue];
+        self.twitterButton.alpha = self.twitterButton.selected ? 1.0 : 0.54;
+    }
     [self.socialContainer addSubview:self.twitterButton];
     
     self.facebookButton = [[FRSSocialButton alloc] init];
@@ -492,14 +496,19 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.facebookButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.facebookButton addTarget:self action:@selector(handleFacebookButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
-    [self.socialContainer addSubview:self.facebookButton];
     
+    if (self.socialOptions){
+        self.facebookButton.selected = [self.socialOptions[@"facebook_selected"] boolValue];
+        self.facebookButton.alpha = self.facebookButton.selected ? 1.0 : 0.54;
+    }
+    
+    [self.socialContainer addSubview:self.facebookButton];
 }
 
 -(void)configureTextView{
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76)];
     self.captionTextView.delegate = self;
-    self.captionTextView.text = [self.gallery.caption isEqualToString:@"No Caption"] ? WHATS_HAPPENING : self.captionTextView.text;
+    self.captionTextView.text = [self.gallery.caption isEqualToString:@"No Caption"] ? WHATS_HAPPENING : self.gallery.caption;
     self.captionTextView.textColor = [UIColor colorWithWhite:0 alpha:0.26];
     self.captionTextView.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15];
     self.captionTextView.backgroundColor = [UIColor whiteBackgroundColor];
@@ -1115,11 +1124,10 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
      }
      */
     
-    
     NSString *galleryID = gallery.galleryID ? gallery.galleryID : @"";
     NSString *assignmentID = assignment.assignmentId ? : @"";
     
-    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assignment_id" : assignmentID, @"assets" : assetIDs, @"caption" : gallery.caption, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
+    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assignment_id" : assignmentID, @"assets" : assetIDs, @"caption" : self.captionTextView.text, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
     
     [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_UPLOADING_GALLERY_DICT];
 }

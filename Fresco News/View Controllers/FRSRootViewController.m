@@ -158,12 +158,16 @@
     }
 
     FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
+    gallery.caption = dict[@"caption"];
     
     [self.tbc presentViewController:navVC animated:NO completion:^{
         GalleryPostViewController *postVC = [[GalleryPostViewController alloc] init];
         postVC.gallery = gallery;
+        postVC.socialOptions = @{@"facebook_selected" : dict[@"facebook_selected"], @"twitter_selected" : dict[@"twitter_selected"]};
         postVC.selectedAssignment = assignment;
         [navVC pushViewController:postVC animated:NO];
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
     }];
 }
 
@@ -303,11 +307,13 @@
         UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Upload Failure"
                                        message:@"It seems that your upload failed. Please try again."
-                                       action:@"Dismiss" handler:nil];
+                                       action:@"Dismiss" handler:^(UIAlertAction *action) {
+                                           [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+                                       }];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             
-            [self setRootViewControllerUpload];
+            [self setRootViewControllerToGalleryUploadVC];
             
         }]];
         

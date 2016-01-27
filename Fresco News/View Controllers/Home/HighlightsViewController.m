@@ -102,7 +102,6 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [FRSDataManager sharedManager];
-    [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
     
 //    if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT]){
 //        NSLog(@"THERE WAS A SAVED DICT");

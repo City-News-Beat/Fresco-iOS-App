@@ -17,6 +17,8 @@
 #import "FRSAlertViewManager.h"
 #import "AppDelegate+Additions.h"
 
+#import "FRSUploadManager.h"
+
 #define kFrescoUserIdKey @"frescoUserId"
 #define kFrescoTokenKey @"frescoAPIToken"
 
@@ -445,7 +447,7 @@
             
             //Successful refresh and log in
             if(success){
-                
+                [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
                 if(block) block(YES, nil);
                 
                 //Validate Terms Here
