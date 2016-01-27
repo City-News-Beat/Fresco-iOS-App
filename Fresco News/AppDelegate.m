@@ -96,6 +96,11 @@
     
     NSLog(@"DID ENTER BACKGROUND");
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+    
+    if([FRSUploadManager sharedManager].isUploadingGallery){
+        [self fireFailedUploadLocalNotification];
+    }
+    
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
@@ -251,16 +256,13 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    
     if(application.applicationState == UIApplicationStateInactive) {
         
         //Handle the push notification
         [self handlePush:userInfo];
     
         handler(UIBackgroundFetchResultNewData);
-        
     }
-
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -331,7 +333,6 @@
     if ([identifier isEqualToString: NAVIGATE_IDENTIFIER] && notification[@"assignment"]) {
         
         [self openAssignmentFromPush:notification[@"assignment"] withNavigation:YES];
-
     }
 
     // Must be called when finished

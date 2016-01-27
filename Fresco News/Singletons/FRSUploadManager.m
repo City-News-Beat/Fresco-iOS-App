@@ -130,11 +130,17 @@
                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
                                                   
                                                   //Check if we have a valid response
+                                                  
+                                                  NSLog(@"error = %@", uploadError.localizedDescription);
+                                                  NSLog(@"response = %@", response);
+                                                  NSLog(@"responseObject = %@", responseObject);
+                                                  
                                                   if(responseObject[@"data"][@"_id"] != nil && !uploadError){
                                                       
                                                       gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
                                                       //Run rest of upload
+                                                      
                                                       [self handleGalleryCompletionForGallery:gallery withSocialOptions:socialOptions];
                                                       
                                                       

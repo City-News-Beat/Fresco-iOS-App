@@ -82,6 +82,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 @property (nonatomic) CGFloat keyboardOffset;
 
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTaskID;
+
+
 @end
 
 @implementation GalleryPostViewController
@@ -814,7 +817,12 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 //                                self.scrollView.frame = viewFrame;
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
-                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:YES];
+                                
+                                
+                                NSInteger height = self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                if (self.scrollView.contentSize.height < [UIScreen mainScreen].bounds.size.height) height = 0;
+                                
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, height) animated:YES];
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 0.0;
@@ -1040,6 +1048,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     [FRSUploadManager sharedManager].delegate = self;
     
+    
+    [self beginBackgroundUpdateTask];
     [[FRSUploadManager sharedManager] uploadGallery:self.gallery
                                      withAssignment:self.selectedAssignment
                                   withSocialOptions:@{
@@ -1048,9 +1058,25 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                                       }
                                   withResponseBlock:nil];
     
+    
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
     
     [self returnToTabBarWithPrevious:YES];
+}
+
+- (void) beginBackgroundUpdateTask
+{
+    [self endBackgroundUpdateTask];
+    
+    self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundUpdateTask];
+    }];
+}
+
+- (void) endBackgroundUpdateTask
+{
+    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundTaskID];
+    self.backgroundTaskID = UIBackgroundTaskInvalid;
 }
 
 -(void)updateSocialTipView{
