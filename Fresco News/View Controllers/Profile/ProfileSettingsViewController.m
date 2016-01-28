@@ -659,6 +659,7 @@ typedef enum : NSUInteger {
                     //The save is successful
                     else{
 
+                        self.saveChangesbutton.enabled = NO;
                         [self.navigationController popViewControllerAnimated:YES];
                     
                     }
