@@ -65,8 +65,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         weakSelf.playPause.alpha = 0;
         weakSelf.playPause.image = [UIImage imageNamed:@"pause"];
 
-        
-        
         //Add subviews and bring to the front so they don't get hidden
         [weakSelf addSubview:weakSelf.playPause];
         [weakSelf addSubview:weakSelf.mutedImage];
@@ -85,7 +83,37 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
          weakSelf.imageView.image  = result;
          
      }];
+    
+    [self configureTranscodingImage];
 }
+
+- (void)configureTranscodingImage{
+    
+    //Look over imogens notes in slack
+    //Need asset rendered in white
+    
+    self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
+    self.transcodeImage.tintColor = [UIColor whiteColor];
+    self.transcodeImage.alpha = 0.54;
+    self.transcodeImage.frame = CGRectMake(self.frame.size.width/2 - self.transcodeImage.frame.size.width/2, self.frame.size.height/2 - self.transcodeImage.frame.size.height/2, self.transcodeImage.frame.size.width, self.transcodeImage.frame.size.height);
+    [self addSubview:self.transcodeImage];
+    
+    self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2 + 40, self.frame.size.width, 20)];
+    self.transcodeLabel.text = @"Processing image";
+    self.transcodeLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightRegular];
+    self.transcodeLabel.alpha = 0.54;
+    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:self.transcodeLabel];
+    
+}
+
+- (void)createTranscodingPlaceHolder{
+   
+    self.transcodeLabel.hidden = NO;
+    self.transcodeImage.hidden = NO;
+    
+}
+
 
 - (void)removeTranscodePlaceHolder{
     

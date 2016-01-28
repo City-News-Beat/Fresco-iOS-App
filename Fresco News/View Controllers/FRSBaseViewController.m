@@ -114,6 +114,8 @@
         
         [button setTitle:@"" forState:UIControlStateNormal];
         
+        button.tintColor = [UIColor clearColor];
+        
         CGRect spinnerFrame = CGRectMake(0,0, 20, 20);
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:spinnerFrame];
@@ -161,7 +163,6 @@
         
     }
     else if(login == LoginFacebook){
-        NSLog(@"-[facebook login]-");
         //Facebook icon image
         [self.view viewWithTag:51].hidden = YES;
         
