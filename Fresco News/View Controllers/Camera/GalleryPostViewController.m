@@ -871,7 +871,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 1.0;
-                                
                             }
                             
                         } completion:nil];
@@ -908,7 +907,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                      completion:^{
                                          button.selected = NO;
                                      }];
-                    
                 }
             }];
             

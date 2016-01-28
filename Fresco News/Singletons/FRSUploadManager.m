@@ -180,6 +180,7 @@
     }];
     
     FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
+    gallery.caption = galleryDict[@"caption"];
     
     FRSAssignment *assignment = [[FRSAssignment alloc] init];
     if (![galleryDict[@"assignment_id"] isEqualToString:@""]){
