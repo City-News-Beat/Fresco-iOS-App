@@ -73,6 +73,7 @@
         
         [[self responseSerializer] setAcceptableContentTypes:nil];
         
+        
         [[AFNetworkReachabilityManager sharedManager] startMonitoring];
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
@@ -687,6 +688,7 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         [self.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey] forHTTPHeaderField:@"authToken"];
+        [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"content-type"];
         
         [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
