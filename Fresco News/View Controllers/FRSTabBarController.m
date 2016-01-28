@@ -92,7 +92,7 @@
     //Camera
     if ([item.title isEqualToString:@"Camera"]) {
         if ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] != AVAuthorizationStatusDenied && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
-            [self presentCameraForCaptureMode:FRSCaptureModePhoto];
+            [self presentCameraForCaptureMode:FRSCaptureModeVideo];
         }
     }
 }
