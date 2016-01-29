@@ -824,33 +824,13 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
-                                self.keyboardOffset = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                                
-                                //                                self.scrollView.frame = viewFrame;
-                                
-                                
-//                                NSInteger height = self.scrollView.contentSize.height - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-                                
                                 CGFloat height;
                                 
-                                height = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height - (self.view.frame.size.height - self.scrollView.contentSize.height) + 92;
-                                
-                                
-//                                NSLog(@"%f %f", [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height, self.galleryCV.frame.size.height + self.assignmentTV.frame.size.height);
-//                                if (self.scrollView.contentSize.height > [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height){
-//                                    height = self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-//                                } else {
-//                                    height = abs((self.view.frame.size.height - self.scrollView.contentSize.height) - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
-//                                }
+                                height = MAX([notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height - (self.view.frame.size.height - self.scrollView.contentSize.height) + 92,0);
                                 
                                 self.originalContentOffset = self.scrollView.contentOffset.y;
                                 
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
-                                
-                                
-//                                NSInteger height = self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
-//                                if (self.scrollView.contentSize.height < [UIScreen mainScreen].bounds.size.height) height = 0;
-                                
                                 
                                 [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, height) animated:NO];
                                 
