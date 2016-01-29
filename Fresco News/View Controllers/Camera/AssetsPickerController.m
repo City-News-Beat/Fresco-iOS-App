@@ -666,7 +666,7 @@ static CGSize AssetGridThumbnailSize;
 //                                                                            action:nil];
     
     [self.navigationController pushViewController:vc animated:YES];
-
+    
 
 }
 
@@ -674,7 +674,8 @@ static CGSize AssetGridThumbnailSize;
     UIAlertController *longAlert = [UIAlertController alertControllerWithTitle:@"​Video is too long" message:@"To submit this video, edit it in Photos so it’s under one minute long." preferredStyle:UIAlertControllerStyleAlert];
     [longAlert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:longAlert animated:YES completion:nil];
-     
+    
+    
 }
 
 

@@ -995,7 +995,7 @@
                    @"offset" : offset,
                    @"sort" : @"1",
                    @"limit" : @"5",
-                   @"hide" : @"3" //HIDE NUMBER
+                   @"hide" : @"4" //HIDE NUMBER
                    };
     }
     

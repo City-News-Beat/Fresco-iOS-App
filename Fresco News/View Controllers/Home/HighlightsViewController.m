@@ -18,7 +18,7 @@
 
 #import "FRSUploadManager.h"
 
-#define HIDE_NUMBER @3
+#define HIDE_NUMBER @4
 
 @interface HighlightsViewController ()
 
