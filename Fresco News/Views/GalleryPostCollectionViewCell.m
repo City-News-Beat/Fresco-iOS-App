@@ -24,7 +24,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintImageViewAspectRatio;
 
-@property (strong, nonatomic) UIColor *color;
+//@property (strong, nonatomic) UIColor *color;
 
 @end
 
@@ -83,66 +83,78 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
      resultHandler:^(UIImage * result, NSDictionary * info) {
          
          weakSelf.imageView.image  = result;
+//         NSLog(@"result = %@", result);
          
      }];
     
-    [self configureTranscodingImage];
+//    [self configureTranscodingImage];
 }
 
-- (void)configureTranscodingImage {
-    
-    [self GetCurrentPixelColorAtPoint:CGPointMake(self.imageView.center.x, self.imageView.center.y)];
-    
-    
-    const CGFloat* components = CGColorGetComponents(self.color.CGColor);
-    NSLog(@"Red: %f", components[0]);
-    NSLog(@"Green: %f", components[1]);
-    NSLog(@"Blue: %f", components[2]);
-    NSLog(@"Alpha: %f", CGColorGetAlpha(self.color.CGColor));
-    
-    CGFloat colorValue = components[0] + components[1] + components[2] +components[3];
-    NSLog(@"colorValue = %f", colorValue);
-    
-    
-    if (colorValue < 1) {
-        NSLog(@"transcode image should be light");
-        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-light"]];
-    } else {
-        NSLog(@"transcode image should be dark");
-        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-dark"]];
-        self.transcodeImage.alpha = 0.87;
-    }
-    
-    self.transcodeImage.frame = CGRectMake(self.frame.size.width/2 - self.transcodeImage.frame.size.width/2, self.frame.size.height/2 - self.transcodeImage.frame.size.height/2, self.transcodeImage.frame.size.width, self.transcodeImage.frame.size.height);
-    [self addSubview:self.transcodeImage];
-    
-    self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2 + 40, self.frame.size.width, 20)];
-    self.transcodeLabel.text = @"Processing image";
-    self.transcodeLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightRegular];
-    self.transcodeLabel.alpha = 0.87;
-    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
-    [self addSubview:self.transcodeLabel];
-    
-}
-
-
-
-
-- (UIColor *) GetCurrentPixelColorAtPoint:(CGPoint)point {
-    
-    unsigned char centerPixel[4] = {0};
-
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(centerPixel, 1, 1, 8, 4, colorSpace, kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedLast);
-    CGContextTranslateCTM(context, -point.x, -point.y);
-    [self.imageView.layer renderInContext:context];
-    NSLog(@"centerPixel: %d %d %d %d", centerPixel[0], centerPixel[1], centerPixel[2], centerPixel[3]);
-    
-//    self.color should = average RGB value
-    self.color = [UIColor colorWithRed:centerPixel[0]/255.0 green:centerPixel[1]/255.0 blue:centerPixel[2]/255.0 alpha:centerPixel[3]/255.0];
-
-    return self.color;
-}
+//- (void)configureTranscodingImage {
+//    
+//    [self getCurrentPixelValueFromPoint:CGPointMake(self.imageView.center.x, self.imageView.center.y)];
+//    
+//    const CGFloat* components = CGColorGetComponents(self.color.CGColor);
+//    NSLog(@"Red: %f", components[0]);
+//    NSLog(@"Green: %f", components[1]);
+//    NSLog(@"Blue: %f", components[2]);
+//    NSLog(@"Alpha: %f", CGColorGetAlpha(self.color.CGColor));
+//    
+//    CGFloat colorValue = components[0] + components[1] + components[2] +components[3];
+//    NSLog(@"colorValue = %f", colorValue);
+//
+//    
+//    if (colorValue < 1.5) {
+//        NSLog(@"transcode image should be light");
+//        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-light"]];
+//        self.transcodeImage.alpha = 1;
+//        
+////        self.transcodeImage.layer.shadowColor = [UIColor frescoDropShadowColor].CGColor;
+////        self.transcodeImage.layer.shadowOffset = CGSizeMake(0, 1);
+////        self.transcodeImage.layer.shadowOpacity = 1;
+////        self.transcodeImage.layer.shadowRadius = 1.0;
+////        self.transcodeImage.clipsToBounds = NO;
+//        
+//        self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2 + 40, self.frame.size.width, 20)];
+//        [self.transcodeLabel setTextColor:[UIColor whiteColor]];
+//
+//    } else {
+//        NSLog(@"transcode image should be dark");
+//        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-dark"]];
+//        self.transcodeImage.alpha = 0.87;
+//        
+//        self.transcodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.frame.size.height/2 + 40, self.frame.size.width, 20)];
+//        self.transcodeLabel.alpha = 0.87;
+//    }
+//    
+//    self.transcodeImage.frame = CGRectMake(self.frame.size.width/2 - self.transcodeImage.frame.size.width/2, self.frame.size.height/2 - self.transcodeImage.frame.size.height/2, self.transcodeImage.frame.size.width, self.transcodeImage.frame.size.height);
+//    [self addSubview:self.transcodeImage];
+//
+//    self.transcodeLabel.text = @"Processing image";
+//    self.transcodeLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightRegular];
+//    self.transcodeLabel.textAlignment = NSTextAlignmentCenter;
+//
+//    [self addSubview:self.transcodeLabel];
+//}
+//
+//
+//
+//
+//- (UIColor *) getCurrentPixelValueFromPoint:(CGPoint)centerPoint {
+//    
+//    unsigned char centerPixel[4] = {0};
+//
+//    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//    CGContextRef context = CGBitmapContextCreate(centerPixel, 1, 1, 8, 4, colorSpace, kCGBitmapAlphaInfoMask & kCGImageAlphaPremultipliedLast);
+//    CGContextTranslateCTM(context, -centerPoint.x, -centerPoint.y);
+//    [self.imageView.layer renderInContext:context];
+//    NSLog(@"centerPixel: %d %d %d %d", centerPixel[0], centerPixel[1], centerPixel[2], centerPixel[3]);
+//    
+////    self.color should = average RGB value
+//    self.color = [UIColor colorWithRed:centerPixel[0]/255.0 green:centerPixel[1]/255.0 blue:centerPixel[2]/255.0 alpha:centerPixel[3]/255.0];
+//
+//    return self.color;
+//}
 
 
 
