@@ -27,4 +27,7 @@
 
 + (NSString *)identifier;
 
+-(void)clearCell;
+-(void)configureCell;
+
 @end

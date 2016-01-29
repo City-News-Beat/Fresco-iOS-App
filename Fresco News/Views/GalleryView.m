@@ -302,6 +302,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     return cell;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(PostCollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    [cell clearCell];
+    [cell configureCell];
+}
+
 
 
 #pragma mark - UICollectionViewDelegate

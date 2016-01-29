@@ -42,6 +42,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     [self.transcodeImage removeFromSuperview];
     [self.transcodeLabel removeFromSuperview];
     
+    
 //    [[self imageView] setImage:nil];
 //    
 //    [[self imageView] cancelImageRequestOperation];
@@ -56,9 +57,22 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
 }
 
+-(void)clearCell{
+    self.imageView.image = nil;
+    self.playPause = nil;
+    self.mutedImage = nil;
+    [self.photoIndicatorView removeFromSuperview];
+    
+}
+
 - (void)setPost:(FRSPost *)post
 {
     _post = post;
+    
+    
+}
+
+-(void)configureCell{
     
     if (_post.postID) {
         
@@ -70,9 +84,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
         [self bringSubviewToFront:self.photoIndicatorView];
         
         if(self.post.isVideo) {
-            
-            [self configureTranscodingImage];
-            [self showTranscodingImage];
             
             //Set up for play/pause button
             self.playPause = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 66, 66)];
@@ -125,7 +136,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     else {
         // local
         [[PHImageManager defaultManager]
-         requestImageForAsset:post.image.asset
+         requestImageForAsset:self.post.image.asset
          targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
          contentMode:PHImageContentModeDefault
          options:nil
