@@ -606,6 +606,8 @@ static CGSize AssetGridThumbnailSize;
     
     [tabBarController dismissViewControllerAnimated:YES completion:nil];
     
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -628,9 +630,25 @@ static CGSize AssetGridThumbnailSize;
 - (void)createGalleryPost:(id)sender{
 
     if (!self.selectedAssets.count) {
-        
         return;
     }
+    
+    BOOL longVideo = NO;
+    
+    for (PHAsset *asset in self.selectedAssets){
+        if (asset.duration > MAX_VIDEO_LENGTH){
+            longVideo = YES;
+            break;
+        }
+    }
+    
+    if (longVideo){
+        [self showLongVideoAlertController];
+        return;
+    }
+    
+    
+    
     
     FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:self.selectedAssets];
     
@@ -648,8 +666,16 @@ static CGSize AssetGridThumbnailSize;
 //                                                                            action:nil];
     
     [self.navigationController pushViewController:vc animated:YES];
+    
 
+}
 
+-(void)showLongVideoAlertController{
+    UIAlertController *longAlert = [UIAlertController alertControllerWithTitle:@"​Video is too long" message:@"To submit this video, edit it in Photos so it’s under one minute long." preferredStyle:UIAlertControllerStyleAlert];
+    [longAlert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:longAlert animated:YES completion:nil];
+    
+    
 }
 
 

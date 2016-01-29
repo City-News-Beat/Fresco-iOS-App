@@ -67,10 +67,15 @@
     
     [results enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
         //Check if there is a location, and if the video is less than the MAX_VIDEO_LENGTH
-        if (asset.location != nil && asset.duration <= MAX_VIDEO_LENGTH) {
+//        if (asset.location != nil && asset.duration <= MAX_VIDEO_LENGTH) {
+//            [filteredAssets addObject:asset];
+//            }
+        if (asset.location){
             [filteredAssets addObject:asset];
-            }
+        }
+
         }];
+        
         
         PHAssetCollection *assetCollectionWithLocation = [PHAssetCollection transientAssetCollectionWithAssets:filteredAssets title:@"Assets with location data"];
         

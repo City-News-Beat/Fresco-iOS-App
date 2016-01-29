@@ -15,6 +15,7 @@
 #import "FRSPost.h"
 #import "FRSImage.h"
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import "FRSAppConstants.h"
 
 
 
@@ -25,6 +26,9 @@
 @property (nonatomic, assign) NSInteger postCount;
 
 @property (nonatomic, assign) NSInteger currentPostIndex;
+
+@property (strong, nonatomic) NSMutableArray *uploadingAssetIDs;
+
 
 @end
 
@@ -79,12 +83,13 @@
     
     NSString *filename = [NSString stringWithFormat:@"file%@", @(0)];
     
-    NSDictionary *parameters = @{ @"owner" : [FRSDataManager sharedManager].currentUser.userID,
+    NSDictionary *parameters = @{ @"owner" : [[PFUser currentUser] objectForKey:@"frescoUserId"],
                                   @"caption" : gallery.caption ?: [NSNull null],
                                   @"posts" : [post constructPostMetaDataWithFileName:filename],
                                   @"assignment" : assignment.assignmentId ?: [NSNull null],
                                   @"count" : @(self.postCount)};
     
+    self.isUploadingGallery = YES;
     
     //Send request for image data
     [post dataForPostWithResponseBlock:^(NSData *data, NSError *error) {
@@ -115,22 +120,33 @@
                                               completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
                                                   
                                                   //Check if we have a valid response
+                                                  
+                                                  NSLog(@"error = %@", uploadError.localizedDescription);
+                                                  NSLog(@"response = %@", response);
+                                                  NSLog(@"responseObject = %@", responseObject);
+                                                  
                                                   if(responseObject[@"data"][@"_id"] != nil && !uploadError){
                                                       
                                                       gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
                                                       //Run rest of upload
+                                                      
                                                       [self handleGalleryCompletionForGallery:gallery withSocialOptions:socialOptions];
+                                                      
                                                       
                                                   }
                                                   //Gallery ID is missing
                                                   else{
+                                                      
+                                                      NSLog(@"ERROR upload error %@", uploadError);
                                                       
                                                       //Send response block back to caller
                                                       if(responseBlock)
                                                           responseBlock(NO, nil);
                                                       
                                                       [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_FAILURE object:nil];
+                                                      
+                                                      self.isUploadingGallery = NO;
                                                       
                                                   }
                                                   
@@ -142,8 +158,42 @@
                    forKeyPath:@"fractionCompleted"
                       options:NSKeyValueObservingOptionNew
                       context:NULL];
-        
     }];
+}
+
+-(void)finishTerminatedGalleryUploadIfNeeded{
+    
+    if (![PFUser currentUser]) return;
+    
+    NSDictionary *galleryDict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT];
+    if (!galleryDict) return;
+    
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    fetchOptions.sortDescriptors = @[
+                                     [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES],
+                                     ];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:galleryDict[@"assets"] options:fetchOptions];
+    
+    NSMutableArray *array = [NSMutableArray new];
+    [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+        [array addObject:asset];
+    }];
+    
+    FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
+    gallery.caption = galleryDict[@"caption"];
+    
+    FRSAssignment *assignment = [[FRSAssignment alloc] init];
+    if (![galleryDict[@"assignment_id"] isEqualToString:@""]){
+        assignment.assignmentId = galleryDict[@"assignment_id"];
+    }
+    
+    NSDictionary *socialOptions = @{@"twitter" : galleryDict[@"twitter_selected"], @"facebook" : galleryDict[@"facebook_selected"]};
+    
+    
+    [self uploadGallery:gallery withAssignment:assignment withSocialOptions:socialOptions withResponseBlock:^(BOOL sucess, NSError *error) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
+    }];
+    
 }
 
 /**
@@ -169,30 +219,29 @@
                 [self uploadPost:gallery.posts[i] withGalleryId:gallery.galleryID withResponseBlock:^(BOOL sucess, NSError *error) {
                     
                     //Signal to update the profile when upload is finished i.e. finished with the last post
-                    if(i == gallery.posts.count -1){
+                    if(i == gallery.posts.count - 1){
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+                            [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+                            self.isUploadingGallery = NO;
                         });
                     }
                     
                     //Signal that upload is done to semaphore
                     dispatch_semaphore_signal(semaphore);
                     
-                    
                 }];
                 
                 //Call dispatch_semaphore_wait to prevent thread from running
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                
             }
         });
 
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
-            
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_UPDATE_USER_GALLERIES];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+            self.isUploadingGallery = NO;
         });
     }
 
@@ -266,6 +315,7 @@
         
         NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *uploadError) {
             
+            if (uploadError) NSLog(@"ERROR upload error %@", uploadError);
             if(responseBlock)
                 responseBlock(uploadError == nil ? YES : NO, uploadError);
             
@@ -364,6 +414,7 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
+
 
 
 @end

@@ -22,6 +22,10 @@
 #import "BTBadgeView.h"
 #import "FRSCameraViewController.h"
 
+#import "GalleryPostViewController.h"
+
+#import <Photos/Photos.h>
+
 @interface FRSRootViewController () <UITabBarControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NotificationsViewController *notificationsView;
@@ -74,7 +78,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUploadProgress:) name:NOTIF_UPLOAD_PROGRESS object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideUploadProgress:) name:NOTIF_UPLOAD_COMPLETE object:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRootViewControllerToGalleryUploadVC) name:@"FINISH UPLOADING GALLERY" object:nil];
 
 }
 
@@ -127,6 +132,42 @@
     BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
     
     [self.tbc presentViewController:navVC animated:YES completion:nil];
+}
+
+-(void)setRootViewControllerToGalleryUploadVC{
+    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+    
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT];
+    
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    fetchOptions.sortDescriptors = @[
+                                     [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES],
+                                     ];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:dict[@"assets"] options:fetchOptions];
+    
+    NSMutableArray *array = [NSMutableArray new];
+    [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+        [array addObject:asset];
+    }];
+    
+    FRSAssignment *assignment;
+    if (![dict[@"assignment_id"] isEqualToString:@""]){
+        assignment = [[FRSAssignment alloc] init];
+        assignment.assignmentId = dict[@"assignment_id"];
+    }
+
+    FRSGallery *gallery = [[FRSGallery alloc] initWithAssets:array];
+    gallery.caption = dict[@"caption"];
+    
+    [self.tbc presentViewController:navVC animated:NO completion:^{
+        GalleryPostViewController *postVC = [[GalleryPostViewController alloc] init];
+        postVC.gallery = gallery;
+        postVC.socialOptions = @{@"facebook_selected" : dict[@"facebook_selected"], @"twitter_selected" : dict[@"twitter_selected"]};
+        postVC.selectedAssignment = assignment;
+        [navVC pushViewController:postVC animated:NO];
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+    }];
 }
 
 - (void)setRootViewControllerToCamera{
@@ -265,11 +306,13 @@
         UIAlertController *alertCon = [FRSAlertViewManager
                                        alertControllerWithTitle:@"Upload Failure"
                                        message:@"It seems that your upload failed. Please try again."
-                                       action:@"Dismiss" handler:nil];
+                                       action:@"Dismiss" handler:^(UIAlertAction *action) {
+                                           [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+                                       }];
         
         [alertCon addAction:[UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
             
-            [self setRootViewControllerUpload];
+            [self setRootViewControllerToGalleryUploadVC];
             
         }]];
         

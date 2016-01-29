@@ -74,13 +74,18 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 @property (strong, nonatomic) GalleryPostCollectionViewCell *zoomCell;
 @property (strong, nonatomic) UICollectionViewFlowLayout *flowLayout;
 
-@property (strong, nonatomic) FRSAssignment *selectedAssignment;
+@property (nonatomic) CGFloat originalContentOffset;
+
+
 
 @property (strong, nonatomic) UITapGestureRecognizer *resignKeyboardGR;
 
 @property (nonatomic) NSIndexPath *playingIndex;
 
 @property (nonatomic) CGFloat keyboardOffset;
+
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTaskID;
+
 
 @end
 
@@ -479,6 +484,10 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.twitterButton setFrame:CGRectMake(0, 0, self.view.frame.size.width/2, 46)];
     [self.twitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:NO];
     [self.twitterButton addTarget:self action:@selector(handleTwitterButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    if (self.socialOptions){
+        self.twitterButton.selected = [self.socialOptions[@"twitter_selected"] boolValue];
+        self.twitterButton.alpha = self.twitterButton.selected ? 1.0 : 0.54;
+    }
     [self.socialContainer addSubview:self.twitterButton];
     
     self.facebookButton = [[FRSSocialButton alloc] init];
@@ -489,14 +498,19 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     [self.facebookButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:17]];
     [self.facebookButton addTarget:self action:@selector(handleFacebookButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.facebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:NO];
-    [self.socialContainer addSubview:self.facebookButton];
     
+    if (self.socialOptions){
+        self.facebookButton.selected = [self.socialOptions[@"facebook_selected"] boolValue];
+        self.facebookButton.alpha = self.facebookButton.selected ? 1.0 : 0.54;
+    }
+    
+    [self.socialContainer addSubview:self.facebookButton];
 }
 
 -(void)configureTextView{
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentTV.frame.origin.y + self.assignmentTV.frame.size.height + 3, self.view.frame.size.width - 22, 76)];
     self.captionTextView.delegate = self;
-    self.captionTextView.text = WHATS_HAPPENING;
+    self.captionTextView.text = [self.gallery.caption isEqualToString:@"No Caption"] ? WHATS_HAPPENING : self.gallery.caption;
     self.captionTextView.textColor = [UIColor colorWithWhite:0 alpha:0.26];
     self.captionTextView.font = [UIFont fontWithName:HELVETICA_NEUE_LIGHT size:15];
     self.captionTextView.backgroundColor = [UIColor whiteBackgroundColor];
@@ -810,11 +824,15 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
-                                self.keyboardOffset = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+                                CGFloat height;
                                 
-                                //                                self.scrollView.frame = viewFrame;
+                                height = MAX([notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height - (self.view.frame.size.height - self.scrollView.contentSize.height) + 92,0);
+                                
+                                self.originalContentOffset = self.scrollView.contentOffset.y;
+                                
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
-                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y + [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:YES];
+                                
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, height) animated:NO];
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, -[notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 0.0;
@@ -828,12 +846,11 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
-                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.scrollView.contentOffset.y - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height) animated:NO];
+                                [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.originalContentOffset) animated:NO];
                                 self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 1.0;
-                                
                             }
                             
                         } completion:nil];
@@ -870,7 +887,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                      completion:^{
                                          button.selected = NO;
                                      }];
-                    
                 }
             }];
             
@@ -1029,6 +1045,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     self.gallery.caption = self.captionTextView.text;
     
+    [self saveGallery:self.gallery forAssignment:self.selectedAssignment];
+    
     NSNumber * facebookPost = [NSNumber numberWithBool:NO];
     NSNumber * twitterPost = [NSNumber numberWithBool:NO];
     
@@ -1038,6 +1056,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     
     [FRSUploadManager sharedManager].delegate = self;
     
+    
+    [self beginBackgroundUpdateTask];
     [[FRSUploadManager sharedManager] uploadGallery:self.gallery
                                      withAssignment:self.selectedAssignment
                                   withSocialOptions:@{
@@ -1046,9 +1066,25 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                                       }
                                   withResponseBlock:nil];
     
+    
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UD_GALLERY_POSTED];
     
     [self returnToTabBarWithPrevious:YES];
+}
+
+- (void) beginBackgroundUpdateTask
+{
+    [self endBackgroundUpdateTask];
+    
+    self.backgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundUpdateTask];
+    }];
+}
+
+- (void) endBackgroundUpdateTask
+{
+    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundTaskID];
+    self.backgroundTaskID = UIBackgroundTaskInvalid;
 }
 
 -(void)updateSocialTipView{
@@ -1067,6 +1103,32 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
         }
     });
+}
+
+-(void)saveGallery:(FRSGallery *)gallery forAssignment:(FRSAssignment *)assignment{
+    NSMutableArray *assetIDs = [NSMutableArray new];
+    for (FRSPost *post in gallery.posts){
+        NSString *assetID = post.image.asset.localIdentifier;
+        [assetIDs addObject:assetID];
+    }
+    
+    /*
+     @{
+     @"gallery_id" : <gallery.galleryId>
+     @"assignment_id" : <assignmentId>
+     @"assets" : @[assetId]
+     @"caption" : <caption>
+     @"facebook_selected" : @BOOL
+     @"twitter_selected: @BOOL
+     }
+     */
+    
+    NSString *galleryID = gallery.galleryID ? gallery.galleryID : @"";
+    NSString *assignmentID = assignment.assignmentId ? : @"";
+    
+    NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assignment_id" : assignmentID, @"assets" : assetIDs, @"caption" : self.captionTextView.text, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
+    
+    [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_UPLOADING_GALLERY_DICT];
 }
 
 #pragma mark - AV Player

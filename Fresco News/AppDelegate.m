@@ -20,6 +20,8 @@
 #import "FRSUser.h"
 #import "FRSDataManager.h"
 #import "FRSLocationManager.h"
+#import "FRSUploadManager.h"
+
 #import "FRSOnboardViewConroller.h"
 #import "FRSRootViewController.h"
 #import "AppDelegate+Additions.h"
@@ -72,7 +74,7 @@
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
         
         [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-    
+        
     }
     
     //Check if we've launched the app before or if the app is the iPhone 4s/4
@@ -94,24 +96,26 @@
     
     NSLog(@"DID ENTER BACKGROUND");
     
+    
     if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)) {
         NSLog(@"location denied");
     } else if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse)){
         NSLog(@"location accepted");
         [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+        
+        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
+        
+        if([FRSUploadManager sharedManager].isUploadingGallery){
+            [self fireFailedUploadLocalNotification];
+        }
     }
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
-    NSLog(@"DID TERMINATE");
+    NSLog(@"WILL TERMINATE");
     
-    if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)) {
-        NSLog(@"location denied");
-    } else if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse)){
-        NSLog(@"location accepted");
-        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-    }    
+    [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
 }
 
 
@@ -198,9 +202,8 @@
                                consumerSecret:TWITTER_CONSUMER_SECRET];
     
     NSString *appToken = @"43lq9tvcgnwg";
-    NSString *environment = ADJEnvironmentSandbox;
+    NSString *environment = ADJEnvironmentSandbox; //CHECK FOR RELEASE
     ADJConfig *adjustConfig = [ADJConfig configWithAppToken:appToken environment:environment];
-    [adjustConfig setLogLevel:ADJLogLevelVerbose];
     [Adjust appDidLaunch:adjustConfig];
 
 }
@@ -255,16 +258,13 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
-    
     if(application.applicationState == UIApplicationStateInactive) {
         
         //Handle the push notification
         [self handlePush:userInfo];
     
         handler(UIBackgroundFetchResultNewData);
-        
     }
-
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -323,8 +323,6 @@
         [self openStoryFromPush:userInfo[@"story"]];
         
     }
-    
-    
 }
 
 
@@ -337,7 +335,6 @@
     if ([identifier isEqualToString: NAVIGATE_IDENTIFIER] && notification[@"assignment"]) {
         
         [self openAssignmentFromPush:notification[@"assignment"] withNavigation:YES];
-
     }
 
     // Must be called when finished

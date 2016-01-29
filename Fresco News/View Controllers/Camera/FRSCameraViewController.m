@@ -15,6 +15,7 @@
 //Apple APIs
 @import Photos;
 @import AVFoundation;
+@import CoreMotion;
 
 //Views
 
@@ -57,6 +58,7 @@
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 @property (strong, nonatomic) FRSGalleryAssetsManager *assetsManager;
+@property (strong, nonatomic) CMMotionManager *motionManager;
 
 @property (strong, nonatomic) UIView *preview;
 
@@ -113,6 +115,8 @@
 
 @property (nonatomic) CGRect originalApertureFrame;
 
+@property (nonatomic) UIDeviceOrientation lastOrientation;
+
 @end
 
 @implementation FRSCameraViewController
@@ -155,8 +159,6 @@
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     
-    [self addObservers];
-    
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
         [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -186,6 +188,9 @@
             [self configurePreviewLayer];
         }];
     }
+    
+    self.motionManager = [[CMMotionManager alloc] init];
+    [self startTrackingMovement];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -718,8 +723,8 @@
     }
 }
 
--(void)rotateApp:(NSNotification *)notif{
-    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
+-(void)rotateAppForOrientation:(UIDeviceOrientation)o{
+//    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
     CGFloat angle = 0;
     NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
     NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
@@ -896,9 +901,9 @@
 
 #pragma mark - Notifications and Observers
 
--(void)addObservers{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateApp:) name:UIDeviceOrientationDidChangeNotification object:nil];
-}
+//-(void)addObservers{
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateApp:) name:UIDeviceOrientationDidChangeNotification object:nil];
+//}
 
 #pragma mark - Camera focus
 
@@ -1436,6 +1441,65 @@
         default:
             return AVCaptureVideoOrientationPortraitUpsideDown;
     }
+}
+
+#pragma mark ORIENTATION
+
+- (void)startTrackingMovement {
+    
+    self.motionManager.accelerometerUpdateInterval = .2;
+    self.motionManager.gyroUpdateInterval = .2;
+    
+    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
+                                                           withHandler:^(CMAccelerometerData  *accelerometerData, NSError *error) {
+                                                               if (!error) {
+                                                                   [self outputAccelertionData:accelerometerData.acceleration];
+                                                                   
+                                                               } else {
+                                                                   NSLog(@"%@", error);
+                                                               }
+                                                           }];
+}
+
+
+- (void)outputAccelertionData:(CMAcceleration)acceleration {
+    
+    UIDeviceOrientation orientationNew;
+    
+    if (acceleration.z > -2 && acceleration.z < 2) {
+        
+        if (acceleration.x >= 0.75) {
+            orientationNew = UIDeviceOrientationLandscapeRight;
+            
+            
+        } else if (acceleration.x <= -0.75) {
+            orientationNew = UIDeviceOrientationLandscapeLeft;
+            
+        } else if (acceleration.y <= -0.75) {
+            orientationNew = UIInterfaceOrientationPortrait;
+            
+            
+        } else if (acceleration.y >= 0.75) {
+            orientationNew = UIDeviceOrientationPortraitUpsideDown;
+            
+            
+        } else if (acceleration.z < -0.85) {
+            orientationNew = UIDeviceOrientationPortrait;
+            
+        }
+        else {
+            // Consider same as last time
+            return;
+        }
+    }
+    
+    if (orientationNew == self.lastOrientation)
+        return;
+    
+    self.lastOrientation = orientationNew;
+    
+    [self rotateAppForOrientation:orientationNew];
+    
 }
 
 /*er

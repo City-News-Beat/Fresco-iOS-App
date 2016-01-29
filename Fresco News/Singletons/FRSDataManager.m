@@ -17,6 +17,9 @@
 #import "FRSLocationManager.h"
 #import "FRSStory.h"
 #import "FRSAlertViewManager.h"
+#import "AppDelegate+Additions.h"
+
+#import "FRSUploadManager.h"
 
 
 #define kFrescoUserIdKey @"frescoUserId"
@@ -29,6 +32,8 @@
 }
 
 @property (nonatomic, strong) NSURLSessionTask *searchTask;
+
+@property (strong, nonatomic) AppDelegate *appDelegate;
 
 + (NSURLSessionConfiguration *)frescoSessionConfiguration;
 
@@ -44,7 +49,9 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[FRSDataManager alloc] init];
-        
+        manager.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+
     });
     return manager;
 }
@@ -69,6 +76,7 @@
     if (self = [super initWithBaseURL:baseURL sessionConfiguration:[[self class] frescoSessionConfiguration]]) {
         
         [[self responseSerializer] setAcceptableContentTypes:nil];
+        
         
         [[AFNetworkReachabilityManager sharedManager] startMonitoring];
         
@@ -480,7 +488,7 @@
             
             //Successful refresh and log in
             if(success){
-                
+                [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
                 if(block) block(YES, nil);
                 
                 //Validate Terms Here
@@ -720,6 +728,7 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         [self.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] stringForKey:kFrescoTokenKey] forHTTPHeaderField:@"authToken"];
+        [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"content-type"];
         
         [self POST:@"user/update" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
@@ -1026,7 +1035,7 @@
                    @"offset" : offset,
                    @"sort" : @"1",
                    @"limit" : @"5",
-                   @"hide" : @"3" //HIDE NUMBER
+                   @"hide" : @"4" //HIDE NUMBER
                    };
     }
     

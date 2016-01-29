@@ -205,7 +205,7 @@ typedef enum : NSUInteger {
     
     [super willMoveToParentViewController:parent];
     
-    [self saveChanges];
+    [self saveChanges]; //CHECK FOR RELEASE
     
 }
 
@@ -659,6 +659,7 @@ typedef enum : NSUInteger {
                     //The save is successful
                     else{
 
+                        self.saveChangesbutton.enabled = NO;
                         [self.navigationController popViewControllerAnimated:YES];
                     
                     }

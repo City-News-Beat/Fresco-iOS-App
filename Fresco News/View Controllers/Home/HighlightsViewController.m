@@ -18,7 +18,10 @@
 
 @import FBSDKCoreKit;
 
-#define HIDE_NUMBER @3
+#import "FRSUploadManager.h"
+
+#define HIDE_NUMBER @4
+
 
 @interface HighlightsViewController ()
 
@@ -95,6 +98,18 @@
     [[self navigationItem] setBackBarButtonItem:newBackButton];
     
     
+    
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [FRSDataManager sharedManager];
+    
+//    if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_UPLOADING_GALLERY_DICT]){
+//        NSLog(@"THERE WAS A SAVED DICT");
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"FINISH UPLOADING GALLERY" object:nil];
+//    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
