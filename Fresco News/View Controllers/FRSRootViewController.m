@@ -81,7 +81,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRootViewControllerToGalleryUploadVC) name:@"FINISH UPLOADING GALLERY" object:nil];
 
-
 }
 
 #pragma mark - View Controller swapping
