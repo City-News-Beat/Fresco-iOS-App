@@ -90,10 +90,10 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 }
 
 - (void)configureTranscodingImage {
-
+    
     [self GetCurrentPixelColorAtPoint:CGPointMake(self.imageView.center.x, self.imageView.center.y)];
     
-
+    
     const CGFloat* components = CGColorGetComponents(self.color.CGColor);
     NSLog(@"Red: %f", components[0]);
     NSLog(@"Green: %f", components[1]);
@@ -103,15 +103,16 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     CGFloat colorValue = components[0] + components[1] + components[2] +components[3];
     NSLog(@"colorValue = %f", colorValue);
     
-    if (colorValue < 1.5) {
+    
+    if (colorValue < 1) {
         NSLog(@"transcode image should be light");
+        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-light"]];
     } else {
         NSLog(@"transcode image should be dark");
+        self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding-dark"]];
+        self.transcodeImage.alpha = 0.87;
     }
     
-    self.transcodeImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"transcoding"]];
-    self.transcodeImage.tintColor = [UIColor whiteColor];
-    self.transcodeImage.alpha = 0.87;
     self.transcodeImage.frame = CGRectMake(self.frame.size.width/2 - self.transcodeImage.frame.size.width/2, self.frame.size.height/2 - self.transcodeImage.frame.size.height/2, self.transcodeImage.frame.size.width, self.transcodeImage.frame.size.height);
     [self addSubview:self.transcodeImage];
     
@@ -147,7 +148,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 
 //- (BOOL)isWallPixel:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
-//    
 //    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
 //    const UInt8* data = CFDataGetBytePtr(pixelData);
 //    
@@ -165,14 +165,12 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 //    
 //    if (alpha) return YES;
 //    else return NO;
-//    
 //}
 
 - (void)createTranscodingPlaceHolder{
    
     self.transcodeLabel.hidden = NO;
     self.transcodeImage.hidden = NO;
-    
 }
 
 
@@ -183,7 +181,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
     
     [self.transcodeImage removeFromSuperview];
     [self.transcodeLabel removeFromSuperview];
-    
 }
 
 @end
