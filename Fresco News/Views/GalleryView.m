@@ -323,12 +323,6 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     return 0.0f;
 }
 
--(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    if ([cell isKindOfClass:[PostCollectionViewCell class]]){
-        PostCollectionViewCell *postCell = (PostCollectionViewCell *)cell;
-        [postCell prepareForReuse];
-    }
-}
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     

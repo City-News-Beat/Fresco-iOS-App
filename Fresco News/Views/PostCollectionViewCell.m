@@ -60,8 +60,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 {
     _post = post;
     
-    __weak PostCollectionViewCell *self = self;
-    
     if (_post.postID) {
         
         CGRect spinnerFrame = CGRectMake(self.frame.size.width/2, self.frame.size.height/2, 0, 0);
@@ -119,7 +117,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             //back to the main thread for the UI call
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.photoIndicatorView stopAnimating];
-                [self hideTranscodingImage];
             });
             
         } failure:nil];
