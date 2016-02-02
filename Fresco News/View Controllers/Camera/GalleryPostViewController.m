@@ -621,15 +621,17 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
         GalleryPostCollectionViewCell *postCell = (GalleryPostCollectionViewCell *) [self.galleryCV cellForItemAtIndexPath:visibleIndexPath];
         self.zoomCell = postCell;
         
-        if(self.gallery.galleryID){
-            
-            NSDictionary *dict = @{
-                                   @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
-                                   @"gallery" : self.gallery.galleryID
-                                   };
-            if (dict)
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:nil userInfo:dict];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(self.gallery.galleryID){
+                
+                NSDictionary *dict = @{
+                                       @"postIndex" : [NSNumber numberWithInteger:visibleIndexPath.row],
+                                       @"gallery" : self.gallery.galleryID
+                                       };
+                if (dict)
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_GALLERY_HEADER_UPDATE object:nil userInfo:dict];
+            }
+        });
         
         
         if([postCell.post isVideo]){

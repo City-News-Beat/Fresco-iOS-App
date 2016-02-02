@@ -23,8 +23,11 @@
         
         if (!error && responseObject) {
             
-            UIViewController *vc = ((FRSRootViewController *)self.window.rootViewController).viewController;
-            if (![[vc class] isSubclassOfClass:[UITabBarController class]]) return;
+            
+            UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (![vc isKindOfClass:[FRSRootViewController class]]) return;
+            FRSRootViewController *root = (FRSRootViewController *)vc;
+            if (![root.viewController isKindOfClass:[UITabBarController class]]) return;
             
             //Retreieve Gallery View Controller from storyboard
             UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
@@ -54,6 +57,11 @@
         
         if (!error) {
         
+            UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (![vc isKindOfClass:[FRSRootViewController class]]) return;
+            FRSRootViewController *root = (FRSRootViewController *)vc;
+            if (![root.viewController isKindOfClass:[UITabBarController class]]) return;
+            
             UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
 
             
@@ -78,6 +86,11 @@
             //Retreieve Notifications View Controller from storyboard
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
             
+            UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (![vc isKindOfClass:[FRSRootViewController class]]) return;
+            FRSRootViewController *root = (FRSRootViewController *)vc;
+            if (![root.viewController isKindOfClass:[UITabBarController class]]) return;
+            
             UITabBarController *tabBarController = (UITabBarController *)((FRSRootViewController *)self.window.rootViewController).viewController;
 
             HighlightsViewController *homeVC = (HighlightsViewController *) ([[tabBarController viewControllers][0] viewControllers][0]);
@@ -100,6 +113,12 @@
     [[FRSDataManager sharedManager] resolveGalleriesInList:galleries withResponseBlock:^(id responseObject, NSError *error) {
         
         if(responseObject != nil){
+            
+            
+            UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+            if (![vc isKindOfClass:[FRSRootViewController class]]) return;
+            FRSRootViewController *root = (FRSRootViewController *)vc;
+            if (![root.viewController isKindOfClass:[UITabBarController class]]) return;
             
             //Retreieve Gallery View Controller from storyboard
             UITabBarController *tabBarController = ((UITabBarController *)((FRSRootViewController *)[UIApplication sharedApplication].keyWindow.rootViewController).viewController);

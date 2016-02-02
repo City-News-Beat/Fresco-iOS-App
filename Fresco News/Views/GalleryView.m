@@ -175,6 +175,9 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     else{
         
         [self.sharedPlayer play];
+        [UIView animateWithDuration:.5 animations:^{
+            postCell.mutedImage.alpha = 0.0f;
+        }];
         NSLog(@"Video Started");
         
     }
@@ -218,6 +221,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
             postCell.playingVideo = YES;
             
             [self.sharedPlayer play];
+            
 
             NSLog(@"Video Started");
 
@@ -226,6 +230,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                 [UIView animateWithDuration:1.0 animations:^{
                     
                     postCell.photoIndicatorView.alpha = 0.0f;
+                    postCell.mutedImage.alpha = 0.0;
                     
                 } completion:^(BOOL finished){
                     

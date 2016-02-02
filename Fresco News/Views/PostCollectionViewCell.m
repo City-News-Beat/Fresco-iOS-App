@@ -105,7 +105,6 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             self.mutedImage.alpha = 1;
             self.mutedImage.image = [UIImage imageNamed:@"volume-off"];
             
-            
             //Add subviews and bring to the front so they don't get hidden
             [self addSubview:self.playPause];
             [self addSubview:self.mutedImage];

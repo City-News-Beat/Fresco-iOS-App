@@ -83,10 +83,10 @@
     
     NSString *filename = [NSString stringWithFormat:@"file%@", @(0)];
     
-    NSDictionary *parameters = @{ @"owner" : [[PFUser currentUser] objectForKey:@"frescoUserId"],
-                                  @"caption" : gallery.caption ?: [NSNull null],
+    NSDictionary *parameters = @{ @"owner" : [[PFUser currentUser] objectForKey:@"frescoUserId"] ? : [NSNull null],
+                                  @"caption" : gallery.caption ? : [NSNull null],
                                   @"posts" : [post constructPostMetaDataWithFileName:filename],
-                                  @"assignment" : assignment.assignmentId ?: [NSNull null],
+                                  @"assignment" : assignment.assignmentId ? : [NSNull null],
                                   @"count" : @(self.postCount)};
     
     self.isUploadingGallery = YES;

@@ -170,18 +170,23 @@ static NSString * const kCellIdentifier = @"GalleryHeader";
 - (void)updateGalleryHeader:(NSNotification *)notif{
     
     //Check if the notification is in a valid format
-    if(notif.userInfo[@"postIndex"] && notif.userInfo[@"gallery"]){
-    
-        if([notif.userInfo[@"gallery"] isEqualToString:self.gallery.galleryID]){
-         
-            [self galleryHeaderUpdateAnimationWithIndex:[(NSNumber *)notif.userInfo[@"postIndex"] integerValue]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(notif.userInfo[@"postIndex"] && notif.userInfo[@"gallery"]){
             
+            if([notif.userInfo[@"gallery"] isEqualToString:self.gallery.galleryID]){
+                
+                [self galleryHeaderUpdateAnimationWithIndex:[(NSNumber *)notif.userInfo[@"postIndex"] integerValue]];
+                
+            }
         }
-    }
+    });
+    
 }
 
 - (void)galleryHeaderUpdateAnimationWithIndex:(NSInteger)postIndex{
 
+    if (!self.gallery.posts.count || postIndex > self.gallery.posts.count) return;
+    
     FRSPost *post = (FRSPost *)self.gallery.posts[postIndex];
     
     if(!post) return;
