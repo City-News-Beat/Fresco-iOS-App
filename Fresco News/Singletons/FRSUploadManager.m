@@ -129,6 +129,10 @@
                                                       
                                                       gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
+                                                      NSMutableDictionary *uploadedGal = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT]];
+                                                      uploadedGal[@"gallery_id"] = gallery.galleryID;
+                                                      [[NSUserDefaults standardUserDefaults] setObject:uploadedGal forKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                                                      
                                                       //Run rest of upload
                                                       
                                                       [self handleGalleryCompletionForGallery:gallery withSocialOptions:socialOptions];
@@ -145,6 +149,8 @@
                                                           responseBlock(NO, nil);
                                                       
                                                       [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_FAILURE object:nil];
+                                                      
+                                                      [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
                                                       
                                                       self.isUploadingGallery = NO;
                                                       
@@ -172,6 +178,7 @@
     fetchOptions.sortDescriptors = @[
                                      [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES],
                                      ];
+    
     PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:galleryDict[@"assets"] options:fetchOptions];
     
     NSMutableArray *array = [NSMutableArray new];
@@ -218,11 +225,17 @@
                 
                 [self uploadPost:gallery.posts[i] withGalleryId:gallery.galleryID withResponseBlock:^(BOOL sucess, NSError *error) {
                     
+                    
+                    if (error || !sucess){
+                        [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                        return;
+                    }
                     //Signal to update the profile when upload is finished i.e. finished with the last post
                     if(i == gallery.posts.count - 1){
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
                             [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+                            
                             self.isUploadingGallery = NO;
                         });
                     }
@@ -241,6 +254,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_COMPLETE object:nil];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_UPLOADING_GALLERY_DICT];
+            
             self.isUploadingGallery = NO;
         });
     }

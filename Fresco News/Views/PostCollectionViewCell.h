@@ -24,6 +24,10 @@
 
 @property (nonatomic, assign) BOOL playingVideo;
 
+@property (strong, nonatomic) NSString *currentGalleryId;
+
+@property (nonatomic) BOOL shouldUseLocalVideo;
+
 
 + (NSString *)identifier;
 

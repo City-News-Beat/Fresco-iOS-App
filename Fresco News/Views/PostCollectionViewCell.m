@@ -59,9 +59,12 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
 
 -(void)clearCell{
     self.imageView.image = nil;
+    [self.playPause removeFromSuperview];
     self.playPause = nil;
+    [self.mutedImage removeFromSuperview];
     self.mutedImage = nil;
     [self.photoIndicatorView removeFromSuperview];
+    self.shouldUseLocalVideo = NO;
     
 }
 
@@ -118,19 +121,75 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
             [self.photoIndicatorView startAnimating];
         });
         
-        [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post.image mediumImageUrl]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            
-            self.imageView.image = image;
-            
-            self.imageView.alpha = 1.0f;
-            
-            //back to the main thread for the UI call
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.photoIndicatorView stopAnimating];
-            });
-            
-        } failure:nil];
+        /*
+         @{
+         @"gallery_id" : <gallery.galleryId>
+         @"assignment_id" : <assignmentId>
+         @"assets" : @[assetId]
+         @"caption" : <caption>
+         @"facebook_selected" : @BOOL
+         @"twitter_selected: @BOOL
+         }
+         */
         
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT]){
+            NSDictionary *galleryDict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+            if ([self.currentGalleryId isEqualToString:galleryDict[@"gallery_id"]]){
+                NSArray *assetIDs = galleryDict[@"assets"];
+                if (assetIDs.count){
+                    NSString *firstAsset = [assetIDs firstObject];
+                    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+                    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[firstAsset] options:fetchOptions];
+                    
+                    NSMutableArray *array = [NSMutableArray new];
+                    [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [array addObject:asset];
+                    }];
+                    
+                    if (array.count){
+                        PHAsset *asset = [array firstObject];
+                        PHCachingImageManager *imageManager = [[PHCachingImageManager alloc] init];
+                        [imageManager requestImageForAsset:asset targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height) contentMode:PHImageContentModeDefault options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                self.imageView.image = result;
+                                self.imageView.alpha = 1.0f;
+                                [self.photoIndicatorView stopAnimating];
+                            });
+                        }];
+                        
+                        if (asset.mediaType == PHAssetMediaTypeVideo){
+                            NSLog(@"is Video");
+                            self.shouldUseLocalVideo = YES;
+                            self.post.image.asset = asset;
+                        }
+                        
+                        [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                        
+                    }
+                    else {
+                        [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                    }
+                }
+                else {
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                }
+            }
+        }
+        else {
+            
+            [self.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[self.post.image mediumImageUrl]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                
+                self.imageView.image = image;
+                
+                self.imageView.alpha = 1.0f;
+                
+                //back to the main thread for the UI call
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.photoIndicatorView stopAnimating];
+                });
+                
+            } failure:nil];
+        }
     }
     else {
         // local

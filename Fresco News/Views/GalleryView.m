@@ -309,7 +309,17 @@ static CGFloat const kImageInitialYTranslation = 10.f;
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(PostCollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     [cell clearCell];
+    cell.currentGalleryId = self.gallery.galleryID;
     [cell configureCell];
+    
+    
+    if (cell.shouldUseLocalVideo){
+        [[PHImageManager defaultManager] requestAVAssetForVideo:cell.post.image.asset options:nil resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+            if (((AVURLAsset *)asset).URL && cell)
+                [self setUpPlayerWithUrl:((AVURLAsset *)asset).URL cell:cell muted:YES buffer:NO];
+            
+        }];
+    }
 }
 
 
@@ -505,6 +515,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     if([postCell.post isVideo]){
         
         //If a url
+        
         if (postCell.post.video) {
             [self setUpPlayerWithUrl:postCell.post.video cell:postCell muted:NO buffer:YES];
             [UIView animateWithDuration:.5 animations:^{

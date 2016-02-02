@@ -139,7 +139,7 @@ enum FRSErrorCodes {
 #define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
 #define UD_GALLERY_POSTED                   @"galleryPosted"
 #define UD_UPLOADING_GALLERY_DICT           @"uploadingGalleryDictionary"
-
+#define UD_LAST_UPLOADED_GALLERY_DICT   @"mostRecentlyUploadedGallery"
 
 
 /* Fonts */

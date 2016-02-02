@@ -142,8 +142,8 @@
         self.sessionManager = [FRSAVSessionManager defaultManager];
         self.locationManager = [FRSLocationManager sharedManager];
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-        self.currentOrientation = [UIDevice currentDevice].orientation;
         self.captureMode = captureMode;
+        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.firstTime = YES;
     }
     return self;
@@ -158,6 +158,7 @@
     
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
+    [self rotateAppForOrientation:self.lastOrientation];
     
     [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
         [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
@@ -862,6 +863,8 @@
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
+        
+        self.lastOrientation = UIDeviceOrientationLandscapeLeft;
         //        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
         
@@ -880,8 +883,6 @@
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
-        /* Delay is used to change color of mask after animation completes */
-        
         
         [self.sessionManager.session beginConfiguration];
         
@@ -894,7 +895,7 @@
         [self.sessionManager.session commitConfiguration];
         
     }
-    
+    [self rotateAppForOrientation:self.lastOrientation];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
 }
@@ -1429,7 +1430,7 @@
 }
 
 -(AVCaptureVideoOrientation)orientationFromDeviceOrientaton{
-    switch ([UIDevice currentDevice].orientation) {
+    switch (self.lastOrientation) {
         case UIDeviceOrientationLandscapeLeft:
             return AVCaptureVideoOrientationLandscapeRight;
             break;
@@ -1439,7 +1440,7 @@
         case UIDeviceOrientationPortrait:
             return AVCaptureVideoOrientationPortrait;
         default:
-            return AVCaptureVideoOrientationPortraitUpsideDown;
+            return AVCaptureVideoOrientationPortrait;
     }
 }
 
@@ -1466,18 +1467,22 @@
     
     UIDeviceOrientation orientationNew;
     
+    if (self.captureMode == FRSCaptureModeVideo){
+        self.lastOrientation = UIDeviceOrientationLandscapeLeft;
+        return;
+    }
+    
+    
     if (acceleration.z > -2 && acceleration.z < 2) {
         
         if (acceleration.x >= 0.75) {
             orientationNew = UIDeviceOrientationLandscapeRight;
             
-            
         } else if (acceleration.x <= -0.75) {
             orientationNew = UIDeviceOrientationLandscapeLeft;
             
         } else if (acceleration.y <= -0.75) {
-            orientationNew = UIInterfaceOrientationPortrait;
-            
+            orientationNew = UIDeviceOrientationPortrait;
             
         } else if (acceleration.y >= 0.75) {
             orientationNew = UIDeviceOrientationPortraitUpsideDown;

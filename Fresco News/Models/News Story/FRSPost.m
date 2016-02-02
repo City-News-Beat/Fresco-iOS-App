@@ -78,7 +78,6 @@
         return image;
         
     }];
-
 }
 
 - (NSURL *)largeImageURL
