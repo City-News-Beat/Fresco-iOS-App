@@ -119,6 +119,8 @@
 
 @property (nonatomic) UIDeviceOrientation lastOrientation;
 
+@property (nonatomic) CGFloat rotationIVOriginalY;
+
 @end
 
 @implementation FRSCameraViewController
@@ -145,7 +147,8 @@
         self.locationManager = [FRSLocationManager sharedManager];
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
-        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
+//        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
+        self.lastOrientation = [UIDevice currentDevice].orientation;
         self.firstTime = YES;
     }
     return self;
@@ -485,7 +488,6 @@
     self.apertureAnimationView.alpha = 0.0;
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
-    
     self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
     self.apertureMask.backgroundColor = [UIColor clearColor];
     self.apertureMask.layer.borderColor = [UIColor goldApertureColor].CGColor;
@@ -510,11 +512,13 @@
     self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
     self.videoRotateIV.layer.shadowOpacity = 0.15;
     self.videoRotateIV.layer.shadowRadius = 1.0;
+    self.videoRotateIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 1.0 : 0.0;
+    self.rotationIVOriginalY = self.videoRotateIV.frame.origin.y;
     
     
     self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake((self.videoRotateIV.frame.size.width - 13)/2, (self.videoRotateIV.frame.size.height - 22)/2, 13, 22)];
     [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
-    self.videoPhoneIV.alpha = 0.7;
+    self.videoPhoneIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 0.7 : 0.0;
     self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
     [self.videoRotateIV addSubview:self.videoPhoneIV];
     
@@ -533,83 +537,75 @@
 
 -(void)handleApertureButtonDepressed{
     
+    self.apertureButton.userInteractionEnabled = NO;
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
         self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 1);
         
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        self.apertureButton.userInteractionEnabled = YES;
+    }];
 }
 
 -(void)handleApertureButtonReleased{
     
+    self.apertureButton.userInteractionEnabled = NO;
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
         self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
         
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        self.apertureButton.userInteractionEnabled = YES;
+    }];
 }
 
--(void)handleApertureButtonRotation{
-    
-    //    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-    //        
-    //                self.videoRotateIV.transform = CGAffineTransformRotate(self.videoRotateIV.transform, ( -2.0 * M_PI));
-    ////                self.videoRotateIV.transform = CGAffineTransformRotate(self.videoRotateIV.transform, (3.14));
-    //        
-    //    } completion:nil];
-    //    
-    ////    [self rotateSpinningView];
-    
-    [self runSpinAnimationOnView:self.videoPhoneIV duration:0.3];
-}
-
--(void)runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration {
+-(void)animatePhoneRotationForVideoOrientation{
     
     self.apertureButton.userInteractionEnabled = NO;
     
-    [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        view.transform = CGAffineTransformMakeRotation((M_PI * 2.) / -3.);
+    CGFloat duration = 0.3;
+    
+    [UIView animateWithDuration:duration/4. delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) / -3.);
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-            view.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2./-3.);
+        [UIView animateWithDuration:duration/4. delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            self.videoPhoneIV.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2./-3.);
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                view.transform = CGAffineTransformMakeRotation(M_PI * -2.05);
+            [UIView animateWithDuration:duration/4. delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+                self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -2.0);
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    view.transform = CGAffineTransformMakeRotation(M_PI * 0.01);
+                [UIView animateWithDuration:0.06 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+                    self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * - 0.05);
                 } completion:^(BOOL finished) {
-                    self.apertureButton.userInteractionEnabled = YES;
+                    [UIView animateWithDuration:0.06 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        self.videoPhoneIV.transform = CGAffineTransformMakeRotation(0);
+                    } completion:^(BOOL finished) {
+                        self.apertureButton.userInteractionEnabled = YES;
+                    }];
                 }];
             }];
         }];
     }];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self animateVideoRotateHide];
-    });
-    
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self animateVideoRotationAppear];
-    });
-
-    
     
 }
 
 -(void)animateVideoRotateHide{
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    
+    self.videoRotateIV.center = self.apertureShadowView.center;
+    
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.transform = CGAffineTransformMakeRotation(M_PI);
         self.videoRotateIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.videoRotateIV.alpha = 0;
+        self.videoPhoneIV.alpha = 0;
         
     } completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
@@ -619,15 +615,19 @@
 }
 
 -(void)animateVideoRotationAppear{
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    
+    self.videoRotateIV.center = self.apertureShadowView.center;
+    
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.transform = CGAffineTransformMakeRotation(-M_PI);
         self.videoRotateIV.transform = CGAffineTransformMakeScale(1, 1);
         self.videoRotateIV.alpha = 1;
+        self.videoPhoneIV.alpha = 1.0;
         
     } completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
@@ -879,6 +879,13 @@
     NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
     NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
     if ( o == UIDeviceOrientationLandscapeLeft ){
+        
+        if (self.captureMode == FRSCaptureModeVideo){
+            [self animateVideoRotateHide];
+            self.videoRotateIV.alpha = 0.0;
+            self.videoPhoneIV.alpha = 0.0;
+        }
+        
         NSLog(@"landscapeLeft");
         angle = M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
@@ -895,6 +902,13 @@
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
         NSLog(@"landscapeRight");
+        
+        if (self.captureMode == FRSCaptureModeVideo){
+            [self animateVideoRotateHide];
+            self.videoRotateIV.alpha = 0.0;
+            self.videoPhoneIV.alpha = 0.0;
+        }
+        
         angle = -M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -922,6 +936,13 @@
         return;
         
     } else if ( o == UIDeviceOrientationPortrait ){
+        
+        if (self.captureMode == FRSCaptureModeVideo){
+            [self animateVideoRotationAppear];
+            self.videoRotateIV.alpha = 1.0;
+            self.videoPhoneIV.alpha = 0.7;
+        }
+        
         NSLog(@"portrait");
         labelWidth = self.captureVideoPreviewLayer.frame.size.width;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -980,17 +1001,24 @@
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
-    //    if (self.captureMode == FRSCaptureModePhoto){
-    //        
-    //        [self captureStillImage];
-    //    }
-    //    else {
-    //        [self toggleVideoRecording];
-    //    }
+    if (self.videoRotateIV.frame.origin.y != self.rotationIVOriginalY){
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.videoRotateIV.frame = CGRectMake(self.videoRotateIV.frame.origin.x, self.rotationIVOriginalY, self.videoRotateIV.frame.size.width, self.videoRotateIV.frame.size.height);
+        } completion:nil];
+    }
     
-    [self handleApertureButtonReleased];
-    [self handleApertureButtonRotation];
-    
+        if (self.captureMode == FRSCaptureModePhoto){
+            
+            [self captureStillImage];
+        }
+        else {
+            if (self.lastOrientation == UIDeviceOrientationPortrait){
+                [self animatePhoneRotationForVideoOrientation];
+            }
+            else {
+                [self toggleVideoRecording];
+            }
+        }
 }
 
 //=======
@@ -1016,8 +1044,6 @@
     
     if (self.captureMode == FRSCaptureModePhoto){
         self.captureMode = FRSCaptureModeVideo;
-        
-        self.lastOrientation = UIDeviceOrientationLandscapeLeft;
         //        self.cameraDisabled = YES;
         self.apertureImageView.alpha = 1;
         
@@ -1036,6 +1062,10 @@
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
+        
+        self.videoPhoneIV.alpha = 0.0;
+        self.videoRotateIV.alpha = 0.0;
+        [self animateVideoRotateHide];
         
         [self.sessionManager.session beginConfiguration];
         
@@ -1620,11 +1650,6 @@
     
     UIDeviceOrientation orientationNew;
     
-    if (self.captureMode == FRSCaptureModeVideo){
-        self.lastOrientation = UIDeviceOrientationLandscapeLeft;
-        return;
-    }
-    
     
     if (acceleration.z > -2 && acceleration.z < 2) {
         
@@ -1638,7 +1663,7 @@
             orientationNew = UIDeviceOrientationPortrait;
             
         } else if (acceleration.y >= 0.75) {
-            orientationNew = UIDeviceOrientationPortraitUpsideDown;
+            orientationNew = self.lastOrientation;
             
             
         } else if (acceleration.z < -0.85) {
