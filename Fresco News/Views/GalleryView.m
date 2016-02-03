@@ -182,6 +182,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
         
     }
     
+    
     //dispatch adding sublayer to main UI thread
     dispatch_async(dispatch_get_main_queue(), ^{
        
@@ -198,6 +199,11 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                object:[self.sharedPlayer currentItem]];
     
     self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
+    
+    if (postCell.shouldUseLocalVideo){
+        [postCell.photoIndicatorView stopAnimating];
+        postCell.photoIndicatorView.alpha = 0.0;
+    }
     
 }
 
