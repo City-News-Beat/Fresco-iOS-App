@@ -175,9 +175,17 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     else{
         
         [self.sharedPlayer play];
-        [UIView animateWithDuration:.5 animations:^{
-            postCell.mutedImage.alpha = 0.0f;
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:.5 animations:^{
+                postCell.mutedImage.alpha = 0.0f;
+                if (postCell.shouldUseLocalVideo){
+                    
+                    [postCell.photoIndicatorView stopAnimating];
+                    postCell.photoIndicatorView.alpha = 0.0;
+                }
+            }];
+        });
+        
         NSLog(@"Video Started");
         
     }
@@ -200,10 +208,7 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     
     self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
     
-    if (postCell.shouldUseLocalVideo){
-        [postCell.photoIndicatorView stopAnimating];
-        postCell.photoIndicatorView.alpha = 0.0;
-    }
+    
     
 }
 
