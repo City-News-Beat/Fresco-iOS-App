@@ -132,8 +132,11 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
          }
          */
         
+        //This dictionary looks exactly the same as the dictionary that is saved for a gallery that was terminated before it finished updated, except that it also has a galleryID, so that we can identity the gallery that was the most recently uploaded.
         if ([[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT]){
             NSDictionary *galleryDict = [[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+            
+            //We are making sure that this particular gallery is the same one as the one that was just uploaded.
             if ([self.currentGalleryId isEqualToString:galleryDict[@"gallery_id"]]){
                 NSArray *assetIDs = galleryDict[@"assets"];
                 if (assetIDs.count){
@@ -146,6 +149,7 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                         [array addObject:asset];
                     }];
                     
+                    //We check to make sure that the fetch returned some assets, then we request the actual image for the assets. This will MOST LIKELY get called twice, due to Apple's way of calling the delegate method. Initially returns an image that is low quality, and then gets the larger quality image afterwards.
                     if (array.count){
                         PHAsset *asset = [array firstObject];
                         PHCachingImageManager *imageManager = [[PHCachingImageManager alloc] init];
@@ -156,21 +160,27 @@ static NSString * const kCellIdentifier = @"PostCollectionViewCell";
                                 [self.photoIndicatorView stopAnimating];
                             });
                         }];
-                        
+
+                        //Both image and video asset types do return an image, but a video needs additional configuration. We need to alert the galleryView in which the cells are contained to setup the shared AVPlayer with the LOCAL asset version of the video, instead of attempting to stream it.
                         if (asset.mediaType == PHAssetMediaTypeVideo){
+
                             NSLog(@"is Video");
                             self.shouldUseLocalVideo = YES;
                             self.post.image.asset = asset;
                         }
                         
+                        //Finally, after all this is done, we are going to remove the dictionary that we have stored in defaults, so that the next time the cell loads, it attempts to stream the image / video from the server.
                         [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
+                        
                         
                     }
                     else {
+                        //If the fetch returned no assets, then something is wrong, and we shouldn't attempt to load the assets locally again.
                         [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
                     }
                 }
                 else {
+                    //If the fetch returned no assets, then something is wrong, and we shouldn't attempt to load the assets locally again.
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
                 }
             }

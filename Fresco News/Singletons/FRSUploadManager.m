@@ -129,6 +129,8 @@
                                                       
                                                       gallery.galleryID = responseObject[@"data"][@"_id"];
                                                       
+                                                      
+                                                      //This dictionary contains the necessary information of the last uploaded gallery so that we can use the local asset the first time around the gallery is loaded in the profile view controller
                                                       NSMutableDictionary *uploadedGal = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_UPLOADED_GALLERY_DICT]];
                                                       uploadedGal[@"gallery_id"] = gallery.galleryID;
                                                       [[NSUserDefaults standardUserDefaults] setObject:uploadedGal forKey:UD_LAST_UPLOADED_GALLERY_DICT];
@@ -150,6 +152,7 @@
                                                       
                                                       [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_UPLOAD_FAILURE object:nil];
                                                       
+                                                      //We want to remove the dictionary that was saved for the purpose of using the local asset if the API determined that the upload failed for whatever
                                                       [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
                                                       
                                                       self.isUploadingGallery = NO;
