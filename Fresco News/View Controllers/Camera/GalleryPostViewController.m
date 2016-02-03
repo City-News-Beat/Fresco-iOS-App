@@ -1131,7 +1131,6 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     NSDictionary *galleryDict = @{@"gallery_id" : galleryID, @"assignment_id" : assignmentID, @"assets" : assetIDs, @"caption" : self.captionTextView.text, @"facebook_selected" : @(self.facebookButton.selected), @"twitter_selected" : @(self.twitterButton.selected)};
     
     [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_UPLOADING_GALLERY_DICT];
-    [[NSUserDefaults standardUserDefaults] setObject:galleryDict forKey:UD_LAST_UPLOADED_GALLERY_DICT];
 }
 
 #pragma mark - AV Player

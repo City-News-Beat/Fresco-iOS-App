@@ -175,12 +175,21 @@ static CGFloat const kImageInitialYTranslation = 10.f;
     else{
         
         [self.sharedPlayer play];
-        [UIView animateWithDuration:.5 animations:^{
-            postCell.mutedImage.alpha = 0.0f;
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:.5 animations:^{
+                postCell.mutedImage.alpha = 0.0f;
+                if (postCell.shouldUseLocalVideo){
+                    
+                    [postCell.photoIndicatorView stopAnimating];
+                    postCell.photoIndicatorView.alpha = 0.0;
+                }
+            }];
+        });
+        
         NSLog(@"Video Started");
         
     }
+    
     
     //dispatch adding sublayer to main UI thread
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -198,6 +207,8 @@ static CGFloat const kImageInitialYTranslation = 10.f;
                                                object:[self.sharedPlayer currentItem]];
     
     self.playingIndex = [self.collectionPosts indexPathForCell:postCell];
+    
+    
     
 }
 
