@@ -65,6 +65,8 @@
 @property (strong, nonatomic) UIView *bottomClearContainer;
 @property (strong, nonatomic) UIView *bottomOpaqueContainer;
 
+@property (strong, nonatomic) UIImageView *videoRotateIV;
+@property (strong, nonatomic) UIImageView *videoPhoneIV;
 
 @property (strong, nonatomic) UIView *apertureShadowView;
 @property (strong, nonatomic) UIView *apertureAnimationView;
@@ -195,7 +197,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-
+    
     [super viewDidAppear:animated];
     [self fadeInPreview];
     
@@ -439,7 +441,7 @@
             else if (object == self.flashButton)
                 self.flashButton.alpha = 0.7;
         }
-        else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ // Was highlighted and now unhighlighted
+        else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ //Was highlighted and now unhighlighted
             if (object == self.nextButton)
                 self.previewBackgroundIV.alpha = 1.0;
             else if (object == self.flashButton)
@@ -496,14 +498,146 @@
     
     self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
+    self.apertureImageView.alpha = 0;
     self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+//    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 46.25, self.view.frame.size.height - 92.2, 92.5, 92.2)];
+    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 92.5, 92.5)];
+    self.videoRotateIV.center = self.apertureShadowView.center;
+    [self.videoRotateIV setImage:[UIImage imageNamed:@"videoRotateLeft"]];
+    self.videoRotateIV.contentMode = UIViewContentModeScaleAspectFill;
+    self.videoRotateIV.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
+    self.videoRotateIV.layer.shadowOpacity = 0.15;
+    self.videoRotateIV.layer.shadowRadius = 1.0;
+    
+    
+    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake((self.videoRotateIV.frame.size.width - 13)/2, (self.videoRotateIV.frame.size.height - 22)/2, 13, 22)];
+    [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
+    self.videoPhoneIV.alpha = 0.7;
+    self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
+    [self.videoRotateIV addSubview:self.videoPhoneIV];
     
     [self.apertureButton addSubview:self.apertureImageView];
     
     [self.apertureMask addSubview:self.apertureButton];
     
+    [self.bottomClearContainer addSubview:self.videoRotateIV];
+    
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.apertureButton addTarget:self action:@selector(handleApertureButtonDepressed) forControlEvents:UIControlEventTouchDown];
+    [self.apertureButton addTarget:self action:@selector(handleApertureButtonReleased) forControlEvents:UIControlEventTouchDragExit];
+    
+    
 }
+
+-(void)handleApertureButtonDepressed{
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
+        self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 1);
+        
+    } completion:nil];
+}
+
+-(void)handleApertureButtonReleased{
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
+        self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
+        
+    } completion:nil];
+}
+
+-(void)handleApertureButtonRotation{
+    
+    //    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    //        
+    //                self.videoRotateIV.transform = CGAffineTransformRotate(self.videoRotateIV.transform, ( -2.0 * M_PI));
+    ////                self.videoRotateIV.transform = CGAffineTransformRotate(self.videoRotateIV.transform, (3.14));
+    //        
+    //    } completion:nil];
+    //    
+    ////    [self rotateSpinningView];
+    
+    [self runSpinAnimationOnView:self.videoPhoneIV duration:0.3];
+}
+
+-(void)runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration {
+    
+    self.apertureButton.userInteractionEnabled = NO;
+    
+    [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        view.transform = CGAffineTransformMakeRotation((M_PI * 2.) / -3.);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            view.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2./-3.);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                view.transform = CGAffineTransformMakeRotation(M_PI * -2.05);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    view.transform = CGAffineTransformMakeRotation(M_PI * 0.01);
+                } completion:^(BOOL finished) {
+                    self.apertureButton.userInteractionEnabled = YES;
+                }];
+            }];
+        }];
+    }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self animateVideoRotateHide];
+    });
+    
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self animateVideoRotationAppear];
+    });
+
+    
+    
+}
+
+-(void)animateVideoRotateHide{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.videoRotateIV.transform = CGAffineTransformMakeRotation(M_PI);
+        self.videoRotateIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.videoRotateIV.alpha = 0;
+        
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
+        self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
+        self.apertureImageView.alpha = 1;
+        
+    } completion:nil];
+}
+
+-(void)animateVideoRotationAppear{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.videoRotateIV.transform = CGAffineTransformMakeRotation(-M_PI);
+        self.videoRotateIV.transform = CGAffineTransformMakeScale(1, 1);
+        self.videoRotateIV.alpha = 1;
+        
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
+        self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.apertureImageView.alpha = 0;
+        
+    } completion:nil];
+}
+
+
+
 
 
 -(void)configureFlashButton{
@@ -554,7 +688,6 @@
         if (self.flashIsOn == NO ) {
             [self flash:YES];
             NSLog(@"flash enabled = %d", self.flashIsOn);
-            
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
             
@@ -703,6 +836,15 @@
     CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
     
     if (self.captureMode == FRSCaptureModePhoto){
+        
+        //if portrait
+        //        if (self.currentOrientation == UIInterfaceOrientationPortrait) {
+//                    self.videoRotateIV.alpha = 0;
+//                    self.videoPhoneIV.alpha = 0;
+        //        }
+        
+        NSLog(@"self.currentOrientation = %ld", (long)self.currentOrientation);
+
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
@@ -713,6 +855,13 @@
         }];
     }
     else {
+        
+        //if portrait
+        //        if (self.currentOrientation == UIInterfaceOrientationPortrait) {
+//                    self.videoRotateIV.alpha = 1;
+//                    self.videoPhoneIV.alpha = 0.7;
+        //        }
+        
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.preview.frame = bigPreviewFrame;
             self.captureVideoPreviewLayer.frame = bigPreviewFrame;
@@ -725,11 +874,12 @@
 }
 
 -(void)rotateAppForOrientation:(UIDeviceOrientation)o{
-//    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
+    //    UIDeviceOrientation o = [UIDevice currentDevice].orientation;
     CGFloat angle = 0;
     NSInteger labelWidth = self.captureVideoPreviewLayer.frame.size.width;
     NSInteger offset = 12 + self.closeButton.frame.size.width + 17 + self.locationIV.frame.size.width + 7 + 12;
     if ( o == UIDeviceOrientationLandscapeLeft ){
+        NSLog(@"landscapeLeft");
         angle = M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -744,6 +894,7 @@
         }];
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
+        NSLog(@"landscapeRight");
         angle = -M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -771,6 +922,7 @@
         return;
         
     } else if ( o == UIDeviceOrientationPortrait ){
+        NSLog(@"portrait");
         labelWidth = self.captureVideoPreviewLayer.frame.size.width;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.topContainer.alpha = 0;
@@ -795,7 +947,7 @@
     self.flashButton.transform = rotation;
     self.apertureBackground.transform = rotation;
     self.previewBackgroundIV.transform = rotation;
-
+    
     [UIView commitAnimations];
     
     self.assignmentLabel.frame = CGRectMake(12 + 24 + 17 + 22 + 7 + 7, 0 , labelWidth - offset, 24);
@@ -828,15 +980,16 @@
 
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
-    if (self.captureMode == FRSCaptureModePhoto){
-        
-        [self captureStillImage];
-    }
-    else {
-        [self toggleVideoRecording];
-        
-    }
+    //    if (self.captureMode == FRSCaptureModePhoto){
+    //        
+    //        [self captureStillImage];
+    //    }
+    //    else {
+    //        [self toggleVideoRecording];
+    //    }
     
+    [self handleApertureButtonReleased];
+    [self handleApertureButtonRotation];
     
 }
 
@@ -1320,7 +1473,7 @@
 }
 
 
-- (void)runVideoRecordAnimation{
+-(void)runVideoRecordAnimation{
     
     self.captureModeToggleView.alpha = 0.0;
     
@@ -1444,7 +1597,7 @@
     }
 }
 
-#pragma mark ORIENTATION
+#pragma mark - Orientation
 
 - (void)startTrackingMovement {
     
@@ -1452,14 +1605,14 @@
     self.motionManager.gyroUpdateInterval = .2;
     
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
-                                                           withHandler:^(CMAccelerometerData  *accelerometerData, NSError *error) {
-                                                               if (!error) {
-                                                                   [self outputAccelertionData:accelerometerData.acceleration];
-                                                                   
-                                                               } else {
-                                                                   NSLog(@"%@", error);
-                                                               }
-                                                           }];
+                                             withHandler:^(CMAccelerometerData  *accelerometerData, NSError *error) {
+                                                 if (!error) {
+                                                     [self outputAccelertionData:accelerometerData.acceleration];
+                                                     
+                                                 } else {
+                                                     NSLog(@"%@", error);
+                                                 }
+                                             }];
 }
 
 
