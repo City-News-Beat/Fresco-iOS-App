@@ -43,7 +43,7 @@
 		1EA6F2E81ABB6CAE00E74E68 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2E71ABB6CAE00E74E68 /* GalleryView.m */; };
 		1EA6F2ED1ABB80AA00E74E68 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA6F2EC1ABB80AA00E74E68 /* StoryViewController.m */; };
 		1EBC7FD11AD6DED000DE5301 /* ProfileHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */; };
-		1ED9A32B1AA9FFE3009BD7A3 /* lView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* lView.m */; };
+		1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */; };
 		1ED9A3311AAA552B009BD7A3 /* StoryCellMosaic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3301AAA552B009BD7A3 /* StoryCellMosaic.m */; };
 		1ED9A3341AAE01D9009BD7A3 /* StoryCellMosaicHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3331AAE01D9009BD7A3 /* StoryCellMosaicHeader.m */; };
 		1ED9A3381AAE2E4B009BD7A3 /* StoryThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9A3371AAE2E4B009BD7A3 /* StoryThumbnailView.m */; };
@@ -266,7 +266,7 @@
 		1EBC7FCF1AD6DED000DE5301 /* ProfileHeaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileHeaderViewController.h; sourceTree = "<group>"; };
 		1EBC7FD01AD6DED000DE5301 /* ProfileHeaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileHeaderViewController.m; sourceTree = "<group>"; };
 		1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssignmentsViewController.h; sourceTree = "<group>"; };
-		1ED9A32A1AA9FFE3009BD7A3 /* lView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lView.m; sourceTree = "<group>"; usesTabs = 0; };
+		1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssignmentsViewController.m; sourceTree = "<group>"; usesTabs = 0; };
 		1ED9A32C1AAA0009009BD7A3 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		1ED9A32D1AAA0009009BD7A3 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		1ED9A32F1AAA552B009BD7A3 /* StoryCellMosaic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCellMosaic.h; sourceTree = "<group>"; };
@@ -1000,7 +1000,7 @@
 			isa = PBXGroup;
 			children = (
 				1ED9A3291AA9FFE3009BD7A3 /* AssignmentsViewController.h */,
-				1ED9A32A1AA9FFE3009BD7A3 /* lView.m */,
+				1ED9A32A1AA9FFE3009BD7A3 /* AssignmentsViewController.m */,
 				BC77FE801B6AC74100EF6135 /* AssignmentOnboardViewController.h */,
 				BC77FE811B6AC74100EF6135 /* AssignmentOnboardViewController.m */,
 			);
@@ -1624,7 +1624,7 @@
 				E7D27A9D1B5FFF5900A08B51 /* CRMotionView.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				1E408B751AA799750057AC16 /* UIColor+Additions.m in Sources */,
-				1ED9A32B1AA9FFE3009BD7A3 /* lView.m in Sources */,
+				1ED9A32B1AA9FFE3009BD7A3 /* AssignmentsViewController.m in Sources */,
 				1E3592831AC2FF3C00F60348 /* GalleriesViewController.m in Sources */,
 				1EDA45021AA4D0730082E08D /* FRSArticle.m in Sources */,
 				65C6EA541C21E309005581A4 /* FRSAssignmentChoiceCell.m in Sources */,
