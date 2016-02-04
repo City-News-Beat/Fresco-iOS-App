@@ -1652,10 +1652,6 @@
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
     
-    NSLog(@"z %f", acceleration.z);
-    NSLog(@"y %f", acceleration.y);
-    NSLog(@"x %f", acceleration.x);
-    
     if (acceleration.z > -2 && acceleration.z < 2) {
         
         if (acceleration.x >= 0.75) {

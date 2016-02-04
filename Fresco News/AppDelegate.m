@@ -93,29 +93,35 @@
     return YES;
 }
 
+
 -(void)applicationDidEnterBackground:(UIApplication *)application{
     
     NSLog(@"DID ENTER BACKGROUND");
     
+    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+    NSRunLoop *loop = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(fireFailedUploadLocalNotificationIfNeeded) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:loop forMode:NSRunLoopCommonModes];
+
     
     if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusNotDetermined)) {
         NSLog(@"location denied");
     } else if (([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse)){
         NSLog(@"location accepted");
         [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-        
-        [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
-        
-        if([FRSUploadManager sharedManager].isUploadingGallery){
-            [self fireFailedUploadLocalNotification];
-        }
+
+    }
+}
+
+-(void)fireFailedUploadLocalNotificationIfNeeded{
+    if([FRSUploadManager sharedManager].isUploadingGallery){
+        [self fireFailedUploadLocalNotification];
     }
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
     
     NSLog(@"WILL TERMINATE");
-    
+    [self fireFailedUploadLocalNotificationIfNeeded];
     [[FRSLocationManager sharedManager] setupLocationMonitoringForState:LocationManagerStateBackground];
 }
 
