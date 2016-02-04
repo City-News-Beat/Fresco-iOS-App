@@ -42,6 +42,7 @@
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
     UIInterfaceOrientation orientationNew;
+    
         
     if (acceleration.z > -2 && acceleration.z < 2) {
         

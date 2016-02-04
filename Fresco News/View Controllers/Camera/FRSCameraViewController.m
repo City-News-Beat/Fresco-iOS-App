@@ -500,7 +500,7 @@
     
     self.apertureImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH - 8, APERTURE_WIDTH - 8)];
     [self.apertureImageView setImage:[UIImage imageNamed:@"camera-iris"]];
-    self.apertureImageView.alpha = 0;
+    self.apertureImageView.alpha = 1;
     self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
 //    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 46.25, self.view.frame.size.height - 92.2, 92.5, 92.2)];
@@ -1650,6 +1650,11 @@
     
     UIDeviceOrientation orientationNew;
     
+    if (self.sessionManager.movieFileOutput.isRecording) return;
+    
+    NSLog(@"z %f", acceleration.z);
+    NSLog(@"y %f", acceleration.y);
+    NSLog(@"x %f", acceleration.x);
     
     if (acceleration.z > -2 && acceleration.z < 2) {
         

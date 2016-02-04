@@ -32,6 +32,7 @@
 
 #import "FRSCameraViewController.h"
 
+#import "FRSTabBarController.h"
 
 
 @interface AppDelegate ()
@@ -390,22 +391,66 @@
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
     
-    /* Dismiss any view controller presented modally */
-    [self.frsRootViewController dismissViewControllerAnimated:YES completion:nil];
+    //Which index of the tabbar are we trying to present?
+    NSInteger indexToPresent;
+    FRSCaptureMode captureMode;
     
-    /* Link shortcut items to designated view controllers */
     if ([shortcutItem.localizedTitle isEqual: @"Take photo"]) {
-        
-        [self.frsRootViewController setRootViewControllerToCamera];
-        
+        indexToPresent = 2;
+        captureMode = FRSCaptureModePhoto;
+        //        [self.frsRootViewController setRootViewControllerToCamera];
     } else if ([shortcutItem.localizedTitle isEqual: @"Assignments"]) {
-        
-        [self.frsRootViewController setRootViewControllerToAssignments];
-        
+        //        [self.frsRootViewController setRootViewControllerToAssignments];
+        indexToPresent = 3;
     } else if ([shortcutItem.localizedTitle isEqual: @"Take video"]) {
+        captureMode = FRSCaptureModeVideo;
+        //        [self.frsRootViewController setRootViewControllerToCameraForVideo];
+        indexToPresent = 2;
+    }
+    
+    
+    UIViewController *vc = self.frsRootViewController.viewController;
+    
+    if (!vc)  return;
+    
+    else{
+        FRSTabBarController *tbvc = (FRSTabBarController *)vc;
         
-        [self.frsRootViewController setRootViewControllerToCameraForVideo];
-        
+        if (tbvc.selectedIndex == indexToPresent){ //we were already on the view controller
+            if (indexToPresent == 2 && [tbvc.presentedViewController isKindOfClass:[FRSCameraViewController class]]){
+                FRSCameraViewController *camVC = (FRSCameraViewController *)tbvc.presentedViewController;
+                
+                if (camVC.isPresented && camVC.captureMode != captureMode){ //The camera was the last visible viewcontroller and the user has not gone to assetpicker or gallerypost but the desired capture mode is different than current capture mode
+                    [camVC toggleCaptureMode];
+                }
+                else if (!camVC.isPresented){ //The tabbar did present the camera vc, but the user moved to the assetpicker or gallery post
+                    [camVC dismissAndReturnToPreviousTab];
+                    captureMode == FRSCaptureModePhoto ? [self.frsRootViewController setRootViewControllerToCamera] : [self.frsRootViewController setRootViewControllerToCameraForVideo];
+                }
+            }
+        }
+        else{ //We were NOT on the correct view controller
+            if (indexToPresent == 2){
+                [[NSUserDefaults standardUserDefaults] setInteger:tbvc.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
+                captureMode == FRSCaptureModePhoto ? [self.frsRootViewController setRootViewControllerToCamera] : [self.frsRootViewController setRootViewControllerToCameraForVideo];
+                
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (tbvc.presentedViewController && [tbvc.presentedViewController isKindOfClass:[FRSCameraViewController class]]){
+                        FRSCameraViewController *camVC = (FRSCameraViewController *)tbvc.presentedViewController;
+                        [camVC dismissViewControllerAnimated:NO completion:^{
+                            [self.frsRootViewController setRootViewControllerToAssignments];
+                        }];
+                    }
+                    else {
+                        [self.frsRootViewController setRootViewControllerToAssignments];
+                    }
+                });
+                
+            }
+        }
+        return;
     }
 }
 

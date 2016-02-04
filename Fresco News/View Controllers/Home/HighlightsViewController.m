@@ -38,6 +38,8 @@
     [super viewDidLoad];
     
     [self setFrescoNavigationBar];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:UD_LAST_UPLOADED_GALLERY_DICT];
 
     //Check if the app visited onboard, then go straight to updating
     
@@ -96,9 +98,6 @@
                                                                      target:[self navigationController]
                                                                      action:@selector(popViewControllerAnimated:)];
     [[self navigationItem] setBackBarButtonItem:newBackButton];
-    
-    
-    
     
 }
 
