@@ -518,11 +518,11 @@
     self.rotationIVOriginalY = self.videoRotateIV.frame.origin.y;
     
     
-    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake((self.videoRotateIV.frame.size.width - 13)/2, (self.videoRotateIV.frame.size.height - 22)/2, 13, 22)];
+    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.bottomClearContainer.frame.size.width/2 -7, self.bottomClearContainer.frame.size.height -90, 13, 22)];
     [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
     self.videoPhoneIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 0.7 : 0.0;
     self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
-    [self.videoRotateIV addSubview:self.videoPhoneIV];
+    [self.bottomClearContainer addSubview:self.videoPhoneIV];
     
     [self.apertureButton addSubview:self.apertureImageView];
     
@@ -598,7 +598,7 @@
     
     self.videoRotateIV.center = self.apertureShadowView.center;
     
-    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.transform = CGAffineTransformMakeRotation(M_PI);
         self.videoRotateIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
@@ -607,7 +607,7 @@
         
     } completion:nil];
     
-    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
