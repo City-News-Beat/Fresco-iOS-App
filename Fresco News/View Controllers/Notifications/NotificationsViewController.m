@@ -269,7 +269,7 @@ static NSString *NotificationCellIdentifier = @"NotificationCell";
     else if([notification.type isEqualToString:@"use"] || [notification.type isEqualToString:NOTIF_BREAKING] ){
         
         //Get assignment and navigate to on assignments view
-        [[FRSDataManager sharedManager] getGallery:notification.meta[@"ry"] withResponseBlock:^(id responseObject, NSError *error) {
+        [[FRSDataManager sharedManager] getGallery:notification.meta[@"gallery"] withResponseBlock:^(id responseObject, NSError *error) {
             if (!error) {
                 
                 if(((FRSGallery *)responseObject).galleryID != nil){
