@@ -1302,6 +1302,23 @@
     [self toggleVideoRecording];
 }
 
+-(void)animateCloseButtonHide:(BOOL)shouldHide{
+    
+    if (shouldHide) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.closeButton.alpha = 0;
+            
+        } completion:nil];
+    } else {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.closeButton.alpha = 1;
+            
+        } completion:nil];
+    }
+}
+
 -(void)toggleVideoRecording{
     
     if (self.sessionManager.movieFileOutput.isRecording) {
@@ -1312,10 +1329,12 @@
         
         [self stopRecordingAnimation];
         self.previewBackgroundIV.alpha = 1.0;
+        [self animateCloseButtonHide:NO];
         
     }
     else {
         self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        [self animateCloseButtonHide:YES];
     }
     
     dispatch_async(self.sessionManager.sessionQueue, ^{
