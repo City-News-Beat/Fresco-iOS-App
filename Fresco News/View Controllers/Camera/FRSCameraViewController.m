@@ -203,7 +203,7 @@
     
     [super viewDidAppear:animated];
     [self fadeInPreview];
-    [self.motionManager stopAccelerometerUpdates];
+    
     
 }
 
@@ -219,6 +219,7 @@
     [_captureVideoPreviewLayer removeFromSuperlayer];
     
     self.isPresented = NO;
+    [self.motionManager stopAccelerometerUpdates];
 }
 
 

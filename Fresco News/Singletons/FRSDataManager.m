@@ -488,7 +488,7 @@
             
             //Successful refresh and log in
             if(success){
-                [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
+//                [[FRSUploadManager sharedManager] finishTerminatedGalleryUploadIfNeeded];
                 if(block) block(YES, nil);
                 
                 //Validate Terms Here
