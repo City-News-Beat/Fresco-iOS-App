@@ -382,7 +382,6 @@
             
             if(succeeded){
                 block(user, error);
-                    [self updateEmail];
             } else {
                 block(nil, error);
             }
