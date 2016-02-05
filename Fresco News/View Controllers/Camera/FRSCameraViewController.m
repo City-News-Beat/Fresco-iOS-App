@@ -847,14 +847,16 @@
         //        }
         
         NSLog(@"self.currentOrientation = %ld", (long)self.currentOrientation);
+        
+        
 
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = smallPreviewFrame;
             self.captureVideoPreviewLayer.frame = self.preview.bounds;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
+            self.preview.frame = smallPreviewFrame;
         }];
     }
     else {
@@ -1071,7 +1073,7 @@
         [self animateVideoRotateHide];
         
         [self.sessionManager.session beginConfiguration];
-        
+    
         //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
             //Set the session preset to photo, the default mode we enter in as
