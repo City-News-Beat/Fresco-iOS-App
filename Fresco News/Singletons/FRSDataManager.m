@@ -382,6 +382,9 @@
             
             if(succeeded){
                 block(user, error);
+                
+                [self updateEmail];
+                
             } else {
                 block(nil, error);
             }
@@ -401,8 +404,6 @@
     NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
     [parameters setValue:@"id,name,email" forKey:@"fields"];
     
-    
-    
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
                                   initWithGraphPath:@"me"
                                   parameters:parameters
@@ -410,10 +411,14 @@
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                           id result,
                                           NSError *error) {
+        
+        if (error || !result[@"email"]) return;
+        
         NSString *email = [result objectForKey:@"email"];
         
         [PFUser currentUser].email = email;
         self.currentUser.email = email;
+        [[PFUser currentUser] saveInBackground];
         
         [self updateFrescoUserWithParams:@{@"email" : email} withImageData:nil block:^(BOOL sucess, NSError *error) {
             if (error){
@@ -428,8 +433,7 @@
  ** Social Login via Facebook
  */
 
-- (void)loginViaFacebookWithBlock:(PFUserResultBlock)resultBlock
-{
+- (void)loginViaFacebookWithBlock:(PFUserResultBlock)resultBlock {
     assert(resultBlock);
     
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[ @"public_profile", @"email" ] block:^(PFUser *user, NSError *error) {
@@ -474,9 +478,8 @@
     if([[PFUser currentUser] objectForKey:kFrescoUserIdKey] == nil){
         
         [[PFUser currentUser] deleteInBackground];
-        
+        [PFUser logOut];
         self.loggingIn = NO;
-        
     }
     //The fresco user id exists and proceed normally
     else{

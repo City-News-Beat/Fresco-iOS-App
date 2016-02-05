@@ -179,6 +179,8 @@
     [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
     self.locationManager.delegate = self;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideoCaptureIfNeeded) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -203,7 +205,6 @@
     
     [super viewDidAppear:animated];
     [self fadeInPreview];
-    
     
 }
 
@@ -1294,6 +1295,11 @@
             }
         }];
     });
+}
+
+-(void)stopVideoCaptureIfNeeded{
+    if (!self.sessionManager.movieFileOutput.isRecording) return;
+    [self toggleVideoRecording];
 }
 
 -(void)toggleVideoRecording{

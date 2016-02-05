@@ -207,6 +207,8 @@
     
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteBackgroundColor];
+    
     [self.saveCardButton addTarget:self action:@selector(saveCardAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UITapGestureRecognizer *recg = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
@@ -472,7 +474,6 @@
         }
         
     }];
-    
 }
 
 #pragma mark - UIKeyboard Notificaitons
@@ -490,7 +491,7 @@
                             CGRect viewFrame = self.view.frame;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]){
-                                viewFrame.origin.y = -kbSize.height /4;
+                                viewFrame.origin.y = - (kbSize.height - 64);
                                 [self togglePicker:YES];
                             }
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification]){
