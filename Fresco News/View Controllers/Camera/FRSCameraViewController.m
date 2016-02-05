@@ -580,7 +580,7 @@
                 self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * -2.0);
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.06 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-                    self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * - 0.05);
+                    self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI * - 0.1);
                 } completion:^(BOOL finished) {
                     [UIView animateWithDuration:0.06 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                         self.videoPhoneIV.transform = CGAffineTransformMakeRotation(0);
@@ -599,16 +599,28 @@
     
     self.videoRotateIV.center = self.apertureShadowView.center;
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.apertureShadowView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureShadowView.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.transform = CGAffineTransformMakeRotation(M_PI);
         self.videoRotateIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI);
+        self.videoPhoneIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.videoRotateIV.alpha = 0;
         self.videoPhoneIV.alpha = 0;
         
     } completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(1, 1);
@@ -621,20 +633,38 @@
     
     self.videoRotateIV.center = self.apertureShadowView.center;
     
-    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.apertureShadowView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.apertureShadowView.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.transform = CGAffineTransformMakeRotation(-M_PI);
         self.videoRotateIV.transform = CGAffineTransformMakeScale(1, 1);
+        self.videoPhoneIV.transform = CGAffineTransformMakeRotation(-M_PI);
+        self.videoPhoneIV.transform = CGAffineTransformMakeScale(1, 1);
         self.videoRotateIV.alpha = 1;
         self.videoPhoneIV.alpha = 1.0;
         
-    } completion:nil];
+        
+        
+    } completion:^(BOOL finished) {
+        
+    }];
     
-    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.apertureImageView.alpha = 0;
+        
+        
         
     } completion:nil];
 }
@@ -1056,6 +1086,7 @@
         
         [self.sessionManager.session beginConfiguration];
         
+
         //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
             //Set the session preset to photo, the default mode we enter in as
