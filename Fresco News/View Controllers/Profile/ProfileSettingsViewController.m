@@ -42,15 +42,15 @@ typedef enum : NSUInteger {
 @property (strong, nonatomic) UIActivityIndicatorView *toolbarSpinner;
 
 /*
-** Profile Picture
-*/
+ ** Profile Picture
+ */
 
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) UIImage *selectedImage;
 
 /*
-** Text Fields
-*/
+ ** Text Fields
+ */
 
 @property (weak, nonatomic) IBOutlet UITextField *textfieldFirst;
 @property (weak, nonatomic) IBOutlet UITextField *textfieldLast;
@@ -59,8 +59,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UITextField *textfieldEmail;
 
 /*
-** Buttons
-*/
+ ** Buttons
+ */
 
 @property (weak, nonatomic) IBOutlet FRSSocialButton *connectTwitterButton;
 @property (weak, nonatomic) IBOutlet FRSSocialButton *connectFacebookButton;
@@ -70,8 +70,8 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet FRSSaveButton *saveChangesbutton;
 
 /*
-** Radius Setting
-*/
+ ** Radius Setting
+ */
 
 @property (weak, nonatomic) IBOutlet UISlider *radiusStepper;
 @property (weak, nonatomic) IBOutlet UILabel *radiusStepperLabel;
@@ -79,8 +79,8 @@ typedef enum : NSUInteger {
 @property (nonatomic) DBImageColorPicker *picker;
 
 /*
-** UI Constraints
-*/
+ ** UI Constraints
+ */
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintAccountVerticalTop;
@@ -98,7 +98,7 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     
     self.title = @"Edit Profile";
-
+    
     [self configureViews];
     
 }
@@ -116,7 +116,7 @@ typedef enum : NSUInteger {
 - (void)configureViews{
     
     self.saveChangesbutton.enabled = NO;
-
+    
     //Set text fields with user data
     self.textfieldFirst.text = [FRSDataManager sharedManager].currentUser.first;
     self.textfieldLast.text  = [FRSDataManager sharedManager].currentUser.last;
@@ -138,7 +138,7 @@ typedef enum : NSUInteger {
     //Set up social icons
     [self.connectFacebookButton setUpSocialIcon:SocialNetworkFacebook withRadius:YES];
     [self.connectTwitterButton setUpSocialIcon:SocialNetworkTwitter withRadius:YES];
-        
+    
     //Update radius slider value for user
     self.radiusStepper.value = [[FRSDataManager sharedManager].currentUser.notificationRadius floatValue];
     
@@ -146,22 +146,25 @@ typedef enum : NSUInteger {
     [self sliderValueChanged:self.radiusStepper];
     
     //Checks if the user's primary login is through social, then disable the email and password fields
-    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-       && [FRSDataManager sharedManager].currentUser.email == nil){
+    if(([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] || [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])){
+        if ([FRSDataManager sharedManager].currentUser.email == nil){
+            
+            [self.view viewWithTag:100].hidden = YES;
+            [self.view viewWithTag:101].hidden = YES;
+            [[self.view viewWithTag:100] removeFromSuperview];
+            [[self.view viewWithTag:101] removeFromSuperview];
+            
+            CGFloat y = -self.view.frame.size.height/8;
+            self.constraintAccountVerticalTop.constant = y;
+            self.constraintAccountVerticalBottom.constant = 0;
+        }else {
+            self.textfieldNewPassword.userInteractionEnabled = NO;
+            self.textfieldConfirmPassword.userInteractionEnabled = NO;
+        }
         
-        [self.view viewWithTag:100].hidden = YES;
-        [self.view viewWithTag:101].hidden = YES;
-        [[self.view viewWithTag:100] removeFromSuperview];
-        [[self.view viewWithTag:101] removeFromSuperview];
-        
-        CGFloat y = -self.view.frame.size.height/8;
-        self.constraintAccountVerticalTop.constant = y;
-        self.constraintAccountVerticalBottom.constant = 0;
-        
+        [self.scrollView setNeedsLayout];
+        [self.scrollView layoutIfNeeded];
     }
-    
-    [self.scrollView setNeedsLayout];
-    [self.scrollView layoutIfNeeded];
     
     if (!self.picker)
         self.picker = [MKMapView createDBImageColorPickerForUserWithImage:nil];
@@ -193,7 +196,7 @@ typedef enum : NSUInteger {
     [self.addCardButton addSubview:caret];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         [self getYolked];
         
     });
@@ -206,6 +209,7 @@ typedef enum : NSUInteger {
     [super willMoveToParentViewController:parent];
     
     [self saveChanges]; //CHECK FOR RELEASE
+    
 }
 
 
@@ -260,7 +264,7 @@ typedef enum : NSUInteger {
         [self.spinner startAnimating];
         
         [button addSubview:self.spinner];
-            
+        
     });
     
     if(network == SocialNetworkFacebook){
@@ -409,22 +413,22 @@ typedef enum : NSUInteger {
 - (void)updateLinkingStatus {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-            
+        
         [self.connectTwitterButton setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
         [self.connectFacebookButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
-
+        
         //Twitter
         if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]])
             [self.connectTwitterButton setTitle:@"Disconnect" forState:UIControlStateNormal];
         else
             [self.connectTwitterButton setTitle:@"Connect" forState:UIControlStateNormal];
-
+        
         //Facebook
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
             [self.connectFacebookButton setTitle:@"Disconnect" forState:UIControlStateNormal];
         else
             [self.connectFacebookButton setTitle:@"Connect" forState:UIControlStateNormal];
-
+        
     });
 }
 
@@ -450,7 +454,7 @@ typedef enum : NSUInteger {
         
         warningTitle = WELL_MISS_YOU;
         warningMessage = YOU_CAN_LOGIN_FOR_ONE_YR;
-    
+        
     }
     
     UIAlertController *alertCon = [FRSAlertViewManager
@@ -459,11 +463,11 @@ typedef enum : NSUInteger {
                                    action:CANCEL handler:nil];
     
     [alertCon addAction:[UIAlertAction actionWithTitle:DISABLE style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action){
-
+        
         [[FRSDataManager sharedManager] disableFrescoUser:^(BOOL success, NSError *error){
             
             if (success) {
-
+                
                 [[FRSDataManager sharedManager] logout];
                 
                 FRSRootViewController *rvc = (FRSRootViewController *)[[UIApplication sharedApplication] delegate].window.rootViewController;
@@ -497,7 +501,7 @@ typedef enum : NSUInteger {
 - (void)updateAddCardButton{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-            
+        
         if([[FRSDataManager sharedManager].currentUser.payable integerValue] == 1){
             
             //If we already have the last 4
@@ -554,7 +558,7 @@ typedef enum : NSUInteger {
     
     //Break if the saveChangesButton is not enabled
     if(!self.saveChangesbutton.enabled) return;
-
+    
     NSMutableDictionary *updateParams = [[NSMutableDictionary alloc] initWithCapacity:5];
     
     if ([self.textfieldFirst.text length])
@@ -565,17 +569,17 @@ typedef enum : NSUInteger {
     
     //Check if the password field is not empty and is being needed for check
     if(self.textfieldNewPassword.text && self.textfieldNewPassword.text.length > 0){
-       
+        
         //Check if the password field text is valid
         if(![self.textfieldNewPassword.text isValidPassword]){
-
+            
             [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:@"Invalid Password"
                                          message:@"Please enter a password that is 6 characters or longer" action:DISMISS]
                                animated:YES
                              completion:nil];
             
-         
+            
             
             return;
         }
@@ -588,10 +592,10 @@ typedef enum : NSUInteger {
                                          action:DISMISS]
                                animated:YES
                              completion:nil];
-
+            
             return;
         }
-       
+        
     }
     
     [self.saveChangesbutton toggleSpinner];
@@ -610,7 +614,7 @@ typedef enum : NSUInteger {
         if (!success) {
             
             [self.saveChangesbutton toggleSpinner];
-                        
+            
             [self presentViewController:[FRSAlertViewManager
                                          alertControllerWithTitle:ERROR
                                          message:PROFILE_SETTINGS_SAVE_ERROR
@@ -618,7 +622,7 @@ typedef enum : NSUInteger {
                                animated:YES
                              completion:nil];
             
-        
+            
         }
         // On success, run password check
         else {
@@ -652,22 +656,22 @@ typedef enum : NSUInteger {
                                                animated:YES
                                              completion:nil];
                         }
-
-                    
+                        
+                        
                     }
                     //The save is successful
                     else{
-
+                        
                         self.saveChangesbutton.enabled = NO;
                         [self.navigationController popViewControllerAnimated:YES];
-                    
+                        
                     }
                 }];
                 
             }
             //No passwords are set, pop back
             else{
-            
+                
                 [self.saveChangesbutton toggleSpinner];
                 
                 [self.navigationController popViewControllerAnimated:YES];
@@ -677,7 +681,7 @@ typedef enum : NSUInteger {
     
     // send a second post to save the radius -- ignore success
     [updateParams removeAllObjects];
-
+    
 }
 
 #pragma mark - IBActions
@@ -720,7 +724,7 @@ typedef enum : NSUInteger {
 }
 
 - (IBAction)disableAccount:(id)sender {
-
+    
     [self disableAcctWithSocialNetwork:nil];
 }
 
@@ -738,7 +742,7 @@ typedef enum : NSUInteger {
     if(roundedValue > 0){
         
         NSString *pluralizer = (roundedValue > 1 || roundedValue == 0) ? @"s" : @"";
-    
+        
         NSString *newValue = [NSString stringWithFormat:@"%2.0f mile%@", roundedValue, pluralizer];
         
         // only update changes
@@ -765,7 +769,7 @@ typedef enum : NSUInteger {
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
     [self.saveChangesbutton updateSaveState:SaveStateEnabled];
-
+    
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -838,7 +842,7 @@ typedef enum : NSUInteger {
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-
+    
     self.selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
     
     self.profileImageView.image = self.selectedImage;
@@ -848,7 +852,7 @@ typedef enum : NSUInteger {
     [self.mapView updateUserPinViewForMapViewWithImage:self.selectedImage];
     self.picker = [MKMapView createDBImageColorPickerForUserWithImage:self.selectedImage];
     [self.mapView userRadiusUpdated:@(self.radiusStepper.value)];
-
+    
     // Code here to work with media
     [self dismissViewControllerAnimated:YES completion:nil];
     

@@ -126,6 +126,9 @@
     
     //Load the profile header with the cached data
     if([[FRSDataManager sharedManager] isLoggedIn]){
+        if ([PFUser currentUser].email && ![FRSDataManager sharedManager].currentUser.email){
+            [FRSDataManager sharedManager].currentUser.email = [PFUser currentUser].email;
+        }
         [self.galleriesViewController.profileHeaderViewController updateUserInfo];
     }
     

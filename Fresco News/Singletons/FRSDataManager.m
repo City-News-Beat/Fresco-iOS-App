@@ -399,6 +399,7 @@
 }
 
 -(void)updateEmail{
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
