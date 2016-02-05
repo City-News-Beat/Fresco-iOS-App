@@ -474,7 +474,6 @@
         }
         
     }];
-    
 }
 
 #pragma mark - UIKeyboard Notificaitons
@@ -492,7 +491,7 @@
                             CGRect viewFrame = self.view.frame;
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]){
-                                viewFrame.origin.y = IS_IPHONE_5 ? - (kbSize.height - 64) : - (kbSize.height - 64);
+                                viewFrame.origin.y = - (kbSize.height - 64);
                                 [self togglePicker:YES];
                             }
                             else if([notification.name isEqualToString:UIKeyboardWillHideNotification]){
