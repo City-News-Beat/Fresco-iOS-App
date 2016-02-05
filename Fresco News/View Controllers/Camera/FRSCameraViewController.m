@@ -1652,6 +1652,8 @@
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
     
+    NSLog(@"y = %f" , acceleration.y);
+    
     if (acceleration.z > -2 && acceleration.z < 2) {
         
         if (acceleration.x >= 0.75) {
@@ -1665,12 +1667,12 @@
             
         } else if (acceleration.y >= 0.75) {
             orientationNew = self.lastOrientation;
-            
-            
-        } else if (acceleration.z < -0.85) {
-            orientationNew = UIDeviceOrientationPortrait;
-            
         }
+        
+        //        } else if (acceleration.z < -0.85) {
+        //            orientationNew = UIDeviceOrientationPortrait;
+        //
+        //        }
         else {
             // Consider same as last time
             return;
