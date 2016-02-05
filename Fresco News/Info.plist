@@ -2,33 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Take photo</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>avaliable at launch</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick-action-camera</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Take video</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>avaliable at launch</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick-action-video</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Assignments</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>avaliable at launch</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick-action-map</string>
-		</dict>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -65,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>4</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -141,6 +114,33 @@
 	<string>Fresco servers use location to notify you when there is an assignment nearby. This location data is secure and anonymous.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Fresco uses location to automatically verify photos and videos before they are posted.</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-camera</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take photo</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-video</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take video</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-map</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Assignments</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

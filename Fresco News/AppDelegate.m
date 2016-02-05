@@ -360,30 +360,30 @@
 }
 
 
-- (void)createItemsWithIcons {
-    
-    // create icon with custom images
-    
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0){
-        
-        UIApplicationShortcutIcon *camera = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-camera"];
-        UIApplicationShortcutIcon *video = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-video"];
-        UIApplicationShortcutIcon *map = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-map"];
-        
-        // create dynamic shortcut items
-        UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-camera" localizedTitle:@"Take photo" localizedSubtitle:@"" icon:camera userInfo:nil];
-        
-        UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-video" localizedTitle:@"Take video" localizedSubtitle:@"" icon:video userInfo:nil];
-        
-        UIMutableApplicationShortcutItem *item3 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-map" localizedTitle:@"Assignments" localizedSubtitle:@"" icon:map userInfo:nil];
-        
-        // add all items to an array
-        NSArray *items = @[item1, item2, item3];
-        
-        // add the array to our app
-        [UIApplication sharedApplication].shortcutItems = items;
-    }
-}
+//- (void)createItemsWithIcons {
+//    
+//    // create icon with custom images
+//    
+//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0){
+//        
+//        UIApplicationShortcutIcon *camera = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-camera"];
+//        UIApplicationShortcutIcon *video = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-video"];
+//        UIApplicationShortcutIcon *map = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick-action-map"];
+//        
+//        // create dynamic shortcut items
+//        UIMutableApplicationShortcutItem *item1 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-camera" localizedTitle:@"Take photo" localizedSubtitle:@"" icon:camera userInfo:nil];
+//        
+//        UIMutableApplicationShortcutItem *item2 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-video" localizedTitle:@"Take video" localizedSubtitle:@"" icon:video userInfo:nil];
+//        
+//        UIMutableApplicationShortcutItem *item3 = [[UIMutableApplicationShortcutItem alloc]initWithType:@"quick-action-map" localizedTitle:@"Assignments" localizedSubtitle:@"" icon:map userInfo:nil];
+//        
+//        // add all items to an array
+//        NSArray *items = @[item1, item2, item3];
+//        
+//        // add the array to our app
+//        [UIApplication sharedApplication].shortcutItems = items;
+//    }
+//}
 
 
 

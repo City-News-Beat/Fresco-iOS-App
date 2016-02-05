@@ -203,6 +203,7 @@
     
     [super viewDidAppear:animated];
     [self fadeInPreview];
+    [self.motionManager stopAccelerometerUpdates];
     
 }
 
@@ -1651,8 +1652,6 @@
     UIDeviceOrientation orientationNew;
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
-    
-    NSLog(@"y = %f" , acceleration.y);
     
     if (acceleration.z > -2 && acceleration.z < 2) {
         
