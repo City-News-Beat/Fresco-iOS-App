@@ -1098,8 +1098,6 @@
     else {
         self.captureMode = FRSCaptureModePhoto;
         
-        self.videoPhoneIV.alpha = 0.0;
-        self.videoRotateIV.alpha = 0.0;
         [self animateVideoRotateHide];
         
         [self.sessionManager.session beginConfiguration];
