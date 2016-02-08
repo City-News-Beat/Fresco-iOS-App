@@ -898,7 +898,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
             
         }]];
-        
+        [self resignKeyboard];
         //Bring up alert view
         [self presentViewController:alertCon animated:YES completion:nil];
         
@@ -948,7 +948,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
             
         }]];
-        
+        [self resignKeyboard];
         //Bring up alert view
         [self presentViewController:alertCon animated:YES completion:nil];
         
