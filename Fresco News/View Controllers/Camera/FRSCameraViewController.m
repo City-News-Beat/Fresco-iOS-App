@@ -483,12 +483,13 @@
     
     self.apertureBackground.backgroundColor = [UIColor blueColor];
     
-    self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
+    self.apertureAnimationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH)];
     [self.apertureAnimationView centerHorizontallyInView:self.apertureBackground];
     [self.apertureAnimationView centerVerticallyInView:self.apertureBackground];
-    self.apertureAnimationView.layer.cornerRadius = 8/2;
+    self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH/2.;
     self.apertureAnimationView.layer.masksToBounds = YES;
     self.apertureAnimationView.alpha = 0.0;
+    self.apertureAnimationView.transform = CGAffineTransformMakeScale(0.1, 0.1);
     [self.apertureBackground addSubview:self.apertureAnimationView];
     
     self.apertureMask = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.apertureBackground.frame.size.width, self.apertureBackground.frame.size.height)];
@@ -846,14 +847,12 @@
     self.apertureAnimationView.alpha = 1.0;
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.apertureAnimationView.frame = CGRectMake(0, 0, APERTURE_WIDTH, APERTURE_WIDTH);
-        self.apertureAnimationView.layer.cornerRadius = APERTURE_WIDTH/2.0;
+        self.apertureAnimationView.transform = CGAffineTransformMakeScale(1.00, 1.00);
         
     } completion:^(BOOL finished) {
         self.apertureAnimationView.alpha = 0.0;
-        self.apertureAnimationView.frame = CGRectMake(0, 0, 8, 8);
+        self.apertureAnimationView.transform = CGAffineTransformMakeScale(0.1, 0.1);
         self.apertureAnimationView.center = self.apertureBackground.center;
-        self.apertureAnimationView.layer.cornerRadius = 4;
         self.apertureBackground.backgroundColor = color;
         self.apertureMask.layer.borderColor = color.CGColor;
     }];

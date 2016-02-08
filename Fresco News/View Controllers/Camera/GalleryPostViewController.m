@@ -661,7 +661,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
             }];
         }
         
-        if (scrollView.contentOffset.y < 5){
+        if (scrollView.contentOffset.y < 10){
             [UIView animateWithDuration:0.1 animations:^{
                 self.topBar.alpha = 1.0;
             }];
