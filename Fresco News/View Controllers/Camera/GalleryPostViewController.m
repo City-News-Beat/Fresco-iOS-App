@@ -75,6 +75,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 @property (strong, nonatomic) UICollectionViewFlowLayout *flowLayout;
 
 @property (nonatomic) CGFloat originalContentOffset;
+@property (nonatomic) CGFloat originalContentHeight;
 
 
 
@@ -123,6 +124,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self cleanUpVideoPlayer];
+//    [self.view endEditing:YES];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -519,6 +521,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
 
 -(void)updateScrollViewContentSize{
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCV.frame.size.height + self.assignmentTV.frame.size.height + self.captionTextView.frame.size.height + 15);
+    self.originalContentHeight = self.scrollView.contentSize.height;
 }
 
 -(void)configureSocialTipView{
@@ -820,6 +823,8 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                             
                             if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
                                 
+                                if (self.scrollView.contentSize.height != self.originalContentHeight) return;
+                                
                                 viewFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
                                 
                                 toolBarFrame.origin.y -= [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
@@ -849,7 +854,7 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
                                 self.navigationController.toolbar.frame = toolBarFrame;
                                 
                                 [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentOffset.x, self.originalContentOffset) animated:NO];
-                                self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+                                self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.originalContentHeight);
                                 
                                 self.socialContainer.frame = CGRectOffset(self.socialContainer.frame, 0, [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
                                 self.topBar.alpha = 1.0;
@@ -1032,9 +1037,9 @@ typedef NS_ENUM(NSUInteger, ScrollViewDirection) {
     }
     //Check if the user is logged in before proceeding, send to sign up otherwise
     else if (![[FRSDataManager sharedManager] currentUserIsLoaded]) {
+        [self resignKeyboard];
         
         [self presentFirstRun];
-        
         return;
     }
     
