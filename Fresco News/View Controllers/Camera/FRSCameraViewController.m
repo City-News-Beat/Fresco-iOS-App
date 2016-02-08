@@ -73,6 +73,8 @@
 @property (strong, nonatomic) UIView *apertureBackground;
 @property (strong, nonatomic) UIImageView *apertureImageView;
 @property (strong, nonatomic) UIView *apertureMask;
+@property (strong, nonatomic) UIView *ivContainer;
+@property (strong, nonatomic) UIButton *clearButton;
 
 @property (strong, nonatomic) UIView *topContainer;
 
@@ -507,41 +509,60 @@
     self.apertureImageView.alpha = 1;
     self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
-//    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 46.25, self.view.frame.size.height - 92.2, 92.5, 92.2)];
-    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 92.5, 92.5)];
-    self.videoRotateIV.center = self.apertureShadowView.center;
+    self.ivContainer = [[UIView alloc] initWithFrame:self.apertureShadowView.frame];
+//    self.ivContButton = [[UIButton alloc] initWithFrame:self.apertureShadowView.frame];
+    
+    self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 92.2, 92.2)];
+    [self.videoRotateIV centerHorizontallyInView:self.ivContainer];
+    [self.videoRotateIV centerVerticallyInView:self.ivContainer];
+    
     [self.videoRotateIV setImage:[UIImage imageNamed:@"videoRotateLeft"]];
-    self.videoRotateIV.contentMode = UIViewContentModeScaleAspectFill;
     self.videoRotateIV.layer.shadowColor = [UIColor blackColor].CGColor;
     self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
     self.videoRotateIV.layer.shadowOpacity = 0.15;
     self.videoRotateIV.layer.shadowRadius = 1.0;
-    self.videoRotateIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 1.0 : 0.0;
+    self.videoRotateIV.alpha = 1.0;
     self.rotationIVOriginalY = self.videoRotateIV.frame.origin.y;
+    self.videoRotateIV.userInteractionEnabled = YES;
     
+    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 13, 22)];
+    [self.videoPhoneIV centerHorizontallyInView:self.ivContainer];
+    [self.videoPhoneIV centerVerticallyInView:self.ivContainer];
     
-    self.videoPhoneIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.bottomClearContainer.frame.size.width/2 -7, self.bottomClearContainer.frame.size.height -90, 13, 22)];
+    self.videoPhoneIV.frame = CGRectOffset(self.videoPhoneIV.frame, 0, 3);
+    
     [self.videoPhoneIV setImage:[UIImage imageNamed:@"cellphone"]];
     self.videoPhoneIV.alpha = (self.captureMode == FRSCaptureModeVideo && self.lastOrientation == UIDeviceOrientationPortrait) ? 0.7 : 0.0;
     self.videoPhoneIV.contentMode = UIViewContentModeScaleAspectFill;
-    [self.bottomClearContainer addSubview:self.videoPhoneIV];
+    self.videoPhoneIV.userInteractionEnabled = YES;
     
     [self.apertureButton addSubview:self.apertureImageView];
+
+    [self.ivContainer addSubview:self.videoPhoneIV];
+    [self.ivContainer addSubview:self.videoRotateIV];
     
     [self.apertureMask addSubview:self.apertureButton];
     
-    [self.bottomClearContainer addSubview:self.videoRotateIV];
+    [self.bottomClearContainer addSubview:self.ivContainer];
+    
+    
+    self.clearButton = [[UIButton alloc] initWithFrame:self.ivContainer.bounds];
+    [self.ivContainer addSubview:self.clearButton];
     
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonDepressed) forControlEvents:UIControlEventTouchDown];
     [self.apertureButton addTarget:self action:@selector(handleApertureButtonReleased) forControlEvents:UIControlEventTouchDragExit];
     
-    
+    [self.clearButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.clearButton addTarget:self action:@selector(handleApertureButtonDepressed) forControlEvents:UIControlEventTouchDown];
+    [self.clearButton addTarget:self action:@selector(handleApertureButtonReleased) forControlEvents:UIControlEventTouchDragExit];
+
 }
 
 -(void)handleApertureButtonDepressed{
     
     self.apertureButton.userInteractionEnabled = NO;
+    self.clearButton.userInteractionEnabled = NO;
     [UIView animateWithDuration:0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
@@ -549,12 +570,15 @@
         
     } completion:^(BOOL finished) {
         self.apertureButton.userInteractionEnabled = YES;
+        self.clearButton.userInteractionEnabled = YES;
     }];
 }
 
 -(void)handleApertureButtonReleased{
     
     self.apertureButton.userInteractionEnabled = NO;
+    self.clearButton.userInteractionEnabled = NO;
+    
     [UIView animateWithDuration:0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
@@ -562,12 +586,14 @@
         
     } completion:^(BOOL finished) {
         self.apertureButton.userInteractionEnabled = YES;
+        self.clearButton.userInteractionEnabled = YES;
     }];
 }
 
 -(void)animatePhoneRotationForVideoOrientation{
     
     self.apertureButton.userInteractionEnabled = NO;
+    self.clearButton.userInteractionEnabled = NO;
     
     CGFloat duration = 0.3;
     
@@ -587,18 +613,35 @@
                         self.videoPhoneIV.transform = CGAffineTransformMakeRotation(0);
                     } completion:^(BOOL finished) {
                         self.apertureButton.userInteractionEnabled = YES;
+                        self.clearButton.userInteractionEnabled = YES;
                     }];
                 }];
             }];
         }];
     }];
+}
+
+
+-(void)animateRotateView:(UIView *)view withDuration:(CGFloat)duration counterClockwise:(BOOL)counterClockwise{
     
+    NSInteger mult = 1;
+    if (counterClockwise) mult = -1;
     
+    [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        view.transform = CGAffineTransformMakeRotation((M_PI * 2.) / 3. * mult);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            view.transform = CGAffineTransformMakeRotation((M_PI * 2.) * 2./3. * mult);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration/3. delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                view.transform = CGAffineTransformMakeRotation(M_PI * 2. * mult);
+            } completion:nil];
+        }];
+    }];
 }
 
 -(void)animateVideoRotateHide{
-    
-    self.videoRotateIV.center = self.apertureShadowView.center;
+
     
     [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -610,16 +653,18 @@
         } completion:nil];
     }];
     
+    
+    [self animateRotateView:self.videoRotateIV withDuration:0.45 counterClockwise:YES];
+    [self animateRotateView:self.videoPhoneIV withDuration:0.45 counterClockwise:YES];
+    
     [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-        self.videoRotateIV.transform = CGAffineTransformMakeRotation(M_PI);
-        self.videoRotateIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
-        self.videoPhoneIV.transform = CGAffineTransformMakeRotation(M_PI);
-        self.videoPhoneIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.ivContainer.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.videoRotateIV.alpha = 0;
         self.videoPhoneIV.alpha = 0;
         
     } completion:nil];
+    
     
     [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -632,7 +677,7 @@
 
 -(void)animateVideoRotationAppear{
     
-    self.videoRotateIV.center = self.apertureShadowView.center;
+//    self.videoRotateIV.center = self.ivContainer.center;
     
     [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -640,20 +685,20 @@
         
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.apertureShadowView.transform = CGAffineTransformMakeScale(1, 1);
+            self.apertureShadowView.transform = CGAffineTransformMakeScale(1.0, 1.0);
         } completion:nil];
     }];
     
+    [self animateRotateView:self.videoRotateIV withDuration:0.45 counterClockwise:NO];
+    [self animateRotateView:self.videoPhoneIV withDuration:0.45 counterClockwise:NO];
+    
     [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.videoRotateIV.transform = CGAffineTransformMakeRotation(-M_PI);
-        self.videoRotateIV.transform = CGAffineTransformMakeScale(1, 1);
-        self.videoPhoneIV.transform = CGAffineTransformMakeRotation(-M_PI);
-        self.videoPhoneIV.transform = CGAffineTransformMakeScale(1, 1);
-        self.videoRotateIV.alpha = 1;
+
+        self.videoRotateIV.alpha = 1.0;
         self.videoPhoneIV.alpha = 1.0;
         
-        
+        self.ivContainer.transform = CGAffineTransformMakeScale(1.0, 1.0);
+
         
     } completion:^(BOOL finished) {
         
@@ -1111,6 +1156,7 @@
         [self.sessionManager.session commitConfiguration];
         
     }
+    
     [self rotateAppForOrientation:self.lastOrientation];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
