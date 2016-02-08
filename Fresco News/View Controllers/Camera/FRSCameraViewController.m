@@ -856,8 +856,7 @@
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-            
-            
+
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
             
@@ -1100,19 +1099,6 @@
         }
 }
 
-//=======
-//#pragma mark - Button action handlers
-//
-//-(void)handleApertureButtonTapped:(UIButton *)button{
-//    if (self.captureMode == FRSCaptureModePhoto){
-//        [self captureStillImage];
-//    }
-//    else {
-//        [self toggleVideoRecording];
-//>>>>>>> 97a0ccb8a862368e56875c9feb62ba4a16252c1e
-//    }
-//}
-
 -(void)toggleCaptureMode{
     
     /* Disables torch when returning from video toggle and torch is enabled */
@@ -1160,6 +1146,7 @@
     [self rotateAppForOrientation:self.lastOrientation];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
+    self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, self.view.frame.size.width, 24);
 }
 
 #pragma mark - Notifications and Observers
