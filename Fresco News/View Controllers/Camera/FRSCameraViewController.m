@@ -541,7 +541,7 @@
 -(void)handleApertureButtonDepressed{
     
     self.apertureButton.userInteractionEnabled = NO;
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, 1);
         self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 1);
@@ -554,7 +554,7 @@
 -(void)handleApertureButtonReleased{
     
     self.apertureButton.userInteractionEnabled = NO;
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.videoRotateIV.frame = CGRectOffset(self.videoRotateIV.frame, 0, -1);
         self.videoRotateIV.layer.shadowOffset = CGSizeMake(0, 2);
@@ -1037,7 +1037,7 @@
 -(void)handleApertureButtonTapped:(UIButton *)button{
     
     if (self.videoRotateIV.frame.origin.y != self.rotationIVOriginalY){
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [UIView animateWithDuration:0 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.videoRotateIV.frame = CGRectMake(self.videoRotateIV.frame.origin.x, self.rotationIVOriginalY, self.videoRotateIV.frame.size.width, self.videoRotateIV.frame.size.height);
         } completion:nil];
     }
