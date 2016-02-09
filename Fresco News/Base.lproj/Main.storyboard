@@ -548,12 +548,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="38.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIQ-F1-s1d" userLabel="Opaque background">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ult-p4-y5e" userLabel="Title">
-                                            <rect key="frame" x="24" y="10" width="28.5" height="19"/>
+                                            <rect key="frame" x="16" y="10" width="28.5" height="19"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                             <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -562,30 +558,26 @@
                                             </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5i-Ae-rgB" userLabel="Date">
-                                            <rect key="frame" x="60" y="12" width="516" height="14.5"/>
+                                            <rect key="frame" x="68" y="12" width="515.5" height="14.5"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="mIQ-F1-s1d" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leading" id="3Bd-cQ-xBt"/>
-                                        <constraint firstAttribute="trailing" secondItem="mIQ-F1-s1d" secondAttribute="trailing" id="J3M-m0-YNM"/>
-                                        <constraint firstItem="M5i-Ae-rgB" firstAttribute="leading" secondItem="ult-p4-y5e" secondAttribute="trailing" constant="8" id="L6A-DA-ltD"/>
+                                        <constraint firstItem="ult-p4-y5e" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leadingMargin" constant="8" id="2fq-R2-mHY"/>
+                                        <constraint firstItem="M5i-Ae-rgB" firstAttribute="leading" secondItem="ult-p4-y5e" secondAttribute="trailing" constant="23.5" id="L6A-DA-ltD"/>
                                         <constraint firstItem="M5i-Ae-rgB" firstAttribute="leading" secondItem="ult-p4-y5e" secondAttribute="leading" constant="530.5" id="QX9-qy-FdB"/>
-                                        <constraint firstItem="M5i-Ae-rgB" firstAttribute="centerY" secondItem="mIQ-F1-s1d" secondAttribute="centerY" id="RB1-HM-5bP"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="M5i-Ae-rgB" secondAttribute="trailing" constant="16" id="bSh-HK-sI3"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="M5i-Ae-rgB" secondAttribute="trailing" constant="8.5" id="bSh-HK-sI3"/>
                                         <constraint firstItem="ult-p4-y5e" firstAttribute="leading" secondItem="KVY-9S-kjr" secondAttribute="leadingMargin" constant="16" id="dOG-4q-GfN"/>
                                         <constraint firstAttribute="centerY" secondItem="ult-p4-y5e" secondAttribute="centerY" id="gCM-Ue-4IS"/>
-                                        <constraint firstAttribute="bottom" secondItem="mIQ-F1-s1d" secondAttribute="bottom" id="o4j-GY-GNK"/>
                                         <constraint firstItem="M5i-Ae-rgB" firstAttribute="centerY" secondItem="ult-p4-y5e" secondAttribute="centerY" id="q2f-Ko-VVL"/>
                                         <constraint firstItem="M5i-Ae-rgB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ult-p4-y5e" secondAttribute="leading" constant="10" id="qDL-dn-DiK"/>
-                                        <constraint firstItem="mIQ-F1-s1d" firstAttribute="top" secondItem="KVY-9S-kjr" secondAttribute="top" id="r87-bt-77V"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
+                                            <exclude reference="dOG-4q-GfN"/>
                                             <exclude reference="QX9-qy-FdB"/>
-                                            <exclude reference="RB1-HM-5bP"/>
                                             <exclude reference="qDL-dn-DiK"/>
                                         </mask>
                                     </variation>
