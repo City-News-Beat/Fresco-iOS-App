@@ -16,6 +16,8 @@
 
 #import "FRSDataValidator.h"
 
+@import UIKit;
+
 @implementation FRSGallery
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
@@ -41,6 +43,40 @@
         [self addArticlesObject:article];
     }
     
+}
+
+-(NSInteger)heightForGallery{
+    
+    NSInteger totalHeight = 0;
+    
+    for (FRSPost *post in self.posts){
+        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
+        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+        
+        if (rawHeight == 0 || rawWidth == 0){
+            totalHeight += [UIScreen mainScreen].bounds.size.width;
+        }
+        else {
+            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+            totalHeight += scaledHeight;
+        }
+    }
+    
+    NSInteger averageHeight = totalHeight/self.posts.count;
+    
+    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32, 0)];
+    
+    label.font = [UIFont systemFontOfSize:15 weight:-1];
+    label.text = self.caption;
+    label.numberOfLines = 6;
+    
+    [label sizeToFit];
+    
+    averageHeight += label.frame.size.height + 12 + 44 + 20;
+    
+    return averageHeight;
 }
 
 

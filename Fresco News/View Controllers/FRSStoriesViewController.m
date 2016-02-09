@@ -183,7 +183,10 @@
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     FRSGallery *story = self.dataSource[index];
-    return [self heightForCellForStory:story];
+//    return [self heightForCellForStory:story];
+    return [story heightForGallery];
+    
+    //CHECK FOR RELEASE this probably needs to be refactored.
 }
 
 -(NSInteger)heightForCellForStory:(FRSGallery *)gallery{

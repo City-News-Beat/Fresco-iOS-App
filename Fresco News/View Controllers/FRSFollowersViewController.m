@@ -32,6 +32,7 @@
 -(void)configureNavigationBar{
     [super configureNavigationBar];
     [super configureBackButtonAnimated:NO];
+    [super removeNavigationBarLine];
     
     self.followersTab = [[UIButton alloc] init];
     [self.followersTab setTitle:@"FOLLOWERS" forState:UIControlStateNormal];

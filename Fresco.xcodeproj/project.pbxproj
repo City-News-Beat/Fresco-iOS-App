@@ -78,6 +78,8 @@
 		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
 		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */ = {isa = PBXBuildFile; fileRef = 654181E31C5144CD00019B3F /* NSObject+Validator.m */; };
+		6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */; };
+		6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 6547C9061C6A69E600DAD98C /* UILabel+Custom.m */; };
 		65550B3C1BFA34FC001B7B63 /* Fresco WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71F0E2F1B0B936200186BAD /* Fresco WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */; };
 		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
@@ -311,6 +313,10 @@
 		65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSProfileViewController.m; sourceTree = "<group>"; };
 		654181E21C5144CD00019B3F /* NSObject+Validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Validator.h"; path = "Categories/NSObject+Validator.h"; sourceTree = "<group>"; };
 		654181E31C5144CD00019B3F /* NSObject+Validator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Validator.m"; path = "Categories/NSObject+Validator.m"; sourceTree = "<group>"; };
+		6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserTableViewCell.h; sourceTree = "<group>"; };
+		6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserTableViewCell.m; sourceTree = "<group>"; };
+		6547C9051C6A69E600DAD98C /* UILabel+Custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+Custom.h"; path = "Categories/UILabel+Custom.h"; sourceTree = "<group>"; };
+		6547C9061C6A69E600DAD98C /* UILabel+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+Custom.m"; path = "Categories/UILabel+Custom.m"; sourceTree = "<group>"; };
 		655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSArticlesTableViewCell.h; sourceTree = "<group>"; };
 		655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSArticlesTableViewCell.m; sourceTree = "<group>"; };
 		657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Helpers.h"; sourceTree = "<group>"; };
@@ -615,6 +621,8 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
+				6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */,
 				07A30C111C50499A00C536EB /* FRSStoryCell.h */,
 				07A30C121C50499A00C536EB /* FRSStoryCell.m */,
 				07A30C081C50494700C536EB /* FRSStoryView.h */,
@@ -962,6 +970,8 @@
 		E7E582EF1BBDC0B200287324 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				6547C9051C6A69E600DAD98C /* UILabel+Custom.h */,
+				6547C9061C6A69E600DAD98C /* UILabel+Custom.m */,
 				074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */,
 				074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */,
 				657F3EA61C0CC9D7009AE08F /* UIImage+Helpers.h */,
@@ -1322,6 +1332,7 @@
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
+				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
 				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
 				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
@@ -1379,6 +1390,7 @@
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
+				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,

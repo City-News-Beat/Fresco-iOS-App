@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+
+#import "UILabel+Custom.h"
 
 @interface FRSBaseViewController : UIViewController
 

@@ -67,8 +67,10 @@
 
 }
 
+#pragma mark - Fetch Methods
+
 -(void)fetchGalleries{
-    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
+    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @4, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
         if (!responseObject.count){
             return;
         }
@@ -89,7 +91,7 @@
 
 #pragma mark - UI Elements
 -(void)configureUI{
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureNavigationBar];
     [self configureTableView];
@@ -116,7 +118,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
-    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
@@ -236,6 +238,9 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
+    
+    //We have two sections for our tableview. The first section holds the profile container and has a header height of 0.
+    //The second section holds the feed/likes, and the header has the segmented tab and has a height of 44.
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -244,7 +249,7 @@
     }
     else {
         return self.galleries.count;
-//        return 10;
+        return 0;
     }
 }
 
@@ -262,7 +267,10 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-        return 600;
+//        return 600;
+        if (!self.galleries.count) return 0;
+        FRSGallery *gallery = self.galleries[indexPath.row];
+        return [gallery heightForGallery];
     }
 }
 
@@ -287,9 +295,11 @@
         [cell addSubview:self.profileContainer];
     }
     else {
-//        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-//        [galCell clearCell];
-//        [galCell configureCell];
+        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        [galCell clearCell];
+        
+        galCell.gallery = self.galleries[indexPath.row];
+        [galCell configureCell];
     }
 }
 
