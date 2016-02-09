@@ -8,9 +8,11 @@
 
 #import "FRSFollowersViewController.h"
 
+#import "FRSUserTableViewCell.h"
+
 #define CELL_HEIGHT 56
 
-@interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIButton *followersTab;
 @property (strong, nonatomic) UIButton *followingTab;
@@ -20,6 +22,14 @@
 @end
 
 @implementation FRSFollowersViewController
+
+-(instancetype)init{
+    self = [super init];
+    if (self){
+        self.hiddenTabBar = YES;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,8 +41,8 @@
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
-    [super configureBackButtonAnimated:NO];
-    [super removeNavigationBarLine];
+    [self configureBackButtonAnimated:NO];
+    [self removeNavigationBarLine];
     
     self.followersTab = [[UIButton alloc] init];
     [self.followersTab setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
@@ -54,9 +64,10 @@
     
     NSInteger xOrigin = (self.view.frame.size.width - (36 * 2) - self.followingTab.frame.size.width - self.followersTab.frame.size.width)/3;
     
-    [self.followingTab setFrame:CGRectMake(self.followersTab.frame.size.width + xOrigin, 0, self.followersTab.frame.size.width, 44)];
+    [self.followingTab setFrame:CGRectMake(self.followersTab.frame.size.width + xOrigin, 0, self.followingTab.frame.size.width, 44)];
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(36 + xOrigin, 20, self.followingTab.frame.size.width + self.followersTab.frame.size.width + xOrigin, 44)];
+    titleView.backgroundColor = [UIColor blueColor];
     self.navigationItem.titleView = titleView;
     
     [titleView addSubview:self.followersTab];
@@ -78,6 +89,7 @@
     [super configureTableView];
     self.tableView.delegate =self;
     self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
     
 }
 
@@ -105,7 +117,8 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataSourceArray.count;
+    //return self.dataSourceArray.count;
+    return 10;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -113,17 +126,30 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return nil;
+    FRSUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user-cell"];
+    if (!cell){
+        cell = [[FRSUserTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"user-cell"];
+    }
+    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    FRSUserTableViewCell *userCell = (FRSUserTableViewCell *)cell;
+    [userCell clearCell];
+    [userCell configureCellWithUser:nil];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
+
+#pragma mark - Scrolling
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentSize.height < self.tableView.frame.size.height) return;
+    [super scrollViewDidScroll:scrollView];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

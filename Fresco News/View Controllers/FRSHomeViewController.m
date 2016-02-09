@@ -58,32 +58,36 @@
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
-    [super removeNavigationBarLine];
+    [self removeNavigationBarLine];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(44, 0, self.view.frame.size.width - 88, 44)];
-    
-    self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width/2, 44)];
+    self.highlightTabButton = [[UIButton alloc] init];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [self.highlightTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.highlightTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.highlightTabButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:self.highlightTabButton];
+    [self.highlightTabButton sizeToFit];
     
-    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake(view.frame.size.width/2, 0, view.frame.size.width/2, 44)];
+    self.followingTabButton = [[UIButton alloc] init];
     [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
     [self.followingTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.followingTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.followingTabButton sizeToFit];
     [self.followingTabButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:self.followingTabButton];
+   
+    UIView *clearView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44)];
     
-    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 48 - 44, -0.5, 48, 44)];
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44)];
+    titleView.backgroundColor = [UIColor frescoOrangeColor];
+    [clearView addSubview:titleView];
+    
+    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width - 48, -0.5, 48, 44)];
     searchButton.contentMode = UIViewContentModeCenter;
     searchButton.imageView.contentMode = UIViewContentModeCenter;
     [searchButton setImage:[UIImage imageNamed:@"search-icon"] forState:UIControlStateNormal];
     [searchButton addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:searchButton];
+    [titleView addSubview:searchButton];
     
-    self.navigationController.navigationBar.topItem.titleView = view;
+    self.navigationController.navigationBar.topItem.titleView = clearView;
     
 }
 
@@ -218,7 +222,21 @@
     
     [self.navigationController pushViewController:vc animated:YES];
     [self hideTabBarAnimated:YES];
+}
+
+#pragma mark - Nav Bar Actions
+
+-(void)handleFollowingTabTapped{
     
+}
+
+-(void)handleHighlightsTabTapped{
+    
+}
+
+-(void)search{
+    NSLog(@"search");
+
 }
 
 /*

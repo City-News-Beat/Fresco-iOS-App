@@ -21,6 +21,7 @@
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UIImageView *accessoryIV;
+@property (strong, nonatomic) UIView *bottomLine;
 
 @end
 
@@ -43,7 +44,6 @@
         self.profileIV = [[UIImageView alloc] init];
         self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
         self.profileIV.clipsToBounds = YES;
-        self.profileIV.layer.cornerRadius = 32/2;
         [self addSubview:self.profileIV];
         
         self.nameLabel = [UILabel labelWithText:@"" textColor:[UIColor frescoDarkTextColor] font:[UIFont notaMediumWithSize:17]];
@@ -55,7 +55,11 @@
         self.accessoryIV = [[UIImageView alloc] init];
         self.accessoryIV.contentMode = UIViewContentModeCenter;
         [self addSubview:self.accessoryIV];
-    }
+        
+        self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+        self.bottomLine.backgroundColor = [UIColor frescoShadowColor];
+        [self addSubview:self.bottomLine];
+    };
     return self;
 }
 
@@ -67,7 +71,9 @@
 }
 
 -(void)configureCellWithUser:(FRSUser *)user{
+    
     self.profileIV.frame = CGRectMake(16, 12, 32, 32);
+    self.profileIV.layer.cornerRadius = 32/2;
     self.profileIV.image = [UIImage imageNamed:@"kobe"];
     
     self.nameLabel.text = @"Kobe Bryant";
@@ -79,9 +85,12 @@
     self.usernameLabel.text = @"@theblackmamba";
     [self.usernameLabel sizeToFit];
     [self.usernameLabel centerVerticallyInView:self];
-    [self.nameLabel setFrame:CGRectMake(self.nameLabel.frame.size.width + self.nameLabel.frame.origin.x + 8, self.usernameLabel.frame.origin.y, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height)];
+    [self.usernameLabel setFrame:CGRectMake(self.nameLabel.frame.size.width + self.nameLabel.frame.origin.x + 8, self.usernameLabel.frame.origin.y, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height)];
     
-    self.accessoryIV.image =
+    self.accessoryIV.frame = CGRectMake(self.frame.size.width - 16 - 24, 16, 24, 24);
+    self.accessoryIV.image = [UIImage imageNamed:@"add-follower"];
+    
+    self.bottomLine.frame = CGRectMake(0, self.frame.size.height - 0.5, self.bottomLine.frame.size.width, 0.5);\
 }
 
 
