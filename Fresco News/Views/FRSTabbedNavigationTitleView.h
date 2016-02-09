@@ -14,7 +14,7 @@
 
 @property (weak, nonatomic) NSObject <FRSTabbedNavigationTitleViewDelegate> *delegate;
 
--(instancetype)initWithTabTitles:(NSArray *)titles;
+-(instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id <FRSTabbedNavigationTitleViewDelegate>)delegate;
 
 @end
 

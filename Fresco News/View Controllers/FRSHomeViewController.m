@@ -13,9 +13,11 @@
 #import "FRSGalleryCell.h"
 #import "FRSDataManager.h"
 
+#import "FRSTabbedNavigationTitleView.h"
+
 #import <MagicalRecord/MagicalRecord.h>
 
-@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 
 @property (strong, nonatomic) NSArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
@@ -60,35 +62,13 @@
     [super configureNavigationBar];
     [self removeNavigationBarLine];
     
-    self.highlightTabButton = [[UIButton alloc] init];
-    [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
-    [self.highlightTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.highlightTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.highlightTabButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.highlightTabButton sizeToFit];
+    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self];
     
-    self.followingTabButton = [[UIButton alloc] init];
-    [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-    [self.followingTabButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.followingTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.followingTabButton sizeToFit];
-    [self.followingTabButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
-   
-    UIView *clearView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44)];
-    
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44)];
-    titleView.backgroundColor = [UIColor frescoOrangeColor];
-    [clearView addSubview:titleView];
-    
-    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width - 48, -0.5, 48, 44)];
-    searchButton.contentMode = UIViewContentModeCenter;
-    searchButton.imageView.contentMode = UIViewContentModeCenter;
-    [searchButton setImage:[UIImage imageNamed:@"search-icon"] forState:UIControlStateNormal];
-    [searchButton addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:searchButton];
-    
-    self.navigationController.navigationBar.topItem.titleView = clearView;
-    
+    self.navigationController.navigationBar.topItem.titleView = titleView;
+}
+
+-(UIImage *)imageForRightBarItem{
+    return [UIImage imageNamed:@"search-icon"];
 }
 
 -(void)configureTableView{

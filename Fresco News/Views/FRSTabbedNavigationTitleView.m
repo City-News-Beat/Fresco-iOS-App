@@ -27,8 +27,7 @@
 @implementation FRSTabbedNavigationTitleView
 
 
-
--(instancetype)initWithTabTitles:(NSArray *)tabTitles{
+-(instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id <FRSTabbedNavigationTitleViewDelegate>)delegate{
     
     NSAssert(tabTitles.count == 2, @"Our app only supports exactly 2 tab items for the navigation title view");
     
@@ -36,10 +35,12 @@
     if (self){
         
         self.tabTitles = tabTitles;
+        self.delegate = delegate;
         
         [self configureContainerView];
         [self configureTabItems];
         [self configureNeededBarItems];
+        [self adjustFrames];
     }
     return self;
 }
@@ -81,13 +82,34 @@
 }
 
 -(void)configureLeftBarItem{
-    self.leftBarItem = [UIButton alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+    // we are making the origin 4, instead of the real padding of 12, because we want to give the button a larger hit box. Therefore the size of the button also increases by 2 * 8
+    self.leftBarItem = [[UIButton alloc] initWithFrame:CGRectMake(4, 2, 24 + 16, 24 + 16)];
+    self.leftBarItem.contentMode = UIViewContentModeCenter;
+    self.leftBarItem.imageView.contentMode = UIViewContentModeCenter;
+    [self.leftBarItem setImage:[self.delegate imageForLeftBarItem] forState:UIControlStateNormal];
+    [self.leftBarItem addTarget:self.delegate action:@selector(tabbedNavigationTitleViewDidTapLeftBarItem) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView addSubview:self.leftBarItem];
 }
 
 -(void)configureRightBarItem{
-    
+    //for notes on the origin and size see the comment for the left bar item
+    self.rightBarItem = [[UIButton alloc] initWithFrame:CGRectMake(self.containerView.frame.size.width - 4 - 40, 2, 24 + 16, 24 + 16)];
+    self.rightBarItem.contentMode = UIViewContentModeCenter;
+    self.rightBarItem.imageView.contentMode = UIViewContentModeCenter;
+    [self.rightBarItem setImage:[self.delegate imageForRightBarItem] forState:UIControlStateNormal];
+    [self.rightBarItem addTarget:self.delegate action:@selector(tabbedNavigationTitleViewDidTapRightBarItem) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView addSubview:self.rightBarItem];
 }
 
+-(void)adjustFrames{
+    NSInteger availableWidth = self.containerView.frame.size.width - (12 + 24 + 12) * 2 - self.firstTab.frame.size.width - self.secondTab.frame.size.width;
+    CGFloat padding = availableWidth/3;
+    
+    //the 48 is the end of the left tab bar item, and then we add the padding we calculated
+    self.firstTab.frame = CGRectMake(48 + padding, 0, self.firstTab.frame.size.width, 44);
+    
+    self.secondTab.frame = CGRectOffset(self.firstTab.frame, self.firstTab.frame.size.width + padding, 0);
+}
 
 #pragma mark - Action handlers
 -(void)handleFirstTabTapped{
