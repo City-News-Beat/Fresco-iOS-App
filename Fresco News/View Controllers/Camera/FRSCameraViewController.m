@@ -150,7 +150,7 @@
         self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
 //        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
-        self.lastOrientation = [UIDevice currentDevice].orientation;
+        self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
     }
     return self;
@@ -1755,6 +1755,7 @@
             
         } else if (acceleration.y >= 0.75) {
             orientationNew = self.lastOrientation;
+            NSLog(@"acel x = %f, acel z = %f", acceleration.x, acceleration.z);
         }
         
         //        } else if (acceleration.z < -0.85) {
