@@ -58,6 +58,7 @@
 
 -(void)configureNavigationBar{
     [super configureNavigationBar];
+    [super removeNavigationBarLine];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(44, 0, self.view.frame.size.width - 88, 44)];
     
@@ -83,6 +84,7 @@
     [view addSubview:searchButton];
     
     self.navigationController.navigationBar.topItem.titleView = view;
+    
 }
 
 -(void)configureTableView{

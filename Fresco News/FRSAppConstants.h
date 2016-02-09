@@ -107,7 +107,6 @@ enum FRSErrorCodes {
 #define TWITTER_USERS_SHOW_URL              @"https://api.twitter.com/1.1/users/show.json?"
 #define TWITTER_VERIFY_URL                  @"https://api.twitter.com/1.1/account/verify_credentials.json"
 
-
 /* Float/Int Values */
 
 #pragma mark - Float/Int Values
