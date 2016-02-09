@@ -44,6 +44,7 @@ static NSString * const kCellIdentifier = @"StoryCellMosaicHeader";
         self.labelTimestamp.text = @"";
     
     self.labelTitle.text = _story.title;
+    self.labelTitle.font = [UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15];
     
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     gesture.numberOfTapsRequired = 1;
