@@ -10,6 +10,7 @@
 
 #import "FRSStoryView.h"
 #import "FRSPost.h"
+#import "FRSStory.h"
 
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
@@ -31,18 +32,14 @@
 
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
 
-@property (strong, nonatomic) UILabel *captionLabel;
-@property (strong, nonatomic) UILabel *nameLabel;
-@property (strong, nonatomic) UILabel *locationLabel;
-@property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) UIView *topContainer;
 
-@property (strong, nonatomic) UIImageView *profileIV;
-@property (strong, nonatomic) UIImageView *locationIV;
-@property (strong, nonatomic) UIImageView *clockIV;
+@property (strong, nonatomic) UILabel *titleLabel;
+
+@property (strong, nonatomic) UILabel *caption;
 
 @property (strong, nonatomic) NSMutableArray *imageViews;
 
-@property (strong, nonatomic) NSArray *orderedPosts;
 
 
 @end
@@ -63,66 +60,55 @@
 
 -(void)configureUI {
     
-    self.backgroundColor = [UIColor blueColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self configureScrollView];
-    [self configureImageViews];
+    [self configureTopContainer];
+    [self configureTitleLabel];
+    [self configureCaption];
+    [self configureActionsBar];
 }
 
--(void)configureScrollView{
+-(void)configureTopContainer{
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 241)];
-    if (IS_IPHONE_5){
-        self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, 193);
-    }
+    NSInteger height = IS_IPHONE_5 ? 192 : 240;
     
-    self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    self.scrollView.delegate = self;
-    self.scrollView.pagingEnabled = YES;
-    self.scrollView.showsHorizontalScrollIndicator = NO;
-//    self.scrollView.contentSize = CGSizeMake(self.story.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
-    [self addSubview:self.scrollView];
+    self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
+    self.topContainer.backgroundColor = [UIColor blueColor];
+    [self addSubview:self.topContainer];
 }
 
--(void)configureImageViews{
-
-}
-
--(void)configureStoryTitle{
-    UILabel *storyLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 228, 50)];
-    storyLabel.backgroundColor = [UIColor redColor];
-    [self addSubview:storyLabel];
+-(void)configureTitleLabel{
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 0)];
+    self.titleLabel.numberOfLines = 2;
+    self.titleLabel.text = self.story.title;
+    self.titleLabel.font = [UIFont notaBoldWithSize:24];
+    self.titleLabel.textColor = [UIColor whiteColor];
+    [self.titleLabel sizeToFit];
+    
+    [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
+    
+    [self.topContainer addSubview:self.titleLabel];
 }
 
 
--(void)configureCaptionLabel{
-    self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
-    self.captionLabel.textColor = [UIColor frescoDarkTextColor];
-    self.captionLabel.font = [UIFont systemFontOfSize:15 weight:-1];
-//    self.captionLabel.text = self.story.caption;
-    self.captionLabel.backgroundColor = [UIColor redColor];
-    self.captionLabel.text = @"Caption caption caption caption";
+-(void)configureCaption{
+    self.caption = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.frame.size.width - 32, 0)];
+    self.caption.numberOfLines = 6;
+    self.caption.textColor = [UIColor frescoDarkTextColor];
+    self.caption.font = [UIFont systemFontOfSize:15 weight:-1];
+    self.caption.text = self.story.caption;
     
-    if ([self.delegate shouldHaveTextLimit]){
-        self.captionLabel.numberOfLines = 6;
-    } else {
-        self.captionLabel.numberOfLines = 0;
-    }
+    [self.caption sizeToFit];
     
-    [self.captionLabel sizeToFit];
+    [self.caption setFrame:CGRectMake(16, self.topContainer.frame.size.height + 11, self.frame.size.width - 32, self.caption.frame.size.height)];
     
-    [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PADDING, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
-    
-    [self addSubview:self.captionLabel];
+    [self addSubview:self.caption];
 }
 
 -(void)configureActionsBar{
     
-    if (![self.delegate shouldHaveActionBar]) {
-        self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
-    } else {
-        self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
-    }
+    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
+    [self addSubview:self.actionBar];
 }
 
 #pragma mark - Action Bar Deletate

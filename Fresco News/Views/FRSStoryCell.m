@@ -24,9 +24,9 @@
 }
 
 - (void)configureCell {
-    self.backgroundColor = [UIColor purpleColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) story:self.story delegate:self];
+    self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
     
     [self addSubview:self.storyView];
 }
@@ -34,7 +34,6 @@
 -(void)clearCell{
     [self.storyView removeFromSuperview];
 }
-
 
 
 #pragma mark - DataSource For Action Bar

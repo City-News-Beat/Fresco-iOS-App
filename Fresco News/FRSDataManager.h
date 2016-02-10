@@ -167,7 +167,7 @@
 #pragma mark - Stories
 
 - (void)getStory:(NSString *)storyId withResponseBlock:(FRSAPIResponseBlock)responseBlock;
-- (void)getStoriesWithResponseBlock:(NSNumber*)offset shouldRefresh:(BOOL)invalidate withReponseBlock:(FRSAPIResponseBlock)responseBlock;
+- (void)getStoriesWithOffset:(NSNumber*)offset shouldRefresh:(BOOL)refresh withReponseBlock:(FRSAPIResponseBlock)responseBlock;
 
 #pragma mark - Assignments
 

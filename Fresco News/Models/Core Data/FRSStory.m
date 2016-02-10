@@ -10,8 +10,43 @@
 #import "FRSGallery.h"
 #import "FRSUser.h"
 
+#import "FRSDateFormatter.h"
+
+@import UIKit;
+
+
+//@property (nullable, nonatomic, retain) NSString *caption;
+//@property (nullable, nonatomic, retain) NSDate *createdDate;
+//@property (nullable, nonatomic, retain) NSDate *editedDate;
+//@property (nullable, nonatomic, retain) NSString *title;
+//@property (nullable, nonatomic, retain) NSString *uid;
+//@property (nullable, nonatomic, retain) FRSUser *creator;
+//@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
+
 @implementation FRSStory
 
 // Insert code here to add functionality to your managed object subclass
+
+-(void)configureWithDictionary:(NSDictionary *)dict{
+    self.caption = dict[@"caption"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.title = dict[@"title"];
+    self.uid = dict[@"_id"];
+}
+
+-(NSInteger)heightForStory{
+    
+    NSInteger imageViewHeight = IS_IPHONE_5 ? 192 : 240;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32 , 0)];
+    label.text = self.caption;
+    label.numberOfLines = 6;
+    label.font = [UIFont systemFontOfSize:15 weight:-1];
+    [label sizeToFit];
+    
+    // 44 is tab bar, 11 is top padding, 13 is bottom padding
+    imageViewHeight += label.frame.size.height + 44 + 11 + 13;
+    return imageViewHeight;
+}
 
 @end

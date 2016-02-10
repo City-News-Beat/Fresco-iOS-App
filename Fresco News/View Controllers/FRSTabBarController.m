@@ -80,7 +80,7 @@
 -(void)configureViewControllers{
     UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
 
-    UIViewController *vc1 = [[FRSStoriesViewController alloc] init];
+    UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
 
     UIViewController *vc2 = [[UIViewController alloc] init];
     UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];

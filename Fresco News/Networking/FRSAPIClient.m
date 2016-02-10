@@ -32,6 +32,9 @@
     }];
 }
 
+
+
+
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations{
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:BASE_API]];
     [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"];

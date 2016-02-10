@@ -70,4 +70,41 @@
     
 }
 
+- (void)getStoriesWithOffset:(NSNumber*)offset shouldRefresh:(BOOL)refresh withReponseBlock:(FRSAPIResponseBlock)responseBlock{
+    
+    NSString *path = @"https://api.fresconews.com/v1/story/recent";
+    
+    NSDictionary *params = @{
+                             @"limit" :@"8",
+                             @"notags" : @"true",
+                             @"offset" : offset ?: [NSNumber numberWithInteger:0]
+                             };
+    
+    //If we are refreshing, removed the cached response for the request by setting the cache policy
+    if(refresh)
+        self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        
+        NSArray *stories = [responseObject objectForKey:@"data"];
+        
+        if(responseBlock) responseBlock(stories, nil);
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        if(responseBlock) responseBlock(nil, error);
+    }];
+    
+    //Set the policy back to normal
+    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+    
+}
+
+
 @end
