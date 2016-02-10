@@ -117,6 +117,8 @@
 
 @property (nonatomic) BOOL firstTime;
 
+@property (nonatomic) BOOL firstTimeCameraAni;
+
 @property (nonatomic) CGRect originalApertureFrame;
 
 @property (nonatomic) UIDeviceOrientation lastOrientation;
@@ -152,6 +154,7 @@
 //        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
+        self.firstTimeCameraAni = YES;
     }
     return self;
 }
@@ -678,7 +681,7 @@
     
 //    self.videoRotateIV.center = self.ivContainer.center;
     
-    CGFloat duration = self.firstTime ? 0.05 : 0.45;
+    CGFloat duration = self.firstTimeCameraAni ? 0.05 : 0.45;
     
     [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -714,6 +717,7 @@
         
         
     } completion:nil];
+    self.firstTimeCameraAni = NO;
 }
 
 
