@@ -50,6 +50,8 @@
 
 @property (strong, nonatomic) NSArray *orderedPosts;
 
+@property (nonatomic) NSInteger adjustedPage;
+
 @end
 
 @implementation FRSGalleryView
@@ -213,13 +215,24 @@
 }
 
 -(void)updateLabels{
-    FRSPost *post = self.orderedPosts[self.pageControl.currentPage];
+    FRSPost *post = self.orderedPosts[self.adjustedPage];
+    
     self.nameLabel.text = post.byline;
     self.locationLabel.text = post.address;
+    self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
     [self.nameLabel sizeToFit];
-    [self.locationLabel sizeToFit];
+    self.nameLabel.center = self.profileIV.center;
+    [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
+    [self.locationLabel sizeToFit];
+    self.locationLabel.center = self.locationIV.center;
+    [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
+    
+    
+    [self.timeLabel sizeToFit];
+    self.timeLabel.center = self.clockIV.center;
+    [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
@@ -295,8 +308,13 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    self.adjustedPage = page;
     
     if (page >= self.gallery.posts.count) return;
+    
+    if (page != self.pageControl.currentPage){
+        [self updateLabels];
+    }
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
     
@@ -315,7 +333,6 @@
         self.nameLabel.alpha = 0;
         self.locationLabel.alpha = 0;
         self.timeLabel.alpha = 0;
-        [self updateLabels];
         return;
     }
         
