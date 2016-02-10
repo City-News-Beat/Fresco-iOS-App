@@ -186,7 +186,7 @@
         
         annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
         
-        [annotationView setImage:[UIImage imageNamed:@"radius-large"]];
+//        [annotationView setImage:[UIImage imageNamed:@"radius-large"]];
         
         annotationView.enabled = YES;
         

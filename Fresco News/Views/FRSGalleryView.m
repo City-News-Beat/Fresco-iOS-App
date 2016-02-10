@@ -50,6 +50,8 @@
 
 @property (strong, nonatomic) NSArray *orderedPosts;
 
+@property (nonatomic) NSInteger adjustedPage;
+
 @end
 
 @implementation FRSGalleryView
@@ -154,6 +156,7 @@
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];
+    [self updateLabels];
 }
 
 -(void)configureTimeLine{
@@ -166,7 +169,9 @@
 
     [self addSubview:self.clockIV];
     
-    self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:self.gallery.createdDate] fontSize:13];
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    
+    self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate] fontSize:13];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
@@ -200,11 +205,34 @@
     
     [self addSubview:self.profileIV];
     
-    self.nameLabel = [self galleryInfoLabelWithText:@"Daniel Sun" fontSize:17];
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    
+    self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
     [self addSubview:self.nameLabel];
+}
+
+-(void)updateLabels{
+    FRSPost *post = self.orderedPosts[self.adjustedPage];
+    
+    self.nameLabel.text = post.byline;
+    self.locationLabel.text = post.address;
+    self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
+    
+    [self.nameLabel sizeToFit];
+    self.nameLabel.center = self.profileIV.center;
+    [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
+    
+    [self.locationLabel sizeToFit];
+    self.locationLabel.center = self.locationIV.center;
+    [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
+    
+    
+    [self.timeLabel sizeToFit];
+    self.timeLabel.center = self.clockIV.center;
+    [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
@@ -280,19 +308,47 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    
+    self.adjustedPage = page;
     
     if (page >= self.gallery.posts.count) return;
+    
+    if (page != self.pageControl.currentPage){
+        [self updateLabels];
+    }
+    
+    if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
     
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+    
+    NSInteger halfScroll = scrollView.frame.size.width/4;
+    CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
+    
+    CGFloat percentCompleted = ABS(amtScrolled) / halfScroll;
+    NSLog(@"percent completed %f", percentCompleted);
+    
+    if (percentCompleted > 1.0 && percentCompleted < 3.0) {
+        self.nameLabel.alpha = 0;
+        self.locationLabel.alpha = 0;
+        self.timeLabel.alpha = 0;
+        return;
+    }
+        
+    if (percentCompleted > 3) percentCompleted -= 2;
+    CGFloat absAlpha = ABS(1 - percentCompleted);
+    
+    self.nameLabel.alpha = absAlpha;
+    self.locationLabel.alpha = absAlpha;
+    self.timeLabel.alpha = absAlpha;
+    
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     NSInteger page = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     self.pageControl.currentPage = page;
+    
 }
 
 -(NSInteger)imageViewHeight{
