@@ -59,7 +59,7 @@
     [self.firstTab setTitle:self.tabTitles[0] forState:UIControlStateNormal];
     [self.firstTab setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.firstTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.firstTab addTarget:self.delegate action:@selector(handleFirstTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.firstTab addTarget:self action:@selector(handleFirstTabTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.firstTab sizeToFit];
     [self.containerView addSubview:self.firstTab];
     
@@ -69,6 +69,7 @@
     [self.secondTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.secondTab sizeToFit];
     [self.secondTab addTarget:self action:@selector(handleSecondTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    self.secondTab.alpha = 0.7;
     [self.containerView addSubview:self.secondTab];
 }
 
@@ -102,23 +103,41 @@
 }
 
 -(void)adjustFrames{
-    NSInteger availableWidth = self.containerView.frame.size.width - (12 + 24 + 12) * 2 - self.firstTab.frame.size.width - self.secondTab.frame.size.width;
+    
+    //These numbers seem arbitrary but they have a purpose. Once we size to fit the buttons, they most likely have too small of a hitbox, even if the titles are long like "highlights".
+    //The availableWidth is how much space left over to split evenly for the padding. The (24 + 12) is the size of the bar item and the outer padding. We disregard the padding (12) closer to the center, because we want that to be part of the available width. It's multiplied by two because there are two bar items. Then we divide by three because we want three areas of equal spacing: between the left bar item and the first tab, between the first and second tab, and between the second tab and the last bar item (regardless of whether or not the bar items exist).
+    
+    NSInteger availableWidth = self.containerView.frame.size.width - (24 + 12) * 2 - self.firstTab.frame.size.width - self.secondTab.frame.size.width;
     CGFloat padding = availableWidth/3;
     
-    //the 48 is the end of the left tab bar item, and then we add the padding we calculated
-    self.firstTab.frame = CGRectMake(48 + padding, 0, self.firstTab.frame.size.width, 44);
+    //Here, we are setting the origin of the tab to start the end of the left bar item plus half of the padding. This is because we are extending the size of the first tab so that the right edge hits the center of the container, and we know that the space between the two tabs is 'padding'. So if we extend the size of the first tab by padding, we are effectively adding padding/2 to each side of the button.
+    self.firstTab.frame = CGRectMake(36 + padding/2, 0, self.firstTab.frame.size.width + padding, 44);
     
-    self.secondTab.frame = CGRectOffset(self.firstTab.frame, self.firstTab.frame.size.width + padding, 0);
+    self.secondTab.frame = CGRectOffset(self.firstTab.frame, self.firstTab.frame.size.width, 0);
 }
 
 #pragma mark - Action handlers
 -(void)handleFirstTabTapped{
-    [self.delegate tabbedNavigationTitleViewDidTapButtonAtIndex:0];
+    
+    if (self.firstTab.alpha == 1) return;
+    self.firstTab.alpha = 1.0;
+    self.secondTab.alpha = 0.7;
+    
+//    [self.delegate tabbedNavigationTitleViewDidTapButtonAtIndex:0];
 }
 
 -(void)handleSecondTabTapped{
-    [self.delegate tabbedNavigationTitleViewDidTapButtonAtIndex:1];
+    
+    if (self.secondTab.alpha == 1) return;
+    self.secondTab.alpha = 1.0;
+    self.firstTab.alpha = 0.7;
+    
+//    [self.delegate tabbedNavigationTitleViewDidTapButtonAtIndex:1];
 }
+
+
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
