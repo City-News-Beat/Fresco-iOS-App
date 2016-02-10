@@ -678,20 +678,22 @@
     
 //    self.videoRotateIV.center = self.ivContainer.center;
     
-    [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    CGFloat duration = self.firstTime ? 0.05 : 0.45;
+    
+    [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureShadowView.transform = CGAffineTransformMakeScale(0.9, 0.9);
         
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.apertureShadowView.transform = CGAffineTransformMakeScale(1.0, 1.0);
         } completion:nil];
     }];
     
-    [self animateRotateView:self.videoRotateIV withDuration:0.45 counterClockwise:NO];
-    [self animateRotateView:self.videoPhoneIV withDuration:0.45 counterClockwise:NO];
+    [self animateRotateView:self.videoRotateIV withDuration:duration counterClockwise:NO];
+    [self animateRotateView:self.videoPhoneIV withDuration:duration counterClockwise:NO];
     
-    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
 
         self.videoRotateIV.alpha = 1.0;
         self.videoPhoneIV.alpha = 1.0;
@@ -703,7 +705,7 @@
         
     }];
     
-    [UIView animateWithDuration:0.45 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
