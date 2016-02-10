@@ -9,10 +9,11 @@
 #import "FRSFollowersViewController.h"
 
 #import "FRSUserTableViewCell.h"
+#import "FRSTabbedNavigationTitleView.h"
 
 #define CELL_HEIGHT 56
 
-@interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface FRSFollowersViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 
 @property (strong, nonatomic) UIButton *followersTab;
 @property (strong, nonatomic) UIButton *followingTab;
@@ -44,34 +45,31 @@
     [self configureBackButtonAnimated:NO];
     [self removeNavigationBarLine];
     
-    self.followersTab = [[UIButton alloc] init];
-    [self.followersTab setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
-    [self.followersTab setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [self.followersTab setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
-    [self.followersTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.followersTab sizeToFit];
-    [self.followersTab addTarget:self action:@selector(handleFollowersTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.followersTab setFrame:CGRectMake(0, 0, self.followersTab.frame.size.width, 44)];
-    self.followersTab.selected = YES;
+//    self.followersTab = [[UIButton alloc] init];
+//    [self.followersTab setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
+//    [self.followersTab setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+//    [self.followersTab setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
+//    [self.followersTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+//    [self.followersTab sizeToFit];
+//    [self.followersTab addTarget:self action:@selector(handleFollowersTabTapped) forControlEvents:UIControlEventTouchUpInside];
+//    [self.followersTab setFrame:CGRectMake(0, 0, self.followersTab.frame.size.width, 44)];
+//    self.followersTab.selected = YES;
+//    
+//    self.followingTab = [[UIButton alloc] init];
+//    [self.followingTab setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+//    [self.followingTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+//    [self.followingTab setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+//    [self.followingTab setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
+//    [self.followingTab sizeToFit];
+//    [self.followingTab addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
     
-    self.followingTab = [[UIButton alloc] init];
-    [self.followingTab setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-    [self.followingTab.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [self.followingTab setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [self.followingTab setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
-    [self.followingTab sizeToFit];
-    [self.followingTab addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    
-    NSInteger xOrigin = (self.view.frame.size.width - (36 * 2) - self.followingTab.frame.size.width - self.followersTab.frame.size.width)/3;
-    
-    [self.followingTab setFrame:CGRectMake(self.followersTab.frame.size.width + xOrigin, 0, self.followingTab.frame.size.width, 44)];
-    
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(36 + xOrigin, 20, self.followingTab.frame.size.width + self.followersTab.frame.size.width + xOrigin, 44)];
-    titleView.backgroundColor = [UIColor blueColor];
-    self.navigationItem.titleView = titleView;
-    
-    [titleView addSubview:self.followersTab];
-    [titleView addSubview:self.followingTab];
+//    NSInteger xOrigin = (self.view.frame.size.width - (36 * 2) - self.followingTab.frame.size.width - self.followersTab.frame.size.width)/3;
+//    
+//    [self.followingTab setFrame:CGRectMake(self.followersTab.frame.size.width + xOrigin, 0, self.followingTab.frame.size.width, 44)];
+//    
+//    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(36 + xOrigin, 20, self.followingTab.frame.size.width + self.followersTab.frame.size.width + xOrigin, 44)];
+//    titleView.backgroundColor = [UIColor blueColor];
+    self.navigationItem.titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"FOLLOWERS", @"FOLLOWING"] delegate:self hasBackButton:YES];
 }
 
 -(void)popViewController{

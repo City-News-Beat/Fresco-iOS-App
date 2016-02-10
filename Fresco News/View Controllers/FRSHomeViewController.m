@@ -62,7 +62,7 @@
     [super configureNavigationBar];
     [self removeNavigationBarLine];
     
-    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self];
+    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self hasBackButton:NO];
     
     self.navigationController.navigationBar.topItem.titleView = titleView;
 }

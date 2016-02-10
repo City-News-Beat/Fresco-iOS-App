@@ -22,12 +22,14 @@
 
 @property (strong, nonatomic) NSArray *tabTitles;
 
+@property (nonatomic) BOOL hasBackButton;
+
 @end
 
 @implementation FRSTabbedNavigationTitleView
 
 
--(instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id <FRSTabbedNavigationTitleViewDelegate>)delegate{
+-(instancetype)initWithTabTitles:(NSArray *)tabTitles delegate:(id <FRSTabbedNavigationTitleViewDelegate>)delegate hasBackButton:(BOOL)hasBackButton{
     
     NSAssert(tabTitles.count == 2, @"Our app only supports exactly 2 tab items for the navigation title view");
     
@@ -36,6 +38,7 @@
         
         self.tabTitles = tabTitles;
         self.delegate = delegate;
+        self.hasBackButton = hasBackButton;
         
         [self configureContainerView];
         [self configureTabItems];
@@ -49,6 +52,9 @@
 
 -(void)configureContainerView{
     //this is necessary because the titleView item of navigation bars are automatically horizontally resized.
+    
+//    CGRect containerFrame = self.hasBackButton ? CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 44, 44) : CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44);
+    
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     self.containerView.backgroundColor = [UIColor frescoOrangeColor];
     [self addSubview:self.containerView];
