@@ -24,7 +24,7 @@
 #import "FRSLocationManager.h"
 #import "FRSDataManager.h"
 //#import "FRSGalleryAssetsManager.h"
-//#import "FRSAVSessionManager.h"
+#import "FRSAVSessionManager.h"
 
 //Categories
 //#import "UIColor+Additions.h"
@@ -55,7 +55,7 @@
 
 @interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 
-//@property (strong, nonatomic) FRSAVSessionManager *sessionManager;
+@property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 //@property (strong, nonatomic) FRSGalleryAssetsManager *assetsManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
@@ -127,29 +127,29 @@
 
 @implementation FRSCameraViewController
 
-//-(instancetype)init{
-//    self = [super init];
-//    if (self){
-//        self.sessionManager = [FRSAVSessionManager defaultManager];
-//        self.locationManager = [FRSLocationManager sharedManager];
+-(instancetype)init{
+    self = [super init];
+    if (self){
+        self.sessionManager = [FRSAVSessionManager defaultManager];
+        self.locationManager = [FRSLocationManager sharedManager];
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-//        self.currentOrientation = [UIDevice currentDevice].orientation;
-//
-//
-//        self.firstTime = YES;
-//
-//    }
-//    return self;
-//}
+        self.currentOrientation = [UIDevice currentDevice].orientation;
+
+
+        self.firstTime = YES;
+
+    }
+    return self;
+}
 
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode{
     self = [super init];
     if (self){
-//        self.sessionManager = [FRSAVSessionManager defaultManager];
+        self.sessionManager = [FRSAVSessionManager defaultManager];
         self.locationManager = [FRSLocationManager sharedManager];
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
-//        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
+        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
     }
@@ -191,12 +191,12 @@
     
     self.isPresented = YES;
     
-//    if (!self.sessionManager.session.isRunning){
-//        
-//        [self.sessionManager startCaptureSessionForCaptureMode:self.captureMode withCompletion:^{
-//            [self configurePreviewLayer];
-//        }];
-//    }
+    if (!self.sessionManager.session.isRunning){
+        
+        [self.sessionManager startCaptureSessionForCaptureMode:self.captureMode withCompletion:^{
+            [self configurePreviewLayer];
+        }];
+    }
     
     self.motionManager = [[CMMotionManager alloc] init];
     [self startTrackingMovement];
@@ -216,7 +216,7 @@
 //    [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
-//    [self.sessionManager clearCaptureSession];
+    [self.sessionManager clearCaptureSession];
     
     [_captureVideoPreviewLayer removeFromSuperlayer];
     
@@ -228,7 +228,7 @@
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        //        [UIView animateWithDuration:0.2 animations:^{
+//                [UIView animateWithDuration:0.2 animations:^{
         self.preview.alpha = 1.0;
         //        }];
         
@@ -289,7 +289,7 @@
 -(void)configurePreviewLayer{
     dispatch_async(dispatch_get_main_queue(), ^{
         CALayer *viewLayer = self.preview.layer;
-//        self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
+        self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
         self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
         [viewLayer addSublayer:self.captureVideoPreviewLayer];
@@ -318,7 +318,7 @@
 - (void)dismissAndReturnToPreviousTab
 {
 //    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-    
+//    
 //    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
     
 //    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
@@ -1113,16 +1113,16 @@
         
         /* Delay is used to change color of mask after animation completes */
         
-//        [self.sessionManager.session beginConfiguration];
+        [self.sessionManager.session beginConfiguration];
         
 
-//        //Change the preset to display properly
-//        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
-//            //Set the session preset to photo, the default mode we enter in as
-//            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
-//        }
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+        }
         
-//        [self.sessionManager.session commitConfiguration];
+        [self.sessionManager.session commitConfiguration];
         
     }
     else {
@@ -1130,15 +1130,15 @@
         
         [self animateVideoRotateHide];
         
-//        [self.sessionManager.session beginConfiguration];
-//    
-//        //Change the preset to display properly
-//        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
-//            //Set the session preset to photo, the default mode we enter in as
-//            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
-//        }
-//        
-//        [self.sessionManager.session commitConfiguration];
+        [self.sessionManager.session beginConfiguration];
+    
+        //Change the preset to display properly
+        if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
+            //Set the session preset to photo, the default mode we enter in as
+            [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
+        }
+        
+        [self.sessionManager.session commitConfiguration];
         
     }
     
@@ -1162,7 +1162,7 @@
     CGPoint rawPoint = [gr locationInView:gr.view];
     [self playFocusAnimationAtPoint:rawPoint];
     
-//    [self.sessionManager focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
+    [self.sessionManager focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
     
 }
 
@@ -1201,166 +1201,166 @@
 #pragma mark - Capture data processing
 
 -(void)captureStillImage{
-//    dispatch_async(self.sessionManager.sessionQueue, ^{
-//        
-//        if(self.capturingImage)
-//            return;
-//        else {
-//            self.capturingImage = YES;
-//            self.previewButton.userInteractionEnabled = NO;
-//            self.nextButton.userInteractionEnabled = NO;
-//        }
-//    
-//        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-//    
-//        // Update the orientation on the still image output video connection before capturing.
-//        connection.videoOrientation = [self orientationFromDeviceOrientaton];
-//    
+    dispatch_async(self.sessionManager.sessionQueue, ^{
+        
+        if(self.capturingImage)
+            return;
+        else {
+            self.capturingImage = YES;
+            self.previewButton.userInteractionEnabled = NO;
+            self.nextButton.userInteractionEnabled = NO;
+        }
+    
+        AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
+    
+        // Update the orientation on the still image output video connection before capturing.
+        connection.videoOrientation = [self orientationFromDeviceOrientaton];
+    
 //         Capture a still image.
-//        
-//        [self animateShutterWithCompletion:nil];
-//        
-//        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-//    
-//            CMSampleBufferRef copy = NULL;
-//            CMSampleBufferCreateCopy(NULL, imageDataSampleBuffer, &copy);
-//    
-//            if (copy){
-//                
-//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
-//                    NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:copy];
-//                    
-//                    if (imageNSData) {
-//                        
-//                        CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
-//                        
-//                        //make the metadata dictionary mutable so we can add properties to it
-//                        NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
-//                        
-//                        NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
-//                        
-//                        if(!GPSDictionary)
-//                            GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
-//                        
-//                        
-//                        //Add the modified Data back into the image’s metadata
-//                        if (GPSDictionary) {
-//                            [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
-//                        }
-//                        
-//                        CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
-//                        
-//                        //this will be the data CGImageDestinationRef will write into
-//                        NSMutableData *newImageData = [NSMutableData data];
-//                        
-//                        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
-//                        
-//                        if(!destination)
-//                            NSLog(@"***Could not create image destination ***");
-//                        
-//                        //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
-//                        CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
-//                        
-//                        //tell the destination to write the image data and metadata into our data object.
-//                        //It will return false if something goes wrong
-//                        BOOL success = NO;
-//                        success = CGImageDestinationFinalize(destination);
-//                        
-//                        if(!success){
-//                            NSLog(@"***Could not create data from image destination ***");
-//                            
-//                            self.capturingImage = NO;
-//                            self.previewButton.userInteractionEnabled = YES;
-//                            self.nextButton.userInteractionEnabled = YES;
-//                            
-//                            return;
-//                        }
-//                        
-//                        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-//                            
-//                            if (status == PHAuthorizationStatusAuthorized ) {
-//                                
-//                                // Note that creating an asset from a UIImage discards the metadata.
-//                                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
-//                                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
-//                                if ([PHAssetCreationRequest class]) {
-//                                    
-//                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                        
-//                                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
-//                                        
-//                                    } completionHandler:^( BOOL success, NSError *error ) {
-//                                        
-//                                        if (!success) {
-//                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                            self.capturingImage = NO;
-//                                            self.previewButton.userInteractionEnabled = YES;
-//                                            self.nextButton.userInteractionEnabled = YES;
-//                                        }
-//                                        else {
-//                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-//                                            self.capturingImage = NO;
-//                                            self.previewButton.userInteractionEnabled = YES;
-//                                            self.nextButton.userInteractionEnabled = YES;
-//                                        }
-//                                    }];
-//                                }
-//                                else {
-//                                    
-//                                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
-//                                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
-//                                    
-//                                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
-//                                    
-//                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                                        
-//                                        NSError *error = nil;
-//                                        
-//                                        [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
-//                                        
-//                                        if ( error ) {
-//                                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
-//                                        }
-//                                        else {
-//                                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
-//                                        }
-//                                        
-//                                    } completionHandler:^( BOOL success, NSError *error ) {
-//                                        
-//                                        if (!success ) {
-//                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
-//                                        }
-//                                        else {
-//                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
-//                                            
-//                                        }
-//                                        
-//                                        self.capturingImage = NO;
-//                                        self.previewButton.userInteractionEnabled = YES;
-//                                        self.nextButton.userInteractionEnabled = YES;
-//                                        
-//                                        // Delete the temporary file.
-//                                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
-//                                        
-//                                    }];
-//                                }
-//                            }
-//                        }];
-//                    }
-//                    else {
-//                        NSLog( @"Could not capture still image: %@", error );
-//                    }
-//                });
-//            }
-//            else {
-//                NSLog( @"Could not capture still image: %@", error );
-//            }
-//        }];
-//    });
+        
+        [self animateShutterWithCompletion:nil];
+        
+        [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
+    
+            CMSampleBufferRef copy = NULL;
+            CMSampleBufferCreateCopy(NULL, imageDataSampleBuffer, &copy);
+    
+            if (copy){
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
+                    NSData *imageNSData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:copy];
+                    
+                    if (imageNSData) {
+                        
+                        CGImageSourceRef imgSource = CGImageSourceCreateWithData((__bridge_retained CFDataRef)imageNSData, NULL);
+                        
+                        //make the metadata dictionary mutable so we can add properties to it
+                        NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
+                        
+                        NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
+                        
+                        if(!GPSDictionary)
+                            GPSDictionary = [[self.locationManager.location EXIFMetadata] mutableCopy];
+                        
+                        
+                        //Add the modified Data back into the image’s metadata
+                        if (GPSDictionary) {
+                            [metadata setObject:GPSDictionary forKey:(NSString *)kCGImagePropertyGPSDictionary];
+                        }
+                        
+                        CFStringRef UTI = CGImageSourceGetType(imgSource); //this is the type of image (e.g., public.jpeg)
+                        
+                        //this will be the data CGImageDestinationRef will write into
+                        NSMutableData *newImageData = [NSMutableData data];
+                        
+                        CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)newImageData, UTI, 1, NULL);
+                        
+                        if(!destination)
+                            NSLog(@"***Could not create image destination ***");
+                        
+                        //add the image contained in the image source to the destination, overidding the old metadata with our modified metadata
+                        CGImageDestinationAddImageFromSource(destination, imgSource, 0, (__bridge CFDictionaryRef) metadata);
+                        
+                        //tell the destination to write the image data and metadata into our data object.
+                        //It will return false if something goes wrong
+                        BOOL success = NO;
+                        success = CGImageDestinationFinalize(destination);
+                        
+                        if(!success){
+                            NSLog(@"***Could not create data from image destination ***");
+                            
+                            self.capturingImage = NO;
+                            self.previewButton.userInteractionEnabled = YES;
+                            self.nextButton.userInteractionEnabled = YES;
+                            
+                            return;
+                        }
+                        
+                        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+                            
+                            if (status == PHAuthorizationStatusAuthorized ) {
+                                
+                                // Note that creating an asset from a UIImage discards the metadata.
+                                // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+                                // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+                                if ([PHAssetCreationRequest class]) {
+                                    
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                        
+                                        [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:newImageData options:nil];
+                                        
+                                    } completionHandler:^( BOOL success, NSError *error ) {
+                                        
+                                        if (!success) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                            self.capturingImage = NO;
+                                            self.previewButton.userInteractionEnabled = YES;
+                                            self.nextButton.userInteractionEnabled = YES;
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            self.capturingImage = NO;
+                                            self.previewButton.userInteractionEnabled = YES;
+                                            self.nextButton.userInteractionEnabled = YES;
+                                        }
+                                    }];
+                                }
+                                else {
+                                    
+                                    NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                                    NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                                    
+                                    NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                                    
+                                    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                        
+                                        NSError *error = nil;
+                                        
+                                        [newImageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                                        
+                                        if ( error ) {
+                                            NSLog( @"Error occured while writing image data to a temporary file: %@", error );
+                                        }
+                                        else {
+                                            [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                                        }
+                                        
+                                    } completionHandler:^( BOOL success, NSError *error ) {
+                                        
+                                        if (!success ) {
+                                            NSLog( @"Error occurred while saving image to photo library: %@", error );
+                                        }
+                                        else {
+                                            [self updatePreviewButtonWithImage:[UIImage imageWithData:newImageData scale:.1]];
+                                            
+                                        }
+                                        
+                                        self.capturingImage = NO;
+                                        self.previewButton.userInteractionEnabled = YES;
+                                        self.nextButton.userInteractionEnabled = YES;
+                                        
+                                        // Delete the temporary file.
+                                        [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                                        
+                                    }];
+                                }
+                            }
+                        }];
+                    }
+                    else {
+                        NSLog( @"Could not capture still image: %@", error );
+                    }
+                });
+            }
+            else {
+                NSLog( @"Could not capture still image: %@", error );
+            }
+        }];
+    });
 }
 
 -(void)stopVideoCaptureIfNeeded{
-//    if (!self.sessionManager.movieFileOutput.isRecording) return;
+    if (!self.sessionManager.movieFileOutput.isRecording) return;
     [self toggleVideoRecording];
 }
 
@@ -1383,79 +1383,79 @@
 
 -(void)toggleVideoRecording{
     
-//    if (self.sessionManager.movieFileOutput.isRecording) {
-//    
-//        //Clear the timer so it doesn't re-run
-//        [self.videoTimer invalidate];
-//        self.videoTimer = nil;
-//        
-//        [self stopRecordingAnimation];
-//        self.previewBackgroundIV.alpha = 1.0;
-//        [self animateCloseButtonHide:NO];
-//        
-//    }
-//    else {
-//        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
-//        [self animateCloseButtonHide:YES];
-//    }
-//    
-//    dispatch_async(self.sessionManager.sessionQueue, ^{
-//        
-//        if (!self.sessionManager.movieFileOutput.isRecording) {
-//            
-//            AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-//            
-//            if (!movieConnection){
-//                [self.sessionManager.session beginConfiguration];
-//                
-//                if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
-//                    //Set the session preset to photo, the default mode we enter in as
-//                    [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
-//                }
-//                
-//                [self.sessionManager.session commitConfiguration];
-//            }
-//            
-//            movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-//            
-//            if (movieConnection.active) {
-//                
-//                AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
-//                item.keySpace = AVMetadataKeySpaceCommon;
-//                item.key = AVMetadataCommonKeyLocation;
-//                item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", [FRSLocationManager sharedManager].location.coordinate.latitude, [FRSLocationManager sharedManager].location.coordinate.longitude];
-//                self.sessionManager.movieFileOutput.metadata = @[item];
-//                
-//                if ( [UIDevice currentDevice].isMultitaskingSupported ) {
-//                    // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
-//                    // callback is not received until AVCam returns to the foreground unless you request background execution time.
-//                    // This also ensures that there will be time to write the file to the photo library when AVCam is backgrounded.
-//                    // To conclude this background execution, -endBackgroundTask is called in
-//                    // -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:] after the recorded file has been saved.
-//                    self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-//                }
-//                
-//                // Update the orientation on the movie file output video connection before starting recording.
-//                AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-//                connection.videoOrientation = [self orientationFromDeviceOrientaton];
-//                
-//                // Start recording to a temporary file.
-//                NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
-//                NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
-//                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-//                //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-//                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self runVideoRecordAnimation];
-//                });
-//                
-//            }
-//            
-//        }
-//        else {
-//            [self.sessionManager.movieFileOutput stopRecording];
-//        }
-//    });
+    if (self.sessionManager.movieFileOutput.isRecording) {
+    
+        //Clear the timer so it doesn't re-run
+        [self.videoTimer invalidate];
+        self.videoTimer = nil;
+        
+        [self stopRecordingAnimation];
+        self.previewBackgroundIV.alpha = 1.0;
+        [self animateCloseButtonHide:NO];
+        
+    }
+    else {
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        [self animateCloseButtonHide:YES];
+    }
+    
+    dispatch_async(self.sessionManager.sessionQueue, ^{
+        
+        if (!self.sessionManager.movieFileOutput.isRecording) {
+            
+            AVCaptureConnection *movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (!movieConnection){
+                [self.sessionManager.session beginConfiguration];
+                
+                if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
+                    //Set the session preset to photo, the default mode we enter in as
+                    [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
+                }
+                
+                [self.sessionManager.session commitConfiguration];
+            }
+            
+            movieConnection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+            
+            if (movieConnection.active) {
+                
+                AVMutableMetadataItem *item = [[AVMutableMetadataItem alloc] init];
+                item.keySpace = AVMetadataKeySpaceCommon;
+                item.key = AVMetadataCommonKeyLocation;
+                item.value = [NSString stringWithFormat:@"%+08.4lf%+09.4lf/", [FRSLocationManager sharedManager].location.coordinate.latitude, [FRSLocationManager sharedManager].location.coordinate.longitude];
+                self.sessionManager.movieFileOutput.metadata = @[item];
+                
+                if ( [UIDevice currentDevice].isMultitaskingSupported ) {
+                    // Setup background task. This is needed because the -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:]
+                    // callback is not received until AVCam returns to the foreground unless you request background execution time.
+                    // This also ensures that there will be time to write the file to the photo library when AVCam is backgrounded.
+                    // To conclude this background execution, -endBackgroundTask is called in
+                    // -[captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:] after the recorded file has been saved.
+                    self.backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+                }
+                
+                // Update the orientation on the movie file output video connection before starting recording.
+                AVCaptureConnection *connection = [self.sessionManager.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+                connection.videoOrientation = [self orientationFromDeviceOrientaton];
+                
+                // Start recording to a temporary file.
+                NSString *outputFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
+                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self runVideoRecordAnimation];
+                });
+                
+            }
+            
+        }
+        else {
+            [self.sessionManager.movieFileOutput stopRecording];
+        }
+    });
 }
 
 - (void)videoEnded:(NSTimer *)timer{
@@ -1466,70 +1466,70 @@
 
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
 {
-//    // Note that currentBackgroundRecordingID is used to end the background task associated with this recording.
-//    // This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's isRecording property
-//    // is back to NO — which happens sometime after this method returns.
-//    // Note: Since we use a unique file path for each recording, a new recording will not overwrite a recording currently being saved.
-//    UIBackgroundTaskIdentifier currentBackgroundRecordingID = self.backgroundRecordingID;
-//    self.backgroundRecordingID = UIBackgroundTaskInvalid;
-//    
-//    dispatch_block_t cleanup = ^{
-//        [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
-//        if ( currentBackgroundRecordingID != UIBackgroundTaskInvalid ) {
-//            [[UIApplication sharedApplication] endBackgroundTask:currentBackgroundRecordingID];
-//        }
-//    };
-//    
-//    BOOL success = YES;
-//    
-//    if ( error ) {
-//        NSLog( @"Movie file finishing error: %@", error );
-//        success = [error.userInfo[AVErrorRecordingSuccessfullyFinishedKey] boolValue];
-//    }
-//    if ( success ) {
-//        // Check authorization status.
-//        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-//            if ( status == PHAuthorizationStatusAuthorized ) {
-//                // Save the movie file to the photo library and cleanup.
-//                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-//                    // In iOS 9 and later, it's possible to move the file into the photo library without duplicating the file data.
-//                    // This avoids using double the disk space during save, which can make a difference on devices with limited free disk space.
-//                    if ( [PHAssetResourceCreationOptions class] ) {
-//                        PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
-//                        options.shouldMoveFile = YES;
-//                        PHAssetCreationRequest *changeRequest = [PHAssetCreationRequest creationRequestForAsset];
-//                        [changeRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
-//                    }
-//                    else {
-//                        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
-//                        
-//                    }
-//                } completionHandler:^( BOOL success, NSError *error ) {
-//                    if ( ! success ) {
-//                        NSLog( @"Could not save movie to photo library: %@", error );
-//                    }
-//                    
-////                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
-////                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
-//                        
+    // Note that currentBackgroundRecordingID is used to end the background task associated with this recording.
+    // This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's isRecording property
+    // is back to NO — which happens sometime after this method returns.
+    // Note: Since we use a unique file path for each recording, a new recording will not overwrite a recording currently being saved.
+    UIBackgroundTaskIdentifier currentBackgroundRecordingID = self.backgroundRecordingID;
+    self.backgroundRecordingID = UIBackgroundTaskInvalid;
+    
+    dispatch_block_t cleanup = ^{
+        [[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
+        if ( currentBackgroundRecordingID != UIBackgroundTaskInvalid ) {
+            [[UIApplication sharedApplication] endBackgroundTask:currentBackgroundRecordingID];
+        }
+    };
+    
+    BOOL success = YES;
+    
+    if ( error ) {
+        NSLog( @"Movie file finishing error: %@", error );
+        success = [error.userInfo[AVErrorRecordingSuccessfullyFinishedKey] boolValue];
+    }
+    if ( success ) {
+        // Check authorization status.
+        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+            if ( status == PHAuthorizationStatusAuthorized ) {
+                // Save the movie file to the photo library and cleanup.
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    // In iOS 9 and later, it's possible to move the file into the photo library without duplicating the file data.
+                    // This avoids using double the disk space during save, which can make a difference on devices with limited free disk space.
+                    if ( [PHAssetResourceCreationOptions class] ) {
+                        PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
+                        options.shouldMoveFile = YES;
+                        PHAssetCreationRequest *changeRequest = [PHAssetCreationRequest creationRequestForAsset];
+                        [changeRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:outputFileURL options:options];
+                    }
+                    else {
+                        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
+                        
+                    }
+                } completionHandler:^( BOOL success, NSError *error ) {
+                    if ( ! success ) {
+                        NSLog( @"Could not save movie to photo library: %@", error );
+                    }
+                    
+//                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+//                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
+                    
 //                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
-//                            
+                    
 //                            [self updatePreviewButtonWithImage:result];
 //                        }];
-//                        
+                    
 //                        cleanup();
 //                    }];
-//                    
-//                }];
-//            }
-//            else {
-//                cleanup();
-//            }
-//        }];
-//    }
-//    else {
-//        cleanup();
-//    }
+                    
+                }];
+            }
+            else {
+                cleanup();
+            }
+        }];
+    }
+    else {
+        cleanup();
+    }
 }
 
 
@@ -1643,7 +1643,6 @@
     
     //    }
     
-    
 }
 
 -(void)stopRecordingAnimation {
@@ -1684,9 +1683,9 @@
 
 -(void)handlePreviewButtonTapped{
     
-//    if (self.sessionManager.movieFileOutput.isRecording){
-//        [self toggleVideoRecording];
-//    }
+    if (self.sessionManager.movieFileOutput.isRecording){
+        [self toggleVideoRecording];
+    }
     
 //    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
     
@@ -1739,7 +1738,7 @@
     
     UIDeviceOrientation orientationNew;
     
-//    if (self.sessionManager.movieFileOutput.isRecording) return;
+    if (self.sessionManager.movieFileOutput.isRecording) return;
     
     if (acceleration.z > -2 && acceleration.z < 2) {
         
