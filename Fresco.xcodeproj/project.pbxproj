@@ -14,6 +14,7 @@
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
+		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */; };
 		07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */; };
@@ -196,6 +197,8 @@
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
 		074393F01C3B0F9A0007CFF0 /* UIImageView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+Helpers.h"; path = "Categories/UIImageView+Helpers.h"; sourceTree = "<group>"; };
 		074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+Helpers.m"; path = "Categories/UIImageView+Helpers.m"; sourceTree = "<group>"; };
+		0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCameraViewController.h; sourceTree = "<group>"; };
+		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBusinessTypeViewController.h; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.h"; sourceTree = "<group>"; };
@@ -659,6 +662,8 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */,
+				0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */,
 				65D1E4F31C4F0675003362D3 /* FRSFollowersViewController.h */,
 				65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */,
 				659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */,
@@ -1401,6 +1406,7 @@
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
+				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
 			);

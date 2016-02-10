@@ -18,6 +18,8 @@
 
 #import "FRSStoriesViewController.h"
 
+#import "FRSCameraViewController.h"
+
 #import "UIColor+Fresco.h"
 
 
@@ -82,7 +84,7 @@
 
     UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
 
-    UIViewController *vc2 = [[UIViewController alloc] init];
+    UIViewController *vc2 = [UIViewController new];
     UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
     UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
@@ -106,28 +108,13 @@
 
 #pragma mark Delegate
 
-//-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
-//    
-//    switch ([self.tabBar.items indexOfObject:item]) {
-//        case 0:
-//            [self handleHomeTabPressed];
-//            break;
-//        case 1:
-//            [self handleStoryTabPressed];
-//            break;
-//        case 2:
-//            [self handleCameraTabPressed];
-//            break;
-//        case 3:
-//            [self handleAssignmentTabPressed];
-//            break;
-//        case 4:
-//            [self handleProfileTabPressed];
-//            break;
-//        default:
-//            break;
-//    }
-//}
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+    
+    if ([self.tabBar.items indexOfObject:item] == 2) {
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        [self presentViewController:cam animated:YES completion:nil];
+    }
+}
 //
 //-(void)handleHomeTabPressed{
 //    
