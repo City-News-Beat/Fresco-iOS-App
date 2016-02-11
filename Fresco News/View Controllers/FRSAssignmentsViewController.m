@@ -80,7 +80,7 @@
 
 
 -(void)configureNavigationBar{
-    [super configureNavigationBar];
+//    [super configureNavigationBar];
     self.navigationItem.title = @"ASSIGNMENTS";
 }
 
@@ -408,9 +408,6 @@
     [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation];
     
     [self configureAnnotationsForMap];
-    
-    
-    
 }
 
 

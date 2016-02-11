@@ -41,7 +41,7 @@
 #pragma mark - Override Super
 
 -(void)configureNavigationBar{
-    [super configureNavigationBar];
+//    [super configureNavigationBar];
     [self configureBackButtonAnimated:NO];
     [self removeNavigationBarLine];
     

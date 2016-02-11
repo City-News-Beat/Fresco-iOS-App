@@ -64,7 +64,7 @@
 
 -(void)configureNavigationBar{
     
-    [super configureNavigationBar];
+//    [super configureNavigationBar];
     [super removeNavigationBarLine];
     self.navigationItem.title = @"STORIES";
     

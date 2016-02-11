@@ -14,6 +14,8 @@
 
 #import "UILabel+Custom.h"
 
+#import "FRSNavigationController.h";
+
 @interface FRSBaseViewController : UIViewController
 
 @property (nonatomic) BOOL hiddenTabBar;
@@ -22,8 +24,6 @@
 
 -(void)configureBackButtonAnimated:(BOOL)animated;
 
--(void)configureNavigationBar;
-
 -(void)removeNavigationBarLine;
 
 -(void)hideTabBarAnimated:(BOOL)animated;
@@ -31,5 +31,6 @@
 -(void)showTabBarAnimated:(BOOL)animated;
 
 -(void)popViewController;
+
 
 @end

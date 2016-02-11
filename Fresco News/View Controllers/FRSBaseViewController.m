@@ -7,6 +7,7 @@
 //
 
 #import "FRSBaseViewController.h"
+#import "FRSNavigationController.h"
 
 @interface FRSBaseViewController ()
 
@@ -16,18 +17,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configureNavigationBar];
-    // Do any additional setup after loading the view.
-}
-
--(void)configureNavigationBar{
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
-    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-//    [self configureBackButton];
+//    [self configureNavigationBar];
+    // Do any additional setup after loading the view.
 }
+
+//-(void)configureNavigationBar{
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
+//    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+//    
+//    
+//    
+////    [self configureBackButton];
+//}
 
 -(void)removeNavigationBarLine{
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
@@ -72,6 +76,7 @@
         self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, self.tabBarController.tabBar.frame.size.width, self.tabBarController.tabBar.frame.size.height);
     } completion:nil];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

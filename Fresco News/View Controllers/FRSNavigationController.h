@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class FRSTabbedNavigationTitleView;
+
 @interface FRSNavigationController : UINavigationController
 
+@property (nonatomic) BOOL shouldHaveTabbedBar;
+@property (nonatomic) BOOL shouldHaveBackButton;
+
+@property (strong, nonatomic) UIView *titleView;
+
+-(void)configureFRSNavigationBarWithTitle:(NSString *)title;
+-(void)configureFRSNavigationBarWithTabs:(NSArray *)tabs;
 
 @end

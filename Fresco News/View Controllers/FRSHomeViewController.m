@@ -27,6 +27,7 @@
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
 
+
 @end
 
 @implementation FRSHomeViewController
@@ -59,12 +60,15 @@
 #pragma mark - UI
 
 -(void)configureNavigationBar{
-    [super configureNavigationBar];
+    
     [self removeNavigationBarLine];
     
-    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self hasBackButton:NO];
+    FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
+    [frsNav configureFRSNavigationBarWithTitle:@"TEST"];
     
-    self.navigationController.navigationBar.topItem.titleView = titleView;
+//    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self hasBackButton:NO];
+//    self.navigationController.navigationBar.topItem.titleView = titleView;
+    
 }
 
 -(UIImage *)imageForRightBarItem{
