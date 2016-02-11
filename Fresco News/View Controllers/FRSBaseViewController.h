@@ -18,6 +18,7 @@
 
 @property (nonatomic) BOOL hiddenTabBar;
 @property (nonatomic) BOOL actionBarVisible;
+@property (nonatomic) BOOL isPresented;
 
 -(void)configureBackButtonAnimated:(BOOL)animated;
 

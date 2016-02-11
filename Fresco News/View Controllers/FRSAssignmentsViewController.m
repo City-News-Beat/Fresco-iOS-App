@@ -21,7 +21,7 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate>
+@interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
@@ -34,6 +34,10 @@
 
 @property (strong, nonatomic) FRSMapCircle *userCircle;
 
+@property (strong, nonatomic) FRSLocationManager *locationManager;
+
+
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -41,21 +45,38 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];
-    [self addNotificationObservers];
+    
+    
+    
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    self.isPresented = YES;
+    
+//    [self addNotificationObservers];
+    
+    self.locationManager = [[FRSLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager startLocationMonitoringForeground];
+//    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+}
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+//    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
+    
+    self.isPresented = NO;
 }
+
 
 
 -(void)configureNavigationBar{
@@ -71,24 +92,24 @@
 }
 
 -(void)addNotificationObservers{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocations:) name:NOTIF_LOCATIONS_UPDATE object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocations:) name:NOTIF_LOCATIONS_UPDATE object:nil];
 }
 
--(void)didUpdateLocations:(NSNotification *)notification{
-    NSArray *locations = notification.userInfo[@"locations"];
-    
-    NSLog(@"Location update notification observed by assignmentsVC");
-    
-    if (!locations.count) return;
-    
-    CLLocation *currentLocation = [locations lastObject];
-    
-    [self adjustMapRegionWithLocation:currentLocation];
-    
-    [self fetchAssignmentsNearLocation:currentLocation];
-    
-    [self configureAnnotationsForMap];
-}
+//-(void)didUpdateLocations:(NSNotification *)notification{
+//    NSArray *locations = notification.userInfo[@"locations"];
+//    
+//    NSLog(@"Location update notification observed by assignmentsVC");
+//    
+//    if (!locations.count) return;
+//    
+//    CLLocation *currentLocation = [locations lastObject];
+//    
+//    [self adjustMapRegionWithLocation:currentLocation];
+//    
+//    [self fetchAssignmentsNearLocation:currentLocation];
+//    
+//    [self configureAnnotationsForMap];
+//}
 
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location{
@@ -132,7 +153,7 @@
 
 -(void)setInitialMapRegion{
     self.isOriginalSpan = YES;
-    [self adjustMapRegionWithLocation:[FRSLocationManager sharedManager].lastAcquiredLocation];
+    [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
 }
 
 #pragma mark - Annotations
@@ -322,7 +343,7 @@
         [self.mapView removeOverlay:self.userCircle];
     }
     
-    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:[FRSLocationManager sharedManager].lastAcquiredLocation.coordinate radius:radius];
+    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:self.locationManager.lastAcquiredLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
     
     [self.mapView addOverlay:self.userCircle];
@@ -360,6 +381,36 @@
             [self.mapView removeOverlay:circle];
         }
     }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    if (!locations.count){
+        NSLog(@"FRSLocationManager did not return any locations");
+        return;
+    }
+    
+    if (![self.locationManager significantLocationChangeForLocation:[locations lastObject]]) return;
+    
+    self.locationManager.lastAcquiredLocation = [locations lastObject];
+    
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
+    
+    if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground){
+        [self.locationManager stopUpdatingLocation];
+    }
+    
+    NSLog(@"Location update notification observed by assignmentsVC");
+    
+//    CLLocation *currentLocation = [locations lastObject];
+    
+    [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
+    
+    [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation];
+    
+    [self configureAnnotationsForMap];
+    
+    
+    
 }
 
 

@@ -189,7 +189,6 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //hide status bar before view is loaded.
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     self.isPresented = YES;
     
@@ -202,12 +201,15 @@
     
     self.motionManager = [[CMMotionManager alloc] init];
     [self startTrackingMovement];
+    
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
     [self fadeInPreview];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
 }
 
@@ -230,9 +232,9 @@
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-//                [UIView animateWithDuration:0.2 animations:^{
-        self.preview.alpha = 1.0;
-        //        }];
+        [UIView animateWithDuration:0.2 animations:^{
+            self.preview.alpha = 1.0;
+        }];
         
     });
 }
@@ -241,6 +243,7 @@
 #pragma mark - UI configuration methods
 
 -(void)configureUI{
+    
     [self configurePreview];
     [self configureBottomContainer];
     [self configureTopContainer];
@@ -326,6 +329,7 @@
 //    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
@@ -918,11 +922,6 @@
     
     if (self.captureMode == FRSCaptureModePhoto){
         
-        //if portrait
-        //        if (self.currentOrientation == UIInterfaceOrientationPortrait) {
-//                    self.videoRotateIV.alpha = 0;
-//                    self.videoPhoneIV.alpha = 0;
-        //        }
         
         NSLog(@"self.currentOrientation = %ld", (long)self.currentOrientation);
         
@@ -1547,6 +1546,7 @@
 -(void)dealloc{
     [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
     [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

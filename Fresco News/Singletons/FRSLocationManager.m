@@ -26,12 +26,12 @@
     static FRSLocationManager *_manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _manager = [[FRSLocationManager alloc] initPrivate];
+        _manager = [[FRSLocationManager alloc] init];
     });
     return _manager;
 }
 
--(instancetype)initPrivate{
+-(instancetype)init{
     self = [super init];
     if (self){
         self.delegate = self;
@@ -91,8 +91,12 @@
 }
 
 -(void)pauseLocationMonitoring{
-    [self stopMonitoringSignificantLocationChanges];
-    [self stopUpdatingLocation];
+    if (self.monitoringState == FRSLocationMonitoringStateBackground){
+        [self stopMonitoringSignificantLocationChanges];
+    }
+    else if (self.monitoringState == FRSLocationMonitoringStateForeground){
+        [self stopUpdatingLocation];
+    }
     
     self.monitoringState = FRSLocationMonitoringStateOff;
     
@@ -133,7 +137,7 @@
     
     self.lastAcquiredLocation = [locations lastObject];
     
-    [self.notificationCenter postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
     if (self.monitoringState == FRSLocationMonitoringStateForeground){
         [self stopUpdatingLocation];

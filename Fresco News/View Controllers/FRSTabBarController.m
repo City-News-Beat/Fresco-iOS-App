@@ -112,9 +112,12 @@
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-        [self presentViewController:cam animated:YES completion:nil];
+        [self presentViewController:cam animated:YES completion:^{
+            [self setSelectedIndex:self.lastActiveIndex];
+        }];
     }
 }
+
 
 //
 //-(void)handleHomeTabPressed{
@@ -152,16 +155,17 @@
         selectedVC = [nav.viewControllers firstObject];
     }
     
+    self.lastActiveIndex = tabBarController.selectedIndex;
+    
     NSInteger index = [self.viewControllers indexOfObject:viewController];
     
     switch (index) {
         case 0:
-            
             break;
         case 1:
             break;
         case 2:
-            break;
+            return NO;
         case 3:
             if (self.lastActiveIndex == 3){
                 
@@ -177,8 +181,6 @@
         default:
             break;
     }
-    
-    self.lastActiveIndex = index;
     
     return YES;
 }
