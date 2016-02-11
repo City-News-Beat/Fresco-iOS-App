@@ -45,7 +45,7 @@
     [self configureBackButtonAnimated:NO];
     [self removeNavigationBarLine];
     
-//    self.followersTab = [[UIButton alloc] init];
+    //    self.followersTab = [[UIButton alloc] init];
 //    [self.followersTab setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
 //    [self.followersTab setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
 //    [self.followersTab setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
@@ -54,6 +54,7 @@
 //    [self.followersTab addTarget:self action:@selector(handleFollowersTabTapped) forControlEvents:UIControlEventTouchUpInside];
 //    [self.followersTab setFrame:CGRectMake(0, 0, self.followersTab.frame.size.width, 44)];
 //    self.followersTab.selected = YES;
+
 //    
 //    self.followingTab = [[UIButton alloc] init];
 //    [self.followingTab setTitle:@"FOLLOWING" forState:UIControlStateNormal];
@@ -85,10 +86,9 @@
 
 -(void)configureTableView{
     [super configureTableView];
-    self.tableView.delegate =self;
+    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
-    
 }
 
 #pragma mark - Tabbing
@@ -99,6 +99,7 @@
         [self.followingTab setSelected:NO];
     }
 }
+
 
 -(void)handleFollowingTabTapped{
     if (!self.followingTab.selected){

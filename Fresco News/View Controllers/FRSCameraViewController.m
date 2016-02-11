@@ -117,6 +117,8 @@
 
 @property (nonatomic) BOOL firstTime;
 
+@property (nonatomic) BOOL firstTimeAni;
+
 @property (nonatomic) CGRect originalApertureFrame;
 
 @property (nonatomic) UIDeviceOrientation lastOrientation;
@@ -135,7 +137,7 @@
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.currentOrientation = [UIDevice currentDevice].orientation;
 
-
+        self.firstTimeAni = YES;
         self.firstTime = YES;
 
     }
@@ -678,7 +680,7 @@
     
 //    self.videoRotateIV.center = self.ivContainer.center;
     
-    CGFloat duration = self.firstTime ? 0.05 : 0.45;
+    CGFloat duration = self.firstTimeAni ? 0.05 : 0.45;
     
     [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -714,6 +716,8 @@
         
         
     } completion:nil];
+    
+    self.firstTimeAni = NO;
 }
 
 
@@ -925,7 +929,7 @@
         
 
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.captureVideoPreviewLayer.frame = self.preview.bounds;
+            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
