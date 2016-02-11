@@ -64,7 +64,7 @@
     [self removeNavigationBarLine];
     
     FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
-    [frsNav configureFRSNavigationBarWithTitle:@"TEST"];
+    [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
     
 //    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self hasBackButton:NO];
 //    self.navigationController.navigationBar.topItem.titleView = titleView;
