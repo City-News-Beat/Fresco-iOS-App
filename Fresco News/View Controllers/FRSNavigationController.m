@@ -45,7 +45,14 @@
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     self.titleView = [[UIView alloc] initWithFrame:CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     self.titleView.backgroundColor = [UIColor frescoOrangeColor];
+    
+    
     [self.containerView addSubview:self.titleView];
+    
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 0.5, -20, 1, 64)];
+    line.backgroundColor = [UIColor blackColor];
+    [self.titleView addSubview:line];
     
     
     
@@ -108,8 +115,6 @@
         [self.secondTabContainer addSubview:self.secondTab];
     }
     
-    
-    
     [self.firstTab setTitle:[tabs firstObject] forState:UIControlStateNormal];
     [self.secondTab setTitle:[tabs lastObject] forState:UIControlStateNormal];
     
@@ -131,7 +136,7 @@
     
     NSInteger availableWidth = [UIScreen mainScreen].bounds.size.width - SIDE_MARGIN * 2 - SIDE_PADDING * 4 - BAR_BUTTON_WIDTH * 2;
     NSInteger minusButtons = availableWidth - self.firstTab.frame.size.width - self.secondTab.frame.size.width;
-    NSInteger centerPadding = minusButtons/3;
+    NSInteger centerPadding = minusButtons/2.2;
     
     self.firstTab.frame = CGRectMake(self.firstTabContainer.frame.size.width - centerPadding/2 - self.firstTab.frame.size.width, 7, self.firstTab.frame.size.width, self.firstTab.frame.size.height);
     self.secondTab.frame = CGRectMake(centerPadding/2, 7, self.secondTab.frame.size.width , self.secondTab.frame.size.height);
