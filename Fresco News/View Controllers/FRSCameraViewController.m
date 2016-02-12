@@ -676,9 +676,7 @@
 
 -(void)animateVideoRotationAppear{
     
-//    self.videoRotateIV.center = self.ivContainer.center;
-    
-    CGFloat duration = self.firstTime ? 0.05 : 0.45;
+    CGFloat duration = self.firstTime ? 0.05 : 0.45; 
     
     [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -710,10 +708,9 @@
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.apertureImageView.alpha = 0;
-        
-        
-        
+
     } completion:nil];
+    self.firstTime = NO;
 }
 
 
