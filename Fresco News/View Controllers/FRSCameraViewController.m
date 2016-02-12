@@ -129,21 +129,21 @@
 @end
 
 @implementation FRSCameraViewController
-
--(instancetype)init{
-    self = [super init];
-    if (self){
-        self.sessionManager = [FRSAVSessionManager defaultManager];
-        self.locationManager = [FRSLocationManager sharedManager];
-//        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-        self.currentOrientation = [UIDevice currentDevice].orientation;
-
-        self.firstTimeAni = YES;
-        self.firstTime = YES;
-
-    }
-    return self;
-}
+//
+//-(instancetype)init{
+//    self = [super init];
+//    if (self){
+//        self.sessionManager = [FRSAVSessionManager defaultManager];
+//        self.locationManager = [FRSLocationManager sharedManager];
+////        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
+//        self.currentOrientation = [UIDevice currentDevice].orientation;
+//
+//        self.firstTimeAni = YES;
+//        self.firstTime = YES;
+//
+//    }
+//    return self;
+//}
 
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode{
     self = [super init];
@@ -152,9 +152,10 @@
         self.locationManager = [FRSLocationManager sharedManager];
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
-        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
+//        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
+        self.firstTimeAni = YES;
     }
     return self;
 }
@@ -695,7 +696,6 @@
 -(void)animateVideoRotationAppear{
     
     CGFloat duration = self.firstTimeAni ? 0.05 : 0.45;
-
     
     [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -716,7 +716,6 @@
         self.videoPhoneIV.alpha = 1.0;
         
         self.ivContainer.transform = CGAffineTransformMakeScale(1.0, 1.0);
-
         
     } completion:^(BOOL finished) {
         
@@ -764,7 +763,6 @@
     //    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
     //    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
     //                         forKey:@"torchIsOn"];
-    
     
     if (self.captureMode == FRSCaptureModeVideo){
         if (self.torchIsOn == NO) {

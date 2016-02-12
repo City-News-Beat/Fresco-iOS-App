@@ -123,6 +123,11 @@
         if (i==0)
             [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
         
+        imageView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
+        tap.numberOfTapsRequired = 1;
+        [imageView addGestureRecognizer:tap];
+        
         [self.scrollView addSubview:imageView];
     }
     
@@ -134,6 +139,7 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
     [self addSubview:line];
+    
 }
 
 -(void)configurePageControl{
@@ -374,6 +380,9 @@
     return averageHeight;
 }
 
+-(void)galleryTapped{
+    NSLog(@"gallery tapped");
+}
 
 
 @end
