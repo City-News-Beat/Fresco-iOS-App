@@ -42,6 +42,7 @@
 
 //Root View Controller
 //#import "FRSRootViewController.h"
+#import "FRSBaseViewController.h"
 
 
 
@@ -318,13 +319,26 @@
 - (void)dismissAndReturnToPreviousTab
 {
 //    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-//    
-//    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
     
-//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
+    
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    
     
     [self dismissViewControllerAnimated:YES completion:nil];
+
 }
+
+//- (void)dismissAndReturnToPreviousTab
+//{
+//    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
+//    
+//    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+//    
+//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+//    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
     

@@ -143,8 +143,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+//-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+//    NSLog(@"viewController = %@", viewController);
+//}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     
+//    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     
     UIViewController *selectedVC = viewController;
     if ([viewController isKindOfClass:[FRSNavigationController class]]){
@@ -179,6 +184,11 @@
     }
     
     self.lastActiveIndex = index;
+    
+    
+//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:self.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     return YES;
 }
