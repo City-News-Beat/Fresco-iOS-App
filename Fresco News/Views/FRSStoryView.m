@@ -25,6 +25,8 @@
 
 #define TEXTVIEW_TOP_PADDING 12
 
+#define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height/2)
+
 
 @interface FRSStoryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 
@@ -73,8 +75,51 @@
     NSInteger height = IS_IPHONE_5 ? 192 : 240;
     
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
-    self.topContainer.backgroundColor = [UIColor blueColor];
+    self.topContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.topContainer.clipsToBounds = YES;
     [self addSubview:self.topContainer];
+    
+    CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
+    CGFloat width = halfHeight * 1.333333333 - 2;
+
+    
+    if (self.story.imageURLs.count < 6) return;
+    
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
+    iv.contentMode = UIViewContentModeScaleAspectFill;
+    iv.clipsToBounds = YES;
+    [iv hnk_setImageFromURL:self.story.imageURLs[0]];
+    [self.topContainer addSubview:iv];
+    
+    UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
+    iv2.contentMode = UIViewContentModeScaleAspectFill;
+    iv2.clipsToBounds = YES;
+    [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
+    [self.topContainer addSubview:iv2];
+    
+    UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
+    iv3.contentMode = UIViewContentModeScaleAspectFill;
+    iv3.clipsToBounds = YES;
+    [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
+    [self.topContainer addSubview:iv3];
+    
+    UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
+    iv4.contentMode = UIViewContentModeScaleAspectFill;
+    iv4.clipsToBounds = YES;
+    [iv4 hnk_setImageFromURL:self.story.imageURLs[3]];
+    [self.topContainer addSubview:iv4];
+    
+    UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
+    iv5.contentMode = UIViewContentModeScaleAspectFill;
+    iv5.clipsToBounds = YES;
+    [iv5 hnk_setImageFromURL:self.story.imageURLs[4]];
+    [self.topContainer addSubview:iv5];
+    
+    UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
+    iv6.contentMode = UIViewContentModeScaleAspectFill;
+    iv6.clipsToBounds = YES;
+    [iv6 hnk_setImageFromURL:self.story.imageURLs[5]];
+    [self.topContainer addSubview:iv6];
 }
 
 -(void)configureTitleLabel{

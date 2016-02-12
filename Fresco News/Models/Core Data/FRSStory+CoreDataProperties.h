@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDate *editedDate;
 @property (nullable, nonatomic, retain) NSString *title;
 @property (nullable, nonatomic, retain) NSString *uid;
-@property (nullable, nonatomic, retain) id imageURLs;
+@property (nullable, nonatomic, retain) NSArray * imageURLs;
 @property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 

@@ -32,6 +32,7 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.title = dict[@"title"];
     self.uid = dict[@"_id"];
+    self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
 }
 
 -(NSInteger)heightForStory{
@@ -47,6 +48,20 @@
     // 44 is tab bar, 11 is top padding, 13 is bottom padding
     imageViewHeight += label.frame.size.height + 44 + 11 + 13;
     return imageViewHeight;
+}
+
+-(NSArray *)imagesURLsFromThumbnails:(NSArray *)thumbnails{
+    NSMutableArray *mArr = [NSMutableArray new];
+    for (NSDictionary *thumb in thumbnails){
+        NSString *stringURL = thumb[@"image"];
+        if (!stringURL) continue;
+        NSString *escapedString = [stringURL stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+        NSURL *url = [NSURL URLWithString:escapedString];
+        [mArr addObject:url];
+        
+        if (mArr.count >= 6) break;
+    }
+    return [mArr copy];
 }
 
 @end
