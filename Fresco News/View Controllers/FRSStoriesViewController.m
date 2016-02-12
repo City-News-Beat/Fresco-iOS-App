@@ -10,7 +10,11 @@
 #import "FRSSearchViewController.h"
 
 #import "FRSStoryCell.h"
-#import "FRSDataManager.h"
+//#import "FRSDataManager.h"
+
+#import "FRSAPIClient.h"
+
+#import "FRSStory.h"
 
 #import <MagicalRecord/MagicalRecord.h>
 
@@ -100,30 +104,15 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchStories{
-//    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
-//        if (!responseObject.count){
-//            return;
-//        }
-//        
-//        NSMutableArray *mArr = [NSMutableArray new];
-//        
-//        NSArray *galleries = responseObject;
-//        for (NSDictionary *dict in galleries){
-//            FRSGallery *gallery = [FRSGallery MR_createEntity];
-//            [gallery configureWithDictionary:dict];
-//            [mArr addObject:gallery];
-//        }
-//        
-//        self.stories = [mArr copy];
-//        [self.tableView reloadData];
-//    }];
-//    
     
-    [[FRSDataManager sharedManager] getStoriesWithOffset:0 shouldRefresh:NO withReponseBlock:^(id responseObject, NSError *error) {
-        NSArray *stories = responseObject;
+    [[FRSAPIClient new] fetchStoriesWithLimit:10 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+        if (!stories.count){
+            if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
+            else NSLog(@"No error fetching stories but the request returned zero results");
+            return;
+        }
         
         NSMutableArray *mArr = [NSMutableArray new];
-        
         
         for (NSDictionary *storyDict in stories){
             FRSStory *story = [FRSStory MR_createEntity];
@@ -134,7 +123,6 @@
         self.stories = [mArr copy];
         [self.tableView reloadData];
     }];
-    
 }
 
 

@@ -97,7 +97,6 @@ enum FRSErrorCodes {
     #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
 #endif
 
-
 /* Twitter Auth */
 
 #pragma mark - Twitter Auth
@@ -119,7 +118,6 @@ enum FRSErrorCodes {
 #define kDegreesInAMile                     69.0
 
 
-
 /* User Defaults */
 
 #pragma mark - User Defaults
@@ -139,8 +137,6 @@ enum FRSErrorCodes {
 #define UD_UPDATE_PROFILE                   @"updateProfile"
 #define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
 #define UD_GALLERY_POSTED                   @"galleryPosted"
-
-
 
 /* Fonts */
 
