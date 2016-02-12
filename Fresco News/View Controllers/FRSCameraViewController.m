@@ -42,6 +42,7 @@
 
 //Root View Controller
 //#import "FRSRootViewController.h"
+#import "FRSBaseViewController.h"
 
 
 
@@ -323,14 +324,25 @@
 - (void)dismissAndReturnToPreviousTab
 {
 //    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-//    
-//    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
     
-//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
+    
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
+
+//- (void)dismissAndReturnToPreviousTab
+//{
+//    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
+//    
+//    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
+//    
+//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+//    
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
     
@@ -682,9 +694,8 @@
 
 -(void)animateVideoRotationAppear{
     
-//    self.videoRotateIV.center = self.ivContainer.center;
-    
     CGFloat duration = self.firstTimeAni ? 0.05 : 0.45;
+
     
     [UIView animateWithDuration:duration/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -716,9 +727,7 @@
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.apertureImageView.alpha = 0;
-        
-        
-        
+
     } completion:nil];
     
     self.firstTimeAni = NO;

@@ -85,6 +85,8 @@
     UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
 
     UIViewController *vc2 = [UIViewController new];
+    vc2.view.backgroundColor = [UIColor blackColor];
+    
     UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
     UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
@@ -146,8 +148,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+//-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+//    NSLog(@"viewController = %@", viewController);
+//}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     
+//    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     
     UIViewController *selectedVC = viewController;
     if ([viewController isKindOfClass:[FRSNavigationController class]]){
