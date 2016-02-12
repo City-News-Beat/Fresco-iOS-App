@@ -324,9 +324,7 @@
     
     tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
     
-    
     [self dismissViewControllerAnimated:YES completion:nil];
-
 }
 
 //- (void)dismissAndReturnToPreviousTab
