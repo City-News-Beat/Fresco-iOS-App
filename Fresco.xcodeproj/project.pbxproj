@@ -16,11 +16,6 @@
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
-		077C84BB1C72403100D1BF68 /* CRMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077C84B21C72403100D1BF68 /* CRMotionView.m */; };
-		077C84BC1C72403100D1BF68 /* FRSMotionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077C84B41C72403100D1BF68 /* FRSMotionView.m */; };
-		077C84BD1C72403100D1BF68 /* FRSPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077C84B61C72403100D1BF68 /* FRSPhotoBrowserView.m */; };
-		077C84BE1C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077C84B81C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.m */; };
-		077C84BF1C72403100D1BF68 /* UIScrollView+CRScrollIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 077C84BA1C72403100D1BF68 /* UIScrollView+CRScrollIndicator.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */; };
 		07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */; };
@@ -207,16 +202,6 @@
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
 		075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAVSessionManager.m; sourceTree = "<group>"; };
-		077C84B11C72403100D1BF68 /* CRMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMotionView.h; sourceTree = "<group>"; };
-		077C84B21C72403100D1BF68 /* CRMotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMotionView.m; sourceTree = "<group>"; };
-		077C84B31C72403100D1BF68 /* FRSMotionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMotionView.h; sourceTree = "<group>"; };
-		077C84B41C72403100D1BF68 /* FRSMotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMotionView.m; sourceTree = "<group>"; };
-		077C84B51C72403100D1BF68 /* FRSPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPhotoBrowserView.h; sourceTree = "<group>"; };
-		077C84B61C72403100D1BF68 /* FRSPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoBrowserView.m; sourceTree = "<group>"; };
-		077C84B71C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPhotoMotionCollectionViewCell.h; sourceTree = "<group>"; };
-		077C84B81C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoMotionCollectionViewCell.m; sourceTree = "<group>"; };
-		077C84B91C72403100D1BF68 /* UIScrollView+CRScrollIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+CRScrollIndicator.h"; sourceTree = "<group>"; };
-		077C84BA1C72403100D1BF68 /* UIScrollView+CRScrollIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+CRScrollIndicator.m"; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
 		07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBusinessTypeViewController.h; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.h"; sourceTree = "<group>"; };
@@ -537,23 +522,6 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
-		077C84B01C72402200D1BF68 /* Photo Browser */ = {
-			isa = PBXGroup;
-			children = (
-				077C84B11C72403100D1BF68 /* CRMotionView.h */,
-				077C84B21C72403100D1BF68 /* CRMotionView.m */,
-				077C84B31C72403100D1BF68 /* FRSMotionView.h */,
-				077C84B41C72403100D1BF68 /* FRSMotionView.m */,
-				077C84B51C72403100D1BF68 /* FRSPhotoBrowserView.h */,
-				077C84B61C72403100D1BF68 /* FRSPhotoBrowserView.m */,
-				077C84B71C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.h */,
-				077C84B81C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.m */,
-				077C84B91C72403100D1BF68 /* UIScrollView+CRScrollIndicator.h */,
-				077C84BA1C72403100D1BF68 /* UIScrollView+CRScrollIndicator.m */,
-			);
-			name = "Photo Browser";
-			sourceTree = "<group>";
-		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -662,7 +630,6 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				077C84B01C72402200D1BF68 /* Photo Browser */,
 				6547C9081C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.h */,
 				6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */,
 				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
@@ -1366,7 +1333,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
-				077C84BC1C72403100D1BF68 /* FRSMotionView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
 				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
@@ -1406,9 +1372,7 @@
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
-				077C84BE1C72403100D1BF68 /* FRSPhotoMotionCollectionViewCell.m in Sources */,
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
-				077C84BD1C72403100D1BF68 /* FRSPhotoBrowserView.m in Sources */,
 				65046DFF1C3EE8CA003E02B5 /* FRSDataManager.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
@@ -1419,7 +1383,6 @@
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
-				077C84BF1C72403100D1BF68 /* UIScrollView+CRScrollIndicator.m in Sources */,
 				65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
@@ -1444,7 +1407,6 @@
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
-				077C84BB1C72403100D1BF68 /* CRMotionView.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
