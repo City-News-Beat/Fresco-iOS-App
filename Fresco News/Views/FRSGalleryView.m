@@ -394,9 +394,17 @@
     self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 
     
-//    UIImage *currentImage = [self.imageViews objectAtIndex:self.currentPage];    
-//    [self.parallaxImage setImage:currentImage];
-
+//    FRSScrollViewImageView *image = [[FRSScrollViewImageView alloc] initWithFrame:self.parallaxImage.frame];
+//    UIImage *currentImage = [UIImage new];
+//    image = [self.imageViews objectAtIndex:self.currentPage];
+//    [self.parallaxImage setImage:image];
+    
+//    UIImage *imageView = self.imageViews[self.currentPage];
+//    self.parallaxImage.image = imageView;
+    
+//    self.parallaxImage.image = self.imageViews.firstObject;
+    
+    
     
     self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     self.container.backgroundColor = [UIColor blackColor];

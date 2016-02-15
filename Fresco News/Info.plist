@@ -167,5 +167,32 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-camera</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take photo</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-video</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Take video</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick-action-map</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Assignments</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>avaliable at launch</string>
+		</dict>
+	</array>
 </dict>
 </plist>
