@@ -24,7 +24,6 @@
 #import "FRSContentActionsBar.h"
 
 #import <Haneke/Haneke.h>
-#import "FRSPhotoBrowserView.h"
 #import "OEParallax.h"
 
 #define TEXTVIEW_TOP_PAD 12
@@ -54,7 +53,6 @@
 
 @property (nonatomic) NSInteger adjustedPage;
 
-@property (nonatomic, strong) FRSPhotoBrowserView *photoBrowserView;
 
 @property (strong, nonatomic) UIImageView *parallaxImage;
 @property (strong, nonatomic) UIView *container;
