@@ -26,6 +26,7 @@ target 'Fresco' do
 	pod ‘MagicalRecord’
 	pod 'Haneke'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
+	pod 'CRMotionView'
 
 end
 

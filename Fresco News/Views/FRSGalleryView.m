@@ -131,7 +131,6 @@
         [self.scrollView addSubview:imageView];
     }
     
-    
     UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
     topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
     [self addSubview:topLine];
