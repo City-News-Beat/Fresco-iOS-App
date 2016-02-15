@@ -25,6 +25,7 @@
 
 #import <Haneke/Haneke.h>
 #import "FRSPhotoBrowserView.h"
+#import "OEParallax.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -56,6 +57,8 @@
 @property (nonatomic, strong) FRSPhotoBrowserView *photoBrowserView;
 
 @property (strong, nonatomic) UIImageView *parallaxImage;
+@property (strong, nonatomic) UIView *container;
+@property (nonatomic) NSInteger currentPage;
 
 @end
 
@@ -358,6 +361,9 @@
     NSInteger page = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     self.pageControl.currentPage = page;
     
+    self.currentPage = page;
+    NSLog(@"self.currentPage = %ld", self.currentPage);
+    
 }
 
 -(NSInteger)imageViewHeight{
@@ -386,43 +392,60 @@
 -(void)galleryTapped{
     NSLog(@"gallery tapped");
     
+    
     self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    self.parallaxImage.transform = CGAffineTransformMakeScale(0.97, 0.97);
+
+    
+//    UIImage *currentImage = [self.imageViews objectAtIndex:self.currentPage];    
+//    [self.parallaxImage setImage:currentImage];
+
+    
+    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    self.container.backgroundColor = [UIColor blackColor];
+    [self.window addSubview:self.container];
+    
+    
     self.parallaxImage.alpha = 0;
+    self.userInteractionEnabled = NO;
     self.parallaxImage.backgroundColor = [UIColor redColor];
     [self.window addSubview:self.parallaxImage];
-    self.userInteractionEnabled = NO;
     
-//    self.parallaxImage.image = [self.imageViews objectAtIndex:2];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
-    tap.numberOfTapsRequired = 1;
     [self.window addGestureRecognizer:tap];
     
     
     [self presentParallax];
+    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
 }
 
 -(void)presentParallax{
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.parallaxImage.transform = CGAffineTransformMakeScale(1, 1);
+        self.container.alpha = 1;
         self.parallaxImage.alpha = 1;
     } completion:nil];
+    
+    [UIView beginAnimations:@"statusBar" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [UIView commitAnimations];
 }
 
 -(void)dismissParallax{
+    self.parallaxImage.alpha = 0;
 
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.parallaxImage.transform = CGAffineTransformMakeScale(0.97, 0.97);
-        self.parallaxImage.alpha = 0;
-        
+        self.container.alpha = 0;
     } completion:^(BOOL finished) {
         [self.parallaxImage removeFromSuperview];
         self.userInteractionEnabled = YES;
     }];
+    
+    [UIView beginAnimations:@"statusBar" context:nil];
+    [UIView setAnimationDuration:0];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [UIView commitAnimations];
 }
-
 
 @end
