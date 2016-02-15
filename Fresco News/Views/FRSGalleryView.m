@@ -24,6 +24,7 @@
 #import "FRSContentActionsBar.h"
 
 #import <Haneke/Haneke.h>
+#import "FRSPhotoBrowserView.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -51,6 +52,10 @@
 @property (strong, nonatomic) NSArray *orderedPosts;
 
 @property (nonatomic) NSInteger adjustedPage;
+
+@property (nonatomic, strong) FRSPhotoBrowserView *photoBrowserView;
+
+@property (strong, nonatomic) UIImageView *parallaxImage;
 
 @end
 
@@ -234,7 +239,6 @@
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     
-    
     [self.timeLabel sizeToFit];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
@@ -381,6 +385,43 @@
 
 -(void)galleryTapped{
     NSLog(@"gallery tapped");
+    
+    self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    self.parallaxImage.transform = CGAffineTransformMakeScale(0.97, 0.97);
+    self.parallaxImage.alpha = 0;
+    self.parallaxImage.backgroundColor = [UIColor redColor];
+    [self.window addSubview:self.parallaxImage];
+    self.userInteractionEnabled = NO;
+    
+//    self.parallaxImage.image = [self.imageViews objectAtIndex:2];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
+    tap.numberOfTapsRequired = 1;
+    [self.window addGestureRecognizer:tap];
+    
+    
+    [self presentParallax];
+}
+
+-(void)presentParallax{
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.parallaxImage.transform = CGAffineTransformMakeScale(1, 1);
+        self.parallaxImage.alpha = 1;
+    } completion:nil];
+}
+
+-(void)dismissParallax{
+
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.parallaxImage.transform = CGAffineTransformMakeScale(0.97, 0.97);
+        self.parallaxImage.alpha = 0;
+        
+    } completion:^(BOOL finished) {
+        [self.parallaxImage removeFromSuperview];
+        self.userInteractionEnabled = YES;
+    }];
 }
 
 
