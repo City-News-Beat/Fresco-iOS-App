@@ -41,6 +41,8 @@
 @property (strong, nonatomic) UIImageView *imageView7;
 @property (strong, nonatomic) UIImageView *imageView8;
 
+@property (nonatomic) NSInteger tag;
+
 @end
 
 @implementation FRSBusinessTypeViewController
@@ -48,6 +50,11 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self configureUI];
+
+    [self selectTag:1]; // Select first row if no other row is selected
+    self.tag = [[NSUserDefaults standardUserDefaults] integerForKey:@"selected-tag"];
+    [self selectTag:self.tag];
+
 }
 
 -(void)configureUI{
@@ -57,16 +64,9 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 352)];
     container.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:container];
-    
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 1)];
-    topLine.backgroundColor = [UIColor frescoLightTextColor];
-    topLine.alpha = 0.5;
-    [container addSubview:topLine];
-    
-    UIView *baseLine = [[UIView alloc] initWithFrame:CGRectMake(0, container.frame.size.height-1, self.view.frame.size.width, 1)];
-    baseLine.backgroundColor = [UIColor frescoLightTextColor];
-    baseLine.alpha = 0.5;
-    [container addSubview:baseLine];
+
+    [self addLineToContainer:container AtYPos:0];
+    [self addLineToContainer:container AtYPos:container.frame.size.height-1];
     
     self.button1 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,   self.view.frame.size.width, 44)];
     self.button2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 44,  self.view.frame.size.width, 44)];
@@ -147,11 +147,10 @@
     [container addSubview:self.label7];
     
     self.label8  = [[UILabel alloc] initWithFrame:CGRectMake(16, 319, self.view.frame.size.width, 20)];
-    self.label8.text = @"S corporation";
+    self.label8.text = @"Trust";
     self.label8.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.label8.textColor = [UIColor frescoDarkTextColor];
     [container addSubview:self.label8];
-    
     
     self.imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
     self.imageView1.frame = CGRectMake(self.view.frame.size.width - 18 - 20, 10, 24, 24);
@@ -189,49 +188,57 @@
 
 -(void)buttonTapped:(UIButton*)button{
     
-    NSLog(@"tag %ld", button.tag);
+    self.tag = button.tag;
+    [[NSUserDefaults standardUserDefaults] setInteger:self.tag forKey:@"selected-tag"];
 
+    NSLog(@"selectedTag = %ld", self.tag);
     switch (button.tag) {
         case 1:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label1.text];
             [self selectTag:1];
             break;
         
         case 2:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label2.text];
             [self selectTag:2];
             break;
             
         case 3:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label3.text];
             [self selectTag:3];
             break;
             
         case 4:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label4.text];
             [self selectTag:4];
             break;
             
         case 5:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label5.text];
             [self selectTag:5];
             break;
             
         case 6:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label6.text];
             [self selectTag:6];
             break;
             
         case 7:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label7.text];
             [self selectTag:7];
             break;
             
         case 8:
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label8.text];
             [self selectTag:8];
             break;
             
         default:
             break;
     }
-    
 }
 
 -(void)selectTag:(NSInteger)tag{
-    
     switch (tag) {
         case 1:
             self.label1.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
@@ -452,165 +459,20 @@
         default:
             break;
     }
-
-    
-    
 }
 
 -(void)createLabelAtYPosition:(CGFloat)yPosition{
-    
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, yPosition, self.view.frame.size.width, 44)];
     title.text = @"Title/Titleship";
     title.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    
-    
 }
 
-//-(void)configureTableView{
-//    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-//    CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
-//    
-//    self.title = @"";
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-//    self.tableView.showsVerticalScrollIndicator = NO;
-//    self.tableView.delegate = self;
-//    self.tableView.dataSource = self;
-//    self.tableView.bounces = NO;
-//    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-//    [self.tableView setSeparatorColor:[UIColor clearColor]];
-//    [self.view addSubview:self.tableView];
-
-//}
-
-
-//-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    return 1;
-//}
-//
-//-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    return 8;
-//}
-//
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return 44;
-//}
-
-//-(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-//    NSString *cellIdentifier;
-//    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//    
-//    if (cell == nil) {
-//        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-//    }
-//    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-//        [cell setSeparatorInset:UIEdgeInsetsZero];
-//    }
-//    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-//        [cell setPreservesSuperviewLayoutMargins:NO];
-//    }
-//    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-//        [cell setLayoutMargins:UIEdgeInsetsZero];
-//    }
-//    return cell;
-//
-//}
-
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-//    switch (indexPath.row) {
-//        case 0:
-//            [cell configureCheckBoxCellWithTitle:@"Individual/Sole Proprietorship" withTopSeperator:YES withBottomSeperator:NO isSelected:YES];
-//            break;
-//        case 1:
-//            [cell configureCheckBoxCellWithTitle:@"Partnership" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 2:
-//            [cell configureCheckBoxCellWithTitle:@"LLC (Partnership class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 3:
-//            [cell configureCheckBoxCellWithTitle:@"LLC (C class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 4:
-//            [cell configureCheckBoxCellWithTitle:@"LLC (S class)" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 5:
-//            [cell configureCheckBoxCellWithTitle:@"C corporation" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 6:
-//            [cell configureCheckBoxCellWithTitle:@"S corporation" withTopSeperator:NO withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 7:
-//            [cell configureCheckBoxCellWithTitle:@"Trust" withTopSeperator:NO withBottomSeperator:YES isSelected:NO];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//}
-
-
-//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    
-//    NSLog(@"cell at index %ld selected", (long)indexPath.row);
-//    
-//    FRSTableViewCell *cell = [FRSTableViewCell new];
-//    
-//    switch (indexPath.row) {
-//        case 0:
-//            [cell configureCheckBoxCellWithTitle:@"Individual/Sole Proprietorship" withTopSeperator:YES withBottomSeperator:NO isSelected:NO];
-//            break;
-//        case 1:
-//
-//            break;
-//        case 2:
-//
-//            break;
-//        case 3:
-//
-//            break;
-//        case 4:
-//
-//            break;
-//        case 5:
-//
-//            break;
-//        case 6:
-//
-//            break;
-//        case 7:
-//
-//            break;
-//            
-//        default:
-//            break;
-//    }
-    
-    
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-(void)addLineToContainer:(UIView*)container AtYPos:(CGFloat)yPos{
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, yPos, self.view.frame.size.width, 1)];
+    line.backgroundColor = [UIColor frescoLightTextColor];
+    line.alpha = 0.5;
+    [container addSubview:line];
+}
 
 
 @end

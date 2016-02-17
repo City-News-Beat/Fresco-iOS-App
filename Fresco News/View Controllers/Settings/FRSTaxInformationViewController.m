@@ -15,6 +15,7 @@
 @interface FRSTaxInformationViewController()<UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSString *businessType;
 
 @end
 
@@ -24,7 +25,15 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incomingNotification:) name:@"selected-business-type" object:nil];
+    
     [self configureTableView];
+}
+- (void) incomingNotification:(NSNotification *)notification{
+
+    self.businessType = [notification object];
+    
+    NSLog(@"carretText = %@", self.businessType);
 }
 
 -(void)configureTableView{
@@ -121,7 +130,7 @@
                     
                 case 0:
                     //Make custom editible cell
-                    [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
+                    [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:self.businessType];
 
                     break;
                     
