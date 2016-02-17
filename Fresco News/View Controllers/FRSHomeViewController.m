@@ -41,6 +41,7 @@
     [self addNotificationObservers];
     
     // Do any additional setup after loading the view.
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -53,6 +54,7 @@
     
     [self configureTableView];
     [self configureDataSource];
+    [self configurePullToRefresh];
 }
 
 -(void)addNotificationObservers{
@@ -60,6 +62,31 @@
 }
 
 #pragma mark - UI
+
+-(void)configurePullToRefresh{
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:50 loadingViewSize:30 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.tableView dg_stopLoading];
+        });
+    } loadingView:loadingView];
+    
+    
+    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+
+    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+    
+    
+}
+
+- (void)dealloc{
+    [self.tableView dg_removePullToRefresh];
+}
 
 -(void)configureNavigationBar{
     

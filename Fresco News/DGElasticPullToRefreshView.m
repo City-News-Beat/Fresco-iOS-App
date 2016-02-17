@@ -442,13 +442,17 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
             CGFloat leftPartWidth = locationX - minLeftX;
             CGFloat rightPartWidth = maxRightX - locationX;
 
+
             self.cControlPointView.center = CGPointMake(locationX, baseHeight + waveHeight * 1.36);
-            self.l1ControlPointView.center = CGPointMake(minLeftX + leftPartWidth * 0.71, baseHeight + waveHeight * 0.64);
-            self.l2ControlPointView.center = CGPointMake(minLeftX + leftPartWidth * 0.44, baseHeight);
-            self.l3ControlPointView.center = CGPointMake(minLeftX, baseHeight);
-            self.r1ControlPointView.center = CGPointMake(maxRightX - rightPartWidth * 0.71, baseHeight + waveHeight * 0.64);
-            self.r2ControlPointView.center = CGPointMake(maxRightX - (rightPartWidth * 0.44), baseHeight);
-            self.r3ControlPointView.center = CGPointMake(maxRightX, baseHeight);
+//            self.l1ControlPointView.center = CGPointMake(minLeftX + leftPartWidth * 0.71, baseHeight + waveHeight * 0.64);
+//            self.l2ControlPointView.center = CGPointMake(minLeftX + leftPartWidth * 0.44, baseHeight);
+//            self.l3ControlPointView.center = CGPointMake(minLeftX, baseHeight);
+//            self.r1ControlPointView.center = CGPointMake(maxRightX - rightPartWidth * 0.71, baseHeight + waveHeight * 0.64);
+//            self.r2ControlPointView.center = CGPointMake(maxRightX - (rightPartWidth * 0.44), baseHeight);
+//            self.r3ControlPointView.center = CGPointMake(maxRightX, baseHeight);
+            
+            
+            
         }
         self.shapeLayer.frame = CGRectMake(0, 0, width, height);
         self.shapeLayer.path = [self currentPath];

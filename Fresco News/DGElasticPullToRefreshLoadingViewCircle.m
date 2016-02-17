@@ -40,7 +40,7 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
     self = [super initWithFrame:CGRectZero];
     if (self) {
         _shapeLayer = [CAShapeLayer layer];
-        _shapeLayer.lineWidth = 1.0;
+        _shapeLayer.lineWidth = 2.0;
         _shapeLayer.fillColor = [UIColor clearColor].CGColor;
         _shapeLayer.strokeColor = self.tintColor.CGColor;
         _shapeLayer.actions = @{ @"strokeEnd" : [NSNull null],
