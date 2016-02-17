@@ -154,7 +154,7 @@
     self.defaultTitleLabel.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:self.defaultTitleLabel];
     
-    self.rightAlignedDefaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 130, 0, 100, self.frame.size.height)];
+    self.rightAlignedDefaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width - 230, 0, 200, self.frame.size.height)];
     self.rightAlignedDefaultTitleLabel.textAlignment = NSTextAlignmentRight;
     self.rightAlignedDefaultTitleLabel.text = secondTitle;
     self.rightAlignedDefaultTitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];

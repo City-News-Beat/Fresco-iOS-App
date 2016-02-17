@@ -27,13 +27,60 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incomingNotification:) name:@"selected-business-type" object:nil];
     
+    
+    NSInteger tag = [[NSUserDefaults standardUserDefaults] integerForKey:@"selected-tag"];
+    NSLog(@"tag = %ld", (long)tag);
+    
+    
+    switch (tag) {
+        case 1:
+            self.businessType = @"Individual";
+            break;
+            
+        case 2:
+            self.businessType = @"Partnership";
+            break;
+            
+        case 3:
+            self.businessType = @"LLC (Partnership class)";
+            break;
+            
+        case 4:
+            self.businessType = @"LLC (C class)";
+            break;
+            
+        case 5:
+            self.businessType = @"LLC (S class)";
+            break;
+            
+        case 6:
+            self.businessType = @"C corporation";
+            break;
+            
+        case 7:
+            self.businessType = @"S corporation";
+            break;
+            
+        case 8:
+            self.businessType = @"Trust";
+            break;
+            
+        default:
+            break;
+    }
+    
+    
     [self configureTableView];
 }
-- (void) incomingNotification:(NSNotification *)notification{
 
+
+
+- (void) incomingNotification:(NSNotification *)notification{
     self.businessType = [notification object];
-    
-    NSLog(@"carretText = %@", self.businessType);
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
 }
 
 -(void)configureTableView{
@@ -75,32 +122,22 @@
     }
     
     return 0;
-    
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
-    
     switch (indexPath.section) {
-            
         case 1:
             return 12;
             break;
-            
             
         default:
             return 44;
             break;
     }
     
-    
     return 44;
-    
-    
-    
-    
 }
 
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -130,7 +167,13 @@
                     
                 case 0:
                     //Make custom editible cell
-                    [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:self.businessType];
+                    
+                    NSLog(@"self.businessType = %@", self.businessType);
+                    if ([self.businessType  isEqual: @"Individual/Sole Proprietorship"]) {
+                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
+                    } else {
+                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:self.businessType];
+                    }
 
                     break;
                     
