@@ -17,6 +17,8 @@
 
 #import <MagicalRecord/MagicalRecord.h>
 
+#import "DGElasticPullToRefresh.h"
+
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 
 @property (strong, nonatomic) NSArray *highlights;
