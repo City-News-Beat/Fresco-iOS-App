@@ -241,8 +241,7 @@
                 case 0:
                 {
                     FRSBusinessTypeViewController *businessType = [[FRSBusinessTypeViewController alloc] init];
-                    [self.navigationController pushViewController:businessType animated:NO];
-//                    [self.navigationController presentViewController:businessType animated:YES completion:nil];
+                    [self.navigationController pushViewController:businessType animated:YES];
                     self.navigationItem.title = @"";
                 }
                     break;
