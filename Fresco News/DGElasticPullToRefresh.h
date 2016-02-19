@@ -44,11 +44,12 @@ SOFTWARE.
                                  loadingView:(DGElasticPullToRefreshLoadingView*)loadingView;
 
 - (void)dg_addPullToRefreshWithWaveMaxHeight:(CGFloat)waveMaxHeight
-                               minOffsetToPull:(CGFloat)minOffsetToPull
-                               loadingContentInset:(CGFloat)loadingContentInset
-                               loadingViewSize:(CGFloat)loadingViewSize
+                             minOffsetToPull:(CGFloat)minOffsetToPull
+                         loadingContentInset:(CGFloat)loadingContentInset
+                             loadingViewSize:(CGFloat)loadingViewSize
+                                    velocity:(CGFloat)velocity
                                actionHandler:(void (^)())actionHandler
-                                 loadingView:(DGElasticPullToRefreshLoadingView*)loadingView;
+                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView;
 
 
 - (void)dg_removePullToRefresh;

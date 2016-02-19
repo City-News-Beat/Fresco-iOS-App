@@ -44,6 +44,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
                              minOffsetToPull:(CGFloat)minOffsetToPull
                          loadingContentInset:(CGFloat)loadingContentInset
                              loadingViewSize:(CGFloat)loadingViewSize
+                                    velocity:(CGFloat)velocity
                                actionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView *)loadingView{
     
@@ -58,6 +59,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
     self.pullToRefreshView = pullToRefreshView;
     pullToRefreshView.actionHandler = actionHandler;
     pullToRefreshView.loadingView = loadingView;
+    pullToRefreshView.animationVelocity = velocity;
     [self addSubview:pullToRefreshView];
     
     pullToRefreshView.observing = YES;
@@ -66,7 +68,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView*)loadingView
 {
-    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 actionHandler:actionHandler loadingView:loadingView];
+    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 velocity:3.4 actionHandler:actionHandler loadingView:loadingView];
 }
 - (void)dg_removePullToRefresh
 {

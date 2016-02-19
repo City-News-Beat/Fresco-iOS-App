@@ -325,7 +325,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
     [UIView animateWithDuration:duration
         delay:0.0
-        usingSpringWithDamping:0.39
+        usingSpringWithDamping:self.animationVelocity
         initialSpringVelocity:0.0
         options:0
         animations:^{

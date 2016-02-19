@@ -20,6 +20,8 @@
 
 #import <MagicalRecord/MagicalRecord.h>
 
+#import "DGElasticPullToRefresh.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -95,6 +97,31 @@
     
     [self configureNavigationBar];
     [self configureTableView];
+    [self configurePullToRefresh];
+}
+
+-(void)configurePullToRefresh{
+    [super removeNavigationBarLine];
+    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.tableView dg_stopLoading];
+        });
+    } loadingView:loadingView];
+    
+    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+}
+
+- (void)dealloc{
+    [self.tableView dg_removePullToRefresh];
 }
 
 -(void)configureNavigationBar{
