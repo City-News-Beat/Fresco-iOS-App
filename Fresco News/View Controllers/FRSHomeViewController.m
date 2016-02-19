@@ -77,11 +77,8 @@
     
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-    
-    
-    
+
 }
 
 - (void)dealloc{

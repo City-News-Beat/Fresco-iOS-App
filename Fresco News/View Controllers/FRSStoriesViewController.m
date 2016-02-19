@@ -18,6 +18,8 @@
 
 #import <MagicalRecord/MagicalRecord.h>
 
+#import "DGElasticPullToRefresh.h"
+
 @interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSArray *stories;
@@ -53,6 +55,7 @@
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
+    [self configurePullToRefresh];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -74,6 +77,7 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     
+    
 //    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
 //    self.searchTextField.tintColor = [UIColor whiteColor];
 //    self.searchTextField.alpha = 0;
@@ -81,6 +85,32 @@
 //    self.searchTextField.textColor = [UIColor whiteColor];
 //    self.searchTextField.returnKeyType = UIReturnKeySearch;
 //    [navBar addSubview:self.searchTextField];
+}
+
+
+
+-(void)configurePullToRefresh{
+    [super removeNavigationBarLine];
+
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.tableView dg_stopLoading];
+        });
+    } loadingView:loadingView];
+    
+    
+    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+}
+
+- (void)dealloc{
+    [self.tableView dg_removePullToRefresh];
 }
 
 -(void)configureTableView{
@@ -170,8 +200,6 @@
     [cell configureCell];
     
 }
-
-
 
 
 
