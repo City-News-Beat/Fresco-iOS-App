@@ -45,16 +45,9 @@
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     self.titleView = [[UIView alloc] initWithFrame:CGRectMake(-8, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     self.titleView.backgroundColor = [UIColor frescoOrangeColor];
-    
+
     
     [self.containerView addSubview:self.titleView];
-    
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 0.5, -20, 1, 64)];
-    line.backgroundColor = [UIColor blackColor];
-    [self.titleView addSubview:line];
-    
-    
     
     
 //    self.navigationBar.tintColor = [UIColor whiteColor];
