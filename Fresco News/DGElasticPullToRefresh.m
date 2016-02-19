@@ -66,7 +66,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView*)loadingView
 {
-    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:30.0 actionHandler:actionHandler loadingView:loadingView];
+    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 actionHandler:actionHandler loadingView:loadingView];
 }
 - (void)dg_removePullToRefresh
 {
