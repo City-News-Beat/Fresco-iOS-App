@@ -293,7 +293,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
     };
     if (animated) {
         [self startDisplayLink];
-        [UIView animateWithDuration:1.0 animations:^{
+        [UIView animateWithDuration:0.4 animations:^{
             scrollView.contentInset = contentInset;
         }
             completion:^(BOOL finished) {
@@ -384,10 +384,11 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         self.frame = CGRectMake(0, -height - 1.0, width, height);
     }
     else if (self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
-        height = [self actualContentOffsetY];
+//        height = [self actualContentOffsetY];
         
     }
-    self.shapeLayer.frame = CGRectMake(0, 0, width, height);
+    
+//    self.shapeLayer.frame = CGRectMake(0, 0, width, height);
     self.shapeLayer.path = [self currentPath];
     [self layoutLoadingView];
 }
@@ -409,6 +410,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
     self.loadingView.maskLayer.frame = [self convertRect:self.shapeLayer.frame toView:self.loadingView];
 
     self.loadingView.maskLayer.path = self.shapeLayer.path;
+
 }
 
 - (void)layoutSubviews
@@ -440,8 +442,8 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
             CGFloat minLeftX = MIN((locationX - width / 2.0) * 0.28, 0);
             CGFloat maxRightX = MAX(width + (locationX - width / 2.0) * 0.28, width);
 
-            CGFloat leftPartWidth = locationX - minLeftX;
-            CGFloat rightPartWidth = maxRightX - locationX;
+//            CGFloat leftPartWidth = locationX - minLeftX;
+//            CGFloat rightPartWidth = maxRightX - locationX;
 
 //            self.cControlPointView.center = CGPointMake(locationX, baseHeight + waveHeight * 1.36);
 //            self.l1ControlPointView.center = CGPointMake(minLeftX + leftPartWidth * 0.71, baseHeight + waveHeight * 0.64);
@@ -486,6 +488,19 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
     }
     else if (state == DGElasticPullToRefreshStateAnimatingToStopped) {
         __weak typeof (self)wself = self;
+        
+        if (self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.loadingView.alpha = 0;
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    self.loadingView.alpha = 1;
+                    
+                } completion:nil];
+            }];
+        }
+        
         [wself resetScrollViewContentInset:YES animated:YES completion:^{
             wself.state = DGElasticPullToRefreshStateStoped;
         }];
