@@ -115,6 +115,7 @@
         });
     } loadingView:loadingView];
     
+    
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
     
@@ -360,8 +361,9 @@
         
         if (self.scrollDirection == UIScrollViewScrollDirectionDown){
             if ([self.tableView.backgroundColor isEqual:[UIColor frescoBackgroundColorDark]]) return;
-            
             self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+            [self.tableView dg_stopLoading];
+            
         }
         else {
             if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
@@ -369,6 +371,7 @@
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }
     }
+    
 }
 
 #pragma mark - Navigation
