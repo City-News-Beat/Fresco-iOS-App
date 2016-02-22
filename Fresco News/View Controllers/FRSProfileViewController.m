@@ -371,7 +371,6 @@
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }
     }
-    
 }
 
 #pragma mark - Navigation

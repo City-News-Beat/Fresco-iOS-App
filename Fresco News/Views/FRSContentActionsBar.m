@@ -80,10 +80,13 @@
     [self addSubview:self.repostLabel];
     
     self.repostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height)];
-    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+    [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"]  forState:UIControlStateNormal];
     [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateSelected];
     [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateHighlighted];
-    [self.repostButton addTarget:self action:@selector(handleRepostTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.repostButton addTarget:self action:@selector(handleRepostTapped)     forControlEvents:UIControlEventTouchUpInside];
+    [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDown];
+    [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
+    [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
     
 }
@@ -101,21 +104,35 @@
     
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
-    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+    [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"]        forState:UIControlStateNormal];
     [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateSelected];
     [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateHighlighted];
     self.likeButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.likeButton.contentMode = UIViewContentModeScaleAspectFit;
     [self.likeButton addTarget:self action:@selector(handleLikeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.likeButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDown];
+    [self.likeButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
+    [self.likeButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.likeButton];
 }
 
 -(void)handleRepostTapped{
+    if( [[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
+        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+    } else {
+        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+    }
     
+    [self bounceButton:self.repostButton];
 }
 
 -(void)handleLikeButtonTapped{
-    
+    if( [[self.likeButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"liked-heart"]]) {
+        [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+    } else {
+        [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+    }
+    [self bounceButton:self.likeButton];
 }
 
 -(void)handleActionButtonTapped{
@@ -128,12 +145,42 @@
     [self.actionButton setSizeWithSize:CGSizeMake(self.actionButton.frame.size.width, self.frame.size.height)];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+
+-(void)handleButtonSelected:(UIButton*)button{
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        button.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        
+    } completion:nil];
 }
-*/
+
+-(void)handleButtonDrag:(UIButton*)button{
+    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        button.transform = CGAffineTransformMakeScale(1, 1);
+        
+    } completion:nil];
+}
+
+
+-(void)bounceButton:(UIButton *)button{
+    [UIView animateWithDuration:0.125 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+        
+        button.transform = CGAffineTransformMakeScale(1.15, 1.15);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.125 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+            
+            button.transform = CGAffineTransformMakeScale(0.95, 0.95);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.125 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                button.transform = CGAffineTransformMakeScale(1, 1);
+                
+            } completion:nil];
+        }];
+    }];
+}
 
 @end
