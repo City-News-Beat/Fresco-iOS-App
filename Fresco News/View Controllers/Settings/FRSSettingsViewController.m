@@ -481,8 +481,8 @@
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:
-                    FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
-                    [self.navigationController pushViewController:disable animated:YES];
+//                    FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
+//                    [self.navigationController pushViewController:disable animated:YES];
                     self.navigationItem.title = @"";
                 {
                     
