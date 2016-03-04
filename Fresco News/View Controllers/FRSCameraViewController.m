@@ -756,24 +756,14 @@
 
 -(void)flashButtonTapped {
     
-    //    NSUserDefaults *flash = [NSUserDefaults standardUserDefaults];
-    //    [flash setObject:[NSNumber numberWithBool:self.flashIsOn]
-    //                         forKey:@"flashIsOn"];
-    //
-    //    NSUserDefaults *torch = [NSUserDefaults standardUserDefaults];
-    //    [torch setObject:[NSNumber numberWithBool:self.torchIsOn]
-    //                         forKey:@"torchIsOn"];
-    
     if (self.captureMode == FRSCaptureModeVideo){
         if (self.torchIsOn == NO) {
             [self torch:YES];
-            NSLog(@"torch enabled = %d", self.torchIsOn);
-            
+
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
             
         } else {
             [self torch:NO];
-            NSLog(@"torch disabled = %d", self.torchIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"torch-off"] forState:UIControlStateNormal];
             
@@ -782,13 +772,11 @@
     } else {
         if (self.flashIsOn == NO ) {
             [self flash:YES];
-            NSLog(@"flash enabled = %d", self.flashIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-on"] forState:UIControlStateNormal];
             
         } else {
             [self flash:NO];
-            NSLog(@"flash disabled = %d", self.flashIsOn);
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
             
@@ -929,11 +917,6 @@
     
     if (self.captureMode == FRSCaptureModePhoto){
         
-        
-        NSLog(@"self.currentOrientation = %ld", (long)self.currentOrientation);
-        
-        
-
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.captureVideoPreviewLayer.frame = smallPreviewFrame;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
@@ -944,13 +927,7 @@
         }];
     }
     else {
-        
-        //if portrait
-        //        if (self.currentOrientation == UIInterfaceOrientationPortrait) {
-//                    self.videoRotateIV.alpha = 1;
-//                    self.videoPhoneIV.alpha = 0.7;
-        //        }
-        
+
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.preview.frame = bigPreviewFrame;
             self.captureVideoPreviewLayer.frame = bigPreviewFrame;
@@ -975,7 +952,6 @@
             self.videoPhoneIV.alpha = 0.0;
         }
         
-        NSLog(@"landscapeLeft");
         angle = M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -990,7 +966,6 @@
         }];
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
-        NSLog(@"landscapeRight");
         
         if (self.captureMode == FRSCaptureModeVideo){
             [self animateVideoRotateHide];
@@ -1032,7 +1007,6 @@
             self.videoPhoneIV.alpha = 0.7;
         }
         
-        NSLog(@"portrait");
         labelWidth = self.captureVideoPreviewLayer.frame.size.width;
         [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.topContainer.alpha = 0;

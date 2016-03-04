@@ -191,7 +191,6 @@
     self.tag = button.tag;
     [[NSUserDefaults standardUserDefaults] setInteger:self.tag forKey:@"selected-tag"];
 
-    NSLog(@"selectedTag = %ld", self.tag);
     switch (button.tag) {
         case 1:
             [[NSNotificationCenter defaultCenter] postNotificationName:@"selected-business-type" object:self.label1.text];

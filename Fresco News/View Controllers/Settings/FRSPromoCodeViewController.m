@@ -32,7 +32,7 @@
 }
 
 -(void)shareTapped{
-    NSLog(@"share");
+
 }
 
 -(void)configureLabels{

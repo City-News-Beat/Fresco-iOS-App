@@ -27,10 +27,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incomingNotification:) name:@"selected-business-type" object:nil];
     
-    
     NSInteger tag = [[NSUserDefaults standardUserDefaults] integerForKey:@"selected-tag"];
-    NSLog(@"tag = %ld", (long)tag);
-    
     
     switch (tag) {
         case 1:
@@ -168,7 +165,6 @@
                 case 0:
                     //Make custom editible cell
                     
-                    NSLog(@"self.businessType = %@", self.businessType);
                     if ([self.businessType  isEqual: @"Individual/Sole Proprietorship"]) {
                         [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
                     } else {

@@ -479,10 +479,8 @@
                     break;
                 case 1:
                     [self presentModalMailComposerViewController:YES];
-                    NSLog(@"email support");
                     break;
                 case 2:
-                    NSLog(@"disable account");
                     FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disable animated:YES];
                     self.navigationItem.title = @"";

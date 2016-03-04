@@ -244,7 +244,6 @@
 }
 
 -(void)search{
-    NSLog(@"search");
 
 }
 
