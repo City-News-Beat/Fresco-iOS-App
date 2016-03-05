@@ -10,6 +10,7 @@
 #import "FRSDateFormatter.h"
 #import <MagicalRecord/MagicalRecord.h>
 #import "FRSDataValidator.h"
+#import "FRSCoreData.h"
 
 @implementation FRSAssignment
 

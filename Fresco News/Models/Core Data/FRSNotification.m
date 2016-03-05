@@ -7,6 +7,7 @@
 //
 
 #import "FRSNotification.h"
+#import "FRSCoreData.h"
 
 @implementation FRSNotification
 

@@ -23,7 +23,9 @@
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSPost+CoreDataProperties.h"
 
-typedef void(^FRSCachePutCompletionBlock)(NSManagedObject *managedObject, NSManagedObjectContext *context, NSError *error);
+#import "FRSCoreData.h" // expected behavior of each managed object
+
+typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectContext *context, NSError *error);
 typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error);
 
 typedef enum {
@@ -45,6 +47,6 @@ typedef enum {
 // galleries / stories
 // highlights
 -(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion;
--(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSArray *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
+-(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
 
 @end

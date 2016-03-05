@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "FRSCoreData.h"
 
 @class FRSGallery, FRSPost, FRSStory;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSUser : NSManagedObject
+@interface FRSUser : NSManagedObject<FRSManagedObject>
 
 // Insert code here to declare functionality of your managed object subclass
 

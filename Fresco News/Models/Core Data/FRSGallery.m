@@ -11,6 +11,7 @@
 #import "FRSArticle.h"
 #import "FRSStory.h"
 #import "FRSUser.h"
+#import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"
 

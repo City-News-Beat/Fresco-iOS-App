@@ -405,6 +405,7 @@
 		D4F91A481C8B51500078BF15 /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAPIClient.m; sourceTree = "<group>"; };
 		D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPersistence.h; sourceTree = "<group>"; };
 		D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPersistence.m; sourceTree = "<group>"; };
+		D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCoreData.h; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E70F4BD91B9F87E500A765E0 /* WKImageRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKImageRowController.h; path = Galleries/WKImageRowController.h; sourceTree = "<group>"; };
 		E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKImageRowController.m; path = Galleries/WKImageRowController.m; sourceTree = "<group>"; };
@@ -884,6 +885,7 @@
 		6501D56E1C249612001F54EF /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				65135FDD1C286E1900839149 /* FRSArticle */,
 				65135FDE1C286E2200839149 /* FRSUser */,
 				65135FDF1C286E2700839149 /* FRSAssignment */,

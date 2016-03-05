@@ -19,15 +19,28 @@
 
 }
 
--(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSArray *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion {
-
-    __block __weak NSManagedObject *objectToReturn = Nil; // default value // unreadable
-    __block __weak NSManagedObjectContext *defaultContext = Nil; // store context
+-(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion {
+    
+    __block __strong Class managedObjectClass= [self managedObjectClassFromType:dataType];
+    __block __strong id<FRSManagedObject> objectToReturn = Nil; // default value // unreadable
+    __block __strong NSManagedObjectContext *defaultContext = Nil; // store context (weakly) for completion
+    
+    /* 
+        No real analysis needed at this level, pass everything upward
+     */
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         defaultContext = localContext;
         
+        if ([managedObjectClass instancesRespondToSelector:@selector(initWithProperties:)]) {
+            objectToReturn = [[managedObjectClass alloc] initWithProperties:dictionaryRepresentation];
+        }
+        
+        // what do we do if it doesn't conform? We'll see as come up
+        
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        objectToReturn = Nil;
+        managedObjectClass = Nil;
         completion(objectToReturn, defaultContext, error);
     }];
 }
