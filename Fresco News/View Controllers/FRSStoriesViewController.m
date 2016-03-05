@@ -6,13 +6,13 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
+#import "Fresco.h"
+
 #import "FRSStoriesViewController.h"
 #import "FRSSearchViewController.h"
 
 #import "FRSStoryCell.h"
 //#import "FRSDataManager.h"
-
-#import "FRSAPIClient.h"
 
 #import "FRSStory.h"
 

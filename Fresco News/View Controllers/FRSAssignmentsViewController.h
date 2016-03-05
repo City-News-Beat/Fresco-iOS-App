@@ -7,6 +7,7 @@
 //
 
 #import "FRSBaseViewController.h"
+#import "Fresco.h"
 
 @interface FRSAssignmentsViewController : FRSBaseViewController
 

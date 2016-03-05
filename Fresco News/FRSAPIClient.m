@@ -16,8 +16,11 @@
     
     [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(responseObject[@"data"], Nil);
         
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(Nil, error);
+
     }];
 }
 
@@ -27,13 +30,20 @@
  */
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    //AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     NSDictionary *params = @{
                              @"lat" :location[0],
                              @"lon" : location[1],
                              @"radius" : @(radius),
                              @"active" : @"true"
                             };
+    
+    
+    [self get:@"assignment/find" withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+    
+    /*
     
     [manager GET:@"assignment/find" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         if (responseObject[@"data"]){
@@ -44,7 +54,7 @@
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         if (!completion) return;
         completion(nil, error);
-    }];
+    }]; */
 }
 
  
@@ -90,7 +100,7 @@
 
 
 -(void)getGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+   // AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     //CHECK FOR RELEASE
     NSDictionary *params = @{
@@ -98,11 +108,16 @@
                              @"last_gallery_id" : offsetID
                              };
     
+    [self get:@"gallery/highlights" withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+    
+    /*
     [manager GET:@"gallery/highlights" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         
-    }];
+    }]; */
     
 }
 
@@ -115,7 +130,7 @@
 
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion{
     
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    //AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     NSDictionary *params = @{
                              @"limit" : @(limit),
@@ -123,6 +138,11 @@
                              @"offset" : @0
                              };
     
+    [self get:@"story/recent" withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+    
+    /*
     [manager GET:@"story/recent" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSDictionary *responseDict = (NSDictionary *)responseObject;
         if (!responseDict){
@@ -141,7 +161,7 @@
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(nil, error);
-    }];
+    }]; */
 }
 
 //NSString *path = @"https://api.fresconews.com/v1/story/recent";

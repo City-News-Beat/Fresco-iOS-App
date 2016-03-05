@@ -10,7 +10,6 @@
 #import "FRSTabBarController.h"
 
 #import "FRSLocationManager.h"
-#import "FRSAPIClient.h"
 
 #import "FRSAssignment.h"
 
