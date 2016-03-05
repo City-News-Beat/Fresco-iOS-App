@@ -6,8 +6,9 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @protocol FRSManagedObject
 @optional // don't want to force this for every data models
--(instancetype)initWithProperties:(NSDictionary *)properties;
+-(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 @end

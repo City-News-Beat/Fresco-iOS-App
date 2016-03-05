@@ -34,8 +34,7 @@
         
         if ([managedObjectClass instancesRespondToSelector:@selector(initWithProperties:)]) { // auto setup (please)
             
-            objectToReturn = [[managedObjectClass alloc] initWithProperties:dictionaryRepresentation];
-            
+            objectToReturn = [[managedObjectClass alloc] initWithProperties:dictionaryRepresentation context:localContext];
         }
         else {
             
