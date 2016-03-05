@@ -22,7 +22,7 @@
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion {
     
     __block __strong Class managedObjectClass= [self managedObjectClassFromType:dataType];
-    __block __strong id<FRSManagedObject> objectToReturn = Nil; // default value // unreadable
+    __block __strong id<FRSManagedObject, NSObject> objectToReturn = Nil; // default value // unreadable
     __block __strong NSManagedObjectContext *defaultContext = Nil; // store context (weakly) for completion
     
     /* 
@@ -32,16 +32,38 @@
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         defaultContext = localContext;
         
-        if ([managedObjectClass instancesRespondToSelector:@selector(initWithProperties:)]) {
+        if ([managedObjectClass instancesRespondToSelector:@selector(initWithProperties:)]) { // auto setup (please)
+            
             objectToReturn = [[managedObjectClass alloc] initWithProperties:dictionaryRepresentation];
+            
+        }
+        else {
+            
+            objectToReturn = [[managedObjectClass alloc] init]; // boring old subclass
+            
+            for (NSString *key in [dictionaryRepresentation allKeys]) {
+                
+                NSString *useableKey = [key capitalizedString];
+                useableKey = [useableKey stringByReplacingOccurrencesOfString:@" " withString:@""];
+
+                if ([managedObjectClass instancesRespondToSelector:NSSelectorFromString(useableKey)]) {
+                    
+                    id valueForKey = [dictionaryRepresentation objectForKey:key];
+                    
+                    if (valueForKey && [managedObjectClass instancesRespondToSelector:NSSelectorFromString(useableKey)]) {
+                        [objectToReturn performSelector:@selector(setValue:forKey:) withObject:useableKey withObject:valueForKey];
+                    }
+                }
+            }
         }
         
-        // what do we do if it doesn't conform? We'll see as come up
-        
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        completion(objectToReturn, defaultContext, error);
+        
+        // reference count
         objectToReturn = Nil;
         managedObjectClass = Nil;
-        completion(objectToReturn, defaultContext, error);
+        defaultContext = Nil;
     }];
 }
                    
