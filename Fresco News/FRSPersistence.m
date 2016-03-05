@@ -14,10 +14,28 @@
 
 @implementation FRSPersistence
 
+
+/*
+    Generic top level block that just makes us not have to work with MagicalRecord elsewhere
+ */
+-(void)executeModification:(FRSCacheModifyBlock)modification completion:(FRSCacheModifyCompletionBlock)completion {
+    [MagicalRecord saveWithBlock:modification completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        completion(error, contextDidSave);
+    }];
+}
+
+/*
+    Pull from cache, need to add index, sorting, and filtering
+ */
+
 -(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion {
 
 
 }
+
+/*
+    Designed specifically to create a core data entry for each object type based on its dictionary representation
+ */
 
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion {
     
@@ -57,7 +75,7 @@
         }
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        completion(objectToReturn, defaultContext, error);
+        completion(objectToReturn, defaultContext, error, contextDidSave);
         
         // reference count
         objectToReturn = Nil;

@@ -25,8 +25,11 @@
 
 #import "FRSCoreData.h" // expected behavior of each managed object
 
-typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectContext *context, NSError *error);
-typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error);
+typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectContext *context, NSError *error, BOOL success);
+typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success);
+typedef void(^FRSCacheModifyCompletionBlock)(NSError *error, BOOL success);
+
+typedef void(^FRSCacheModifyBlock)(NSManagedObjectContext * localContext);
 
 typedef enum {
     FRSManagedObjectTypeArticle,
@@ -48,5 +51,6 @@ typedef enum {
 // highlights
 -(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion;
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
+-(void)executeModification:(FRSCacheModifyBlock)modification completion:(FRSCacheModifyCompletionBlock)completion;
 
 @end
