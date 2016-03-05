@@ -11,6 +11,9 @@
 
 @implementation FRSAPIClient
 
+/*
+    Generic GET request against api BASE url + endpoint, with parameters
+ */
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
@@ -24,10 +27,17 @@
     }];
 }
 
-
-/*
-    Were we seriously planning on re-writing the same code over and over for each endpoint?
- */
+-(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    
+    [manager POST:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        completion(responseObject[@"data"], Nil);
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(Nil, error);
+    }];
+}
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
@@ -88,9 +98,8 @@
 
 
 -(void)getGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
-   // AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
-    //CHECK FOR RELEASE
+    //CHECK FOR RELEASE (FROM DAN)
     NSDictionary *params = @{
                              @"limit" : @(limit),
                              @"last_gallery_id" : offsetID
@@ -115,7 +124,7 @@
     NSDictionary *params = @{
                              @"limit" : @(limit),
                              @"notags" : @"true",
-                             @"offset" : @0
+                             @"offset" : (offsetID != Nil) ? offsetID : [NSNumber numberWithInteger:0]
                              };
     
     [self get:@"story/recent" withParameters:params completion:^(id responseObject, NSError *error) {
