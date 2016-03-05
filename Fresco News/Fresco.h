@@ -7,5 +7,4 @@
 //
 
 #import "FRSAppConstants.h"
-
 #import "FRSAPIClient.h" // change this class structure up
