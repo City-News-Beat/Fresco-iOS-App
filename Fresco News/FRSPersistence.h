@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+typedef void(^FRSCachePutCompletionBlock)(NSManagedObject *managedObject, NSManagedObjectContext *context, NSError *error);
+typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error);
 
 @interface FRSPersistence : NSObject
-
+{
+    
+}
 @end
