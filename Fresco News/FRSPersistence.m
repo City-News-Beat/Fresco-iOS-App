@@ -28,10 +28,32 @@
     Pull from cache, need to add index, sorting, and filtering
  */
 
--(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion {
-
-
+-(void)pullCacheWithType:(FRSManagedObjectType)dataType predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor *)sort completion:(FRSCachePullCompletionBlock)completion {
+    
+    __block NSArray *pulledFromCache;
+    __block NSManagedObjectContext *currentContext;
+    
+    [self executeModification:^(NSManagedObjectContext *localContext) {
+        
+        // save context for later
+        currentContext = localContext;
+        
+        // set up fetch request
+        // set type to correct type
+        // add predicate to fetch request
+        // add sort descriptor to fetch request
+        
+        // perform fetch
+        // completion with results
+        
+        // save output to [pulledFromCache]
+        // faults or no faults on returned objects?
+        
+    } completion:^(NSError *error, BOOL success) {
+        completion(pulledFromCache, currentContext, error, success);
+    }];
 }
+
 
 /*
     Designed specifically to create a core data entry for each object type based on its dictionary representation

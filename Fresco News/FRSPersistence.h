@@ -49,7 +49,7 @@ typedef enum {
 
 // galleries / stories
 // highlights
--(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion;
+-(void)pullCacheWithType:(FRSManagedObjectType)dataType predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor *)sort completion:(FRSCachePullCompletionBlock)completion;
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
 -(void)executeModification:(FRSCacheModifyBlock)modification completion:(FRSCacheModifyCompletionBlock)completion;
 
