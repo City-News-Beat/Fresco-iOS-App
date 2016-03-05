@@ -37,7 +37,7 @@
 
 -(void)configureText{
     CGFloat screenWidth = self.bounds.size.width;
-    CGFloat offset;
+    CGFloat offset = 138; // default
     
     if (IS_IPHONE_5){
         offset = 138;
@@ -46,6 +46,7 @@
     } else if (IS_STANDARD_IPHONE_6_PLUS) {
         offset = 172;
     }
+
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(screenWidth/2 - 144, offset, 288, 67)];
     [self addSubview:container];
@@ -78,7 +79,7 @@
     CGFloat xOrigin = 67.7;
     CGFloat yOrigin = 52.3;
     
-    CGFloat offset;
+    CGFloat offset = 138; // default
     
     if (IS_IPHONE_5){
         width = 160;

@@ -11,6 +11,21 @@
 
 @implementation FRSAPIClient
 
+-(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    
+    [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        
+    }];
+}
+
+
+/*
+    Were we seriously planning on re-writing the same code over and over for each endpoint?
+ */
+
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     NSDictionary *params = @{
@@ -18,7 +33,7 @@
                              @"lon" : location[1],
                              @"radius" : @(radius),
                              @"active" : @"true"
-                             };
+                            };
     
     [manager GET:@"assignment/find" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         if (responseObject[@"data"]){

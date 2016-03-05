@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UILabel+Custom.h"
 @class FRSGallery;
 
 

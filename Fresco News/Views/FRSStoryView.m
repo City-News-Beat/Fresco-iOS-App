@@ -156,7 +156,7 @@
     [self addSubview:self.actionBar];
 }
 
-#pragma mark - Action Bar Deletate
+#pragma mark - Action Bar Delete
 
 -(NSString *)titleForActionButton{
     return @"READ MORE";

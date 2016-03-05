@@ -11,5 +11,5 @@
 @interface UILabel (Custom)
 
 +(UILabel *)labelWithText:(NSString *)text textColor:(UIColor *)textColor font:(UIFont *)font;
-
+-(void)enableDropShadow:(BOOL)shouldShadow;
 @end
