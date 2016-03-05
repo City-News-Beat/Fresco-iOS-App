@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSPersistence.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
