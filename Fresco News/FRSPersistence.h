@@ -27,11 +27,6 @@ typedef void(^FRSCachePutCompletionBlock)(NSManagedObject *managedObject, NSMana
 typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error);
 
 typedef enum {
-    FRSDataStoreTypeHighlights,
-    FRSDataStoreTypeStories
-} FRSDataStoreType;
-
-typedef enum {
     FRSManagedObjectTypeArticle,
     FRSManagedObjectTypeUser,
     FRSManagedObjectTypeAssignment,
@@ -49,6 +44,7 @@ typedef enum {
 
 // galleries / stories
 // highlights
--(NSArray *)pullCacheWithType:(FRSDataStoreType)dataType completion:(FRSCachePullCompletionBlock)completion;
--(NSArray *)pushCacheWithType:(FRSDataStoreType)dataType objects:(NSArray *)managedObjects completion:(FRSCachePutCompletionBlock)completion;
+-(void)pullCacheWithType:(FRSManagedObjectType)dataType completion:(FRSCachePullCompletionBlock)completion;
+-(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSArray *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
+
 @end
