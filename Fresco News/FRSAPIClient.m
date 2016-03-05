@@ -30,7 +30,7 @@
  */
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
-    //AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+
     NSDictionary *params = @{
                              @"lat" :location[0],
                              @"lon" : location[1],
@@ -43,18 +43,6 @@
         completion(responseObject, error);
     }];
     
-    /*
-    
-    [manager GET:@"assignment/find" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        if (responseObject[@"data"]){
-            
-            if (!completion) return;
-            completion(responseObject[@"data"], nil);
-        }
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        if (!completion) return;
-        completion(nil, error);
-    }]; */
 }
 
  
@@ -111,14 +99,6 @@
     [self get:@"gallery/highlights" withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-    
-    /*
-    [manager GET:@"gallery/highlights" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        
-    }]; */
-    
 }
 
 -(void)getRecentGalleriesFromLastGalleryID:(NSString *)galleryID completion:(void(^)(NSArray *galleries, NSError *error))completion{
@@ -141,27 +121,6 @@
     [self get:@"story/recent" withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-    
-    /*
-    [manager GET:@"story/recent" parameters:params success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        NSDictionary *responseDict = (NSDictionary *)responseObject;
-        if (!responseDict){
-            completion(nil, nil);
-            return;
-        }
-        
-        NSArray *stories = responseDict[@"data"];
-        
-        if (!stories.count){
-            completion(nil, nil);
-            return;
-        }
-        
-        completion(stories, nil);
-        
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        completion(nil, error);
-    }]; */
 }
 
 //NSString *path = @"https://api.fresconews.com/v1/story/recent";
