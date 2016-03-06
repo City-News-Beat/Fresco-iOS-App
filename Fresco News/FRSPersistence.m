@@ -84,6 +84,7 @@
                 
                 NSString *useableKey = [key capitalizedString];
                 useableKey = [useableKey stringByReplacingOccurrencesOfString:@" " withString:@""];
+                useableKey = [useableKey stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[useableKey substringToIndex:1]];
 
                 if ([managedObjectClass instancesRespondToSelector:NSSelectorFromString(useableKey)]) {
                     
