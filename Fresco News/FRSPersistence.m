@@ -106,6 +106,39 @@
         defaultContext = Nil;
     }];
 }
+
+/*
+    Bulk object creation
+ */
+
+
+-(void)createManagedObjectsWithType:(FRSManagedObjectType)dataType objects:(NSArray *)objects completion:(FRSCacheBulkPutCompletionBlock)completion {
+    
+    __block NSInteger toComplete = [objects count];
+    __block NSInteger completed = 0;
+    
+    __block NSMutableArray *completedManagedObjects = [[NSMutableArray alloc] init];
+    __block NSMutableArray *errors = [[NSMutableArray alloc] init];
+        
+    for (NSDictionary *properties in objects) {
+        [self createManagedObjectWithType:dataType properties:properties completion:^(id managedObject, NSManagedObjectContext *context, NSError *error, BOOL success) {
+            
+            if (!success || error) {
+                [errors addObject:error];
+            }
+            
+            if (managedObject) {
+                [completedManagedObjects addObject:managedObject];
+            }
+            
+            completed++;
+            
+            if (toComplete == completed) {
+                completion(completedManagedObjects, context, errors, ([errors count] == 0));
+            }
+        }];
+    }
+}
                    
 -(Class)managedObjectClassFromType:(FRSManagedObjectType)objectType {
     

@@ -29,6 +29,8 @@ typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectConte
 typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success);
 typedef void(^FRSCacheModifyCompletionBlock)(NSError *error, BOOL success);
 
+typedef void(^FRSCacheBulkPutCompletionBlock)(NSArray *managedObjects, NSManagedObjectContext *context, NSArray *errors, BOOL completeSuccess);
+
 typedef void(^FRSCacheModifyBlock)(NSManagedObjectContext * localContext);
 
 typedef enum {
@@ -52,5 +54,7 @@ typedef enum {
 -(void)pullCacheWithType:(FRSManagedObjectType)dataType predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor *)sort completion:(FRSCachePullCompletionBlock)completion;
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
 -(void)executeModification:(FRSCacheModifyBlock)modification completion:(FRSCacheModifyCompletionBlock)completion;
+
+-(void)createManagedObjectsWithType:(FRSManagedObjectType)dataType objects:(NSArray *)objects completion:(FRSCacheBulkPutCompletionBlock)completion;
 
 @end
