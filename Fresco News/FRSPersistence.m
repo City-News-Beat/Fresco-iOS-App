@@ -57,6 +57,8 @@
 
 /*
     Designed specifically to create a core data entry for each object type based on its dictionary representation
+ 
+    *note* move from MagicalRecord to [self executeModification:^(){}];
  */
 
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion {
@@ -119,7 +121,7 @@
     
     __block NSMutableArray *completedManagedObjects = [[NSMutableArray alloc] init];
     __block NSMutableArray *errors = [[NSMutableArray alloc] init];
-        
+    
     for (NSDictionary *properties in objects) {
         [self createManagedObjectWithType:dataType properties:properties completion:^(id managedObject, NSManagedObjectContext *context, NSError *error, BOOL success) {
             
