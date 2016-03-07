@@ -48,6 +48,11 @@
 
 @implementation FRSStoryView
 
+
+-(void)handleActionButtonTapped {
+    
+}
+
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     
