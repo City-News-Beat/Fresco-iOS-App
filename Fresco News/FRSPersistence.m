@@ -75,7 +75,6 @@
         
         completion(results, localContext, Nil, TRUE);
         
-        
         // set up fetch request
         // set type to correct type
         // add predicate to fetch request

@@ -113,17 +113,24 @@
 
 -(void)configureDataSource{
     
-    // local call
+  /*  // local call
     [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
-        NSLog(@"%@", results);
+        
+        __block __strong NSMutableArray *cacheResults = [[NSMutableArray alloc] init];
+        
+        for (__strong id result in results) {
+            [cacheResults addObject:result];
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.dataSource = [results copy];
+            self.highlights = [cacheResults copy];
+            self.dataSource = [self.highlights copy];
             [self.tableView reloadData];
         });
 
     }];
-    return;
+    return;*/
+    
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
         
@@ -161,6 +168,7 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSLog(@"CD %@", self.dataSource);
     return self.dataSource.count;
 }
 
