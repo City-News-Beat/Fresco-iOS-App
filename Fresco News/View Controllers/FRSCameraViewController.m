@@ -188,7 +188,6 @@
     
     [UIView beginAnimations:@"fade-statusbar" context:nil];
     [UIView setAnimationDuration:0.3];
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     [UIView commitAnimations];
     

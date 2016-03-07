@@ -47,6 +47,8 @@
     
     [self configureUI];
     [self fetchStories];
+    
+    self.view.backgroundColor = [UIColor redColor];
 }
 
 
@@ -62,7 +64,9 @@
     [super viewWillAppear:animated];
     
     
-    if (!self.firstTime) [self fetchStories];
+//    if (!self.firstTime){
+        [self fetchStories];
+//    }
     
     self.firstTime = NO;
 }
