@@ -102,7 +102,8 @@
     return [UIImage imageNamed:@"search-icon"];
 }
 
--(void)configureTableView{
+-(void)configureTableView
+{
     [super configureTableView];
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64- 49);
     self.tableView.delegate = self;
@@ -112,7 +113,18 @@
 
 -(void)configureDataSource{
     
-    
+    // local call
+    [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
+        NSLog(@"%@", results);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.dataSource = [results copy];
+            [self.tableView reloadData];
+        });
+
+    }];
+    return;
+    // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
         
         if ([galleries count] == 0){
@@ -122,39 +134,30 @@
         NSMutableArray *mArr = [NSMutableArray new];
         
         for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
-            [mArr addObject:gallery];
+            [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
+                FRSGallery *gallery = [FRSGallery MR_findFirstByAttribute:@"uid" withValue:dict[@"_id"]];
+                
+                if (!gallery) {
+                    gallery = [FRSGallery MR_createEntityInContext:localContext];
+                    [gallery configureWithDictionary:dict context:localContext];
+                    [mArr addObject:gallery];
+                }
+                else {
+                    [mArr addObject:gallery];
+                }
+                
+            } completion:^(NSError *error, BOOL success) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([mArr count] == 12) {
+                        self.dataSource = [mArr copy];
+                        [self.tableView reloadData];
+                    }
+                });
+            }];
         }
-        
-        self.highlights = [mArr copy];
-        self.dataSource = [self.highlights copy];
-        [self.tableView reloadData];
- 
     }];
-    
-    
-    /* [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
-        if (!responseObject.count){
-            return;
-        }
-        
-        NSMutableArray *mArr = [NSMutableArray new];
-        
-        NSArray *galleries = responseObject;
-        for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
-            [mArr addObject:gallery];
-        }
-        
-        self.highlights = [mArr copy];
-        self.dataSource = [self.highlights copy];
-        [self.tableView reloadData];
-    }];*/
 }
-
-
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

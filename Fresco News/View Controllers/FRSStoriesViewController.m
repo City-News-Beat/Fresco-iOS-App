@@ -153,6 +153,9 @@
                     [story configureWithDictionary:storyDict];
                     [initialStoriesArray addObject:story];
                 }
+                else {
+                    [initialStoriesArray addObject:story];
+                }
                 
             } completion:^(NSError *error, BOOL success) {
                 

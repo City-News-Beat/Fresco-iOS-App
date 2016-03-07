@@ -16,10 +16,12 @@
 #import "FRSDateFormatter.h"
 
 #import "FRSDataValidator.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @import UIKit;
 
 @implementation FRSGallery
+@synthesize currentContext = _currentContext;
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.uid = dict[@"_id"];
@@ -31,17 +33,37 @@
     [self addArticlesWithArray:dict[@"articles"]];
 }
 
+-(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
+    _currentContext = context;
+    [self configureWithDictionary:dict];
+}
+
 -(void)addPostsWithArray:(NSArray *)posts{
     for (NSDictionary *dict in posts){
-        FRSPost *post = [FRSPost postWithDictionary:dict];
-        [self addPostsObject:post];
+        
+        if (_currentContext) {
+            FRSPost *post = [FRSPost MR_createEntityInContext:_currentContext];
+            [post configureWithDictionary:dict];
+            [self addPostsObject:post];
+        }
+        else {
+            FRSPost *post = [FRSPost postWithDictionary:dict];
+            [self addPostsObject:post];
+        }
     }
 }
 
 -(void)addArticlesWithArray:(NSArray *)articles{
     for (NSDictionary * dict in articles){
-        FRSArticle *article = [FRSArticle articleWithDictionary:dict];
-        [self addArticlesObject:article];
+        if (_currentContext) {
+            FRSArticle *article = [FRSArticle MR_createEntityInContext:_currentContext];
+            [article configureWithDictionary:dict];
+            [self addArticlesObject:article];
+        }
+        else {
+            FRSArticle *article = [FRSArticle articleWithDictionary:dict];
+            [self addArticlesObject:article];
+        }
     }
     
 }

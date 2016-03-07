@@ -18,8 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Insert code here to declare functionality of your managed object subclass
 -(void)configureWithDictionary:(NSDictionary *)dict;
+-(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
 
 -(NSInteger)heightForGallery;
+@property (nonatomic, weak) NSManagedObjectContext *currentContext;
 
 @end
 

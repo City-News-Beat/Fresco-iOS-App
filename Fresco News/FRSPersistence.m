@@ -70,6 +70,12 @@
         // save context for later
         currentContext = localContext;
         
+        Class objectClass = [self managedObjectClassFromType:dataType];
+        NSArray *results = [objectClass MR_findAllInContext:localContext];
+        
+        completion(results, localContext, Nil, TRUE);
+        
+        
         // set up fetch request
         // set type to correct type
         // add predicate to fetch request
