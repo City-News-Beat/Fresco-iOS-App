@@ -134,6 +134,8 @@
 
 -(void)fetchStories{
     
+    __block NSMutableArray *initialStoriesArray = [[NSMutableArray alloc] init];
+
     [[FRSAPIClient new] fetchStoriesWithLimit:10 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
@@ -141,16 +143,18 @@
             return;
         }
         
-        NSMutableArray *mArr = [NSMutableArray new];
-        
         for (NSDictionary *storyDict in stories){
-            FRSStory *story = [FRSStory MR_createEntity];
-            [story configureWithDictionary:storyDict];
-            [mArr addObject:story];
+            __block FRSStory *story;
+            
+            [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
+                story = [FRSStory MR_createEntityInContext:localContext];
+                [story configureWithDictionary:storyDict];
+                [initialStoriesArray addObject:story];
+            } completion:^(NSError *error, BOOL success) {
+                self.stories = [initialStoriesArray copy];
+                [self.tableView reloadData];
+            }];
         }
-        
-        self.stories = [mArr copy];
-        [self.tableView reloadData];
     }];
 }
 

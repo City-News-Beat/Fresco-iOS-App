@@ -55,6 +55,13 @@ typedef enum {
 
 -(void)createManagedObjectsWithType:(FRSManagedObjectType)dataType objects:(NSArray *)objects completion:(FRSCacheBulkPutCompletionBlock)completion;
 
+/*
+    Cache top level stories, flush afterwords
+ */
+
+-(void)cacheHighlight:(FRSCacheModifyBlock)cacheBlock completion:(FRSCachePutCompletionBlock)completion;
+-(void)flushHighlightCache:(FRSCacheModifyBlock)completion;
+
 +(instancetype)defaultStore;
 
 @end

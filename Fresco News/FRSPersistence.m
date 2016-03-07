@@ -15,6 +15,23 @@
 @implementation FRSPersistence
 
 
+#pragma mark Highlight-Cache
+
+-(void)cacheHighlight:(FRSCacheModifyBlock)cacheBlock completion:(FRSCachePutCompletionBlock)completion {
+   
+    [self executeModification:^(NSManagedObjectContext *localContext) {
+        FRSGallery *gallery = [FRSGallery MR_findFirstByAttribute:@"FirstName"
+                                               withValue:@"Forrest"];
+
+    } completion:^(NSError *error, BOOL success) {
+        
+    }];
+}
+
+-(void)flushHighlightCache:(FRSCacheModifyBlock)completion {
+    
+}
+
 /*
     Generic top level block that just makes us not have to work with MagicalRecord elsewhere
  */

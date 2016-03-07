@@ -114,7 +114,7 @@
                              @"limit" : @(limit),
                              @"notags" : @"true",
                              @"offset" : (offsetID != Nil) ? offsetID : [NSNumber numberWithInteger:0]
-                             };
+                            };
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
