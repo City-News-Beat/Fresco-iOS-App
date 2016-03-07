@@ -129,21 +129,6 @@
 @end
 
 @implementation FRSCameraViewController
-//
-//-(instancetype)init{
-//    self = [super init];
-//    if (self){
-//        self.sessionManager = [FRSAVSessionManager defaultManager];
-//        self.locationManager = [FRSLocationManager sharedManager];
-////        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
-//        self.currentOrientation = [UIDevice currentDevice].orientation;
-//
-//        self.firstTimeAni = YES;
-//        self.firstTime = YES;
-//
-//    }
-//    return self;
-//}
 
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode{
     self = [super init];
@@ -152,7 +137,7 @@
         self.locationManager = [FRSLocationManager sharedManager];
 //        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
-//        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
+        //        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
         self.firstTimeAni = YES;
@@ -201,19 +186,23 @@
         }];
     }
     
+    [UIView beginAnimations:@"fade-statusbar" context:nil];
+    [UIView setAnimationDuration:0.3];
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    [UIView commitAnimations];
+    
     self.motionManager = [[CMMotionManager alloc] init];
     [self startTrackingMovement];
-    
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
+
     [self fadeInPreview];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    
 }
+
 
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -228,24 +217,23 @@
     
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
+    
 }
 
 
 -(void)fadeInPreview{
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [UIView animateWithDuration:0.2 animations:^{
-            self.preview.alpha = 1.0;
-        }];
+        //        [UIView animateWithDuration:0.2 animations:^{
+        self.preview.alpha = 1.0;
+        //        }];
         
     });
 }
 
-
 #pragma mark - UI configuration methods
 
 -(void)configureUI{
-    
     [self configurePreview];
     [self configureBottomContainer];
     [self configureTopContainer];
@@ -309,7 +297,17 @@
 //    
 //    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewButton.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
 //        if (!result){
-//            self.previewBackgroundIV.alpha = 0;
+//            //            self.previewBackgroundIV.alpha = 0;
+//            
+//            UIImageView *browser = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-browser"]];
+//            browser.frame = CGRectMake(self.previewBackgroundIV.frame.size.width/2 - 12, self.previewBackgroundIV.frame.size.height/2 - 12, 24, 24);
+//            [self.previewBackgroundIV addSubview:browser];
+//            
+//            self.previewBackgroundIV.layer.shadowOpacity = 0;
+//            self.previewBackgroundIV.layer.shadowColor = [UIColor clearColor].CGColor;
+//            [self.previewBackgroundIV addDropShadowWithColor:[UIColor clearColor] path:nil];
+//            self.previewButton.layer.shadowOpacity = 0;
+//            
 //        }
 //        else {
 //            self.previewBackgroundIV.alpha = 1.0;
@@ -322,8 +320,8 @@
 //    }];
 }
 
-- (void)dismissAndReturnToPreviousTab
-{
+- (void)dismissAndReturnToPreviousTab {
+    
 //    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
@@ -1497,12 +1495,12 @@
                     
 //                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
 //                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
-                    
+//                    
 //                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
-                    
+//                    
 //                            [self updatePreviewButtonWithImage:result];
 //                        }];
-                    
+//                    
 //                        cleanup();
 //                    }];
                     
@@ -1674,10 +1672,10 @@
         [self toggleVideoRecording];
     }
     
-//    BaseNavigationController *navVC = [[BaseNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
-    
+//    FRSNavigationController *navVC = [[FRSNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
+//    
 //    navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
+//    
 //    [self presentViewController:navVC animated:NO completion:nil];
 }
 

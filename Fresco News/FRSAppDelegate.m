@@ -9,14 +9,15 @@
 #import "FRSAppDelegate.h"
 
 #import "FRSTabBarController.h"
+
 #import "FRSOnboardingViewController.h"
 
 #import "FRSSettingsViewController.h"
 
 #import "FRSNavigationController.h"
 
-
 #import "FRSSignUpViewController.h"
+
 #import "FRSSetupProfileViewController.h"
 
 #import "FRSProfileViewController.h"
@@ -24,6 +25,8 @@
 #import "FRSLocationManager.h"
 
 #import <MagicalRecord/MagicalRecord.h>
+
+#import "FRSCameraViewController.h"
 
 @implementation FRSAppDelegate
 
@@ -40,6 +43,7 @@
     self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
 
+//    self.window.rootViewController = [[FRSCameraViewController alloc] init];
 //    [self determineAppPath];
 //    self.window.rootViewController = [[FRSTabBarController alloc] init];
 
