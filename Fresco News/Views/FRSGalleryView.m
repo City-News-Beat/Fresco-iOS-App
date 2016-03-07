@@ -70,6 +70,10 @@
 }
 */
 
+-(void)handleActionButtonTapped {
+    // show actions sheet
+}
+
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     if (self){
@@ -221,7 +225,6 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    //[self.nameLabel enableDropShadow:YES];
     [self addSubview:self.nameLabel];
 }
 
