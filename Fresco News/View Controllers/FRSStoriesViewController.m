@@ -47,8 +47,6 @@
     
     [self configureUI];
     [self fetchStories];
-    
-    self.view.backgroundColor = [UIColor redColor];
 }
 
 
@@ -64,9 +62,7 @@
     [super viewWillAppear:animated];
     
     
-//    if (!self.firstTime){
-        [self fetchStories];
-//    }
+    if (!self.firstTime) [self fetchStories];
     
     self.firstTime = NO;
 }
@@ -75,27 +71,27 @@
 
 -(void)configureNavigationBar{
     
-//    [super configureNavigationBar];
+    //    [super configureNavigationBar];
     [super removeNavigationBarLine];
     self.navigationItem.title = @"STORIES";
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     
     
-//    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
-//    self.searchTextField.tintColor = [UIColor whiteColor];
-//    self.searchTextField.alpha = 0;
-//    self.searchTextField.delegate = self;
-//    self.searchTextField.textColor = [UIColor whiteColor];
-//    self.searchTextField.returnKeyType = UIReturnKeySearch;
-//    [navBar addSubview:self.searchTextField];
+    //    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
+    //    self.searchTextField.tintColor = [UIColor whiteColor];
+    //    self.searchTextField.alpha = 0;
+    //    self.searchTextField.delegate = self;
+    //    self.searchTextField.textColor = [UIColor whiteColor];
+    //    self.searchTextField.returnKeyType = UIReturnKeySearch;
+    //    [navBar addSubview:self.searchTextField];
 }
 
 
 
 -(void)configurePullToRefresh{
     [super removeNavigationBarLine];
-
+    
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
     
@@ -137,6 +133,7 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchStories{
+    
     
     [[FRSAPIClient new] fetchStoriesWithLimit:10 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
         if (!stories.count){
@@ -203,25 +200,5 @@
     [cell configureCell];
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end
