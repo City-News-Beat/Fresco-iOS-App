@@ -17,7 +17,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
-
 #pragma mark - Stories
 
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion;

@@ -8,6 +8,7 @@
 
 #import "FRSAPIClient.h"
 #import <AFNetworking/AFNetworking.h>
+#import "Fresco.h"
 
 @implementation FRSAPIClient
 
@@ -49,7 +50,7 @@
                             };
     
     
-    [self get:@"assignment/find" withParameters:params completion:^(id responseObject, NSError *error) {
+    [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
     
@@ -105,7 +106,7 @@
                              @"last_gallery_id" : offsetID
                              };
     
-    [self get:@"gallery/highlights" withParameters:params completion:^(id responseObject, NSError *error) {
+    [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -127,7 +128,7 @@
                              @"offset" : (offsetID != Nil) ? offsetID : [NSNumber numberWithInteger:0]
                              };
     
-    [self get:@"story/recent" withParameters:params completion:^(id responseObject, NSError *error) {
+    [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
