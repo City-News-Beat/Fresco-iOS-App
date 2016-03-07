@@ -69,7 +69,6 @@
 
 
 -(void)clear{
-    NSLog(@"clear textfield");
     self.searchTextField.text = @"";
 }
 

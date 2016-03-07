@@ -156,11 +156,9 @@
 
 -(void)logIn{
     //Gets called but does not always fade the titleLabel
-    NSLog(@"logIn");
 }
 
 -(void)signUp{
-    NSLog(@"signUp");
 }
 
 

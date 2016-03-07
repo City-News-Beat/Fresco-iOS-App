@@ -337,7 +337,6 @@
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
     
     CGFloat percentCompleted = ABS(amtScrolled) / halfScroll;
-    NSLog(@"percent completed %f", percentCompleted);
     
     if (percentCompleted > 1.0 && percentCompleted < 3.0) {
         self.nameLabel.alpha = 0;
@@ -360,7 +359,6 @@
     self.pageControl.currentPage = page;
     
     self.currentPage = page;
-    NSLog(@"self.currentPage = %ld", self.currentPage);
     
 }
 
@@ -387,9 +385,7 @@
     return averageHeight;
 }
 
--(void)galleryTapped{
-    NSLog(@"gallery tapped");
-    
+-(void)galleryTapped{    
     
     self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 

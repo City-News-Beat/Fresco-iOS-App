@@ -71,27 +71,27 @@
 
 -(void)configureNavigationBar{
     
-//    [super configureNavigationBar];
+    //    [super configureNavigationBar];
     [super removeNavigationBarLine];
     self.navigationItem.title = @"STORIES";
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     
     
-//    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
-//    self.searchTextField.tintColor = [UIColor whiteColor];
-//    self.searchTextField.alpha = 0;
-//    self.searchTextField.delegate = self;
-//    self.searchTextField.textColor = [UIColor whiteColor];
-//    self.searchTextField.returnKeyType = UIReturnKeySearch;
-//    [navBar addSubview:self.searchTextField];
+    //    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
+    //    self.searchTextField.tintColor = [UIColor whiteColor];
+    //    self.searchTextField.alpha = 0;
+    //    self.searchTextField.delegate = self;
+    //    self.searchTextField.textColor = [UIColor whiteColor];
+    //    self.searchTextField.returnKeyType = UIReturnKeySearch;
+    //    [navBar addSubview:self.searchTextField];
 }
 
 
 
 -(void)configurePullToRefresh{
     [super removeNavigationBarLine];
-
+    
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
     
@@ -137,6 +137,7 @@
     __block int const numToFetch = 12;
     
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");
@@ -215,25 +216,5 @@
     [cell configureCell];
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end

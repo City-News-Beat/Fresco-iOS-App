@@ -8,6 +8,7 @@
 
 #import "FRSScrollingViewController.h"
 #import "FRSBaseViewController.h"
+#import "FRSDataManager.h"
 
 @interface FRSStoriesViewController : FRSScrollingViewController
 

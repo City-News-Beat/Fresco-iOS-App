@@ -31,6 +31,9 @@
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
 
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property BOOL contentIsEmpty;
+
 
 @end
 
@@ -57,6 +60,10 @@
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
+    
+//    if (self.contentIsEmpty) {
+        [self configureSpinner];
+//    }
 }
 
 -(void)addNotificationObservers{
@@ -64,6 +71,14 @@
 }
 
 #pragma mark - UI
+
+-(void)configureSpinner{
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
+    [self.view addSubview:self.spinner];
+    
+    [self.spinner startAnimating];
+}
 
 -(void)configurePullToRefresh{
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -140,6 +155,9 @@
         
         NSMutableArray *mArr = [NSMutableArray new];
         
+//        NSArray *galleries = responseObject;
+        [self.spinner stopAnimating];
+
         for (NSDictionary *dict in galleries){
             [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
                 FRSGallery *gallery = [FRSGallery MR_findFirstByAttribute:@"uid" withValue:dict[@"_id"]];
@@ -279,7 +297,6 @@
 }
 
 -(void)search{
-    NSLog(@"search");
 
 }
 
