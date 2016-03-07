@@ -18,4 +18,8 @@
     return label;
 }
 
+-(void)enableDropShadow:(BOOL)shouldShadow {
+    // eh
+}
+
 @end

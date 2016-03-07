@@ -31,6 +31,11 @@
 
 @implementation FRSTabBarController
 
+
+-(void)returnToGalleryPost {
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

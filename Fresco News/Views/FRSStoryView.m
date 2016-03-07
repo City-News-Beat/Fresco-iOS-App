@@ -91,7 +91,7 @@
     if (self.story.imageURLs.count < 6) {
         switch (self.story.imageURLs.count) {
             case 1:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
@@ -100,11 +100,11 @@
             }
                 break;
             case 2:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
             }
                 break;
             case 3:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
@@ -128,10 +128,10 @@
             }
                 break;
             case 4:
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
                 break;
             case 5:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
         }
                 break;
             default:
