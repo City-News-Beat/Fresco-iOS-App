@@ -99,11 +99,12 @@
             }
                 break;
             case 3:{
+                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                 [iv hnk_setImageFromURL:self.story.imageURLs[0]];
-                iv.frame = CGRectMake(0, 0, iv.frame.size.width *2, halfHeight*2);
+                iv.frame = CGRectMake(0, 0, iv.frame.size.width, halfHeight*2);
                 [self.topContainer addSubview:iv];
                 
                 UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
@@ -124,8 +125,9 @@
             case 4:
                 NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
                 break;
-            case 5:
+            case 5:{
                 NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+        }
                 break;
             default:
                 break;
