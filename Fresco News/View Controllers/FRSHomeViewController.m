@@ -128,23 +128,8 @@
 
 -(void)configureDataSource{
     
-    [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-        __block __strong NSMutableArray *cacheResults = [[NSMutableArray alloc] init];
-        
-        for (__strong id result in results) {
-            [cacheResults addObject:result];
-        }
-        
-            self.highlights = [cacheResults copy];
-            self.dataSource = [self.highlights copy];
-            [self.tableView reloadData];
-        });
-
-    }];
-    
-    return;
+    // make core data fetch
+    [self fetchLocalData];
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
@@ -153,36 +138,30 @@
             return;
         }
         
-        NSMutableArray *mArr = [NSMutableArray new];
+        NSMutableArray *futureDataSource = [[NSMutableArray alloc] init];
         
-//        NSArray *galleries = responseObject;
         [self.spinner stopAnimating];
 
         for (NSDictionary *dict in galleries){
-            [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
-                FRSGallery *gallery = [FRSGallery MR_findFirstByAttribute:@"uid" withValue:dict[@"_id"]];
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            [futureDataSource addObject:gallery];
                 
-                if (!gallery) {
-                    gallery = [FRSGallery MR_createEntityInContext:localContext];
-                    [gallery configureWithDictionary:dict context:localContext];
-                    [mArr addObject:gallery];
-                }
-                else {
-                    [mArr addObject:gallery];
-                }
-                
-            } completion:^(NSError *error, BOOL success) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([mArr count] == 12) {
-                        self.dataSource = [mArr copy];
-                        [self.tableView reloadData];
-                    }
-                });
-            }];
+            self.dataSource = [futureDataSource copy];
+            [self.tableView reloadData];
+            [self cacheLocalData];
         }
     }];
 }
+
+-(void)fetchLocalData {
+    
+}
+
+-(void)cacheLocalData {
+    
+}
+
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

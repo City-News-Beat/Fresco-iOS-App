@@ -132,7 +132,9 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchStories{    
+-(void)fetchStories{
+    [self fetchLocalData];
+    
     __block NSMutableArray *initialStoriesArray = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
     
@@ -145,30 +147,31 @@
         }
         
         for (NSDictionary *storyDict in stories){
-            __block FRSStory *story;
-            [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
-                story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+             FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
                 
-                if (!story) {
-                    story = [FRSStory MR_createEntityInContext:localContext];
-                    [story configureWithDictionary:storyDict];
-                    [initialStoriesArray addObject:story];
-                }
-                else {
-                    [initialStoriesArray addObject:story];
-                }
-                
-            } completion:^(NSError *error, BOOL success) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([initialStoriesArray count] == numToFetch) {
-                        self.stories = [initialStoriesArray copy];
-                        [self.tableView reloadData];
-                    }
-                });
-            }];
+            if (!story) {
+                story = [FRSStory MR_createEntity];
+                [story configureWithDictionary:storyDict];
+                [initialStoriesArray addObject:story];
+            }
+            else {
+                [initialStoriesArray addObject:story];
+            }
+            
+            self.stories = [initialStoriesArray copy];
+            [self.tableView reloadData];
+            [self cacheLocalData];
         }
+       
     }];
+}
+
+-(void)fetchLocalData {
+    
+}
+
+-(void)cacheLocalData {
+    
 }
 
 
