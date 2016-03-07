@@ -6,8 +6,8 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import "FRSAppConstants.h"
-#import "FRSAPIClient.h" // change this class structure up
+#import "FRSAPIClient.h" // Network
+#import "FRSPersistence.h" // Local storage
 
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";

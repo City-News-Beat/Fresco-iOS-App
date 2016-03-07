@@ -28,6 +28,11 @@
     }];
 }
 
+/*
+ 
+ Generic POST request against api BASE url + endpoint, with parameters
+ 
+ */
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
@@ -40,6 +45,11 @@
     }];
 }
 
+/*
+ 
+ Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
+ 
+ */
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSDictionary *params = @{
@@ -65,39 +75,14 @@
 //[1:02]
 //`/user/search?q=test&offset=0&limit=10`
 //
-//
-//
 
 #pragma mark - Gallery Fetch
 
-//- (void)getGalleries:(NSDictionary *)params shouldRefresh:(BOOL)refresh withResponseBlock:(FRSAPIResponseBlock)responseBlock{
-//    
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-//    
-//    if(self.reachabilityManager.reachable && refresh){
-//        //If we are refreshing, removed the cached response for the request by setting the cache policy
-//        self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringCacheData;
-//    }
-//    
-//    [[AFHTTPSessionManager manager] GET:@"https://api.fresconews.com/v1/gallery/highlights" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-//        
-//        NSArray *galleries = responseObject[@"data"];
-//        if(responseBlock) responseBlock(galleries, nil);
-//        
-//        
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        return;
-//    }];
-//    
-//    
-//    //Set the policy back to normal
-//    self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
-//    
-//}
-
-
-
-
+/*
+ 
+ Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
+ 
+ */
 -(void)getGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
     
     //CHECK FOR RELEASE (FROM DAN)

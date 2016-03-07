@@ -28,9 +28,7 @@
 typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectContext *context, NSError *error, BOOL success);
 typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success);
 typedef void(^FRSCacheModifyCompletionBlock)(NSError *error, BOOL success);
-
 typedef void(^FRSCacheBulkPutCompletionBlock)(NSArray *managedObjects, NSManagedObjectContext *context, NSArray *errors, BOOL completeSuccess);
-
 typedef void(^FRSCacheModifyBlock)(NSManagedObjectContext * localContext);
 
 typedef enum {
