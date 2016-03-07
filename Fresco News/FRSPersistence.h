@@ -55,4 +55,6 @@ typedef enum {
 
 -(void)createManagedObjectsWithType:(FRSManagedObjectType)dataType objects:(NSArray *)objects completion:(FRSCacheBulkPutCompletionBlock)completion;
 
++(instancetype)defaultStore;
+
 @end

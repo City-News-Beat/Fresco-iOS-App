@@ -200,4 +200,19 @@
     
     return FRSManagedObjectTypeUnrecognized;
 }
+
+/*
+ Singleton
+ */
+
++(instancetype)defaultStore {
+    static FRSPersistence *persistence = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        persistence = [[FRSPersistence alloc] init];
+    });
+    
+    return persistence;
+}
 @end

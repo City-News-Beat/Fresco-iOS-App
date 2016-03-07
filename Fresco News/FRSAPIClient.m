@@ -16,9 +16,11 @@
     Generic GET request against api BASE url + endpoint, with parameters
  */
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
         
         completion(responseObject[@"data"], Nil);
         
@@ -61,6 +63,7 @@
     
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@", responseObject);
         completion(responseObject, error);
     }];
     
@@ -83,12 +86,14 @@
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
  
  */
--(void)getGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
+-(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
     
     //CHECK FOR RELEASE (FROM DAN)
     NSDictionary *params = @{
                              @"limit" : @(limit),
-                             @"last_gallery_id" : offsetID
+                             @"last_gallery_id" : (offsetID) ? offsetID : @"",
+                             @"hide": @2,
+                             @"stories": @1
                              };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
@@ -104,8 +109,6 @@
 
 
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion{
-    
-    //AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     NSDictionary *params = @{
                              @"limit" : @(limit),
@@ -156,6 +159,21 @@
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:BASE_API]];
     [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"];
     return manager;
+}
+
+/*
+ Singleton
+ */
+
++(instancetype)sharedClient {
+    static FRSAPIClient *client = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        client = [[FRSAPIClient alloc] init];
+    });
+    
+    return client;
 }
 
 @end

@@ -19,6 +19,8 @@
 
 #import "DGElasticPullToRefresh.h"
 
+#import "Fresco.h"
+
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 
 @property (strong, nonatomic) NSArray *highlights;
@@ -110,7 +112,29 @@
 
 -(void)configureDataSource{
     
-    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
+    
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+        
+        if ([galleries count] == 0){
+            return;
+        }
+        
+        NSMutableArray *mArr = [NSMutableArray new];
+        
+        for (NSDictionary *dict in galleries){
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            [mArr addObject:gallery];
+        }
+        
+        self.highlights = [mArr copy];
+        self.dataSource = [self.highlights copy];
+        [self.tableView reloadData];
+ 
+    }];
+    
+    
+    /* [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
         if (!responseObject.count){
             return;
         }
@@ -127,7 +151,7 @@
         self.highlights = [mArr copy];
         self.dataSource = [self.highlights copy];
         [self.tableView reloadData];
-    }];
+    }];*/
 }
 
 
