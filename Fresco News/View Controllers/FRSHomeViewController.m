@@ -165,7 +165,6 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"CD %@", self.dataSource);
     return self.dataSource.count;
 }
 
