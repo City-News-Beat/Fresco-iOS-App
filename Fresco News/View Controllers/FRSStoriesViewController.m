@@ -145,17 +145,23 @@
         
         for (NSDictionary *storyDict in stories){
             __block FRSStory *story;
-            
             [[FRSPersistence defaultStore] executeModification:^(NSManagedObjectContext *localContext) {
-                story = [FRSStory MR_createEntityInContext:localContext];
-                [story configureWithDictionary:storyDict];
-                [initialStoriesArray addObject:story];
+                story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+                
+                if (!story) {
+                    story = [FRSStory MR_createEntityInContext:localContext];
+                    [story configureWithDictionary:storyDict];
+                    [initialStoriesArray addObject:story];
+                }
+                
             } completion:^(NSError *error, BOOL success) {
                 
-                if ([initialStoriesArray count] == numToFetch) {
-                    self.stories = [initialStoriesArray copy];
-                    [self.tableView reloadData];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([initialStoriesArray count] == numToFetch) {
+                        self.stories = [initialStoriesArray copy];
+                        [self.tableView reloadData];
+                    }
+                });
             }];
         }
     }];
