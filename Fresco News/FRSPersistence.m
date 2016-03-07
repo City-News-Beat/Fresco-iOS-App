@@ -17,19 +17,34 @@
 
 #pragma mark Highlight-Cache
 
--(void)cacheHighlight:(FRSCacheModifyBlock)cacheBlock completion:(FRSCachePutCompletionBlock)completion {
-   
+-(void)flushHighlightCacheSaving:(NSArray *)toSave completion:(FRSCacheModifyBlock)completion {
+    
+    __block NSMutableArray *idsToSave = [[NSMutableArray alloc] init];
+    __block NSManagedObjectContext *thisContext;
+    
+    for (FRSStory *story in toSave) {
+        [idsToSave addObject:story.uid];
+    }
+    
     [self executeModification:^(NSManagedObjectContext *localContext) {
-        FRSGallery *gallery = [FRSGallery MR_findFirstByAttribute:@"FirstName"
-                                               withValue:@"Forrest"];
+        
+        thisContext = localContext;
+        
+        NSArray *stories = [FRSStory MR_findAll];
+        
+        for (FRSStory *story in stories) {
+            if ([idsToSave containsObject:story.uid]) {
+                // skip
+            }
+            else {
+                // goodbye
+                [story MR_deleteEntityInContext:localContext];
+            }
+        }
 
     } completion:^(NSError *error, BOOL success) {
-        
+        completion(thisContext);
     }];
-}
-
--(void)flushHighlightCache:(FRSCacheModifyBlock)completion {
-    
 }
 
 /*

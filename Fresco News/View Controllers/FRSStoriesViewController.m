@@ -132,11 +132,11 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchStories{
-    
+-(void)fetchStories{    
     __block NSMutableArray *initialStoriesArray = [[NSMutableArray alloc] init];
-
-    [[FRSAPIClient new] fetchStoriesWithLimit:10 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+    __block int const numToFetch = 12;
+    
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");
@@ -151,8 +151,11 @@
                 [story configureWithDictionary:storyDict];
                 [initialStoriesArray addObject:story];
             } completion:^(NSError *error, BOOL success) {
-                self.stories = [initialStoriesArray copy];
-                [self.tableView reloadData];
+                
+                if ([initialStoriesArray count] == numToFetch) {
+                    self.stories = [initialStoriesArray copy];
+                    [self.tableView reloadData];
+                }
             }];
         }
     }];

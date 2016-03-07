@@ -59,8 +59,7 @@ typedef enum {
     Cache top level stories, flush afterwords
  */
 
--(void)cacheHighlight:(FRSCacheModifyBlock)cacheBlock completion:(FRSCachePutCompletionBlock)completion;
--(void)flushHighlightCache:(FRSCacheModifyBlock)completion;
+-(void)flushHighlightCacheSaving:(NSArray *)toSave completion:(FRSCacheModifyBlock)completion;
 
 +(instancetype)defaultStore;
 

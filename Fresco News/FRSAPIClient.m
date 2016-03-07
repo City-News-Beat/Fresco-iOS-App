@@ -21,7 +21,6 @@
     
     [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         
-        
         completion(responseObject[@"data"], Nil);
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
@@ -61,9 +60,7 @@
                              @"active" : @"true"
                             };
     
-    
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
         completion(responseObject, error);
     }];
     
@@ -88,9 +85,8 @@
  */
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
     
-    //CHECK FOR RELEASE (FROM DAN)
     NSDictionary *params = @{
-                             @"limit" : @(limit),
+                             @"limit" : [NSNumber numberWithInteger:limit],
                              @"last_gallery_id" : (offsetID) ? offsetID : @"",
                              @"hide": @2,
                              @"stories": @1
@@ -111,10 +107,11 @@
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion{
     
     NSDictionary *params = @{
-                             @"limit" : @(limit),
+                             @"limit" : [NSNumber numberWithInteger:limit],
                              @"notags" : @"true",
                              @"offset" : (offsetID != Nil) ? offsetID : [NSNumber numberWithInteger:0]
                             };
+    
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
