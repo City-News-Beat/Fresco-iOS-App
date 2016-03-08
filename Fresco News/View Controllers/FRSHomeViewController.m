@@ -22,7 +22,9 @@
 #import "Fresco.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
-
+{
+    BOOL isLoading;
+}
 @property (strong, nonatomic) NSArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
 
@@ -198,7 +200,18 @@
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    if (indexPath.row == self.dataSource.count - 3) {
+        if (!isLoading) {
+            [self loadMore];
+        }
+    }
+    
     return cell;
+}
+
+-(void)loadMore {
+    isLoading = TRUE;
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{

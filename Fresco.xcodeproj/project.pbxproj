@@ -1233,10 +1233,10 @@
 		D4F91A451C8B50670078BF15 /* Fresco API */ = {
 			isa = PBXGroup;
 			children = (
-				65EBEDBD1C44507600BE671F /* Networking */,
-				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
 				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
+				65EBEDBD1C44507600BE671F /* Networking */,
+				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
