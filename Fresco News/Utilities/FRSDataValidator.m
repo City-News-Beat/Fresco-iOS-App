@@ -58,8 +58,15 @@
 }
 
 +(BOOL)isValidUserName:(NSString *)userName {
+    NSCharacterSet *validCharSet = [[NSCharacterSet characterSetWithCharactersInString:validUsernameChars] invertedSet];
+    
+    BOOL isValidCharSet = TRUE;
+    
+    if ([userName rangeOfCharacterFromSet:validCharSet].location != NSNotFound) {
+        isValidCharSet = FALSE;
+    }
 
-    return (userName && userName.length < maxUsernameChars);
+    return (userName && userName.length < maxUsernameChars && isValidCharSet);
 }
 
 @end
