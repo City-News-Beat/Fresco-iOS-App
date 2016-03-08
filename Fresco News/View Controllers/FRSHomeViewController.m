@@ -204,7 +204,9 @@
     
     if (indexPath.row == self.dataSource.count - 5) {
         if (!isLoading) {
-            [self loadMore];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                [self loadMore];
+            });
         }
     }
     
@@ -243,8 +245,10 @@
             [self.highlights addObject:gallery];
         }
         
-        [self.tableView reloadData];
-        [self cacheLocalData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self cacheLocalData];
+        });
         
     }];
 
