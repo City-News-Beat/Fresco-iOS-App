@@ -26,10 +26,10 @@
     BOOL isLoading;
     NSInteger lastOffset;
 }
-@property (strong, nonatomic) NSArray *highlights;
+@property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
 
-@property (strong, nonatomic) NSArray *dataSource;
+@property (strong, nonatomic) NSMutableArray *dataSource;
 
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
@@ -149,6 +149,8 @@
     
     // make core data fetch
     [self fetchLocalData];
+    self.dataSource = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
@@ -157,16 +159,14 @@
             return;
         }
         
-        NSMutableArray *futureDataSource = [[NSMutableArray alloc] init];
         
         [self.spinner stopAnimating];
 
         for (NSDictionary *dict in galleries){
             FRSGallery *gallery = [FRSGallery MR_createEntity];
             [gallery configureWithDictionary:dict];
-            [futureDataSource addObject:gallery];
-                
-            self.dataSource = [futureDataSource copy];
+            [self.dataSource addObject:gallery];
+            [self.highlights addObject:gallery];
             [self.tableView reloadData];
             [self cacheLocalData];
         }
@@ -227,26 +227,25 @@
     
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
         
-        NSLog(@"%@", galleries);
+        NSLog(@"RELOADING: %lu", galleries.count);
         
         if ([galleries count] == 0){
             return;
         }
         
         isLoading = FALSE;
-
-        NSMutableArray *futureDataSource = [[NSMutableArray alloc] init];
         
         for (NSDictionary *dict in galleries){
             FRSGallery *gallery = [FRSGallery MR_createEntity];
             [gallery configureWithDictionary:dict];
-            [futureDataSource addObject:gallery];
             
-            self.dataSource = [self.dataSource arrayByAddingObjectsFromArray:futureDataSource];
-            self.highlights = [self.highlights arrayByAddingObjectsFromArray:futureDataSource];
-            [self.tableView reloadData];
-            [self cacheLocalData];
+            [self.dataSource addObject:gallery];
+            [self.highlights addObject:gallery];
         }
+        
+        [self.tableView reloadData];
+        [self cacheLocalData];
+        
     }];
 
 }
