@@ -521,28 +521,17 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */,
-				07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */,
-				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
-				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
-				07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */,
-				07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */,
-				07A30BED1C50488800C536EB /* FRSEmailViewController.h */,
-				07A30BEE1C50488800C536EB /* FRSEmailViewController.m */,
-				07A30BEF1C50488800C536EB /* FRSPasswordChangeViewController.h */,
-				07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */,
-				07A30BF11C50488800C536EB /* FRSPromoCodeViewController.h */,
-				07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */,
-				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
-				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
-				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
-				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
-				07A30BF71C50488800C536EB /* FRSTableViewCell.h */,
-				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
-				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
-				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
-				07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */,
-				07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */,
+				D43C7FE41C8F354500A7A7A7 /* Business Type */,
+				D43C7FE51C8F354F00A7A7A7 /* Debit Card */,
+				D43C7FE61C8F355500A7A7A7 /* Disable Account */,
+				D43C7FE71C8F355D00A7A7A7 /* Email */,
+				D43C7FE81C8F356200A7A7A7 /* Password */,
+				D43C7FE91C8F356800A7A7A7 /* Promo */,
+				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
+				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
+				D43C7FEC1C8F359700A7A7A7 /* Table View */,
+				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
+				D43C7FEE1C8F35A300A7A7A7 /* Username */,
 			);
 			name = Settings;
 			path = ../..;
@@ -1061,6 +1050,141 @@
 			name = Future;
 			sourceTree = "<group>";
 		};
+		D43C7FE01C8F290D00A7A7A7 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				65F237BD1C24C0E4002182DE /* FRSOnboardingViewController.h */,
+				65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		D43C7FE11C8F291B00A7A7A7 /* One */ = {
+			isa = PBXGroup;
+			children = (
+				65F237C01C24C28D002182DE /* FRSOnboardOneView.h */,
+				65F237C11C24C28D002182DE /* FRSOnboardOneView.m */,
+			);
+			name = One;
+			sourceTree = "<group>";
+		};
+		D43C7FE21C8F292200A7A7A7 /* Two */ = {
+			isa = PBXGroup;
+			children = (
+				070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */,
+				070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */,
+			);
+			name = Two;
+			sourceTree = "<group>";
+		};
+		D43C7FE31C8F292A00A7A7A7 /* Three */ = {
+			isa = PBXGroup;
+			children = (
+				070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */,
+				070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */,
+			);
+			name = Three;
+			sourceTree = "<group>";
+		};
+		D43C7FE41C8F354500A7A7A7 /* Business Type */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */,
+				07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */,
+			);
+			name = "Business Type";
+			sourceTree = "<group>";
+		};
+		D43C7FE51C8F354F00A7A7A7 /* Debit Card */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
+				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
+			);
+			name = "Debit Card";
+			sourceTree = "<group>";
+		};
+		D43C7FE61C8F355500A7A7A7 /* Disable Account */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */,
+				07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */,
+			);
+			name = "Disable Account";
+			sourceTree = "<group>";
+		};
+		D43C7FE71C8F355D00A7A7A7 /* Email */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BED1C50488800C536EB /* FRSEmailViewController.h */,
+				07A30BEE1C50488800C536EB /* FRSEmailViewController.m */,
+			);
+			name = Email;
+			sourceTree = "<group>";
+		};
+		D43C7FE81C8F356200A7A7A7 /* Password */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BEF1C50488800C536EB /* FRSPasswordChangeViewController.h */,
+				07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */,
+			);
+			name = Password;
+			sourceTree = "<group>";
+		};
+		D43C7FE91C8F356800A7A7A7 /* Promo */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF11C50488800C536EB /* FRSPromoCodeViewController.h */,
+				07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */,
+			);
+			name = Promo;
+			sourceTree = "<group>";
+		};
+		D43C7FEA1C8F358A00A7A7A7 /* Radius */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
+				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
+			);
+			name = Radius;
+			sourceTree = "<group>";
+		};
+		D43C7FEB1C8F359000A7A7A7 /* Settings VC */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
+				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
+			);
+			name = "Settings VC";
+			sourceTree = "<group>";
+		};
+		D43C7FEC1C8F359700A7A7A7 /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF71C50488800C536EB /* FRSTableViewCell.h */,
+				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
+			);
+			name = "Table View";
+			sourceTree = "<group>";
+		};
+		D43C7FED1C8F359D00A7A7A7 /* Tax Info */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
+				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
+			);
+			name = "Tax Info";
+			sourceTree = "<group>";
+		};
+		D43C7FEE1C8F35A300A7A7A7 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */,
+				07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */,
+			);
+			name = Username;
+			sourceTree = "<group>";
+		};
 		D4F91A451C8B50670078BF15 /* Fresco API */ = {
 			isa = PBXGroup;
 			children = (
@@ -1153,14 +1277,10 @@
 		E784280E1B57F3E30090DFCC /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
-				65F237BD1C24C0E4002182DE /* FRSOnboardingViewController.h */,
-				65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */,
-				65F237C01C24C28D002182DE /* FRSOnboardOneView.h */,
-				65F237C11C24C28D002182DE /* FRSOnboardOneView.m */,
-				070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */,
-				070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */,
-				070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */,
-				070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */,
+				D43C7FE01C8F290D00A7A7A7 /* General */,
+				D43C7FE11C8F291B00A7A7A7 /* One */,
+				D43C7FE21C8F292200A7A7A7 /* Two */,
+				D43C7FE31C8F292A00A7A7A7 /* Three */,
 			);
 			path = Onboard;
 			sourceTree = "<group>";
