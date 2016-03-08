@@ -48,7 +48,7 @@
     BOOL hasNumber = FALSE;
     
     for (NSString *number in numbers) {
-        if ([password containsString:number]) {
+        if ([password rangeOfString:number].location != NSNotFound) {
             hasNumber = TRUE;
             break;
         }
@@ -58,7 +58,8 @@
 }
 
 +(BOOL)isValidUserName:(NSString *)userName {
-    return [userName isEqualToString:@""] ? NO : YES;
+
+    return (userName && userName.length < maxUsernameChars);
 }
 
 @end
