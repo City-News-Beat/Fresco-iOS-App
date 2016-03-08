@@ -24,6 +24,7 @@
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
     BOOL isLoading;
+    NSInteger lastOffset;
 }
 @property (strong, nonatomic) NSArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
@@ -150,7 +151,7 @@
     [self fetchLocalData];
     
     // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
         
         if ([galleries count] == 0){
             return;
@@ -201,7 +202,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    if (indexPath.row == self.dataSource.count - 3) {
+    if (indexPath.row == self.dataSource.count - 5) {
         if (!isLoading) {
             [self loadMore];
         }
@@ -211,7 +212,43 @@
 }
 
 -(void)loadMore {
+    
     isLoading = TRUE;
+    FRSGallery *lastGallery = [self.dataSource lastObject];
+    NSString *offsetID = lastGallery.uid;
+    
+    if (lastOffset == self.dataSource.count) {
+        NSLog(@"NOT RELOADING");
+        return;
+    }
+    
+    NSLog(@"RELOADING WITH OFFSET ID: %@", offsetID);
+    lastOffset = self.dataSource.count;
+    
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
+        
+        NSLog(@"%@", galleries);
+        
+        if ([galleries count] == 0){
+            return;
+        }
+        
+        isLoading = FALSE;
+
+        NSMutableArray *futureDataSource = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *dict in galleries){
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            [futureDataSource addObject:gallery];
+            
+            self.dataSource = [self.dataSource arrayByAddingObjectsFromArray:futureDataSource];
+            self.highlights = [self.highlights arrayByAddingObjectsFromArray:futureDataSource];
+            [self.tableView reloadData];
+            [self cacheLocalData];
+        }
+    }];
+
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{

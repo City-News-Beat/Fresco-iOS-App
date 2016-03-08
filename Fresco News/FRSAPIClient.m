@@ -84,14 +84,14 @@
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
  
  */
--(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offsetID completion:(void(^)(NSArray *galleries, NSError *error))completion{
+-(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion{
     
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
-                             @"last_gallery_id" : (offsetID) ? offsetID : @"",
+                             @"offset" : @(offset),
                              @"hide": @2,
                              @"stories": @1
-                             };
+                            };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
