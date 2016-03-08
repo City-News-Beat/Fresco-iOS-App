@@ -627,6 +627,7 @@
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
 				D4F91A451C8B50670078BF15 /* Fresco API */,
+				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				6596ECA01C5032000011C18B /* Subclasses */,
@@ -998,8 +999,6 @@
 			children = (
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
-				D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */,
-				D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -1222,6 +1221,15 @@
 				070D66D11C2B395D00AB3D9D /* OEParallax.m */,
 			);
 			name = Parallax;
+			sourceTree = "<group>";
+		};
+		D43C7FF41C8F588C00A7A7A7 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */,
+				D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */,
+			);
+			name = Persistence;
 			sourceTree = "<group>";
 		};
 		D4F91A451C8B50670078BF15 /* Fresco API */ = {

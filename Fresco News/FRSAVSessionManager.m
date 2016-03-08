@@ -38,6 +38,11 @@
     return _sessionQueue;
 }
 
+
+/* 
+    Whoever wrote this: do not make structures with FRS prefix just because, there's no reason this couldn't have just returned an AVAuthorizationStatus
+ */
+
 -(FRSAVAuthStatus)authStatus{
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
