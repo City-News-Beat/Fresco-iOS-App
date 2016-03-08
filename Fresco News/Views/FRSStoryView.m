@@ -81,7 +81,6 @@
     
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
-
     
     if (self.story.imageURLs.count < 6) {
         switch (self.story.imageURLs.count) {
@@ -96,15 +95,11 @@
                 break;
             case 2:{
                 NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
-            }
-                break;
-            case 3:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                 [iv hnk_setImageFromURL:self.story.imageURLs[0]];
-                iv.frame = CGRectMake(0, 0, iv.frame.size.width, halfHeight*2);
+                iv.frame = CGRectMake(0, 0, iv.frame.size.width*2, halfHeight*2);
                 [self.topContainer addSubview:iv];
                 
                 UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
@@ -113,13 +108,51 @@
                 [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
                 iv2.frame = CGRectMake(iv.frame.size.width + 1, 0, iv2.frame.size.width, halfHeight*2);
                 [self.topContainer addSubview:iv2];
+            }
+                break;
+            case 3:{
+                
+                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 1000, 1000)];
+                iv.backgroundColor = [UIColor redColor]; //debug
+                iv.contentMode = UIViewContentModeScaleAspectFit;
+                [self.topContainer addSubview:iv];
 
-                UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
-                iv3.contentMode = UIViewContentModeScaleAspectFill;
-                iv3.clipsToBounds = YES;
-                [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
-                iv3.frame = CGRectMake(iv.frame.size.width + iv2.frame.size.width +2, 0, iv3.frame.size.width, halfHeight*2);
-                [self.topContainer addSubview:iv3];
+                [iv hnk_setImageFromURL:self.story.imageURLs[0] placeholder:nil success:^(UIImage *image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                       
+                        NSInteger imageWidth  = image.size.width;
+                        NSInteger imageHeight = image.size.height;
+                        NSInteger viewHeight  = self.topContainer.frame.size.height;
+                        
+                        float multiplier = (float)viewHeight / (float)imageHeight;
+                        
+                        CGRect imageFrame = CGRectMake(0, 0, multiplier*imageWidth, viewHeight);
+                        
+                        iv.frame = imageFrame;
+                        iv.image = image;
+                        
+                    });
+                    
+                } failure:^(NSError *error) {
+                    //failure
+                }];
+                
+
+
+//                UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
+//                iv2.contentMode = UIViewContentModeScaleAspectFill;
+//                iv2.clipsToBounds = YES;
+//                [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
+//                iv2.frame = CGRectMake(iv.frame.size.width + 1, 0, iv2.image.size.width, halfHeight*2);
+//                [self.topContainer addSubview:iv2];
+//
+//                UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
+//                iv3.contentMode = UIViewContentModeScaleAspectFill;
+//                iv3.clipsToBounds = YES;
+//                [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
+//                iv3.frame = CGRectMake(iv.frame.size.width + iv2.frame.size.width +2, 0, iv3.frame.size.width, halfHeight*2);
+//                [self.topContainer addSubview:iv3];
             }
                 break;
             case 4:

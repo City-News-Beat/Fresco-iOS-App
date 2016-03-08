@@ -135,7 +135,7 @@
 -(void)fetchStories{
     
     
-    [[FRSAPIClient new] fetchStoriesWithLimit:10 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+    [[FRSAPIClient new] fetchStoriesWithLimit:15 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");

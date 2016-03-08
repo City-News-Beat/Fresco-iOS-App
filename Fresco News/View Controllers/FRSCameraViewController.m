@@ -61,6 +61,7 @@
 //@property (strong, nonatomic) FRSGalleryAssetsManager *assetsManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
 
+
 @property (strong, nonatomic) UIView *preview;
 
 @property (strong, nonatomic) UIView *bottomClearContainer;
@@ -307,8 +308,7 @@
 //            [self.previewBackgroundIV addDropShadowWithColor:[UIColor clearColor] path:nil];
 //            self.previewButton.layer.shadowOpacity = 0;
 //            
-//        }
-//        else {
+//        } else {
 //            self.previewBackgroundIV.alpha = 1.0;
 //            
 //            if (self.firstTime){ //This is the first time the preview button is being created
