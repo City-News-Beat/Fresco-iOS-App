@@ -113,7 +113,7 @@
 -(void)configureWindow{
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor]; // used to be [UIColor whiteBackgroundColor];
-
+    
     [self.window makeKeyAndVisible];
 }
 
