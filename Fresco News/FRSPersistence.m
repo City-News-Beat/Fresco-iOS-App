@@ -9,9 +9,6 @@
 #import "FRSPersistence.h"
 #include <objc/runtime.h>
 
-#define objc_dynamic_cast(obj, cls) \
-([obj isKindOfClass:(Class)objc_getClass(#cls)] ? (cls *)obj : NULL)
-
 @implementation FRSPersistence
 
 
@@ -73,18 +70,7 @@
         Class objectClass = [self managedObjectClassFromType:dataType];
         NSArray *results = [objectClass MR_findAllInContext:localContext];
         
-        completion(results, localContext, Nil, TRUE);
-        
-        // set up fetch request
-        // set type to correct type
-        // add predicate to fetch request
-        // add sort descriptor to fetch request
-        
-        // perform fetch
-        // completion with results
-        
-        // save output to [pulledFromCache]
-        // faults or no faults on returned objects?
+        completion(results, localContext, Nil, TRUE); // faults, relationships not instantiated
         
     } completion:^(NSError *error, BOOL success) {
         completion(pulledFromCache, currentContext, error, success);

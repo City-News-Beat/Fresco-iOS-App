@@ -25,6 +25,10 @@
 
 #import "FRSCoreData.h" // expected behavior of each managed object
 
+// dynamic class cast
+#define objc_dynamic_cast(obj, cls) \
+([obj isKindOfClass:(Class)objc_getClass(#cls)] ? (cls *)obj : NULL)
+
 typedef void(^FRSCachePutCompletionBlock)(id managedObject, NSManagedObjectContext *context, NSError *error, BOOL success);
 typedef void(^FRSCachePullCompletionBlock)(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success);
 typedef void(^FRSCacheModifyCompletionBlock)(NSError *error, BOOL success);
