@@ -81,9 +81,9 @@
 
 -(void)configureViewControllers{
     UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
-
+    
     UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
-
+    
     UIViewController *vc2 = [UIViewController new];
     vc2.view.backgroundColor = [UIColor blackColor];
     
@@ -123,7 +123,7 @@
 
 //
 //-(void)handleHomeTabPressed{
-//    
+//
 //}
 //
 //-(void)handleStoryTabPressed{
@@ -154,7 +154,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     
-//    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
+    //    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     
     UIViewController *selectedVC = viewController;
     if ([viewController isKindOfClass:[FRSNavigationController class]]){
@@ -167,24 +167,50 @@
     NSInteger index = [self.viewControllers indexOfObject:viewController];
     
     switch (index) {
-        case 0:
-            break;
-        case 1:
+        case 0:{
             
-            break;
+            if (self.lastActiveIndex != 0) {
+                break;
+            }
+            
+            FRSHomeViewController *homeVC = (FRSHomeViewController *)selectedVC;
+            [homeVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            
+        } break;
+            
+        case 1:{
+            
+            if (self.lastActiveIndex != 1) {
+                break;
+            }
+            
+            FRSStoriesViewController *storiesVC = (FRSStoriesViewController *)selectedVC;
+            [storiesVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            
+        } break;
+            
         case 2:
             return NO;
+            
         case 3:
+            
             if (self.lastActiveIndex == 3){
-                
                 if (![selectedVC isKindOfClass:[FRSAssignmentsViewController class]]) break;
-                
                 FRSAssignmentsViewController *assignVC = (FRSAssignmentsViewController *)selectedVC;
                 [assignVC setInitialMapRegion];
+                
+            } break;
+            
+        case 4:{
+            
+            if (self.lastActiveIndex != 4) {
+                break;
             }
-            break;
-        case 4:
-            break;
+            
+            FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
+            [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            
+        } break;
             
         default:
             break;
@@ -197,13 +223,13 @@
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
