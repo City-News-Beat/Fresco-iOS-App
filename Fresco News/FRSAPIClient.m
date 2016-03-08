@@ -33,6 +33,7 @@
  Generic POST request against api BASE url + endpoint, with parameters
  
  */
+
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
@@ -50,6 +51,7 @@
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
  
  */
+
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSDictionary *params = @{

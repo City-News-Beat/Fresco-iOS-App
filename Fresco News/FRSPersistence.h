@@ -52,7 +52,6 @@ typedef enum {
 -(void)pullCacheWithType:(FRSManagedObjectType)dataType predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor *)sort completion:(FRSCachePullCompletionBlock)completion;
 -(void)createManagedObjectWithType:(FRSManagedObjectType)dataType properties:(NSDictionary *)dictionaryRepresentation completion:(FRSCachePutCompletionBlock)completion;
 -(void)executeModification:(FRSCacheModifyBlock)modification completion:(FRSCacheModifyCompletionBlock)completion;
-
 -(void)createManagedObjectsWithType:(FRSManagedObjectType)dataType objects:(NSArray *)objects completion:(FRSCacheBulkPutCompletionBlock)completion;
 
 /*
@@ -60,7 +59,6 @@ typedef enum {
  */
 
 -(void)flushHighlightCacheSaving:(NSArray *)toSave completion:(FRSCacheModifyBlock)completion;
-
 +(instancetype)defaultStore;
 
 @end

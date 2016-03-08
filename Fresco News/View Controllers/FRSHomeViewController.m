@@ -34,10 +34,26 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property BOOL contentIsEmpty;
 
-
 @end
 
 @implementation FRSHomeViewController
+
+
+-(UIImage *)imageForLeftBarItem {
+    return Nil;
+}
+
+-(void)tabbedNavigationTitleViewDidTapRightBarItem {
+    
+}
+
+-(void)tabbedNavigationTitleViewDidTapLeftBarItem {
+    
+}
+
+-(void)tabbedNavigationTitleViewDidTapButtonAtIndex:(NSInteger)index {
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -248,7 +264,7 @@
 }
 
 
--(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification{
+-(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
     
     NSArray *filteredArray = [self.dataSource filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     

@@ -34,7 +34,13 @@
 }
 
 +(BOOL)isValidEmail:(NSString *)email{
-    return [email isEqualToString:@""] ? NO : YES;
+    NSError *regexError;
+    
+    NSRegularExpression *emailCheck = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$" options:kNilOptions error:&regexError];
+    
+    NSArray *matches = [emailCheck matchesInString:email options:kNilOptions range:NSMakeRange(0, email.length)];
+    
+    return ([matches count] == 0);
 }
 
 +(BOOL)isValidPassword:(NSString *)password{
