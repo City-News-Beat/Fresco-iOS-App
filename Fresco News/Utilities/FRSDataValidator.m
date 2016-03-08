@@ -44,7 +44,17 @@
 }
 
 +(BOOL)isValidPassword:(NSString *)password{
-    return [password isEqualToString:@""] ? NO : YES;
+    NSArray *numbers = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"0"];
+    BOOL hasNumber = FALSE;
+    
+    for (NSString *number in numbers) {
+        if ([password containsString:number]) {
+            hasNumber = TRUE;
+            break;
+        }
+    }
+    
+    return (password.length >= 8 && hasNumber);
 }
 
 +(BOOL)isValidUserName:(NSString *)userName {
