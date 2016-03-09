@@ -224,7 +224,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row == self.stories.count) {
+    if (indexPath.row == self.stories.count-1) {
         return 40;
     }
     
@@ -233,7 +233,6 @@
     FRSStory *story = self.stories[indexPath.row];
     return [story heightForStory];
 }
-
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -271,10 +270,10 @@
     
     [cell clearCell];
     
-    cell.story = self.stories[indexPath.row];
-    
-    [cell configureCell];
-    
+    if (indexPath.row < self.stories.count) {
+        cell.story = self.stories[indexPath.row];
+        [cell configureCell];
+    }
 }
 
 @end
