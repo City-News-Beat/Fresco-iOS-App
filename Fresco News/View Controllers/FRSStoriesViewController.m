@@ -248,6 +248,11 @@
         cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    if (indexPath.row == self.stories.count - 5) {
+        [self fetchMoreStories];
+    }
+    
     return cell;
 }
 
@@ -259,6 +264,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
+        return;
+    }
     
     [cell clearCell];
     
