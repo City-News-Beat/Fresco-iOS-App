@@ -268,7 +268,7 @@
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     if (index == self.dataSource.count) {
-        return 85;
+        return 65;
     }
     
     FRSGallery *gallery = self.dataSource[index];

@@ -22,6 +22,7 @@
                         </constraints>
                     </activityIndicatorView>
                 </subviews>
+                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstItem="UZ1-cc-j2J" firstAttribute="centerX" secondItem="jNX-Yw-a6S" secondAttribute="centerX" id="KZf-rK-MBw"/>
                     <constraint firstItem="UZ1-cc-j2J" firstAttribute="centerY" secondItem="jNX-Yw-a6S" secondAttribute="centerY" id="jvw-Ls-rPI"/>
