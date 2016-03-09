@@ -105,12 +105,12 @@
 #pragma mark - Stories Fetch
 
 
--(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion{
+-(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSInteger)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion {
     
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
                              @"notags" : @"true",
-                             @"offset" : (offsetID != Nil) ? offsetID : [NSNumber numberWithInteger:0]
+                             @"offset" : @(offsetID)
                             };
     
     

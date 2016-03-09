@@ -22,7 +22,7 @@
 
 @interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
-@property (strong, nonatomic) NSArray *stories;
+@property (strong, nonatomic) NSMutableArray *stories;
 
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UIButton *searchButton;
@@ -115,6 +115,9 @@
 -(void)configureTableView{
     [super configureTableView];
     
+    // loading cell
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
@@ -134,11 +137,10 @@
 
 -(void)fetchStories{
     [self fetchLocalData];
-    
-    __block NSMutableArray *initialStoriesArray = [[NSMutableArray alloc] init];
+    self.stories = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
     
-    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
 
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
@@ -152,18 +154,52 @@
             if (!story) {
                 story = [FRSStory MR_createEntity];
                 [story configureWithDictionary:storyDict];
-                [initialStoriesArray addObject:story];
+                [self.stories addObject:story];
             }
             else {
-                [initialStoriesArray addObject:story];
+                [self.stories addObject:story];
             }
             
-            self.stories = [initialStoriesArray copy];
             [self.tableView reloadData];
             [self cacheLocalData];
         }
        
     }];
+}
+
+-(void)fetchMoreStories {
+
+    if (!self.stories) {
+        self.stories = [[NSMutableArray alloc] init];
+    }
+    __block int const numToFetch = 12;
+    
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:self.stories.count completion:^(NSArray *stories, NSError *error) {
+        
+        if (!stories.count){
+            if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
+            else NSLog(@"No error fetching stories but the request returned zero results");
+            return;
+        }
+        
+        for (NSDictionary *storyDict in stories){
+            FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+            
+            if (!story) {
+                story = [FRSStory MR_createEntity];
+                [story configureWithDictionary:storyDict];
+                [self.stories addObject:story];
+            }
+            else {
+                [self.stories addObject:story];
+            }
+            
+            [self.tableView reloadData];
+            [self cacheLocalData];
+        }
+        
+    }];
+
 }
 
 -(void)fetchLocalData {
@@ -178,7 +214,7 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.stories.count;
+    return (self.stories.count == 0) ? 0 : self.stories.count+1;
     
 }
 
@@ -187,6 +223,11 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.row == self.stories.count) {
+        return 40;
+    }
+    
     if (!self.stories.count) return 0;
     
     FRSStory *story = self.stories[indexPath.row];
@@ -195,6 +236,13 @@
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // if we're loading more data
+    if (indexPath.row == self.stories.count -1) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        return cell;
+    }
+    
     FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
     if (!cell){
         cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
