@@ -143,6 +143,7 @@
     editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
     self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 -(void)configureTableView{
