@@ -112,6 +112,7 @@
 
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight])];
+    self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;

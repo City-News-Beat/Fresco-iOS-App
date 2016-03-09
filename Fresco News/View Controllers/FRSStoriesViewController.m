@@ -233,6 +233,10 @@
     
     if (!self.stories.count) return 0;
     
+    if (indexPath.row >= self.stories.count) {
+        return 40;
+    }
+    
     FRSStory *story = self.stories[indexPath.row];
     return [story heightForStory];
 }
