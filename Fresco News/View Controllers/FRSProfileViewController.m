@@ -66,7 +66,12 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self addStatusBarNotification];
+}
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self removeStatusBarNotification];
 }
 
 #pragma mark - Fetch Methods

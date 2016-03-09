@@ -14,6 +14,7 @@
 ** Add four spaces in between sections
 */
 
+
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
@@ -411,3 +412,7 @@ enum FRSErrorCodes {
 #define IS_STANDARD_IPHONE_6_PLUS           (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0)
 
 #define IS_ZOOMED_IPHONE_6_PLUS             (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0 && IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale < [UIScreen mainScreen].scale)
+
+
+#pragma mark - Status Bar
+static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";

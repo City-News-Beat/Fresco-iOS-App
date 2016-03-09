@@ -50,6 +50,11 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self configureNavigationBar];
+    [self addStatusBarNotification];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self removeStatusBarNotification];
 }
 
 -(void)configureUI{
@@ -58,6 +63,7 @@
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
+    
     
 //    if (self.contentIsEmpty) {
         [self configureSpinner];
@@ -270,16 +276,5 @@
         scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(-offset, 0, 0, 0);
     }
 }
-
-/*
- 
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

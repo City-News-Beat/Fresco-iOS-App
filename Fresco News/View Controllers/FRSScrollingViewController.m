@@ -16,6 +16,8 @@
 
 @property (nonatomic) BOOL scrollDirectionChanged;
 
+@property (nonatomic) BOOL enabled;
+
 @end
 
 @implementation FRSScrollingViewController
@@ -28,7 +30,7 @@
         [super configureBackButtonAnimated:NO];
     }
     
-    // Do any additional setup after loading the view.
+    self.enabled = YES;
 }
 
 
@@ -190,14 +192,30 @@
     
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+#pragma mark - Status Bar
+
+-(void)statusBarTappedAction:(NSNotification*)notification{
+    if (self.enabled){
+        if (self.tableView.contentOffset.y >= 0) {
+            [self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.enabled = YES;
+            });
+        }
+    }
+    self.enabled = NO;
+}
+
+-(void)addStatusBarNotification{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(statusBarTappedAction:)
+                                                 name:kStatusBarTappedNotification
+                                               object:nil];
+}
+
+-(void)removeStatusBarNotification{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
+}
+
 
 @end
