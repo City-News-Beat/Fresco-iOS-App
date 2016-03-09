@@ -72,7 +72,13 @@
 */
 
 -(void)handleActionButtonTapped {
+    // idk why dan made this method life is a mystery
+    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+}
+
+-(void)contentActionBarDidSelectActionButton:(id)sender {
     // show actions sheet
+    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
@@ -311,10 +317,6 @@
 
 -(UIColor *)colorForActionButton{
     return [UIColor frescoBlueColor];
-}
-
--(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
 }
 
 #pragma mark ScrollView Delegate

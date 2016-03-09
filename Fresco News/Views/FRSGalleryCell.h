@@ -16,7 +16,7 @@
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 
 @property (strong, nonatomic) FRSGallery *gallery;
-
+@property (strong, nonatomic) ShareSheetBlock shareBlock;
 -(void)clearCell;
 -(void)configureCell;
 

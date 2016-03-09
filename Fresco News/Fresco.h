@@ -52,4 +52,7 @@ static NSInteger const maxCommentChar = 200;
 
 static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 
+// callbacks / blocks
+typedef void (^ShareSheetBlock)(NSArray *sharedContent);
+
 
