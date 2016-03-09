@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -15,17 +16,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UZ1-cc-j2J">
-                        <rect key="frame" x="150" y="12" width="20" height="20"/>
+                        <rect key="frame" x="150" y="0.0" width="20" height="20"/>
                         <constraints>
+                            <constraint firstAttribute="width" constant="20" id="ANO-eY-p2L"/>
                             <constraint firstAttribute="height" constant="20" id="JDe-nR-Ps1"/>
-                            <constraint firstAttribute="width" constant="20" id="mdh-XM-A9b"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="PaV-82-UHv"/>
                         </constraints>
                     </activityIndicatorView>
                 </subviews>
                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
-                    <constraint firstItem="UZ1-cc-j2J" firstAttribute="centerX" secondItem="jNX-Yw-a6S" secondAttribute="centerX" id="KZf-rK-MBw"/>
-                    <constraint firstItem="UZ1-cc-j2J" firstAttribute="centerY" secondItem="jNX-Yw-a6S" secondAttribute="centerY" id="jvw-Ls-rPI"/>
+                    <constraint firstItem="UZ1-cc-j2J" firstAttribute="centerX" secondItem="jNX-Yw-a6S" secondAttribute="centerX" id="C2c-gT-8Dc"/>
+                    <constraint firstItem="UZ1-cc-j2J" firstAttribute="top" secondItem="jNX-Yw-a6S" secondAttribute="topMargin" constant="-8" id="Lyq-k3-oBT"/>
+                    <constraint firstItem="UZ1-cc-j2J" firstAttribute="top" secondItem="jNX-Yw-a6S" secondAttribute="topMargin" constant="-8" id="lca-RG-vh7"/>
                 </constraints>
             </tableViewCellContentView>
             <point key="canvasLocation" x="239" y="241"/>
