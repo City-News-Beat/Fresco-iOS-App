@@ -28,7 +28,7 @@
 -(UIColor *)colorForActionButton;
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
-
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
 -(void)handleActionButtonTapped;
 
 

@@ -55,9 +55,4 @@
     return YES;
 }
 
--(void)contentActionBarDidSelectActionButton:(id)sender {
-    // show actions sheet
-    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
-}
-
 @end

@@ -76,7 +76,7 @@
     self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
 }
 
--(void)contentActionBarDidSelectActionButton:(id)sender {
+-(void)contentActionbarDidSelectShareButton:(id)sender {
     // show actions sheet
     self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
 }
@@ -317,6 +317,14 @@
 
 -(UIColor *)colorForActionButton{
     return [UIColor frescoBlueColor];
+}
+
+-(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
+}
+
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    self.shareBlock(@[self.gallery.uid]);
 }
 
 #pragma mark ScrollView Delegate
