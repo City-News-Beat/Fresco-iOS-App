@@ -339,7 +339,11 @@
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
-    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    
+    NSString *url = [content firstObject];
+    url = [@"https://fresconews.com/gallery/" stringByAppendingString:url];
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
 

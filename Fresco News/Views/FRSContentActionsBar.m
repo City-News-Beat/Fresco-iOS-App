@@ -71,7 +71,7 @@
 }
 
 -(void)handleShareButtonTapped {
-    [self.delegate contentActionBarDidSelectActionButton:self];
+    [self.delegate contentActionBarDidShare:self];
 }
 
 -(void)configureRepostSection{
