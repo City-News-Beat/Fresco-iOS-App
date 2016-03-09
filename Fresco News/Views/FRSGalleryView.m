@@ -326,6 +326,7 @@
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
     FRSPost *post = self.orderedPosts[0];
     NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+    
     sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", post.address, sharedContent];
     self.shareBlock(@[sharedContent]);
 }
