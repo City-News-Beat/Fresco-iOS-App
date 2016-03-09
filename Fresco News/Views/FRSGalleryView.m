@@ -327,7 +327,7 @@
     FRSPost *post = self.orderedPosts[0];
     NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
     
-    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@"/"] firstObject], sharedContent];
+    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
     self.shareBlock(@[sharedContent]);
 }
 
