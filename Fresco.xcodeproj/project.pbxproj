@@ -125,6 +125,7 @@
 		D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */; };
 		D43C7FDD1C8E474C00A7A7A7 /* FRESCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */; };
 		D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */; };
+		D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */; };
 		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
 		D4F91A4C1C8B568B0078BF15 /* FRSPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
@@ -419,6 +420,7 @@
 		D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCheckBox.h; sourceTree = "<group>"; };
 		D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRESCheckBox.m; sourceTree = "<group>"; };
 		D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLoadingCell.xib; sourceTree = "<group>"; };
 		D4F91A461C8B508A0078BF15 /* Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fresco.h; sourceTree = "<group>"; };
 		D4F91A471C8B51500078BF15 /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAPIClient.h; sourceTree = "<group>"; };
 		D4F91A481C8B51500078BF15 /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAPIClient.m; sourceTree = "<group>"; };
@@ -674,34 +676,21 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6547C9081C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.h */,
-				6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */,
-				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
-				6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */,
-				07A30C111C50499A00C536EB /* FRSStoryCell.h */,
-				07A30C121C50499A00C536EB /* FRSStoryCell.m */,
-				07A30C081C50494700C536EB /* FRSStoryView.h */,
-				07A30C091C50494700C536EB /* FRSStoryView.m */,
-				65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */,
-				65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */,
-				65D1E4E71C4EB7B6003362D3 /* FRSMapCircle.h */,
-				65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */,
-				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
-				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
-				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
-				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
-				655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */,
-				655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */,
-				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
-				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
-				65201A321C3D7D7900B31089 /* FRSGalleryCell.h */,
-				65201A331C3D7D7900B31089 /* FRSGalleryCell.m */,
-				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
-				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
-				079CEEFA1C28740B00E559F3 /* FRSAlertView.h */,
-				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
-				65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */,
-				65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */,
+				D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */,
+				D43C7FF51C90745F00A7A7A7 /* Title Nav */,
+				D43C7FF61C90746700A7A7A7 /* User Table */,
+				D43C7FF71C90746C00A7A7A7 /* Story Cell */,
+				D43C7FF81C90747300A7A7A7 /* Story View */,
+				D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */,
+				D43C7FFA1C90748600A7A7A7 /* Map Circle */,
+				D43C7FFB1C90748B00A7A7A7 /* Comment Table */,
+				D43C7FFC1C90749F00A7A7A7 /* Comments View */,
+				D43C7FFD1C9074A400A7A7A7 /* Articles Table */,
+				D43C7FFE1C9074B000A7A7A7 /* Gallery View */,
+				D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */,
+				D43C80001C9074BB00A7A7A7 /* Content Action Bar */,
+				D43C80011C9074C100A7A7A7 /* Alert View */,
+				D43C80021C9074C700A7A7A7 /* Scroll View Image */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1230,6 +1219,140 @@
 			name = Persistence;
 			sourceTree = "<group>";
 		};
+		D43C7FF51C90745F00A7A7A7 /* Title Nav */ = {
+			isa = PBXGroup;
+			children = (
+				6547C9081C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.h */,
+				6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */,
+			);
+			name = "Title Nav";
+			sourceTree = "<group>";
+		};
+		D43C7FF61C90746700A7A7A7 /* User Table */ = {
+			isa = PBXGroup;
+			children = (
+				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
+				6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */,
+			);
+			name = "User Table";
+			sourceTree = "<group>";
+		};
+		D43C7FF71C90746C00A7A7A7 /* Story Cell */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C111C50499A00C536EB /* FRSStoryCell.h */,
+				07A30C121C50499A00C536EB /* FRSStoryCell.m */,
+			);
+			name = "Story Cell";
+			sourceTree = "<group>";
+		};
+		D43C7FF81C90747300A7A7A7 /* Story View */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C081C50494700C536EB /* FRSStoryView.h */,
+				07A30C091C50494700C536EB /* FRSStoryView.m */,
+			);
+			name = "Story View";
+			sourceTree = "<group>";
+		};
+		D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */,
+				65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */,
+			);
+			name = "Assignment Annotation";
+			sourceTree = "<group>";
+		};
+		D43C7FFA1C90748600A7A7A7 /* Map Circle */ = {
+			isa = PBXGroup;
+			children = (
+				65D1E4E71C4EB7B6003362D3 /* FRSMapCircle.h */,
+				65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */,
+			);
+			name = "Map Circle";
+			sourceTree = "<group>";
+		};
+		D43C7FFB1C90748B00A7A7A7 /* Comment Table */ = {
+			isa = PBXGroup;
+			children = (
+				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
+				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
+			);
+			name = "Comment Table";
+			sourceTree = "<group>";
+		};
+		D43C7FFC1C90749F00A7A7A7 /* Comments View */ = {
+			isa = PBXGroup;
+			children = (
+				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
+				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
+			);
+			name = "Comments View";
+			sourceTree = "<group>";
+		};
+		D43C7FFD1C9074A400A7A7A7 /* Articles Table */ = {
+			isa = PBXGroup;
+			children = (
+				655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */,
+				655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */,
+			);
+			name = "Articles Table";
+			sourceTree = "<group>";
+		};
+		D43C7FFE1C9074B000A7A7A7 /* Gallery View */ = {
+			isa = PBXGroup;
+			children = (
+				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
+				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
+			);
+			name = "Gallery View";
+			sourceTree = "<group>";
+		};
+		D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */ = {
+			isa = PBXGroup;
+			children = (
+				65201A321C3D7D7900B31089 /* FRSGalleryCell.h */,
+				65201A331C3D7D7900B31089 /* FRSGalleryCell.m */,
+			);
+			name = "Gallery Cell";
+			sourceTree = "<group>";
+		};
+		D43C80001C9074BB00A7A7A7 /* Content Action Bar */ = {
+			isa = PBXGroup;
+			children = (
+				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
+				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
+			);
+			name = "Content Action Bar";
+			sourceTree = "<group>";
+		};
+		D43C80011C9074C100A7A7A7 /* Alert View */ = {
+			isa = PBXGroup;
+			children = (
+				079CEEFA1C28740B00E559F3 /* FRSAlertView.h */,
+				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
+			);
+			name = "Alert View";
+			sourceTree = "<group>";
+		};
+		D43C80021C9074C700A7A7A7 /* Scroll View Image */ = {
+			isa = PBXGroup;
+			children = (
+				65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */,
+				65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */,
+			);
+			name = "Scroll View Image";
+			sourceTree = "<group>";
+		};
+		D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */,
+			);
+			name = "Loading Bottom Cell";
+			sourceTree = "<group>";
+		};
 		D4F91A451C8B50670078BF15 /* Fresco API */ = {
 			isa = PBXGroup;
 			children = (
@@ -1533,6 +1656,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,

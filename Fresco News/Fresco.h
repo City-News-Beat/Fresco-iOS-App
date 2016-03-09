@@ -9,6 +9,9 @@
 #import "FRSAPIClient.h" // Network
 #import "FRSPersistence.h" // Local storage
 
+/*
+    API
+ */
 
 // api - constants
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
@@ -42,5 +45,11 @@ static NSInteger const maxStoryDescriptionChar = 1500;
 // social
 static NSInteger const maxCommentChar = 200;
 
+
+/* 
+    UI
+ */
+
+static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 
 

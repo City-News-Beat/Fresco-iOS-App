@@ -139,9 +139,13 @@
 -(void)configureTableView
 {
     [super configureTableView];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64- 49);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    // registering nib for bottom cell
+    
     [self.view addSubview:self.tableView];
 }
 
@@ -184,7 +188,7 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataSource.count;
+    return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -195,9 +199,18 @@
     return [self heightForItemAtDataSourceIndex:indexPath.row];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        return cell;
+    }
+    
     FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-    if (!cell){
+    
+    if (!cell) {
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -251,7 +264,6 @@
         });
         
     }];
-
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
@@ -304,6 +316,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
+    
+    // sloppy not to have a check here
+    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        return;
+    }
     
     [cell clearCell];
     
