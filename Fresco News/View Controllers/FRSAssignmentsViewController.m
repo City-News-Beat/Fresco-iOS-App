@@ -21,7 +21,9 @@
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
-
+{
+    NSMutableArray *dictionaryRepresentations;
+}
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
 
@@ -124,12 +126,32 @@
         
         for (NSDictionary *dict in assignments){
             [mSerializedAssignments addObject:[FRSAssignment assignmentWithDictionary:dict]];
+            
+            if (!dictionaryRepresentations) {
+                dictionaryRepresentations = [[NSMutableArray alloc] init];
+            }
+            
+            [dictionaryRepresentations addObject:dict];
         }
         
         self.assignments = [mSerializedAssignments copy];
         [self addAnnotationsForAssignments];
         
         self.isFetching = NO;
+        
+        [self cacheAssignments];
+    }];
+}
+
+-(void)cacheAssignments {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        
+        for (NSDictionary *dict in dictionaryRepresentations) {
+            FRSAssignment *assignmentToSave = [FRSAssignment MR_createEntityInContext:localContext];
+            [assignmentToSave configureWithDictionary:dict];
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"ASSIGNMENTS SAVED: %@", (contextDidSave) ? @"TRUE" : @"FALSE");
     }];
 }
 
