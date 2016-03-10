@@ -54,5 +54,8 @@ static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 
 // callbacks / blocks
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
-
+typedef void (^TransferProgressBlock)(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
+typedef void (^TransferCompletionBlock)(NSString *fileName, NSString *eTag, NSError *error, id task);
+typedef void (^TransferCancellationBlock)(BOOL success, NSError *error, id task);
+typedef void (^TransferPercentage)(float percentage);
 

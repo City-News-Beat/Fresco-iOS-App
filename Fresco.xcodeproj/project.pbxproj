@@ -118,6 +118,8 @@
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
+		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
+		D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */ = {isa = PBXBuildFile; fileRef = D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
 		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
@@ -408,6 +410,8 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
+		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
+		D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMultipartTask.m; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
 		D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSFileLoader.m; path = ../FRSFileLoader.m; sourceTree = "<group>"; };
 		D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileViewController.h; sourceTree = "<group>"; };
@@ -984,6 +988,8 @@
 		65EBEDBD1C44507600BE671F /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
+				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 			);
@@ -1819,6 +1825,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */,
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
 				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
@@ -1855,6 +1862,7 @@
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
+				D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */,
 				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
