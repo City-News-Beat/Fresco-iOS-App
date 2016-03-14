@@ -8,6 +8,7 @@
 
 #import "FRSAPIClient.h" // Network
 #import "FRSPersistence.h" // Local storage
+#import "FRSLocator.h" // location tracking
 
 /*
     API
@@ -27,7 +28,6 @@ static NSInteger const maxNameChars = 40;
 static NSInteger const maxLocationChars = 40;
 static NSInteger const maxBioChars = 160;
 static NSString * const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-
 
 
 // map
