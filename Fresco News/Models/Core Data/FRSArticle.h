@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "FRSCoreData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSArticle : NSManagedObject
+@interface FRSArticle : NSManagedObject<FRSManagedObject>
 
 +(instancetype)articleWithDictionary:(NSDictionary *)dictionary;
 

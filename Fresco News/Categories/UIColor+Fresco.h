@@ -30,8 +30,6 @@
 
 +(UIColor *)frescoBlueColor;
 
-+(UIColor *)frescoDarkTextColor;
-
 +(UIColor *)frescoShadowColor;
 
 +(UIColor *)frescoSliderGray;

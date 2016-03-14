@@ -7,6 +7,9 @@
 //
 
 #import "FRSBaseViewController.h"
+#import <CoreData/CoreData.h>
+#import "MagicalRecord.h"
+#import "Fresco.h"
 
 @interface FRSAssignmentsViewController : FRSBaseViewController
 

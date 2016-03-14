@@ -34,15 +34,39 @@
 }
 
 +(BOOL)isValidEmail:(NSString *)email{
-    return [email isEqualToString:@""] ? NO : YES;
+    NSError *regexError;
+    
+    NSRegularExpression *emailCheck = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$" options:kNilOptions error:&regexError];
+    
+    NSArray *matches = [emailCheck matchesInString:email options:kNilOptions range:NSMakeRange(0, email.length)];
+    
+    return ([matches count] == 0);
 }
 
 +(BOOL)isValidPassword:(NSString *)password{
-    return [password isEqualToString:@""] ? NO : YES;
+    NSArray *numbers = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"0"];
+    BOOL hasNumber = FALSE;
+    
+    for (NSString *number in numbers) {
+        if ([password rangeOfString:number].location != NSNotFound) {
+            hasNumber = TRUE;
+            break;
+        }
+    }
+    
+    return (password.length >= 8 && hasNumber);
 }
 
 +(BOOL)isValidUserName:(NSString *)userName {
-    return [userName isEqualToString:@""] ? NO : YES;
+    NSCharacterSet *validCharSet = [[NSCharacterSet characterSetWithCharactersInString:validUsernameChars] invertedSet];
+    
+    BOOL isValidCharSet = TRUE;
+    
+    if ([userName rangeOfCharacterFromSet:validCharSet].location != NSNotFound) {
+        isValidCharSet = FALSE;
+    }
+
+    return (userName && userName.length < maxUsernameChars && isValidCharSet);
 }
 
 @end

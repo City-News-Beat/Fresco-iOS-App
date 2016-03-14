@@ -7,7 +7,8 @@
 //
 
 #import "FRSBaseViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface FRSSettingsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSettingsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
 
 @end

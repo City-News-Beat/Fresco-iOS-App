@@ -76,7 +76,7 @@
 		65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A1E1C3D7D0000B31089 /* FRSNavigationController.m */; };
 		65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A211C3D7D1A00B31089 /* FRSSignUpViewController.m */; };
 		65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A241C3D7D2300B31089 /* FRSLoginViewController.m */; };
-		65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */; };
+		65201A281C3D7D2B00B31089 /* +.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A271C3D7D2B00B31089 /* +.m */; };
 		65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */; };
 		65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A301C3D7D6200B31089 /* FRSGalleryView.m */; };
 		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
@@ -106,7 +106,6 @@
 		65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */; };
 		65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */; };
 		65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB81C44197100BE671F /* FRSLocationManager.m */; };
-		65EBEDC01C4452CA00BE671F /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */; };
 		65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237AF1C249DC3002182DE /* FRSAppDelegate.m */; };
 		65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B21C24A94E002182DE /* FRSTabBarController.m */; };
 		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
@@ -119,6 +118,18 @@
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
+		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
+		D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */ = {isa = PBXBuildFile; fileRef = D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */; };
+		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
+		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
+		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
+		D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */; };
+		D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */; };
+		D43C7FDD1C8E474C00A7A7A7 /* FRESCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */; };
+		D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */; };
+		D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */; };
+		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
+		D4F91A4C1C8B568B0078BF15 /* FRSPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E70F4BDC1B9F8D6600A765E0 /* WKImageRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */; };
 		E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
@@ -318,7 +329,7 @@
 		65201A231C3D7D2300B31089 /* FRSLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLoginViewController.h; sourceTree = "<group>"; };
 		65201A241C3D7D2300B31089 /* FRSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLoginViewController.m; sourceTree = "<group>"; };
 		65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSScrollingViewController.h; sourceTree = "<group>"; };
-		65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollingViewController.m; sourceTree = "<group>"; };
+		65201A271C3D7D2B00B31089 /* +.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "+.m"; sourceTree = "<group>"; };
 		65201A291C3D7D3C00B31089 /* FRSSetupProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSetupProfileViewController.h; path = Onboard/FRSSetupProfileViewController.h; sourceTree = "<group>"; };
 		65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSetupProfileViewController.m; path = Onboard/FRSSetupProfileViewController.m; sourceTree = "<group>"; };
 		65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryView.h; sourceTree = "<group>"; };
@@ -375,8 +386,6 @@
 		65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentsViewController.m; sourceTree = "<group>"; };
 		65EBEDB71C44197100BE671F /* FRSLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSLocationManager.h; path = Singletons/FRSLocationManager.h; sourceTree = "<group>"; };
 		65EBEDB81C44197100BE671F /* FRSLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSLocationManager.m; path = Singletons/FRSLocationManager.m; sourceTree = "<group>"; };
-		65EBEDBE1C4452CA00BE671F /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAPIClient.h; path = Networking/FRSAPIClient.h; sourceTree = "<group>"; };
-		65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAPIClient.m; path = Networking/FRSAPIClient.m; sourceTree = "<group>"; };
 		65F237AE1C249DC3002182DE /* FRSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAppDelegate.h; sourceTree = "<group>"; };
 		65F237AF1C249DC3002182DE /* FRSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAppDelegate.m; sourceTree = "<group>"; };
 		65F237B11C24A94E002182DE /* FRSTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTabBarController.h; sourceTree = "<group>"; };
@@ -401,6 +410,27 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
+		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
+		D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMultipartTask.m; sourceTree = "<group>"; };
+		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
+		D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSFileLoader.m; path = ../FRSFileLoader.m; sourceTree = "<group>"; };
+		D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileViewController.h; sourceTree = "<group>"; };
+		D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileViewController.m; sourceTree = "<group>"; };
+		D43C7FD31C8E46A500A7A7A7 /* FRSImageViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSImageViewCell.h; sourceTree = "<group>"; };
+		D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSImageViewCell.m; sourceTree = "<group>"; };
+		D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSImageViewCell.xib; sourceTree = "<group>"; };
+		D43C7FD81C8E472B00A7A7A7 /* FRSVideoTrimmer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSVideoTrimmer.h; path = ../FRSVideoTrimmer.h; sourceTree = "<group>"; };
+		D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSVideoTrimmer.m; path = ../FRSVideoTrimmer.m; sourceTree = "<group>"; };
+		D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCheckBox.h; sourceTree = "<group>"; };
+		D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRESCheckBox.m; sourceTree = "<group>"; };
+		D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLoadingCell.xib; sourceTree = "<group>"; };
+		D4F91A461C8B508A0078BF15 /* Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fresco.h; sourceTree = "<group>"; };
+		D4F91A471C8B51500078BF15 /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAPIClient.h; sourceTree = "<group>"; };
+		D4F91A481C8B51500078BF15 /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAPIClient.m; sourceTree = "<group>"; };
+		D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPersistence.h; sourceTree = "<group>"; };
+		D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPersistence.m; sourceTree = "<group>"; };
+		D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCoreData.h; sourceTree = "<group>"; };
 		E65C24581AE6E328001A5208 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E70F4BD91B9F87E500A765E0 /* WKImageRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKImageRowController.h; path = Galleries/WKImageRowController.h; sourceTree = "<group>"; };
 		E70F4BDA1B9F87E500A765E0 /* WKImageRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKImageRowController.m; path = Galleries/WKImageRowController.m; sourceTree = "<group>"; };
@@ -497,28 +527,17 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */,
-				07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */,
-				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
-				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
-				07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */,
-				07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */,
-				07A30BED1C50488800C536EB /* FRSEmailViewController.h */,
-				07A30BEE1C50488800C536EB /* FRSEmailViewController.m */,
-				07A30BEF1C50488800C536EB /* FRSPasswordChangeViewController.h */,
-				07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */,
-				07A30BF11C50488800C536EB /* FRSPromoCodeViewController.h */,
-				07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */,
-				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
-				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
-				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
-				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
-				07A30BF71C50488800C536EB /* FRSTableViewCell.h */,
-				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
-				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
-				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
-				07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */,
-				07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */,
+				D43C7FE41C8F354500A7A7A7 /* Business Type */,
+				D43C7FE51C8F354F00A7A7A7 /* Debit Card */,
+				D43C7FE61C8F355500A7A7A7 /* Disable Account */,
+				D43C7FE71C8F355D00A7A7A7 /* Email */,
+				D43C7FE81C8F356200A7A7A7 /* Password */,
+				D43C7FE91C8F356800A7A7A7 /* Promo */,
+				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
+				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
+				D43C7FEC1C8F359700A7A7A7 /* Table View */,
+				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
+				D43C7FEE1C8F35A300A7A7A7 /* Username */,
 			);
 			name = Settings;
 			path = ../..;
@@ -527,12 +546,11 @@
 		074393EF1C3AC56E0007CFF0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				65201A381C3D7DA800B31089 /* FRSDataValidator.h */,
-				65201A391C3D7DA800B31089 /* FRSDataValidator.m */,
-				65EBEDAF1C4404A800BE671F /* FRSDateFormatter.h */,
-				65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */,
-				070D66D01C2B395D00AB3D9D /* OEParallax.h */,
-				070D66D11C2B395D00AB3D9D /* OEParallax.m */,
+				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
+				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
+				D43C7FF11C8F518E00A7A7A7 /* Data Validation */,
+				D43C7FF21C8F519300A7A7A7 /* Date Formatter */,
+				D43C7FF31C8F519A00A7A7A7 /* Parallax */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -588,6 +606,7 @@
 			isa = PBXGroup;
 			children = (
 				1EDA44B21AA4CCC70082E08D /* Fresco News */,
+				D43C7FCC1C8E464800A7A7A7 /* Future */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
 				E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */,
 				E71F0E451B0B936200186BAD /* Fresco WatchKit App */,
@@ -611,11 +630,10 @@
 		1EDA44B21AA4CCC70082E08D /* Fresco News */ = {
 			isa = PBXGroup;
 			children = (
-				65EBEDBD1C44507600BE671F /* Networking */,
-				074393EF1C3AC56E0007CFF0 /* Utilities */,
-				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
+				D4F91A451C8B50670078BF15 /* Fresco API */,
+				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				6596ECA01C5032000011C18B /* Subclasses */,
 				1EDA45041AA4D0B10082E08D /* Categories */,
 				1EDA44DF1AA4CD0D0082E08D /* Singletons */,
@@ -662,34 +680,21 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6547C9081C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.h */,
-				6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */,
-				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
-				6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */,
-				07A30C111C50499A00C536EB /* FRSStoryCell.h */,
-				07A30C121C50499A00C536EB /* FRSStoryCell.m */,
-				07A30C081C50494700C536EB /* FRSStoryView.h */,
-				07A30C091C50494700C536EB /* FRSStoryView.m */,
-				65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */,
-				65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */,
-				65D1E4E71C4EB7B6003362D3 /* FRSMapCircle.h */,
-				65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */,
-				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
-				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
-				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
-				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
-				655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */,
-				655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */,
-				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
-				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
-				65201A321C3D7D7900B31089 /* FRSGalleryCell.h */,
-				65201A331C3D7D7900B31089 /* FRSGalleryCell.m */,
-				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
-				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
-				079CEEFA1C28740B00E559F3 /* FRSAlertView.h */,
-				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
-				65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */,
-				65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */,
+				D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */,
+				D43C7FF51C90745F00A7A7A7 /* Title Nav */,
+				D43C7FF61C90746700A7A7A7 /* User Table */,
+				D43C7FF71C90746C00A7A7A7 /* Story Cell */,
+				D43C7FF81C90747300A7A7A7 /* Story View */,
+				D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */,
+				D43C7FFA1C90748600A7A7A7 /* Map Circle */,
+				D43C7FFB1C90748B00A7A7A7 /* Comment Table */,
+				D43C7FFC1C90749F00A7A7A7 /* Comments View */,
+				D43C7FFD1C9074A400A7A7A7 /* Articles Table */,
+				D43C7FFE1C9074B000A7A7A7 /* Gallery View */,
+				D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */,
+				D43C80001C9074BB00A7A7A7 /* Content Action Bar */,
+				D43C80011C9074C100A7A7A7 /* Alert View */,
+				D43C80021C9074C700A7A7A7 /* Scroll View Image */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -697,32 +702,19 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */,
-				0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */,
-				65D1E4F31C4F0675003362D3 /* FRSFollowersViewController.h */,
-				65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */,
-				659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */,
-				659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */,
-				65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */,
-				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
-				65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */,
-				65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */,
-				65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */,
-				65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */,
-				65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */,
-				65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */,
-				65046E031C3EFC81003E02B5 /* FRSHomeViewController.h */,
-				65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */,
-				65201A201C3D7D1A00B31089 /* FRSSignUpViewController.h */,
-				65201A211C3D7D1A00B31089 /* FRSSignUpViewController.m */,
-				65201A291C3D7D3C00B31089 /* FRSSetupProfileViewController.h */,
-				65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */,
-				65201A231C3D7D2300B31089 /* FRSLoginViewController.h */,
-				65201A241C3D7D2300B31089 /* FRSLoginViewController.m */,
-				07A30C0B1C50495C00C536EB /* FRSStoriesViewController.h */,
-				07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */,
-				07A30C0E1C50497E00C536EB /* FRSSearchViewController.h */,
-				07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */,
+				4AB98C921C8A7EC6005E7AB2 /* Camera */,
+				4AB98C931C8A7ECF005E7AB2 /* Followers */,
+				4AB98C941C8A7ED7005E7AB2 /* Gallery */,
+				4AB98C951C8A7EDC005E7AB2 /* Assignments */,
+				4AB98C961C8A7EE3005E7AB2 /* Profile */,
+				4AB98C971C8A7EE8005E7AB2 /* Profile */,
+				4AB98C981C8A7EF1005E7AB2 /* Scrolling */,
+				4AB98C991C8A7EF7005E7AB2 /* Home */,
+				4AB98C9A1C8A7EFC005E7AB2 /* Sign up */,
+				4AB98C9B1C8A7F05005E7AB2 /* Setup Profile */,
+				4AB98C9C1C8A7F0D005E7AB2 /* Login */,
+				4AB98C9D1C8A7F11005E7AB2 /* Stories */,
+				4AB98C9E1C8A7F3B005E7AB2 /* Search */,
 				65F237B41C24A954002182DE /* Tab Bar */,
 				073F624C1C3D71D300E07977 /* Settings */,
 				E784280E1B57F3E30090DFCC /* Onboard */,
@@ -754,8 +746,6 @@
 		1EDA45041AA4D0B10082E08D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				65201A1D1C3D7D0000B31089 /* FRSNavigationController.h */,
-				65201A1E1C3D7D0000B31089 /* FRSNavigationController.m */,
 				65F237C81C24D464002182DE /* UIFont+Fresco.h */,
 				65F237C91C24D464002182DE /* UIFont+Fresco.m */,
 				65F237B51C24AACF002182DE /* UIColor+Fresco.h */,
@@ -774,9 +764,127 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		4AB98C921C8A7EC6005E7AB2 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */,
+				0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		4AB98C931C8A7ECF005E7AB2 /* Followers */ = {
+			isa = PBXGroup;
+			children = (
+				65D1E4F31C4F0675003362D3 /* FRSFollowersViewController.h */,
+				65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */,
+			);
+			name = Followers;
+			sourceTree = "<group>";
+		};
+		4AB98C941C8A7ED7005E7AB2 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */,
+				659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */,
+			);
+			name = Gallery;
+			sourceTree = "<group>";
+		};
+		4AB98C951C8A7EDC005E7AB2 /* Assignments */ = {
+			isa = PBXGroup;
+			children = (
+				65EBEDB21C44116700BE671F /* FRSAssignmentsViewController.h */,
+				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
+			);
+			name = Assignments;
+			sourceTree = "<group>";
+		};
+		4AB98C961C8A7EE3005E7AB2 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */,
+				65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		4AB98C971C8A7EE8005E7AB2 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */,
+				65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		4AB98C981C8A7EF1005E7AB2 /* Scrolling */ = {
+			isa = PBXGroup;
+			children = (
+				65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */,
+				65201A271C3D7D2B00B31089 /* +.m */,
+			);
+			name = Scrolling;
+			sourceTree = "<group>";
+		};
+		4AB98C991C8A7EF7005E7AB2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				65046E031C3EFC81003E02B5 /* FRSHomeViewController.h */,
+				65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		4AB98C9A1C8A7EFC005E7AB2 /* Sign up */ = {
+			isa = PBXGroup;
+			children = (
+				65201A201C3D7D1A00B31089 /* FRSSignUpViewController.h */,
+				65201A211C3D7D1A00B31089 /* FRSSignUpViewController.m */,
+			);
+			name = "Sign up";
+			sourceTree = "<group>";
+		};
+		4AB98C9B1C8A7F05005E7AB2 /* Setup Profile */ = {
+			isa = PBXGroup;
+			children = (
+				65201A291C3D7D3C00B31089 /* FRSSetupProfileViewController.h */,
+				65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */,
+			);
+			name = "Setup Profile";
+			sourceTree = "<group>";
+		};
+		4AB98C9C1C8A7F0D005E7AB2 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				65201A231C3D7D2300B31089 /* FRSLoginViewController.h */,
+				65201A241C3D7D2300B31089 /* FRSLoginViewController.m */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		4AB98C9D1C8A7F11005E7AB2 /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C0B1C50495C00C536EB /* FRSStoriesViewController.h */,
+				07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */,
+			);
+			name = Stories;
+			sourceTree = "<group>";
+		};
+		4AB98C9E1C8A7F3B005E7AB2 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C0E1C50497E00C536EB /* FRSSearchViewController.h */,
+				07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
 		6501D56E1C249612001F54EF /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				65135FDD1C286E1900839149 /* FRSArticle */,
 				65135FDE1C286E2200839149 /* FRSUser */,
 				65135FDF1C286E2700839149 /* FRSAssignment */,
@@ -869,6 +977,8 @@
 		6596ECA01C5032000011C18B /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				65201A1D1C3D7D0000B31089 /* FRSNavigationController.h */,
+				65201A1E1C3D7D0000B31089 /* FRSNavigationController.m */,
 				6596EC9D1C5031FA0011C18B /* FRSBorderedImageView.h */,
 				6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */,
 			);
@@ -878,8 +988,10 @@
 		65EBEDBD1C44507600BE671F /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				65EBEDBE1C4452CA00BE671F /* FRSAPIClient.h */,
-				65EBEDBF1C4452CA00BE671F /* FRSAPIClient.m */,
+				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
+				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
+				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
+				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -907,6 +1019,355 @@
 				52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		D43C7FCC1C8E464800A7A7A7 /* Future */ = {
+			isa = PBXGroup;
+			children = (
+				D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */,
+				D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */,
+				D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */,
+				D43C7FD31C8E46A500A7A7A7 /* FRSImageViewCell.h */,
+				D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */,
+				D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */,
+				D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */,
+				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
+			);
+			name = Future;
+			sourceTree = "<group>";
+		};
+		D43C7FE01C8F290D00A7A7A7 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				65F237BD1C24C0E4002182DE /* FRSOnboardingViewController.h */,
+				65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		D43C7FE11C8F291B00A7A7A7 /* One */ = {
+			isa = PBXGroup;
+			children = (
+				65F237C01C24C28D002182DE /* FRSOnboardOneView.h */,
+				65F237C11C24C28D002182DE /* FRSOnboardOneView.m */,
+			);
+			name = One;
+			sourceTree = "<group>";
+		};
+		D43C7FE21C8F292200A7A7A7 /* Two */ = {
+			isa = PBXGroup;
+			children = (
+				070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */,
+				070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */,
+			);
+			name = Two;
+			sourceTree = "<group>";
+		};
+		D43C7FE31C8F292A00A7A7A7 /* Three */ = {
+			isa = PBXGroup;
+			children = (
+				070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */,
+				070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */,
+			);
+			name = Three;
+			sourceTree = "<group>";
+		};
+		D43C7FE41C8F354500A7A7A7 /* Business Type */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */,
+				07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */,
+			);
+			name = "Business Type";
+			sourceTree = "<group>";
+		};
+		D43C7FE51C8F354F00A7A7A7 /* Debit Card */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
+				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
+			);
+			name = "Debit Card";
+			sourceTree = "<group>";
+		};
+		D43C7FE61C8F355500A7A7A7 /* Disable Account */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */,
+				07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */,
+			);
+			name = "Disable Account";
+			sourceTree = "<group>";
+		};
+		D43C7FE71C8F355D00A7A7A7 /* Email */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BED1C50488800C536EB /* FRSEmailViewController.h */,
+				07A30BEE1C50488800C536EB /* FRSEmailViewController.m */,
+			);
+			name = Email;
+			sourceTree = "<group>";
+		};
+		D43C7FE81C8F356200A7A7A7 /* Password */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BEF1C50488800C536EB /* FRSPasswordChangeViewController.h */,
+				07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */,
+			);
+			name = Password;
+			sourceTree = "<group>";
+		};
+		D43C7FE91C8F356800A7A7A7 /* Promo */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF11C50488800C536EB /* FRSPromoCodeViewController.h */,
+				07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */,
+			);
+			name = Promo;
+			sourceTree = "<group>";
+		};
+		D43C7FEA1C8F358A00A7A7A7 /* Radius */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF31C50488800C536EB /* FRSRadiusViewController.h */,
+				07A30BF41C50488800C536EB /* FRSRadiusViewController.m */,
+			);
+			name = Radius;
+			sourceTree = "<group>";
+		};
+		D43C7FEB1C8F359000A7A7A7 /* Settings VC */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
+				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
+			);
+			name = "Settings VC";
+			sourceTree = "<group>";
+		};
+		D43C7FEC1C8F359700A7A7A7 /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF71C50488800C536EB /* FRSTableViewCell.h */,
+				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
+			);
+			name = "Table View";
+			sourceTree = "<group>";
+		};
+		D43C7FED1C8F359D00A7A7A7 /* Tax Info */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
+				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
+			);
+			name = "Tax Info";
+			sourceTree = "<group>";
+		};
+		D43C7FEE1C8F35A300A7A7A7 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */,
+				07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */,
+			);
+			name = Username;
+			sourceTree = "<group>";
+		};
+		D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */ = {
+			isa = PBXGroup;
+			children = (
+				D43C7FD81C8E472B00A7A7A7 /* FRSVideoTrimmer.h */,
+				D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */,
+			);
+			name = "Trimming Video";
+			sourceTree = "<group>";
+		};
+		D43C7FF01C8F518300A7A7A7 /* Loading Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */,
+				D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */,
+			);
+			name = "Loading Resources";
+			sourceTree = "<group>";
+		};
+		D43C7FF11C8F518E00A7A7A7 /* Data Validation */ = {
+			isa = PBXGroup;
+			children = (
+				65201A381C3D7DA800B31089 /* FRSDataValidator.h */,
+				65201A391C3D7DA800B31089 /* FRSDataValidator.m */,
+			);
+			name = "Data Validation";
+			sourceTree = "<group>";
+		};
+		D43C7FF21C8F519300A7A7A7 /* Date Formatter */ = {
+			isa = PBXGroup;
+			children = (
+				65EBEDAF1C4404A800BE671F /* FRSDateFormatter.h */,
+				65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */,
+			);
+			name = "Date Formatter";
+			sourceTree = "<group>";
+		};
+		D43C7FF31C8F519A00A7A7A7 /* Parallax */ = {
+			isa = PBXGroup;
+			children = (
+				070D66D01C2B395D00AB3D9D /* OEParallax.h */,
+				070D66D11C2B395D00AB3D9D /* OEParallax.m */,
+			);
+			name = Parallax;
+			sourceTree = "<group>";
+		};
+		D43C7FF41C8F588C00A7A7A7 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */,
+				D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
+		D43C7FF51C90745F00A7A7A7 /* Title Nav */ = {
+			isa = PBXGroup;
+			children = (
+				6547C9081C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.h */,
+				6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */,
+			);
+			name = "Title Nav";
+			sourceTree = "<group>";
+		};
+		D43C7FF61C90746700A7A7A7 /* User Table */ = {
+			isa = PBXGroup;
+			children = (
+				6547C9021C6A68A700DAD98C /* FRSUserTableViewCell.h */,
+				6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */,
+			);
+			name = "User Table";
+			sourceTree = "<group>";
+		};
+		D43C7FF71C90746C00A7A7A7 /* Story Cell */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C111C50499A00C536EB /* FRSStoryCell.h */,
+				07A30C121C50499A00C536EB /* FRSStoryCell.m */,
+			);
+			name = "Story Cell";
+			sourceTree = "<group>";
+		};
+		D43C7FF81C90747300A7A7A7 /* Story View */ = {
+			isa = PBXGroup;
+			children = (
+				07A30C081C50494700C536EB /* FRSStoryView.h */,
+				07A30C091C50494700C536EB /* FRSStoryView.m */,
+			);
+			name = "Story View";
+			sourceTree = "<group>";
+		};
+		D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */,
+				65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */,
+			);
+			name = "Assignment Annotation";
+			sourceTree = "<group>";
+		};
+		D43C7FFA1C90748600A7A7A7 /* Map Circle */ = {
+			isa = PBXGroup;
+			children = (
+				65D1E4E71C4EB7B6003362D3 /* FRSMapCircle.h */,
+				65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */,
+			);
+			name = "Map Circle";
+			sourceTree = "<group>";
+		};
+		D43C7FFB1C90748B00A7A7A7 /* Comment Table */ = {
+			isa = PBXGroup;
+			children = (
+				65A525F01C499FCA004A622B /* FRSCommentTableViewCell.h */,
+				65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */,
+			);
+			name = "Comment Table";
+			sourceTree = "<group>";
+		};
+		D43C7FFC1C90749F00A7A7A7 /* Comments View */ = {
+			isa = PBXGroup;
+			children = (
+				65A525ED1C4988B9004A622B /* FRSCommentsView.h */,
+				65A525EE1C4988B9004A622B /* FRSCommentsView.m */,
+			);
+			name = "Comments View";
+			sourceTree = "<group>";
+		};
+		D43C7FFD1C9074A400A7A7A7 /* Articles Table */ = {
+			isa = PBXGroup;
+			children = (
+				655768921C496B3A0031107A /* FRSArticlesTableViewCell.h */,
+				655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */,
+			);
+			name = "Articles Table";
+			sourceTree = "<group>";
+		};
+		D43C7FFE1C9074B000A7A7A7 /* Gallery View */ = {
+			isa = PBXGroup;
+			children = (
+				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
+				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
+			);
+			name = "Gallery View";
+			sourceTree = "<group>";
+		};
+		D43C7FFF1C9074B500A7A7A7 /* Gallery Cell */ = {
+			isa = PBXGroup;
+			children = (
+				65201A321C3D7D7900B31089 /* FRSGalleryCell.h */,
+				65201A331C3D7D7900B31089 /* FRSGalleryCell.m */,
+			);
+			name = "Gallery Cell";
+			sourceTree = "<group>";
+		};
+		D43C80001C9074BB00A7A7A7 /* Content Action Bar */ = {
+			isa = PBXGroup;
+			children = (
+				65F237C51C24D263002182DE /* FRSContentActionsBar.h */,
+				65F237C61C24D263002182DE /* FRSContentActionsBar.m */,
+			);
+			name = "Content Action Bar";
+			sourceTree = "<group>";
+		};
+		D43C80011C9074C100A7A7A7 /* Alert View */ = {
+			isa = PBXGroup;
+			children = (
+				079CEEFA1C28740B00E559F3 /* FRSAlertView.h */,
+				079CEEFB1C28740B00E559F3 /* FRSAlertView.m */,
+			);
+			name = "Alert View";
+			sourceTree = "<group>";
+		};
+		D43C80021C9074C700A7A7A7 /* Scroll View Image */ = {
+			isa = PBXGroup;
+			children = (
+				65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */,
+				65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */,
+			);
+			name = "Scroll View Image";
+			sourceTree = "<group>";
+		};
+		D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */,
+			);
+			name = "Loading Bottom Cell";
+			sourceTree = "<group>";
+		};
+		D4F91A451C8B50670078BF15 /* Fresco API */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91A461C8B508A0078BF15 /* Fresco.h */,
+				BC419B671B6FED2700122B87 /* FRSAppConstants.h */,
+				65EBEDBD1C44507600BE671F /* Networking */,
+				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
+			);
+			name = "Fresco API";
 			sourceTree = "<group>";
 		};
 		E70F4BE11B9F927800A765E0 /* Categories */ = {
@@ -993,14 +1454,10 @@
 		E784280E1B57F3E30090DFCC /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
-				65F237BD1C24C0E4002182DE /* FRSOnboardingViewController.h */,
-				65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */,
-				65F237C01C24C28D002182DE /* FRSOnboardOneView.h */,
-				65F237C11C24C28D002182DE /* FRSOnboardOneView.m */,
-				070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */,
-				070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */,
-				070D66CD1C2AEFE000AB3D9D /* FRSOnboardThreeView.h */,
-				070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */,
+				D43C7FE01C8F290D00A7A7A7 /* General */,
+				D43C7FE11C8F291B00A7A7A7 /* One */,
+				D43C7FE21C8F292200A7A7A7 /* Two */,
+				D43C7FE31C8F292A00A7A7A7 /* Three */,
 			);
 			path = Onboard;
 			sourceTree = "<group>";
@@ -1205,11 +1662,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
+				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
+				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1365,6 +1825,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */,
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
 				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
@@ -1377,7 +1838,6 @@
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
-				65EBEDC01C4452CA00BE671F /* FRSAPIClient.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
@@ -1402,6 +1862,8 @@
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
+				D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */,
+				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
@@ -1415,6 +1877,7 @@
 				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
+				D43C7FDD1C8E474C00A7A7A7 /* FRESCheckBox.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
@@ -1433,9 +1896,11 @@
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
+				D4F91A4C1C8B568B0078BF15 /* FRSPersistence.m in Sources */,
 				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
+				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
@@ -1445,14 +1910,17 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
-				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
+				65201A281C3D7D2B00B31089 /* +.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
+				D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */,
+				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

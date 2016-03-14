@@ -67,6 +67,11 @@
     self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 6 - 44, 1, 44, 42)];
     [self.shareButton setImage:[UIImage imageNamed:@"share-icon-dark"] forState:UIControlStateNormal];
     [self addSubview:self.shareButton];
+    [self.shareButton addTarget:self action:@selector(handleShareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void)handleShareButtonTapped {
+    [self.delegate contentActionBarDidShare:self];
 }
 
 -(void)configureRepostSection{

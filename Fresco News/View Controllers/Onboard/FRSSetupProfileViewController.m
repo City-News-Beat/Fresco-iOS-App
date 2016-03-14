@@ -53,7 +53,7 @@
 
 -(void)configureImagePicker{
     self.imagePicker = [[UIImagePickerController alloc] init];
-    self.imagePicker.delegate = self;
+    self.imagePicker.delegate = (id<UINavigationControllerDelegate, UIImagePickerControllerDelegate>)self;
     self.imagePicker.allowsEditing = YES;
 }
 

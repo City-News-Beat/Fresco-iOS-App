@@ -38,6 +38,11 @@
     return _sessionQueue;
 }
 
+
+/* 
+    Whoever wrote this: do not make structures with FRS prefix just because, there's no reason this couldn't have just returned an AVAuthorizationStatus
+ */
+
 -(FRSAVAuthStatus)authStatus{
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
@@ -106,9 +111,12 @@
 -(void)configureInputsOutputs{
     
     //VIDEO INPUT
-    if ([self.session canAddInput:[self videoInputDevice]])
+    if ([self.session canAddInput:[self videoInputDevice]]) {
         [self.session addInput:[self videoInputDevice]];
-    else self.AVSetupSuccess = NO;
+    }
+    else {
+        self.AVSetupSuccess = NO;
+    }
     
     //AUDIO INPUT
 
@@ -119,10 +127,12 @@
     
     NSLog(@"%@", error.localizedDescription);
     
-    if ([self.session canAddInput:audioDeviceInput])
+    if ([self.session canAddInput:audioDeviceInput]) {
         [self.session addInput:audioDeviceInput];
-    else
+    }
+    else {
         self.AVSetupSuccess = NO;
+    }
     
     //VIDEO OUTPUT
     self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="PBImageViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JWL-yc-nzD">
+                        <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xu7-4R-gIY">
+                        <rect key="frame" x="158" y="198" width="59" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="9GL-CE-YM9"/>
+                            <constraint firstAttribute="width" constant="59" id="wMA-R0-sru"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aam-wl-Qve" customClass="FRSCheckBox">
+                        <rect key="frame" x="199" y="5" width="15" height="15"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="GuO-NO-5aZ"/>
+                            <constraint firstAttribute="width" constant="15" id="uG7-3b-lZq"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="JWL-yc-nzD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1Qt-Uh-LS2"/>
+                <constraint firstAttribute="trailing" secondItem="xu7-4R-gIY" secondAttribute="trailing" constant="2" id="EDK-jf-lEn"/>
+                <constraint firstItem="aam-wl-Qve" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="TeB-4g-2S7"/>
+                <constraint firstAttribute="bottom" secondItem="xu7-4R-gIY" secondAttribute="bottom" id="dCp-fe-9mw"/>
+                <constraint firstAttribute="trailing" secondItem="aam-wl-Qve" secondAttribute="trailing" constant="5" id="e6U-fU-TMu"/>
+                <constraint firstAttribute="trailing" secondItem="JWL-yc-nzD" secondAttribute="trailing" id="nv5-81-Pv0"/>
+                <constraint firstAttribute="bottom" secondItem="JWL-yc-nzD" secondAttribute="bottom" id="vyZ-Yi-pEK"/>
+                <constraint firstItem="JWL-yc-nzD" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="wvE-DM-NX7"/>
+            </constraints>
+            <size key="customSize" width="219" height="219"/>
+            <connections>
+                <outlet property="checkBox" destination="aam-wl-Qve" id="eBj-jD-wki"/>
+                <outlet property="imageView" destination="JWL-yc-nzD" id="0Wc-EO-RIl"/>
+                <outlet property="timeLabel" destination="xu7-4R-gIY" id="2Dd-50-NEZ"/>
+            </connections>
+            <point key="canvasLocation" x="389.5" y="249.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

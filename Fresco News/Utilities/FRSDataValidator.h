@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Fresco.h"
 
 @interface FRSDataValidator : NSObject
 

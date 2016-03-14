@@ -31,6 +31,12 @@
     
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery delegate:self];
     [self addSubview:self.galleryView];
+    
+    __weak typeof (self) weakSelf = self;
+    
+    self.galleryView.shareBlock = ^void(NSArray *sharedContent) {
+        weakSelf.shareBlock(sharedContent);
+    };
 
 }
 

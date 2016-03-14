@@ -33,7 +33,7 @@
 
 -(void)configureText{
     CGFloat screenWidth = self.bounds.size.width;
-    CGFloat offset;
+    CGFloat offset = 138; // default
     
     if (IS_IPHONE_5){
         offset = 138;

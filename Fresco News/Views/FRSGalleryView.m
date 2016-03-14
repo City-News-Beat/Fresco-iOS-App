@@ -63,12 +63,23 @@
 @implementation FRSGalleryView
 
 /*
-// Only override drawRect: if you perform custom drawing.
+/
+ / Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     // Drawing code
 }
 */
+
+-(void)handleActionButtonTapped {
+    // idk why dan made this method life is a mystery
+    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+}
+
+-(void)contentActionbarDidSelectShareButton:(id)sender {
+    // show actions sheet
+    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+}
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
@@ -101,6 +112,7 @@
 
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight])];
+    self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
@@ -221,7 +233,6 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    
     [self addSubview:self.nameLabel];
 }
 
@@ -311,6 +322,14 @@
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
+}
+
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    FRSPost *post = self.orderedPosts[0];
+    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+    
+    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
+    self.shareBlock(@[sharedContent]);
 }
 
 #pragma mark ScrollView Delegate

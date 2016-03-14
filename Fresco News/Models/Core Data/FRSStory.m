@@ -9,6 +9,7 @@
 #import "FRSStory.h"
 #import "FRSGallery.h"
 #import "FRSUser.h"
+#import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"
 

@@ -20,7 +20,7 @@
 
 // Insert code here to add functionality to your managed object subclass
 
-+(instancetype)postWithDictionary:(NSDictionary *)dict{
++(instancetype)postWithDictionary:(NSDictionary *)dict {
     FRSPost *post = [FRSPost MR_createEntity];
     
     if (!dict){
@@ -33,7 +33,7 @@
     return post;
 }
 
--(void)configureWithDictionary:(NSDictionary *)dict{
+-(void)configureWithDictionary:(NSDictionary *)dict {
     self.uid = dict[@"_id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
@@ -47,7 +47,7 @@
     self.meta = @{@"image_height" : height, @"image_width" : width};
 }
 
--(NSString *)shortAddressFromAddress:(NSString *)address{
+-(NSString *)shortAddressFromAddress:(NSString *)address {
     NSArray *comps = [address componentsSeparatedByString:@","];
     NSMutableString *str = [NSMutableString new];
     if (comps.count >= 3){

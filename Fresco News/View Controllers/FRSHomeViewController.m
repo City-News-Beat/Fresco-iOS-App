@@ -19,12 +19,17 @@
 
 #import "DGElasticPullToRefresh.h"
 
-@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
+#import "Fresco.h"
 
-@property (strong, nonatomic) NSArray *highlights;
+@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
+{
+    BOOL isLoading;
+    NSInteger lastOffset;
+}
+@property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
 
-@property (strong, nonatomic) NSArray *dataSource;
+@property (strong, nonatomic) NSMutableArray *dataSource;
 
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
@@ -32,10 +37,26 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property BOOL contentIsEmpty;
 
-
 @end
 
 @implementation FRSHomeViewController
+
+
+-(UIImage *)imageForLeftBarItem {
+    return Nil;
+}
+
+-(void)tabbedNavigationTitleViewDidTapRightBarItem {
+    
+}
+
+-(void)tabbedNavigationTitleViewDidTapLeftBarItem {
+    
+}
+
+-(void)tabbedNavigationTitleViewDidTapButtonAtIndex:(NSInteger)index {
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -121,43 +142,60 @@
     return [UIImage imageNamed:@"search-icon"];
 }
 
--(void)configureTableView{
+-(void)configureTableView
+{
     [super configureTableView];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64- 49);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    
+    // registering nib for bottom cell
+    
     [self.view addSubview:self.tableView];
 }
 
 -(void)configureDataSource{
     
-    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @2, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
-        if (!responseObject.count){
+    // make core data fetch
+    [self fetchLocalData];
+    self.dataSource = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
+    
+    // network call
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
+        
+        if ([galleries count] == 0){
             return;
         }
         
-        NSMutableArray *mArr = [NSMutableArray new];
         
-        NSArray *galleries = responseObject;
         [self.spinner stopAnimating];
 
         for (NSDictionary *dict in galleries){
             FRSGallery *gallery = [FRSGallery MR_createEntity];
             [gallery configureWithDictionary:dict];
-            [mArr addObject:gallery];
+            [self.dataSource addObject:gallery];
+            [self.highlights addObject:gallery];
+            [self.tableView reloadData];
+            [self cacheLocalData];
         }
-        
-        self.highlights = [mArr copy];
-        self.dataSource = [self.highlights copy];
-        [self.tableView reloadData];
     }];
 }
 
+-(void)fetchLocalData {
+    
+}
+
+-(void)cacheLocalData {
+    
+}
 
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataSource.count;
+    return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -168,16 +206,78 @@
     return [self heightForItemAtDataSourceIndex:indexPath.row];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        return cell;
+    }
+    
     FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-    if (!cell){
+    
+    if (!cell) {
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    if (indexPath.row == self.dataSource.count - 5) {
+        if (!isLoading) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                [self loadMore];
+            });
+        }
+    }
+    
     return cell;
 }
 
+-(void)loadMore {
+    
+    isLoading = TRUE;
+    FRSGallery *lastGallery = [self.dataSource lastObject];
+    NSString *offsetID = lastGallery.uid;
+    
+    if (lastOffset == self.dataSource.count) {
+        NSLog(@"NOT RELOADING");
+        return;
+    }
+    
+    NSLog(@"RELOADING WITH OFFSET ID: %@", offsetID);
+    lastOffset = self.dataSource.count;
+    
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
+        
+        NSLog(@"RELOADING: %lu", galleries.count);
+        
+        if ([galleries count] == 0){
+            return;
+        }
+        
+        isLoading = FALSE;
+        
+        for (NSDictionary *dict in galleries){
+            FRSGallery *gallery = [FRSGallery MR_createEntity];
+            [gallery configureWithDictionary:dict];
+            
+            [self.dataSource addObject:gallery];
+            [self.highlights addObject:gallery];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self cacheLocalData];
+        });
+        
+    }];
+}
+
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
+    if (index == self.dataSource.count) {
+        return 40;
+    }
+    
     FRSGallery *gallery = self.dataSource[index];
 //    return [self heightForCellForGallery:gallery];
     return [gallery heightForGallery];
@@ -228,10 +328,27 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
     
+    // sloppy not to have a check here
+    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        return;
+    }
+    
     [cell clearCell];
     
     cell.gallery = self.dataSource[indexPath.row];
     [cell configureCell];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    cell.shareBlock = ^void(NSArray *sharedContent) {
+        [weakSelf showShareSheetWithContent:sharedContent];
+    };
+}
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -240,7 +357,7 @@
 }
 
 
--(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification{
+-(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
     
     NSArray *filteredArray = [self.dataSource filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     
@@ -266,7 +383,7 @@
     
 }
 
--(void)search{
+-(void)search {
 
 }
 

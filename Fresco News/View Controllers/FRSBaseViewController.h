@@ -14,7 +14,7 @@
 
 #import "UILabel+Custom.h"
 
-#import "FRSNavigationController.h";
+#import "FRSNavigationController.h"
 
 @interface FRSBaseViewController : UIViewController
 

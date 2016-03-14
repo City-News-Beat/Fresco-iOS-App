@@ -48,6 +48,11 @@
 
 @implementation FRSStoryView
 
+
+-(void)handleActionButtonTapped {
+    
+}
+
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     
@@ -86,18 +91,58 @@
         
         switch (self.story.imageURLs.count) {
             case 1:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                 [iv hnk_setImageFromURL:self.story.imageURLs[0]];
                 [self.topContainer addSubview:iv];
-            } break;
+//            } break;
+//                
+//            default: {
+//                UIImageView *iv = [UIImageView new];
+//                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.story.imageURLs.count];
+//            } break;
+            }
+                break;
+            case 2:{
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
+            }
+                break;
+            case 3:{
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
+                iv.contentMode = UIViewContentModeScaleAspectFill;
+                iv.clipsToBounds = YES;
+                [iv hnk_setImageFromURL:self.story.imageURLs[0]];
+                iv.frame = CGRectMake(0, 0, iv.frame.size.width, halfHeight*2);
+                [self.topContainer addSubview:iv];
                 
-            default: {
-                UIImageView *iv = [UIImageView new];
-                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.story.imageURLs.count];
-            } break;
+                UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
+                iv2.contentMode = UIViewContentModeScaleAspectFill;
+                iv2.clipsToBounds = YES;
+                [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
+                iv2.frame = CGRectMake(iv.frame.size.width + 1, 0, iv2.frame.size.width, halfHeight*2);
+                [self.topContainer addSubview:iv2];
+
+                UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
+                iv3.contentMode = UIViewContentModeScaleAspectFill;
+                iv3.clipsToBounds = YES;
+                [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
+                iv3.frame = CGRectMake(iv.frame.size.width + iv2.frame.size.width +2, 0, iv3.frame.size.width, halfHeight*2);
+                [self.topContainer addSubview:iv3];
+            }
+                break;
+            case 4:
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
+                break;
+            case 5:{
+                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
+        }
+                break;
+            default:
+                break;
+//>>>>>>> 3.0-phil
         }
         
     } else {
@@ -210,7 +255,7 @@
     [self addSubview:self.actionBar];
 }
 
-#pragma mark - Action Bar Deletate
+#pragma mark - Action Bar Delete
 
 -(NSString *)titleForActionButton{
     return @"READ MORE";

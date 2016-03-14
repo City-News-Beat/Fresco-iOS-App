@@ -12,6 +12,8 @@
 
 #import <MagicalRecord/MagicalRecord.h>
 
+#import "FRSCoreData.h"
+
 @implementation FRSArticle
 
 +(instancetype)articleWithDictionary:(NSDictionary *)dictionary{

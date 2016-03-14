@@ -6,13 +6,13 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
+#import "Fresco.h"
+
 #import "FRSStoriesViewController.h"
 #import "FRSSearchViewController.h"
 
 #import "FRSStoryCell.h"
 //#import "FRSDataManager.h"
-
-#import "FRSAPIClient.h"
 
 #import "FRSStory.h"
 
@@ -22,7 +22,7 @@
 
 @interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
-@property (strong, nonatomic) NSArray *stories;
+@property (strong, nonatomic) NSMutableArray *stories;
 
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UIButton *searchButton;
@@ -115,6 +115,9 @@
 -(void)configureTableView{
     [super configureTableView];
     
+    // loading cell
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
@@ -133,33 +136,91 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchStories{
+    [self fetchLocalData];
+    self.stories = [[NSMutableArray alloc] init];
+    __block int const numToFetch = 12;
     
     
-    [[FRSAPIClient new] fetchStoriesWithLimit:15 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) {
+//    [[FRSAPIClient new] fetchStoriesWithLimit:15 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) { //Pretty sure we don't need this anymore, commented out just incase.
+    
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
+
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");
             return;
         }
         
-        NSMutableArray *mArr = [NSMutableArray new];
-        
         for (NSDictionary *storyDict in stories){
-            FRSStory *story = [FRSStory MR_createEntity];
-            [story configureWithDictionary:storyDict];
-            [mArr addObject:story];
+             FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+                
+            if (!story) {
+                story = [FRSStory MR_createEntity];
+                [story configureWithDictionary:storyDict];
+                [self.stories addObject:story];
+            }
+            else {
+                [self.stories addObject:story];
+            }
+            
+            [self.tableView reloadData];
+            [self cacheLocalData];
+        }
+       
+    }];
+}
+
+-(void)fetchMoreStories {
+
+    if (!self.stories) {
+        self.stories = [[NSMutableArray alloc] init];
+    }
+    __block int const numToFetch = 12;
+    
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:self.stories.count completion:^(NSArray *stories, NSError *error) {
+        
+        if (!stories.count){
+            if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
+            else NSLog(@"No error fetching stories but the request returned zero results");
+            return;
         }
         
-        self.stories = [mArr copy];
-        [self.tableView reloadData];
+        for (NSDictionary *storyDict in stories){
+            FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+            
+            if (!story) {
+                story = [FRSStory MR_createEntity];
+                [story configureWithDictionary:storyDict];
+                [self.stories addObject:story];
+            }
+            else {
+                [self.stories addObject:story];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                [self cacheLocalData];
+            });
+
+        }
+        
     }];
+
+}
+
+-(void)fetchLocalData {
+    
+}
+
+-(void)cacheLocalData {
+    
 }
 
 
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.stories.count;
+    return (self.stories.count == 0) ? 0 : self.stories.count+1;
     
 }
 
@@ -168,19 +229,39 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.row == self.stories.count-1) {
+        return 40;
+    }
+    
     if (!self.stories.count) return 0;
+    
+    if (indexPath.row >= self.stories.count) {
+        return 40;
+    }
     
     FRSStory *story = self.stories[indexPath.row];
     return [story heightForStory];
 }
 
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // if we're loading more data
+    if (indexPath.row == self.stories.count -1) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        return cell;
+    }
+    
     FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
     if (!cell){
         cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    if (indexPath.row == self.stories.count - 5) {
+        [self fetchMoreStories];
+    }
+    
     return cell;
 }
 
@@ -193,12 +274,16 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
+        return;
+    }
+    
     [cell clearCell];
     
-    cell.story = self.stories[indexPath.row];
-    
-    [cell configureCell];
-    
+    if (indexPath.row < self.stories.count) {
+        cell.story = self.stories[indexPath.row];
+        [cell configureCell];
+    }
 }
 
 @end
