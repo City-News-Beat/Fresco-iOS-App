@@ -9,6 +9,6 @@
 #ifndef FrescoNews_PrefixHeader_pch
 #define FrescoNews_PrefixHeader_pch
 
-#import "FRSAppConstants.h"
+#import "Fresco.h"
 
 #endif
