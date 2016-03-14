@@ -12,7 +12,6 @@
 #import "FRSSearchViewController.h"
 
 #import "FRSStoryCell.h"
-//#import "FRSDataManager.h"
 
 #import "FRSStory.h"
 
