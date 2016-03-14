@@ -462,3 +462,6 @@ enum FRSErrorCodes {
 
 #define IS_ZOOMED_IPHONE_6_PLUS             (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0 && IS_OS_8_OR_LATER && [UIScreen mainScreen].nativeScale < [UIScreen mainScreen].scale)
 
+
+#pragma mark - Status Bar
+static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";
