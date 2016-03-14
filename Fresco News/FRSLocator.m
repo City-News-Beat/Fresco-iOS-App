@@ -200,14 +200,13 @@
  */
 -(void)sendNotificationForUpdate:(NSArray *)locations {
     _currentLocation = (CLLocation *)[locations lastObject];
-    __weak NSArray *weakLocations = locations;
     
     // sends out as NSNotification, sends array of locations as well as preformed params for API update
     NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lon":@(_currentLocation.coordinate.longitude)};
     
     // make sure we're on the main thread so the updates actually get receieved
     dispatch_async(dispatch_get_main_queue(),^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:FRSLocationUpdateNotification object:weakLocations userInfo:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FRSLocationUpdateNotification object:Nil userInfo:userInfo];
     });
 }
 

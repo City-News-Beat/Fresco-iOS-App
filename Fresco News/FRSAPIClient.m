@@ -12,6 +12,23 @@
 
 @implementation FRSAPIClient
 
+
+-(id)init {
+    self = [super init];
+    
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleLocationUpdate:)
+                                                     name:FRSLocationUpdateNotification
+                                                   object:nil];
+    }
+    
+    return self;
+}
+
+-(void)handleLocationUpdate:(NSDictionary *)userInfo {
+    
+}
 /*
     Generic GET request against api BASE url + endpoint, with parameters
  */
