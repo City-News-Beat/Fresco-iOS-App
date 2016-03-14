@@ -63,6 +63,7 @@ typedef void (^TransferPercentage)(float percentage);
     The following code is coming to us from FRSAPIConstants, thought it cleaner to integrate into Fresco.h
  */
 
+
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);

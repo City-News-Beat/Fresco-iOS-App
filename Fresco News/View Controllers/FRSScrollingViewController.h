@@ -35,5 +35,9 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 -(void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated;
 -(void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated;
 
+#pragma mark - Status Bar
+-(void)statusBarTappedAction:(NSNotification*)notification;
+-(void)addStatusBarNotification;
+-(void)removeStatusBarNotification;
 
 @end

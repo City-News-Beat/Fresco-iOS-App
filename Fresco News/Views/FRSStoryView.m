@@ -89,9 +89,9 @@
     
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
-
     
     if (self.story.imageURLs.count < 6) {
+        
         switch (self.story.imageURLs.count) {
             case 1:{
                 NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
@@ -179,6 +179,42 @@
     [iv6 hnk_setImageFromURL:self.story.imageURLs[5]];
     [self.topContainer addSubview:iv6];
     }
+}
+
+-(void)configureImageFromImageView:(UIImageView *)imageView atIndex:(NSInteger)index xPos:(CGFloat)xPos total:(NSInteger)total {
+    
+    NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+    imageView = [[UIImageView alloc] initWithFrame:CGRectMake(xPos, 0, 1000, 1000)];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.topContainer addSubview:imageView];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [imageView hnk_setImageFromURL:self.story.imageURLs[index] placeholder:nil success:^(UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSInteger imageWidth  = image.size.width;
+            NSInteger imageHeight = image.size.height;
+            NSInteger viewHeight  = self.topContainer.frame.size.height;
+            
+            float multiplier = (float)viewHeight / (float)imageHeight;
+            
+            CGRect imageFrame = CGRectMake(xPos, 0, multiplier*imageWidth, viewHeight);
+            
+            imageView.frame = imageFrame;
+            imageView.image = image;
+            
+            if (index+1 >= total) {
+                return;
+            }
+            
+            [weakSelf configureImageFromImageView:[[UIImageView alloc] init] atIndex:index+1 xPos:xPos+imageView.frame.size.width+(index +1) total:total];
+            
+        });
+        
+    } failure:^(NSError *error) {
+        //failure
+    }];
 }
 
 -(void)configureTitleLabel{

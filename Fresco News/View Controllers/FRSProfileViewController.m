@@ -49,6 +49,12 @@
 
 @property (strong, nonatomic) NSArray *galleries;
 
+@property (strong, nonatomic) UIView *whiteOverlay;
+@property (strong, nonatomic) UIView *socialButtonContainer;
+@property (strong, nonatomic) UIView *profileMaskView;
+
+@property (nonatomic) BOOL overlayPresented;
+
 @property (nonatomic) NSInteger count;
 
 @end
@@ -66,7 +72,12 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self addStatusBarNotification];
+}
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self removeStatusBarNotification];
 }
 
 #pragma mark - Fetch Methods
@@ -98,6 +109,7 @@
     [self configureNavigationBar];
     [self configureTableView];
     [self configurePullToRefresh];
+    [self configureProfileSocialOverlay];
 }
 
 -(void)configurePullToRefresh{
@@ -138,6 +150,7 @@
     editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
     self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 -(void)configureTableView{
@@ -196,13 +209,120 @@
     [self.profileContainer addSubview:followersContainer];
     
     [followersContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFollowers)]];
+    
+}
+
+-(void)configureProfileSocialOverlay{
+
+    self.whiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
+    self.whiteOverlay.backgroundColor = [UIColor whiteColor];
+    self.whiteOverlay.alpha = 1;
+    [self.profileIV addSubview:self.whiteOverlay];
+    
+    UIButton *socialOverlayButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [socialOverlayButton addTarget:self action:@selector(presentSocialOverlay) forControlEvents:UIControlEventTouchUpInside];
+    socialOverlayButton.frame = CGRectMake(16, 12, 96, 96);
+    socialOverlayButton.layer.cornerRadius = 48;
+    [self.profileContainer addSubview:socialOverlayButton];
+    
+    self.socialButtonContainer = [[UIView alloc] initWithFrame:CGRectMake(16, 36, 64.5, 24)];
+    self.socialButtonContainer.alpha = 1;
+    [self.whiteOverlay addSubview:self.socialButtonContainer];
+//    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
+
+    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
+    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [twitterButton setImage:twitter forState:UIControlStateNormal];
+    twitterButton.frame = CGRectMake(0, 0, 24, 24);
+    twitterButton.alpha = 1;
+    [self.socialButtonContainer addSubview:twitterButton];
+    
+    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
+    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [facebookButton setImage:facebook forState:UIControlStateNormal];
+    facebookButton.frame = CGRectMake(40, 0, 24, 24);
+    facebookButton.alpha = 1;
+    [self.socialButtonContainer addSubview:facebookButton];
+    
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    [self.view addGestureRecognizer:gr];
+
+    self.profileMaskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
+    self.profileMaskView.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
+    self.profileMaskView.layer.cornerRadius = 48;
+    self.profileMaskView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:self.profileMaskView];
+    self.whiteOverlay.layer.mask = self.profileMaskView.layer;
+
+}
+
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint point = [gestureRecognizer locationInView:self.view];
+    if (!CGRectContainsPoint(self.profileIV.frame, point)) {
+        [self dismissSocialOverlay];
+    }
+}
+
+-(void)presentSocialOverlay{
+    
+    if (!self.overlayPresented) {
+        
+        //Set overlay presented state to prevent animating if double tapped
+        self.overlayPresented = YES;
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.profileMaskView.transform = CGAffineTransformMakeScale(1, 1);
+            
+        } completion:nil];
+        
+        //Set default transform
+//        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
+        
+//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//            
+//            self.socialButtonContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
+//            self.socialButtonContainer.alpha = 1;
+//            self.whiteOverlay.alpha = 1;
+//            
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                
+//                self.socialButtonContainer.transform = CGAffineTransformMakeScale(1, 1);
+//                
+//            } completion:nil];
+//        }];
+    }
+}
+
+-(void)dismissSocialOverlay{
+    
+    //Set overlay presented state to prevent animating if double tapped
+    self.overlayPresented = NO;
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.profileMaskView.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
+        
+    } completion:nil];
+
+//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//        
+//        self.socialButtonContainer.alpha = 0;
+//        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
+//        self.whiteOverlay.alpha = 0;
+//        
+//    } completion:nil];
+    
 }
 
 -(void)configureLabels{
     NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.profileBG.frame.origin.y, self.view.frame.size.width - origin - 16, 22)];
-    self.nameLabel.text = @"Kobe Bryant, the GOAT";
+    self.nameLabel.text = @"Kobe Bryant";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
     [self.profileContainer addSubview:self.nameLabel];
@@ -356,6 +476,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
+//    [self dismissSocialOverlay];
+    
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
         
@@ -403,14 +525,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - Social Overlay Actions
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)twitterTapped{
+    NSLog(@"twitterTapped");
 }
-*/
+
+-(void)facebookTapped{
+    NSLog(@"facebookTapped");
+}
+
 
 @end
