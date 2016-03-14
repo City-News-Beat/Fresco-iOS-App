@@ -49,6 +49,9 @@
 @implementation FRSStoryView
 
 
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    
+}
 -(void)handleActionButtonTapped {
     
 }
