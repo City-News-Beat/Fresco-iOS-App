@@ -108,27 +108,19 @@
  */
 -(void)trackAsActive {
     
-    if (![self stateDidChange:UIApplicationStateActive]) {
-        return;
-    }
+    NSLog(@"SETTING UP");
     
     _currentState = UIApplicationStateActive;
     
     [_locationManager requestWhenInUseAuthorization];
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [_locationManager startUpdatingLocation];
-    
-    
 }
 
 /*
  App is in background, we don't really need constant updates, so we register for significant location changes, not consistent updates every xx seconds or meters
  */
 -(void)trackAsPassive { // let device decide when to tell us when we need an update
-    
-    if (![self stateDidChange:UIApplicationStateActive]) {
-        return;
-    }
     
     _currentState = UIApplicationStateBackground;
     
@@ -179,6 +171,7 @@
     [self sendNotificationForUpdate:locations];
     
     _lastLocationUpdate = (unsigned long)time(NULL); // epoch timestamp
+    [_locationManager allowDeferredLocationUpdatesUntilTraveled:200 timeout:60]; // one update every 200m or 60s
 }
 
 /*

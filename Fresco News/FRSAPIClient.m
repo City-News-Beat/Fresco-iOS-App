@@ -27,7 +27,7 @@
 }
 
 -(void)handleLocationUpdate:(NSDictionary *)userInfo {
-    
+    NSLog(@"LOCATION: %@", userInfo);
 }
 /*
     Generic GET request against api BASE url + endpoint, with parameters
