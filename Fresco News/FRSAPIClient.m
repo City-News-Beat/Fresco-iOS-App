@@ -169,6 +169,7 @@
     
     dispatch_once(&onceToken, ^{
         client = [[FRSAPIClient alloc] init];
+        [FRSLocator sharedLocator];
     });
     
     return client;

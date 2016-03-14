@@ -29,7 +29,6 @@ static NSInteger const maxLocationChars = 40;
 static NSInteger const maxBioChars = 160;
 static NSString * const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 
-
 // map
 static float const maxRadius = 50.0; // miles
 
