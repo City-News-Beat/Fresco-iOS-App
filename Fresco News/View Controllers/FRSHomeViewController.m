@@ -11,7 +11,6 @@
 #import "FRSGalleryExpandedViewController.h"
 
 #import "FRSGalleryCell.h"
-#import "FRSDataManager.h"
 
 #import "FRSTabbedNavigationTitleView.h"
 

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSDebitCardViewController : UIViewController
+@interface FRSDebitCardViewController : UIViewController<UITextFieldDelegate>
 
 @end

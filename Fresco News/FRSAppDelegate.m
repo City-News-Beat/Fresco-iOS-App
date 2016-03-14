@@ -28,7 +28,6 @@
 
 #import "FRSCameraViewController.h"
 
-
 @implementation FRSAppDelegate
 
 
