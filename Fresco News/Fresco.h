@@ -45,6 +45,9 @@ static NSInteger const maxStoryDescriptionChar = 1500;
 static NSInteger const maxCommentChar = 200;
 
 
+// location tracking
+static NSInteger const userTrackingDelay = 10;
+
 /* 
     UI
  */

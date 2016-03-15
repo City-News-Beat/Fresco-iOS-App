@@ -180,11 +180,7 @@
     
     [_locationManager stopUpdatingLocation];
     
-    if (stopTimer) {
-        [stopTimer invalidate];
-    }
-    
-    stopTimer = [NSTimer timerWithTimeInterval:10
+    stopTimer = [NSTimer timerWithTimeInterval:userTrackingDelay
                                              target:self
                                            selector:@selector(restartActiveUpdates)
                                            userInfo:Nil
@@ -194,6 +190,12 @@
 }
 
 -(void)restartActiveUpdates {
+    
+    if (stopTimer) {
+        [stopTimer invalidate];
+        stopTimer = Nil;
+    }
+    
     if (_currentState == UIApplicationStateActive) {
         [_locationManager startUpdatingLocation];
     }
