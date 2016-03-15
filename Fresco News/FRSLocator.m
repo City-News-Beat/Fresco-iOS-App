@@ -171,7 +171,6 @@
     [self sendNotificationForUpdate:locations];
     
     _lastLocationUpdate = (unsigned long)time(NULL); // epoch timestamp
-    [_locationManager allowDeferredLocationUpdatesUntilTraveled:200 timeout:60]; // one update every 200m or 60s
 }
 
 /*
