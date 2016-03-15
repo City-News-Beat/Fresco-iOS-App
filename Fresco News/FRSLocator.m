@@ -179,13 +179,34 @@
  */
 -(void)handleActiveChange:(NSArray *)locations {
     
+    [_locationManager stopUpdatingLocation];
+    
+    if (stopTimer) {
+        [stopTimer invalidate];
+    }
+    
+    stopTimer = [NSTimer timerWithTimeInterval:10
+                                             target:self
+                                           selector:@selector(restartActiveUpdates)
+                                           userInfo:Nil
+                                            repeats:FALSE];
+    
+    [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
+}
+
+-(void)restartActiveUpdates {
+    if (_currentState == UIApplicationStateActive) {
+        [_locationManager startUpdatingLocation];
+    }
 }
 
 /*
  Handle location update as if user has application in background
  */
 -(void)handlePassiveChange:(NSArray *)locations {
-    
+    if (_backgroundBlock) {
+        _backgroundBlock(locations);
+    }
 }
 
 /*

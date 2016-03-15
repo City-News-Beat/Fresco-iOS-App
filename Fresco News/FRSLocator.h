@@ -20,16 +20,18 @@
  */
 
 static NSString * const FRSLocationUpdateNotification = @"FRSLocationUpdateNotification";
+typedef void (^BackgroundBlock)(NSArray *locations); // allows us to add ability for background task (in case app is killed in background)
 
 @interface FRSLocator : NSObject <CLLocationManagerDelegate>
 {
-    
+    NSTimer *stopTimer;
 }
 
 @property (nonatomic, assign) UIApplicationState currentState;
 @property (nonatomic, assign) CLLocation *currentLocation;
 @property (nonatomic, assign) unsigned long lastLocationUpdate; // epoch timestamp of last location update
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, assign) BackgroundBlock backgroundBlock; // block to execute if app is in background state
 
 -(void)manualUpdate;
 
