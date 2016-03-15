@@ -992,8 +992,6 @@
 			children = (
 				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
 				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
-				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
-				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -1374,6 +1372,8 @@
 			isa = PBXGroup;
 			children = (
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
+				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
+				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
 				D47999631C96A8FD00B46D01 /* Location */,

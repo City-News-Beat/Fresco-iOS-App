@@ -108,8 +108,6 @@
  */
 -(void)trackAsActive {
     
-    NSLog(@"SETTING UP");
-    
     _currentState = UIApplicationStateActive;
     
     [_locationManager requestWhenInUseAuthorization];
@@ -125,7 +123,6 @@
     _currentState = UIApplicationStateBackground;
     
     [_locationManager stopUpdatingLocation];
-    _locationManager.pausesLocationUpdatesAutomatically = YES;
     [_locationManager startMonitoringSignificantLocationChanges];
 }
 
