@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSPersistence.h" // cache certain API call response objects (each individual sub obj)
 #import "FRSAppDelegate.h"
+#import "FRSLocator.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 

@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSSearchViewController : FRSBaseViewController
+@interface FRSSearchViewController : FRSBaseViewController<UITextFieldDelegate>
 
 @end

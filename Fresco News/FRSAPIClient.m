@@ -12,6 +12,24 @@
 
 @implementation FRSAPIClient
 
+
+-(id)init {
+    self = [super init];
+    
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleLocationUpdate:)
+                                                     name:FRSLocationUpdateNotification
+                                                   object:nil];
+    }
+    
+    return self;
+}
+
+-(void)handleLocationUpdate:(NSDictionary *)userInfo {
+    NSLog(@"LOCATION: %@", userInfo);
+}
+
 /*
     Generic GET request against api BASE url + endpoint, with parameters
  */
@@ -33,7 +51,6 @@
  Generic POST request against api BASE url + endpoint, with parameters
  
  */
-
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
@@ -51,7 +68,6 @@
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
  
  */
-
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSDictionary *params = @{
@@ -66,16 +82,6 @@
     }];
     
 }
-
- 
-///gallery/search?q=test&offset=0&limit=18&verified=true&tags=`
-//
-//[1:02]
-//`/story/search?q=test&offset=0&limit=10`
-//
-//[1:02]
-//`/user/search?q=test&offset=0&limit=10`
-//
 
 #pragma mark - Gallery Fetch
 
@@ -119,41 +125,32 @@
     }];
 }
 
-//NSString *path = @"https://api.fresconews.com/v1/story/recent";
-//
-//NSDictionary *params = @{
-//                         @"limit" :@"8",
-//                         @"notags" : @"true",
-//                         @"offset" : offset ?: [NSNumber numberWithInteger:0]
-//                         };
-//
-////If we are refreshing, removed the cached response for the request by setting the cache policy
-//if(refresh)
-//self.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
-//
-//[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-//
-//[self GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//    
-//    
-//    NSArray *stories = [responseObject objectForKey:@"data"];
-//    
-//    if(responseBlock) responseBlock(stories, nil);
-//    
-//} failure:^(NSURLSessionDataTask *task, NSError *error) {
-//    
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//    
-//    if(responseBlock) responseBlock(nil, error);
-//}];
-//
-////Set the policy back to normal
-//self.requestSerializer.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+-(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
+{
+       /* NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+        
+        [params addEntriesFromDictionary:inputParams];
+        
+        [self POST:@"user/locate" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            
+            if(completion) completion(responseObject, nil);
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            if(completion) completion(nil, error);
+            
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            NSLog(@"Error: %@", error);
+        }];
+        
+    }*/
+}
 
 
 
--(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations{
+-(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
     [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"];
     return manager;
@@ -169,6 +166,7 @@
     
     dispatch_once(&onceToken, ^{
         client = [[FRSAPIClient alloc] init];
+        [FRSLocator sharedLocator];
     });
     
     return client;

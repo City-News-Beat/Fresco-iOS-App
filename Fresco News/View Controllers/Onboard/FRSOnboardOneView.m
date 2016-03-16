@@ -7,7 +7,7 @@
 //
 
 #import "FRSOnboardOneView.h"
-#import "FRSAppConstants.h"
+#import "Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 #import "OEParallax.h"

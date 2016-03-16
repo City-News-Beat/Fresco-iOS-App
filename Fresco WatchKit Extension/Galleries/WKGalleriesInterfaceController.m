@@ -10,7 +10,7 @@
 #import "WKGalleryRowController.h"
 #import "WKRelativeDate.h"
 #import "WKImagePath.h"
-#import "FRSAppConstants.h"
+#import "Fresco.h"
 #import <AFNetworking/AFNetworking.h>
 
 @implementation WKGalleriesInterfaceController

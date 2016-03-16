@@ -12,7 +12,6 @@
 #import "FRSSearchViewController.h"
 
 #import "FRSStoryCell.h"
-//#import "FRSDataManager.h"
 
 #import "FRSStory.h"
 
@@ -139,10 +138,7 @@
     [self fetchLocalData];
     self.stories = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
-    
-    
-//    [[FRSAPIClient new] fetchStoriesWithLimit:15 lastStoryID:@"" completion:^(NSArray *stories, NSError *error) { //Pretty sure we don't need this anymore, commented out just incase.
-    
+
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
 
         if (!stories.count){
