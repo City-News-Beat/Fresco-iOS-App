@@ -29,6 +29,7 @@
 -(void)handleLocationUpdate:(NSDictionary *)userInfo {
     NSLog(@"LOCATION: %@", userInfo);
 }
+
 /*
     Generic GET request against api BASE url + endpoint, with parameters
  */
@@ -50,7 +51,6 @@
  Generic POST request against api BASE url + endpoint, with parameters
  
  */
-
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
@@ -68,7 +68,6 @@
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
  
  */
-
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSDictionary *params = @{
@@ -83,16 +82,6 @@
     }];
     
 }
-
- 
-///gallery/search?q=test&offset=0&limit=18&verified=true&tags=`
-//
-//[1:02]
-//`/story/search?q=test&offset=0&limit=10`
-//
-//[1:02]
-//`/user/search?q=test&offset=0&limit=10`
-//
 
 #pragma mark - Gallery Fetch
 
@@ -161,7 +150,7 @@
 
 
 
--(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations{
+-(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
     [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"];
     return manager;

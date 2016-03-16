@@ -7,26 +7,17 @@
 //
 
 #import "FRSAppDelegate.h"
-
 #import "FRSTabBarController.h"
-
 #import "FRSOnboardingViewController.h"
-
 #import "FRSSettingsViewController.h"
-
 #import "FRSNavigationController.h"
-
 #import "FRSSignUpViewController.h"
-
 #import "FRSSetupProfileViewController.h"
-
 #import "FRSProfileViewController.h"
-
 #import "FRSLocationManager.h"
-
-#import <MagicalRecord/MagicalRecord.h>
-
 #import "FRSCameraViewController.h"
+#import <MagicalRecord/MagicalRecord.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation FRSAppDelegate
 
@@ -42,16 +33,16 @@
     [self createItemsWithIcons];
     
     self.window.rootViewController = [[FRSTabBarController alloc] init];
-//    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
-
-//    self.window.rootViewController = [[FRSCameraViewController alloc] init];
-//    [self determineAppPath];
-//    self.window.rootViewController = [[FRSTabBarController alloc] init];
-
     
-//    self.window.rootViewController = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+    if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
+        [self handleLocationUpdate];
+    }
     
     return YES;
+}
+
+-(void)handleLocationUpdate {
+    
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application{
