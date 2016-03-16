@@ -318,6 +318,8 @@
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 412)];
     [self.view addSubview:scrollView];
     
+    scrollView.showsVerticalScrollIndicator = NO;
+    
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [scrollView addSubview:assignmentCard];
