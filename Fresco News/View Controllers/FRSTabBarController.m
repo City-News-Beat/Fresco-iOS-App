@@ -32,14 +32,27 @@
 @implementation FRSTabBarController
 
 
+-(void)presentAssignments {
+    
+}
 -(void)returnToGalleryPost {
     
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.delegate = self;
+    
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+    [[UITabBar appearance] setBackgroundColor:[UIColor frescoDarkTextColor]];
     
     [self configureAppearance];
     [self configureViewControllers];
@@ -52,7 +65,6 @@
     }];
     
     [self configureIrisItem];
-    
     // Do any additional setup after loading the view.
 }
 
@@ -106,7 +118,6 @@
     self.cameraBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(origin, 0, width, 50)];
     self.cameraBackgroundView.backgroundColor = [UIColor frescoOrangeColor];
     [self.tabBar insertSubview:self.cameraBackgroundView atIndex:0];
-    
 }
 
 -(void)setIrisItemColor:(UIColor *)color{
