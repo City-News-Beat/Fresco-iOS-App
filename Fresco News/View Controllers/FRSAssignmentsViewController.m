@@ -363,10 +363,11 @@
 
     if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextField.frame.size.height;
+        cardFrame.size.height = assignmentDetailTextField.frame.size.height * 2;
+        assignmentCard.frame = cardFrame;
     }
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height);
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height + assignmentCard.frame.size.height);
     
     
     //DEBUG
