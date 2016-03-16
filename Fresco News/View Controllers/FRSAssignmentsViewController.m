@@ -219,7 +219,6 @@
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
-//    NSString *identifier = (type == FRSAssignmentAnnotation) ? ASSIGNMENT_IDENTIFIER : CLUSTER_IDENTIFIER;
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
     
@@ -227,13 +226,17 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
         
-//        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
-        
-//        [annotationView setImage:[UIImage imageNamed:@"locationOnIcon"]];
         UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
         whiteView.layer.cornerRadius = 12;
         whiteView.backgroundColor = [UIColor whiteColor];
         [annotationView addSubview:whiteView];
+        
+        whiteView.layer.shadowColor = [UIColor blackColor].CGColor;
+        whiteView.layer.shadowOffset = CGSizeMake(0, 2);
+        whiteView.layer.shadowOpacity = 0.15;
+        whiteView.layer.shadowRadius = 1.5;
+        whiteView.layer.shouldRasterize = YES;
+        whiteView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
         UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
         yellowView.layer.cornerRadius = 8;
@@ -242,14 +245,7 @@
         [whiteView addSubview:yellowView];
         
         annotationView.enabled = YES;
-        
-//        if (type == FRSAssignmentAnnotation) {
-//            
-//            annotationView.canShowCallout = YES;
-//            
-//            annotationView.rightCalloutAccessoryView = [MKMapView caret];
-//            
-//        }
+
     }
     
     return annotationView;
