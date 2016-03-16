@@ -7,21 +7,14 @@
 //
 
 #import "FRSTabBarController.h"
-
 #import "FRSOnboardingViewController.h"
 #import "FRSNavigationController.h"
-
 #import "FRSProfileViewController.h"
 #import "FRSHomeViewController.h"
-
 #import "FRSAssignmentsViewController.h"
-
 #import "FRSStoriesViewController.h"
-
 #import "FRSCameraViewController.h"
-
 #import "UIColor+Fresco.h"
-
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
@@ -52,8 +45,8 @@
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
-    [[UITabBar appearance] setBackgroundColor:[UIColor frescoDarkTextColor]];
-    
+    [[UITabBar appearance] setBackgroundColor:[[UIColor frescoDarkTextColor] colorWithAlphaComponent:1]];
+
     [self configureAppearance];
     [self configureViewControllers];
     

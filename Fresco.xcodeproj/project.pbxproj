@@ -712,7 +712,7 @@
 				4AB98C941C8A7ED7005E7AB2 /* Gallery */,
 				4AB98C951C8A7EDC005E7AB2 /* Assignments */,
 				4AB98C961C8A7EE3005E7AB2 /* Profile */,
-				4AB98C971C8A7EE8005E7AB2 /* Profile */,
+				4AB98C971C8A7EE8005E7AB2 /* Base */,
 				4AB98C981C8A7EF1005E7AB2 /* Scrolling */,
 				4AB98C991C8A7EF7005E7AB2 /* Home */,
 				4AB98C9A1C8A7EFC005E7AB2 /* Sign up */,
@@ -814,13 +814,13 @@
 			name = Profile;
 			sourceTree = "<group>";
 		};
-		4AB98C971C8A7EE8005E7AB2 /* Profile */ = {
+		4AB98C971C8A7EE8005E7AB2 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */,
 				65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */,
 			);
-			name = Profile;
+			name = Base;
 			sourceTree = "<group>";
 		};
 		4AB98C981C8A7EF1005E7AB2 /* Scrolling */ = {
