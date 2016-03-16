@@ -48,18 +48,13 @@
 
 @implementation FRSStoryView
 
-
--(void)handleActionButtonTapped {
-    
-}
-
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     
     if (self){
         self.delegate = delegate;
         self.story = story;
-//        self.orderedPosts = [self.story.posts allObjects];
+        //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
     }
     return self;
@@ -91,97 +86,57 @@
         
         switch (self.story.imageURLs.count) {
             case 1:{
-                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                 [iv hnk_setImageFromURL:self.story.imageURLs[0]];
                 [self.topContainer addSubview:iv];
-//            } break;
-//                
-//            default: {
-//                UIImageView *iv = [UIImageView new];
-//                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.story.imageURLs.count];
-//            } break;
-            }
-                break;
-            case 2:{
-                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
-            }
-                break;
-            case 3:{
-                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
-                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
-                iv.contentMode = UIViewContentModeScaleAspectFill;
-                iv.clipsToBounds = YES;
-                [iv hnk_setImageFromURL:self.story.imageURLs[0]];
-                iv.frame = CGRectMake(0, 0, iv.frame.size.width, halfHeight*2);
-                [self.topContainer addSubview:iv];
+            } break;
                 
-                UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
-                iv2.contentMode = UIViewContentModeScaleAspectFill;
-                iv2.clipsToBounds = YES;
-                [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
-                iv2.frame = CGRectMake(iv.frame.size.width + 1, 0, iv2.frame.size.width, halfHeight*2);
-                [self.topContainer addSubview:iv2];
-
-                UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight*2)];
-                iv3.contentMode = UIViewContentModeScaleAspectFill;
-                iv3.clipsToBounds = YES;
-                [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
-                iv3.frame = CGRectMake(iv.frame.size.width + iv2.frame.size.width +2, 0, iv3.frame.size.width, halfHeight*2);
-                [self.topContainer addSubview:iv3];
-            }
-                break;
-            case 4:
-                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
-                break;
-            case 5:{
-                NSLog(@"%@ has %lu stories", self.story.title, self.story.imageURLs.count);
-        }
-                break;
-            default:
-                break;
-//>>>>>>> 3.0-phil
+            default: {
+                UIImageView *iv = [UIImageView new];
+                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.story.imageURLs.count];
+            } break;
         }
         
     } else {
-    
-    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
-    iv.contentMode = UIViewContentModeScaleAspectFill;
-    iv.clipsToBounds = YES;
-    [iv hnk_setImageFromURL:self.story.imageURLs[0]];
-    [self.topContainer addSubview:iv];
-    
-    UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
-    iv2.contentMode = UIViewContentModeScaleAspectFill;
-    iv2.clipsToBounds = YES;
-    [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
-    [self.topContainer addSubview:iv2];
-    
-    UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
-    iv3.contentMode = UIViewContentModeScaleAspectFill;
-    iv3.clipsToBounds = YES;
-    [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
-    [self.topContainer addSubview:iv3];
-    
-    UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
-    iv4.contentMode = UIViewContentModeScaleAspectFill;
-    iv4.clipsToBounds = YES;
-    [iv4 hnk_setImageFromURL:self.story.imageURLs[3]];
-    [self.topContainer addSubview:iv4];
-    
-    UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
-    iv5.contentMode = UIViewContentModeScaleAspectFill;
-    iv5.clipsToBounds = YES;
-    [iv5 hnk_setImageFromURL:self.story.imageURLs[4]];
-    [self.topContainer addSubview:iv5];
-    
-    UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
-    iv6.contentMode = UIViewContentModeScaleAspectFill;
-    iv6.clipsToBounds = YES;
-    [iv6 hnk_setImageFromURL:self.story.imageURLs[5]];
-    [self.topContainer addSubview:iv6];
+        
+        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
+        iv.contentMode = UIViewContentModeScaleAspectFill;
+        iv.clipsToBounds = YES;
+        [iv hnk_setImageFromURL:self.story.imageURLs[0]];
+        [self.topContainer addSubview:iv];
+        
+        UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
+        iv2.contentMode = UIViewContentModeScaleAspectFill;
+        iv2.clipsToBounds = YES;
+        [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
+        [self.topContainer addSubview:iv2];
+        
+        UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
+        iv3.contentMode = UIViewContentModeScaleAspectFill;
+        iv3.clipsToBounds = YES;
+        [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
+        [self.topContainer addSubview:iv3];
+        
+        UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
+        iv4.contentMode = UIViewContentModeScaleAspectFill;
+        iv4.clipsToBounds = YES;
+        [iv4 hnk_setImageFromURL:self.story.imageURLs[3]];
+        [self.topContainer addSubview:iv4];
+        
+        UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
+        iv5.contentMode = UIViewContentModeScaleAspectFill;
+        iv5.clipsToBounds = YES;
+        [iv5 hnk_setImageFromURL:self.story.imageURLs[4]];
+        [self.topContainer addSubview:iv5];
+        
+        UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
+        iv6.contentMode = UIViewContentModeScaleAspectFill;
+        iv6.clipsToBounds = YES;
+        [iv6 hnk_setImageFromURL:self.story.imageURLs[5]];
+        [self.topContainer addSubview:iv6];
     }
 }
 
@@ -255,7 +210,7 @@
     [self addSubview:self.actionBar];
 }
 
-#pragma mark - Action Bar Delete
+#pragma mark - Action Bar Deletate
 
 -(NSString *)titleForActionButton{
     return @"READ MORE";
@@ -266,7 +221,7 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"StoryContentBarActionTapped" object:nil userInfo:@{@"story_id" : self.story.uid}];
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"StoryContentBarActionTapped" object:nil userInfo:@{@"story_id" : self.story.uid}];
 }
 
 
