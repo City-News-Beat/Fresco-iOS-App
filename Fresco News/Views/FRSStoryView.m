@@ -164,11 +164,12 @@
             imageView.image = image;
             
             if (index+1 >= total) {
+                [self.titleLabel.superview bringSubviewToFront:self.titleLabel];
                 return;
             }
             
             [weakSelf configureImageFromImageView:[[UIImageView alloc] init] atIndex:index+1 xPos:xPos+imageView.frame.size.width+(index +1) total:total];
-            
+
         });
         
     } failure:^(NSError *error) {
