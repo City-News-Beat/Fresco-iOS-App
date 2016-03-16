@@ -23,6 +23,7 @@
 @interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 {
     NSMutableArray *dictionaryRepresentations;
+    BOOL hasSnapped;
 }
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
@@ -186,11 +187,11 @@
 
 -(void)addAnnotationsForAssignments{
     
-//    for (id<MKAnnotation> annotation in self.mapView.annotations){
-//        [self.mapView removeAnnotation:annotation];
-//    }
-//    
-//    [self removeAllOverlaysIncludingUser:NO];
+    for (id<MKAnnotation> annotation in self.mapView.annotations){
+        [self.mapView removeAnnotation:annotation];
+    }
+    
+    [self removeAllOverlaysIncludingUser:NO];
     
     NSInteger count = 0;
     
@@ -209,11 +210,11 @@
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     
     //Create MKCircle surroudning the annotation
-    FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:100];
+    CLLocationDistance distance = [assignment.radius floatValue] * 1609.34;
+    FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:distance];
     circle.circleType = FRSMapCircleTypeAssignment;
     
     [self.mapView addOverlay:circle];
-    
     [self.mapView addAnnotation:ann];
 }
 
@@ -317,7 +318,10 @@
     
 //    CLLocation *currentLocation = [locations lastObject];
     
-    [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
+    if (!hasSnapped) {
+        hasSnapped = TRUE;
+        [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
+    }
     
     [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation];
     
