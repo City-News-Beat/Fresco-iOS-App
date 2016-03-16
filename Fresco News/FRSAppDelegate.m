@@ -38,10 +38,10 @@
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        
+        [self handleLocalPush];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        
+        [self handleRemotePush];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         
@@ -51,6 +51,14 @@
 }
 
 -(void)handleLocationUpdate {
+    
+}
+
+-(void)handleLocalPush {
+    
+}
+
+-(void)handleRemotePush {
     
 }
 
@@ -73,6 +81,8 @@
 #pragma mark - Push Notifications
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    
+    completionHandler(TRUE);
     
 }
 

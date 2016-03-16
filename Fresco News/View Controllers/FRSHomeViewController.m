@@ -244,32 +244,36 @@
     }
     
     NSLog(@"RELOADING WITH OFFSET ID: %@", offsetID);
+    
     lastOffset = self.dataSource.count;
     
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
-        
-        NSLog(@"RELOADING: %lu", galleries.count);
-        
-        if ([galleries count] == 0){
-            return;
-        }
-        
-        isLoading = FALSE;
-        
-        for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
             
-            [self.dataSource addObject:gallery];
-            [self.highlights addObject:gallery];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
+            NSLog(@"RELOADING: %lu", galleries.count);
+            
+            if ([galleries count] == 0){
+                return;
+            }
+            
+            isLoading = FALSE;
+            
+            for (NSDictionary *dict in galleries){
+                FRSGallery *gallery = [FRSGallery MR_createEntity];
+                [gallery configureWithDictionary:dict];
+                
+                [self.dataSource addObject:gallery];
+                [self.highlights addObject:gallery];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
             [self cacheLocalData];
-        });
-        
-    }];
+            
+        }];
+    });
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{

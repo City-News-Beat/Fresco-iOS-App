@@ -208,11 +208,10 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
-                [self cacheLocalData];
             });
-
+            
+            [self cacheLocalData];
         }
-        
     }];
 
 }
@@ -240,13 +239,13 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.row == self.stories.count-1) {
-        return 40;
+        return 20;
     }
     
     if (!self.stories.count) return 0;
     
     if (indexPath.row >= self.stories.count) {
-        return 40;
+        return 20;
     }
     
     FRSStory *story = self.stories[indexPath.row];
