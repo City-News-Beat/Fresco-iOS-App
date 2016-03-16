@@ -38,10 +38,10 @@
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        
+        [self handleLocalPush];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        
+        [self handleRemotePush];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         
@@ -51,6 +51,14 @@
 }
 
 -(void)handleLocationUpdate {
+    
+}
+
+-(void)handleLocalPush {
+    
+}
+
+-(void)handleRemotePush {
     
 }
 
