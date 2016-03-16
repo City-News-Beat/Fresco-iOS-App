@@ -227,9 +227,19 @@
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
         
-        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
+//        annotationView.centerOffset = CGPointMake(0, 1.5); // offset the shadow
         
-//        [annotationView setImage:[UIImage imageNamed:@"radius-large"]];
+//        [annotationView setImage:[UIImage imageNamed:@"locationOnIcon"]];
+        UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
+        whiteView.layer.cornerRadius = 12;
+        whiteView.backgroundColor = [UIColor whiteColor];
+        [annotationView addSubview:whiteView];
+        
+        UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
+        yellowView.layer.cornerRadius = 8;
+        yellowView.backgroundColor = [UIColor frescoOrangeColor];
+        
+        [whiteView addSubview:yellowView];
         
         annotationView.enabled = YES;
         

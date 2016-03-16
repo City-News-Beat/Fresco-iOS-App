@@ -27,6 +27,8 @@
 @property (strong, nonatomic) UIButton *searchButton;
 @property (strong, nonatomic) UITextField *searchTextField;
 
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+
 @property (nonatomic) BOOL firstTime;
 
 @end
@@ -55,6 +57,15 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configurePullToRefresh];
+    [self configureSpinner];
+}
+
+-(void)configureSpinner{
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
+    [self.view addSubview:self.spinner];
+    
+    [self.spinner startAnimating];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -149,7 +160,9 @@
         
         for (NSDictionary *storyDict in stories){
              FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
-                
+            
+            [self.spinner stopAnimating];
+            
             if (!story) {
                 story = [FRSStory MR_createEntity];
                 [story configureWithDictionary:storyDict];
