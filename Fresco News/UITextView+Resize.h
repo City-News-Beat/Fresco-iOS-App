@@ -11,4 +11,5 @@
 
 @interface UITextView (Resize)
 -(void)frs_setTextWithResize:(NSString *)text;
+-(void)frs_resize;
 @end

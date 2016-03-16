@@ -21,4 +21,11 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, newHeight);
 }
 
+-(void)frs_resize {
+    float newHeight = [self sizeThatFits:CGSizeMake(self.frame.size.width, INT_MAX)].height;
+    
+    NSLog(@"HEIGHTFORRESIZE %f", newHeight);
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, newHeight);
+}
+
 @end

@@ -373,11 +373,9 @@
     
     
     //DEBUG
-//    scrollView.backgroundColor = [UIColor redColor];
-
-    
-    
+    //scrollView.backgroundColor = [UIColor redColor];
     // should be in seperate method, [self presentAssignmentCard];
+    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
