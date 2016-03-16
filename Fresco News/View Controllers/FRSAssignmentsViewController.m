@@ -313,7 +313,7 @@
 
 -(void)configureAssignmentCard{
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 412)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, 412)];
     [self.view addSubview:scrollView];
     
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76, self.view.frame.size.width, 412)];
@@ -345,15 +345,48 @@
     titleLabel.clipsToBounds = NO;
     
     [topContainer addSubview:titleLabel];
-    
-    
-//    UITextField *assignmentDetailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
-    
-    
-    
-    //DEBUG
-//    scrollView.backgroundColor = [UIColor redColor];
 
+    
+    //Configure bottom container
+    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, scrollView.frame.size.height - 44, self.view.frame.size.width, 44)];
+    bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [scrollView addSubview:bottomContainer];
+    
+    UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.frame.size.width, 0.5)];
+    bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
+    [bottomContainer addSubview:bottomContainerLine];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(self.view.frame.size.width -93 , 15, 77, 17);
+    [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
+    [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [bottomContainer addSubview:button];
+    
+    
+    
+    UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
+    photoImageView.frame = CGRectMake(16, 10, 24, 24);
+    [bottomContainer addSubview:photoImageView];
+    
+    UILabel *photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
+    photoCashLabel.text = @"$10";
+    photoCashLabel.textColor = [UIColor frescoMediumTextColor];
+    photoCashLabel.textAlignment = NSTextAlignmentCenter;
+    photoCashLabel.font = [UIFont notaBoldWithSize:15];
+    [bottomContainer addSubview:photoCashLabel];
+
+    
+    UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
+    videoImageView.frame = CGRectMake(85, 10, 24, 24);
+    [bottomContainer addSubview:videoImageView];
+    
+    UILabel *videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
+    videoCashLabel.text = @"$50";
+    videoCashLabel.textColor = [UIColor frescoMediumTextColor];
+    videoCashLabel.textAlignment = NSTextAlignmentCenter;
+    videoCashLabel.font = [UIFont notaBoldWithSize:15];
+    [bottomContainer addSubview:videoCashLabel];
     
     
     // should be in seperate method, [self presentAssignmentCard];
