@@ -315,7 +315,7 @@
 
 -(void)configureAssignmentCard{
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, 412)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     [self.view addSubview:scrollView];
     
     scrollView.showsVerticalScrollIndicator = NO;
@@ -352,9 +352,9 @@
 
     
     //Configure bottom container
-    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, scrollView.frame.size.height - 44, self.view.frame.size.width, 44)];
+    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 93, self.view.frame.size.width, 44)];
     bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [scrollView addSubview:bottomContainer];
+    [self.view addSubview:bottomContainer];
     
     UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.frame.size.width, 0.5)];
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
@@ -411,10 +411,7 @@
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [bottomContainer addSubview:videoCashLabel];
     
-    
-    //DEBUG
-    //scrollView.backgroundColor = [UIColor redColor];
-    // should be in seperate method, [self presentAssignmentCard];
+
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
