@@ -369,13 +369,11 @@
         assignmentCard.frame = cardFrame;
     }
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height + assignmentCard.frame.size.height);
-    
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height);
     
     //DEBUG
     //scrollView.backgroundColor = [UIColor redColor];
     // should be in seperate method, [self presentAssignmentCard];
-    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
