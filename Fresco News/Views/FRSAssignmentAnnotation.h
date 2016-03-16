@@ -16,5 +16,5 @@
 @property (nonatomic) NSString *assignmentId;
 
 -(instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index;
-
+-(NSString *)title;
 @end
