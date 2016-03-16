@@ -37,6 +37,15 @@
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
+    if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
+        
+    }
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        
+    }
+    if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
+        
+    }
     
     return YES;
 }
