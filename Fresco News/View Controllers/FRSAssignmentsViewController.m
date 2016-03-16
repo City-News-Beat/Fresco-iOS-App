@@ -304,6 +304,67 @@
     }
 }
 
+
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+
+    [self configureAssignmentCard];
+    
+}
+
+-(void)configureAssignmentCard{
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 412)];
+    [self.view addSubview:scrollView];
+    
+    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76, self.view.frame.size.width, 412)];
+    assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [scrollView addSubview:assignmentCard];
+    
+    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 76)];
+    topContainer.backgroundColor = [UIColor clearColor];
+    [scrollView addSubview:topContainer];
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = topContainer.frame;
+    gradient.opaque = NO;
+    UIColor *startColor = [UIColor clearColor];
+    UIColor *endColor = [UIColor colorWithWhite:0 alpha:0.42];
+    gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
+    [scrollView.layer insertSublayer:gradient atIndex:0];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
+    titleLabel.text = @"Viral cronut letterpress put a bird on it, ugh blog quinoa";
+    titleLabel.numberOfLines = 2;
+    titleLabel.font = [UIFont notaBoldWithSize:24];
+    titleLabel.textColor = [UIColor whiteColor];
+    
+    titleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+    titleLabel.layer.shadowOpacity = .15;
+    titleLabel.layer.shadowRadius = 2;
+    titleLabel.layer.shadowOffset = CGSizeMake(0, 1);
+    titleLabel.clipsToBounds = NO;
+    
+    [topContainer addSubview:titleLabel];
+    
+    
+//    UITextField *assignmentDetailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    
+    
+    
+    //DEBUG
+//    scrollView.backgroundColor = [UIColor redColor];
+
+    
+    
+    // should be in seperate method, [self presentAssignmentCard];
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
+        
+    } completion:nil];
+}
+
+
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     if (!locations.count){
         NSLog(@"FRSLocationManager did not return any locations");
@@ -333,7 +394,6 @@
     
     [self configureAnnotationsForMap];
 }
-
 
 /*
 #pragma mark - Navigation
