@@ -18,6 +18,8 @@
 #import "FRSMapCircle.h"
 #import "FRSAssignmentAnnotation.h"
 
+#import "UITextView+Resize.h"
+
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
@@ -347,8 +349,24 @@
     [topContainer addSubview:titleLabel];
     
     
-//    UITextField *assignmentDetailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    UITextView *assignmentDetailTextField = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    [assignmentCard addSubview:assignmentDetailTextField];
+    [assignmentDetailTextField setFont:[UIFont systemFontOfSize:15]];
+    assignmentDetailTextField.textColor = [UIColor frescoDarkTextColor];
+    assignmentDetailTextField.userInteractionEnabled = NO;
+    assignmentDetailTextField.editable = NO;
+    assignmentDetailTextField.selectable = NO;
+    assignmentDetailTextField.scrollEnabled = NO;
+    assignmentDetailTextField.backgroundColor = [UIColor clearColor];
     
+    [assignmentDetailTextField frs_setTextWithResize:@"To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea."];
+
+    if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
+        CGRect cardFrame = assignmentCard.frame;
+        cardFrame.size.height = assignmentDetailTextField.frame.size.height;
+    }
+    
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height);
     
     
     //DEBUG

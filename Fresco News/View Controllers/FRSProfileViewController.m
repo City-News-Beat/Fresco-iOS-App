@@ -112,7 +112,8 @@
     [self configureProfileSocialOverlay];
 }
 
--(void)configurePullToRefresh{
+-(void)configurePullToRefresh {
+    
     [super removeNavigationBarLine];
     
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -138,7 +139,7 @@
 }
 
 -(void)configureNavigationBar{
-//    [super configureNavigationBar];
+//  [super configureNavigationBar];
     [super removeNavigationBarLine];
     
     //self.navigationItem.title = @"@aesthetique";
