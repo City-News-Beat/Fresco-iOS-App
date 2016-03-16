@@ -9,5 +9,7 @@
 #import "FRSScrollingViewController.h"
 
 @interface FRSProfileViewController : FRSScrollingViewController
-
+{
+    UILabel *titleLabel;
+}
 @end

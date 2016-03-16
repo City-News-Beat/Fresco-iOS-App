@@ -141,7 +141,13 @@
 //    [super configureNavigationBar];
     [super removeNavigationBarLine];
     
-    self.navigationItem.title = @"@aesthetique";
+    //self.navigationItem.title = @"@aesthetique";
+    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
+    titleLabel.text = @"@aesthetique";
+    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:19];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor = [UIColor whiteColor];
+    self.navigationItem.titleView = titleLabel;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
     
