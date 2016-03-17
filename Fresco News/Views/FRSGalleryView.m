@@ -163,6 +163,7 @@
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
     self.pageControl.currentPage = 0;
+    self.pageControl.userInteractionEnabled = NO;
     
     self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
