@@ -406,7 +406,7 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height);
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
     
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
