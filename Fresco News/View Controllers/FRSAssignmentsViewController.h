@@ -11,8 +11,10 @@
 #import "MagicalRecord.h"
 #import "Fresco.h"
 
-@interface FRSAssignmentsViewController : FRSBaseViewController
-
+@interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
+{
+    __weak UIScrollView *currentScroller;
+}
 -(void)setInitialMapRegion;
 
 @end

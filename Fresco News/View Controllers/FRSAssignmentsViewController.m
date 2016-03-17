@@ -426,8 +426,21 @@
         scrollView.frame = scrollFrame;
         
     } completion:nil];
+    
+    currentScroller = scrollView;
+    currentScroller.delegate = self;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == currentScroller) {
+        [self handleAssignmentScroll];
+    }
+}
+
+
+-(void)handleAssignmentScroll {
+    
+}
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     if (!locations.count){
