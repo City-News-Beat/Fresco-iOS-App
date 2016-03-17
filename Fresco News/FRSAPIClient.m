@@ -20,10 +20,16 @@
         case 4:
             // client error
             switch (error.code) {
+                case 401:
+                    
+                    break;
                 case 403:
                 
                     break;
                 case 404:
+                    
+                    break;
+                case 405:
                     
                     break;
                 default:
