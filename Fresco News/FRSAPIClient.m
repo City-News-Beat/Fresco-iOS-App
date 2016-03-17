@@ -27,7 +27,18 @@
 }
 
 -(void)handleLocationUpdate:(NSDictionary *)userInfo {
-    NSLog(@"LOCATION: %@", userInfo);
+    NSLog(@"%@", userInfo);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateUserLocation:userInfo completion:^(NSDictionary *response, NSError *error) {
+            if (!error) {
+                NSLog(@"Sent Location");
+            }
+            else {
+                NSLog(@"Location Error: %@", error);
+            }
+        }];
+    });
 }
 
 /*
@@ -147,10 +158,8 @@
 
 -(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
 {
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : @"FAKE USER ID"}];
-    [params addEntriesFromDictionary:inputParams];
     
-    [self post:@"user/locate" withParameters:params completion:^(id responseObject, NSError *error) {
+    [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
         if (responseObject && !error) {
             
         }
@@ -160,8 +169,6 @@
     }];
         
 }
-
-
 
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
