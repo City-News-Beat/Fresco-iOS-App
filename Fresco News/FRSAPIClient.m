@@ -90,7 +90,8 @@
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
  
  */
--(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion{
+
+-(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
@@ -121,7 +122,27 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        NSMutableArray *smallResponse = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *object in responseObject) {
+            NSMutableDictionary *smallObject = [NSMutableDictionary dictionaryWithDictionary:object];
+            NSArray *thumbnails = [smallObject objectForKey:@"thumbnails"];
+            NSMutableArray *newThumbnails = [[NSMutableArray alloc] init];
+            
+            for (NSMutableDictionary *thumbnail in thumbnails) {
+                NSMutableDictionary *meta = [NSMutableDictionary dictionaryWithDictionary:thumbnail];
+                NSString *imageURL = [meta objectForKey:@"image"];
+                imageURL = [imageURL stringByReplacingOccurrencesOfString:@"images/" withString:@"images/small/"];
+                [meta setObject:imageURL forKey:@"image"];
+                [newThumbnails addObject:meta];
+            }
+            
+            [smallObject setObject:newThumbnails forKey:@"thumbnails"];
+            [smallResponse addObject:smallObject];
+        }
+        
+        completion(smallResponse, error);
+        
     }];
 }
 
