@@ -142,31 +142,23 @@
         }
         
         completion(smallResponse, error);
-        
     }];
 }
 
 -(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
 {
-       /* NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : @"FAKE USER ID"}];
+    [params addEntriesFromDictionary:inputParams];
+    
+    [self post:@"user/locate" withParameters:params completion:^(id responseObject, NSError *error) {
+        if (responseObject && !error) {
+            
+        }
+        else if (error) {
+            
+        }
+    }];
         
-        [params addEntriesFromDictionary:inputParams];
-        
-        [self POST:@"user/locate" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            
-            if(completion) completion(responseObject, nil);
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-            if(completion) completion(nil, error);
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            NSLog(@"Error: %@", error);
-        }];
-        
-    }*/
 }
 
 

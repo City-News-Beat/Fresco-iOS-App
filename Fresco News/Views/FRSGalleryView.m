@@ -296,9 +296,9 @@
     [self addSubview:self.captionLabel];
 }
 
--(void)dealloc {
-    NSLog(@"dEalloc");
-}
+//-(void)dealloc {
+//    NSLog(@"dEalloc");
+//}
 
 -(void)configureActionsBar{
     
