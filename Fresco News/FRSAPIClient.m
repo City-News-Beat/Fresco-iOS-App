@@ -19,6 +19,16 @@
             break;
         case 4:
             // client error
+            switch (error.code) {
+                case 403:
+                
+                    break;
+                case 404:
+                    
+                    break;
+                default:
+                    break;
+            }
             break;
         
         case 3:
