@@ -309,7 +309,15 @@
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
 
     [self configureAssignmentCard];
+    [self snapToAnnotationView:view]; // centers map on top of content
     
+}
+
+-(void)snapToAnnotationView:(MKAnnotationView *)view {
+    // get location
+    // offset location to be in centered in view area screenHeight/3.5
+    // create region based off this
+    // center map to region
 }
 
 -(void)configureAssignmentCard{
@@ -319,11 +327,11 @@
     
     scrollView.showsVerticalScrollIndicator = NO;
     
-    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76, self.view.frame.size.width, 412)];
+    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [scrollView addSubview:assignmentCard];
     
-    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 76)];
+    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
     [scrollView addSubview:topContainer];
     
