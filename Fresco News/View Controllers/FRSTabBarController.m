@@ -129,37 +129,10 @@
     }
 }
 
-
-//
-//-(void)handleHomeTabPressed{
-//
-//}
-//
-//-(void)handleStoryTabPressed{
-//    self.lastActiveIndex = 1;
-//}
-//
-//-(void)handleCameraTabPressed{
-////    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] init];
-////    [self presentViewController:camVC animated:YES completion:nil];
-//}
-//
-//-(void)handleAssignmentTabPressed{
-//    self.lastActiveIndex = 3;
-//}
-//
-//-(void)handleProfileTabPressed{
-//    self.lastActiveIndex = 4;
-//}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-//-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
-//    NSLog(@"viewController = %@", viewController);
-//}
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     
@@ -227,18 +200,5 @@
     
     return YES;
 }
-
-
-
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end
