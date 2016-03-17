@@ -12,6 +12,27 @@
 
 @implementation FRSAPIClient
 
+-(void)handleError:(NSError *)error {
+    switch (error.code/100) {
+        case 5:
+            // server error
+            break;
+        case 4:
+            // client error
+            break;
+        
+        case 3:
+            // redirection
+            break;
+            
+        case 2:
+            // prolly not an error
+            break;
+            
+        default:
+            break;
+    }
+}
 
 -(id)init {
     self = [super init];
@@ -36,6 +57,7 @@
             }
             else {
                 NSLog(@"Location Error: %@", error);
+                [self handleError:error];
             }
         }];
     });
