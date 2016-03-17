@@ -163,6 +163,7 @@
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
     self.pageControl.currentPage = 0;
+    self.pageControl.userInteractionEnabled = NO;
     
     self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
@@ -267,6 +268,15 @@
     return label;
 }
 
+-(void)removeFromSuperview {
+    
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+    
+    [super removeFromSuperview];
+}
+
 -(void)configureCaptionLabel{
     self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
@@ -287,6 +297,10 @@
     [self addSubview:self.captionLabel];
 }
 
+//-(void)dealloc {
+//    NSLog(@"dEalloc");
+//}
+
 -(void)configureActionsBar{
     
     if (![self.delegate shouldHaveActionBar]) {
@@ -297,8 +311,6 @@
     }
     
     [self addSubview:self.actionBar];
-    
-    
     
 }
 

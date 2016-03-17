@@ -12,6 +12,43 @@
 
 @implementation FRSAPIClient
 
+-(void)handleError:(NSError *)error {
+    switch (error.code/100) {
+        case 5:
+            // server error
+            break;
+        case 4:
+            // client error
+            switch (error.code) {
+                case 401:
+                    
+                    break;
+                case 403:
+                
+                    break;
+                case 404:
+                    
+                    break;
+                case 405:
+                    
+                    break;
+                default:
+                    break;
+            }
+            break;
+        
+        case 3:
+            // redirection
+            break;
+            
+        case 2:
+            // prolly not an error
+            break;
+            
+        default:
+            break;
+    }
+}
 
 -(id)init {
     self = [super init];
@@ -27,7 +64,19 @@
 }
 
 -(void)handleLocationUpdate:(NSDictionary *)userInfo {
-    NSLog(@"LOCATION: %@", userInfo);
+    NSLog(@"%@", userInfo);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateUserLocation:userInfo completion:^(NSDictionary *response, NSError *error) {
+            if (!error) {
+                NSLog(@"Sent Location");
+            }
+            else {
+                NSLog(@"Location Error: %@", error);
+                [self handleError:error];
+            }
+        }];
+    });
 }
 
 /*
@@ -90,7 +139,8 @@
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
  
  */
--(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion{
+
+-(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
@@ -121,34 +171,37 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        NSMutableArray *smallResponse = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *object in responseObject) {
+            NSMutableDictionary *smallObject = [NSMutableDictionary dictionaryWithDictionary:object];
+            NSArray *thumbnails = [smallObject objectForKey:@"thumbnails"];
+            NSMutableArray *newThumbnails = [[NSMutableArray alloc] init];
+            
+            for (NSMutableDictionary *thumbnail in thumbnails) {
+                NSMutableDictionary *meta = [NSMutableDictionary dictionaryWithDictionary:thumbnail];
+                NSString *imageURL = [meta objectForKey:@"image"];
+                imageURL = [imageURL stringByReplacingOccurrencesOfString:@"images/" withString:@"images/small/"];
+                [meta setObject:imageURL forKey:@"image"];
+                [newThumbnails addObject:meta];
+            }
+            
+            [smallObject setObject:newThumbnails forKey:@"thumbnails"];
+            [smallResponse addObject:smallObject];
+        }
+        
+        completion(smallResponse, error);
     }];
 }
 
 -(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
 {
-       /* NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id" : self.currentUser.userID}];
+    
+    [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
         
-        [params addEntriesFromDictionary:inputParams];
-        
-        [self POST:@"user/locate" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            
-            if(completion) completion(responseObject, nil);
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-            if(completion) completion(nil, error);
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            NSLog(@"Error: %@", error);
-        }];
-        
-    }*/
 }
-
-
 
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];

@@ -16,7 +16,7 @@
 @implementation FRSStoryCell
 
 -(void)awakeFromNib {
-
+    [super awakeFromNib]; // lord have mercy
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated{

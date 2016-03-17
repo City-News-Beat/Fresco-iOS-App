@@ -198,7 +198,6 @@
     NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments){
-        
         [self addAssignmentAnnotation:assignment index:count];
         count++;
     }
@@ -310,7 +309,15 @@
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
 
     [self configureAssignmentCard];
+    [self snapToAnnotationView:view]; // centers map on top of content
     
+}
+
+-(void)snapToAnnotationView:(MKAnnotationView *)view {
+    // get location
+    // offset location to be in centered in view area screenHeight/3.5
+    // create region based off this
+    // center map to region
 }
 
 -(void)configureAssignmentCard{
@@ -320,11 +327,11 @@
     
     scrollView.showsVerticalScrollIndicator = NO;
     
-    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76, self.view.frame.size.width, 412)];
+    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [scrollView addSubview:assignmentCard];
     
-    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 76)];
+    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
     [scrollView addSubview:topContainer];
     
@@ -397,7 +404,9 @@
         assignmentCard.frame = cardFrame;
     }
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height);
+    NSInteger bottomPadding = 15; // whatever padding we need at the bottom
+    
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
     
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
@@ -414,11 +423,26 @@
 
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
+        CGRect scrollFrame = scrollView.frame;
+        scrollFrame.origin.y = 0;
+        scrollView.frame = scrollFrame;
         
     } completion:nil];
+    
+    currentScroller = scrollView;
+    currentScroller.delegate = self;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == currentScroller) {
+        [self handleAssignmentScroll];
+    }
+}
+
+
+-(void)handleAssignmentScroll {
+    
+}
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     if (!locations.count){
