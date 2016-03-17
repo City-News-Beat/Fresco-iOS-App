@@ -400,11 +400,11 @@
 
     if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextField.frame.size.height * 2;
+        cardFrame.size.height = assignmentDetailTextField.frame.size.height + 50;
         assignmentCard.frame = cardFrame;
     }
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height);
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height+[UIScreen mainScreen].bounds.size.height/3.5);
     
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];

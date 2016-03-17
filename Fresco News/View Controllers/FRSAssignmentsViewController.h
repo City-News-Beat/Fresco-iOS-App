@@ -13,7 +13,7 @@
 
 @interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
 {
-    __weak UIScrollView *currentScroller;
+    __weak UIScrollView *currentScroller; // weak b/c we only want to hold reference when in view
 }
 -(void)setInitialMapRegion;
 
