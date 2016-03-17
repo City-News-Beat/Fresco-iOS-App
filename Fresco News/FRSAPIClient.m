@@ -160,12 +160,7 @@
 {
     
     [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
-        if (responseObject && !error) {
-            
-        }
-        else if (error) {
-            
-        }
+        completion(responseObject, error);
     }];
         
 }
