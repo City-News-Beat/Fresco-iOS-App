@@ -198,7 +198,6 @@
     NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments){
-        
         [self addAssignmentAnnotation:assignment index:count];
         count++;
     }
@@ -414,7 +413,9 @@
 
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        scrollView.transform = CGAffineTransformMakeTranslation(0, -412);
+        CGRect scrollFrame = scrollView.frame;
+        scrollFrame.origin.y = 0;
+        scrollView.frame = scrollFrame;
         
     } completion:nil];
 }
