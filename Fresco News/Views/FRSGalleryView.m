@@ -267,6 +267,14 @@
     return label;
 }
 
+-(void)removeFromSuperview {
+    [super removeFromSuperview];
+    
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+}
+
 -(void)configureCaptionLabel{
     self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
@@ -287,6 +295,10 @@
     [self addSubview:self.captionLabel];
 }
 
+-(void)dealloc {
+    NSLog(@"dEalloc");
+}
+
 -(void)configureActionsBar{
     
     if (![self.delegate shouldHaveActionBar]) {
@@ -297,8 +309,6 @@
     }
     
     [self addSubview:self.actionBar];
-    
-    
     
 }
 
