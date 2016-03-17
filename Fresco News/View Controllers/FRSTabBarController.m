@@ -45,7 +45,7 @@
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
-    [[UITabBar appearance] setBackgroundColor:[[UIColor frescoDarkTextColor] colorWithAlphaComponent:1]];
+    [[UITabBar appearance] setBackgroundColor:[UIColor frescoTabBarColor]];
 
     [self configureAppearance];
     [self configureViewControllers];

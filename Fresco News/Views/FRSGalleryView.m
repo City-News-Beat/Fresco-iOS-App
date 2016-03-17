@@ -268,11 +268,12 @@
 }
 
 -(void)removeFromSuperview {
-    [super removeFromSuperview];
     
     for (UIImageView *imageView in self.imageViews) {
         imageView.image = Nil;
     }
+    
+    [super removeFromSuperview];
 }
 
 -(void)configureCaptionLabel{

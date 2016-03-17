@@ -11,7 +11,7 @@
 @implementation UIColor (Fresco)
 
 +(UIColor *)frescoTabBarColor{
-    return [UIColor colorWithWhite:0.0 alpha:0.87];
+    return [UIColor colorWithWhite:0.13 alpha:1.0]; // opaque
 }
 
 +(UIColor *)frescoOrangeColor{
