@@ -400,13 +400,13 @@
 
     if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextField.frame.size.height + 50;
+        cardFrame.size.height = assignmentDetailTextField.frame.size.height * 2;
         assignmentCard.frame = cardFrame;
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, assignmentCard.frame.size.height+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
+    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
     
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
