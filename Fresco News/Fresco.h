@@ -15,6 +15,8 @@
  */
 
 // api - constants
+static BOOL const developmentEnvironment = FALSE;
+
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";

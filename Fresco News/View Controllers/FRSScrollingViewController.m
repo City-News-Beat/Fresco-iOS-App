@@ -20,16 +20,16 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    //    [self configureNavigationBar];
+//    [self configureNavigationBar];
     // Do any additional setup after loading the view.
 }
 
 //-(void)configureNavigationBar{
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
 //    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-//
-//
-//
+//    
+//    
+//    
 ////    [self configureBackButton];
 //}
 
@@ -49,7 +49,7 @@
 
 -(void)hideTabBarAnimated:(BOOL)animated{
     if (!self.tabBarController.tabBar) return;
-    
+
     NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height;
     
     
@@ -84,12 +84,12 @@
 }
 
 /*
- #pragma mark - Navigation
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+#pragma mark - Navigation
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

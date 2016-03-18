@@ -158,24 +158,30 @@
             return;
         }
         
-        for (NSDictionary *storyDict in stories){
-             FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
-            
-            [self.spinner stopAnimating];
-            
-            if (!story) {
-                story = [FRSStory MR_createEntity];
-                [story configureWithDictionary:storyDict];
-                [self.stories addObject:story];
+        
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            for (NSDictionary *storyDict in stories){
+                FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+                
+                [self.spinner stopAnimating];
+                
+                if (!story) {
+                    story = [FRSStory MR_createEntity];
+                    [story configureWithDictionary:storyDict];
+                    [self.stories addObject:story];
+                }
+                else {
+                    [self.stories addObject:story];
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                });
+                
+                [self cacheLocalData];
             }
-            else {
-                [self.stories addObject:story];
-            }
-            
-            [self.tableView reloadData];
-            [self cacheLocalData];
-        }
-       
+        //});
+        
     }];
 }
 

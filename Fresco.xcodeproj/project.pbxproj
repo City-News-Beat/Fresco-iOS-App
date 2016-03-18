@@ -56,6 +56,7 @@
 		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
 		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
+		2C70EFD9B48743D6EA5E0FFC /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24BD02930A66131EB6AED7E3 /* Pods_Fresco_WatchKit_Extension.framework */; };
 		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
 		42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */; };
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
@@ -517,6 +518,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C70EFD9B48743D6EA5E0FFC /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2120,7 +2122,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2131,7 +2133,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
@@ -2152,7 +2154,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2163,7 +2165,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
@@ -2235,7 +2237,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -2262,7 +2264,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -2287,7 +2289,7 @@
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -2310,7 +2312,7 @@
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -2373,7 +2375,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2384,7 +2386,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
@@ -2430,7 +2432,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -2451,7 +2453,7 @@
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
