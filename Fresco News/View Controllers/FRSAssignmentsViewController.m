@@ -116,13 +116,13 @@
 //}
 
 
--(void)fetchAssignmentsNearLocation:(CLLocation *)location{
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
     if (self.isFetching) return;
     
     self.isFetching = YES;
     
-    [[FRSAPIClient new] getAssignmentsWithinRadius:10 ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient new] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject;
         
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
@@ -240,7 +240,7 @@
     
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
-    [self fetchAssignmentsNearLocation:location];
+    [self fetchAssignmentsNearLocation:location radius:latitudeCircle];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
@@ -493,7 +493,7 @@
         [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
     }
     
-    [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation];
+    [self fetchAssignmentsNearLocation:self.locationManager.lastAcquiredLocation radius:10];
     
     [self configureAnnotationsForMap];
 }
