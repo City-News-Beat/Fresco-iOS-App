@@ -126,6 +126,7 @@
         NSArray *assignments = (NSArray *)responseObject;
         
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
+        NSLog(@"ASS: %@", mSerializedAssignments);
         
         for (NSDictionary *dict in assignments){
             [mSerializedAssignments addObject:[FRSAssignment assignmentWithDictionary:dict]];
@@ -189,7 +190,6 @@
 }
 
 -(void)addAnnotationsForAssignments{
-    NSLog(@"TEST");
     
     for (id<MKAnnotation> annotation in self.mapView.annotations){
         [self.mapView removeAnnotation:annotation];

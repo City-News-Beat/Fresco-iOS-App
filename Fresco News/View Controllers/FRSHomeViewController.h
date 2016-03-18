@@ -9,5 +9,7 @@
 #import "FRSScrollingViewController.h"
 #import "Fresco.h"
 @interface FRSHomeViewController : FRSScrollingViewController
-
+{
+    BOOL delayClear;
+}
 @end

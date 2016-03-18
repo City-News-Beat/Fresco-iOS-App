@@ -333,6 +333,10 @@
     if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         return;
     }
+
+    if (cell.gallery == self.dataSource[indexPath.row]) {
+        return;
+    }
     
     [cell clearCell];
     
