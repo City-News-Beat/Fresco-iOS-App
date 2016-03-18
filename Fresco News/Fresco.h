@@ -59,6 +59,9 @@ static NSInteger const userTrackingDelay = 10;
  */
 
 static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
+static NSString * const highlightCellIdentifier = @"HighlightCell";
+static NSString * const storyCellIdentifier = @"StoryCell";
+static NSString * const settingsCellIdentifier = @"SettingsCell";
 
 // callbacks / blocks
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
