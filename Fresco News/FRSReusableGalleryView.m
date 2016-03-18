@@ -11,12 +11,44 @@
 
 @implementation FRSReusableGalleryView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+-(id)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
 }
-*/
+
+-(id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(void)commonInit {
+
+}
+
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    // handle frame change
+}
 
 @end

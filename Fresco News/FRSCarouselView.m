@@ -57,4 +57,10 @@
     return Nil;
 }
 
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    // handle frame change
+}
+
 @end
