@@ -261,6 +261,7 @@
     }
     
     FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+    
     if (!cell){
         cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -283,6 +284,10 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
+        return;
+    }
+    
+    if (cell.story == self.stories[indexPath.row]) {
         return;
     }
     
