@@ -143,6 +143,7 @@
         self.isFetching = NO;
         
         [self cacheAssignments];
+        [self configureAnnotationsForMap];
     }];
 }
 
@@ -188,6 +189,7 @@
 }
 
 -(void)addAnnotationsForAssignments{
+    NSLog(@"TEST");
     
     for (id<MKAnnotation> annotation in self.mapView.annotations){
         [self.mapView removeAnnotation:annotation];
@@ -217,6 +219,24 @@
     
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
+}
+
+-(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    if (!scrollTimer || ![scrollTimer isValid]) {
+        scrollTimer = [NSTimer timerWithTimeInterval:.3 target:self selector:@selector(updateAssignments) userInfo:Nil repeats:NO];
+    }
+    else {
+        [scrollTimer invalidate];
+        scrollTimer = [NSTimer timerWithTimeInterval:.3 target:self selector:@selector(updateAssignments) userInfo:Nil repeats:NO];
+    }
+}
+
+-(void)updateAssignments {
+    MKCoordinateRegion region = self.mapView.region;
+    CLLocationCoordinate2D center = region.center;
+    
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    [self fetchAssignmentsNearLocation:location];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
