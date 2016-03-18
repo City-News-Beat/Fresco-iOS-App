@@ -14,6 +14,9 @@
 @interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
 {
     __weak UIScrollView *currentScroller; // weak b/c we only want to hold reference when in view
+    BOOL isScrolling;
+    
+    NSTimer *scrollTimer;
 }
 -(void)setInitialMapRegion;
 
