@@ -188,7 +188,7 @@
     self.clockIV.contentMode = UIViewContentModeCenter;
     self.clockIV.center = self.pageControl.center;
     [self.clockIV setFrame:CGRectMake(21, self.clockIV.frame.origin.y, 16, 16)];
-    [self.clockIV addFixedShadow];
+//    [self.clockIV addFixedShadow];
 
     [self addSubview:self.clockIV];
     
@@ -207,7 +207,7 @@
     self.locationIV.contentMode = UIViewContentModeCenter;
     self.locationIV.center = self.clockIV.center;
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
-    [self.locationIV addFixedShadow];
+//    [self.locationIV addFixedShadow];
     [self addSubview:self.locationIV];
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
@@ -224,7 +224,7 @@
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
     self.profileIV.image = [UIImage imageNamed:@"profile-icon-light"];
-    [self.profileIV addFixedShadow];
+//    [self.profileIV addFixedShadow];
     
     [self addSubview:self.profileIV];
     
