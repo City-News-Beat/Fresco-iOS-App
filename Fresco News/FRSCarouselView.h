@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Haneke.h"
 
 @interface FRSCarouselView : UIView
+{
+    NSMutableArray *imageViews; // reusable
+    NSMutableArray *videoPlayers; // expendable
+}
+
+-(void)loadContent:(NSArray *)content;
 
 @end
