@@ -16,6 +16,7 @@
 
 // api - constants
 static BOOL const developmentEnvironment = FALSE;
+static BOOL const stagingEnvironment = FALSE;
 
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
@@ -23,6 +24,9 @@ static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";
 static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
+
+#define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
+
 
 // user - data
 static NSInteger const maxUsernameChars = 20;
