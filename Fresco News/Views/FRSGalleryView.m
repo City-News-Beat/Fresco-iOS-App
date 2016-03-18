@@ -73,7 +73,6 @@
 
 -(void)handleActionButtonTapped {
     // idk why dan made this method life is a mystery
-    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
 }
 
 -(void)contentActionbarDidSelectShareButton:(id)sender {
@@ -97,17 +96,17 @@
     
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self configureScrollView];
-    [self configureImageViews];
-    [self configurePageControl];
+    [self configureScrollView]; //
+    [self configureImageViews]; // these three will be wrapped in carousel
+    [self configurePageControl];//
     
-    [self configureGalleryInfo];
+    [self configureGalleryInfo]; // this will stay similar
     
-    [self configureCaptionLabel];
+    [self configureCaptionLabel]; // this will stay similar
 
-    [self configureActionsBar];
+    [self configureActionsBar]; // this will stay similar
     
-    [self adjustHeight];
+    [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
 }
 
 -(void)configureScrollView{
