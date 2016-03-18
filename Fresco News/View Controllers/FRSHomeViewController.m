@@ -249,9 +249,7 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
-            
-            NSLog(@"RELOADING: %lu", galleries.count);
-            
+                        
             if ([galleries count] == 0){
                 return;
             }

@@ -234,6 +234,10 @@
 -(void)updateAssignments {
     MKCoordinateRegion region = self.mapView.region;
     CLLocationCoordinate2D center = region.center;
+    MKCoordinateSpan regionSpan = region.span;
+    
+    NSInteger latitudeCircle = regionSpan.latitudeDelta / 69;
+    
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
     [self fetchAssignmentsNearLocation:location];
