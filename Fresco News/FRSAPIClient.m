@@ -210,6 +210,52 @@
     return manager;
 }
 
+/*  OAUTH 2
+ 
+- logging in
+ NSURL *baseURL = [NSURL URLWithString:@"http://example.com/"];
+ AFOAuth2Manager *OAuth2Manager =
+ [[AFOAuth2Manager alloc] initWithBaseURL:baseURL
+ clientID:kClientID
+ secret:kClientSecret];
+ 
+ [OAuth2Manager authenticateUsingOAuthWithURLString:@"/oauth/token"
+ username:@"username"
+ password:@"password"
+ scope:@"email"
+ success:^(AFOAuthCredential *credential) {
+ NSLog(@"Token: %@", credential.accessToken);
+ }
+ failure:^(NSError *error) {
+ NSLog(@"Error: %@", error);
+ }];
+ 
+ -- authorizing requests
+ 
+ AFHTTPRequestOperationManager *manager =
+ [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+ 
+ [manager.requestSerializer setAuthorizationHeaderFieldWithCredential:credential];
+ 
+ [manager GET:@"/path/to/protected/resource"
+ parameters:nil
+ success:^(AFHTTPRequestOperation *operation, id responseObject) {
+ NSLog(@"Success: %@", responseObject);
+ }
+ failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+ NSLog(@"Failure: %@", error);
+ }];
+ 
+-- save credential
+ [AFOAuthCredential storeCredential:credential
+ withIdentifier:serviceProviderIdentifier];
+ 
+-- retrieve credential
+ AFOAuthCredential *credential =
+ [AFOAuthCredential retrieveCredentialWithIdentifier:serviceProviderIdentifier];
+
+ */
+
 /*
  Singleton
  */

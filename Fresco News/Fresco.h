@@ -15,7 +15,7 @@
  */
 
 // api - constants
-static BOOL const developmentEnvironment = FALSE;
+static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
 static BOOL const stagingEnvironment = FALSE;
 
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";

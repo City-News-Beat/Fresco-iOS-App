@@ -121,11 +121,15 @@
     NSArray *versionComps = [versionString componentsSeparatedByString:@"."];
     NSInteger firstVersionNum = [[versionComps firstObject] integerValue];
     
-    if (firstVersionNum < 3){ //This is a legacy user from prior to the redesign and persistance layer
+    
+    /*
+        Focus on this -- pull old persistance (however its managed) into new magical record / core data layer
+     */
+    if (firstVersionNum < 3){ // This is a legacy user from prior to the redesign and persistance layer
         [self configureCoreDataStack];
         
     }
-    else if (firstVersionNum == 3){ //This is the current high level version number we are working with.
+    else if (firstVersionNum == 3){ // This is the current high level version number we are working with.
         [self configureCoreDataStack];
         
     }
