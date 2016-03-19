@@ -25,6 +25,8 @@ target 'Fresco' do
 	pod 'FBSDKShareKit'
 	pod ‘MagicalRecord’
 	pod 'AFOAuth2Manager'
+	pod ‘AWSCore’
+	pod ‘AWSS3’
 	pod 'Haneke'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
 
