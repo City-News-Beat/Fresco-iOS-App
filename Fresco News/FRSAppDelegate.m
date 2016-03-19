@@ -113,10 +113,6 @@
     
 }
 
--(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
-    
-}
-
 #pragma mark - App Path
 
 -(void)determineAppPath{
