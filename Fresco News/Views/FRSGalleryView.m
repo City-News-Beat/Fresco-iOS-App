@@ -239,6 +239,8 @@
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
+    
+    NSLog(@"post.creator.firstName = %@", post.creator.firstName);
 }
 
 -(void)updateLabels{
