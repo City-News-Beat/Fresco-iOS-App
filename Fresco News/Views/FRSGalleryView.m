@@ -231,16 +231,29 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
+    
+    self.nameLabel.shadowColor = [UIColor blackColor];
+    self.nameLabel.layer.shadowOpacity = 1;
+    self.nameLabel.layer.masksToBounds = NO;
+    
     [self addSubview:self.nameLabel];
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-        self.profileIV.backgroundColor = [UIColor redColor];
+        
+//        self.profileIV.alpha = 0;
+//        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage] placeholder:Nil success:^(UIImage *image) {
+//            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                self.profileIV.alpha = 1;
+//            } completion:nil];
+//            
+//        } failure:^(NSError *error) {
+//            NSLog(@"Error loading profile image view in gallery. %@", error.localizedDescription);
+//        }];
+        
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
-    
-    NSLog(@"post.creator.firstName = %@", post.creator.firstName);
 }
 
 -(void)updateLabels{
