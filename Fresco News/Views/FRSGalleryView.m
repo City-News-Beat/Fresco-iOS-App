@@ -176,10 +176,10 @@
 }
 
 -(void)configureGalleryInfo{
+    [self updateLabels];
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];
-    [self updateLabels];
 }
 
 -(void)configureTimeLine{
@@ -188,7 +188,6 @@
     self.clockIV.contentMode = UIViewContentModeCenter;
     self.clockIV.center = self.pageControl.center;
     [self.clockIV setFrame:CGRectMake(21, self.clockIV.frame.origin.y, 16, 16)];
-    [self.clockIV addFixedShadow];
 
     [self addSubview:self.clockIV];
     
@@ -207,7 +206,6 @@
     self.locationIV.contentMode = UIViewContentModeCenter;
     self.locationIV.center = self.clockIV.center;
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
-    [self.locationIV addFixedShadow];
     [self addSubview:self.locationIV];
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
@@ -223,9 +221,9 @@
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
-    self.profileIV.image = [UIImage imageNamed:@"profile-icon-light"];
-    [self.profileIV addFixedShadow];
     
+    self.profileIV.layer.cornerRadius = 12;
+    self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
@@ -233,7 +231,33 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
+
+    
+    
+    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:self.nameLabel.text];
+    NSRange range = NSMakeRange(0, [attString length]);
+    
+    [attString addAttribute:NSFontAttributeName value:self.nameLabel.font range:range];
+    [attString addAttribute:NSForegroundColorAttributeName value:self.nameLabel.textColor range:range];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor frescoMediumTextColor];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+    shadow.shadowBlurRadius = 2;
+    [attString addAttribute:NSShadowAttributeName value:shadow range:range];
+    
+    self.nameLabel.attributedText = attString;
+    
+    
+    
+    
     [self addSubview:self.nameLabel];
+    
+    if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+    } else {
+        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+    }
 }
 
 -(void)updateLabels{
@@ -447,8 +471,8 @@
     [self.window addGestureRecognizer:tap];
     
     
-    [self presentParallax];
-    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
+//    [self presentParallax];
+//    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
 }
 
 -(void)presentParallax{
