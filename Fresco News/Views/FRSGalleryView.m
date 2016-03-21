@@ -241,9 +241,9 @@
     [attString addAttribute:NSForegroundColorAttributeName value:self.nameLabel.textColor range:range];
     
     NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [UIColor frescoMediumTextColor];
+    shadow.shadowColor = [UIColor frescoLightTextColor];
     shadow.shadowOffset = CGSizeMake(0, 1);
-    shadow.shadowBlurRadius = 2;
+    shadow.shadowBlurRadius = 1.5;
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
     self.nameLabel.attributedText = attString;
@@ -278,6 +278,22 @@
     [self.timeLabel sizeToFit];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
+}
+
+-(void)addShadowToLabel:(UILabel*)label {
+    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:label.text];
+    NSRange range = NSMakeRange(0, [attString length]);
+    
+    [attString addAttribute:NSFontAttributeName value:label.font range:range];
+    [attString addAttribute:NSForegroundColorAttributeName value:label.textColor range:range];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor frescoLightTextColor];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+    shadow.shadowBlurRadius = 1.5;
+    [attString addAttribute:NSShadowAttributeName value:shadow range:range];
+    
+    self.nameLabel.attributedText = attString;
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
