@@ -176,10 +176,10 @@
 }
 
 -(void)configureGalleryInfo{
+    [self updateLabels];
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];
-    [self updateLabels];
 }
 
 -(void)configureTimeLine{
@@ -232,17 +232,12 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     [self addSubview:self.nameLabel];
-
-    NSLog(@"post.creator.profileImage = %@", post.creator.profileImage);
     
-    if (post.creator.profileImage != [NSNull null]) {
+    if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
         self.profileIV.backgroundColor = [UIColor redColor];
-    }
-    
-    if ([post.creator.profileImage isEqual: [NSNull null]]) {
-        self.profileIV.backgroundColor = [UIColor blueColor];
-        
+    } else {
+        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
 }
 
@@ -457,8 +452,8 @@
     [self.window addGestureRecognizer:tap];
     
     
-    [self presentParallax];
-    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
+//    [self presentParallax];
+//    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
 }
 
 -(void)presentParallax{
