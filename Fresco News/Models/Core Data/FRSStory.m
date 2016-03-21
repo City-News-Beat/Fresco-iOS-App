@@ -65,4 +65,10 @@
     return [mArr copy];
 }
 
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSStory *story = [FRSStory MR_createEntityInContext:context];
+    [story configureWithDictionary:properties];
+    return story;
+}
+
 @end

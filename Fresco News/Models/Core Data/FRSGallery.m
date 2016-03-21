@@ -33,6 +33,13 @@
     [self addArticlesWithArray:dict[@"articles"]];
 }
 
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSGallery *gallery = [FRSGallery MR_createEntityInContext:context];
+    [gallery configureWithDictionary:properties];
+    return gallery;
+}
+
+
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
     [self configureWithDictionary:dict];

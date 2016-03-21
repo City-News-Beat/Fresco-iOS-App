@@ -47,6 +47,13 @@
     self.meta = @{@"image_height" : height, @"image_width" : width};
 }
 
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSPost *post = [FRSPost MR_createEntityInContext:context];
+    [post configureWithDictionary:properties];
+    return post;
+}
+
+
 -(NSString *)shortAddressFromAddress:(NSString *)address {
     NSArray *comps = [address componentsSeparatedByString:@","];
     NSMutableString *str = [NSMutableString new];

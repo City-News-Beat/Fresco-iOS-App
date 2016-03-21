@@ -34,7 +34,7 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
 }
 
--(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSArticle *article = [FRSArticle MR_createEntityInContext:context];
     [article configureWithDictionary:properties];
     return article;

@@ -22,6 +22,12 @@
     return assignment;
 }
 
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSAssignment *assignment = [FRSAssignment MR_createEntityInContext:context];
+    [assignment configureWithDictionary:properties];
+    return assignment;
+}
+
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
     self.uid = dictionary[@"_id"];
     self.title = dictionary[@"title"];

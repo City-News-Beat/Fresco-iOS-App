@@ -10,5 +10,5 @@
 
 @protocol FRSManagedObject
 @optional // don't want to force this for every data models
--(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 @end
