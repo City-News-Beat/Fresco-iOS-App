@@ -158,7 +158,6 @@
             return;
         }
         
-        
         //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             for (NSDictionary *storyDict in stories){
                 FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
@@ -248,7 +247,9 @@
         return 20;
     }
     
-    if (!self.stories.count) return 0;
+    if (!self.stories.count) {
+        return 0;
+    }
     
     if (indexPath.row >= self.stories.count) {
         return 20;
@@ -280,7 +281,6 @@
     return cell;
 }
 
-
 #pragma mark UITableView Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -293,7 +293,8 @@
         return;
     }
     
-    if (cell.story == self.stories[indexPath.row]) {
+    // POSSIBLE BUG!!
+    if (self.stories.count > indexPath.row && cell.story == self.stories[indexPath.row]) {
         return;
     }
     

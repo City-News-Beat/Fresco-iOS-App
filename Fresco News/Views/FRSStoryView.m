@@ -82,21 +82,29 @@
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
     
-    if (self.story.imageURLs.count < 6) {
+    NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
+    
+    for (NSURL *fullSizeURL in self.story.imageURLs) {
+        NSString *fullSizeString = fullSizeURL.absoluteString;
+        NSString *smallString = [fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:@"images/small/"];
+        [smallImageURLS addObject:[NSURL URLWithString:smallString]];
+    }
+    
+    if (smallImageURLS.count < 6) {
         
-        switch (self.story.imageURLs.count) {
+        switch (smallImageURLS.count) {
             case 1:{
-                NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
+                NSLog(@"%@ has %lu stories", self.story.title, smallImageURLS.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
-                [iv hnk_setImageFromURL:self.story.imageURLs[0]];
+                [iv hnk_setImageFromURL:smallImageURLS[0]];
                 [self.topContainer addSubview:iv];
             } break;
                 
             default: {
                 UIImageView *iv = [UIImageView new];
-                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:self.story.imageURLs.count];
+                [self configureImageFromImageView:iv atIndex:0 xPos:0 total:smallImageURLS.count];
             } break;
         }
         
@@ -105,37 +113,37 @@
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
         iv.contentMode = UIViewContentModeScaleAspectFill;
         iv.clipsToBounds = YES;
-        [iv hnk_setImageFromURL:self.story.imageURLs[0]];
+        [iv hnk_setImageFromURL:smallImageURLS[0]];
         [self.topContainer addSubview:iv];
         
         UIImageView *iv2 = [[UIImageView alloc] initWithFrame:CGRectMake(width + 1, 0, width, halfHeight)];
         iv2.contentMode = UIViewContentModeScaleAspectFill;
         iv2.clipsToBounds = YES;
-        [iv2 hnk_setImageFromURL:self.story.imageURLs[1]];
+        [iv2 hnk_setImageFromURL:smallImageURLS[1]];
         [self.topContainer addSubview:iv2];
         
         UIImageView *iv3 = [[UIImageView alloc] initWithFrame:CGRectMake(width * 2 + 2, 0, width, halfHeight)];
         iv3.contentMode = UIViewContentModeScaleAspectFill;
         iv3.clipsToBounds = YES;
-        [iv3 hnk_setImageFromURL:self.story.imageURLs[2]];
+        [iv3 hnk_setImageFromURL:smallImageURLS[2]];
         [self.topContainer addSubview:iv3];
         
         UIImageView *iv4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) - width, halfHeight + 0.5, width, halfHeight)];
         iv4.contentMode = UIViewContentModeScaleAspectFill;
         iv4.clipsToBounds = YES;
-        [iv4 hnk_setImageFromURL:self.story.imageURLs[3]];
+        [iv4 hnk_setImageFromURL:smallImageURLS[3]];
         [self.topContainer addSubview:iv4];
         
         UIImageView *iv5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.topContainer.frame.size.width - (2 * width) + 1, halfHeight + 0.5, width, halfHeight)];
         iv5.contentMode = UIViewContentModeScaleAspectFill;
         iv5.clipsToBounds = YES;
-        [iv5 hnk_setImageFromURL:self.story.imageURLs[4]];
+        [iv5 hnk_setImageFromURL:smallImageURLS[4]];
         [self.topContainer addSubview:iv5];
         
         UIImageView *iv6 = [[UIImageView alloc] initWithFrame:CGRectOffset(iv5.frame, width + 1, 0)];
         iv6.contentMode = UIViewContentModeScaleAspectFill;
         iv6.clipsToBounds = YES;
-        [iv6 hnk_setImageFromURL:self.story.imageURLs[5]];
+        [iv6 hnk_setImageFromURL:smallImageURLS[5]];
         [self.topContainer addSubview:iv6];
     }
 }

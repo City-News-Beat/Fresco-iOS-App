@@ -60,7 +60,9 @@
         NSURL *url = [NSURL URLWithString:escapedString];
         [mArr addObject:url];
         
-        if (mArr.count >= 6) break;
+        if (mArr.count >= 6) {
+            break;   
+        }
     }
     return [mArr copy];
 }

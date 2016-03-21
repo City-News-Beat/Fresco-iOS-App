@@ -14,9 +14,11 @@
 +(instancetype)sharedLocator {
     static FRSLocator *sharedLocator = nil;
     static dispatch_once_t onceToken;
+    
     dispatch_once(&onceToken, ^{
         sharedLocator = [[FRSLocator alloc] init];
     });
+    
     return sharedLocator;
 }
 
