@@ -27,7 +27,6 @@ static NSString * const assignmentsEndpoint = @"assignment/find";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
-
 // user - data
 static NSInteger const maxUsernameChars = 20;
 static NSInteger const maxNameChars = 40;

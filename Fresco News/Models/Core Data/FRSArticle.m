@@ -33,6 +33,13 @@
     self.uid = dictionary[@"_id"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
 }
+
+-(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSArticle *article = [FRSArticle MR_createEntityInContext:context];
+    [article configureWithDictionary:properties];
+    return article;
+}
+
 // Insert code here to add functionality to your managed object subclass
 
 @end
