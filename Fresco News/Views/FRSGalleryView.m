@@ -231,26 +231,30 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
+
     
-    self.nameLabel.shadowColor = [UIColor blackColor];
-    self.nameLabel.layer.shadowOpacity = 1;
-    self.nameLabel.layer.masksToBounds = NO;
+    
+    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:self.nameLabel.text];
+    NSRange range = NSMakeRange(0, [attString length]);
+    
+    [attString addAttribute:NSFontAttributeName value:self.nameLabel.font range:range];
+    [attString addAttribute:NSForegroundColorAttributeName value:self.nameLabel.textColor range:range];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor frescoMediumTextColor];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+    shadow.shadowBlurRadius = 2;
+    [attString addAttribute:NSShadowAttributeName value:shadow range:range];
+    
+    self.nameLabel.attributedText = attString;
+    
+    
+    
     
     [self addSubview:self.nameLabel];
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-        
-//        self.profileIV.alpha = 0;
-//        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage] placeholder:Nil success:^(UIImage *image) {
-//            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//                self.profileIV.alpha = 1;
-//            } completion:nil];
-//            
-//        } failure:^(NSError *error) {
-//            NSLog(@"Error loading profile image view in gallery. %@", error.localizedDescription);
-//        }];
-        
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
