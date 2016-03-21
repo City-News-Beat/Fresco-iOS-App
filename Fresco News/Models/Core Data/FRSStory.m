@@ -27,7 +27,6 @@
 @implementation FRSStory
 
 // Insert code here to add functionality to your managed object subclass
-
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.caption = dict[@"caption"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];

@@ -56,7 +56,7 @@
         {
             [currentData appendBytes:buffer length:length];
         }
-        if ([currentData length] >= 5 * MB) {
+        if ([currentData length] >= CHUNK_SIZE * MB) {
             [self startChunkUpload];
             triggeredUpload = TRUE;
             break;
