@@ -188,7 +188,6 @@
     self.clockIV.contentMode = UIViewContentModeCenter;
     self.clockIV.center = self.pageControl.center;
     [self.clockIV setFrame:CGRectMake(21, self.clockIV.frame.origin.y, 16, 16)];
-//    [self.clockIV addFixedShadow];
 
     [self addSubview:self.clockIV];
     
@@ -207,7 +206,6 @@
     self.locationIV.contentMode = UIViewContentModeCenter;
     self.locationIV.center = self.clockIV.center;
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
-//    [self.locationIV addFixedShadow];
     [self addSubview:self.locationIV];
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
@@ -223,9 +221,9 @@
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
-    self.profileIV.image = [UIImage imageNamed:@"profile-icon-light"];
-//    [self.profileIV addFixedShadow];
     
+    self.profileIV.layer.cornerRadius = 12;
+    self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
@@ -234,6 +232,18 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     [self addSubview:self.nameLabel];
+
+    NSLog(@"post.creator.profileImage = %@", post.creator.profileImage);
+    
+    if (post.creator.profileImage != [NSNull null]) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+        self.profileIV.backgroundColor = [UIColor redColor];
+    }
+    
+    if ([post.creator.profileImage isEqual: [NSNull null]]) {
+        self.profileIV.backgroundColor = [UIColor blueColor];
+        
+    }
 }
 
 -(void)updateLabels{

@@ -40,6 +40,13 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.creator = [FRSUser MR_createEntity];
+    
+    if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
+        if ([[dict objectForKey:@"owner"] objectForKey:@"avatar"] != [NSNull null]) {
+            self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
+        }
+    }
     
     NSNumber *height = dict[@"meta"][@"height"] ? : @0;
     NSNumber *width = dict[@"meta"][@"width"] ? : @0;

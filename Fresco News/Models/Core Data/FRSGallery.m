@@ -44,10 +44,24 @@
         if (_currentContext) {
             FRSPost *post = [FRSPost MR_createEntityInContext:_currentContext];
             [post configureWithDictionary:dict];
+            if (dict[@"owner"]) {
+                if (!dict[@"owner"][@"avatar"]) {
+                    return;
+                }
+                post.creator.profileImage = dict[@"owner"][@"avatar"];
+            }
+            
             [self addPostsObject:post];
         }
         else {
-            FRSPost *post = [FRSPost postWithDictionary:dict];
+            FRSPost *post = [FRSPost postWithDictionary:dict];            
+            if (dict[@"owner"] != [NSNull null]) {
+                if (!dict[@"owner"][@"avatar"]) {
+                    return;
+                }
+                post.creator.profileImage = dict[@"owner"][@"avatar"];
+            }
+            
             [self addPostsObject:post];
         }
     }

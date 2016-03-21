@@ -196,6 +196,8 @@
 
 -(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
 {
+    return;
+    
     
     [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
