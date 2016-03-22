@@ -320,6 +320,9 @@
     // offset location to be in centered in view area screenHeight/3.5
     // create region based off this
     // center map to region
+    
+    CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
+    [self.mapView setCenterCoordinate:newCenter animated:YES];
 }
 
 -(void)configureAssignmentCard{
@@ -458,9 +461,6 @@
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    
-    NSLog(@"%f", scrollView.contentOffset.y);
-    
     if (scrollView.contentOffset.y <= -50) {
         [self dismissAssignmentCard];
     }
