@@ -197,6 +197,8 @@
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
+    [self addShadowToLabel:self.timeLabel];
+    
     [self addSubview:self.timeLabel];
 }
 
@@ -213,6 +215,8 @@
     self.locationLabel = [self galleryInfoLabelWithText:post.address fontSize:13];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
+    
+    [self addShadowToLabel:self.locationLabel];
     
     [self addSubview:self.locationLabel];
 }
@@ -232,24 +236,7 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
 
-    
-    
-    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:self.nameLabel.text];
-    NSRange range = NSMakeRange(0, [attString length]);
-    
-    [attString addAttribute:NSFontAttributeName value:self.nameLabel.font range:range];
-    [attString addAttribute:NSForegroundColorAttributeName value:self.nameLabel.textColor range:range];
-    
-    NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [UIColor frescoLightTextColor];
-    shadow.shadowOffset = CGSizeMake(0, 1);
-    shadow.shadowBlurRadius = 1.5;
-    [attString addAttribute:NSShadowAttributeName value:shadow range:range];
-    
-    self.nameLabel.attributedText = attString;
-    
-    
-    
+    [self addShadowToLabel:self.nameLabel];
     
     [self addSubview:self.nameLabel];
     
@@ -278,6 +265,12 @@
     [self.timeLabel sizeToFit];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
+    
+    if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+    } else {
+        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+    }
 }
 
 -(void)addShadowToLabel:(UILabel*)label {
@@ -293,7 +286,7 @@
     shadow.shadowBlurRadius = 1.5;
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
-    self.nameLabel.attributedText = attString;
+    label.attributedText = attString;
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
@@ -335,10 +328,6 @@
     
     [self addSubview:self.captionLabel];
 }
-
-//-(void)dealloc {
-//    NSLog(@"dEalloc");
-//}
 
 -(void)configureActionsBar{
     
@@ -412,6 +401,7 @@
         self.nameLabel.alpha = 0;
         self.locationLabel.alpha = 0;
         self.timeLabel.alpha = 0;
+        self.profileIV.alpha = 0;
         return;
     }
         
@@ -421,7 +411,18 @@
     self.nameLabel.alpha = absAlpha;
     self.locationLabel.alpha = absAlpha;
     self.timeLabel.alpha = absAlpha;
+    self.profileIV.alpha = absAlpha;
     
+    NSLog(@"absAlpha = %f", absAlpha);
+    
+    FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
+    if (adjustedPost.creator.profileImage != [NSNull null] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
+        self.profileIV.alpha = 1;
+    } else {
+        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+        self.profileIV.alpha = 0;
+    }
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
