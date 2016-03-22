@@ -236,7 +236,8 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-
+        self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    
     [self addShadowToLabel:self.nameLabel];
     
     [self addSubview:self.nameLabel];
@@ -255,7 +256,7 @@
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
-    [self.nameLabel sizeToFit];
+//    [self.nameLabel sizeToFit];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
@@ -279,6 +280,7 @@
 }
 
 -(void)addShadowToLabel:(UILabel*)label {
+    
     NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:label.text];
     NSRange range = NSMakeRange(0, [attString length]);
     
