@@ -42,7 +42,7 @@
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
-
+@property (strong, nonatomic) UIView *dismissView;
 
 @end
 
@@ -52,8 +52,6 @@
     [super viewDidLoad];
     [self configureMap];
     
-    
-    
     // Do any additional setup after loading the view.
 }
 
@@ -61,8 +59,6 @@
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
-    
-//    [self addNotificationObservers];
     
     self.locationManager = [[FRSLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -86,7 +82,7 @@
 
 
 -(void)configureNavigationBar{
-//    [super configureNavigationBar];
+
     self.navigationItem.title = @"ASSIGNMENTS";
 }
 
@@ -97,27 +93,6 @@
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
-
--(void)addNotificationObservers{
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocations:) name:NOTIF_LOCATIONS_UPDATE object:nil];
-}
-
-//-(void)didUpdateLocations:(NSNotification *)notification{
-//    NSArray *locations = notification.userInfo[@"locations"];
-//    
-//    NSLog(@"Location update notification observed by assignmentsVC");
-//    
-//    if (!locations.count) return;
-//    
-//    CLLocation *currentLocation = [locations lastObject];
-//    
-//    [self adjustMapRegionWithLocation:currentLocation];
-//    
-//    [self fetchAssignmentsNearLocation:currentLocation];
-//    
-//    [self configureAnnotationsForMap];
-//}
-
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
@@ -350,9 +325,15 @@
 -(void)configureAssignmentCard{
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
+    self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
     
     self.scrollView.showsVerticalScrollIndicator = NO;
+    
+    self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
+//    self.dismissView.backgroundColor = [UIColor redColor];
+//    self.dismissView.alpha = 0.2;
+    [self.scrollView addSubview:self.dismissView];
     
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -461,11 +442,13 @@
     currentScroller.delegate = self;
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self.scrollView addGestureRecognizer:singleTap];
+    [self.dismissView addGestureRecognizer:singleTap];
 }
 
 -(void)handleTap:(UITapGestureRecognizer *)sender {
-    
+
+    [self dismissAssignmentCard];
+
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -479,12 +462,12 @@
     NSLog(@"%f", scrollView.contentOffset.y);
     
     if (scrollView.contentOffset.y <= -50) {
-        [self dismissScrollViewAnimation];
+        [self dismissAssignmentCard];
     }
 }
 
 
--(void)dismissScrollViewAnimation{
+-(void)dismissAssignmentCard{
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
@@ -525,15 +508,5 @@
     
     [self configureAnnotationsForMap];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
