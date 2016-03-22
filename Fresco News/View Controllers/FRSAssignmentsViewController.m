@@ -465,12 +465,6 @@
 
 -(void)handleTap:(UITapGestureRecognizer *)sender {
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-
-        
-    } completion:nil];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -479,6 +473,23 @@
     }
 }
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    NSLog(@"%f", scrollView.contentOffset.y);
+    
+    if (scrollView.contentOffset.y <= -50) {
+        [self dismissScrollViewAnimation];
+    }
+}
+
+
+-(void)dismissScrollViewAnimation{
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+        
+    } completion:nil];
+}
 
 -(void)handleAssignmentScroll {
     
