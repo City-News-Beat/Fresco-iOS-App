@@ -176,10 +176,11 @@
 }
 
 -(void)configureGalleryInfo{
-    [self updateLabels];
+//    [self updateLabels];
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];
+    [self updateLabels];
 }
 
 -(void)configureTimeLine{
@@ -271,6 +272,10 @@
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
+
+    [self addShadowToLabel:self.nameLabel];
+    [self addShadowToLabel:self.locationLabel];
+    [self addShadowToLabel:self.timeLabel];
 }
 
 -(void)addShadowToLabel:(UILabel*)label {
@@ -413,7 +418,7 @@
     self.timeLabel.alpha = absAlpha;
     self.profileIV.alpha = absAlpha;
     
-    NSLog(@"absAlpha = %f", absAlpha);
+    //Profile picture doesn't fade on scroll
     
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (adjustedPost.creator.profileImage != [NSNull null] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
