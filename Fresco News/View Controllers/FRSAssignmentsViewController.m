@@ -93,6 +93,7 @@
 -(void)configureMap{
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
+    self.mapView.showsCompass = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
