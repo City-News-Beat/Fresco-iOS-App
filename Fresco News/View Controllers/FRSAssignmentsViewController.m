@@ -395,10 +395,18 @@
     [self.scrollView.layer insertSublayer:gradient atIndex:0];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
-    titleLabel.text = self.assignmentTitle;
-    titleLabel.numberOfLines = 2;
     titleLabel.font = [UIFont notaBoldWithSize:24];
+    titleLabel.numberOfLines = 0;
+    titleLabel.text = @"This title is going to be really long and it's going to say something that";
+    [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
+    
+    
+    NSLog(@"titleLabel.height = %f", titleLabel.frame.size.height);
+    
+    if (titleLabel.frame.size.height == 72) { //72 is the size of titleLabel with 3 lines
+        [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
+    }
     
     titleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
     titleLabel.layer.shadowOpacity = .15;
