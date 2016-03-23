@@ -7,16 +7,23 @@
 //
 
 #import "FRSStoryDetailViewController.h"
+#import "FRSGalleryCell.h"
 
 @interface FRSStoryDetailViewController ()
 
 @end
 
 @implementation FRSStoryDetailViewController
+static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self setupTableView];
+}
+
+-(void)setupTableView {
+    [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
 }
 
 - (void)didReceiveMemoryWarning {

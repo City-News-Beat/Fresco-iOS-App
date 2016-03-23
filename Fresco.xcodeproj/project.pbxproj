@@ -1042,6 +1042,13 @@
 			name = Detail;
 			sourceTree = "<group>";
 		};
+		D41365B41CA33347004FE848 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		D43C7FCC1C8E464800A7A7A7 /* Future */ = {
 			isa = PBXGroup;
 			children = (
@@ -1398,6 +1405,7 @@
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
 				D47999631C96A8FD00B46D01 /* Location */,
+				D41365B41CA33347004FE848 /* Settings */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
