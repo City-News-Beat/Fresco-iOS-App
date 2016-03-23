@@ -47,6 +47,10 @@
 
 @property (strong, nonatomic) UIView *assignmentBottomBar;
 
+@property (strong, nonatomic) NSString *assignmentTitle;
+
+@property (strong, nonatomic) NSString *assignmentCaption;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -344,12 +348,10 @@
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
-    NSString *title = assAnn.title;
-    NSString *description = assAnn.subtitle;
-
-    NSLog(@"CLICKED %@ %@", title, description);
-    
+    self.assignmentTitle = assAnn.title;
+    self.assignmentCaption = assAnn.subtitle;
     [self configureAssignmentCard];
+    
     [self snapToAnnotationView:view]; // centers map on top of content
 }
 
@@ -374,8 +376,6 @@
     self.scrollView.showsVerticalScrollIndicator = NO;
     
     self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-//    self.dismissView.backgroundColor = [UIColor redColor];
-//    self.dismissView.alpha = 0.2;
     [self.scrollView addSubview:self.dismissView];
     
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
@@ -395,7 +395,7 @@
     [self.scrollView.layer insertSublayer:gradient atIndex:0];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
-    titleLabel.text = @"Viral cronut letterpress put a bird on it, ugh blog quinoa";
+    titleLabel.text = self.assignmentTitle;
     titleLabel.numberOfLines = 2;
     titleLabel.font = [UIFont notaBoldWithSize:24];
     titleLabel.textColor = [UIColor whiteColor];
@@ -425,20 +425,17 @@
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [self.assignmentBottomBar addSubview:button];
     
-    UITextView *assignmentDetailTextField = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
-    [assignmentCard addSubview:assignmentDetailTextField];
-    [assignmentDetailTextField setFont:[UIFont systemFontOfSize:15]];
-    assignmentDetailTextField.textColor = [UIColor frescoDarkTextColor];
-    assignmentDetailTextField.userInteractionEnabled = NO;
-    assignmentDetailTextField.editable = NO;
-    assignmentDetailTextField.selectable = NO;
-    assignmentDetailTextField.scrollEnabled = NO;
-    assignmentDetailTextField.backgroundColor = [UIColor clearColor];
+    UITextView *assignmentDetailTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    [assignmentCard addSubview:assignmentDetailTextView];
+    [assignmentDetailTextView setFont:[UIFont systemFontOfSize:15]];
+    assignmentDetailTextView.textColor = [UIColor frescoDarkTextColor];
+    assignmentDetailTextView.userInteractionEnabled = NO;
+    assignmentDetailTextView.editable = NO;
+    assignmentDetailTextView.selectable = NO;
+    assignmentDetailTextView.scrollEnabled = NO;
+    assignmentDetailTextView.backgroundColor = [UIColor clearColor];
     
-//    [assignmentDetailTextField frs_setTextWithResize:@"To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea. To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea. To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea."];
-    
-    [assignmentDetailTextField frs_setTextWithResize:@""];
-    
+    [assignmentDetailTextView frs_setTextWithResize:self.assignmentCaption];
     
     UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     photoImageView.frame = CGRectMake(16, 10, 24, 24);
@@ -451,15 +448,15 @@
     photoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:photoCashLabel];
 
-    if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
+    if (assignmentCard.frame.size.height < assignmentDetailTextView.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextField.frame.size.height * 2;
+        cardFrame.size.height = assignmentDetailTextView.frame.size.height * 2;
         assignmentCard.frame = cardFrame;
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
