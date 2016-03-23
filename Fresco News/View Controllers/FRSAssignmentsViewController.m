@@ -40,7 +40,9 @@
 
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
+@property (strong, nonatomic) UIScrollView *scrollView;
 
+@property (strong, nonatomic) UIView *dismissView;
 
 @end
 
@@ -50,8 +52,6 @@
     [super viewDidLoad];
     [self configureMap];
     
-    
-    
     // Do any additional setup after loading the view.
 }
 
@@ -59,8 +59,6 @@
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
-    
-//    [self addNotificationObservers];
     
     self.locationManager = [[FRSLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -84,37 +82,17 @@
 
 
 -(void)configureNavigationBar{
-//    [super configureNavigationBar];
+
     self.navigationItem.title = @"ASSIGNMENTS";
 }
 
 -(void)configureMap{
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
+    self.mapView.showsCompass = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
-
--(void)addNotificationObservers{
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocations:) name:NOTIF_LOCATIONS_UPDATE object:nil];
-}
-
-//-(void)didUpdateLocations:(NSNotification *)notification{
-//    NSArray *locations = notification.userInfo[@"locations"];
-//    
-//    NSLog(@"Location update notification observed by assignmentsVC");
-//    
-//    if (!locations.count) return;
-//    
-//    CLLocation *currentLocation = [locations lastObject];
-//    
-//    [self adjustMapRegionWithLocation:currentLocation];
-//    
-//    [self fetchAssignmentsNearLocation:currentLocation];
-//    
-//    [self configureAnnotationsForMap];
-//}
-
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
@@ -342,22 +320,31 @@
     // offset location to be in centered in view area screenHeight/3.5
     // create region based off this
     // center map to region
+    
+    CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
+    [self.mapView setCenterCoordinate:newCenter animated:YES];
 }
 
 -(void)configureAssignmentCard{
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
-    [self.view addSubview:scrollView];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
+    self.scrollView.multipleTouchEnabled = NO;
+    [self.view addSubview:self.scrollView];
     
-    scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    
+    self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
+//    self.dismissView.backgroundColor = [UIColor redColor];
+//    self.dismissView.alpha = 0.2;
+    [self.scrollView addSubview:self.dismissView];
     
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [scrollView addSubview:assignmentCard];
+    [self.scrollView addSubview:assignmentCard];
     
     UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
-    [scrollView addSubview:topContainer];
+    [self.scrollView addSubview:topContainer];
     
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = topContainer.frame;
@@ -365,7 +352,7 @@
     UIColor *startColor = [UIColor clearColor];
     UIColor *endColor = [UIColor colorWithWhite:0 alpha:0.42];
     gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
-    [scrollView.layer insertSublayer:gradient atIndex:0];
+    [self.scrollView.layer insertSublayer:gradient atIndex:0];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
     titleLabel.text = @"Viral cronut letterpress put a bird on it, ugh blog quinoa";
@@ -383,9 +370,9 @@
 
     
     //Configure bottom container
-    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 93, self.view.frame.size.width, 44)];
+    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.view addSubview:bottomContainer];
+    [self.scrollView addSubview:bottomContainer];
     
     UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.frame.size.width, 0.5)];
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
@@ -430,8 +417,7 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
-    
+    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -444,17 +430,28 @@
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [bottomContainer addSubview:videoCashLabel];
     
+    
+    [bottomContainer setOriginWithPoint:CGPointMake(0, self.scrollView.contentSize.height -93)]; //Check on 5/6plus
 
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        CGRect scrollFrame = scrollView.frame;
+        CGRect scrollFrame = self.scrollView.frame;
         scrollFrame.origin.y = 0;
-        scrollView.frame = scrollFrame;
+        self.scrollView.frame = scrollFrame;
         
     } completion:nil];
     
-    currentScroller = scrollView;
+    currentScroller = self.scrollView;
     currentScroller.delegate = self;
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.dismissView addGestureRecognizer:singleTap];
+}
+
+-(void)handleTap:(UITapGestureRecognizer *)sender {
+
+    [self dismissAssignmentCard];
+
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -463,6 +460,20 @@
     }
 }
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.y <= -50) {
+        [self dismissAssignmentCard];
+    }
+}
+
+
+-(void)dismissAssignmentCard{
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+        
+    } completion:nil];
+}
 
 -(void)handleAssignmentScroll {
     
@@ -497,15 +508,5 @@
     
     [self configureAnnotationsForMap];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
