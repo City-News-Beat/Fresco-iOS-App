@@ -17,4 +17,5 @@
 
 -(instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index;
 -(NSString *)title;
+-(NSString *)subtitle;
 @end

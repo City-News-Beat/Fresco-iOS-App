@@ -149,6 +149,11 @@
     return (oldState != _currentState);
 }
 
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"LOCATION UPDATE FAILED");
+}
+
 /*
  Handle a location update from the location manager
  */
@@ -209,6 +214,9 @@
     if (_backgroundBlock) {
         _backgroundBlock(locations);
     }
+    else {
+        [self handleActiveChange:locations];
+    }
 }
 
 /*
@@ -231,7 +239,9 @@
  */
 -(void)manualUpdate {
     if (_locationManager) {
+        [_locationManager startUpdatingLocation];
         [_locationManager requestLocation];
+        [_locationManager stopUpdatingLocation];
     }
 }
 

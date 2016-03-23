@@ -439,8 +439,8 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
             CGFloat waveHeight = [self currentWaveHeight];
             CGFloat baseHeight = self.bounds.size.height - waveHeight;
 
-            CGFloat minLeftX = MIN((locationX - width / 2.0) * 0.28, 0);
-            CGFloat maxRightX = MAX(width + (locationX - width / 2.0) * 0.28, width);
+//            CGFloat minLeftX = MIN((locationX - width / 2.0) * 0.28, 0);
+//            CGFloat maxRightX = MAX(width + (locationX - width / 2.0) * 0.28, width);
 
 //            CGFloat leftPartWidth = locationX - minLeftX;
 //            CGFloat rightPartWidth = maxRightX - locationX;

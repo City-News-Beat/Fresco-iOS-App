@@ -19,10 +19,11 @@
 #import "FRSAssignmentAnnotation.h"
 
 #import "UITextView+Resize.h"
+#import "Fresco.h"
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
+@interface FRSAssignmentsViewController () <MKMapViewDelegate>
 {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
@@ -44,36 +45,70 @@
 
 @property (strong, nonatomic) UIView *dismissView;
 
+@property (strong, nonatomic) UIView *assignmentBottomBar;
+
+@property (strong, nonatomic) NSString *assignmentTitle;
+
+@property (strong, nonatomic) NSString *assignmentCaption;
+
 @end
 
 @implementation FRSAssignmentsViewController
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];
     
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveLocationUpdate:)
+                                                 name:FRSLocationUpdateNotification
+                                               object:nil];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
     
-    self.locationManager = [[FRSLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    [self.locationManager startLocationMonitoringForeground];
-//    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+    
+    if (lastLocation) {
+        [self locationUpdate:lastLocation];
+    }
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)didReceiveLocationUpdate:(NSNotification *)notification {
+    NSDictionary *latLong = notification.userInfo;
+    
+    NSNumber *lat = latLong[@"lat"];
+    NSNumber *lon = latLong[@"lon"];
+    
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
+    [self locationUpdate:location];
+}
+
+-(void)locationUpdate:(CLLocation *)location {
+    
+    if (!hasSnapped) {
+        hasSnapped = TRUE;
+        [self adjustMapRegionWithLocation:location];
+        [self addUserLocationCircleOverlay];
+    }
+    
+    [self fetchAssignmentsNearLocation:location radius:10];
+    
+    [self configureAnnotationsForMap];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
 //    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)viewDidDisappear:(BOOL)animated{
+-(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     self.isPresented = NO;
@@ -81,12 +116,12 @@
 
 
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
 
     self.navigationItem.title = @"ASSIGNMENTS";
 }
 
--(void)configureMap{
+-(void)configureMap {
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
@@ -100,7 +135,7 @@
     
     self.isFetching = YES;
     
-    [[FRSAPIClient new] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject;
         
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
@@ -140,7 +175,7 @@
 
 #pragma mark - Region
 
--(void)adjustMapRegionWithLocation:(CLLocation *)location{
+-(void)adjustMapRegionWithLocation:(CLLocation *)location {
     
     //We want to preserve the span if the user modified it.
     MKCoordinateSpan currentSpan = self.mapView.region.span;
@@ -155,21 +190,20 @@
     [self.mapView setRegion:region animated:YES];
 }
 
--(void)setInitialMapRegion{
+-(void)setInitialMapRegion {
     self.isOriginalSpan = YES;
     [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
 }
 
 #pragma mark - Annotations
 
--(void)configureAnnotationsForMap{
-    [self addUserLocationCircleOverlay];
+-(void)configureAnnotationsForMap {
     [self addAnnotationsForAssignments];
 }
 
 -(void)addAnnotationsForAssignments{
     
-    for (id<MKAnnotation> annotation in self.mapView.annotations){
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
         [self.mapView removeAnnotation:annotation];
     }
     
@@ -177,13 +211,13 @@
     
     NSInteger count = 0;
     
-    for(FRSAssignment *assignment in self.assignments){
+    for(FRSAssignment *assignment in self.assignments) {
         [self addAssignmentAnnotation:assignment index:count];
         count++;
     }
 }
 
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
     
@@ -221,7 +255,7 @@
     [self fetchAssignmentsNearLocation:location radius:latitudeCircle];
 }
 
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
     
@@ -254,37 +288,40 @@
     return annotationView;
 }
 
-
-
 #pragma mark - Circle Overlays
 
--(void)addUserLocationCircleOverlay{
+-(void)addUserLocationCircleOverlay {
     
     //    CGFloat radius = self.mapView.userLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
+    
     CGFloat radius = 100;
     
-    if (self.userCircle){
+    if (self.userCircle) {
         [self.mapView removeOverlay:self.userCircle];
     }
     
-    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:self.locationManager.lastAcquiredLocation.coordinate radius:radius];
+    CLLocation *userLocation = [FRSLocator sharedLocator].currentLocation;
+    
+
+    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:userLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
     
     [self.mapView addOverlay:self.userCircle];
+
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
 {
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
     
-    if ([overlay isKindOfClass:[FRSMapCircle class]]){
+    if ([overlay isKindOfClass:[FRSMapCircle class]]) {
         FRSMapCircle *circle = (FRSMapCircle *)overlay;
         
-        if (circle.circleType == FRSMapCircleTypeUser){
+        if (circle.circleType == FRSMapCircleTypeUser) {
             circleR.fillColor = [UIColor frescoBlueColor];
             circleR.alpha = 0.5;
         }
-        else if (circle.circleType == FRSMapCircleTypeAssignment){
+        else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
             circleR.alpha = 0.5;
         }
@@ -293,12 +330,12 @@
     return circleR;
 }
 
--(void)removeAllOverlaysIncludingUser:(BOOL)removeUser{
-    for (id<MKOverlay>overlay in self.mapView.overlays){
-        if ([overlay isKindOfClass:[FRSMapCircle class]]){
+-(void)removeAllOverlaysIncludingUser:(BOOL)removeUser {
+    for (id<MKOverlay>overlay in self.mapView.overlays) {
+        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
             FRSMapCircle *circle = (FRSMapCircle *)overlay;
             
-            if (circle.circleType == FRSMapCircleTypeUser){
+            if (circle.circleType == FRSMapCircleTypeUser) {
                 if (!removeUser) continue;
             };
             
@@ -308,11 +345,14 @@
 }
 
 
--(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
+    FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
+    self.assignmentTitle = assAnn.title;
+    self.assignmentCaption = assAnn.subtitle;
     [self configureAssignmentCard];
-    [self snapToAnnotationView:view]; // centers map on top of content
     
+    [self snapToAnnotationView:view]; // centers map on top of content
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -322,10 +362,12 @@
     // center map to region
     
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
+//    newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
+    
 }
 
--(void)configureAssignmentCard{
+-(void)configureAssignmentCard {
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
@@ -334,8 +376,6 @@
     self.scrollView.showsVerticalScrollIndicator = NO;
     
     self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-//    self.dismissView.backgroundColor = [UIColor redColor];
-//    self.dismissView.alpha = 0.2;
     [self.scrollView addSubview:self.dismissView];
     
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
@@ -355,10 +395,18 @@
     [self.scrollView.layer insertSublayer:gradient atIndex:0];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
-    titleLabel.text = @"Viral cronut letterpress put a bird on it, ugh blog quinoa";
-    titleLabel.numberOfLines = 2;
     titleLabel.font = [UIFont notaBoldWithSize:24];
+    titleLabel.numberOfLines = 0;
+    titleLabel.text = self.assignmentTitle;
+    [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
+    
+    
+    NSLog(@"titleLabel.height = %f", titleLabel.frame.size.height);
+    
+    if (titleLabel.frame.size.height == 72) { //72 is the size of titleLabel with 3 lines
+        [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
+    }
     
     titleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
     titleLabel.layer.shadowOpacity = .15;
@@ -370,69 +418,66 @@
 
     
     //Configure bottom container
-    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:bottomContainer];
+    self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
+    self.assignmentBottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.assignmentBottomBar];
     
     UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.frame.size.width, 0.5)];
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
-    [bottomContainer addSubview:bottomContainerLine];
+    [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(self.view.frame.size.width -93 , 15, 77, 17);
     [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [bottomContainer addSubview:button];
+    [self.assignmentBottomBar addSubview:button];
     
-    UITextView *assignmentDetailTextField = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
-    [assignmentCard addSubview:assignmentDetailTextField];
-    [assignmentDetailTextField setFont:[UIFont systemFontOfSize:15]];
-    assignmentDetailTextField.textColor = [UIColor frescoDarkTextColor];
-    assignmentDetailTextField.userInteractionEnabled = NO;
-    assignmentDetailTextField.editable = NO;
-    assignmentDetailTextField.selectable = NO;
-    assignmentDetailTextField.scrollEnabled = NO;
-    assignmentDetailTextField.backgroundColor = [UIColor clearColor];
+    UITextView *assignmentDetailTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    [assignmentCard addSubview:assignmentDetailTextView];
+    [assignmentDetailTextView setFont:[UIFont systemFontOfSize:15]];
+    assignmentDetailTextView.textColor = [UIColor frescoDarkTextColor];
+    assignmentDetailTextView.userInteractionEnabled = NO;
+    assignmentDetailTextView.editable = NO;
+    assignmentDetailTextView.selectable = NO;
+    assignmentDetailTextView.scrollEnabled = NO;
+    assignmentDetailTextView.backgroundColor = [UIColor clearColor];
     
-    [assignmentDetailTextField frs_setTextWithResize:@"To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea. To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea. To you of the outer earth it might seem a slow and tortuous method of traveling through the jungle, but were you of Pellucidar you would realize that time is no factor where time does not exist. So labyrinthine are the windings of these trails, so varied the connecting links and the distances which one must retrace one's steps from the paths' ends to find them that a Mezop often reaches man's estate before he is familiar even with those which lead from his own city to the sea."];
-    
+    [assignmentDetailTextView frs_setTextWithResize:self.assignmentCaption];
     
     UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     photoImageView.frame = CGRectMake(16, 10, 24, 24);
-    [bottomContainer addSubview:photoImageView];
+    [self.assignmentBottomBar addSubview:photoImageView];
     
     UILabel *photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
     photoCashLabel.text = @"$10";
     photoCashLabel.textColor = [UIColor frescoMediumTextColor];
     photoCashLabel.textAlignment = NSTextAlignmentCenter;
     photoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [bottomContainer addSubview:photoCashLabel];
+    [self.assignmentBottomBar addSubview:photoCashLabel];
 
-    if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
+    if (assignmentCard.frame.size.height < assignmentDetailTextView.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextField.frame.size.height * 2;
+        cardFrame.size.height = assignmentDetailTextView.frame.size.height * 2;
         assignmentCard.frame = cardFrame;
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
-    [bottomContainer addSubview:videoImageView];
+    [self.assignmentBottomBar addSubview:videoImageView];
     
     UILabel *videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
     videoCashLabel.text = @"$50";
     videoCashLabel.textColor = [UIColor frescoMediumTextColor];
     videoCashLabel.textAlignment = NSTextAlignmentCenter;
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [bottomContainer addSubview:videoCashLabel];
+    [self.assignmentBottomBar addSubview:videoCashLabel];
     
     
-    [bottomContainer setOriginWithPoint:CGPointMake(0, self.scrollView.contentSize.height -93)]; //Check on 5/6plus
-
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
@@ -444,11 +489,11 @@
     currentScroller = self.scrollView;
     currentScroller.delegate = self;
     
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTap:)];
     [self.dismissView addGestureRecognizer:singleTap];
 }
 
--(void)handleTap:(UITapGestureRecognizer *)sender {
+-(void)dismissTap:(UITapGestureRecognizer *)sender {
 
     [self dismissAssignmentCard];
 
@@ -460,17 +505,20 @@
     }
 }
 
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (scrollView.contentOffset.y <= -50) {
         [self dismissAssignmentCard];
     }
 }
 
 
--(void)dismissAssignmentCard{
+-(void)dismissAssignmentCard {
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, self.view.frame.size.height);
+        
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
     } completion:nil];
 }
@@ -479,8 +527,8 @@
     
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    if (!locations.count){
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    if (!locations.count) {
         NSLog(@"FRSLocationManager did not return any locations");
         return;
     }
