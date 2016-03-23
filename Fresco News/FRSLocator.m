@@ -214,6 +214,9 @@
     if (_backgroundBlock) {
         _backgroundBlock(locations);
     }
+    else {
+        [self handleActiveChange:locations];
+    }
 }
 
 /*
