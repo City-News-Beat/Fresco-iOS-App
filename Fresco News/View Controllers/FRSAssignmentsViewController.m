@@ -19,10 +19,11 @@
 #import "FRSAssignmentAnnotation.h"
 
 #import "UITextView+Resize.h"
+#import "Fresco.h"
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
+@interface FRSAssignmentsViewController () <MKMapViewDelegate>
 {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
@@ -55,6 +56,10 @@
     [self configureMap];
     
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveLocationUpdate:)
+                                                 name:FRSLocationUpdateNotification
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -62,10 +67,31 @@
     
     self.isPresented = YES;
     
-    self.locationManager = [[FRSLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    [self.locationManager startLocationMonitoringForeground];
-//    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+    [self locationUpdate:lastLocation];
+}
+
+-(void)didReceiveLocationUpdate:(NSNotification *)notification {
+    NSDictionary *latLong = notification.userInfo;
+    
+    NSNumber *lat = latLong[@"lat"];
+    NSNumber *lon = latLong[@"lon"];
+    
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
+    [self locationUpdate:location];
+}
+
+-(void)locationUpdate:(CLLocation *)location {
+    
+    if (!hasSnapped) {
+        hasSnapped = TRUE;
+        [self adjustMapRegionWithLocation:location];
+        [self addUserLocationCircleOverlay];
+    }
+    
+    [self fetchAssignmentsNearLocation:location radius:10];
+    
+    [self configureAnnotationsForMap];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -165,7 +191,6 @@
 #pragma mark - Annotations
 
 -(void)configureAnnotationsForMap {
-    [self addUserLocationCircleOverlay];
     [self addAnnotationsForAssignments];
 }
 
@@ -268,8 +293,10 @@
         [self.mapView removeOverlay:self.userCircle];
     }
     
+    CLLocation *userLocation = [FRSLocator sharedLocator].currentLocation;
+    
 
-    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:self.locationManager.lastAcquiredLocation.coordinate radius:radius];
+    self.userCircle = [FRSMapCircle circleWithCenterCoordinate:userLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
     
     [self.mapView addOverlay:self.userCircle];
