@@ -50,14 +50,14 @@
 
 @implementation FRSAssignmentsViewController
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];
     
     // Do any additional setup after loading the view.
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
@@ -68,14 +68,14 @@
 //    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
 //    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)viewDidDisappear:(BOOL)animated{
+-(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     self.isPresented = NO;
@@ -83,12 +83,12 @@
 
 
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
 
     self.navigationItem.title = @"ASSIGNMENTS";
 }
 
--(void)configureMap{
+-(void)configureMap {
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
@@ -142,7 +142,7 @@
 
 #pragma mark - Region
 
--(void)adjustMapRegionWithLocation:(CLLocation *)location{
+-(void)adjustMapRegionWithLocation:(CLLocation *)location {
     
     //We want to preserve the span if the user modified it.
     MKCoordinateSpan currentSpan = self.mapView.region.span;
@@ -157,21 +157,21 @@
     [self.mapView setRegion:region animated:YES];
 }
 
--(void)setInitialMapRegion{
+-(void)setInitialMapRegion {
     self.isOriginalSpan = YES;
     [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
 }
 
 #pragma mark - Annotations
 
--(void)configureAnnotationsForMap{
+-(void)configureAnnotationsForMap {
     [self addUserLocationCircleOverlay];
     [self addAnnotationsForAssignments];
 }
 
 -(void)addAnnotationsForAssignments{
     
-    for (id<MKAnnotation> annotation in self.mapView.annotations){
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
         [self.mapView removeAnnotation:annotation];
     }
     
@@ -179,13 +179,13 @@
     
     NSInteger count = 0;
     
-    for(FRSAssignment *assignment in self.assignments){
+    for(FRSAssignment *assignment in self.assignments) {
         [self addAssignmentAnnotation:assignment index:count];
         count++;
     }
 }
 
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index{
+- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
     
@@ -223,7 +223,7 @@
     [self fetchAssignmentsNearLocation:location radius:latitudeCircle];
 }
 
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
     
@@ -256,37 +256,38 @@
     return annotationView;
 }
 
-
-
 #pragma mark - Circle Overlays
 
--(void)addUserLocationCircleOverlay{
+-(void)addUserLocationCircleOverlay {
     
     //    CGFloat radius = self.mapView.userLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
+    
     CGFloat radius = 100;
     
-    if (self.userCircle){
+    if (self.userCircle) {
         [self.mapView removeOverlay:self.userCircle];
     }
     
+
     self.userCircle = [FRSMapCircle circleWithCenterCoordinate:self.locationManager.lastAcquiredLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
     
     [self.mapView addOverlay:self.userCircle];
+
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
 {
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
     
-    if ([overlay isKindOfClass:[FRSMapCircle class]]){
+    if ([overlay isKindOfClass:[FRSMapCircle class]]) {
         FRSMapCircle *circle = (FRSMapCircle *)overlay;
         
-        if (circle.circleType == FRSMapCircleTypeUser){
+        if (circle.circleType == FRSMapCircleTypeUser) {
             circleR.fillColor = [UIColor frescoBlueColor];
             circleR.alpha = 0.5;
         }
-        else if (circle.circleType == FRSMapCircleTypeAssignment){
+        else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
             circleR.alpha = 0.5;
         }
@@ -295,12 +296,12 @@
     return circleR;
 }
 
--(void)removeAllOverlaysIncludingUser:(BOOL)removeUser{
-    for (id<MKOverlay>overlay in self.mapView.overlays){
-        if ([overlay isKindOfClass:[FRSMapCircle class]]){
+-(void)removeAllOverlaysIncludingUser:(BOOL)removeUser {
+    for (id<MKOverlay>overlay in self.mapView.overlays) {
+        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
             FRSMapCircle *circle = (FRSMapCircle *)overlay;
             
-            if (circle.circleType == FRSMapCircleTypeUser){
+            if (circle.circleType == FRSMapCircleTypeUser) {
                 if (!removeUser) continue;
             };
             
@@ -310,7 +311,7 @@
 }
 
 
--(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
     [self configureAssignmentCard];
     [self snapToAnnotationView:view]; // centers map on top of content
@@ -328,7 +329,7 @@
     
 }
 
--(void)configureAssignmentCard{
+-(void)configureAssignmentCard {
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
@@ -461,14 +462,14 @@
     }
 }
 
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (scrollView.contentOffset.y <= -50) {
         [self dismissAssignmentCard];
     }
 }
 
 
--(void)dismissAssignmentCard{
+-(void)dismissAssignmentCard {
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
@@ -483,8 +484,8 @@
     
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    if (!locations.count){
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    if (!locations.count) {
         NSLog(@"FRSLocationManager did not return any locations");
         return;
     }
