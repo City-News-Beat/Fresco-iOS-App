@@ -397,7 +397,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
     titleLabel.font = [UIFont notaBoldWithSize:24];
     titleLabel.numberOfLines = 0;
-    titleLabel.text = @"This title is going to be really long and it's going to say something that";
+    titleLabel.text = self.assignmentTitle;
     [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
     
