@@ -18,14 +18,24 @@
 @end
 
 @implementation FRSAssignmentAnnotation
+@synthesize subtitle = _subtitle;
 
 -(instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index{
     self = [super init];
     if (self){
-        if ([assignment.title isKindOfClass:[NSString class]])
+        if ([assignment.title isKindOfClass:[NSString class]]) {
             self.name = assignment.title;
-        else
+        }
+        else {
             self.name = @"Unknown Assignment";
+        }
+        
+        if ([assignment.caption isKindOfClass:[NSString class]]) {
+            _subtitle = assignment.caption;
+        }
+        else {
+            _subtitle = @"";
+        }
         
         self.assignmentIndex = index;
         self.assignmentId = assignment.uid;
@@ -33,6 +43,10 @@
         self.coordinate = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     }
     return self;
+}
+
+-(NSString *)subtitle {
+    return _subtitle;
 }
 
 -(NSString *)title {
