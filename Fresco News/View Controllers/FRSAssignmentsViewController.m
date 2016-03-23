@@ -44,6 +44,8 @@
 
 @property (strong, nonatomic) UIView *dismissView;
 
+@property (strong, nonatomic) UIView *assignmentBottomBar;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -312,7 +314,6 @@
 
     [self configureAssignmentCard];
     [self snapToAnnotationView:view]; // centers map on top of content
-    
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -322,7 +323,9 @@
     // center map to region
     
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
+//    newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
+    
 }
 
 -(void)configureAssignmentCard{
@@ -370,20 +373,20 @@
 
     
     //Configure bottom container
-    UIView *bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:bottomContainer];
+    self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
+    self.assignmentBottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.assignmentBottomBar];
     
     UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, self.view.frame.size.width, 0.5)];
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
-    [bottomContainer addSubview:bottomContainerLine];
+    [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(self.view.frame.size.width -93 , 15, 77, 17);
     [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [bottomContainer addSubview:button];
+    [self.assignmentBottomBar addSubview:button];
     
     UITextView *assignmentDetailTextField = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
     [assignmentCard addSubview:assignmentDetailTextField];
@@ -400,14 +403,14 @@
     
     UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     photoImageView.frame = CGRectMake(16, 10, 24, 24);
-    [bottomContainer addSubview:photoImageView];
+    [self.assignmentBottomBar addSubview:photoImageView];
     
     UILabel *photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
     photoCashLabel.text = @"$10";
     photoCashLabel.textColor = [UIColor frescoMediumTextColor];
     photoCashLabel.textAlignment = NSTextAlignmentCenter;
     photoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [bottomContainer addSubview:photoCashLabel];
+    [self.assignmentBottomBar addSubview:photoCashLabel];
 
     if (assignmentCard.frame.size.height < assignmentDetailTextField.frame.size.height) {
         CGRect cardFrame = assignmentCard.frame;
@@ -417,22 +420,20 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + bottomContainer.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextField.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
-    [bottomContainer addSubview:videoImageView];
+    [self.assignmentBottomBar addSubview:videoImageView];
     
     UILabel *videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
     videoCashLabel.text = @"$50";
     videoCashLabel.textColor = [UIColor frescoMediumTextColor];
     videoCashLabel.textAlignment = NSTextAlignmentCenter;
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [bottomContainer addSubview:videoCashLabel];
+    [self.assignmentBottomBar addSubview:videoCashLabel];
     
     
-    [bottomContainer setOriginWithPoint:CGPointMake(0, self.scrollView.contentSize.height -93)]; //Check on 5/6plus
-
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
@@ -444,11 +445,11 @@
     currentScroller = self.scrollView;
     currentScroller.delegate = self;
     
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTap:)];
     [self.dismissView addGestureRecognizer:singleTap];
 }
 
--(void)handleTap:(UITapGestureRecognizer *)sender {
+-(void)dismissTap:(UITapGestureRecognizer *)sender {
 
     [self dismissAssignmentCard];
 
@@ -471,6 +472,9 @@
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, self.view.frame.size.height);
+        
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
     } completion:nil];
 }
