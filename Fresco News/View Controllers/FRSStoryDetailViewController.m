@@ -53,6 +53,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
         return;
     }
     
+    if (indexPath.row >= self.stories.count) {
+        return;
+    }
+    
     if (cell.gallery == self.stories[indexPath.row]) {
         return;
     }
