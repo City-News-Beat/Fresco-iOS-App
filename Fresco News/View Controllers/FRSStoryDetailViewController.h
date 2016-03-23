@@ -15,4 +15,6 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *galleriesTable;
 @property (nonatomic, weak) NSArray *stories;
+
+-(void)reloadData;
 @end

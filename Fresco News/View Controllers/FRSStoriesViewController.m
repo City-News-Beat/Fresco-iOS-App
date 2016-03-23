@@ -35,7 +35,7 @@
 
 @implementation FRSStoriesViewController
 
--(instancetype)init{
+-(instancetype)init {
     self = [super init];
     if (self){
         self.firstTime = YES;
@@ -43,7 +43,7 @@
     return self;
 }
 
--(void)viewDidLoad{
+-(void)viewDidLoad {
     [super viewDidLoad];
     
     [self configureUI];
@@ -53,14 +53,14 @@
 
 #pragma mark - Configure UI
 
--(void)configureUI{
+-(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configurePullToRefresh];
     [self configureSpinner];
 }
 
--(void)configureSpinner{
+-(void)configureSpinner {
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
     [self.view addSubview:self.spinner];
@@ -68,7 +68,7 @@
     [self.spinner startAnimating];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     
@@ -79,7 +79,7 @@
 
 #pragma mark -  UI
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
     
     //    [super configureNavigationBar];
     [super removeNavigationBarLine];
@@ -99,7 +99,7 @@
 
 
 
--(void)configurePullToRefresh{
+-(void)configurePullToRefresh {
     [super removeNavigationBarLine];
     
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -118,11 +118,11 @@
     
 }
 
-- (void)dealloc{
+- (void)dealloc {
     [self.tableView dg_removePullToRefresh];
 }
 
--(void)configureTableView{
+-(void)configureTableView {
     [super configureTableView];
     
     // loading cell
@@ -135,7 +135,7 @@
 
 
 #pragma mark - Search Methods
--(void)searchStories{
+-(void)searchStories {
     //    [self animateSearch];
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
@@ -145,7 +145,7 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchStories{
+-(void)fetchStories {
     [self fetchLocalData];
     self.stories = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
@@ -232,16 +232,16 @@
 
 #pragma mark - UITableView DataSource
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return (self.stories.count == 0) ? 0 : self.stories.count+1;
     
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == self.stories.count-1) {
         return 20;
@@ -259,7 +259,7 @@
     return [story heightForStory];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // if we're loading more data
     if (indexPath.row == self.stories.count -1) {
@@ -283,11 +283,11 @@
 
 #pragma mark UITableView Delegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
         return;

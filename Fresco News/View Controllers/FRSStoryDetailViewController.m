@@ -24,6 +24,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
+    self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,6 +74,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
+
+-(void)reloadData {
+    [self.galleriesTable reloadData];
+}
+
 /*
 #pragma mark - Navigation
 
