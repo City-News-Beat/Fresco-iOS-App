@@ -68,7 +68,10 @@
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-    [self locationUpdate:lastLocation];
+    
+    if (lastLocation) {
+        [self locationUpdate:lastLocation];
+    }
 }
 
 -(void)didReceiveLocationUpdate:(NSNotification *)notification {
