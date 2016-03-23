@@ -41,12 +41,37 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    FRSGalleryCell *cell = (FRSGalleryCell *)[tableView dequeueReusableCellWithIdentifier:galleryCell];
     
-    return Nil;
+    return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // add dans stuff here
+    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        return;
+    }
+    
+    if (cell.gallery == self.stories[indexPath.row]) {
+        return;
+    }
+    
+    [cell clearCell];
+    
+    cell.gallery = self.stories[indexPath.row];
+    [cell configureCell];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    cell.shareBlock = ^void(NSArray *sharedContent) {
+        [weakSelf showShareSheetWithContent:sharedContent];
+    };
+
+}
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
 /*
 #pragma mark - Navigation

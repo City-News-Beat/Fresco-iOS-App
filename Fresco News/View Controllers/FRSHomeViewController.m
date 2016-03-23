@@ -351,7 +351,6 @@
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
-    
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
