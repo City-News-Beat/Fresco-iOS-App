@@ -79,6 +79,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self.galleriesTable reloadData];
 }
 
+-(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
+    
+    NSArray *filteredArray = [self.stories filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    
+    if (!filteredArray.count) return;
+
+}
+
 /*
 #pragma mark - Navigation
 
