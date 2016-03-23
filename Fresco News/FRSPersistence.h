@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/MagicalRecord.h>
+//#import <MagicalRecord/MagicalRecord.h>
 
 /* 
     Types of managed objects we deal with (subclass, custom ivars)

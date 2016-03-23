@@ -7,6 +7,7 @@
 //
 
 #import "FRSPersistence.h"
+#import <MagicalRecord/MagicalRecord.h>
 #include <objc/runtime.h>
 
 @implementation FRSPersistence

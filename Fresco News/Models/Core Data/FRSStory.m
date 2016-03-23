@@ -12,6 +12,7 @@
 #import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @import UIKit;
 
