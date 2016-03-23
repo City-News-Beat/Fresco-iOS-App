@@ -292,7 +292,7 @@
 
 -(void)addUserLocationCircleOverlay {
     
-    //    CGFloat radius = self.mapView.userLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
+    //    CGFloat radius = self.mapView.usergLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
     
     CGFloat radius = 100;
     
@@ -356,15 +356,9 @@
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
-    // get location
-    // offset location to be in centered in view area screenHeight/3.5
-    // create region based off this
-    // center map to region
-    
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
-//    newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
+    newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
-    
 }
 
 -(void)configureAssignmentCard {
@@ -400,9 +394,6 @@
     titleLabel.text = self.assignmentTitle;
     [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
-    
-    
-    NSLog(@"titleLabel.height = %f", titleLabel.frame.size.height);
     
     if (titleLabel.frame.size.height == 72) { //72 is the size of titleLabel with 3 lines
         [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
@@ -516,7 +507,7 @@
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, self.view.frame.size.height);
+//        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, self.view.frame.size.height +100);
         
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
