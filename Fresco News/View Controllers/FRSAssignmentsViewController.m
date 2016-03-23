@@ -192,7 +192,10 @@
 
 -(void)setInitialMapRegion {
     self.isOriginalSpan = YES;
-    [self adjustMapRegionWithLocation:self.locationManager.lastAcquiredLocation];
+    
+    if ([FRSLocator sharedLocator].currentLocation) {
+        [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
+    }
 }
 
 #pragma mark - Annotations
