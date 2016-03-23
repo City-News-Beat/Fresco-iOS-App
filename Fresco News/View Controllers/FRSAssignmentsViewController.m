@@ -97,7 +97,6 @@
     }
     
     [self fetchAssignmentsNearLocation:location radius:10];
-    
     [self configureAnnotationsForMap];
 }
 
@@ -110,11 +109,8 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
     self.isPresented = NO;
 }
-
-
 
 -(void)configureNavigationBar {
 
