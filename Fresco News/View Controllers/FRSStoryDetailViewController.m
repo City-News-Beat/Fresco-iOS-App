@@ -28,9 +28,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    
-    
+
 }
 
 -(void)setupTableView {
