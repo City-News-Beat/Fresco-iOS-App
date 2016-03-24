@@ -57,7 +57,6 @@ static NSInteger const userTrackingDelay = 10;
 /* 
     UI
  */
-
 static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 static NSString * const highlightCellIdentifier = @"HighlightCell";
 static NSString * const storyCellIdentifier = @"StoryCell";
@@ -74,14 +73,12 @@ typedef void (^TransferPercentage)(float percentage);
 /*
     The following code is coming to us from FRSAPIConstants, thought it cleaner to integrate into Fresco.h
  */
-
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 /* Enums */
-
 #pragma mark - Enums
 
 enum FRSErrorCodes {
