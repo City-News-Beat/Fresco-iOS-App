@@ -221,7 +221,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    if (indexPath.row == self.dataSource.count - 5) {
+    if (indexPath.row == self.dataSource.count-4) {
         if (!isLoading) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 [self loadMore];

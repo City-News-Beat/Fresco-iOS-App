@@ -141,7 +141,11 @@
             [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
         }
         
-        NSLog(@"%@", post.mediaType);
+        if ([post.mediaType integerValue] == 1) {
+            // video
+            // set up AVPlayer
+            // add AVPlayerLayer
+        }
         
         
         imageView.userInteractionEnabled = YES;
