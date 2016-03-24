@@ -393,6 +393,7 @@
     self.assignmentCaption = assAnn.subtitle;
     [self configureAssignmentCard];
     [self snapToAnnotationView:view]; // centers map on top of content
+    [self.mapView deselectAnnotation:view.annotation animated:FALSE];
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
