@@ -128,6 +128,7 @@
             [self setSelectedIndex:self.lastActiveIndex];
         }];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -137,8 +138,7 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    //    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
-    
+    // UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     UIViewController *selectedVC = viewController;
     if ([viewController isKindOfClass:[FRSNavigationController class]]){
         FRSNavigationController *nav = (FRSNavigationController *)viewController;

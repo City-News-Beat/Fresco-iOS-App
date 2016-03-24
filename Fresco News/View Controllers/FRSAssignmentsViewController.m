@@ -51,6 +51,7 @@
 
 @property (strong, nonatomic) NSString *assignmentCaption;
 
+@property (nonatomic, assign) BOOL showsCard;
 @end
 
 @implementation FRSAssignmentsViewController
@@ -187,6 +188,13 @@
 }
 
 -(void)setInitialMapRegion {
+    
+    if (self.showsCard) {
+        // dismiss card?
+        
+        return;
+    }
+    
     self.isOriginalSpan = YES;
     
     if ([FRSLocator sharedLocator].currentLocation) {
@@ -361,7 +369,7 @@
 }
 
 -(void)configureAssignmentCard {
-    
+    self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
@@ -503,6 +511,9 @@
 
 
 -(void)dismissAssignmentCard {
+    
+    self.showsCard = FALSE;
+    
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
