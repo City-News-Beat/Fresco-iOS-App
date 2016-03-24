@@ -48,6 +48,15 @@
 
 @implementation FRSStoryView
 
+
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    
+}
+
+-(void)handleActionButtonTapped {
+    
+}
+
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     
@@ -94,7 +103,6 @@
         
         switch (smallImageURLS.count) {
             case 1:{
-                NSLog(@"%@ has %lu stories", self.story.title, smallImageURLS.count);
                 UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
@@ -150,7 +158,6 @@
 
 -(void)configureImageFromImageView:(UIImageView *)imageView atIndex:(NSInteger)index xPos:(CGFloat)xPos total:(NSInteger)total {
     
-    NSLog(@"%@ has %ld stories", self.story.title, self.story.imageURLs.count);
     imageView = [[UIImageView alloc] initWithFrame:CGRectMake(xPos, 0, 1000, 1000)];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.topContainer addSubview:imageView];
