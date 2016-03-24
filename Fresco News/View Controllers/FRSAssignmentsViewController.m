@@ -389,6 +389,14 @@
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
     newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
+    
+    if ([self.mapView respondsToSelector:@selector(camera)]) {
+        [self.mapView setShowsBuildings:NO];
+        MKMapCamera *newCamera = [[self.mapView camera] copy];
+        [newCamera setHeading:0];
+        [self.mapView setCamera:newCamera animated:YES];
+    }
+    
 }
 
 -(void)configureAssignmentCard {
@@ -524,6 +532,7 @@
         [self.scrollView removeFromSuperview];
         [self.assignmentBottomBar removeFromSuperview];
     });
+    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
