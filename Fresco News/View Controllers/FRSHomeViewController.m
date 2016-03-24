@@ -178,7 +178,6 @@
             [self.dataSource addObject:gallery];
             [self.highlights addObject:gallery];
             [self.tableView reloadData];
-            [self cacheLocalData];
         }
     }];
 }
@@ -267,9 +266,6 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
-            
-            [self cacheLocalData];
-            
         }];
     });
 }

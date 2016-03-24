@@ -302,6 +302,8 @@
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
     label.attributedText = attString;
+    label.layer.shouldRasterize = TRUE;
+    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
