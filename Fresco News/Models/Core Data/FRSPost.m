@@ -34,6 +34,7 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict {
+    
     self.uid = dict[@"_id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
@@ -41,6 +42,11 @@
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
     self.creator = [FRSUser MR_createEntity];
+    
+    if ([dict objectForKey:@"video"] != Nil) {
+        self.mediaType = @(1);
+        self.videoUrl = [dict objectForKey:@"video"];
+    }
     
     if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
         if ([[dict objectForKey:@"owner"] objectForKey:@"avatar"] != [NSNull null]) {

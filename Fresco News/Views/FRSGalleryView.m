@@ -137,8 +137,9 @@
         
         [self.imageViews addObject:imageView];
         
-        if (i==0)
+        if (i==0) {
             [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+        }
         
         imageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
