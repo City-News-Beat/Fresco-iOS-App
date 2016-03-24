@@ -21,7 +21,7 @@
 @interface FRSStoryView : UIView
 
 @property (weak, nonatomic) NSObject <FRSStoryViewDelegate> *delegate;
-@property (weak, nonatomic) ActionButtonBlock actionBlock;
+@property (strong, nonatomic) ActionButtonBlock actionBlock;
 @property (strong, nonatomic) FRSStory *story;
 
 

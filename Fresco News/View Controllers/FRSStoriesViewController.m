@@ -304,11 +304,12 @@
         
         __weak typeof(self) weakSelf = self;
         cell.story = self.stories[indexPath.row];
-        [cell configureCell];
         
         cell.actionBlock = ^{
             [weakSelf readMore:indexPath.row];
         };
+        
+        [cell configureCell];
     }
 }
 
