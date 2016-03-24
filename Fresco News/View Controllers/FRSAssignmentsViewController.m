@@ -440,7 +440,6 @@
     self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
     self.assignmentTitleLabel.numberOfLines = 0;
     self.assignmentTitleLabel.text = self.assignmentTitle;
-    self.assignmentTitleLabel.backgroundColor = [UIColor redColor];
     [self.assignmentTitleLabel sizeToFit];
     self.assignmentTitleLabel.textColor = [UIColor whiteColor];
     
@@ -535,6 +534,7 @@
         CGRect scrollFrame = self.scrollView.frame;
         scrollFrame.origin.y = 0;
         self.scrollView.frame = scrollFrame;
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
         
     } completion:nil];
     
