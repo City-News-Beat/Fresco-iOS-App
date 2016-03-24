@@ -383,7 +383,7 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    NSLog(@"TAP");
+
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
@@ -391,9 +391,11 @@
     [self snapToAnnotationView:view]; // centers map on top of content
     
     [self.mapView deselectAnnotation:view.annotation animated:NO];
+    
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
+    
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
     newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
@@ -408,7 +410,7 @@
 }
 
 -(void)configureAssignmentCard {
-    
+
     self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
