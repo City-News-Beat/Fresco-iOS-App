@@ -402,10 +402,21 @@
         [newCamera setHeading:0];
         [self.mapView setCamera:newCamera animated:YES];
     }
+}
+
+-(void)createAssignmentView{
     
 }
 
 -(void)configureAssignmentCard {
+    
+    if (_scrollView) {
+        //update labels
+    } else {
+        
+        [self createAssignmentView];
+        
+
     
     self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
@@ -438,6 +449,7 @@
     titleLabel.font = [UIFont notaBoldWithSize:24];
     titleLabel.numberOfLines = 0;
     titleLabel.text = self.assignmentTitle;
+    titleLabel.backgroundColor = [UIColor redColor];
     [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
     
@@ -513,6 +525,7 @@
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:videoCashLabel];
     
+    }
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
