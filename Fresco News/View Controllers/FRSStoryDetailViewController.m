@@ -27,7 +27,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
-    
+    self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.view.backgroundColor = self.galleriesTable.backgroundColor;
 }
 
@@ -38,7 +38,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //NSLog(@"%@", self.stories);
-    
     return self.stories.count;
 }
 
@@ -112,9 +111,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     NSArray *filteredArray = [self.stories filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     
     if (!filteredArray.count) return;
-    
     // push gallery detail view
-
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
