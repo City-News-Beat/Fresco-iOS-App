@@ -64,7 +64,6 @@
 }
 
 -(void)handleLocationUpdate:(NSDictionary *)userInfo {
-    NSLog(@"%@", userInfo);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateUserLocation:userInfo completion:^(NSDictionary *response, NSError *error) {
@@ -128,9 +127,6 @@
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
-        NSLog(@"responseObject = %@", responseObject);
-        
     }];
     
 }
