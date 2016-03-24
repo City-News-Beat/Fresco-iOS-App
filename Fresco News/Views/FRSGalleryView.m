@@ -138,7 +138,7 @@
         [self.imageViews addObject:imageView];
         
         if (i==0) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];    
             });
         }
