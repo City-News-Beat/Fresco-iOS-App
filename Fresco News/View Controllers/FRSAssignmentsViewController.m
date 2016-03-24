@@ -51,6 +51,8 @@
 
 @property (strong, nonatomic) NSString *assignmentCaption;
 
+@property (strong, nonatomic) UIView *assignmentCard;
+
 @property (nonatomic, assign) BOOL showsCard;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @end
@@ -124,6 +126,7 @@
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
+    self.mapView.showsBuildings = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
@@ -392,6 +395,14 @@
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
     newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
+    
+    if ([self.mapView respondsToSelector:@selector(camera)]) {
+        [self.mapView setShowsBuildings:NO];
+        MKMapCamera *newCamera = [[self.mapView camera] copy];
+        [newCamera setHeading:0];
+        [self.mapView setCamera:newCamera animated:YES];
+    }
+    
 }
 
 -(void)configureAssignmentCard {
@@ -407,9 +418,9 @@
     [self.scrollView addSubview:self.dismissView];
     
     // needs to be global variable & removed on dismiss
-    UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
-    assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:assignmentCard];
+    self.assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
+    self.assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.scrollView addSubview:self.assignmentCard];
     
     UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
@@ -459,7 +470,7 @@
     [self.assignmentBottomBar addSubview:button];
     
     UITextView *assignmentDetailTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
-    [assignmentCard addSubview:assignmentDetailTextView];
+    [self.assignmentCard addSubview:assignmentDetailTextView];
     [assignmentDetailTextView setFont:[UIFont systemFontOfSize:15]];
     assignmentDetailTextView.textColor = [UIColor frescoDarkTextColor];
     assignmentDetailTextView.userInteractionEnabled = NO;
@@ -481,15 +492,15 @@
     photoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:photoCashLabel];
 
-    if (assignmentCard.frame.size.height < assignmentDetailTextView.frame.size.height) {
-        CGRect cardFrame = assignmentCard.frame;
+    if (self.assignmentCard.frame.size.height < assignmentDetailTextView.frame.size.height) {
+        CGRect cardFrame = self.assignmentCard.frame;
         cardFrame.size.height = assignmentDetailTextView.frame.size.height * 2;
-        assignmentCard.frame = cardFrame;
+        self.assignmentCard.frame = cardFrame;
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(assignmentCard.frame.size.width, (assignmentDetailTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (assignmentDetailTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -521,7 +532,13 @@
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
 
     [self dismissAssignmentCard];
-
+    
+    //Waits for animation to complete before removing from superview
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.scrollView removeFromSuperview];
+        [self.assignmentBottomBar removeFromSuperview];
+    });
+    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -544,8 +561,6 @@
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-//        self.mapView.frame = CGRectMake(0, 0, self.mapView.frame.size.width, self.view.frame.size.height +100);
-        
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
     } completion:nil];
