@@ -194,6 +194,8 @@
     [self.titleLabel sizeToFit];
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
+
+    [self addShadowToLabel:self.titleLabel];
     
     [self.topContainer addSubview:self.titleLabel];
 }
@@ -217,6 +219,23 @@
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self addSubview:self.actionBar];
+}
+
+-(void)addShadowToLabel:(UILabel*)label {
+    
+    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:label.text];
+    NSRange range = NSMakeRange(0, [attString length]);
+    
+    [attString addAttribute:NSFontAttributeName value:label.font range:range];
+    [attString addAttribute:NSForegroundColorAttributeName value:label.textColor range:range];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor frescoLightTextColor];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+    shadow.shadowBlurRadius = 1.5;
+    [attString addAttribute:NSShadowAttributeName value:shadow range:range];
+    
+    label.attributedText = attString;
 }
 
 #pragma mark - Action Bar Deletate

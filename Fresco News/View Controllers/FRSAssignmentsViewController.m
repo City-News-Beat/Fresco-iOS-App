@@ -269,6 +269,7 @@
     if (!annotationView) {
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
+        annotationView.backgroundColor = [UIColor redColor];
         
         UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
         whiteView.layer.cornerRadius = 12;
@@ -289,11 +290,31 @@
         [whiteView addSubview:yellowView];
                 
         annotationView.enabled = YES;
-
+        
+//        UIView *tapView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+//        tapView.backgroundColor = [UIColor redColor];
+//        [self.view addSubview:tapView];
+//        
+//        UIGestureRecognizer *tap = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+//        [tapView addGestureRecognizer:tap];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0, 0, 50, 50);
+        button.backgroundColor = [UIColor greenColor];
+        [button addTarget:self action:@selector(tap) forControlEvents:UIControlEventTouchUpInside];
+        [mapView addSubview:button];
+//        [annotationView insertSubview:button atIndex:100000];
+        
     }
     
     return annotationView;
 }
+
+
+-(void)tap{
+    NSLog(@"tap");
+}
+
 
 #pragma mark - Circle Overlays
 
