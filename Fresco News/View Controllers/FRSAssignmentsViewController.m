@@ -379,6 +379,7 @@
     self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     [self.scrollView addSubview:self.dismissView];
     
+    // needs to be global variable & removed on dismiss
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:assignmentCard];
@@ -402,7 +403,7 @@
     [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
     
-    if (titleLabel.frame.size.height == 72) { //72 is the size of titleLabel with 3 lines
+    if (titleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
         [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
     }
     
@@ -413,7 +414,6 @@
     titleLabel.clipsToBounds = NO;
     
     [topContainer addSubview:titleLabel];
-
     
     //Configure bottom container
     self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
