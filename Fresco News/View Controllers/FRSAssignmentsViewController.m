@@ -51,6 +51,10 @@
 
 @property (strong, nonatomic) NSString *assignmentCaption;
 
+@property (strong, nonatomic) UILabel *assignmentTitleLabel;
+
+@property (strong, nonatomic) UITextView *assignmentTextView;
+
 @property (strong, nonatomic) UIView *assignmentCard;
 
 @property (nonatomic, assign) BOOL showsCard;
@@ -405,19 +409,6 @@
 }
 
 -(void)createAssignmentView{
-    
-}
-
--(void)configureAssignmentCard {
-    
-    if (_scrollView) {
-        //update labels
-    } else {
-        
-        [self createAssignmentView];
-        
-
-    
     self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
@@ -445,25 +436,25 @@
     gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
     [self.scrollView.layer insertSublayer:gradient atIndex:0];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
-    titleLabel.font = [UIFont notaBoldWithSize:24];
-    titleLabel.numberOfLines = 0;
-    titleLabel.text = self.assignmentTitle;
-    titleLabel.backgroundColor = [UIColor redColor];
-    [titleLabel sizeToFit];
-    titleLabel.textColor = [UIColor whiteColor];
+    self.assignmentTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
+    self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
+    self.assignmentTitleLabel.numberOfLines = 0;
+    self.assignmentTitleLabel.text = self.assignmentTitle;
+    self.assignmentTitleLabel.backgroundColor = [UIColor redColor];
+    [self.assignmentTitleLabel sizeToFit];
+    self.assignmentTitleLabel.textColor = [UIColor whiteColor];
     
-    if (titleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
-        [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
+    if (self.assignmentTitleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
+        [self.assignmentTitleLabel setOriginWithPoint:CGPointMake(16, 0)];
     }
     
-    titleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-    titleLabel.layer.shadowOpacity = .15;
-    titleLabel.layer.shadowRadius = 2;
-    titleLabel.layer.shadowOffset = CGSizeMake(0, 1);
-    titleLabel.clipsToBounds = NO;
+    self.assignmentTitleLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.assignmentTitleLabel.layer.shadowOpacity = .15;
+    self.assignmentTitleLabel.layer.shadowRadius = 2;
+    self.assignmentTitleLabel.layer.shadowOffset = CGSizeMake(0, 1);
+    self.assignmentTitleLabel.clipsToBounds = NO;
     
-    [topContainer addSubview:titleLabel];
+    [topContainer addSubview:self.assignmentTitleLabel];
     
     //Configure bottom container
     self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
@@ -481,17 +472,17 @@
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [self.assignmentBottomBar addSubview:button];
     
-    UITextView *assignmentDetailTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
-    [self.assignmentCard addSubview:assignmentDetailTextView];
-    [assignmentDetailTextView setFont:[UIFont systemFontOfSize:15]];
-    assignmentDetailTextView.textColor = [UIColor frescoDarkTextColor];
-    assignmentDetailTextView.userInteractionEnabled = NO;
-    assignmentDetailTextView.editable = NO;
-    assignmentDetailTextView.selectable = NO;
-    assignmentDetailTextView.scrollEnabled = NO;
-    assignmentDetailTextView.backgroundColor = [UIColor clearColor];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    [self.assignmentCard addSubview:self.assignmentTextView];
+    [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
+    self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
+    self.assignmentTextView.userInteractionEnabled = NO;
+    self.assignmentTextView.editable = NO;
+    self.assignmentTextView.selectable = NO;
+    self.assignmentTextView.scrollEnabled = NO;
+    self.assignmentTextView.backgroundColor = [UIColor clearColor];
     
-    [assignmentDetailTextView frs_setTextWithResize:self.assignmentCaption];
+    [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     
     UIImageView *photoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     photoImageView.frame = CGRectMake(16, 10, 24, 24);
@@ -503,16 +494,16 @@
     photoCashLabel.textAlignment = NSTextAlignmentCenter;
     photoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:photoCashLabel];
-
-    if (self.assignmentCard.frame.size.height < assignmentDetailTextView.frame.size.height) {
+    
+    if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
         CGRect cardFrame = self.assignmentCard.frame;
-        cardFrame.size.height = assignmentDetailTextView.frame.size.height * 2;
+        cardFrame.size.height = self.assignmentTextView.frame.size.height * 2;
         self.assignmentCard.frame = cardFrame;
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (assignmentDetailTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -524,8 +515,20 @@
     videoCashLabel.textAlignment = NSTextAlignmentCenter;
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:videoCashLabel];
+}
+
+-(void)configureAssignmentCard {
     
+    if (_scrollView) {
+        self.assignmentTitleLabel.text = self.assignmentTitle;
+        self.assignmentTextView.text = self.assignmentCaption;
+        
+    } else {
+        [self createAssignmentView];
     }
+    
+    [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.assignmentBottomBar];
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
