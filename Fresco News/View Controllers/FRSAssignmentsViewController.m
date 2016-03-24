@@ -52,6 +52,7 @@
 @property (strong, nonatomic) NSString *assignmentCaption;
 
 @property (nonatomic, assign) BOOL showsCard;
+@property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @end
 
 @implementation FRSAssignmentsViewController
@@ -65,6 +66,8 @@
                                              selector:@selector(didReceiveLocationUpdate:)
                                                  name:FRSLocationUpdateNotification
                                                object:nil];
+    
+    self.assignmentIDs = [[NSMutableArray alloc] init];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -138,7 +141,15 @@
         NSLog(@"ASS: %@", mSerializedAssignments);
         
         for (NSDictionary *dict in assignments){
-            [mSerializedAssignments addObject:[FRSAssignment assignmentWithDictionary:dict]];
+            FRSAssignment *assignmentToAdd = [FRSAssignment assignmentWithDictionary:dict];
+            NSString *uid = assignmentToAdd.uid;
+            
+            if ([self assignmentExists:uid]) {
+                continue;
+            }
+            
+            [mSerializedAssignments addObject:assignmentToAdd];
+            [self.assignmentIDs addObject:uid];
             
             if (!dictionaryRepresentations) {
                 dictionaryRepresentations = [[NSMutableArray alloc] init];
@@ -155,6 +166,21 @@
         [self cacheAssignments];
         [self configureAnnotationsForMap];
     }];
+}
+
+-(BOOL)assignmentExists:(NSString *)assignment {
+    
+    __block BOOL returnValue = FALSE;
+    
+    [self.assignmentIDs enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *currentID = (NSString *)obj;
+        
+        if ([currentID isEqualToString:assignment]) {
+            returnValue = TRUE;
+        }
+    }];
+    
+    return returnValue;
 }
 
 -(void)cacheAssignments {
@@ -254,8 +280,6 @@
     NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
     NSInteger milesLatitude = metersLatitude / 1609.34;
     
-    return;
-
     CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
     [self fetchAssignmentsNearLocation:location radius:milesLatitude];
 }
