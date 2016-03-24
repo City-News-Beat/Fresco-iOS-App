@@ -43,7 +43,7 @@
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
     self.creator = [FRSUser MR_createEntity];
     
-    if ([dict objectForKey:@"video"] != Nil) {
+    if ([dict objectForKey:@"video"] != [NSNull null]) {
         self.mediaType = @(1);
         self.videoUrl = [dict objectForKey:@"video"];
     }
