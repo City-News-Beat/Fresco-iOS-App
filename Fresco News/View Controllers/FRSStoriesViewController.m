@@ -34,7 +34,7 @@
 @implementation FRSStoriesViewController
 
 -(void)dealloc {
-    
+    [self.tableView dg_removePullToRefresh];
 }
 
 -(instancetype)init {
@@ -48,6 +48,7 @@
 -(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
     FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
     [detailView setStories:story.galleries.allObjects];
+    [detailView reloadData];
     return detailView;
 }
 
@@ -124,10 +125,6 @@
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
     
-}
-
-- (void)dealloc {
-    [self.tableView dg_removePullToRefresh];
 }
 
 -(void)configureTableView {
@@ -323,6 +320,8 @@
 
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
+    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 @end
