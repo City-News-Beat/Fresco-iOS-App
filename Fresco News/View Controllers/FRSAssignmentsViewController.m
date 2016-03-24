@@ -207,13 +207,13 @@
     [self addAnnotationsForAssignments];
 }
 
--(void)addAnnotationsForAssignments{
+-(void)addAnnotationsForAssignments {
     
-    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+    /*for (id<MKAnnotation> annotation in self.mapView.annotations) {
         [self.mapView removeAnnotation:annotation];
-    }
+    }*/
     
-    [self removeAllOverlaysIncludingUser:NO];
+    /*[self removeAllOverlaysIncludingUser:NO];*/
     
     NSInteger count = 0;
     
@@ -240,25 +240,24 @@
 }
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    if (!scrollTimer || ![scrollTimer isValid]) {
-        scrollTimer = [NSTimer timerWithTimeInterval:.3 target:self selector:@selector(updateAssignments) userInfo:Nil repeats:NO];
-    }
-    else {
-        [scrollTimer invalidate];
-        scrollTimer = [NSTimer timerWithTimeInterval:.3 target:self selector:@selector(updateAssignments) userInfo:Nil repeats:NO];
-    }
+    [self updateAssignments];
 }
 
 -(void)updateAssignments {
+    
     MKCoordinateRegion region = self.mapView.region;
     CLLocationCoordinate2D center = region.center;
-    MKCoordinateSpan regionSpan = region.span;
+    MKCoordinateSpan span = region.span;
     
-    NSInteger latitudeCircle = regionSpan.latitudeDelta / 69;
+    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:(center.latitude - span.latitudeDelta * 0.5) longitude:center.longitude];
+    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:(center.latitude + span.latitudeDelta * 0.5) longitude:center.longitude];
+    NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
+    NSInteger milesLatitude = metersLatitude / 1609.34;
     
-    
+    return;
+
     CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
-    [self fetchAssignmentsNearLocation:location radius:latitudeCircle];
+    [self fetchAssignmentsNearLocation:location radius:milesLatitude];
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
