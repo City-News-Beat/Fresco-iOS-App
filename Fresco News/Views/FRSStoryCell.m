@@ -27,7 +27,7 @@
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
-    
+    self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
 }
 

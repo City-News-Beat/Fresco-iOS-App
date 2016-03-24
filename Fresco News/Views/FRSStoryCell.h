@@ -14,8 +14,8 @@
 @interface FRSStoryCell : UITableViewCell <FRSStoryViewDelegate>
 
 @property (strong, nonatomic) FRSStoryView *storyView;
-
 @property (strong, nonatomic) FRSStory *story;
+@property (strong, nonatomic) ActionButtonBlock actionBlock;
 
 -(void)clearCell;
 -(void)configureCell;

@@ -301,9 +301,19 @@
     [cell clearCell];
     
     if (indexPath.row < self.stories.count) {
+        
+        __weak typeof(self) weakSelf = self;
         cell.story = self.stories[indexPath.row];
         [cell configureCell];
+        
+        cell.actionBlock = ^{
+            [weakSelf readMore:indexPath.row];
+        };
     }
+}
+
+-(void)readMore:(NSInteger)index {
+    NSLog(@"READ MORE: %lu", (long)index);
 }
 
 @end

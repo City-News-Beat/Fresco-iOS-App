@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Fresco.h"
+
 @class FRSStory;
 
 @protocol FRSStoryViewDelegate <NSObject>
@@ -19,7 +21,7 @@
 @interface FRSStoryView : UIView
 
 @property (weak, nonatomic) NSObject <FRSStoryViewDelegate> *delegate;
-
+@property (weak, nonatomic) ActionButtonBlock actionBlock;
 @property (strong, nonatomic) FRSStory *story;
 
 

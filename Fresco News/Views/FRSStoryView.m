@@ -231,6 +231,7 @@
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     //    [[NSNotificationCenter defaultCenter] postNotificationName:@"StoryContentBarActionTapped" object:nil userInfo:@{@"story_id" : self.story.uid}];
+    self.actionBlock();
 }
 
 
