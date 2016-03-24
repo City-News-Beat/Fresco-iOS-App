@@ -169,7 +169,7 @@
     };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
