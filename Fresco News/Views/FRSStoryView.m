@@ -196,6 +196,8 @@
     self.titleLabel.text = self.story.title;
     self.titleLabel.font = [UIFont notaBoldWithSize:24];
     self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.clipsToBounds = NO;
+    self.titleLabel.layer.masksToBounds = NO;
     [self.titleLabel sizeToFit];
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
