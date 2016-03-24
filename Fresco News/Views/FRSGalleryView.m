@@ -138,7 +138,9 @@
         [self.imageViews addObject:imageView];
         
         if (i==0) {
-            [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];    
+            });
         }
         
         if ([post.mediaType integerValue] == 1) {
@@ -312,6 +314,8 @@
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
     [label addFixedShadow];
+    label.layer.shouldRasterize = TRUE;
+    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     [label sizeToFit];
 
     return label;

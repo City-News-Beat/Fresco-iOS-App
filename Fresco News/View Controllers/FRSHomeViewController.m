@@ -387,11 +387,5 @@
 
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGFloat offset = scrollView.contentOffset.y;
-    if (offset <= 0) {
-        scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(-offset, 0, 0, 0);
-    }
-}
 
 @end
