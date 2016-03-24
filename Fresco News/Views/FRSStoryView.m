@@ -42,8 +42,6 @@
 
 @property (strong, nonatomic) NSMutableArray *imageViews;
 
-
-
 @end
 
 @implementation FRSStoryView

@@ -26,14 +26,16 @@
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UIButton *searchButton;
 @property (strong, nonatomic) UITextField *searchTextField;
-
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
-
 @property (nonatomic) BOOL firstTime;
 
 @end
 
 @implementation FRSStoriesViewController
+
+-(void)dealloc {
+    
+}
 
 -(instancetype)init {
     self = [super init];
@@ -41,6 +43,12 @@
         self.firstTime = YES;
     }
     return self;
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    [detailView setStories:story.galleries.allObjects];
+    return detailView;
 }
 
 -(void)viewDidLoad {
