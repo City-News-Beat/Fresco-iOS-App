@@ -83,7 +83,7 @@
     
     if (!self.firstTime) [self fetchStories];
     
-    self.firstTime = NO;
+    self.firstTime = TRUE;
 }
 
 #pragma mark -  UI
