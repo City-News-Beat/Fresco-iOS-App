@@ -287,13 +287,7 @@
         yellowView.backgroundColor = [UIColor frescoOrangeColor];
         
         [whiteView addSubview:yellowView];
-        
-        UIButton *assignmentButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        assignmentButton.frame = CGRectMake(-20, -20, 40, 40);
-        [assignmentButton addTarget:self action:@selector(mapView:didSelectAnnotationView:) forControlEvents:UIControlEventTouchUpInside];
-        assignmentButton.backgroundColor = [UIColor redColor];
-        [annotationView addSubview:assignmentButton];
-        
+                
         annotationView.enabled = YES;
 
     }
