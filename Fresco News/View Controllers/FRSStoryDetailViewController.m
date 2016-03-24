@@ -24,6 +24,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
+    self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.view.backgroundColor = self.galleriesTable.backgroundColor;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,21 +43,65 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    FRSGalleryCell *cell = (FRSGalleryCell *)[tableView dequeueReusableCellWithIdentifier:galleryCell];
     
-    return Nil;
+    return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // add dans stuff here
-}
-/*
-#pragma mark - Navigation
+    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        return;
+    }
+    
+    if (indexPath.row >= self.stories.count) {
+        return;
+    }
+    
+    if (cell.gallery == self.stories[indexPath.row]) {
+        return;
+    }
+    
+    [cell clearCell];
+    
+    cell.gallery = self.stories[indexPath.row];
+    [cell configureCell];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    cell.shareBlock = ^void(NSArray *sharedContent) {
+        [weakSelf showShareSheetWithContent:sharedContent];
+    };
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
-*/
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)reloadData {
+    [self.galleriesTable reloadData];
+}
+
+-(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
+    
+    NSArray *filteredArray = [self.stories filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    
+    if (!filteredArray.count) return;
+    
+    // push gallery detail view
+
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row >= self.stories.count) {
+        return 0;
+    }
+    
+    FRSGallery *gallery = [self.stories objectAtIndex:indexPath.row];
+    return [gallery heightForGallery];
+}
 
 @end

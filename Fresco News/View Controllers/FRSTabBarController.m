@@ -53,6 +53,7 @@
     [self configureTabBarItems];
     
     [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+        
         vc.title = nil;
         vc.tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
     }];
@@ -89,7 +90,7 @@
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
--(void)configureViewControllers{
+-(void)configureViewControllers {
     UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
     
     UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
@@ -103,7 +104,7 @@
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }
 
--(void)configureIrisItem{
+-(void)configureIrisItem {
     
     CGFloat origin = self.view.frame.size.width * 2/5;
     CGFloat width = self.view.frame.size.width/5;
@@ -119,7 +120,7 @@
 
 #pragma mark Delegate
 
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
@@ -127,6 +128,7 @@
             [self setSelectedIndex:self.lastActiveIndex];
         }];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -134,10 +136,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    //    UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
-    
+    // UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     UIViewController *selectedVC = viewController;
     if ([viewController isKindOfClass:[FRSNavigationController class]]){
         FRSNavigationController *nav = (FRSNavigationController *)viewController;

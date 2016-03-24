@@ -51,6 +51,7 @@
 
 @property (strong, nonatomic) NSString *assignmentCaption;
 
+@property (nonatomic, assign) BOOL showsCard;
 @end
 
 @implementation FRSAssignmentsViewController
@@ -187,6 +188,13 @@
 }
 
 -(void)setInitialMapRegion {
+    
+    if (self.showsCard) {
+        // dismiss card?
+        
+        return;
+    }
+    
     self.isOriginalSpan = YES;
     
     if ([FRSLocator sharedLocator].currentLocation) {
@@ -367,7 +375,7 @@
 }
 
 -(void)configureAssignmentCard {
-    
+    self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
@@ -377,6 +385,7 @@
     self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     [self.scrollView addSubview:self.dismissView];
     
+    // needs to be global variable & removed on dismiss
     UIView *assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
     assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:assignmentCard];
@@ -400,7 +409,7 @@
     [titleLabel sizeToFit];
     titleLabel.textColor = [UIColor whiteColor];
     
-    if (titleLabel.frame.size.height == 72) { //72 is the size of titleLabel with 3 lines
+    if (titleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
         [titleLabel setOriginWithPoint:CGPointMake(16, 0)];
     }
     
@@ -411,7 +420,6 @@
     titleLabel.clipsToBounds = NO;
     
     [topContainer addSubview:titleLabel];
-
     
     //Configure bottom container
     self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
@@ -509,6 +517,9 @@
 
 
 -(void)dismissAssignmentCard {
+    
+    self.showsCard = FALSE;
+    
     [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
