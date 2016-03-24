@@ -157,6 +157,22 @@
     }];
 }
 
+-(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion {
+    
+    NSDictionary *params = @{
+                             
+               @"id" : storyID,
+               @"offset" : @(0),
+               @"sort" : @"1",
+               @"limit" : @"100",
+               @"hide" : @"4" //HIDE NUMBER
+    };
+
+    [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject[@"data"], error);
+    }];
+}
+
 -(void)getRecentGalleriesFromLastGalleryID:(NSString *)galleryID completion:(void(^)(NSArray *galleries, NSError *error))completion{
     
 }

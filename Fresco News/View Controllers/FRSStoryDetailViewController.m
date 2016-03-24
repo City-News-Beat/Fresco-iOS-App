@@ -8,12 +8,14 @@
 
 #import "FRSStoryDetailViewController.h"
 #import "FRSGalleryCell.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSStoryDetailViewController ()
 
 @end
 
 @implementation FRSStoryDetailViewController
+@synthesize stories = _stories, story = _story;
 static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
@@ -25,6 +27,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
     self.view.backgroundColor = self.galleriesTable.backgroundColor;
 }
 
@@ -34,6 +37,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    //NSLog(@"%@", self.stories);
+    
     return self.stories.count;
 }
 
@@ -81,7 +86,25 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)reloadData {
-    [self.galleriesTable reloadData];
+    [self fetchGalleries];
+}
+
+-(void)fetchGalleries {
+    
+    self.stories = [[NSMutableArray alloc] init];
+    
+    [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid completion:^(NSArray *galleries, NSError *error) {
+        
+        for (NSDictionary *gallery in galleries) {
+            FRSGallery *galleryObject = [FRSGallery MR_createEntity];
+            [galleryObject configureWithDictionary:gallery];
+            [self.stories addObject:galleryObject];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.galleriesTable reloadData];
+        });
+    }];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {

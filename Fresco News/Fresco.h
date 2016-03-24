@@ -24,6 +24,7 @@ static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";
 static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
+static NSString * const storyGalleriesEndpoint = @"story/galleries/";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
