@@ -24,6 +24,15 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self setupTableView];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    
+    
+}
+
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
