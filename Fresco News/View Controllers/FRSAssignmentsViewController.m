@@ -525,7 +525,36 @@
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
     clock.frame = CGRectMake(16, 8, 24, 24);
     [assignmentStatsContainer addSubview:clock];
-
+    
+    UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
+    mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
+    [assignmentStatsContainer addSubview:mapAnnotation];
+    
+    UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
+    warning.frame = CGRectMake(16, 88, 24, 24);
+    [assignmentStatsContainer addSubview:warning];
+    
+    UILabel *expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
+    expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    expirationLabel.textColor = [UIColor frescoMediumTextColor];
+    expirationLabel.text = @"Expires in 24 minutes";
+    [assignmentStatsContainer addSubview:expirationLabel];
+    
+    UILabel *distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
+    distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    distanceLabel.textColor = [UIColor frescoMediumTextColor];
+    distanceLabel.text = @"1.1 miles away";
+    [assignmentStatsContainer addSubview:distanceLabel];
+    
+    
+    
+    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
+    warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    warningLabel.textColor = [UIColor frescoMediumTextColor];
+    warningLabel.text = @"Not all events are safe. Be careful!";
+    [assignmentStatsContainer addSubview:warningLabel];
+    
+    
 }
 
 -(void)configureAssignmentCard {
