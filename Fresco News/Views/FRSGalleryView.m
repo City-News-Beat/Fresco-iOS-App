@@ -208,8 +208,12 @@
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
-    [self addShadowToLabel:self.timeLabel];
     
+    self.timeLabel.clipsToBounds = NO;
+    self.timeLabel.layer.masksToBounds = NO;
+    
+    [self addShadowToLabel:self.timeLabel];
+
     [self addSubview:self.timeLabel];
 }
 
@@ -228,6 +232,9 @@
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     
     [self addShadowToLabel:self.locationLabel];
+    
+    self.locationLabel.clipsToBounds = NO;
+    self.locationLabel.layer.masksToBounds = NO;
     
     [self addSubview:self.locationLabel];
 }
@@ -304,19 +311,26 @@
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
     label.attributedText = attString;
-    label.layer.shouldRasterize = TRUE;
-    label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 }
 
--(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize{
+-(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
+    
     UILabel *label = [UILabel new];
+    label.clipsToBounds = NO;
+    label.layer.masksToBounds = NO;
+
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
     [label addFixedShadow];
     label.layer.shouldRasterize = TRUE;
     label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    
     [label sizeToFit];
+    
+    CGRect labelFrame = label.frame;
+    labelFrame.size.height += 4;
+    label.frame = labelFrame;
 
     return label;
 }
