@@ -44,7 +44,8 @@
     self.radius = dictionary[@"location"][@"radius"];
     
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
-    self.expirationDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"expiration"] milliseconds:YES];
+    NSInteger epoch = [dictionary[@"expiration_time"] integerValue];
+    self.expirationDate = [NSDate dateWithTimeIntervalSince1970:epoch/1000];
     self.caption = dictionary[@"caption"];
 }
 //@property (nullable, nonatomic, retain) NSString *uid;

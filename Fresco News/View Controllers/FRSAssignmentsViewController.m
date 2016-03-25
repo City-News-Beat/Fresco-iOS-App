@@ -51,11 +51,16 @@
 
 @property (strong, nonatomic) NSString *assignmentCaption;
 
+@property (strong, nonatomic) NSDate *assignmentExpirationDate;
+
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
 
 @property (strong, nonatomic) UITextView *assignmentTextView;
 
 @property (strong, nonatomic) UIView *assignmentCard;
+
+@property (strong, nonatomic) UILabel *expirationLabel;
+@property (strong, nonatomic) UILabel *distanceLabel;
 
 @property (nonatomic, assign) BOOL showsCard;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
@@ -145,7 +150,7 @@
         NSArray *assignments = (NSArray *)responseObject;
         
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
-        NSLog(@"ASS: %@", mSerializedAssignments);
+//        NSLog(@"ASS: %@", mSerializedAssignments);
         
         for (NSDictionary *dict in assignments){
             FRSAssignment *assignmentToAdd = [FRSAssignment assignmentWithDictionary:dict];
@@ -197,7 +202,7 @@
             [assignmentToSave configureWithDictionary:dict];
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"ASSIGNMENTS SAVED: %@", (contextDidSave) ? @"TRUE" : @"FALSE");
+//        NSLog(@"ASSIGNMENTS SAVED: %@", (contextDidSave) ? @"TRUE" : @"FALSE");
     }];
 }
 
@@ -263,7 +268,7 @@
 - (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
-    
+//    NSLog(@"EXPIRATION %@", assignment.expirationDate);
     //Create center coordinate for the assignment
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     
@@ -328,11 +333,6 @@
 }
 
 
--(void)tap{
-    NSLog(@"tap");
-}
-
-
 #pragma mark - Circle Overlays
 
 -(void)addUserLocationCircleOverlay {
@@ -392,9 +392,23 @@
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
+    
+    
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
+    
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
+    self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
+    
+    
+    
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
+    
+    NSLog(@"assignmentExpirationDate = %@", self.assignmentExpirationDate);
+    
+    
     [self configureAssignmentCard];
     [self snapToAnnotationView:view]; // centers map on top of content
     
@@ -538,17 +552,22 @@
     warning.frame = CGRectMake(16, 88, 24, 24);
     [assignmentStatsContainer addSubview:warning];
     
-    UILabel *expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
-    expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    expirationLabel.textColor = [UIColor frescoMediumTextColor];
-    expirationLabel.text = @"Expires in 24 minutes";
-    [assignmentStatsContainer addSubview:expirationLabel];
+    self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
+    self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
+    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
+    self.expirationLabel.text = dateString;
+
+    [assignmentStatsContainer addSubview:self.expirationLabel];
     
-    UILabel *distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
-    distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    distanceLabel.textColor = [UIColor frescoMediumTextColor];
-    distanceLabel.text = @"1.1 miles away";
-    [assignmentStatsContainer addSubview:distanceLabel];
+    self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
+    self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
+    self.distanceLabel.text = @"1.1 miles away";
+    [assignmentStatsContainer addSubview:self.distanceLabel];
     
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
