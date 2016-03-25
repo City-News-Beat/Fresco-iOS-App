@@ -156,8 +156,7 @@
             }
             
             [mSerializedAssignments addObject:assignmentToAdd];
-            [self.assignmentIDs addObject:uid];
-            
+
             if (!dictionaryRepresentations) {
                 dictionaryRepresentations = [[NSMutableArray alloc] init];
             }
@@ -251,6 +250,11 @@
     NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments) {
+        if ([self assignmentExists:assignment.uid]) {
+            continue;
+        }
+        
+        [self.assignmentIDs addObject:assignment.uid];
         [self addAssignmentAnnotation:assignment index:count];
         count++;
     }
