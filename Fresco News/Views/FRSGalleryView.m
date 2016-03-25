@@ -230,12 +230,10 @@
     self.locationLabel = [self galleryInfoLabelWithText:post.address fontSize:13];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
-    
-    [self addShadowToLabel:self.locationLabel];
-    
     self.locationLabel.clipsToBounds = NO;
     self.locationLabel.layer.masksToBounds = NO;
-    
+
+    [self addShadowToLabel:self.locationLabel];
     [self addSubview:self.locationLabel];
 }
 
@@ -277,7 +275,7 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
-    [self.locationLabel sizeToFit];
+    //[self.locationLabel sizeToFit];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     
@@ -323,16 +321,20 @@
     label.text = text;
     label.textColor = [UIColor whiteColor];
     label.font = fontSize == 13 ? [UIFont notaRegularWithSize:13] : [UIFont notaMediumWithSize:17];
-    [label addFixedShadow];
+    //[label addFixedShadow];
     label.layer.shouldRasterize = TRUE;
     label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-    
-    [label sizeToFit];
+    label.adjustsFontSizeToFitWidth = YES;
+    label.numberOfLines = 0;
+
+   // [label sizeToFit];
     
     CGRect labelFrame = label.frame;
-    labelFrame.size.height += 4;
+    labelFrame.size.height = 20;
+    labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
     label.frame = labelFrame;
-
+    label.layer.borderColor = [UIColor redColor].CGColor;
+    label.layer.borderWidth = 0.50f;
     return label;
 }
 
@@ -350,7 +352,6 @@
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
     self.captionLabel.font = [UIFont systemFontOfSize:15 weight:-1];
     self.captionLabel.text = self.gallery.caption;
-    
     
     if ([self.delegate shouldHaveTextLimit]){
         self.captionLabel.numberOfLines = 6;
