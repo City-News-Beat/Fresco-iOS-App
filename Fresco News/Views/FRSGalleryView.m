@@ -333,8 +333,6 @@
     labelFrame.size.height = 20;
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
     label.frame = labelFrame;
-    label.layer.borderColor = [UIColor redColor].CGColor;
-    label.layer.borderWidth = 0.50f;
     return label;
 }
 
