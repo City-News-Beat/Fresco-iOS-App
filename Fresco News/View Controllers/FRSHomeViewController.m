@@ -121,6 +121,20 @@
 
 }
 
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (needsUpdate) {
+        needsUpdate = FALSE;
+        [self.tableView reloadData];
+    }
+}
+
+-(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    if (needsUpdate) {
+        needsUpdate = FALSE;
+        [self.tableView reloadData];
+    }
+}
+
 - (void)dealloc{
     [self.tableView dg_removePullToRefresh];
 }
@@ -264,7 +278,7 @@
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
+                needsUpdate = TRUE;
             });
         }];
     });

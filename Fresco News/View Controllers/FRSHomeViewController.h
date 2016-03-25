@@ -11,5 +11,6 @@
 @interface FRSHomeViewController : FRSScrollingViewController
 {
     BOOL delayClear;
+    BOOL needsUpdate;
 }
 @end
