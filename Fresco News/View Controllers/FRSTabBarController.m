@@ -84,20 +84,32 @@
     UITabBarItem *item3 = [self.tabBar.items objectAtIndex:3];
     item3.image = [[UIImage imageNamed:@"tab-bar-assign"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item3.selectedImage = [[UIImage imageNamed:@"tab-bar-assign-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-
     
     UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
     item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    
     //Image insets are hard coded to follow the spec
-    item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
-    item1.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
-    item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
-    item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
-    item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
-
+    
+    if (IS_IPHONE_6) {
+        item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
+        item1.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
+        item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+        item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
+        item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
+    } else if (IS_IPHONE_6_PLUS) {
+        item0.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
+        item1.imageInsets = UIEdgeInsetsMake(5, -8, -5, 8);
+        item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+        item3.imageInsets = UIEdgeInsetsMake(5, 8, -5, -8);
+        item4.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
+    } else if (IS_IPHONE_5) {
+        item0.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
+        item1.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
+        item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+        item3.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
+        item4.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
+    }
 }
 
 -(void)configureViewControllers {
