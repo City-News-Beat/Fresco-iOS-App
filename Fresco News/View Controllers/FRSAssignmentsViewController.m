@@ -546,14 +546,11 @@
     distanceLabel.text = @"1.1 miles away";
     [assignmentStatsContainer addSubview:distanceLabel];
     
-    
-    
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
     [assignmentStatsContainer addSubview:warningLabel];
-    
     
 }
 
