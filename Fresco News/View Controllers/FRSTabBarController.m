@@ -72,7 +72,6 @@
     UITabBarItem *item0 = [self.tabBar.items objectAtIndex:0];
     item0.image = [[UIImage imageNamed:@"tab-bar-home"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item0.selectedImage = [[UIImage imageNamed:@"tab-bar-home-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
     
     UITabBarItem *item1 = [self.tabBar.items objectAtIndex:1];
     item1.image = [[UIImage imageNamed:@"tab-bar-story"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -85,10 +84,20 @@
     UITabBarItem *item3 = [self.tabBar.items objectAtIndex:3];
     item3.image = [[UIImage imageNamed:@"tab-bar-assign"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item3.selectedImage = [[UIImage imageNamed:@"tab-bar-assign-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
     
     UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
     item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    
+    //Image insets are hard coded to follow the spec
+    item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
+    item1.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
+    item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
+    item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
+    item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
+
 }
 
 -(void)configureViewControllers {
