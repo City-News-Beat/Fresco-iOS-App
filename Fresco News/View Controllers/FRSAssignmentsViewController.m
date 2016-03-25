@@ -509,9 +509,9 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +120); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
     
-    UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-icon-profile"]];
+    UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
     [self.assignmentBottomBar addSubview:videoImageView];
     
@@ -521,6 +521,41 @@
     videoCashLabel.textAlignment = NSTextAlignmentCenter;
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:videoCashLabel];
+    
+    
+    UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    [self.assignmentCard addSubview:assignmentStatsContainer];
+    
+    UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
+    clock.frame = CGRectMake(16, 8, 24, 24);
+    [assignmentStatsContainer addSubview:clock];
+    
+    UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
+    mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
+    [assignmentStatsContainer addSubview:mapAnnotation];
+    
+    UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
+    warning.frame = CGRectMake(16, 88, 24, 24);
+    [assignmentStatsContainer addSubview:warning];
+    
+    UILabel *expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
+    expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    expirationLabel.textColor = [UIColor frescoMediumTextColor];
+    expirationLabel.text = @"Expires in 24 minutes";
+    [assignmentStatsContainer addSubview:expirationLabel];
+    
+    UILabel *distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
+    distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    distanceLabel.textColor = [UIColor frescoMediumTextColor];
+    distanceLabel.text = @"1.1 miles away";
+    [assignmentStatsContainer addSubview:distanceLabel];
+    
+    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
+    warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    warningLabel.textColor = [UIColor frescoMediumTextColor];
+    warningLabel.text = @"Not all events are safe. Be careful!";
+    [assignmentStatsContainer addSubview:warningLabel];
+    
 }
 
 -(void)configureAssignmentCard {
