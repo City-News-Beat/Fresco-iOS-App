@@ -72,7 +72,7 @@
     UITabBarItem *item0 = [self.tabBar.items objectAtIndex:0];
     item0.image = [[UIImage imageNamed:@"tab-bar-home"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item0.selectedImage = [[UIImage imageNamed:@"tab-bar-home-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item0.imageInsets = UIEdgeInsetsMake(5, 8, -5, 8);
+    item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
     
     UITabBarItem *item1 = [self.tabBar.items objectAtIndex:1];
     item1.image = [[UIImage imageNamed:@"tab-bar-story"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
