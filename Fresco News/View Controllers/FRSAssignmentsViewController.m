@@ -505,7 +505,7 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding);
+    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +120); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -517,6 +517,15 @@
     videoCashLabel.textAlignment = NSTextAlignmentCenter;
     videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:videoCashLabel];
+    
+    
+    UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    [self.assignmentCard addSubview:assignmentStatsContainer];
+    
+    UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
+    clock.frame = CGRectMake(16, 8, 24, 24);
+    [assignmentStatsContainer addSubview:clock];
+
 }
 
 -(void)configureAssignmentCard {
