@@ -143,6 +143,7 @@
     
     [self removeNavigationBarLine];
     
+    // Deal with this
     FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
     [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
     
