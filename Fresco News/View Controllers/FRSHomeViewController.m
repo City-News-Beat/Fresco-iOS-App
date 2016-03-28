@@ -25,6 +25,7 @@
     BOOL isLoading;
     NSInteger lastOffset;
 }
+
 @property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
 

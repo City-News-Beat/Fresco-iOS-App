@@ -61,6 +61,8 @@
 }
 
 -(void)configureTabItems{
+    
+    
     self.firstTab = [[UIButton alloc] init];
     [self.firstTab setTitle:self.tabTitles[0] forState:UIControlStateNormal];
     [self.firstTab setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
