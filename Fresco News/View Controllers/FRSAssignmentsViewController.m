@@ -391,8 +391,6 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-
-    
     
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
     
@@ -400,14 +398,10 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
-    
-    
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd"];
-    
-    NSLog(@"assignmentExpirationDate = %@", self.assignmentExpirationDate);
-    
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
+    self.expirationLabel.text = dateString; //Not up to spec. "Expires in 24 minutes"
     
     [self configureAssignmentCard];
     [self snapToAnnotationView:view]; // centers map on top of content
@@ -557,7 +551,7 @@
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd"];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
     self.expirationLabel.text = dateString;
 
@@ -611,11 +605,10 @@
     [self dismissAssignmentCard];
     
     //Waits for animation to complete before removing from superview
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.scrollView removeFromSuperview];
         [self.assignmentBottomBar removeFromSuperview];
     });
-    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
