@@ -439,7 +439,7 @@
     [self.scrollView addSubview:self.dismissView];
     
     // needs to be global variable & removed on dismiss
-    self.assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 412)];
+    self.assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 1000)]; //Height is 1000 to avoid user overscrolling in y
     self.assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentCard];
     
@@ -576,8 +576,8 @@
     //Configure photo/video labels for animation
     self.photoCashLabel.alpha = 0;
     self.videoCashLabel.alpha = 0;
-    self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
-    self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
+    self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
 }
 
 -(void)configureAssignmentCard {
@@ -660,8 +660,8 @@
         //Reset animated labels
         self.photoCashLabel.alpha = 0;
         self.videoCashLabel.alpha = 0;
-        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
-        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
+        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     }];
 }
 

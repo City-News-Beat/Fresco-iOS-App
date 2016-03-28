@@ -67,6 +67,7 @@
     [self configureTableView];
     [self configurePullToRefresh];
     [self configureSpinner];
+    [self configureNavigationBar];
 }
 
 -(void)configureSpinner {
@@ -80,12 +81,13 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
     if (!self.firstTime) {
         [self fetchStories];   
     }
     
     self.firstTime = TRUE;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -97,23 +99,19 @@
 #pragma mark -  UI
 
 -(void)configureNavigationBar {
-    
-    //    [super configureNavigationBar];
-    [super removeNavigationBarLine];
-    self.navigationItem.title = @"STORIES";
-    
+    self.navigationItem.title = @"Stories";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
+    //Using label instead of title to un-caps back button when detail tapped
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    label.text = @"STORIES";
+    label.font = [UIFont notaBoldWithSize:17];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor whiteColor];
     
-    //    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width, navBar.frame.size.height - 38, self.view.frame.size.width - 60, 30)];
-    //    self.searchTextField.tintColor = [UIColor whiteColor];
-    //    self.searchTextField.alpha = 0;
-    //    self.searchTextField.delegate = self;
-    //    self.searchTextField.textColor = [UIColor whiteColor];
-    //    self.searchTextField.returnKeyType = UIReturnKeySearch;
-    //    [navBar addSubview:self.searchTextField];
+    [self.navigationItem setTitleView:label];
 }
-
 
 
 -(void)configurePullToRefresh {
@@ -132,7 +130,6 @@
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-    
 }
 
 -(void)configureTableView {
