@@ -62,7 +62,9 @@
     self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     self.searchTextField.delegate = self;
     self.searchTextField.returnKeyType = UIReturnKeySearch;
-    self.searchTextField.placeholder = @"Search";
+    self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
+    
+    
     [navBar addSubview:self.searchTextField];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.searchTextField becomeFirstResponder];
