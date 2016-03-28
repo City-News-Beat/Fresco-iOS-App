@@ -64,6 +64,9 @@
 
 @property (nonatomic, assign) BOOL showsCard;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
+
+@property (strong, nonatomic) UILabel *photoCashLabel;
+@property (strong, nonatomic) UILabel *videoCashLabel;
 @end
 
 @implementation FRSAssignmentsViewController
@@ -503,12 +506,12 @@
     photoImageView.frame = CGRectMake(16, 10, 24, 24);
     [self.assignmentBottomBar addSubview:photoImageView];
     
-    UILabel *photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
-    photoCashLabel.text = @"$10";
-    photoCashLabel.textColor = [UIColor frescoMediumTextColor];
-    photoCashLabel.textAlignment = NSTextAlignmentCenter;
-    photoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [self.assignmentBottomBar addSubview:photoCashLabel];
+    self.photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
+    self.photoCashLabel.text = @"$10";
+    self.photoCashLabel.textColor = [UIColor frescoMediumTextColor];
+    self.photoCashLabel.textAlignment = NSTextAlignmentCenter;
+    self.photoCashLabel.font = [UIFont notaBoldWithSize:15];
+    [self.assignmentBottomBar addSubview:self.photoCashLabel];
     
     if (self.assignmentCard.frame.size.height < self.assignmentTextView.frame.size.height) {
         CGRect cardFrame = self.assignmentCard.frame;
@@ -524,12 +527,12 @@
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
     [self.assignmentBottomBar addSubview:videoImageView];
     
-    UILabel *videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
-    videoCashLabel.text = @"$50";
-    videoCashLabel.textColor = [UIColor frescoMediumTextColor];
-    videoCashLabel.textAlignment = NSTextAlignmentCenter;
-    videoCashLabel.font = [UIFont notaBoldWithSize:15];
-    [self.assignmentBottomBar addSubview:videoCashLabel];
+    self.videoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(115, 15, 24, 17)];
+    self.videoCashLabel.text = @"$50";
+    self.videoCashLabel.textColor = [UIColor frescoMediumTextColor];
+    self.videoCashLabel.textAlignment = NSTextAlignmentCenter;
+    self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
+    [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
     
     UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
@@ -570,6 +573,11 @@
     warningLabel.text = @"Not all events are safe. Be careful!";
     [assignmentStatsContainer addSubview:warningLabel];
     
+    //Configure photo/video labels for animation
+    self.photoCashLabel.alpha = 0;
+    self.videoCashLabel.alpha = 0;
+    self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
+    self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
 }
 
 -(void)configureAssignmentCard {
@@ -604,16 +612,9 @@
 }
 
 -(void)animateAssignmentCard{
-
-    //Animate bottom bar
-//    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        
-//
-//    } completion:nil];
-    
     
     //Animate scrollView in y
-    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
         scrollFrame.origin.y = 0;
@@ -621,18 +622,47 @@
         
     } completion:nil];
     
-    
     //Animate bottom bar in y
-    [UIView animateWithDuration:0.3 delay:0.3 options: UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
         
-    } completion:nil];
-    
+    } completion:^(BOOL finished) {
+        
+        //Animate photoCashLabel
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.photoCashLabel.alpha = 1;
+            self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
-    
+        } completion:nil];
+        
+        //Animate videoCashLabel with delay
+        [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.videoCashLabel.alpha = 1;
+            self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
+        } completion:nil];
+    }];
+}
+
+-(void)dismissAssignmentCard {
     
+    self.showsCard = FALSE;
+    
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
+        
+    } completion:^(BOOL finished) {
+        //Reset animated labels
+        self.photoCashLabel.alpha = 0;
+        self.videoCashLabel.alpha = 0;
+        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
+        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-10, 0);
+    }];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -645,19 +675,6 @@
     if (scrollView.contentOffset.y <= -50) {
         [self dismissAssignmentCard];
     }
-}
-
-
--(void)dismissAssignmentCard {
-    
-    self.showsCard = FALSE;
-    
-    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        
-        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
-        
-    } completion:nil];
 }
 
 -(void)handleAssignmentScroll {
