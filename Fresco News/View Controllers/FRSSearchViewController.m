@@ -39,6 +39,7 @@
 
 -(void)clear{
     self.searchTextField.text = @"";
+    [self hideClearButton];
 }
 
 #pragma mark - UI
@@ -61,6 +62,7 @@
     self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     self.searchTextField.delegate = self;
     self.searchTextField.returnKeyType = UIReturnKeySearch;
+    self.searchTextField.placeholder = @"Search";
     [navBar addSubview:self.searchTextField];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.searchTextField becomeFirstResponder];
@@ -331,7 +333,7 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self hideClearButton];
-//    [self.searchTextField resignFirstResponder];
+    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - dealloc
