@@ -23,6 +23,7 @@
     [super viewDidLoad];
     [self configureNavigationBar];
     [self configureTableView];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -33,7 +34,6 @@
 
 -(void)dismiss{
     [self dismissViewControllerAnimated:YES completion:nil];
-    
 }
 
 
@@ -67,7 +67,6 @@
     });
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
-
     
     self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.clearButton.frame = CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24);
@@ -76,8 +75,6 @@
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     self.clearButton.alpha = 0;
     [navBar addSubview:self.clearButton];
-    
-    
     
 }
 
@@ -97,6 +94,8 @@
         self.clearButton.alpha = 1;
     } completion:nil];
 }
+
+
 
 -(void)hideClearButton {
     
@@ -118,12 +117,17 @@
 }
 
 -(void)textFieldDidChange:(NSNotification *)notification {
-    if (![self.searchTextField.text isEqual: @""]) {
+    if ((![self.searchTextField.text isEqual: @""]) && (self.clearButton.alpha == 0)) {
         [self showClearButton];
-    } else {
+    } else if ([self.searchTextField.text isEqual:@""]){
         [self hideClearButton];
     }
 }
+
+//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+//    [self showClearButton];
+//    return YES;
+//}
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     [self hideClearButton];
