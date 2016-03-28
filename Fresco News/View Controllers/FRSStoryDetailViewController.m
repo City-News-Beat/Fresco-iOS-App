@@ -40,7 +40,12 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)configureNavigationBar {
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
     
+}
+
+-(void)dismissDetail{
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

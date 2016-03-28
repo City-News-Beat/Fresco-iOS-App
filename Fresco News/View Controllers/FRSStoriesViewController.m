@@ -98,7 +98,7 @@
 #pragma mark -  UI
 
 -(void)configureNavigationBar {
-    self.navigationItem.title = @"Stories";
+    self.navigationItem.title = @"";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
@@ -110,6 +110,7 @@
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
+    
 }
 
 
