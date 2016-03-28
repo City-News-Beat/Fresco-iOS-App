@@ -22,10 +22,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self setupTableView];
+    [self configureNavigationBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+//    [super viewWillAppear:animated];
     [super.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
@@ -34,6 +35,12 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.view.backgroundColor = self.galleriesTable.backgroundColor;
+}
+
+-(void)configureNavigationBar {
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
 }
 
 - (void)didReceiveMemoryWarning {
