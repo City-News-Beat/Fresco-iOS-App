@@ -404,7 +404,8 @@
     self.expirationLabel.text = dateString; //Not up to spec. "Expires in 24 minutes"
     
     [self configureAssignmentCard];
-    [self snapToAnnotationView:view]; // centers map on top of content
+    [self animateAssignmentCard];
+    [self snapToAnnotationView:view]; // Centers map with y offset
     
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 }
@@ -471,7 +472,7 @@
     [topContainer addSubview:self.assignmentTitleLabel];
     
     //Configure bottom container
-    self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -93, self.view.frame.size.width, 44)];
+    self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 44)];
     self.assignmentBottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.assignmentBottomBar];
     
@@ -576,22 +577,13 @@
     if (_scrollView) {
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
-        
+
     } else {
         [self createAssignmentView];
     }
     
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.assignmentBottomBar];
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        
-        CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = 0;
-        self.scrollView.frame = scrollFrame;
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
-        
-    } completion:nil];
     
     currentScroller = self.scrollView;
     currentScroller.delegate = self;
@@ -605,10 +597,42 @@
     [self dismissAssignmentCard];
     
     //Waits for animation to complete before removing from superview
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.scrollView removeFromSuperview];
         [self.assignmentBottomBar removeFromSuperview];
     });
+}
+
+-(void)animateAssignmentCard{
+
+    //Animate bottom bar
+//    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//        
+//
+//    } completion:nil];
+    
+    
+    //Animate scrollView in y
+    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.75 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        CGRect scrollFrame = self.scrollView.frame;
+        scrollFrame.origin.y = 0;
+        self.scrollView.frame = scrollFrame;
+        
+    } completion:nil];
+    
+    
+    //Animate bottom bar in y
+    [UIView animateWithDuration:0.3 delay:0.3 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
+        
+    } completion:nil];
+    
+
+    
+
+    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -628,7 +652,7 @@
     
     self.showsCard = FALSE;
     
-    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
