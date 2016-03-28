@@ -26,7 +26,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-//    [super viewWillAppear:animated];
+    [super viewWillAppear:animated];
     [super.navigationController setNavigationBarHidden:NO animated:NO];
 }
 

@@ -323,6 +323,12 @@
     }
 }
 
+//Disables nav bar hide
+//#pragma mark - UIScrollViewDelegate
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    self.searchButton.alpha = 0;
+//}
+
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
