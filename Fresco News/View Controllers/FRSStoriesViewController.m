@@ -271,7 +271,6 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return (self.stories.count == 0) ? 0 : self.stories.count+1;
-    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

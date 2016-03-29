@@ -215,7 +215,7 @@
                 [assignment MR_deleteEntityInContext:localContext];
             }
         }
-        self.assignments = toShow;
+        self.assignments = [toShow mutableCopy];
         [self configureAnnotationsForMap];
     }];
 }
