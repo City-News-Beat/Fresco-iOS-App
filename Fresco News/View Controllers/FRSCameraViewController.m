@@ -389,7 +389,6 @@
             [self.previewBackgroundIV addSubview:self.nextButton];
             
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                
                 self.nextButton.transform = CGAffineTransformMakeScale(1.01, 1.01);
                 self.nextButton.alpha = 0.7;
             } completion:^(BOOL finished) {
@@ -403,6 +402,7 @@
     
     self.bottomOpaqueContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
     self.bottomOpaqueContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    // 239 239 233
     [self.view addSubview:self.bottomOpaqueContainer];
     
     self.bottomClearContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.view.frame.size.width, self.view.frame.size.height - (self.view.frame.size.width * PHOTO_FRAME_RATIO))];
