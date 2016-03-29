@@ -204,7 +204,7 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"editedDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
     [_dataSource addObjectsFromArray:stored];
     [_highlights addObjectsFromArray:stored];
     
