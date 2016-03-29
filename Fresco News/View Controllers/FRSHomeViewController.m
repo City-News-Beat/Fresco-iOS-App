@@ -20,6 +20,8 @@
 
 #import "Fresco.h"
 
+#import "FRSPersistence.h"
+
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
     BOOL isLoading;
@@ -180,7 +182,7 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
-        
+        [self cacheLocalData:galleries];
         if ([galleries count] == 0){
             return;
         }
@@ -202,8 +204,11 @@
     
 }
 
--(void)cacheLocalData {
-    
+-(void)cacheLocalData:(NSArray *)localData {
+    for (NSDictionary *gallery in localData) {
+        FRSGallery *galleryToSave = [FRSGallery initWithProperties:gallery context:Nil];
+        NSLog(@"%@", galleryToSave);
+    }
 }
 
 #pragma mark - UITableView DataSource
