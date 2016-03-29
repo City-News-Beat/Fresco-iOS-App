@@ -146,10 +146,18 @@
 
 #pragma mark - Search Methods
 -(void)searchStories {
-    //    [self animateSearch];
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
-    [self presentViewController:searchVC animated:YES completion:nil];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 1;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromRight;
+    [self.view.window.layer addAnimation:transition forKey:nil];
+    
+    [self presentViewController:searchVC animated:NO completion:nil];
+    
 }
 
 

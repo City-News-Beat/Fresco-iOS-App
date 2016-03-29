@@ -156,7 +156,7 @@
 
 -(void)configureCoreDataStack{
     [MagicalRecord setupAutoMigratingCoreDataStack];
-    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
+    //[MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
 }
 
 
