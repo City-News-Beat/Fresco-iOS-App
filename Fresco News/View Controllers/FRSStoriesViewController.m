@@ -252,6 +252,8 @@
             FRSStory *storySave = [FRSStory MR_createEntityInContext:localContext];
             [storySave configureWithDictionary:story];
         }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"%d %@", contextDidSave, error);
     }];
 }
 
