@@ -194,9 +194,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.tableView reloadData];
                 });
-                
-                [self cacheLocalData];
             }
+        
+        [self cacheLocalData:stories];
         //});
         
     }];
@@ -232,19 +232,31 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
-            
-            [self cacheLocalData];
         }
     }];
-
 }
 
 -(void)fetchLocalData {
     
 }
 
--(void)cacheLocalData {
+-(void)cacheLocalData:(NSArray *)localData {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        for (NSDictionary *story in localData) {
+            
+        }
+    }];
+}
+
+-(BOOL)storyExists:(NSString *)storyID {
     
+    for (FRSStory *story in self.stories) {
+        if ([story.uid isEqualToString:storyID]) {
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 
