@@ -67,7 +67,6 @@
     
     [self configureUI];
     [self addNotificationObservers];
-    [self fetchLocalData];
     
     // Do any additional setup after loading the view.
     
@@ -85,14 +84,13 @@
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-    
+    [self configureSpinner];
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
     
     
 //    if (self.contentIsEmpty) {
-        [self configureSpinner];
 //    }
 }
 
@@ -204,7 +202,7 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"editedDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
     [_dataSource addObjectsFromArray:stored];
     [_highlights addObjectsFromArray:stored];
     
@@ -215,12 +213,29 @@
     [self.tableView reloadData];
 }
 
+-(BOOL)galleryExists:(NSString *)galleryID {
+    for (FRSGallery *gallery in self.dataSource) {
+        NSString *uid = gallery.uid;
+        if ([uid isEqualToString:galleryID]) {
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+}
+
 -(void)cacheLocalData:(NSArray *)localData {
     
     NSMutableArray *toSave = [[NSMutableArray alloc] init];
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
+            NSString *galleryID = [gallery objectForKey:@"_id"];
+            
+            if ([self galleryExists:galleryID]) {
+                continue;
+            }
+            
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
             [toSave addObject:galleryToSave];
