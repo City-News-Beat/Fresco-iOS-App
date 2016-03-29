@@ -23,7 +23,7 @@
     [super viewDidLoad];
     [self configureNavigationBar];
     [self configureTableView];
-    [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -45,6 +45,25 @@
 #pragma mark - UI
 -(void)configureNavigationBar{
     
+//    UIImage *image = [UIImage imageNamed:@"back-arrow-light"];
+//    self.navigationController.navigationItem.backBarButtonItem.image = image;
+    
+    
+//    UIImage *image = [[UIImage imageNamed:@"back-arrow-light"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 30, 30) resizingMode:UIImageResizing];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:image forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+
+    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    backButton.tintColor = [UIColor whiteColor];
+    backButton.bounds = CGRectMake(-10, 0, 24, 24);
+    [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
+    
+    
     UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     navBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:navBar];
@@ -65,10 +84,7 @@
     self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
     
     [navBar addSubview:self.searchTextField];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.searchTextField becomeFirstResponder];
-//    });
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
     
     self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
