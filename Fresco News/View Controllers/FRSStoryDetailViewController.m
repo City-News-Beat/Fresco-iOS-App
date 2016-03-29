@@ -20,7 +20,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
     [self setupTableView];
     [self configureNavigationBar];
 }
@@ -28,23 +28,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
-//    [self.navigationController viewWillAppear:NO];
-    
-//    self.navigationController.navigationBar.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, 64);
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-//    [[[self parentViewController] navigationController] setNavigationBarHidden:NO animated:YES];
-    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];    
 }
-
-//-(void)viewWillDisappear:(BOOL)animated {
-//    if (self.navigationController.topViewController == self) {
-//        [self.navigationController setNavigationBarHidden:NO animated:animated];
-//    }
-//}
-
-//-(void)viewWillLayoutSubviews{
-//    [self.navigationController setNavigationBarHidden:NO animated:NO];
-//}
 
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
@@ -54,7 +39,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)configureNavigationBar {
-    
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
 }
@@ -65,11 +49,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    //NSLog(@"%@", self.stories);
     return self.stories.count;
 }
 
