@@ -64,7 +64,6 @@
     self.searchTextField.returnKeyType = UIReturnKeySearch;
     self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
     
-    
     [navBar addSubview:self.searchTextField];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.searchTextField becomeFirstResponder];
@@ -79,7 +78,6 @@
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     self.clearButton.alpha = 0;
     [navBar addSubview:self.clearButton];
-    
 }
 
 -(void)showClearButton {
@@ -125,6 +123,12 @@
         [self showClearButton];
     } else if ([self.searchTextField.text isEqual:@""]){
         [self hideClearButton];
+    }
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (![self.searchTextField.text isEqualToString: @""]) {
+        [self showClearButton];
     }
 }
 
