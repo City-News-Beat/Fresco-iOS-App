@@ -42,13 +42,8 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
-    
-    if (!self.currentContext) {
-        self.creator = [FRSUser MR_createEntity];
-    }
-    else {
-        self.creator = [FRSUser initWithProperties:Nil context:self.currentContext];
-    }
+    self.creator = [FRSUser MR_createEntity];
+    /*self.creator = [FRSUser MR_createEntity];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
         self.mediaType = @(1);
@@ -59,6 +54,31 @@
         if ([[dict objectForKey:@"owner"] objectForKey:@"avatar"] != [NSNull null]) {
             self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
         }
+    }*/
+    
+    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
+    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
+    
+    self.meta = @{@"image_height" : height, @"image_width" : width};
+}
+
+-(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
+    self.uid = dict[@"_id"];
+    self.visibility = dict[@"visiblity"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.imageUrl = dict[@"image"];
+    self.byline = dict[@"byline"];
+    self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.creator = [FRSUser MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    if ([dict objectForKey:@"video"] != [NSNull null]) {
+        self.mediaType = @(1);
+        self.videoUrl = [dict objectForKey:@"video"];
+    }
+    
+    if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
+        //self.creator = [FRSUser MR_createEntityInContext:context];
+        //self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
     }
     
     NSNumber *height = dict[@"meta"][@"height"] ? : @0;
@@ -70,7 +90,7 @@
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSPost *post = [FRSPost MR_createEntityInContext:context];
     post.currentContext = context;
-    [post configureWithDictionary:properties];
+    [post configureWithDictionary:properties context:context];
     return post;
 }
 

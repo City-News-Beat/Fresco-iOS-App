@@ -24,7 +24,9 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSUser *user = [FRSUser MR_createEntityInContext:context];
+    NSLog(@"MAKE IN CONTEXT");
+    
+    FRSUser *user = [FRSUser MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
     return user;
 }
 

@@ -43,22 +43,16 @@
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
+    save = TRUE;
     [self configureWithDictionary:dict];
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
     for (NSDictionary *dict in posts){
         
-        if (_currentContext) {
-            FRSPost *post = [FRSPost MR_createEntityInContext:_currentContext];
-            [post configureWithDictionary:dict];
-            if (dict[@"owner"]) {
-                if (!dict[@"owner"][@"avatar"]) {
-                    return;
-                }
-                post.creator.profileImage = dict[@"owner"][@"avatar"];
-            }
-            
+        if (save) {
+            FRSPost *post = [FRSPost MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+            [post configureWithDictionary:dict context:[NSManagedObjectContext MR_defaultContext]];
             [self addPostsObject:post];
         }
         else {

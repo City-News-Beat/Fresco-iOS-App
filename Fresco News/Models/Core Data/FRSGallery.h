@@ -15,7 +15,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSGallery : NSManagedObject<FRSManagedObject>
-
+{
+    BOOL save;
+}
 // Insert code here to declare functionality of your managed object subclass
 -(void)configureWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;

@@ -185,12 +185,11 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
-        [self cacheLocalData:galleries];
         if ([galleries count] == 0){
             return;
         }
         
-        
+        [self cacheLocalData:galleries];
         [self.spinner stopAnimating];
 
         for (NSDictionary *dict in galleries){
@@ -205,6 +204,7 @@
 }
 
 -(void)fetchLocalData {
+    return;
     [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
         
         NSLog(@"%@", results);
@@ -213,11 +213,15 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
+    
     NSMutableArray *toSave = [[NSMutableArray alloc] init];
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
-            [toSave addObject:[FRSGallery initWithProperties:gallery context:localContext]];
+            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+            [galleryToSave configureWithDictionary:gallery context:[NSManagedObjectContext MR_defaultContext]];
+            [toSave addObject:galleryToSave];
+            //[toSave addObject:[FRSGallery initWithProperties:gallery context:[NSManagedObjectContext MR_defaultContext]]];
         }
     }];
     
