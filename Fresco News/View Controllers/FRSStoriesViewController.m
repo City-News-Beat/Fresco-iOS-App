@@ -113,7 +113,6 @@
     
 }
 
-
 -(void)configurePullToRefresh {
     [super removeNavigationBarLine];
     
@@ -148,12 +147,7 @@
 -(void)searchStories {
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
-    
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.25;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [self.view.window.layer addAnimation:transition forKey:nil];
-    [self presentViewController:searchVC animated:NO completion:nil];
+    [self.navigationController pushViewController:searchVC animated:YES];
 }
 
 

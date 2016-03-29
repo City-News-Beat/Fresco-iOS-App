@@ -23,6 +23,7 @@
     [super viewDidLoad];
     [self configureNavigationBar];
     [self configureTableView];
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -32,13 +33,8 @@
 }
 
 -(void)dismiss{
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.25;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-//    transition.type = kCATransitionPush;
-//    transition.subtype = kCATransitionFromLeft;
-    [self.view.window.layer addAnimation:transition forKey:nil];
-    [self dismissViewControllerAnimated:NO completion:nil];
+
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)clear{
@@ -69,9 +65,9 @@
     self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
     
     [navBar addSubview:self.searchTextField];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.searchTextField becomeFirstResponder];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.searchTextField becomeFirstResponder];
+//    });
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
     
