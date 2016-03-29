@@ -21,6 +21,8 @@
 #import "Fresco.h"
 
 #import "FRSPersistence.h"
+#import "FRSCoreData.h"
+
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
@@ -65,6 +67,7 @@
     
     [self configureUI];
     [self addNotificationObservers];
+    [self fetchLocalData];
     
     // Do any additional setup after loading the view.
     
@@ -202,13 +205,26 @@
 }
 
 -(void)fetchLocalData {
-    
+    [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
+        
+        NSLog(@"%@", results);
+        
+    }];
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
+    NSMutableArray *toSave = [[NSMutableArray alloc] init];
+    
     for (NSDictionary *gallery in localData) {
-        [FRSGallery initWithProperties:gallery context:Nil];
+        
+        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+            [toSave addObject:[FRSGallery initWithProperties:gallery context:localContext]];
+        }];
     }
+    
+    [[FRSPersistence defaultStore] flushHighlightCacheSaving:toSave completion:^(NSManagedObjectContext *localContext) {
+        NSLog(@"SAVED AND FLUSHED OLD DATA");
+    }];
 }
 
 #pragma mark - UITableView DataSource
