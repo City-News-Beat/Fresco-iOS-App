@@ -200,6 +200,12 @@
 -(void)cacheAssignments {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         
+        NSArray *delete = [FRSAssignment MR_findAllInContext:localContext];
+        
+        for (FRSAssignment *assignment in delete) {
+            [assignment MR_deleteEntityInContext:localContext];
+        }
+        
         for (NSDictionary *dict in dictionaryRepresentations) {
             FRSAssignment *assignmentToSave = [FRSAssignment MR_createEntityInContext:localContext];
             [assignmentToSave configureWithDictionary:dict];

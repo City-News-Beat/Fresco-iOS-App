@@ -21,8 +21,8 @@
 #import "Fresco.h"
 
 #import "FRSPersistence.h"
-#import "FRSCoreData.h"
 
+#import "FRSCoreData.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
