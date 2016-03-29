@@ -156,7 +156,7 @@
 
 -(void)configureCoreDataStack{
     [MagicalRecord setupCoreDataStack];
-    [MagicalRecord setupAutoMigratingCoreDataStack];
+    //[MagicalRecord setupAutoMigratingCoreDataStack];
 }
 
 
