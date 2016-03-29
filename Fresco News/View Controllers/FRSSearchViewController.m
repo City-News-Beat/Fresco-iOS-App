@@ -23,7 +23,6 @@
     [super viewDidLoad];
     [self configureNavigationBar];
     [self configureTableView];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -56,7 +55,7 @@
     [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:dismissButton];
     
-    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 38, self.view.frame.size.width - 80, 30)];
+    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
     self.searchTextField.tintColor = [UIColor whiteColor];
     self.searchTextField.textColor = [UIColor whiteColor];
     self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
@@ -131,11 +130,6 @@
         [self showClearButton];
     }
 }
-
-//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-//    [self showClearButton];
-//    return YES;
-//}
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     [self hideClearButton];
@@ -338,7 +332,6 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    [self hideClearButton];
     [self.searchTextField resignFirstResponder];
 }
 
