@@ -178,8 +178,6 @@
     
     // make core data fetch
     [self fetchLocalData];
-    self.dataSource = [[NSMutableArray alloc] init];
-    self.highlights = [[NSMutableArray alloc] init];
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
@@ -203,6 +201,9 @@
 
 -(void)fetchLocalData {
     NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    _dataSource = [[NSMutableArray alloc] init];
+    _highlights = [[NSMutableArray alloc] init];
+    
     [_dataSource addObjectsFromArray:stored];
     [_highlights addObjectsFromArray:stored];
     
@@ -226,8 +227,6 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     
-    NSMutableArray *toSave = [[NSMutableArray alloc] init];
-    
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
             NSString *galleryID = [gallery objectForKey:@"_id"];
@@ -238,7 +237,6 @@
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
-            [toSave addObject:galleryToSave];
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"%d %@", contextDidSave, error);
