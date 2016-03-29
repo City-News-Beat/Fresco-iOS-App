@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype)postWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict;
-
+@property (nonatomic, weak) NSManagedObjectContext *currentContext;
 @end
 
 NS_ASSUME_NONNULL_END

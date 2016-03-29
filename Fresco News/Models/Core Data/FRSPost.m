@@ -41,7 +41,13 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
-    self.creator = [FRSUser MR_createEntity];
+    
+    if (!self.currentContext) {
+        self.creator = [FRSUser MR_createEntity];
+    }
+    else {
+        self.creator = [FRSUser initWithProperties:Nil context:self.currentContext];
+    }
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
         self.mediaType = @(1);
@@ -62,6 +68,7 @@
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSPost *post = [FRSPost MR_createEntityInContext:context];
+    post.currentContext = context;
     [post configureWithDictionary:properties];
     return post;
 }

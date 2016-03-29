@@ -23,6 +23,11 @@
     return user;
 }
 
++(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
+    FRSUser *user = [FRSUser MR_createEntityInContext:context];
+    return user;
+}
+
 
 
 
