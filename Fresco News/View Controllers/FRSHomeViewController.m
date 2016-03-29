@@ -204,9 +204,14 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
     [_dataSource addObjectsFromArray:stored];
     [_highlights addObjectsFromArray:stored];
+    
+    if ([_dataSource count] > 0) {
+        [self.spinner stopAnimating];
+    }
+    
     [self.tableView reloadData];
 }
 
