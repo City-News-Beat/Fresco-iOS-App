@@ -181,6 +181,10 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
+        
+        self.dataSource = [[NSMutableArray alloc] init];
+        self.highlights = [[NSMutableArray alloc] init];
+        
         if ([galleries count] == 0){
             return;
         }
@@ -201,6 +205,7 @@
 
 -(void)fetchLocalData {
     NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    
     _dataSource = [[NSMutableArray alloc] init];
     _highlights = [[NSMutableArray alloc] init];
     
