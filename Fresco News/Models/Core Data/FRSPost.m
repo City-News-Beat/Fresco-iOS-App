@@ -17,6 +17,7 @@
 #import <MagicalRecord/MagicalRecord.h>
 
 @implementation FRSPost
+@synthesize currentContext;
 
 // Insert code here to add functionality to your managed object subclass
 
