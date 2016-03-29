@@ -91,6 +91,8 @@
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
     
+    [self fetchLocalAssignments];
+    
     if (lastLocation) {
         [self locationUpdate:lastLocation];
     }
@@ -195,6 +197,27 @@
     }];
     
     return returnValue;
+}
+
+-(void)fetchLocalAssignments {
+    NSArray *assignments = [FRSAssignment MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSMutableArray *toShow = [[NSMutableArray alloc] init];
+    self.assignmentIDs = [[NSMutableArray alloc] init];
+    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        for (FRSAssignment *assignment in assignments) {
+            if ([assignment.expirationDate timeIntervalSinceNow] > 0) {
+                [toShow addObject:assignment];
+                [self.assignmentIDs addObject:assignment.uid];
+            }
+            else {
+                // delete
+                [assignment MR_deleteEntityInContext:localContext];
+            }
+        }
+        self.assignments = assignments;
+        [self configureAnnotationsForMap];
+    }];
 }
 
 -(void)cacheAssignments {
