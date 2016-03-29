@@ -51,8 +51,8 @@
     for (NSDictionary *dict in posts){
         
         if (save) {
-            FRSPost *post = [FRSPost MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
-            [post configureWithDictionary:dict context:[NSManagedObjectContext MR_defaultContext]];
+            FRSPost *post = [FRSPost MR_createEntityInContext:_currentContext];
+            [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];
         }
         else {

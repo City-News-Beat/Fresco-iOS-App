@@ -205,7 +205,9 @@
 
 -(void)fetchLocalData {
     NSArray *stored = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    NSLog(@"%@", stored);
+    [_dataSource addObjectsFromArray:stored];
+    [_highlights addObjectsFromArray:stored];
+    [self.tableView reloadData];
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
