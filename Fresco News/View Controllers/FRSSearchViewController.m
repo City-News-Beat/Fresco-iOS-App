@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;
+@property (strong, nonatomic) UIButton *clearButton;
 
 @end
 
@@ -30,6 +31,16 @@
     [self.searchTextField resignFirstResponder];
 }
 
+-(void)dismiss{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)clear{
+    self.searchTextField.text = @"";
+    [self hideClearButton];
+}
+
+#pragma mark - UI
 -(void)configureNavigationBar{
     
     UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
@@ -43,40 +54,82 @@
     [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:dismissButton];
     
-    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 38, self.view.frame.size.width - 80, 30)];
+    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
     self.searchTextField.tintColor = [UIColor whiteColor];
     self.searchTextField.textColor = [UIColor whiteColor];
     self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     self.searchTextField.delegate = self;
     self.searchTextField.returnKeyType = UIReturnKeySearch;
+    self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
+    
     [navBar addSubview:self.searchTextField];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.searchTextField becomeFirstResponder];
     });
     
-    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    clearButton.frame = CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24);
-    [clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
-    clearButton.tintColor = [UIColor whiteColor];
-    [clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
-    [navBar addSubview:clearButton];
-}
-
--(void)dismiss{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
     
+    self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.clearButton.frame = CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24);
+    [self.clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+    self.clearButton.tintColor = [UIColor whiteColor];
+    [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
+    self.clearButton.alpha = 0;
+    [navBar addSubview:self.clearButton];
 }
 
-
--(void)clear{
-    self.searchTextField.text = @"";
+-(void)showClearButton {
+    
+    //Scale clearButton up with a little jiggle
+    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+            self.clearButton.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
+    
+    //Fade in clearButton over total duration of scale
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.clearButton.alpha = 1;
+    } completion:nil];
 }
 
+-(void)hideClearButton {
+    
+    //Scale clearButton down with anticipation
+    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+            self.clearButton.transform = CGAffineTransformMakeScale(0.0001, 0.0001); //iOS does not scale to (0,0) for some reason :(
+            self.clearButton.alpha = 0;
+        } completion:nil];
+    }];
+}
 
 #pragma mark - UITextField Delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+-(void)textFieldDidChange:(NSNotification *)notification {
+    if ((![self.searchTextField.text isEqual: @""]) && (self.clearButton.alpha == 0)) {
+        [self showClearButton];
+    } else if ([self.searchTextField.text isEqual:@""]){
+        [self hideClearButton];
+    }
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (![self.searchTextField.text isEqualToString: @""]) {
+        [self showClearButton];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    [self hideClearButton];
 }
 
 #pragma mark - UITableView Datasource
@@ -273,13 +326,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
     [self.searchTextField resignFirstResponder];
-    
 }
 
-
+#pragma mark - dealloc
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 
 @end

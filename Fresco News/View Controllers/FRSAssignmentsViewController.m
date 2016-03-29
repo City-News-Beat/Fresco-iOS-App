@@ -310,11 +310,14 @@
     if (!annotationView) {
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
+        UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+        container.backgroundColor = [UIColor clearColor];
+       /* container.layer.borderColor = [UIColor redColor].CGColor;
+        container.layer.borderWidth = 1.0f;*/
         
-        UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
+        UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(25.5, 25.5, 24, 24)];
         whiteView.layer.cornerRadius = 12;
         whiteView.backgroundColor = [UIColor whiteColor];
-        [annotationView addSubview:whiteView];
         
         whiteView.layer.shadowColor = [UIColor blackColor].CGColor;
         whiteView.layer.shadowOffset = CGSizeMake(0, 2);
@@ -328,8 +331,11 @@
         yellowView.backgroundColor = [UIColor frescoOrangeColor];
         
         [whiteView addSubview:yellowView];
-                
+        [container addSubview:whiteView];
+        [annotationView addSubview:container];
+
         annotationView.enabled = YES;
+        annotationView.frame = CGRectMake(0, 0, 75, 75);
     }
     
     return annotationView;
@@ -394,7 +400,9 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    
+    NSLog(@"TEST");
+    [self.mapView deselectAnnotation:view.annotation animated:NO];
+
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
     
     self.assignmentTitle = assAnn.title;
@@ -410,7 +418,6 @@
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
     
-    [self.mapView deselectAnnotation:view.annotation animated:NO];
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {

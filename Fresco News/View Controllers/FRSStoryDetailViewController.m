@@ -20,13 +20,15 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
     [self setupTableView];
+    [self configureNavigationBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [super.navigationController setNavigationBarHidden:NO animated:NO];
+
+    [self.navigationController setNavigationBarHidden:NO animated:NO];    
 }
 
 -(void)setupTableView {
@@ -36,13 +38,20 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.view.backgroundColor = self.galleriesTable.backgroundColor;
 }
 
+-(void)configureNavigationBar {
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
+}
+
+-(void)dismissDetail{
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    //NSLog(@"%@", self.stories);
     return self.stories.count;
 }
 

@@ -90,10 +90,15 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
 #pragma mark -  UI
 
 -(void)configureNavigationBar {
-    self.navigationItem.title = @"Stories";
+    self.navigationItem.title = @"";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
@@ -105,6 +110,7 @@
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
+    
 }
 
 
@@ -140,10 +146,18 @@
 
 #pragma mark - Search Methods
 -(void)searchStories {
-    //    [self animateSearch];
     
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
-    [self presentViewController:searchVC animated:YES completion:nil];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 1;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromRight;
+    [self.view.window.layer addAnimation:transition forKey:nil];
+    
+    [self presentViewController:searchVC animated:NO completion:nil];
+    
 }
 
 
@@ -316,6 +330,12 @@
         [cell configureCell];
     }
 }
+
+//Disables nav bar hide
+//#pragma mark - UIScrollViewDelegate
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    self.searchButton.alpha = 0;
+//}
 
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
