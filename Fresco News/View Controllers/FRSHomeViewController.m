@@ -127,14 +127,14 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = FALSE;
-        [self.tableView reloadData];
+       // [self.tableView reloadData];
     }
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = FALSE;
-        [self.tableView reloadData];
+       // [self.tableView reloadData];
     }
 }
 
@@ -195,8 +195,9 @@
             [gallery configureWithDictionary:dict];
             [self.dataSource addObject:gallery];
             [self.highlights addObject:gallery];
-            [self.tableView reloadData];
         }
+        
+        [self.tableView reloadData];
     }];
 }
 
@@ -206,8 +207,7 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     for (NSDictionary *gallery in localData) {
-        FRSGallery *galleryToSave = [FRSGallery initWithProperties:gallery context:Nil];
-        NSLog(@"%@", galleryToSave);
+        [FRSGallery initWithProperties:gallery context:Nil];
     }
 }
 
@@ -284,6 +284,7 @@
                 [self.highlights addObject:gallery];
             }
             
+            [self.tableView reloadData];
             dispatch_async(dispatch_get_main_queue(), ^{
                 needsUpdate = TRUE;
             });
