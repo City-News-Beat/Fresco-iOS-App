@@ -35,6 +35,7 @@
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSGallery *gallery = [FRSGallery MR_createEntityInContext:context];
+    gallery.currentContext = context;
     [gallery configureWithDictionary:properties];
     return gallery;
 }

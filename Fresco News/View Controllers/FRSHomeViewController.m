@@ -215,12 +215,11 @@
 -(void)cacheLocalData:(NSArray *)localData {
     NSMutableArray *toSave = [[NSMutableArray alloc] init];
     
-    for (NSDictionary *gallery in localData) {
-        
-        [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        for (NSDictionary *gallery in localData) {
             [toSave addObject:[FRSGallery initWithProperties:gallery context:localContext]];
-        }];
-    }
+        }
+    }];
     
     [[FRSPersistence defaultStore] flushHighlightCacheSaving:toSave completion:^(NSManagedObjectContext *localContext) {
         NSLog(@"SAVED AND FLUSHED OLD DATA");
