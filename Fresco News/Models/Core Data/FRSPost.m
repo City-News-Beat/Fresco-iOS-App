@@ -69,7 +69,7 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
-    self.creator = [FRSUser MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+    self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
         self.mediaType = @(1);
@@ -78,7 +78,7 @@
     
     if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
         //self.creator = [FRSUser MR_createEntityInContext:context];
-        //self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
+        self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
     }
     
     NSNumber *height = dict[@"meta"][@"height"] ? : @0;

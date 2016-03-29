@@ -204,12 +204,8 @@
 }
 
 -(void)fetchLocalData {
-    return;
-    [[FRSPersistence defaultStore] pullCacheWithType:FRSManagedObjectTypeGallery predicate:Nil sortDescriptor:Nil completion:^(NSArray *results, NSManagedObjectContext *context, NSError *error, BOOL success) {
-        
-        NSLog(@"%@", results);
-        
-    }];
+    NSArray *stored = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSLog(@"%@", stored);
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
@@ -218,15 +214,12 @@
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
-            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
-            [galleryToSave configureWithDictionary:gallery context:[NSManagedObjectContext MR_defaultContext]];
+            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
+            [galleryToSave configureWithDictionary:gallery context:localContext];
             [toSave addObject:galleryToSave];
-            //[toSave addObject:[FRSGallery initWithProperties:gallery context:[NSManagedObjectContext MR_defaultContext]]];
         }
-    }];
-    
-    [[FRSPersistence defaultStore] flushHighlightCacheSaving:toSave completion:^(NSManagedObjectContext *localContext) {
-        NSLog(@"SAVED AND FLUSHED OLD DATA");
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"%d %@", contextDidSave, error);
     }];
 }
 
