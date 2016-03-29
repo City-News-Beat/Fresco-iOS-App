@@ -54,12 +54,13 @@
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [container addSubview:backButton];
     backButton.tintColor = [UIColor whiteColor];
-    backButton.bounds = CGRectMake(-10, 0, 24, 24);
+    backButton.frame = CGRectMake(-4, 5, 24, 24);
     [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
-    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     
