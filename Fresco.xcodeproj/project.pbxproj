@@ -119,6 +119,7 @@
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
 		D01F921F08AC04F58AB14B31 /* Pods_Fresco_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24BD02930A66131EB6AED7E3 /* Pods_Fresco_WatchKit_Extension.framework */; };
+		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
 		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
 		D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */ = {isa = PBXBuildFile; fileRef = D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
@@ -414,6 +415,8 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
+		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
+		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
 		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
 		D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMultipartTask.m; sourceTree = "<group>"; };
 		D41365AF1CA32DC0004FE848 /* FRSStoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryDetailViewController.h; sourceTree = "<group>"; };
@@ -1032,6 +1035,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		D40FA31C1CAAFB2500A4FE47 /* Defaults */ = {
+			isa = PBXGroup;
+			children = (
+				D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */,
+				D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */,
+			);
+			name = Defaults;
+			sourceTree = "<group>";
+		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1249,6 +1261,7 @@
 			children = (
 				D4F91A4A1C8B568B0078BF15 /* FRSPersistence.h */,
 				D4F91A4B1C8B568B0078BF15 /* FRSPersistence.m */,
+				D40FA31C1CAAFB2500A4FE47 /* Defaults */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1882,6 +1895,7 @@
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
+				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
 				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
