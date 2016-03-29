@@ -150,14 +150,10 @@
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
     
     CATransition *transition = [CATransition animation];
-    transition.duration = 1;
+    transition.duration = 0.25;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromRight;
     [self.view.window.layer addAnimation:transition forKey:nil];
-    
     [self presentViewController:searchVC animated:NO completion:nil];
-    
 }
 
 
