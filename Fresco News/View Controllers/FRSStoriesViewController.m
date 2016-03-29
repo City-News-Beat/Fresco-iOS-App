@@ -243,7 +243,14 @@
 -(void)cacheLocalData:(NSArray *)localData {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *story in localData) {
+            NSString *storyID = [story objectForKey:@"_id"];
             
+            if ([self storyExists:storyID]) {
+                continue;
+            }
+            
+            FRSStory *storySave = [FRSStory MR_createEntityInContext:localContext];
+            [storySave configureWithDictionary:story];
         }
     }];
 }
