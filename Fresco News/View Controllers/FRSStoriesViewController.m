@@ -92,7 +92,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark -  UI

@@ -27,8 +27,24 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [super.navigationController setNavigationBarHidden:NO animated:NO];
+
+//    [self.navigationController viewWillAppear:NO];
+    
+//    self.navigationController.navigationBar.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, 64);
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+//    [[[self parentViewController] navigationController] setNavigationBarHidden:NO animated:YES];
+    
 }
+
+//-(void)viewWillDisappear:(BOOL)animated {
+//    if (self.navigationController.topViewController == self) {
+//        [self.navigationController setNavigationBarHidden:NO animated:animated];
+//    }
+//}
+
+//-(void)viewWillLayoutSubviews{
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
+//}
 
 -(void)setupTableView {
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
@@ -41,7 +57,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
-    
 }
 
 -(void)dismissDetail{

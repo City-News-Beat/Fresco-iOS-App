@@ -35,7 +35,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 -(void)clear{
     self.searchTextField.text = @"";
     [self hideClearButton];
@@ -95,8 +94,6 @@
         self.clearButton.alpha = 1;
     } completion:nil];
 }
-
-
 
 -(void)hideClearButton {
     
@@ -328,7 +325,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
