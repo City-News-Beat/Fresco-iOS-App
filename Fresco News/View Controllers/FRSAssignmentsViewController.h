@@ -17,6 +17,7 @@
     BOOL isScrolling;
     
     NSTimer *scrollTimer;
+    BOOL notFirstFetch;
 }
 -(void)setInitialMapRegion;
 

@@ -179,7 +179,11 @@
         
         self.isFetching = NO;
         
-        [self cacheAssignments];
+        if (!notFirstFetch) {
+            notFirstFetch = TRUE;
+            [self cacheAssignments];
+        }
+        
         [self configureAnnotationsForMap];
     }];
 }
