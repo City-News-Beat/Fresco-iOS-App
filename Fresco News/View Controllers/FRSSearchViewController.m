@@ -44,13 +44,6 @@
 
 #pragma mark - UI
 -(void)configureNavigationBar{
-    
-//    UIImage *image = [UIImage imageNamed:@"back-arrow-light"];
-//    self.navigationController.navigationItem.backBarButtonItem.image = image;
-    
-    
-//    UIImage *image = [[UIImage imageNamed:@"back-arrow-light"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 30, 30) resizingMode:UIImageResizing];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:image forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -64,17 +57,16 @@
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     
-    
     UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     navBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:navBar];
     
-    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
-    [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
-    dismissButton.tintColor = [UIColor whiteColor];
-    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    [navBar addSubview:dismissButton];
+//    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
+//    [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
+//    dismissButton.tintColor = [UIColor whiteColor];
+//    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+//    [navBar addSubview:dismissButton];
     
     self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
     self.searchTextField.tintColor = [UIColor whiteColor];

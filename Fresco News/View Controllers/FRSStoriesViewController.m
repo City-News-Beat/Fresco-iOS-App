@@ -92,7 +92,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark -  UI
@@ -329,6 +328,7 @@
 
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     [self.navigationController pushViewController:detailView animated:YES];
 }
