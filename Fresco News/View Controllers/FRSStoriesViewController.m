@@ -164,11 +164,11 @@
 
 -(void)fetchStories {
     [self fetchLocalData];
-    self.stories = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
 
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
-
+        self.stories = [[NSMutableArray alloc] init];
+        
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");
