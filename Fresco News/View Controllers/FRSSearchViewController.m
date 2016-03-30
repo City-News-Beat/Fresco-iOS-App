@@ -56,7 +56,6 @@
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
-    
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.navigationItem.titleView = titleView;
     
@@ -77,33 +76,9 @@
     [self.clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     self.clearButton.tintColor = [UIColor whiteColor];
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
-    self.clearButton.alpha = 1;
+    self.clearButton.alpha = 0;
     
     [titleView addSubview:self.clearButton];
-    
-    
-    
-//    self.navigationController.navigationItem.titleView = self.searchTextField;
-//    self.navigationController.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
-
-//    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
-//    [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
-//    dismissButton.tintColor = [UIColor whiteColor];
-//    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-//    [navBar addSubview:dismissButton];
-    
-//    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
-//    self.searchTextField.tintColor = [UIColor whiteColor];
-//    self.searchTextField.textColor = [UIColor whiteColor];
-//    self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
-//    self.searchTextField.delegate = self;
-//    self.searchTextField.returnKeyType = UIReturnKeySearch;
-//    self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
-//    
-//    [navBar addSubview:self.searchTextField];
-
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
 
 }
 

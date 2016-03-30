@@ -24,7 +24,6 @@
 @property (strong, nonatomic) NSMutableArray *stories;
 
 @property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UIButton *searchButton;
 @property (strong, nonatomic) UITextField *searchTextField;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (nonatomic) BOOL firstTime;
@@ -109,7 +108,6 @@
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
-    
 }
 
 -(void)configurePullToRefresh {
@@ -320,11 +318,13 @@
     }
 }
 
-//Disables nav bar hide
-//#pragma mark - UIScrollViewDelegate
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    self.searchButton.alpha = 0;
-//}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [super scrollViewDidScroll:scrollView];
+    
+    self.navigationItem.rightBarButtonItem.customView.alpha = 0;
+    
+    NSLog(@"contentOffset.y = %f", scrollView.contentOffset.y);
+}
 
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
