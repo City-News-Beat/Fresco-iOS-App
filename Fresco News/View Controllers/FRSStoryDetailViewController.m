@@ -120,6 +120,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
+    
+    self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
+    self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
