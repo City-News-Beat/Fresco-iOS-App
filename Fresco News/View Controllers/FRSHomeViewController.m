@@ -251,10 +251,9 @@
             [temp addObject:galleryToSave];
         }
         
-        self.dataSource = [temp mutableCopy];
-        self.highlights = [temp mutableCopy];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
+            self.highlights = [[NSMutableArray alloc] initWithArray:temp];
             [self.tableView reloadData];
         });
         
@@ -273,7 +272,6 @@
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"Flush: %d %@", contextDidSave, error);
-
     }];
 }
 
