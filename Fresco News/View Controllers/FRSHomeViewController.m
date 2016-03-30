@@ -254,7 +254,9 @@
         self.dataSource = [temp mutableCopy];
         self.highlights = [temp mutableCopy];
         
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"Cache: %d %@", contextDidSave, error);
@@ -266,7 +268,7 @@
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (FRSGallery *gallery in pulledFromCache) {
             if (![self.dataSource containsObject:gallery]) {
-                [gallery MR_deleteEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+                [gallery MR_deleteEntityInContext:localContext];
             }
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
