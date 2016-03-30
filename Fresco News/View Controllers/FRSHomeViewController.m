@@ -182,24 +182,12 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
-        
-        self.dataSource = [[NSMutableArray alloc] init];
-        self.highlights = [[NSMutableArray alloc] init];
-        
         if ([galleries count] == 0){
             return;
         }
         
         [self cacheLocalData:galleries];
         [self.spinner stopAnimating];
-
-        for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
-            [self.dataSource addObject:gallery];
-            [self.highlights addObject:gallery];
-        }
-        
         [self.tableView reloadData];
     }];
 }
@@ -220,7 +208,7 @@
     [self.tableView reloadData];
 }
 
--(BOOL)galleryExists:(NSString *)galleryID {
+-(NSInteger)galleryExists:(NSString *)galleryID {
     for (FRSGallery *gallery in self.dataSource) {
         NSString *uid = gallery.uid;
         if ([uid isEqualToString:galleryID]) {
@@ -228,25 +216,46 @@
         }
     }
     
-    return FALSE;
+    return -1;
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
+    
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    if (!self.dataSource) {
+        self.dataSource = [[NSMutableArray alloc] init];
+        self.highlights = [[NSMutableArray alloc] init];
+    }
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
             NSString *galleryID = [gallery objectForKey:@"_id"];
             
-            if ([self galleryExists:galleryID]) {
+            NSInteger index = [self galleryExists:galleryID];
+            
+            if (index > -1) {
+                FRSGallery *gallerySaved = [self.dataSource objectAtIndex:index];
+                [temp addObject:gallerySaved];
                 continue;
             }
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
+            [temp addObject:galleryToSave];
         }
+        
+        self.dataSource = temp;
+        self.highlights = temp;
+        
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"%d %@", contextDidSave, error);
+        [self flushCache:localData];
     }];
+}
+
+-(void)flushCache:(NSArray *)received {
+    
 }
 
 #pragma mark - UITableView DataSource

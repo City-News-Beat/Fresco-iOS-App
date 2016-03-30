@@ -296,6 +296,9 @@
 }
 
 -(void)addShadowToLabel:(UILabel*)label {
+    if (!label.text) {
+        return;
+    }
     
     NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:label.text];
     NSRange range = NSMakeRange(0, [attString length]);
