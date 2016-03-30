@@ -91,8 +91,12 @@
     
     if (animated){
         
-        if (self.animatingShow) return;
-        if (!self.scrollDirectionChanged) return;
+        if (self.animatingShow) {
+            return;
+        }
+        if (!self.scrollDirectionChanged) {
+            return;
+        }
         
         self.animatingShow = YES;
         self.animatingHide = NO;
@@ -121,6 +125,7 @@
 }
 
 -(void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated {
+    
     CGRect toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
     
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
@@ -131,8 +136,12 @@
     
     if (animated){
         
-        if (self.animatingHide) return;
-        if (!self.scrollDirectionChanged) return;
+        if (self.animatingShow) {
+            return;
+        }
+        if (!self.scrollDirectionChanged) {
+            return;
+        }
         
         self.animatingHide = YES;
         self.animatingShow = NO;
