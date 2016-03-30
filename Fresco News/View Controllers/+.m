@@ -186,19 +186,23 @@
     NSInteger difference = currentContentOffY - self.prevContentOffY;
     
     if (difference < 0){
-        if (self.scrollDirection == UIScrollViewScrollDirectionDown || !self.scrollDirection)
+        if (self.scrollDirection == UIScrollViewScrollDirectionDown || !self.scrollDirection) {
             self.scrollDirectionChanged = YES;
-        else
+        }
+        else {
             self.scrollDirectionChanged = NO;
+        }
         
         self.scrollDirection = UIScrollViewScrollDirectionUp;
     }
     else if (difference> 0){
         
-        if (self.scrollDirection == UIScrollViewScrollDirectionUp || !self.scrollDirection)
+        if (self.scrollDirection == UIScrollViewScrollDirectionUp || !self.scrollDirection) {
             self.scrollDirectionChanged = YES;
-        else
+        }
+        else {
             self.scrollDirectionChanged = NO;
+        }
         
         self.scrollDirection = UIScrollViewScrollDirectionDown;
     }
