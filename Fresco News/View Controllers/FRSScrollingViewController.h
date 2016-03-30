@@ -19,6 +19,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (strong, nonatomic) UITableView *tableView;
 
+@property (strong, nonatomic) UIBarButtonItem *search;
+
 @property (nonatomic) UIScrollViewScrollDirection scrollDirection;
 
 @property (nonatomic) NSInteger prevContentOffY;

@@ -53,8 +53,12 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     NSInteger currentContentOffY = scrollView.contentOffset.y ;
-    if (currentContentOffY > scrollView.contentSize.height - scrollView.frame.size.height) return; //The user is scrolling down, and is pulling past the furthest point.
-    else if (currentContentOffY <= 0) return;
+    if (currentContentOffY > scrollView.contentSize.height - scrollView.frame.size.height) {
+        return; //The user is scrolling down, and is pulling past the furthest point.
+    }
+    else if (currentContentOffY <= 0) {
+        return;
+    }
     
     NSInteger difference = currentContentOffY - self.prevContentOffY;
     
@@ -84,7 +88,10 @@
     if (self.actionBarVisible) height -= 44;
     
     CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
-    
+    if (self.search) {
+        self.navigationItem.rightBarButtonItem = self.search;
+        self.search = Nil;
+    }
     if (animated){
         
         if (self.animatingShow) return;
@@ -97,6 +104,7 @@
             self.navigationController.navigationBar.frame = toFrame;
             scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 1.0;
+            
             
             if (self.shouldHaveBackButton){
                 [super configureBackButtonAnimated:YES];
@@ -132,11 +140,14 @@
         
         self.animatingHide = YES;
         self.animatingShow = NO;
+        self.search = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = Nil;
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
             scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 0.0;
+            
             if (self.shouldHaveBackButton){
                 [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:YES];
             }

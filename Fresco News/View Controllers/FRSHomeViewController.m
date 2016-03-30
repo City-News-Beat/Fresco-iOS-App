@@ -171,6 +171,7 @@
     
     // registering nib for bottom cell
     
+    
     [self.view addSubview:self.tableView];
 }
 
