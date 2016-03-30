@@ -203,10 +203,9 @@
     [_highlights addObjectsFromArray:stored];
     
     if ([_dataSource count] > 0) {
+        [self.tableView reloadData];
         [self.spinner stopAnimating];
     }
-    
-    [self.tableView reloadData];
 }
 
 -(NSInteger)galleryExists:(NSString *)galleryID {
@@ -248,7 +247,10 @@
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
-            [temp addObject:galleryToSave];
+            NSLog(@"%@", galleryToSave);
+            FRSGallery *use = [FRSGallery MR_createEntity];
+            [use configureWithDictionary:gallery];
+            [temp addObject:use];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -290,7 +292,6 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
         
