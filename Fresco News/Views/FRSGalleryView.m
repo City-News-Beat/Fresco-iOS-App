@@ -265,6 +265,9 @@
 }
 
 -(void)updateLabels{
+    if (self.orderedPosts.count == 0)
+        return;
+    
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
     self.nameLabel.text = post.byline;
