@@ -152,20 +152,21 @@
 
 -(void)fetchStories {
     [self fetchLocalData];
-    self.stories = [[NSMutableArray alloc] init];
     __block int const numToFetch = 12;
 
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
-
+        self.stories = [[NSMutableArray alloc] init];
+        
         if (!stories.count){
             if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
             else NSLog(@"No error fetching stories but the request returned zero results");
             return;
         }
         
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self cacheLocalData:stories];
+
             for (NSDictionary *storyDict in stories){
-                FRSStory *story; // = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+                FRSStory *story; 
                 
                 [self.spinner stopAnimating];
                 
@@ -181,11 +182,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.tableView reloadData];
                 });
-                
-                [self cacheLocalData];
             }
-        //});
-        
     }];
 }
 
@@ -219,19 +216,43 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
-            
-            [self cacheLocalData];
         }
     }];
-
 }
 
 -(void)fetchLocalData {
-    
+    NSArray *stories = [FRSStory MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    self.stories = [stories mutableCopy];
+    NSLog(@"%@", stories);
+    [self.tableView reloadData];
 }
 
--(void)cacheLocalData {
+-(void)cacheLocalData:(NSArray *)localData {
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        for (NSDictionary *story in localData) {
+            NSString *storyID = [story objectForKey:@"_id"];
+            
+            if ([self storyExists:storyID]) {
+                continue;
+            }
+            
+            FRSStory *storySave = [FRSStory MR_createEntityInContext:localContext];
+            [storySave configureWithDictionary:story];
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"%d %@", contextDidSave, error);
+    }];
+}
+
+-(BOOL)storyExists:(NSString *)storyID {
     
+    for (FRSStory *story in self.stories) {
+        if ([story.uid isEqualToString:storyID]) {
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 
@@ -239,7 +260,6 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return (self.stories.count == 0) ? 0 : self.stories.count+1;
-    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

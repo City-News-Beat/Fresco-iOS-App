@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)configureWithDictionary:(NSDictionary *)dict;
 
 -(NSInteger)heightForStory;
-
 @end
 
 NS_ASSUME_NONNULL_END
