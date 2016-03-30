@@ -43,32 +43,24 @@
 }
 
 #pragma mark - UI
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     [container addSubview:backButton];
     backButton.tintColor = [UIColor whiteColor];
-    backButton.frame = CGRectMake(-4, 5, 24, 24);
+    backButton.frame = CGRectMake(-3, 0, 24, 24);
     [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     
-    UIView *navBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
-    navBar.backgroundColor = [UIColor frescoOrangeColor];
-    [self.view addSubview:navBar];
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
+    self.navigationItem.titleView = titleView;
     
-//    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
-//    [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
-//    dismissButton.tintColor = [UIColor whiteColor];
-//    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-//    [navBar addSubview:dismissButton];
-    
-    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
+    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(19, 17, self.view.frame.size.width - 80, 30)];
     self.searchTextField.tintColor = [UIColor whiteColor];
     self.searchTextField.textColor = [UIColor whiteColor];
     self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
@@ -76,17 +68,43 @@
     self.searchTextField.returnKeyType = UIReturnKeySearch;
     self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
     
-    [navBar addSubview:self.searchTextField];
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
     
+    [titleView addSubview:self.searchTextField];
+    
     self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.clearButton.frame = CGRectMake(self.view.frame.size.width - 36, navBar.frame.size.height -34, 24, 24);
+    self.clearButton.frame = CGRectMake(self.view.frame.size.width - 80, 20, 24, 24);
     [self.clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
     self.clearButton.tintColor = [UIColor whiteColor];
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
-    self.clearButton.alpha = 0;
-    [navBar addSubview:self.clearButton];
+    self.clearButton.alpha = 1;
+    
+    [titleView addSubview:self.clearButton];
+    
+    
+    
+//    self.navigationController.navigationItem.titleView = self.searchTextField;
+//    self.navigationController.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
+
+//    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    dismissButton.frame = CGRectMake(12, navBar.frame.size.height -34, 24, 24);
+//    [dismissButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
+//    dismissButton.tintColor = [UIColor whiteColor];
+//    [dismissButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+//    [navBar addSubview:dismissButton];
+    
+//    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(64, navBar.frame.size.height - 36, self.view.frame.size.width - 80, 30)];
+//    self.searchTextField.tintColor = [UIColor whiteColor];
+//    self.searchTextField.textColor = [UIColor whiteColor];
+//    self.searchTextField.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+//    self.searchTextField.delegate = self;
+//    self.searchTextField.returnKeyType = UIReturnKeySearch;
+//    self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{ NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.3], NSFontAttributeName : [UIFont systemFontOfSize:17 weight:UIFontWeightMedium] }];
+//    
+//    [navBar addSubview:self.searchTextField];
+
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:self.searchTextField];
+
 }
 
 -(void)showClearButton {
@@ -148,7 +166,7 @@
 -(void)configureTableView{
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
