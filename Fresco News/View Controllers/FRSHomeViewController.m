@@ -225,7 +225,6 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     
-    NSMutableArray *temp = [[NSMutableArray alloc] init];
     
     if (!self.dataSource) {
         self.dataSource = [[NSMutableArray alloc] init];
@@ -233,6 +232,8 @@
     }
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        NSMutableArray *temp = [[NSMutableArray alloc] init];
+
         for (NSDictionary *gallery in localData) {
             NSString *galleryID = [gallery objectForKey:@"_id"];
             
@@ -249,8 +250,10 @@
             [temp addObject:galleryToSave];
         }
         
-        self.dataSource = temp;
-        self.highlights = temp;
+        self.dataSource = [temp mutableCopy];
+        self.highlights = [temp mutableCopy];
+        
+        [self.tableView reloadData];
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"%d %@", contextDidSave, error);
