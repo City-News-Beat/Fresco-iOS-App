@@ -110,7 +110,6 @@
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
-    
 }
 
 
