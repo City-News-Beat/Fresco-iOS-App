@@ -209,11 +209,15 @@
 }
 
 -(NSInteger)galleryExists:(NSString *)galleryID {
+    NSInteger index = 0;
+    
     for (FRSGallery *gallery in self.dataSource) {
         NSString *uid = gallery.uid;
         if ([uid isEqualToString:galleryID]) {
-            return TRUE;
+            return index;
         }
+        
+        index++;
     }
     
     return -1;
