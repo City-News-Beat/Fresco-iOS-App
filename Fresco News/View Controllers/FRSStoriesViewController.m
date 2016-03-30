@@ -240,6 +240,7 @@
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"%d %@", contextDidSave, error);
+        [self flushCache:localData]; // empty non-remote stories (oos)
     }];
 }
 
@@ -281,6 +282,10 @@
     
     FRSStory *story = self.stories[indexPath.row];
     return [story heightForStory];
+}
+
+-(void)flushCache:(NSArray *)nonLocalData {
+    //
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
