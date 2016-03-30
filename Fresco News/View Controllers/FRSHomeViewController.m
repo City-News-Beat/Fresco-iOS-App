@@ -194,6 +194,7 @@
 
 -(void)fetchLocalData {
     NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    pulledFromCache = stored;
     
     _dataSource = [[NSMutableArray alloc] init];
     _highlights = [[NSMutableArray alloc] init];
@@ -256,13 +257,22 @@
         [self.tableView reloadData];
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"%d %@", contextDidSave, error);
+        NSLog(@"Cache: %d %@", contextDidSave, error);
         [self flushCache:localData];
     }];
 }
 
 -(void)flushCache:(NSArray *)received {
-    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        for (FRSGallery *gallery in pulledFromCache) {
+            if (![self.dataSource containsObject:gallery]) {
+                [gallery MR_deleteEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+            }
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"Flush: %d %@", contextDidSave, error);
+
+    }];
 }
 
 #pragma mark - UITableView DataSource

@@ -12,5 +12,7 @@
 {
     BOOL delayClear;
     BOOL needsUpdate;
+    
+    NSArray *pulledFromCache;
 }
 @end
