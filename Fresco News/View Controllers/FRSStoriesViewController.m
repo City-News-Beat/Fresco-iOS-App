@@ -223,7 +223,6 @@
 -(void)fetchLocalData {
     NSArray *stories = [FRSStory MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
     self.stories = [stories mutableCopy];
-    NSLog(@"%@", stories);
     [self.tableView reloadData];
 }
 
