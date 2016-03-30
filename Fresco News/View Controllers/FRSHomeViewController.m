@@ -268,7 +268,7 @@
 -(void)flushCache:(NSArray *)received {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (FRSGallery *gallery in pulledFromCache) {
-            if (![self.dataSource containsObject:gallery]) {
+            if (![self galleryExists:gallery.uid]) {
                 [gallery MR_deleteEntityInContext:localContext];
             }
         }
