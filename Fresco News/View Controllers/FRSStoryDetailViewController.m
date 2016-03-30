@@ -27,7 +27,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
+    
     [self.navigationController setNavigationBarHidden:NO animated:NO];    
 }
 
@@ -35,12 +35,24 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.view.backgroundColor = self.galleriesTable.backgroundColor;
+    self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 -(void)configureNavigationBar {
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    label.text = [self.story.title uppercaseString];
+    label.font = [UIFont notaBoldWithSize:17];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor whiteColor];
+    
+    [self.navigationItem setTitleView:label];
+
 }
 
 -(void)dismissDetail{
@@ -64,6 +76,16 @@ static NSString *galleryCell = @"GalleryCellReuse";
     FRSGalleryCell *cell = (FRSGalleryCell *)[tableView dequeueReusableCellWithIdentifier:galleryCell];
     
     return cell;
+}
+
+-(void)viewDidLayoutSubviews {
+    if ([self.galleriesTable respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.galleriesTable setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([self.galleriesTable respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.galleriesTable setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,7 +112,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
     cell.shareBlock = ^void(NSArray *sharedContent) {
         [weakSelf showShareSheetWithContent:sharedContent];
     };
-
+    
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
@@ -136,6 +165,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     FRSGallery *gallery = [self.stories objectAtIndex:indexPath.row];
     return [gallery heightForGallery];
+}
+
+-(void)followStory {
+    NSLog(@"Follow Story");
 }
 
 @end
