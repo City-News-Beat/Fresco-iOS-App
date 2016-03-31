@@ -232,37 +232,42 @@
     }
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        NSMutableArray *temp = [[NSMutableArray alloc] init];
-
         for (NSDictionary *gallery in localData) {
             NSString *galleryID = [gallery objectForKey:@"_id"];
             
             NSInteger index = [self galleryExists:galleryID];
             
             if (index > -1) {
-                FRSGallery *gallerySaved = [self.dataSource objectAtIndex:index];
-                [temp addObject:gallerySaved];
                 continue;
             }
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
             NSLog(@"%@", galleryToSave);
-            FRSGallery *use = [FRSGallery MR_createEntity];
-            [use configureWithDictionary:gallery];
-            [temp addObject:use];
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
-            self.highlights = [[NSMutableArray alloc] initWithArray:temp];
-            [self.tableView reloadData];
-        });
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"Cache: %d %@", contextDidSave, error);
         [self flushCache:localData];
     }];
+    
+    // actual use
+    
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *gallery in localData) {
+        FRSGallery *use = [FRSGallery MR_createEntity];
+        [use configureWithDictionary:gallery];
+        [temp addObject:use];
+    }
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
+        self.highlights = [[NSMutableArray alloc] initWithArray:temp];
+        [self.tableView reloadData];
+    });
 }
 
 -(void)flushCache:(NSArray *)received {
