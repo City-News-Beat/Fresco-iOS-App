@@ -87,7 +87,7 @@
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 108)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44)];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
 }
@@ -270,7 +270,7 @@
 }
 
 -(void)configureBottomBar{
-    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 108, self.view.frame.size.width, 44)];
+    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
     

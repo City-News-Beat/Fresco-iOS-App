@@ -34,7 +34,7 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSSignUpViewController alloc] init];
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
