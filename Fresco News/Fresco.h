@@ -34,6 +34,9 @@ static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
 static NSString * const storyGalleriesEndpoint = @"story/galleries/";
 
+static NSString * const loginEndpoint = @"auth/signin";
+static NSString * const signUpEndpoint = @"auth/signup";
+
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";
