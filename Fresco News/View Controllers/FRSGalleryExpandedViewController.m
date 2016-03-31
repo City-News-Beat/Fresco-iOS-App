@@ -80,7 +80,6 @@
     titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, 0, titleLabel.frame.size.width, 44);
     
     self.navigationItem.titleView = titleLabel;
-    
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
@@ -230,6 +229,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+
 }
 
 #pragma mark - Comments View Delegate

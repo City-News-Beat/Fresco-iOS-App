@@ -84,6 +84,8 @@
 -(void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated{
     CGRect toFrame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44);
     
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
     if (self.hiddenTabBar) height += 49;
     if (self.actionBarVisible) height -= 44;
