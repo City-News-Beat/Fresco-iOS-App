@@ -58,6 +58,18 @@
     return [SSKeychain passwordForService:serviceName account:userName];
 }
 
+-(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
+-(void)signInWithTwitter:(NSString *)token withSecret:(NSString *)tokenSecret completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
+-(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 -(id)init {
     self = [super init];
     
