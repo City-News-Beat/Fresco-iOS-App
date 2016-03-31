@@ -151,9 +151,9 @@
     FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
     [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
     
-//    FRSTabbedNavigationTitleView *titleView = [[FRSTabbedNavigationTitleView alloc] initWithTabTitles:@[@"HIGHLIGHTS", @"FOLLOWING"] delegate:self hasBackButton:NO];
-//    self.navigationController.navigationBar.topItem.titleView = titleView;
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(asdf)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+
 }
 
 -(UIImage *)imageForRightBarItem{

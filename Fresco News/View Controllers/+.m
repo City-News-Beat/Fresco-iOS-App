@@ -87,14 +87,13 @@
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
     if (self.hiddenTabBar) height += 49;
     if (self.actionBarVisible) height -= 44;
-    
     CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
 
     if (self.search != Nil) {
         [self.navigationItem setRightBarButtonItem:self.search animated:YES];
         self.search = Nil;
     }
-    
+
     if (animated){
         
         if (self.animatingShow) return;
