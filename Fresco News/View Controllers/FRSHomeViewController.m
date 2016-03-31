@@ -430,10 +430,12 @@
         return;
     }
     
-    [cell clearCell];
-    
     cell.gallery = self.dataSource[indexPath.row];
-    [cell configureCell];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cell clearCell];
+        [cell configureCell];
+    });
     
     __weak typeof(self) weakSelf = self;
     
