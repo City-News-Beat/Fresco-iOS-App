@@ -346,7 +346,6 @@
     [super scrollViewDidScroll:scrollView];
     
     self.navigationItem.rightBarButtonItem.customView.alpha = 0;
-    
     NSLog(@"contentOffset.y = %f", scrollView.contentOffset.y);
 }
 
