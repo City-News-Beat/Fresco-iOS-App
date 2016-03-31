@@ -50,6 +50,14 @@
     }
 }
 
+-(void)saveToken:(NSString *)token forUser:(NSString *)userName {
+    [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
+}
+
+-(NSString *)tokenForUser:(NSString *)userName {
+    return [SSKeychain passwordForService:serviceName account:userName];
+}
+
 -(id)init {
     self = [super init];
     
