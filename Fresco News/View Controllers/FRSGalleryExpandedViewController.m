@@ -80,6 +80,8 @@
     titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, 0, titleLabel.frame.size.width, 44);
     
     self.navigationItem.titleView = titleLabel;
+    
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -96,6 +98,7 @@
     [self configureArticles];
     [self configureComments];
     [self configureActionBar];
+    [self configureNavigationBar];
 
     [self adjustScrollViewContentSize];
 }
