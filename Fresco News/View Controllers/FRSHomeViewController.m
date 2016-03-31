@@ -193,7 +193,7 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"createdDate" ascending:NO inContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *stored = [FRSGallery MR_findAll];
     pulledFromCache = stored;
     
     _dataSource = [[NSMutableArray alloc] init];
