@@ -14,6 +14,12 @@
     API
  */
 
+// #define distribution TRUE // disable logging
+
+#ifdef distribution 
+#define NSLog //
+#endif
+
 // api - constants
 static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
 static BOOL const stagingEnvironment = FALSE;
