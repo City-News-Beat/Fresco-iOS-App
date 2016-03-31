@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -27,6 +27,7 @@
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="relatedStories" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="tags" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
@@ -66,6 +67,7 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="imageURLs" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="stories" inverseEntity="FRSUser" syncable="YES"/>
@@ -90,12 +92,12 @@
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="creator" inverseEntity="FRSStory" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FRSArticle" positionX="-981" positionY="144" width="128" height="150"/>
-        <element name="FRSAssignment" positionX="-972" positionY="153" width="128" height="210"/>
-        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="225"/>
-        <element name="FRSNotification" positionX="-990" positionY="135" width="128" height="150"/>
+        <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
+        <element name="FRSAssignment" positionX="-990" positionY="-153" width="128" height="210"/>
+        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="238"/>
+        <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="150"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="255"/>
-        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="165"/>
+        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="178"/>
         <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
     </elements>
 </model>
