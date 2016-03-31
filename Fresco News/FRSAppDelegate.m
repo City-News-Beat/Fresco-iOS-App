@@ -46,12 +46,27 @@
         [self handleRemotePush];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
-        
+        [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
     
     [self registerForPushNotifications];
     
     return YES;
+}
+
+// when the app isn't open
+-(void)handleColdQuickAction:(UIApplicationShortcutItem *)shortcutItem {
+    
+    if ([shortcutItem.type isEqualToString:takeVideoAction]) {
+        // load video view
+    }
+    else if ([shortcutItem.type isEqualToString:takePhotoAction]) {
+        // load photo view
+    }
+    else if ([shortcutItem.type isEqualToString:assignmentsAction]) {
+        // load assignments view
+    }
+
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
