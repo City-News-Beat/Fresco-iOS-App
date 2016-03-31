@@ -28,6 +28,7 @@ target 'Fresco' do
 	pod ‘AWSCore’
 	pod ‘AWSS3’
 	pod 'Haneke'
+	pod 'SSKeychain'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
 
 end

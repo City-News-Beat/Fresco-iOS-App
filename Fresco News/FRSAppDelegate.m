@@ -20,7 +20,9 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import "Fresco.h"
+@interface FRSAppDelegate (Implement)
 
+@end
 @implementation FRSAppDelegate
 
 
