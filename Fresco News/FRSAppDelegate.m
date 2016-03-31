@@ -19,6 +19,8 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import "Fresco.h"
+
 @implementation FRSAppDelegate
 
 
@@ -50,6 +52,19 @@
     [self registerForPushNotifications];
     
     return YES;
+}
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
+    
+    if ([shortcutItem.type isEqualToString:takeVideoAction]) {
+        // load video view
+    }
+    else if ([shortcutItem.type isEqualToString:takePhotoAction]) {
+        // load photo view
+    }
+    else if ([shortcutItem.type isEqualToString:assignmentsAction]) {
+        // load assignments view
+    }
 }
 
 -(void)registerForPushNotifications {

@@ -26,6 +26,11 @@ static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
 static NSString * const storyGalleriesEndpoint = @"story/galleries/";
 
+// quick actions -- app delegate
+static NSString * const assignmentsAction = @"FRSAssignmentsAction";
+static NSString * const takeVideoAction = @"FRSVideoAction";
+static NSString * const takePhotoAction = @"FRSPhotoAction";
+
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
 // user - data
