@@ -149,7 +149,6 @@
             // add AVPlayerLayer
         }
         
-        
         imageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
         tap.numberOfTapsRequired = 1;
@@ -499,7 +498,7 @@
 
 -(void)galleryTapped{    
     
-    self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 
     
 //    FRSScrollViewImageView *image = [[FRSScrollViewImageView alloc] initWithFrame:self.parallaxImage.frame];
@@ -514,19 +513,19 @@
     
     
     
-    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    self.container.backgroundColor = [UIColor blackColor];
-    [self.window addSubview:self.container];
-    
-    
-    self.parallaxImage.alpha = 0;
-    self.userInteractionEnabled = NO;
-    self.parallaxImage.backgroundColor = [UIColor redColor];
-    [self.window addSubview:self.parallaxImage];
-    
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
-    [self.window addGestureRecognizer:tap];
+//    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    self.container.backgroundColor = [UIColor blackColor];
+//    [self.window addSubview:self.container];
+//    
+//    
+//    self.parallaxImage.alpha = 0;
+//    self.userInteractionEnabled = NO;
+//    self.parallaxImage.backgroundColor = [UIColor redColor];
+//    [self.window addSubview:self.parallaxImage];
+//    
+//    
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
+//    [self.window addGestureRecognizer:tap];
     
     
 //    [self presentParallax];

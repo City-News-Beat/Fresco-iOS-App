@@ -100,7 +100,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-    //Using label instead of title to un-caps back button when detail tapped
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
     label.text = @"STORIES";
     label.font = [UIFont notaBoldWithSize:17];
@@ -142,7 +141,6 @@
 
 #pragma mark - Search Methods
 -(void)searchStories {
-    
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
     [self.navigationController pushViewController:searchVC animated:YES];
 }
@@ -347,11 +345,16 @@
     
     self.navigationItem.rightBarButtonItem.customView.alpha = 0;
     NSLog(@"contentOffset.y = %f", scrollView.contentOffset.y);
+
 }
 
 -(void)readMore:(NSInteger)index {
     NSLog(@"READ MORE: %lu", (long)index);
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+//    if (self.navigationController.navigationBarHidden) {
+        [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    }
+    
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     [self.navigationController pushViewController:detailView animated:YES];
 }

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Fresco.h"
 #import "UIColor+Fresco.h"
+#import "UIFont+Fresco.h"
 
 @interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 {

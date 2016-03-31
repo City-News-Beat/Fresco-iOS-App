@@ -45,6 +45,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -86,9 +87,13 @@
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20 - 49;
     if (self.hiddenTabBar) height += 49;
     if (self.actionBarVisible) height -= 44;
-    
     CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
-    
+
+    if (self.search != Nil) {
+        [self.navigationItem setRightBarButtonItem:self.search animated:YES];
+        self.search = Nil;
+    }
+
     if (animated){
         
         if (self.animatingShow) {
@@ -145,6 +150,9 @@
         
         self.animatingHide = YES;
         self.animatingShow = NO;
+        
+        self.search = self.navigationItem.rightBarButtonItem;
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
@@ -209,6 +217,7 @@
     
 }
 
+
 #pragma mark - Status Bar
 
 -(void)statusBarTappedAction:(NSNotification*)notification{
@@ -233,6 +242,5 @@
 -(void)removeStatusBarNotification{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
 }
-
 
 @end
