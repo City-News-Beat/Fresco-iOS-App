@@ -235,6 +235,7 @@
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (NSDictionary *gallery in localData) {
+            
             NSString *galleryID = [gallery objectForKey:@"_id"];
             
             NSInteger index = [self galleryExists:galleryID];
@@ -245,7 +246,6 @@
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
-            NSLog(@"%@", galleryToSave);
         }
         
         
@@ -266,9 +266,11 @@
     
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
         self.highlights = [[NSMutableArray alloc] initWithArray:temp];
         [self.tableView reloadData];
+        
     });
 }
 
