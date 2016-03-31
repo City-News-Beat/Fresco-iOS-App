@@ -24,6 +24,8 @@
 
 #import "FRSCoreData.h"
 
+#import "FRSSearchViewController.h"
+
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
     BOOL isLoading;
@@ -151,7 +153,7 @@
     FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
     [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(asdf)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
 }
@@ -443,8 +445,9 @@
     
 }
 
--(void)search {
-
+-(void)searchStories {
+    FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
+    [self.navigationController pushViewController:searchVC animated:YES];
 }
 
 

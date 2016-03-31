@@ -141,7 +141,6 @@
 
 #pragma mark - Search Methods
 -(void)searchStories {
-    
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
     [self.navigationController pushViewController:searchVC animated:YES];
 }
