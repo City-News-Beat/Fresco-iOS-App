@@ -70,6 +70,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
+    //Checks if the cell is selected to avoid the URL on didLoad
     if (selected) {
         NSURL *url = [NSURL URLWithString:self.article.articleStringURL];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {

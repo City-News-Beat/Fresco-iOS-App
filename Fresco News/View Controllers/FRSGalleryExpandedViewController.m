@@ -21,7 +21,7 @@
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
@@ -37,6 +37,7 @@
 
 @property (nonatomic) BOOL addCommentState;
 
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -63,6 +64,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self check3DTouch];
 }
 
 -(void)popViewController{
@@ -265,6 +268,56 @@
     }
 }
 
+
+#pragma mark - 3D Touch
+
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    
+    [self check3DTouch];
+}
+
+-(void)check3DTouch {
+    
+    if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+        NSLog(@"3D Touchable");
+
+        [self registerForPreviewingWithDelegate:self sourceView:self.view];
+        self.longPress.enabled = NO;
+    } else {
+        NSLog(@"Not 3D Touchable");
+        
+        self.longPress.enabled = YES;
+    }
+}
+
+-(UILongPressGestureRecognizer *)longPress {
+
+    if (!_longPress) {
+        _longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showPeek)];
+        [self.view addGestureRecognizer:_longPress];
+    }
+    return _longPress;
+}
+
+
+
+-(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    
+
+}
+
+-(UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
+    
+    UIViewController *vc = [[UIViewController alloc] init];
+
+    
+    
+//    NSURL *url = [NSURL URLWithString:@"https://www.google.com"];
+//    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+//        [[UIApplication sharedApplication] openURL:url];
+//    }
+    return vc;
+}
 
 
 #pragma mark - Navigation
