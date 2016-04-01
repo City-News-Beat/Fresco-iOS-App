@@ -621,7 +621,6 @@
 			isa = PBXGroup;
 			children = (
 				1EDA44B21AA4CCC70082E08D /* Fresco News */,
-				D43C7FCC1C8E464800A7A7A7 /* Future */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
 				E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */,
 				E71F0E451B0B936200186BAD /* Fresco WatchKit App */,
@@ -782,6 +781,7 @@
 		4AB98C921C8A7EC6005E7AB2 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				D43C7FCC1C8E464800A7A7A7 /* Image Picker */,
 				0759982E1C6BBD9600A0FE73 /* FRSCameraViewController.h */,
 				0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */,
 			);
@@ -1061,7 +1061,7 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		D43C7FCC1C8E464800A7A7A7 /* Future */ = {
+		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
 			isa = PBXGroup;
 			children = (
 				D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */,
@@ -1073,7 +1073,8 @@
 				D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */,
 				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
 			);
-			name = Future;
+			name = "Image Picker";
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		D43C7FE01C8F290D00A7A7A7 /* General */ = {
