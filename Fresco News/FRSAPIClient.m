@@ -59,11 +59,13 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 -(void)signInWithTwitter:(NSString *)token withSecret:(NSString *)tokenSecret completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+
 }
 
 -(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
