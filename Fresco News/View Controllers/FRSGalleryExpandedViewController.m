@@ -17,6 +17,8 @@
 #import "FRSCommentsView.h"
 #import "FRSContentActionsBar.h"
 
+#import "PeekPopArticleViewController.h"
+
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -65,7 +67,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self check3DTouch];
+    [self register3DTouch];
 }
 
 -(void)popViewController{
@@ -273,34 +275,18 @@
 
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     
-    [self check3DTouch];
+    [self register3DTouch];
 }
 
--(void)check3DTouch {
+-(void)register3DTouch {
     
     if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
         NSLog(@"3D Touchable");
-        
         [self registerForPreviewingWithDelegate:self sourceView:self.articlesTV];
-        self.longPress.enabled = NO;
     } else {
         NSLog(@"Not 3D Touchable");
-        
-        self.longPress.enabled = YES;
     }
 }
-
--(UILongPressGestureRecognizer *)longPress {
-
-    if (!_longPress) {
-        _longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showPeek)];
-        
-        [self.view addGestureRecognizer:_longPress];
-    }
-    return _longPress;
-}
-
-
 
 -(UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
     
@@ -308,7 +294,7 @@
     NSIndexPath *path = [self.articlesTV indexPathForRowAtPoint:cellPostion];
     [previewingContext setSourceRect:[self.articlesTV rectForRowAtIndexPath:path]];
 
-    UIViewController *vc = [[UIViewController alloc] init];
+    PeekPopArticleViewController *vc = [[PeekPopArticleViewController alloc] init];
     UIView *contentView = vc.view;
     
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height)];
