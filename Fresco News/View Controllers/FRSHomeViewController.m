@@ -20,8 +20,6 @@
 
 #import "Fresco.h"
 
-#import "FRSPersistence.h"
-
 #import "FRSCoreData.h"
 
 #import "FRSSearchViewController.h"
