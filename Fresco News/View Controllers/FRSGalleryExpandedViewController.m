@@ -280,8 +280,8 @@
     
     if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
         NSLog(@"3D Touchable");
-
-        [self registerForPreviewingWithDelegate:self sourceView:self.view];
+        
+        [self registerForPreviewingWithDelegate:self sourceView:self.articlesTV];
         self.longPress.enabled = NO;
     } else {
         NSLog(@"Not 3D Touchable");
@@ -294,6 +294,7 @@
 
     if (!_longPress) {
         _longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showPeek)];
+        
         [self.view addGestureRecognizer:_longPress];
     }
     return _longPress;
@@ -301,22 +302,31 @@
 
 
 
--(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
-    
-
-}
-
 -(UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
     
-    UIViewController *vc = [[UIViewController alloc] init];
+    CGPoint cellPostion = [self.articlesTV convertPoint:location fromView:self.articlesTV];
+    NSIndexPath *path = [self.articlesTV indexPathForRowAtPoint:cellPostion];
+    [previewingContext setSourceRect:[self.articlesTV rectForRowAtIndexPath:path]];
 
+    UIViewController *vc = [[UIViewController alloc] init];
+    UIView *contentView = vc.view;
     
-    
-//    NSURL *url = [NSURL URLWithString:@"https://www.google.com"];
-//    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-//        [[UIApplication sharedApplication] openURL:url];
-//    }
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height)];
+    [contentView addSubview:webView];
+    FRSArticle *article = self.orderedArticles[path.row];
+    NSString *urlString = article.articleStringURL;
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
+    vc.title = urlString;
+
     return vc;
+}
+
+-(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    
+    NSURL *url = [NSURL URLWithString:viewControllerToCommit.title];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 
