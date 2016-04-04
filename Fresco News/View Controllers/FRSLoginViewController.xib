@@ -64,6 +64,10 @@
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="epH-Bx-fQW">
+                    <rect key="frame" x="48" y="210" width="505" height="1"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
