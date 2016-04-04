@@ -48,11 +48,10 @@
         } else {
             NSLog(@"Could not add to Reading List");
         }
-        
     }];
     
     UIPreviewAction *action3 = [UIPreviewAction actionWithTitle:@"Share" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
-        [self shareText:@"" andImage:nil andUrl:[[NSURL alloc] initWithString:self.title]];
+            [self shareText:@"" andImage:nil andUrl:[[NSURL alloc] initWithString:self.title]];
     }];
     
     NSArray *actions = @[action1, action2, action3];
@@ -75,7 +74,7 @@
     }
     
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
-    [self.parentViewController presentViewController:activityController animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:activityController animated:YES completion:nil];
 }
 
 
