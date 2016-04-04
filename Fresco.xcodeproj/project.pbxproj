@@ -77,7 +77,7 @@
 		65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A1E1C3D7D0000B31089 /* FRSNavigationController.m */; };
 		65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A211C3D7D1A00B31089 /* FRSSignUpViewController.m */; };
 		65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A241C3D7D2300B31089 /* FRSLoginViewController.m */; };
-		65201A281C3D7D2B00B31089 /* +.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A271C3D7D2B00B31089 /* +.m */; };
+		65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */; };
 		65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */; };
 		65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A301C3D7D6200B31089 /* FRSGalleryView.m */; };
 		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
@@ -335,7 +335,7 @@
 		65201A231C3D7D2300B31089 /* FRSLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLoginViewController.h; sourceTree = "<group>"; };
 		65201A241C3D7D2300B31089 /* FRSLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLoginViewController.m; sourceTree = "<group>"; };
 		65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSScrollingViewController.h; sourceTree = "<group>"; };
-		65201A271C3D7D2B00B31089 /* +.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "+.m"; sourceTree = "<group>"; };
+		65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollingViewController.m; sourceTree = "<group>"; };
 		65201A291C3D7D3C00B31089 /* FRSSetupProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSSetupProfileViewController.h; path = Onboard/FRSSetupProfileViewController.h; sourceTree = "<group>"; };
 		65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSetupProfileViewController.m; path = Onboard/FRSSetupProfileViewController.m; sourceTree = "<group>"; };
 		65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryView.h; sourceTree = "<group>"; };
@@ -836,7 +836,7 @@
 			isa = PBXGroup;
 			children = (
 				65201A261C3D7D2B00B31089 /* FRSScrollingViewController.h */,
-				65201A271C3D7D2B00B31089 /* +.m */,
+				65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */,
 			);
 			name = Scrolling;
 			sourceTree = "<group>";
@@ -1033,15 +1033,6 @@
 				52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		D40FA31C1CAAFB2500A4FE47 /* Defaults */ = {
-			isa = PBXGroup;
-			children = (
-				D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */,
-				D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */,
-			);
-			name = Defaults;
 			sourceTree = "<group>";
 		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
@@ -1257,12 +1248,13 @@
 			name = Parallax;
 			sourceTree = "<group>";
 		};
-		D43C7FF41C8F588C00A7A7A7 /* Persistence */ = {
+		D43C7FF41C8F588C00A7A7A7 /* Defaults */ = {
 			isa = PBXGroup;
 			children = (
-				D40FA31C1CAAFB2500A4FE47 /* Defaults */,
+				D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */,
+				D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */,
 			);
-			name = Persistence;
+			name = Defaults;
 			sourceTree = "<group>";
 		};
 		D43C7FF51C90745F00A7A7A7 /* Title Nav */ = {
@@ -1415,7 +1407,7 @@
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 				65EBEDBD1C44507600BE671F /* Networking */,
-				D43C7FF41C8F588C00A7A7A7 /* Persistence */,
+				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
 				D41365B41CA33347004FE848 /* Settings */,
 			);
@@ -1969,7 +1961,7 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
-				65201A281C3D7D2B00B31089 /* +.m in Sources */,
+				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,

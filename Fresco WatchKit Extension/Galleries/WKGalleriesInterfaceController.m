@@ -66,11 +66,7 @@
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"%@", error);
         }];
-    
-        
     }
-    
-
 }
 
 -(void)populateGalleries{
