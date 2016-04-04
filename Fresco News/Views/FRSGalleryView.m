@@ -26,6 +26,8 @@
 #import <Haneke/Haneke.h>
 #import "OEParallax.h"
 
+#import "FRSUser+CoreDataProperties.h"
+
 #define TEXTVIEW_TOP_PAD 12
 
 

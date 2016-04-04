@@ -162,6 +162,8 @@
     [self animateCash3];
 }
 
+
+
 - (void)animateCash1 {
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.cloudIV.transform = CGAffineTransformMakeScale(1.03, 1.03);

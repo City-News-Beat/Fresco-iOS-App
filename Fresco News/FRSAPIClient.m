@@ -50,6 +50,39 @@
     }
 }
 
+-(void)saveToken:(NSString *)token forUser:(NSString *)userName {
+    [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
+}
+
+-(NSString *)tokenForUser:(NSString *)userName {
+    return [SSKeychain passwordForService:serviceName account:userName];
+}
+
+-(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)signInWithTwitter:(NSString *)token withSecret:(NSString *)tokenSecret completion:(FRSAPIDefaultCompletionBlock)completion {
+
+}
+
+-(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
+-(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
+    // make auth calls
+    
+    return;
+    
+    // no auth persistence yet
+    [self post:locationEndpoint withParameters:location completion:^(id responseObject, NSError *error) {
+        
+    }];
+}
+
 -(id)init {
     self = [super init];
     
@@ -268,5 +301,6 @@
     
     return client;
 }
+
 
 @end

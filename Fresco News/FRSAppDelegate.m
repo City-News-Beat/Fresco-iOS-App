@@ -18,6 +18,7 @@
 #import "FRSCameraViewController.h"
 #import <MagicalRecord/MagicalRecord.h>
 #import <CoreLocation/CoreLocation.h>
+#import "FRSLoginViewController.h"
 
 #import "Fresco.h"
 @interface FRSAppDelegate (Implement)
@@ -36,7 +37,7 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSLoginViewController alloc] init];
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
@@ -54,6 +55,13 @@
     [self registerForPushNotifications];
     
     return YES;
+}
+
+-(BOOL)isAuthenticated {
+    
+    // check against keychian
+    
+    return FALSE;
 }
 
 // when the app isn't open
@@ -102,6 +110,8 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    NSLog(@"%@", newDeviceToken);
     
 }
 
@@ -195,6 +205,12 @@
 #pragma mark - Quick Actions
 
 - (void)createItemsWithIcons {
+    BOOL isAuthenticated = TRUE; // check keychain
+    
+    if (!isAuthenticated) {
+        [UIApplication sharedApplication].shortcutItems = @[];
+        return;
+    }
     
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0){
         
@@ -216,72 +232,6 @@
         [UIApplication sharedApplication].shortcutItems = items;
     }
 }
-
-//- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
-//    
-//    //Which index of the tabbar are we trying to present?
-//    // added defaults
-//    NSInteger indexToPresent = 2;
-//    FRSCaptureMode captureMode = FRSCaptureModePhoto;
-//    
-//    if ([shortcutItem.localizedTitle isEqual: @"Take photo"]) {
-//        indexToPresent = 2;
-//        captureMode = FRSCaptureModePhoto;
-//        //        [self.frsRootViewController setRootViewControllerToCamera];
-//    } else if ([shortcutItem.localizedTitle isEqual: @"Assignments"]) {
-//        //        [self.frsRootViewController setRootViewControllerToAssignments];
-//        indexToPresent = 3;
-//    } else if ([shortcutItem.localizedTitle isEqual: @"Take video"]) {
-//        captureMode = FRSCaptureModeVideo;
-//        //        [self.frsRootViewController setRootViewControllerToCameraForVideo];
-//        indexToPresent = 2;
-//    }
-//    
-//    
-//    UIViewController *vc = self.frsRootViewController.viewController;
-//    
-//    if (!vc)  return;
-//    
-//    else{
-//        FRSTabBarController *tbvc = (FRSTabBarController *)vc;
-//        
-//        if (tbvc.selectedIndex == indexToPresent){ //we were already on the view controller
-//            if (indexToPresent == 2 && [tbvc.presentedViewController isKindOfClass:[FRSCameraViewController class]]){
-//                FRSCameraViewController *camVC = (FRSCameraViewController *)tbvc.presentedViewController;
-//                
-//                if (camVC.isPresented && camVC.captureMode != captureMode){ //The camera was the last visible viewcontroller and the user has not gone to assetpicker or gallerypost but the desired capture mode is different than current capture mode
-//                    [camVC toggleCaptureMode];
-//                }
-//                else if (!camVC.isPresented){ //The tabbar did present the camera vc, but the user moved to the assetpicker or gallery post
-//                    [camVC dismissAndReturnToPreviousTab];
-//                    captureMode == FRSCaptureModePhoto ? [self.frsRootViewController setRootViewControllerToCamera] : [self.frsRootViewController setRootViewControllerToCameraForVideo];
-//                }
-//            }
-//        }
-//        else{ //We were NOT on the correct view controller
-//            if (indexToPresent == 2){
-//                [[NSUserDefaults standardUserDefaults] setInteger:tbvc.selectedIndex forKey:UD_PREVIOUSLY_SELECTED_TAB];
-//                captureMode == FRSCaptureModePhoto ? [self.frsRootViewController setRootViewControllerToCamera] : [self.frsRootViewController setRootViewControllerToCameraForVideo];
-//                
-//            }
-//            else {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    if (tbvc.presentedViewController && [tbvc.presentedViewController isKindOfClass:[FRSCameraViewController class]]){
-//                        FRSCameraViewController *camVC = (FRSCameraViewController *)tbvc.presentedViewController;
-//                        [camVC dismissViewControllerAnimated:NO completion:^{
-//                            [self.frsRootViewController setRootViewControllerToAssignments];
-//                        }];
-//                    }
-//                    else {
-//                        [self.frsRootViewController setRootViewControllerToAssignments];
-//                    }
-//                });
-//                
-//            }
-//        }
-//        return;
-//    }
-//}
 
 #pragma mark - Status Bar
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{

@@ -17,12 +17,8 @@
 @import AVFoundation;
 @import CoreMotion;
 
-//Views
-
-
 //Managers
 #import "FRSLocationManager.h"
-#import "FRSDataManager.h"
 //#import "FRSGalleryAssetsManager.h"
 #import "FRSAVSessionManager.h"
 
@@ -39,20 +35,15 @@
 //#import "FRSUploadManager.h"
 #import "FRSTabBarController.h"
 
-
 //Root View Controller
 //#import "FRSRootViewController.h"
 #import "FRSBaseViewController.h"
-
-
 
 #define ICON_WIDTH 24
 #define PREVIEW_WIDTH 56
 #define APERTURE_WIDTH 72
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4/3
-
-
 
 @interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 

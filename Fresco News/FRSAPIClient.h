@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSPersistence.h" // cache certain API call response objects (each individual sub obj)
 #import "FRSAppDelegate.h"
 #import "FRSLocator.h"
 
@@ -22,10 +21,17 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
 
+
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
-// generic auth call
+// generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 
+// authentication
+-(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)signInWithTwitter:(NSString *)token withSecret:(NSString *)tokenSecret completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 @end

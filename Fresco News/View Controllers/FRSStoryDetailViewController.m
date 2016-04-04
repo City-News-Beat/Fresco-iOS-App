@@ -9,7 +9,7 @@
 #import "FRSStoryDetailViewController.h"
 #import "FRSGalleryCell.h"
 #import <MagicalRecord/MagicalRecord.h>
-
+#import "FRSStory+CoreDataProperties.h"
 @interface FRSStoryDetailViewController ()
 
 @end
