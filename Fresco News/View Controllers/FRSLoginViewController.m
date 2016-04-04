@@ -40,6 +40,21 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
+-(IBAction)login:(id)sender {
+    
+}
+
+-(IBAction)twitter:(id)sender {
+    
+}
+
+-(IBAction)facebook:(id)sender {
+    
+}
+
+-(IBAction)next:(id)sender {
+    [self.passwordField becomeFirstResponder];
+}
 /*
 #pragma mark - Navigation
 

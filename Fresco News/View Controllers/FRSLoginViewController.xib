@@ -43,7 +43,10 @@
                         <constraint firstAttribute="height" constant="30" id="zO2-MR-g0T"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                    <connections>
+                        <action selector="next:" destination="-1" eventType="editingDidEndOnExit" id="van-Nk-Jef"/>
+                    </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
                     <rect key="frame" x="48" y="250" width="504" height="30"/>
@@ -51,7 +54,10 @@
                         <constraint firstAttribute="height" constant="30" id="3io-1p-I6z"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
+                    <connections>
+                        <action selector="login:" destination="-1" eventType="editingDidEndOnExit" id="sna-jP-hIu"/>
+                    </connections>
                 </textField>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="h1c-69-np5">
                     <rect key="frame" x="206" y="30" width="188" height="65"/>
@@ -70,6 +76,9 @@
                     <state key="normal" title="LOG IN">
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <action selector="login:" destination="-1" eventType="touchUpInside" id="Thm-H1-krW"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
                     <rect key="frame" x="215" y="352" width="182" height="32"/>
@@ -82,12 +91,18 @@
                                     <state key="normal" image="facebook-b">
                                         <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
+                                    <connections>
+                                        <action selector="facebook:" destination="-1" eventType="touchUpInside" id="Th8-GZ-bbN"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y9q-Ly-sJx">
                                     <rect key="frame" x="7" y="0.0" width="20" height="22"/>
                                     <state key="normal" image="twitter-b">
                                         <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
+                                    <connections>
+                                        <action selector="twitter:" destination="-1" eventType="touchUpInside" id="Kpc-C9-TL2"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

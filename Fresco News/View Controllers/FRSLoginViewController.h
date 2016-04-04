@@ -25,6 +25,10 @@
 @property (nonatomic, retain) IBOutlet UIButton *facebookButton;
 @property (nonatomic, retain) IBOutlet UILabel *socialLabel;
 
+-(IBAction)login:(id)sender;
+-(IBAction)twitter:(id)sender;
+-(IBAction)facebook:(id)sender;
 
+-(IBAction)next:(id)sender;
 @end
 
