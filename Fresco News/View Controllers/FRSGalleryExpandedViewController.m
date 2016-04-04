@@ -17,11 +17,13 @@
 #import "FRSCommentsView.h"
 #import "FRSContentActionsBar.h"
 
+#import "PeekPopArticleViewController.h"
+
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
@@ -37,6 +39,7 @@
 
 @property (nonatomic) BOOL addCommentState;
 
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -63,6 +66,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self register3DTouch];
 }
 
 -(void)popViewController{
@@ -80,6 +85,7 @@
     titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, 0, titleLabel.frame.size.width, 44);
     
     self.navigationItem.titleView = titleLabel;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -96,6 +102,7 @@
     [self configureArticles];
     [self configureComments];
     [self configureActionBar];
+    [self configureNavigationBar];
 
     [self adjustScrollViewContentSize];
 }
@@ -227,6 +234,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+
 }
 
 #pragma mark - Comments View Delegate
@@ -262,6 +270,50 @@
     }
 }
 
+
+#pragma mark - 3D Touch
+
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    
+    [self register3DTouch];
+}
+
+-(void)register3DTouch {
+    
+    if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+        NSLog(@"3D Touchable");
+        [self registerForPreviewingWithDelegate:self sourceView:self.articlesTV];
+    } else {
+        NSLog(@"Not 3D Touchable");
+    }
+}
+
+-(UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
+    
+    CGPoint cellPostion = [self.articlesTV convertPoint:location fromView:self.articlesTV];
+    NSIndexPath *path = [self.articlesTV indexPathForRowAtPoint:cellPostion];
+    [previewingContext setSourceRect:[self.articlesTV rectForRowAtIndexPath:path]];
+
+    PeekPopArticleViewController *vc = [[PeekPopArticleViewController alloc] init];
+    UIView *contentView = vc.view;
+    
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height)];
+    [contentView addSubview:webView];
+    FRSArticle *article = self.orderedArticles[path.row];
+    NSString *urlString = article.articleStringURL;
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
+    vc.title = urlString;
+
+    return vc;
+}
+
+-(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    
+    NSURL *url = [NSURL URLWithString:viewControllerToCommit.title];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
 
 
 #pragma mark - Navigation

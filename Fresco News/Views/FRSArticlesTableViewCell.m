@@ -51,8 +51,14 @@
 
 -(void)configureLabels{
     self.titleLabel = [self labelWithText:self.article.title font:[UIFont notaBoldWithSize:17] color:[UIColor frescoDarkTextColor]];
-    [self addSubview:self.titleLabel];
     
+    if ([self.titleLabel.text isEqualToString:@""]){
+        self.titleLabel.text = self.article.articleStringURL;
+        NSLog(@"self.article.articleStringURL = %@", self.article.articleStringURL);
+        [self.titleLabel sizeToFit];
+    }
+    [self addSubview:self.titleLabel];
+
 //    self.sourceLabel = [self labelWithText:self.article.source font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     self.sourceLabel = [self labelWithText:@"CNN News" font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     [self addSubview:self.sourceLabel];
@@ -70,7 +76,13 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+    //Checks if the cell is selected to avoid the URL on didLoad
+    if (selected) {
+        NSURL *url = [NSURL URLWithString:self.article.articleStringURL];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
 }
 
 -(void)configureCell{
