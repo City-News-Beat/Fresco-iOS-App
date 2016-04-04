@@ -18,6 +18,7 @@
 #import "FRSCameraViewController.h"
 #import <MagicalRecord/MagicalRecord.h>
 #import <CoreLocation/CoreLocation.h>
+#import "FRSLoginViewController.h"
 
 #import "Fresco.h"
 @interface FRSAppDelegate (Implement)
@@ -36,7 +37,7 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSLoginViewController alloc] init];
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
