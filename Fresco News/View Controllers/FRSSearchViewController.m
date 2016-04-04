@@ -40,6 +40,7 @@
 -(void)clear{
     self.searchTextField.text = @"";
     [self hideClearButton];
+    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - UI
@@ -73,7 +74,7 @@
     
     self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.clearButton.frame = CGRectMake(self.view.frame.size.width - 80, 20, 24, 24);
-    [self.clearButton setImage:[UIImage imageNamed:@"delete-small-white"] forState:UIControlStateNormal];
+    [self.clearButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
     self.clearButton.tintColor = [UIColor whiteColor];
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     self.clearButton.alpha = 0;
