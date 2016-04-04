@@ -24,6 +24,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(instancetype)init {
+    self = [super initWithNibName:@"FRSLoginViewController" bundle:[NSBundle mainBundle]];
+    
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
 /*
 #pragma mark - Navigation
 
