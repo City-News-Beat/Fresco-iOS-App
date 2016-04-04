@@ -23,12 +23,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i0x-cI-9iD">
-                    <rect key="frame" x="-10" y="30" width="66" height="22"/>
+                    <rect key="frame" x="-10" y="30" width="66" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="66" id="JRK-GJ-DJk"/>
-                        <constraint firstAttribute="height" constant="22" id="QYL-eo-4hn"/>
+                        <constraint firstAttribute="height" constant="32" id="QYL-eo-4hn"/>
                     </constraints>
-                    <state key="normal" image="backCaretDark"/>
+                    <state key="normal" image="back-arrow-dark"/>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email or @username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eP9-i7-SxN">
                     <rect key="frame" x="48" y="212" width="505" height="30"/>
@@ -64,10 +64,12 @@
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="epH-Bx-fQW">
-                    <rect key="frame" x="48" y="210" width="505" height="1"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
-                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Or, sign in with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Aw-rc-Zq2">
+                    <rect key="frame" x="184" y="378" width="233" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -88,7 +90,7 @@
         </view>
     </objects>
     <resources>
-        <image name="backCaretDark" width="12" height="20"/>
+        <image name="back-arrow-dark" width="24" height="24"/>
         <image name="largeLogo" width="204" height="71"/>
     </resources>
 </document>
