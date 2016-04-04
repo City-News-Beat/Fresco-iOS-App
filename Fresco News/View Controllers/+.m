@@ -31,12 +31,24 @@
     }
     
     self.enabled = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willEnterBackground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
-//    [self showNavBarForScrollView:self animated:NO];
+
+}
+
+-(void)willEnterBackground {
+    self.navigationItem.titleView.alpha = 1.0;
+    if (self.shouldHaveBackButton) {
+        [super configureBackButtonAnimated:NO];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    }
 }
 
 -(void)configureTableView{

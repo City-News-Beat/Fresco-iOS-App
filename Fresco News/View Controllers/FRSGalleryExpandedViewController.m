@@ -39,6 +39,8 @@
 
 @property (nonatomic) BOOL addCommentState;
 
+@property (nonatomic) BOOL touchEnabled;
+
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
 
 @end
@@ -52,6 +54,7 @@
         self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
+        self.touchEnabled = NO;
     }
     return self;
 }
@@ -280,11 +283,9 @@
 
 -(void)register3DTouch {
     
-    if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
-        NSLog(@"3D Touchable");
+    if ((self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) && (self.touchEnabled == NO)) {
+        self.touchEnabled = YES;
         [self registerForPreviewingWithDelegate:self sourceView:self.articlesTV];
-    } else {
-        NSLog(@"Not 3D Touchable");
     }
 }
 

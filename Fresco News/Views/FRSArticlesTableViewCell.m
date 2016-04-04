@@ -89,12 +89,13 @@
     
     self.sourceIV.backgroundColor = [UIColor frescoLightTextColor];
     self.sourceIV.layer.cornerRadius = 16;
-
+    
     UIImageView *placeHolderIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"launch"]];
     placeHolderIcon.frame = CGRectMake(10, 10, 12, 12);
     
     [self.sourceIV hnk_setImageFromURL:[NSURL URLWithString:self.article.imageStringURL] placeholder:nil success:^(UIImage *image) {
         [self.sourceIV hnk_setImageFromURL:[NSURL URLWithString:self.article.imageStringURL] placeholder:nil];
+        self.sourceIV.backgroundColor = [UIColor clearColor];
     } failure:^(NSError *error) {
         [self.sourceIV addSubview:placeHolderIcon];
     }];
