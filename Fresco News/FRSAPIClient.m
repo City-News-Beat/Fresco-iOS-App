@@ -73,7 +73,7 @@
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+    // make auth call
 }
 
 -(id)init {
@@ -294,5 +294,6 @@
     
     return client;
 }
+
 
 @end
