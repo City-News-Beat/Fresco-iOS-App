@@ -54,7 +54,6 @@
     
     if ([self.titleLabel.text isEqualToString:@""]){
         self.titleLabel.text = self.article.articleStringURL;
-        NSLog(@"self.article.articleStringURL = %@", self.article.articleStringURL);
         [self.titleLabel sizeToFit];
     }
     [self addSubview:self.titleLabel];
@@ -87,7 +86,18 @@
 
 -(void)configureCell{
     self.sourceIV.frame = CGRectMake(16, 15, 32, 32);
-    [self.sourceIV hnk_setImageFromURL:[NSURL URLWithString:self.article.imageStringURL] placeholder:nil];
+    
+    self.sourceIV.backgroundColor = [UIColor frescoLightTextColor];
+    self.sourceIV.layer.cornerRadius = 16;
+
+    UIImageView *placeHolderIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"launch"]];
+    placeHolderIcon.frame = CGRectMake(10, 10, 12, 12);
+    
+    [self.sourceIV hnk_setImageFromURL:[NSURL URLWithString:self.article.imageStringURL] placeholder:nil success:^(UIImage *image) {
+        [self.sourceIV hnk_setImageFromURL:[NSURL URLWithString:self.article.imageStringURL] placeholder:nil];
+    } failure:^(NSError *error) {
+        [self.sourceIV addSubview:placeHolderIcon];
+    }];
     
     self.titleLabel.frame = CGRectMake(64, 15, self.frame.size.width - 64 - 16, self.titleLabel.frame.size.height);
     self.sourceLabel.frame = CGRectMake(64, 36, self.titleLabel.frame.size.width, self.sourceLabel.frame.size.height);
