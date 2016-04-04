@@ -30,32 +30,61 @@
                     </constraints>
                     <state key="normal" image="backCaretDark"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-cU-aii">
-                    <rect key="frame" x="419" y="349" width="46" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email or @username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eP9-i7-SxN">
+                    <rect key="frame" x="48" y="212" width="505" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="zO2-MR-g0T"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
+                    <rect key="frame" x="48" y="250" width="505" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="3io-1p-I6z"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="h1c-69-np5">
+                    <rect key="frame" x="206" y="30" width="188" height="65"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="188" id="JGX-os-I3y"/>
+                        <constraint firstAttribute="height" constant="65" id="m9k-Co-Boq"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-cU-aii">
+                    <rect key="frame" x="507" y="292" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Sgi-bM-GeU"/>
+                        <constraint firstAttribute="width" constant="46" id="ver-iB-4PT"/>
+                    </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <state key="normal" title="LOG IN">
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email or @username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eP9-i7-SxN">
-                    <rect key="frame" x="48" y="241" width="505" height="30"/>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
-                    <rect key="frame" x="48" y="279" width="505" height="30"/>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="SBV-cU-aii" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="12" id="Ca0-dl-P0o"/>
                 <constraint firstItem="i0x-cI-9iD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-10" id="Eq9-HG-aqI"/>
+                <constraint firstItem="h1c-69-np5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="JpS-KP-7lS"/>
+                <constraint firstItem="eP9-i7-SxN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="LIE-FF-feb"/>
+                <constraint firstItem="lTK-cu-Nxz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="N1B-kC-16F"/>
+                <constraint firstAttribute="trailing" secondItem="eP9-i7-SxN" secondAttribute="trailing" constant="47" id="cid-QO-RzV"/>
+                <constraint firstItem="h1c-69-np5" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dlF-xy-93x"/>
+                <constraint firstItem="eP9-i7-SxN" firstAttribute="top" secondItem="h1c-69-np5" secondAttribute="bottom" constant="117" id="en9-Ma-hd5"/>
+                <constraint firstAttribute="trailing" secondItem="SBV-cU-aii" secondAttribute="trailing" constant="47" id="exk-c5-6BS"/>
+                <constraint firstAttribute="trailing" secondItem="lTK-cu-Nxz" secondAttribute="trailing" constant="47" id="gCA-na-UQf"/>
+                <constraint firstItem="eP9-i7-SxN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="gc4-Ce-lxR"/>
                 <constraint firstItem="i0x-cI-9iD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="ijn-xJ-mcJ"/>
+                <constraint firstItem="lTK-cu-Nxz" firstAttribute="top" secondItem="eP9-i7-SxN" secondAttribute="bottom" constant="8" id="wPB-D0-3MC"/>
             </constraints>
         </view>
     </objects>
     <resources>
         <image name="backCaretDark" width="12" height="20"/>
+        <image name="largeLogo" width="204" height="71"/>
     </resources>
 </document>
