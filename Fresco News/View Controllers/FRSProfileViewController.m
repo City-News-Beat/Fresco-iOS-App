@@ -14,13 +14,13 @@
 #import "FRSNavigationController.h"
 
 #import "FRSGalleryCell.h"
-#import "FRSDataManager.h"
 
 #import "FRSBorderedImageView.h"
 
 #import <MagicalRecord/MagicalRecord.h>
 
 #import "DGElasticPullToRefresh.h"
+#import "Fresco.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -82,8 +82,8 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries{
-    [[FRSDataManager sharedManager] getGalleries:@{@"offset" : @0, @"hide" : @4, @"stories" : @"true"} shouldRefresh:YES withResponseBlock:^(NSArray* responseObject, NSError *error) {
+-(void)fetchGalleries {
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *responseObject, NSError *error) {
         if (!responseObject.count){
             return;
         }
@@ -99,6 +99,7 @@
         
         self.galleries = [mArr copy];
         [self.tableView reloadData];
+
     }];
 }
 

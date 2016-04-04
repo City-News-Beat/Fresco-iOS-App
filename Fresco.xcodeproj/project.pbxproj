@@ -63,7 +63,6 @@
 		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
 		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
 		6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6501D56B1C249604001F54EF /* Model.xcdatamodeld */; };
-		65046DFF1C3EE8CA003E02B5 /* FRSDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65046DFE1C3EE8CA003E02B5 /* FRSDataManager.m */; };
 		65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */; };
 		65135FD01C286DCF00839149 /* FRSArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FB61C286DCF00839149 /* FRSArticle.m */; };
 		65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FB81C286DCF00839149 /* FRSUser+CoreDataProperties.m */; };
@@ -307,8 +306,6 @@
 		42D998061AEC46D900636F33 /* NSDate+ISO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ISO.m"; path = "Categories/NSDate+ISO.m"; sourceTree = "<group>"; };
 		52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.beta.xcconfig"; sourceTree = "<group>"; };
 		6501D56C1C249604001F54EF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		65046DFD1C3EE8CA003E02B5 /* FRSDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDataManager.h; sourceTree = "<group>"; };
-		65046DFE1C3EE8CA003E02B5 /* FRSDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDataManager.m; sourceTree = "<group>"; };
 		65046E031C3EFC81003E02B5 /* FRSHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSHomeViewController.h; sourceTree = "<group>"; };
 		65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSHomeViewController.m; sourceTree = "<group>"; };
 		65135FB51C286DCF00839149 /* FRSArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSArticle.h; path = "Core Data/FRSArticle.h"; sourceTree = "<group>"; };
@@ -745,8 +742,6 @@
 				075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */,
 				65EBEDB71C44197100BE671F /* FRSLocationManager.h */,
 				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
-				65046DFD1C3EE8CA003E02B5 /* FRSDataManager.h */,
-				65046DFE1C3EE8CA003E02B5 /* FRSDataManager.m */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -1934,7 +1929,6 @@
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
-				65046DFF1C3EE8CA003E02B5 /* FRSDataManager.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,

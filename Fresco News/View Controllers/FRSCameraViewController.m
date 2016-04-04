@@ -19,7 +19,6 @@
 
 //Managers
 #import "FRSLocationManager.h"
-#import "FRSDataManager.h"
 //#import "FRSGalleryAssetsManager.h"
 #import "FRSAVSessionManager.h"
 

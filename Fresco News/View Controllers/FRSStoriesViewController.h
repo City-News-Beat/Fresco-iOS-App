@@ -8,7 +8,6 @@
 
 #import "FRSScrollingViewController.h"
 #import "FRSBaseViewController.h"
-#import "FRSDataManager.h"
 #import "Fresco.h"
 #import "FRSStoryDetailViewController.h"
 
