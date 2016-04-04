@@ -51,7 +51,7 @@
     }
 }
 
--(void)configureTableView{
+-(void)configureTableView {
     
     NSInteger height = self.view.frame.size.height - 64 - 49;
     if (self.hiddenTabBar) height += 49;

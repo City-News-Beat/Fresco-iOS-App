@@ -11,6 +11,8 @@
 
 @interface FRSArticlesTableViewCell : UITableViewCell
 
+@property BOOL selectable;
+
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier article:(FRSArticle *)article;
 
 -(void)configureCell;

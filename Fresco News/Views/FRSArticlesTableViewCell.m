@@ -74,13 +74,24 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+    
+    if (self.selectable) {
+        self.sourceIV.backgroundColor = [UIColor frescoLightTextColor];
+    }
 
-    //Checks if the cell is selected to avoid the URL on didLoad
-    if (selected) {
+    if (selected) { //Checks if the cell is selected to avoid opening the URL on didLoad
         NSURL *url = [NSURL URLWithString:self.article.articleStringURL];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
         }
+    }
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (self.selectable) {
+        self.sourceIV.backgroundColor = [UIColor frescoLightTextColor];
     }
 }
 
@@ -98,6 +109,7 @@
         self.sourceIV.backgroundColor = [UIColor clearColor];
     } failure:^(NSError *error) {
         [self.sourceIV addSubview:placeHolderIcon];
+        self.selectable = TRUE;
     }];
     
     self.titleLabel.frame = CGRectMake(64, 15, self.frame.size.width - 64 - 16, self.titleLabel.frame.size.height);
