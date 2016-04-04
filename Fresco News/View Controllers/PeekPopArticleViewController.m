@@ -7,6 +7,7 @@
 //
 
 #import "PeekPopArticleViewController.h"
+#import "FRSArticle.h"
 
 @interface PeekPopArticleViewController () <UIViewControllerPreviewingDelegate>
 
@@ -27,7 +28,10 @@
 -(NSArray<id<UIPreviewActionItem>> *)previewActionItems {
     
     UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"Open in Safari" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
-        NSLog(@"Action 1");
+        NSURL *url = [NSURL URLWithString:self.title];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
     }];
     
     UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"Add to Reading List" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {

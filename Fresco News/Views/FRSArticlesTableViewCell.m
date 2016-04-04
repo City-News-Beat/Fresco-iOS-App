@@ -51,8 +51,14 @@
 
 -(void)configureLabels{
     self.titleLabel = [self labelWithText:self.article.title font:[UIFont notaBoldWithSize:17] color:[UIColor frescoDarkTextColor]];
-    [self addSubview:self.titleLabel];
     
+    if ([self.titleLabel.text isEqualToString:@""]){
+        self.titleLabel.text = self.article.articleStringURL;
+        NSLog(@"self.article.articleStringURL = %@", self.article.articleStringURL);
+        [self.titleLabel sizeToFit];
+    }
+    [self addSubview:self.titleLabel];
+
 //    self.sourceLabel = [self labelWithText:self.article.source font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     self.sourceLabel = [self labelWithText:@"CNN News" font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     [self addSubview:self.sourceLabel];
