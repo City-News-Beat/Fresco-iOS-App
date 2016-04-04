@@ -36,28 +36,41 @@
         }
     }];
     
-    UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"Add to Reading List" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+    UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"Share" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
         
-        SSReadingList *readList = [SSReadingList defaultReadingList];
-        NSError *error = [NSError new];
-        
-        BOOL status = [readList addReadingListItemWithURL:[NSURL URLWithString:self.title] title:self.title previewText:@"" error:&error];
-        
-        if (status) {
-            NSLog(@"Added to Reading List");
-        } else {
-            NSLog(@"Could not add to Reading List");
-        }
+        [self shareText:@"" andImage:nil andUrl:[[NSURL alloc] initWithString:self.title]];
+
     }];
     
-    UIPreviewAction *action3 = [UIPreviewAction actionWithTitle:@"Share" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
-            [self shareText:@"" andImage:nil andUrl:[[NSURL alloc] initWithString:self.title]];
-    }];
-    
-    NSArray *actions = @[action1, action2, action3];
+    NSArray *actions = @[action1, action2];
     
     return actions;
 }
+
+//-(NSArray<id> *)previewActionItems {
+//    
+//    // setup a list of preview actions
+//    UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"Action 1" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//        NSLog(@"Action 1 triggered");
+//    }];
+//    
+//    UIPreviewAction *action2 = [UIPreviewAction actionWithTitle:@"Destructive Action" style:UIPreviewActionStyleDestructive handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//        NSLog(@"Destructive Action triggered");
+//    }];
+//    
+//    UIPreviewAction *action3 = [UIPreviewAction actionWithTitle:@"Selected Action" style:UIPreviewActionStyleSelected handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+//        NSLog(@"Selected Action triggered");
+//    }];
+//    
+//    // add them to an arrary
+//    NSArray *actions = @[action1, action2, action3];
+//    
+//    UIPreviewActionGroup *group1 = [UIPreviewActionGroup actionGroupWithTitle:@"Action Group" style:UIPreviewActionStyleDefault actions:actions];
+//    NSArray *group = @[group1];
+//    
+//    // and return them
+//    return group;
+//}
 
 -(void)shareText:(NSString *)text andImage:(UIImage *)image andUrl:(NSURL *)url {
     

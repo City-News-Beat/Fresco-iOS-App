@@ -33,6 +33,11 @@
     self.enabled = YES;
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+//    [self showNavBarForScrollView:self animated:NO];
+}
 
 -(void)configureTableView{
     
