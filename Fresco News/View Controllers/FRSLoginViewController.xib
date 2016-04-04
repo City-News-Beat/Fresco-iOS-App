@@ -14,6 +14,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSLoginViewController">
             <connections>
+                <outlet property="backButton" destination="i0x-cI-9iD" id="Lrt-8B-Q9z"/>
+                <outlet property="loginButton" destination="SBV-cU-aii" id="oOe-D2-4hd"/>
+                <outlet property="logoView" destination="h1c-69-np5" id="vpG-Jh-brU"/>
+                <outlet property="passwordField" destination="lTK-cu-Nxz" id="ALz-SH-lD9"/>
+                <outlet property="socialLabel" destination="7Aw-rc-Zq2" id="Pgd-Vo-DUE"/>
+                <outlet property="userField" destination="eP9-i7-SxN" id="iMm-09-3IW"/>
                 <outlet property="view" destination="iN0-l3-epB" id="DAn-Je-7V2"/>
             </connections>
         </placeholder>
@@ -64,12 +70,36 @@
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Or, sign in with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Aw-rc-Zq2">
-                    <rect key="frame" x="184" y="378" width="233" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
+                    <rect key="frame" x="215" y="352" width="182" height="32"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Or, sign in with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Aw-rc-Zq2">
+                            <rect key="frame" x="6" y="5" width="108" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                            <color key="textColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RM0-9A-k0i">
+                            <rect key="frame" x="114" y="5" width="68" height="22"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6VX-7g-49m">
+                                    <rect key="frame" x="35" y="0.0" width="20" height="22"/>
+                                    <state key="normal" image="facebook-b">
+                                        <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y9q-Ly-sJx">
+                                    <rect key="frame" x="7" y="0.0" width="20" height="22"/>
+                                    <state key="normal" image="twitter-b">
+                                        <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -91,6 +121,8 @@
     </objects>
     <resources>
         <image name="back-arrow-dark" width="24" height="24"/>
+        <image name="facebook-b" width="20" height="20"/>
         <image name="largeLogo" width="204" height="71"/>
+        <image name="twitter-b" width="20" height="20"/>
     </resources>
 </document>
