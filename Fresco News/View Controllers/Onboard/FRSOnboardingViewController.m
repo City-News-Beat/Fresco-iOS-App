@@ -77,6 +77,7 @@
     NSInteger offset = (self.scrollView.frame.size.width - 320)/2;
     
     self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
+
     [self.scrollView addSubview:self.viewOne];
     
     FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
