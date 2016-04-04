@@ -70,7 +70,7 @@
                         <color key="titleColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
                     <rect key="frame" x="215" y="352" width="182" height="32"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Or, sign in with:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Aw-rc-Zq2">
@@ -99,15 +99,21 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="182" id="aY8-kX-Q1A"/>
+                        <constraint firstAttribute="height" constant="32" id="cwY-gS-hCK"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="1yy-e2-FzW"/>
                 <constraint firstItem="SBV-cU-aii" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="12" id="Ca0-dl-P0o"/>
                 <constraint firstItem="i0x-cI-9iD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-10" id="Eq9-HG-aqI"/>
                 <constraint firstItem="h1c-69-np5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="JpS-KP-7lS"/>
                 <constraint firstItem="eP9-i7-SxN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="LIE-FF-feb"/>
                 <constraint firstItem="lTK-cu-Nxz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="N1B-kC-16F"/>
+                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="72" id="UZO-c3-waH"/>
                 <constraint firstAttribute="trailing" secondItem="eP9-i7-SxN" secondAttribute="trailing" constant="47" id="cid-QO-RzV"/>
                 <constraint firstItem="h1c-69-np5" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dlF-xy-93x"/>
                 <constraint firstItem="eP9-i7-SxN" firstAttribute="top" secondItem="h1c-69-np5" secondAttribute="bottom" constant="117" id="en9-Ma-hd5"/>
