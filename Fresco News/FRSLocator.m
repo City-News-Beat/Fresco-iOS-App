@@ -7,6 +7,7 @@
 //
 
 #import "FRSLocator.h"
+#import "FRSAPIClient.h"
 
 @implementation FRSLocator
 
@@ -41,6 +42,42 @@
 -(void)defaultSetup {
     [self setupNotifications];
     [self setupLocationManager];
+    
+    self.backgroundBlock = ^(NSArray *locations) {
+        UIApplication *app = [UIApplication sharedApplication];
+        
+        __block UIBackgroundTaskIdentifier locationUpdateTaskID = [app beginBackgroundTaskWithExpirationHandler:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (locationUpdateTaskID != UIBackgroundTaskInvalid) {
+                    [app endBackgroundTask:locationUpdateTaskID];
+                    locationUpdateTaskID = UIBackgroundTaskInvalid;
+                }
+            });
+        }];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            CLLocation *currentLocation = [locations firstObject];
+            NSDictionary *userLocation = @{@"lat":@(currentLocation.coordinate.latitude), @"lon":@(currentLocation.coordinate.longitude)};
+            
+            [[FRSAPIClient sharedClient] pingLocation:userLocation completion:^(id responseObject, NSError *error) {
+                if (error) {
+                    NSLog(@"Location Error");
+                }
+                else {
+                    NSLog(@"Background Location Updated");
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (locationUpdateTaskID != UIBackgroundTaskInvalid) {
+                        [app endBackgroundTask:locationUpdateTaskID];
+                        locationUpdateTaskID = UIBackgroundTaskInvalid;
+                    }
+                });
+
+            }];
+        });
+        
+    };
 }
 
 -(void)setupNotifications {
@@ -149,11 +186,6 @@
     return (oldState != _currentState);
 }
 
-
--(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    NSLog(@"LOCATION UPDATE FAILED");
-}
-
 /*
  Handle a location update from the location manager
  */
@@ -186,11 +218,11 @@
     
     [_locationManager stopUpdatingLocation];
     
-    stopTimer = [NSTimer timerWithTimeInterval:userTrackingDelay
-                                             target:self
-                                           selector:@selector(restartActiveUpdates)
-                                           userInfo:Nil
-                                            repeats:FALSE];
+    stopTimer = [NSTimer timerWithTimeInterval:10
+                                        target:self
+                                      selector:@selector(restartActiveUpdates)
+                                      userInfo:Nil
+                                       repeats:FALSE];
     
     [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
 }
@@ -239,9 +271,7 @@
  */
 -(void)manualUpdate {
     if (_locationManager) {
-        [_locationManager startUpdatingLocation];
         [_locationManager requestLocation];
-        [_locationManager stopUpdatingLocation];
     }
 }
 

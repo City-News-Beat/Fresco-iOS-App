@@ -21,6 +21,7 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
 
+
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
 // generic auth-ed call
@@ -31,4 +32,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)signInWithTwitter:(NSString *)token withSecret:(NSString *)tokenSecret completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 @end

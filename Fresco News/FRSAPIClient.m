@@ -72,6 +72,10 @@
     
 }
 
+-(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 -(id)init {
     self = [super init];
     
