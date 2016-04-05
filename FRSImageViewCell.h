@@ -21,6 +21,7 @@
     IBOutlet UIImageView *imageView;
     IBOutlet UILabel *timeLabel;
     IBOutlet FRSCheckBox *checkBox;
+    IBOutlet UIView *coverView;
 }
 -(void)loadAsset:(PHAsset *)asset;
 @property (nonatomic, weak) PHAsset *currentAsset;

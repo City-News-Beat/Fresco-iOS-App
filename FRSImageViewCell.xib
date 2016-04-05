@@ -27,6 +27,10 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view hidden="YES" alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VM9-a9-GDE">
+                        <rect key="frame" x="0.0" y="0.0" width="219" height="219"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aam-wl-Qve" customClass="FRSCheckBox">
                         <rect key="frame" x="194" y="5" width="20" height="20"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -41,9 +45,13 @@
             <constraints>
                 <constraint firstItem="JWL-yc-nzD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1Qt-Uh-LS2"/>
                 <constraint firstAttribute="trailing" secondItem="xu7-4R-gIY" secondAttribute="trailing" constant="2" id="EDK-jf-lEn"/>
+                <constraint firstItem="VM9-a9-GDE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Jbv-iL-BJw"/>
                 <constraint firstItem="aam-wl-Qve" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="TeB-4g-2S7"/>
                 <constraint firstAttribute="bottom" secondItem="xu7-4R-gIY" secondAttribute="bottom" id="dCp-fe-9mw"/>
                 <constraint firstAttribute="trailing" secondItem="aam-wl-Qve" secondAttribute="trailing" constant="5" id="e6U-fU-TMu"/>
+                <constraint firstAttribute="bottom" secondItem="VM9-a9-GDE" secondAttribute="bottom" id="i61-ms-9G2"/>
+                <constraint firstItem="VM9-a9-GDE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="n2c-yx-HuS"/>
+                <constraint firstAttribute="trailing" secondItem="VM9-a9-GDE" secondAttribute="trailing" id="nJA-AM-oJq"/>
                 <constraint firstAttribute="trailing" secondItem="JWL-yc-nzD" secondAttribute="trailing" id="nv5-81-Pv0"/>
                 <constraint firstAttribute="bottom" secondItem="JWL-yc-nzD" secondAttribute="bottom" id="vyZ-Yi-pEK"/>
                 <constraint firstItem="JWL-yc-nzD" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="wvE-DM-NX7"/>
@@ -51,6 +59,7 @@
             <size key="customSize" width="219" height="219"/>
             <connections>
                 <outlet property="checkBox" destination="aam-wl-Qve" id="eBj-jD-wki"/>
+                <outlet property="coverView" destination="VM9-a9-GDE" id="2ud-SL-1FM"/>
                 <outlet property="imageView" destination="JWL-yc-nzD" id="0Wc-EO-RIl"/>
                 <outlet property="timeLabel" destination="xu7-4R-gIY" id="2Dd-50-NEZ"/>
             </connections>

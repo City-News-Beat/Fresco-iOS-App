@@ -93,6 +93,7 @@
 
 -(void)selected:(BOOL)selected {
     checkBox.selected = selected;
+    coverView.hidden = !selected;
 }
 
 
