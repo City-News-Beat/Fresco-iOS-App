@@ -245,6 +245,7 @@
     
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
 }
 
