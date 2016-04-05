@@ -19,7 +19,6 @@
 
 //Managers
 #import "FRSLocationManager.h"
-//#import "FRSGalleryAssetsManager.h"
 #import "FRSAVSessionManager.h"
 
 //Categories
@@ -32,11 +31,9 @@
 #import "FRSAssignment.h"
 #import "CLLocation+EXIFGPS.h"
 
-//#import "FRSUploadManager.h"
 #import "FRSTabBarController.h"
 
 //Root View Controller
-//#import "FRSRootViewController.h"
 #import "FRSBaseViewController.h"
 
 #define ICON_WIDTH 24
@@ -49,7 +46,6 @@
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
-//@property (strong, nonatomic) FRSGalleryAssetsManager *assetsManager;
 @property (strong, nonatomic) CMMotionManager *motionManager;
 
 
@@ -124,16 +120,16 @@
 
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode{
     self = [super init];
+    
     if (self){
         self.sessionManager = [FRSAVSessionManager defaultManager];
         self.locationManager = [FRSLocationManager sharedManager];
-//        self.assetsManager = [FRSGalleryAssetsManager sharedManager];
         self.captureMode = captureMode;
-        //        self.lastOrientation = self.captureMode == FRSCaptureModeVideo ? UIDeviceOrientationLandscapeLeft : [UIDevice currentDevice].orientation;
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
         self.firstTimeAni = YES;
     }
+    
     return self;
 }
 
@@ -150,23 +146,11 @@
     [self checkLibrary];
     
     [self addPanGesture];
-
-//    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
-//        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                status == PHAuthorizationStatusAuthorized ? [self updatePreviewButtonWithAsset] : [self updatePreviewButtonWithImage:[UIImage imageNamed:@"camera-roll"]];
-//            });
-//        }];
-//    }];
     
     
     self.isRecording = NO;
     
-//    [self.locationManager setupLocationMonitoringForState:LocationManagerStateForeground];
-    self.locationManager.delegate = self;
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideoCaptureIfNeeded) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
 }
 
 -(void)addPanGesture {
@@ -320,7 +304,7 @@
     [self.view addSubview:self.preview];
 }
 
--(void)configurePreviewLayer{
+-(void)configurePreviewLayer {
     dispatch_async(dispatch_get_main_queue(), ^{
         CALayer *viewLayer = self.preview.layer;
         self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.sessionManager.session];
@@ -331,36 +315,12 @@
     });
 }
 
--(void)updatePreviewButtonWithAsset{
-//    PHAsset *asset = [self.assetsManager.fetchResult firstObject];
-//    
-//    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewButton.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
-//        if (!result){
-//            //            self.previewBackgroundIV.alpha = 0;
-//            
-//            UIImageView *browser = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"photo-browser"]];
-//            browser.frame = CGRectMake(self.previewBackgroundIV.frame.size.width/2 - 12, self.previewBackgroundIV.frame.size.height/2 - 12, 24, 24);
-//            [self.previewBackgroundIV addSubview:browser];
-//            
-//            self.previewBackgroundIV.layer.shadowOpacity = 0;
-//            self.previewBackgroundIV.layer.shadowColor = [UIColor clearColor].CGColor;
-//            [self.previewBackgroundIV addDropShadowWithColor:[UIColor clearColor] path:nil];
-//            self.previewButton.layer.shadowOpacity = 0;
-//            
-//        } else {
-//            self.previewBackgroundIV.alpha = 1.0;
-//            
-//            if (self.firstTime){ //This is the first time the preview button is being created
-//                [self.previewButton setImage:result forState:UIControlStateNormal];
-//                self.firstTime = NO;
-//            }
-//        }
-//    }];
+-(void)updatePreviewButtonWithAsset {
+
+    
 }
 
 - (void)dismissAndReturnToPreviousTab {
-    
-//    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
     
     FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
     
@@ -370,20 +330,8 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
-//- (void)dismissAndReturnToPreviousTab
-//{
-//    [[FRSUploadManager sharedManager] resetDraftGalleryPost];
-//    
-//    FRSTabBarController *tabBarController = ((FRSRootViewController *)self.presentingViewController).tbc;
-//    
-//    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
-//    
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
 
 -(void)updatePreviewButtonWithImage:(UIImage *)image{
-    
-//    [self.assetsManager fetchGalleryAssetsInBackgroundWithCompletion:nil];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         UIImageView *temp = [[UIImageView alloc] initWithFrame:self.previewButton.frame];
@@ -1712,12 +1660,6 @@
     
     FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
     [self presentViewController:fileView animated:FALSE completion:Nil];
-    
-//    FRSNavigationController *navVC = [[FRSNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
-//    
-//    navVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    
-//    [self presentViewController:navVC animated:NO completion:nil];
 }
 
 
@@ -1800,15 +1742,5 @@
     [self rotateAppForOrientation:orientationNew];
     
 }
-
-/*er
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end
