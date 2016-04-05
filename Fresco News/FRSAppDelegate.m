@@ -39,11 +39,11 @@
     [self createItemsWithIcons];
     
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        [self startAuthentication];
-        return YES; // no other stuff going on (no quick action handling, etc)
+        self.window.rootViewController = [[FRSTabBarController alloc] init];
     }
     else {
-        self.window.rootViewController = [[FRSTabBarController alloc] init];
+        [self startAuthentication];
+        return YES; // no other stuff going on (no quick action handling, etc)
     }
 
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
