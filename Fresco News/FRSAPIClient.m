@@ -58,6 +58,14 @@
     return [SSKeychain passwordForService:serviceName account:userName];
 }
 
+-(BOOL)isAuthenticated {
+    if ([[SSKeychain accountsForService:serviceName] count] > 0) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -236,7 +244,7 @@
 
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
-    [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"];
+   // [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"]; // no auth token from user defaults, all in keychain now
     return manager;
 }
 
