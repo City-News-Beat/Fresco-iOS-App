@@ -215,6 +215,8 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     [UIView commitAnimations];
     
+    [self.navigationController setNavigationBarHidden:TRUE animated:YES];
+
     self.motionManager = [[CMMotionManager alloc] init];
     [self startTrackingMovement]; 
 }
@@ -222,10 +224,11 @@
 -(void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
-    [self.navigationController setNavigationBarHidden:TRUE animated:YES];
 
     [self fadeInPreview];
 }
+
+
 
 
 
