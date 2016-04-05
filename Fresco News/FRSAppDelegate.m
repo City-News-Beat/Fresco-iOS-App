@@ -40,6 +40,7 @@
     
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         [self startAuthentication];
+        return; // no other stuff going on (no quick action handling, etc)
     }
     else {
         self.window.rootViewController = [[FRSTabBarController alloc] init];
