@@ -119,9 +119,8 @@ static NSString *imageTile = @"ImageTile";
     
     return CGSizeMake(cellSize, cellSize);
 }
+
 /* Not Footer Related */
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

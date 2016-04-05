@@ -148,6 +148,8 @@
     [self rotateAppForOrientation:self.lastOrientation];
 
     [self checkLibrary];
+    
+    [self addPanGesture];
 
 //    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
 //        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
@@ -167,6 +169,24 @@
     
 }
 
+-(void)addPanGesture {
+    UIPanGestureRecognizer *zoomGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
+    [self.view addGestureRecognizer:zoomGesture];
+}
+
+-(void)zoom:(UIPanGestureRecognizer *)sender {
+    UIGestureRecognizerState senderState = sender.state;
+    
+    if (senderState == UIGestureRecognizerStateBegan) {
+        
+    }
+    else if (senderState == UIGestureRecognizerStateChanged) {
+        
+    }
+    else if (senderState == UIGestureRecognizerStateEnded) {
+        
+    }
+}
 -(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
