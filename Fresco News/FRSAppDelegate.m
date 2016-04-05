@@ -19,6 +19,7 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import <CoreLocation/CoreLocation.h>
 #import "FRSLoginViewController.h"
+#import "FRSAPIClient.h"
 
 #import "Fresco.h"
 @interface FRSAppDelegate (Implement)
@@ -37,8 +38,13 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
-    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [self startAuthentication];
+    }
+    else {
+        self.window.rootViewController = [[FRSTabBarController alloc] init];
+    }
+
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
@@ -55,6 +61,10 @@
     [self registerForPushNotifications];
     
     return YES;
+}
+
+-(void)startAuthentication {
+    
 }
 
 -(BOOL)isAuthenticated {

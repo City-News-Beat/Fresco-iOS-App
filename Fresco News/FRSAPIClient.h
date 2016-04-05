@@ -34,4 +34,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(BOOL)isAuthenticated;
 @end
