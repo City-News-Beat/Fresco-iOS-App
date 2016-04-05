@@ -7,6 +7,7 @@
 //
 
 #import "FRSFileViewController.h"
+#import "UIFont+Fresco.h"
 
 @interface FRSFileViewController ()
 
@@ -24,7 +25,7 @@ static NSString *imageTile = @"ImageTile";
     
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor],
-       NSFontAttributeName:[UIFont fontWithName:@"Rcmxvjwvfimvkbxcocyomfdqzzd" size:19]}]; // why'd you send me a font w this name
+       NSFontAttributeName:[UIFont notaBoldWithSize:18]}]; // why'd you send me a font w this name
 
     self.automaticallyAdjustsScrollViewInsets = NO; // keeps collection view from misbehaving
     [self setupCollectionView];
@@ -41,7 +42,7 @@ static NSString *imageTile = @"ImageTile";
     [self.view addSubview:line];
     
     nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextButton.titleLabel setFont:[UIFont fontWithName:@"Rcmxvjwvfimvkbxcocyomfdqzzd" size:17]];
+    [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     nextButton.frame = CGRectMake(screenWidth-64, [UIScreen mainScreen].bounds.size.height-41, 60, 40);
     nextButton.backgroundColor = [UIColor clearColor];
     [nextButton setTitleColor:[[UIColor lightGrayColor] colorWithAlphaComponent:.8] forState:UIControlStateNormal];
