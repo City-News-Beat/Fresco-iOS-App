@@ -66,4 +66,14 @@
     [self addSubview:self.backgroundView];
 }
 
+-(void)setBackground:(UIView *)background {
+    
+    [self.backgroundView removeFromSuperview];
+    self.backgroundView = background;
+    self.backgroundView.frame = CGRectMake(0, 0, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height);
+    [self addSubview:self.backgroundView];
+    
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height); // resize to background
+}
+
 @end

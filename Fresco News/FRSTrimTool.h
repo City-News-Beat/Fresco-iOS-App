@@ -15,5 +15,5 @@
 
 @property (nonatomic, assign) float right;
 @property (nonatomic, assign) float left;
-
+-(void)setBackground:(UIView *)background;
 @end

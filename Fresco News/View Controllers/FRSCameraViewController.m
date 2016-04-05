@@ -199,7 +199,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //hide status bar before view is loaded.
     
     self.isPresented = YES;
     
@@ -236,7 +235,6 @@
     
     [super viewWillDisappear:animated];
     
-//    [self.locationManager stopLocationUpdates];
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
     [self.sessionManager clearCaptureSession];
@@ -246,7 +244,6 @@
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
 }
 
 
