@@ -148,6 +148,7 @@
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
         [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
         
         [self presentViewController:navControl animated:YES completion:^{
             [self setSelectedIndex:self.lastActiveIndex];

@@ -98,8 +98,15 @@ static NSString *imageTile = @"ImageTile";
 }
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:FALSE animated:YES];
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:TRUE animated:YES];
+}
 -(void)next:(id)sender {
     
 }
