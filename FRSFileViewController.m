@@ -7,10 +7,11 @@
 //
 
 #import "FRSFileViewController.h"
+#import "VideoTrimmerViewController.h"
 #import "UIFont+Fresco.h"
 
 @interface FRSFileViewController ()
-
+@property CMTime currentTime;
 @end
 
 @implementation FRSFileViewController
@@ -128,14 +129,13 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 -(void)next:(id)sender {
     
 }
-/*
-    Footer Related */
+/* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -199,6 +199,7 @@ static NSString *imageTile = @"ImageTile";
     
     if ([selectedAssets containsObject:representedAsset]) {
         [cell selected:TRUE];
+        //if video and if > 60 seconds
     }
     else {
         [cell selected:FALSE];
@@ -216,6 +217,11 @@ static NSString *imageTile = @"ImageTile";
         [cell selected:FALSE];
     }
     else {
+        if (cell.currentAVAsset) {
+            self.currentTime = cell.currentAVAsset.duration;
+            [self presentVideoTrimmerViewController];
+        }
+        
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
     }
@@ -237,6 +243,12 @@ static NSString *imageTile = @"ImageTile";
         [alert addAction:ok];
         [self presentViewController:alert animated:YES completion:nil];
     });
+}
+
+-(void)presentVideoTrimmerViewController {
+    self.currentTime;
+    VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 -(void)filesLoaded {
