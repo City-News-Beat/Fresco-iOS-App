@@ -69,7 +69,7 @@
             <constraints>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="2lt-tV-e4M"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="6Tc-i5-lMi"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="cCd-zR-7Ac"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="65" id="cCd-zR-7Ac"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="40" id="e3h-1W-uBY"/>
             </constraints>
             <point key="canvasLocation" x="333" y="250"/>
