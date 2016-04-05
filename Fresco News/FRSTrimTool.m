@@ -15,6 +15,7 @@
 @property (nonatomic, retain) UIView *topView;
 @property (nonatomic, retain) UIView *bottomView;
 @end
+
 @implementation FRSTrimTool
 
 -(instancetype)init {
@@ -48,6 +49,19 @@
 }
 
 -(void)commonInit {
+    [self setupUI];
+}
+
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    [self reconfigureUI];
+}
+
+-(void)reconfigureUI {
+    
+}
+
+-(void)setupUI {
     
 }
 
