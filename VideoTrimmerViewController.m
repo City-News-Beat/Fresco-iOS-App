@@ -7,10 +7,17 @@
 //
 
 #import "VideoTrimmerViewController.h"
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 
 @interface VideoTrimmerViewController ()
+
+//@property (strong, nonatomic) AVPlayer *player;
+//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+//@property (strong, nonatomic) AVPlayerItem *playerItem;
+//@property (strong, nonatomic) AVAsset *asset;
 
 @end
 
@@ -26,6 +33,7 @@
     self.view.backgroundColor = [UIColor blackColor];
 
     [self configureTopContainer];
+    [self configurePlayer];
 }
 
 -(void)configureTopContainer {
@@ -49,9 +57,24 @@
     
     
     /* DEBUG */
-//    topContainer.backgroundColor = [UIColor redColor];
-//    titleLabel.backgroundColor = [UIColor greenColor];
+    //    topContainer.backgroundColor = [UIColor redColor];
+    //    titleLabel.backgroundColor = [UIColor greenColor];
 }
+
+-(void)configurePlayer {
+
+    AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString: @"https://www.youtube.com/watch?v=40x89Q2o5Xw"]];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+    playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, 200);
+    [self.view.layer insertSublayer:playerLayer above:self.view.layer];
+    
+    [player play];
+    
+    
+    /* DEBUG */
+    playerLayer.backgroundColor = [UIColor greenColor].CGColor;
+}
+
 
 -(void)dismiss {
     [self dismissViewControllerAnimated:YES completion:nil];
