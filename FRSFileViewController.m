@@ -32,6 +32,15 @@ static NSString *imageTile = @"ImageTile";
     [self setupSecondaryUI];
     
     self.navigationItem.title = @"CHOOSE MEDIA";
+    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [container addSubview:backButton];
+    backButton.tintColor = [UIColor whiteColor];
+    backButton.frame = CGRectMake(-3, 0, 24, 24);
+    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
+    self.navigationItem.backBarButtonItem = backBarButtonItem;
     
 }
 

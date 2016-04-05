@@ -147,6 +147,7 @@
     if ([self.tabBar.items indexOfObject:item] == 2) {
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
         [navControl pushViewController:cam animated:NO];
         [navControl setNavigationBarHidden:YES];
         
