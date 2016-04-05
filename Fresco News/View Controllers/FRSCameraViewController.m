@@ -173,6 +173,14 @@
         
         if (firstAsset) {
             // image that fits predicate at index 0
+            [self.fileLoader getDataFromAsset:firstAsset callback:^(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updatePreviewButtonWithImage:image];
+                    self.capturingImage = NO;
+                    self.previewButton.userInteractionEnabled = YES;
+                    self.nextButton.userInteractionEnabled = YES;
+                });
+            }];
         }
         else {
             // no image
@@ -181,8 +189,9 @@
 }
 
 -(void)checkLibrary {
-    
+    [self fetchGalleryAssetsInBackgroundWithCompletion:Nil];
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //hide status bar before view is loaded.
@@ -195,6 +204,7 @@
             [self configurePreviewLayer];
         }];
     }
+    [self checkLibrary];
     
     [UIView beginAnimations:@"fade-statusbar" context:nil];
     [UIView setAnimationDuration:0.3];
@@ -1192,7 +1202,7 @@
 
 #pragma mark - Capture data processing
 
--(void)captureStillImage{
+-(void)captureStillImage {
     dispatch_async(self.sessionManager.sessionQueue, ^{
         
         if(self.capturingImage)
