@@ -28,11 +28,11 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aam-wl-Qve" customClass="FRSCheckBox">
-                        <rect key="frame" x="199" y="5" width="15" height="15"/>
+                        <rect key="frame" x="194" y="5" width="20" height="20"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="GuO-NO-5aZ"/>
-                            <constraint firstAttribute="width" constant="15" id="uG7-3b-lZq"/>
+                            <constraint firstAttribute="height" constant="20" id="GuO-NO-5aZ"/>
+                            <constraint firstAttribute="width" constant="20" id="uG7-3b-lZq"/>
                         </constraints>
                     </view>
                 </subviews>

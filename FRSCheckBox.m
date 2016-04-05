@@ -53,7 +53,7 @@
 
 -(void)commonInit {
     self.backgroundColor = [UIColor clearColor];
-    imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
+    imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     imageView.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
     [self addSubview:imageView];
 }
