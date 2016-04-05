@@ -103,20 +103,14 @@ static NSString *imageTile = @"ImageTile";
     
     [self.navigationController setNavigationBarHidden:FALSE animated:YES];
     
-    [UIView beginAnimations:@"fade-statusbar" context:nil];
-    [UIView setAnimationDuration:0.3];
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    [UIView commitAnimations];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:TRUE animated:YES];
-    [UIView beginAnimations:@"fade-statusbar" context:nil];
-    [UIView setAnimationDuration:0.3];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    [UIView commitAnimations];
 }
 -(void)next:(id)sender {
     
