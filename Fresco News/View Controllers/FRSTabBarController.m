@@ -146,7 +146,10 @@
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-        [self presentViewController:cam animated:YES completion:^{
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        [navControl pushViewController:cam animated:NO];
+        
+        [self presentViewController:navControl animated:YES completion:^{
             [self setSelectedIndex:self.lastActiveIndex];
         }];
     }

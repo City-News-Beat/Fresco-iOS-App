@@ -35,6 +35,7 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)setupSecondaryUI {
     // boundary
+    
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
     
     line = [[UIView alloc] initWithFrame:CGRectMake(0, fileCollectionView.frame.origin.y + fileCollectionView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 1.5)];

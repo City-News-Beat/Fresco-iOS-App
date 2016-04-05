@@ -70,8 +70,8 @@
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="24" id="2oQ-Mc-JeT"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="6Tc-i5-lMi"/>
                 <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="24" id="bj9-n3-uHV"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="65" id="cCd-zR-7Ac"/>
-                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="40" id="e3h-1W-uBY"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="cCd-zR-7Ac"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="e3h-1W-uBY"/>
             </constraints>
             <point key="canvasLocation" x="333" y="250"/>
         </view>

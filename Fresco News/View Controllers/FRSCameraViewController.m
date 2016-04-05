@@ -1661,7 +1661,7 @@
     FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
     fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
-    [self presentViewController:fileView animated:TRUE completion:Nil];
+    [self.navigationController pushViewController:fileView animated:YES];
 }
 
 
