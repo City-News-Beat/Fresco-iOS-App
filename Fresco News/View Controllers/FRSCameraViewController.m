@@ -222,6 +222,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
+    [self.navigationController setNavigationBarHidden:TRUE animated:YES];
 
     [self fadeInPreview];
 }

@@ -128,7 +128,6 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:TRUE animated:NO];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
