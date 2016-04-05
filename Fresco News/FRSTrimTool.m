@@ -70,10 +70,10 @@
     
     [self.backgroundView removeFromSuperview];
     self.backgroundView = background;
-    self.backgroundView.frame = CGRectMake(0, 0, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height);
+    self.backgroundView.frame = CGRectMake(0, 8, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height);
     [self addSubview:self.backgroundView];
     
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height); // resize to background
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height+16); // resize to background
 }
 
 @end
