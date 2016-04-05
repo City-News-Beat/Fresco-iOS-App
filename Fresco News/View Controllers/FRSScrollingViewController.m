@@ -124,7 +124,8 @@
             scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 1.0;
             
-            if (self.shouldHaveBackButton){
+            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
+                self.scrollDirectionChanged = FALSE;
                 [super configureBackButtonAnimated:YES];
             }
             
