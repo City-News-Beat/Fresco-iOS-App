@@ -18,6 +18,8 @@
 
 @property (nonatomic) BOOL enabled;
 
+@property (nonatomic) BOOL backButtonHidden;
+
 @end
 
 @implementation FRSScrollingViewController
@@ -33,6 +35,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     
     self.enabled = YES;
+    self.backButtonHidden = NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
 }
 
 -(void)appWillResignActive:(NSNotification*)notification {
@@ -93,6 +101,7 @@
 }
 
 -(void)showNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated{
+    
     CGRect toFrame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44);
     
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
@@ -124,10 +133,16 @@
             scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 1.0;
             
-            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
-                self.scrollDirectionChanged = FALSE;
+            
+            //Need to check if back button already exists to avoid weird scrolling bug
+            if (self.shouldHaveBackButton){
                 [super configureBackButtonAnimated:YES];
             }
+            
+//            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
+//                self.scrollDirectionChanged = FALSE;
+//                [super configureBackButtonAnimated:YES];
+//            }
             
         } completion:^(BOOL finished) {
             if (finished)
@@ -137,13 +152,18 @@
     else {
         scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
-        if (self.shouldHaveBackButton){
+        if (self.shouldHaveBackButton && self.backButtonHidden){
             [super configureBackButtonAnimated:NO];
         }
     }
+    
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 -(void)hideNavBarForScrollView:(UIScrollView *)scrollView animated:(BOOL)animated {
+    
+    self.backButtonHidden = YES;
     
     CGRect toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
     
@@ -186,6 +206,10 @@
         self.navigationController.navigationBar.frame = toFrame;
         [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:NO];
     }
+    
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{

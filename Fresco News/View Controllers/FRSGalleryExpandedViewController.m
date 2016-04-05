@@ -41,7 +41,8 @@
 
 @property (nonatomic) BOOL touchEnabled;
 
-@property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
+@property (strong, nonatomic) UILabel *titleLabel;
+
 
 @end
 
@@ -71,7 +72,6 @@
     [super viewWillAppear:animated];
     
     [self register3DTouch];
-
 }
 
 -(void)popViewController{
@@ -80,20 +80,22 @@
 }
 
 -(void)configureNavigationBar{
-    UILabel *titleLabel = [[UILabel alloc] init];
-    titleLabel.text = @"GALLERY";
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.font = [UIFont notaBoldWithSize:17];
-    [titleLabel sizeToFit];
-    titleLabel.center = self.view.center;
-    titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, 0, titleLabel.frame.size.width, 44);
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.text = @"GALLERY";
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.font = [UIFont notaBoldWithSize:17];
+    [self.titleLabel sizeToFit];
+    self.titleLabel.center = self.view.center;
+    self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, 0, self.titleLabel.frame.size.width, 44);
     
-    self.navigationItem.titleView = titleLabel;
+    self.navigationItem.titleView = self.titleLabel;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    self.navigationItem.titleView = self.titleLabel;
 }
 
 -(void)configureUI{
