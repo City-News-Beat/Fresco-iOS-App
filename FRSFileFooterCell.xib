@@ -4,6 +4,11 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="karmina-bold.otf">
+            <string>Karmina-Bold</string>
+        </mutableArray>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -18,7 +23,7 @@
                         <constraint firstAttribute="height" constant="30" id="bdS-Eh-QH4"/>
                         <constraint firstAttribute="width" constant="320" id="c1Z-3j-Swl"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                    <fontDescription key="fontDescription" name="Karmina-Bold" family="Karmina" pointSize="22"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -65,7 +70,7 @@
                 <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="2lt-tV-e4M"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="6Tc-i5-lMi"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="cCd-zR-7Ac"/>
-                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="e3h-1W-uBY"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="40" id="e3h-1W-uBY"/>
             </constraints>
             <point key="canvasLocation" x="333" y="250"/>
         </view>
