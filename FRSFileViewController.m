@@ -40,8 +40,14 @@ static NSString *imageTile = @"ImageTile";
     backButton.frame = CGRectMake(-3, 0, 24, 24);
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-    self.navigationItem.backBarButtonItem = backBarButtonItem;
     
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
+}
+
+-(void)back {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)setupSecondaryUI {
