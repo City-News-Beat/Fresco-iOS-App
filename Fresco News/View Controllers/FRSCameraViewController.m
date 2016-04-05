@@ -147,7 +147,8 @@
     [self adjustFramesForCaptureState];
     [self rotateAppForOrientation:self.lastOrientation];
 
-    
+    [self checkLibrary];
+
 //    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
 //        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
 //            dispatch_async(dispatch_get_main_queue(), ^{
@@ -204,7 +205,6 @@
             [self configurePreviewLayer];
         }];
     }
-    [self checkLibrary];
     
     [UIView beginAnimations:@"fade-statusbar" context:nil];
     [UIView setAnimationDuration:0.3];
@@ -1689,6 +1689,9 @@
     if (self.sessionManager.movieFileOutput.isRecording){
         [self toggleVideoRecording];
     }
+    
+    FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
+    [self presentViewController:fileView animated:FALSE completion:Nil];
     
 //    FRSNavigationController *navVC = [[FRSNavigationController alloc] initWithRootViewController:[[AssetsPickerController alloc] init]];
 //    

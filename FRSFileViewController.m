@@ -96,10 +96,6 @@ static NSString *imageTile = @"ImageTile";
 }
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (selectedAssets) {
-        [selectedAssets removeAllObjects];
-        [fileCollectionView reloadData];
-    }
 }
 
 -(void)next:(id)sender {

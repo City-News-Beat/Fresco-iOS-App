@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSFileLoader.h"
+#import "FRSFileViewController.h"
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
