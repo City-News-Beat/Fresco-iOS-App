@@ -25,6 +25,10 @@
 @property (nonatomic, retain) IBOutlet UIButton *facebookButton;
 @property (nonatomic, retain) IBOutlet UILabel *socialLabel;
 
+@property (nonatomic, retain) IBOutlet UIView *topLine;
+@property (nonatomic, retain) IBOutlet UIView *middleLine;
+@property (nonatomic, retain) IBOutlet UIView *yellowLine;
+
 -(IBAction)login:(id)sender;
 -(IBAction)twitter:(id)sender;
 -(IBAction)facebook:(id)sender;

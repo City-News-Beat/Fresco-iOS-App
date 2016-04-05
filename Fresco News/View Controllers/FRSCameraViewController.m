@@ -146,6 +146,7 @@
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     [self rotateAppForOrientation:self.lastOrientation];
+
     
 //    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
 //        [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
@@ -165,6 +166,9 @@
     
 }
 
+-(void)checkLibrary {
+    
+}
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //hide status bar before view is loaded.
