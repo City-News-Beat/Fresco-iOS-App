@@ -134,6 +134,7 @@
 		D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
+		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */; };
 		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
 		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
@@ -1724,6 +1725,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
 				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
