@@ -41,6 +41,8 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property BOOL contentIsEmpty;
 
+@property (strong, nonatomic) UIScrollView *scrollView;
+
 @end
 
 @implementation FRSHomeViewController
@@ -68,6 +70,8 @@
     [self configureUI];
     [self addNotificationObservers];
     
+    self.scrollView.delegate = self;
+    
     // Do any additional setup after loading the view.
     
 }
@@ -75,7 +79,16 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self configureNavigationBar];
+    
     [self addStatusBarNotification];
+    
+    [self showNavBarForScrollView:self.scrollView animated:NO];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self showTabBarAnimated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -224,7 +237,6 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    
     
     if (!self.dataSource) {
         self.dataSource = [[NSMutableArray alloc] init];
