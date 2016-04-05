@@ -113,6 +113,11 @@
 }
 
 -(void)handleLeftChange {
+    float currentLeftPosition = 0; // calculate relative x value for left thumb
+    float currentRightPostion = 0; // calculate relative x value for right thumb
+    
+    self.left = currentLeftPosition / self.frame.size.width-20; // % calculated on bg frame
+    self.right = currentRightPostion / self.frame.size.width-20; // % calculated on bg frame
     
     if (self.player) {
         float duration = CMTimeGetSeconds(self.player.currentItem.asset.duration);
@@ -126,7 +131,6 @@
     if (self.delegate) {
         [self.delegate trimmersDidAdjust];
     }
-    
 }
 
 -(void)handleRightChange {
