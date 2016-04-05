@@ -137,6 +137,8 @@
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
 		D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */; };
+		D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */; };
+		D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */; };
 		D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */; };
 		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
 		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
@@ -446,6 +448,8 @@
 		D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "karmina-bold.otf"; sourceTree = "<group>"; };
 		D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxBlankCircleOutline24W2@3x.png"; sourceTree = "<group>"; };
 		D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxBlankCircleOutline24W2@2x.png"; sourceTree = "<group>"; };
+		D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLoginViewController.xib; sourceTree = "<group>"; };
 		D4E76A2E1CB423F600AC7A45 /* FRSTrimTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTrimTool.h; sourceTree = "<group>"; };
 		D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTrimTool.m; sourceTree = "<group>"; };
@@ -495,6 +499,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
+				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
 				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
 				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
 				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
@@ -599,6 +605,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */,
+				D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */,
 				65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */,
 				E72DB15F1B852BEF0017AAA5 /* Fabric.framework */,
 				E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */,
