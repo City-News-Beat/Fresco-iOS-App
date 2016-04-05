@@ -129,7 +129,7 @@
 		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
 		D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */; };
 		D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */; };
-		D43C7FDD1C8E474C00A7A7A7 /* FRESCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */; };
+		D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FDC1C8E474C00A7A7A7 /* FRSCheckBox.m */; };
 		D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */; };
 		D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
@@ -434,7 +434,7 @@
 		D43C7FD81C8E472B00A7A7A7 /* FRSVideoTrimmer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSVideoTrimmer.h; path = ../FRSVideoTrimmer.h; sourceTree = "<group>"; };
 		D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSVideoTrimmer.m; path = ../FRSVideoTrimmer.m; sourceTree = "<group>"; };
 		D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCheckBox.h; sourceTree = "<group>"; };
-		D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRESCheckBox.m; sourceTree = "<group>"; };
+		D43C7FDC1C8E474C00A7A7A7 /* FRSCheckBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCheckBox.m; sourceTree = "<group>"; };
 		D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
 		D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLoadingCell.xib; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
@@ -1064,7 +1064,7 @@
 			children = (
 				D43C7FDE1C8E489600A7A7A7 /* FRSFileFooterCell.xib */,
 				D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */,
-				D43C7FDC1C8E474C00A7A7A7 /* FRESCheckBox.m */,
+				D43C7FDC1C8E474C00A7A7A7 /* FRSCheckBox.m */,
 				D43C7FD31C8E46A500A7A7A7 /* FRSImageViewCell.h */,
 				D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */,
 				D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */,
@@ -1946,7 +1946,7 @@
 				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
-				D43C7FDD1C8E474C00A7A7A7 /* FRESCheckBox.m in Sources */,
+				D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */,
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,

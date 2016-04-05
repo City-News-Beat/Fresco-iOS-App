@@ -55,7 +55,6 @@
     self.backgroundColor = [UIColor clearColor];
     imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
     imageView.image = [UIImage imageNamed:@"circlefres"];
-    self.alpha = .7;
     [self addSubview:imageView];
 }
 
