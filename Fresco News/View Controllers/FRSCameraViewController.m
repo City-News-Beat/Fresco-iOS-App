@@ -216,7 +216,7 @@
     [UIView commitAnimations];
     
     self.motionManager = [[CMMotionManager alloc] init];
-    [self startTrackingMovement];
+    [self startTrackingMovement]; 
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -225,6 +225,7 @@
 
     [self fadeInPreview];
 }
+
 
 
 -(void)viewWillDisappear:(BOOL)animated{

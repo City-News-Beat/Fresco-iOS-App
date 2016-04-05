@@ -14,15 +14,10 @@
 -(void)setSelected:(BOOL)selected {
     _selected = selected;
     if (_selected) {
-        imageView.hidden = TRUE;
-        self.backgroundColor = [UIColor whiteColor];
-        self.layer.masksToBounds = YES;
-        self.layer.cornerRadius = self.frame.size.width/2;
+        imageView.image = [UIImage imageNamed:@"picker-checkmark"];
     }
     else {
-        imageView.hidden = FALSE;
-        self.backgroundColor = [UIColor clearColor];
-        self.layer.cornerRadius = 0;
+        imageView.image = [UIImage imageNamed:@"circlefres"];
     }
 }
 
