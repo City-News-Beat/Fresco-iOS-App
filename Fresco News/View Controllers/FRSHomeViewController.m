@@ -83,7 +83,12 @@
     [self addStatusBarNotification];
     
     [self showNavBarForScrollView:self.scrollView animated:NO];
+    
+}
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self showTabBarAnimated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -232,7 +237,6 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    
     
     if (!self.dataSource) {
         self.dataSource = [[NSMutableArray alloc] init];

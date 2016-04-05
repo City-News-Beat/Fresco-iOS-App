@@ -60,6 +60,7 @@
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -72,6 +73,18 @@
     [super viewWillAppear:animated];
     
     [self register3DTouch];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    self.navigationItem.titleView = self.titleLabel;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    self.navigationItem.titleView = self.titleLabel;
 }
 
 -(void)popViewController{
@@ -90,12 +103,6 @@
     
     self.navigationItem.titleView = self.titleLabel;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    
-    self.navigationItem.titleView = self.titleLabel;
 }
 
 -(void)configureUI{
