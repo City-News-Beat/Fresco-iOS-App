@@ -166,6 +166,20 @@
     
 }
 
+-(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        self.fileLoader = [[FRSFileLoader alloc] initWithDelegate:Nil];
+        PHAsset *firstAsset = [self.fileLoader assetAtIndex:0];
+        
+        if (firstAsset) {
+            // image that fits predicate at index 0
+        }
+        else {
+            // no image
+        }
+    });
+}
+
 -(void)checkLibrary {
     
 }

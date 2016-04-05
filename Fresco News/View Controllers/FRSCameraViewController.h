@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSFileLoader.h"
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
@@ -19,6 +20,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic) FRSCaptureMode captureMode;
 
+@property (nonatomic, retain) FRSFileLoader *fileLoader;
 
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
 
