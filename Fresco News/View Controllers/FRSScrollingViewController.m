@@ -30,9 +30,20 @@
         [super configureBackButtonAnimated:NO];
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    
     self.enabled = YES;
 }
 
+-(void)appWillResignActive:(NSNotification*)notification {
+    
+    self.navigationItem.titleView.alpha = 1.0;
+    
+    if (self.shouldHaveBackButton){
+        [super configureBackButtonAnimated:YES];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    }
+}
 
 -(void)configureTableView{
     

@@ -71,6 +71,7 @@
     [super viewWillAppear:animated];
     
     [self register3DTouch];
+
 }
 
 -(void)popViewController{
