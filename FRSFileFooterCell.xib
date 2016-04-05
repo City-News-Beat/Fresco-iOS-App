@@ -3,13 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="karmina-bold.otf">
-            <string>Karmina-Bold</string>
-        </mutableArray>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -24,7 +18,7 @@
                         <constraint firstAttribute="height" constant="30" id="bdS-Eh-QH4"/>
                         <constraint firstAttribute="width" constant="320" id="c1Z-3j-Swl"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="Karmina-Bold" family="Karmina" pointSize="22"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -42,14 +36,14 @@
                             <string key="content">We can only verify photos and videos from the past 24 hours. If nothing’s showing up, make sure Location Services are turned on in </string>
                             <attributes>
                                 <color key="NSColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="Settings">
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
@@ -58,7 +52,7 @@
 </string>
                             <attributes>
                                 <color key="NSColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
@@ -66,10 +60,10 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailingMargin" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="16" id="B6Y-kz-qLl"/>
-                <constraint firstAttribute="trailingMargin" secondItem="mc4-1b-s15" secondAttribute="trailing" constant="-8" id="D1q-MS-szT"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="2lt-tV-e4M"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="6Tc-i5-lMi"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="cCd-zR-7Ac"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="e3h-1W-uBY"/>
             </constraints>
