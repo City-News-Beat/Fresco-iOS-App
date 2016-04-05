@@ -17,7 +17,7 @@
         imageView.image = [UIImage imageNamed:@"picker-checkmark"];
     }
     else {
-        imageView.image = [UIImage imageNamed:@"circlefres"];
+        imageView.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
     }
 }
 
@@ -54,7 +54,7 @@
 -(void)commonInit {
     self.backgroundColor = [UIColor clearColor];
     imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
-    imageView.image = [UIImage imageNamed:@"circlefres"];
+    imageView.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
     [self addSubview:imageView];
 }
 
