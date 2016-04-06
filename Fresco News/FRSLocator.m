@@ -39,9 +39,21 @@
 /*
  Sets up CLLocationManager, and sets us up to receive UIApplicationState change notifications
  */
+
+-(void)checkForCachedLocation {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"]) {
+        NSNumber *latitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-latitude"];
+        NSNumber *longitude = [[NSUserDefaults standardUserDefaults] objectForKey:@"fresco-last-longitude"];
+        
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]];
+        self.currentLocation = location;
+    }
+}
+
 -(void)defaultSetup {
     [self setupNotifications];
     [self setupLocationManager];
+    [self checkForCachedLocation];
     
     self.backgroundBlock = ^(NSArray *locations) {
         UIApplication *app = [UIApplication sharedApplication];
@@ -225,6 +237,16 @@
                                        repeats:FALSE];
     
     [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
+    [self cacheLocation:[locations firstObject]];
+}
+
+-(void)cacheLocation:(CLLocation *)location {
+    float longitude = location.coordinate.longitude;
+    float latitude = location.coordinate.latitude;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@(longitude) forKey:@"fresco-last-longitude"];
+    [[NSUserDefaults standardUserDefaults] setObject:@(latitude) forKey:@"fresco-last-latitude"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)restartActiveUpdates {
@@ -249,6 +271,8 @@
     else {
         [self handleActiveChange:locations];
     }
+    
+    [self cacheLocation:[locations firstObject]];
 }
 
 /*

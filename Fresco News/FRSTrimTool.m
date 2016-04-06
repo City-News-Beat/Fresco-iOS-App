@@ -210,10 +210,7 @@
 }
 
 -(void)handleRightChange {
-    
-    if (self.delegate) {
-        [self.delegate trimmersDidAdjust];
-    }
+    [self handleLeftChange];
 }
 
 @end
