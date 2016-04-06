@@ -33,6 +33,7 @@
 		07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */; };
 		07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C121C50499A00C536EB /* FRSStoryCell.m */; };
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
+		07BB581C1CB5717A00091C86 /* lalaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 07BB581B1CB5717A00091C86 /* lalaunch.mp4 */; };
 		07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
@@ -263,6 +264,7 @@
 		07A30C121C50499A00C536EB /* FRSStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryCell.m; sourceTree = "<group>"; };
 		07B61ECB1CAF1C4900D3454F /* PeekPopArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeekPopArticleViewController.h; sourceTree = "<group>"; };
 		07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeekPopArticleViewController.m; sourceTree = "<group>"; };
+		07BB581B1CB5717A00091C86 /* lalaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lalaunch.mp4; sourceTree = "<group>"; };
 		07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrimmerViewController.h; sourceTree = "<group>"; };
 		07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTrimmerViewController.m; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
@@ -1081,6 +1083,7 @@
 				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
 				07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */,
 				07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */,
+				07BB581B1CB5717A00091C86 /* lalaunch.mp4 */,
 			);
 			name = "Image Picker";
 			path = ../..;
@@ -1750,6 +1753,7 @@
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
+				07BB581C1CB5717A00091C86 /* lalaunch.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

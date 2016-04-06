@@ -129,7 +129,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 -(void)next:(id)sender {
@@ -246,9 +246,14 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)presentVideoTrimmerViewController {
-    self.currentTime;
+    
     VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
     [self presentViewController:vc animated:YES completion:nil];
+    
+//    [UIView beginAnimations:@"fade-statusbar" context:nil];
+//    [UIView setAnimationDuration:0.3];
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+//    [UIView commitAnimations];
 }
 
 -(void)filesLoaded {

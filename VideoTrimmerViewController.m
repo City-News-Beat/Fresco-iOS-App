@@ -14,10 +14,7 @@
 
 @interface VideoTrimmerViewController ()
 
-//@property (strong, nonatomic) AVPlayer *player;
-//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
-//@property (strong, nonatomic) AVPlayerItem *playerItem;
-//@property (strong, nonatomic) AVAsset *asset;
+@property (strong, nonatomic) AVPlayer *player;
 
 @end
 
@@ -55,24 +52,42 @@
     [dismissButton setTintColor:[UIColor whiteColor]];
     [topContainer addSubview:dismissButton];
     
-    
     /* DEBUG */
     //    topContainer.backgroundColor = [UIColor redColor];
     //    titleLabel.backgroundColor = [UIColor greenColor];
 }
 
 -(void)configurePlayer {
-
-    AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString: @"https://www.youtube.com/watch?v=40x89Q2o5Xw"]];
-    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-    playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, 200);
-    [self.view.layer insertSublayer:playerLayer above:self.view.layer];
     
-    [player play];
+    NSString *filepath = [[NSBundle mainBundle] pathForResource:@"lalaunch" ofType:@"mp4"];
+    NSURL *fileURL = [NSURL fileURLWithPath:filepath];
+    
+    self.player = [[AVPlayer alloc] initWithURL:fileURL];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+    playerLayer.frame = CGRectMake(16, self.view.frame.size.height/2 - 100, self.view.frame.size.width - 32, 200);
+    
+    [self.view.layer addSublayer:playerLayer];
+
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+    [self.view addGestureRecognizer:tap];
+    
+    
+    [self.player play];
     
     
     /* DEBUG */
     playerLayer.backgroundColor = [UIColor greenColor].CGColor;
+}
+
+-(void)tapped:(UITapGestureRecognizer *)sender {
+    
+    if (self.player.rate == 0) {
+        [self.player play];
+    }
+    else {
+        [self.player pause];
+    }
 }
 
 
