@@ -57,7 +57,7 @@
 -(void)reconfigureUI {
     float effectiveWidth = self.frame.size.width-30;
     
-    self.leftOutline.frame = CGRectMake(15 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
+    self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
     self.rightOutline.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 10, 15, self.frame.size.height-20);
     
     self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 6);
