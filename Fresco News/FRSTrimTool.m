@@ -57,8 +57,8 @@
 -(void)reconfigureUI {
     float effectiveWidth = self.frame.size.width-30;
     
-    self.leftOutline.frame = CGRectMake(15 + (effectiveWidth * self.left), 10, 30, self.frame.size.height-20);
-    self.rightOutline.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 10, 30, self.frame.size.height-20);
+    self.leftOutline.frame = CGRectMake(15 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
+    self.rightOutline.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 10, 15, self.frame.size.height-20);
     
     self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 6);
     self.bottomView.frame = CGRectMake(35, self.frame.size.height-16, self.frame.size.width-70, 6);
@@ -92,6 +92,12 @@
     [self addSubview:self.rightView];
     [self addSubview:self.leftView];
     
+    self.leftOutline.layer.masksToBounds = YES;
+    self.rightOutline.layer.masksToBounds = YES;
+    
+    self.leftOutline.layer.cornerRadius = 2.0;
+    self.rightOutline.layer.cornerRadius = 2.0;
+    
     [self reconfigureUI]; // set frames correctly
 }
 
@@ -114,7 +120,7 @@
         
         for (int i = 0; i < 3; i++) {
             for (int c = 0; c < 2; c++) {
-                float x = 4 * c; // 0 | 4
+                float x = 4 * c + 5; // 0 | 4
                 float y = 4 * i + 1;
                 UIView *currentSquare = [[UIView alloc] initWithFrame:CGRectMake(x, y, 2, 2)];
                 currentSquare.backgroundColor = [UIColor whiteColor];
