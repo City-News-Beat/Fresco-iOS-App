@@ -23,6 +23,7 @@
 #import "FRSCoreData.h"
 
 #import "FRSSearchViewController.h"
+#import "FRSTrimTool.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
 {
@@ -83,7 +84,8 @@
     [self addStatusBarNotification];
     
     [self showNavBarForScrollView:self.scrollView animated:NO];
-    
+    FRSTrimTool *trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 50)];
+    [self.view addSubview:trimmer];
 }
 
 -(void)viewDidAppear:(BOOL)animated{

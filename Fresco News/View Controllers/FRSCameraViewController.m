@@ -261,8 +261,6 @@
 
     [self fadeInPreview];
     
-    FRSTrimTool *trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 50)];
-    [self.view addSubview:trimmer];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
