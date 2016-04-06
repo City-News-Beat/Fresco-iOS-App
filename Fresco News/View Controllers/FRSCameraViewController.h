@@ -16,7 +16,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 };
 
 @interface FRSCameraViewController : UIViewController
-
+{
+    float beginGestureScale;
+    float effectiveScale;
+}
 @property (nonatomic) BOOL isPresented;
 
 @property (nonatomic) FRSCaptureMode captureMode;

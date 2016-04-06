@@ -154,21 +154,40 @@
 }
 
 -(void)addPanGesture {
-    UIPanGestureRecognizer *zoomGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
+    UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
     [self.view addGestureRecognizer:zoomGesture];
 }
 
--(void)zoom:(UIPanGestureRecognizer *)sender {
-    UIGestureRecognizerState senderState = sender.state;
+-(void)zoom:(UIPinchGestureRecognizer *)recognizer {
     
-    if (senderState == UIGestureRecognizerStateBegan) {
-        
+    AVCaptureVideoPreviewLayer *previewLayer = self.captureVideoPreviewLayer;
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        beginGestureScale = effectiveScale;
     }
-    else if (senderState == UIGestureRecognizerStateChanged) {
-        
+    
+    BOOL allTouchesAreOnThePreviewLayer = YES;
+    NSUInteger numTouches = [recognizer numberOfTouches], i;
+    for ( i = 0; i < numTouches; ++i ) {
+        CGPoint location = [recognizer locationOfTouch:i inView:self.view];
+        CGPoint convertedLocation = [previewLayer convertPoint:location fromLayer:previewLayer.superlayer];
+        if ( ! [previewLayer containsPoint:convertedLocation] ) {
+            allTouchesAreOnThePreviewLayer = NO;
+            break;
+        }
     }
-    else if (senderState == UIGestureRecognizerStateEnded) {
-        
+    
+    if ( allTouchesAreOnThePreviewLayer ) {
+        effectiveScale = beginGestureScale * recognizer.scale;
+        if (effectiveScale < 1.0)
+            effectiveScale = 1.0;
+        CGFloat maxScaleAndCropFactor = [[self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo] videoMaxScaleAndCropFactor];
+        if (effectiveScale > maxScaleAndCropFactor)
+            effectiveScale = maxScaleAndCropFactor;
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:.025];
+        [previewLayer setAffineTransform:CGAffineTransformMakeScale(effectiveScale, effectiveScale)];
+        [CATransaction commit];
     }
 }
 -(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
