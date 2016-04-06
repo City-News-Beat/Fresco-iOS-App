@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface VideoTrimmerViewController : UIViewController
+@interface VideoTrimmerViewController : FRSBaseViewController
 
 @end

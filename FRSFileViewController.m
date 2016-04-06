@@ -130,7 +130,6 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 -(void)next:(id)sender {
@@ -252,27 +251,6 @@ static NSString *imageTile = @"ImageTile";
     [self presentViewController:vc animated:YES completion:nil];
     
     [self shouldShowStatusBar:NO animated:YES];
-}
-
--(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
-    
-    UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];
-    
-    int alpha;
-    if (statusBar) {
-        alpha = 1;
-    } else {
-        alpha = 0;
-    }
-    
-    if (animated) {
-        [UIView beginAnimations:@"fade-statusbar" context:nil];
-        [UIView setAnimationDuration:0.3];
-        statusBarApplicationWindow.alpha = alpha;
-        [UIView commitAnimations];
-    } else {
-        statusBarApplicationWindow.alpha = alpha;
-    }
 }
 
 -(void)filesLoaded {

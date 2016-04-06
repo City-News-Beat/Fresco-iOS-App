@@ -20,12 +20,22 @@
 
 @implementation VideoTrimmerViewController
 
+
+#pragma mark - Lifecycle
 -(void)viewDidLoad {
     [super viewDidLoad];
     
     [self configureUI];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:NO];
+}
+
+#pragma mark - UI
 -(void)configureUI {
     self.view.backgroundColor = [UIColor blackColor];
 
@@ -75,11 +85,12 @@
     
     [self.player play];
     
-    
     /* DEBUG */
     playerLayer.backgroundColor = [UIColor greenColor].CGColor;
 }
 
+
+#pragma mark - Actions
 -(void)tapped:(UITapGestureRecognizer *)sender {
     
     if (self.player.rate == 0) {
@@ -90,9 +101,31 @@
     }
 }
 
-
 -(void)dismiss {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+//#pragma mark - Status Bar
+//-(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
+//    
+//    UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];
+//    
+//    int alpha;
+//    if (statusBar) {
+//        alpha = 1;
+//    } else {
+//        alpha = 0;
+//    }
+//    
+//    if (animated) {
+//        [UIView beginAnimations:@"fade-statusbar" context:nil];
+//        [UIView setAnimationDuration:0.3];
+//        statusBarApplicationWindow.alpha = alpha;
+//        [UIView commitAnimations];
+//    } else {
+//        statusBarApplicationWindow.alpha = alpha;
+//    }
+//}
 
 @end
