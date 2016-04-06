@@ -23,6 +23,9 @@
 
 @property (nonatomic, retain) UIPanGestureRecognizer *leftPan;
 @property (nonatomic, retain) UIPanGestureRecognizer *rightPan;
+
+@property (nonatomic, retain) NSArray *leftSquares;
+@property (nonatomic, retain) NSArray *rightSquares;
 @end
 
 @implementation FRSTrimTool
@@ -85,8 +88,39 @@
     
     [self.leftView addSubview:self.leftOutline];  // green thumb
     [self.rightView addSubview:self.rightOutline]; // green thumb
+    [self drawSquares];
     
     [self reconfigureUI]; // set frames correctly
+}
+
+-(void)drawSquares {
+    NSMutableArray *la = [[NSMutableArray alloc] init]; // left array
+    NSMutableArray *ra = [[NSMutableArray alloc] init]; // right array
+    NSMutableArray *ca; // currently represented array
+    UIView *cv; // current represented view (leftOutline v rightOutline)
+    
+    for (int r = 0; r < 2; r++) {
+        
+        if (r == 0) {
+            ca = la;
+            cv = self.leftOutline;
+        }
+        else {
+            ca = ra;
+            cv = self.rightOutline;
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            for (int c = 0; c < 2; c++) {
+                float x = 4 * c; // 0 | 4
+                float y = 4 * i + 1;
+                UIView *currentSquare = [[UIView alloc] initWithFrame:CGRectMake(x, y, 2, 2)];
+                currentSquare.backgroundColor = [UIColor whiteColor];
+                [cv addSubview:currentSquare];
+                [ca addObject:currentSquare];
+            }
+        }
+    }
 }
 
 -(void)setBackground:(UIView *)background {
