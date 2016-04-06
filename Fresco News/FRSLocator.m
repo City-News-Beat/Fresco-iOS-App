@@ -47,6 +47,13 @@
         
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]];
         self.currentLocation = location;
+        
+        NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lon":@(_currentLocation.coordinate.longitude)};
+        
+        // propogate last location through notification center
+        dispatch_async(dispatch_get_main_queue(),^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:FRSLocationUpdateNotification object:Nil userInfo:userInfo];
+        });
     }
 }
 
