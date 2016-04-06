@@ -82,8 +82,7 @@
     
     [self addStatusBarNotification];
     
-    [self showNavBarForScrollView:self.scrollView animated:NO];
-    
+//    [self showNavBarForScrollView:self.scrollView animated:NO];
 }
 
 -(void)viewDidAppear:(BOOL)animated{

@@ -120,6 +120,7 @@ static NSString *imageTile = @"ImageTile";
     [self.navigationController setNavigationBarHidden:FALSE animated:YES];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -250,10 +251,28 @@ static NSString *imageTile = @"ImageTile";
     VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
     [self presentViewController:vc animated:YES completion:nil];
     
-//    [UIView beginAnimations:@"fade-statusbar" context:nil];
-//    [UIView setAnimationDuration:0.3];
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-//    [UIView commitAnimations];
+    [self shouldShowStatusBar:NO animated:YES];
+}
+
+-(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
+    
+    UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];
+    
+    int alpha;
+    if (statusBar) {
+        alpha = 1;
+    } else {
+        alpha = 0;
+    }
+    
+    if (animated) {
+        [UIView beginAnimations:@"fade-statusbar" context:nil];
+        [UIView setAnimationDuration:0.3];
+        statusBarApplicationWindow.alpha = alpha;
+        [UIView commitAnimations];
+    } else {
+        statusBarApplicationWindow.alpha = alpha;
+    }
 }
 
 -(void)filesLoaded {
