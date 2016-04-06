@@ -19,7 +19,7 @@
  */
 
 
-@interface FRSFileViewController : FRSScrollingViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FRSFileLoaderDelegate>
+@interface FRSFileViewController : FRSBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FRSFileLoaderDelegate>
 {
     FRSFileLoader *fileLoader;
     UICollectionView *fileCollectionView;
