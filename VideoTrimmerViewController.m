@@ -106,26 +106,4 @@
 }
 
 
-//#pragma mark - Status Bar
-//-(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated {
-//    
-//    UIWindow *statusBarApplicationWindow = (UIWindow *)[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"];
-//    
-//    int alpha;
-//    if (statusBar) {
-//        alpha = 1;
-//    } else {
-//        alpha = 0;
-//    }
-//    
-//    if (animated) {
-//        [UIView beginAnimations:@"fade-statusbar" context:nil];
-//        [UIView setAnimationDuration:0.3];
-//        statusBarApplicationWindow.alpha = alpha;
-//        [UIView commitAnimations];
-//    } else {
-//        statusBarApplicationWindow.alpha = alpha;
-//    }
-//}
-
 @end

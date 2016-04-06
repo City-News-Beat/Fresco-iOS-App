@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModeVideo
 };
 
-@interface FRSCameraViewController : UIViewController
+@interface FRSCameraViewController : FRSBaseViewController
 
 @property (nonatomic) BOOL isPresented;
 
