@@ -118,10 +118,10 @@
             cv = self.rightOutline;
         }
         
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             for (int c = 0; c < 2; c++) {
                 float x = 4 * c + 5; // 0 | 4
-                float y = 4 * i + 1;
+                float y = 4 * i + 1 + 7;
                 UIView *currentSquare = [[UIView alloc] initWithFrame:CGRectMake(x, y, 2, 2)];
                 currentSquare.backgroundColor = [UIColor whiteColor];
                 [cv addSubview:currentSquare];
