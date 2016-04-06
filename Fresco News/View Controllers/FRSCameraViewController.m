@@ -164,6 +164,11 @@
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         beginGestureScale = effectiveScale;
+        
+        if (beginGestureScale <= 0) {
+            beginGestureScale = 1;
+            effectiveScale = 1;
+        }
     }
     
     BOOL allTouchesAreOnThePreviewLayer = YES;
@@ -807,7 +812,7 @@
 }
 
 -(void)torch:(BOOL)on{
-
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if ([device hasTorch]) {
         [device lockForConfiguration:nil];
         if (on) {
