@@ -7,6 +7,7 @@
 //
 
 #import "FRSTrimTool.h"
+#import "UIColor+Fresco.h"
 
 @interface FRSTrimTool (defined)
 @property CGRect leftRect;
@@ -16,6 +17,9 @@
 @property (nonatomic, retain) UIView *rightView;
 @property (nonatomic, retain) UIView *topView;
 @property (nonatomic, retain) UIView *bottomView;
+
+@property (nonatomic, retain) UIView *leftOutline;
+@property (nonatomic, retain) UIView *rightOutline;
 
 @property (nonatomic, retain) UIPanGestureRecognizer *leftPan;
 @property (nonatomic, retain) UIPanGestureRecognizer *rightPan;
@@ -69,6 +73,20 @@
 -(void)setupUI {
     self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [self addSubview:self.backgroundView];
+    
+    self.leftView = [[UIView alloc] init];
+    self.rightView = [[UIView alloc] init];
+    
+    self.leftOutline = [[UIView alloc] init];
+    self.rightOutline = [[UIView alloc] init];
+    //
+    self.rightOutline.backgroundColor = [UIColor frescoGreenColor];
+    self.leftOutline.backgroundColor = [UIColor frescoGreenColor];
+    
+    [self.leftView addSubview:self.leftOutline];  // green thumb
+    [self.rightView addSubview:self.rightOutline]; // green thumb
+    
+    [self reconfigureUI]; // set frames correctly
 }
 
 -(void)setBackground:(UIView *)background {
