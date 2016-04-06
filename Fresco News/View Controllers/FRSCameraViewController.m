@@ -188,6 +188,9 @@
         [CATransaction setAnimationDuration:.025];
         [previewLayer setAffineTransform:CGAffineTransformMakeScale(effectiveScale, effectiveScale)];
         [CATransaction commit];
+        
+        [[self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo] setVideoScaleAndCropFactor:effectiveScale];
+
     }
 }
 -(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
