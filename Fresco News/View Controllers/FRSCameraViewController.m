@@ -182,8 +182,6 @@
         }
     }
     
-    
-    
     if ( allTouchesAreOnThePreviewLayer ) {
         AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
         effectiveScale = beginGestureScale * recognizer.scale;
@@ -193,13 +191,9 @@
         CGFloat maxScaleAndCropFactor = device.activeFormat.videoMaxZoomFactor;
         if (effectiveScale > maxScaleAndCropFactor)
             effectiveScale = maxScaleAndCropFactor;
-        
-        //[self.captureVideoPreviewLayer.connection setVideoScaleAndCropFactor:effectiveScale];
-        
+                
         if ([device respondsToSelector:@selector(setVideoZoomFactor:)]
             && device.activeFormat.videoMaxZoomFactor >= effectiveScale) {
-            
-            NSLog(@"ZOOM VIDEO SRC %f", effectiveScale);
             
             if ([device lockForConfiguration:nil]) {
                 [device setVideoZoomFactor:effectiveScale];

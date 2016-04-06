@@ -72,6 +72,9 @@
 -(void)reconfigureUI {
     self.rightOutline.frame = CGRectMake(15, 10, 30, self.frame.size.height-20);
     self.leftOutline.frame = CGRectMake(self.frame.size.width-15 - 30, 10, 30, self.frame.size.height-20);
+    
+    self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 6);
+    self.bottomView.frame = CGRectMake(35, self.frame.size.height-16, self.frame.size.width-70, 6);
 }
 
 -(void)setupUI {
