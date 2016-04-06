@@ -47,6 +47,15 @@
 
 -(void)commonInit {
     [self setupUI];
+    [self setupGestureRecognizers];
+}
+
+-(void)setupGestureRecognizers {
+    UIPanGestureRecognizer *leftRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panLeft:)];
+    UIPanGestureRecognizer *rightRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRight:)];
+    
+    [self.leftView addGestureRecognizer:leftRecognizer];
+    [self.rightView addGestureRecognizer:rightRecognizer];
 }
 
 -(void)setFrame:(CGRect)frame {
@@ -60,8 +69,8 @@
     self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
     self.rightOutline.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 10, 15, self.frame.size.height-20);
     
-    self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 6);
-    self.bottomView.frame = CGRectMake(35, self.frame.size.height-16, self.frame.size.width-70, 6);
+    self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 4);
+    self.bottomView.frame = CGRectMake(35, self.frame.size.height-14, self.frame.size.width-70, 4);
 }
 
 -(void)setupUI {
@@ -149,7 +158,7 @@
 }
 
 -(void)panRight:(UIPanGestureRecognizer *)sender {
-    
+    NSLog(@"PANRIGHT");
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.rightRect = self.rightView.frame;
     }
@@ -165,7 +174,7 @@
 }
 
 -(void)panLeft:(UIPanGestureRecognizer *)sender {
-    
+    NSLog(@"PANLEFT");
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.leftRect = self.leftView.frame;
     }
