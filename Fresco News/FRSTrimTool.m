@@ -120,6 +120,13 @@
                 [ca addObject:currentSquare];
             }
         }
+        
+        if (r == 0) {
+            self.leftSquares = ca;
+        }
+        else {
+            self.rightSquares = ca;
+        }
     }
 }
 
