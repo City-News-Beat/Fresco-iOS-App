@@ -185,30 +185,28 @@
     
     
     if ( allTouchesAreOnThePreviewLayer ) {
+        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
         effectiveScale = beginGestureScale * recognizer.scale;
+        
         if (effectiveScale < 1.0)
             effectiveScale = 1.0;
-        CGFloat maxScaleAndCropFactor = [[self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo] videoMaxScaleAndCropFactor];
+        CGFloat maxScaleAndCropFactor = device.activeFormat.videoMaxZoomFactor;
         if (effectiveScale > maxScaleAndCropFactor)
             effectiveScale = maxScaleAndCropFactor;
         
         //[self.captureVideoPreviewLayer.connection setVideoScaleAndCropFactor:effectiveScale];
-        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
         
         if ([device respondsToSelector:@selector(setVideoZoomFactor:)]
             && device.activeFormat.videoMaxZoomFactor >= effectiveScale) {
-            // iOS 7.x with compatible hardware
+            
+            NSLog(@"ZOOM VIDEO SRC %f", effectiveScale);
+            
             if ([device lockForConfiguration:nil]) {
                 [device setVideoZoomFactor:effectiveScale];
                 [device unlockForConfiguration];
             }
         }
-        else {
-            [CATransaction begin];
-            [CATransaction setAnimationDuration:.025];
-            [previewLayer setAffineTransform:CGAffineTransformMakeScale(effectiveScale, effectiveScale)];
-            [CATransaction commit];
-        }
+
     }
 }
 -(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
