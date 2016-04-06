@@ -38,5 +38,6 @@ typedef void (^TrimCompletion)(NSURL *originalURL, NSURL *destinationURL, NSErro
 
 -(void)trimAssetAtURL:(NSURL *)startURL startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with a URL AND float time values
 
+-(UIView *)previewImagesForAsset:(AVAsset *)asset;
 
 @end

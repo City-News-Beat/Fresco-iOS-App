@@ -95,4 +95,8 @@
     [self trimAssetAtURL:startURL startTime:startCMTime endTime:endCMTime toURL:url withCallback:completion];
 }
 
+-(UIView *)previewImagesForAsset:(AVAsset *)asset {
+    return asset;
+}
+
 @end

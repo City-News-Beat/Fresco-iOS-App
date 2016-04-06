@@ -70,7 +70,8 @@
 }
 
 -(void)reconfigureUI {
-    
+    self.rightOutline.frame = CGRectMake(15, 10, 30, self.frame.size.height-20);
+    self.leftOutline.frame = CGRectMake(self.frame.size.width-15 - 30, 10, 30, self.frame.size.height-20);
 }
 
 -(void)setupUI {
@@ -89,6 +90,17 @@
     [self.leftView addSubview:self.leftOutline];  // green thumb
     [self.rightView addSubview:self.rightOutline]; // green thumb
     [self drawSquares];
+    
+    self.topView = [[UIView alloc] init];
+    self.topView.backgroundColor = [UIColor frescoGreenColor];
+    
+    self.bottomView = [[UIView alloc] init];
+    self.bottomView.backgroundColor = [UIColor frescoGreenColor];
+    
+    [self addSubview:self.topView];
+    [self addSubview:self.bottomView];
+    [self addSubview:self.rightView];
+    [self addSubview:self.leftView];
     
     [self reconfigureUI]; // set frames correctly
 }
