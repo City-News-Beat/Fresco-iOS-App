@@ -10,22 +10,7 @@
 #import "UIColor+Fresco.h"
 
 @interface FRSTrimTool (defined)
-@property CGRect leftRect;
-@property CGRect rightRect;
-@property (nonatomic, retain) UIView *backgroundView;
-@property (nonatomic, retain) UIView *leftView; // trim overlay
-@property (nonatomic, retain) UIView *rightView;
-@property (nonatomic, retain) UIView *topView;
-@property (nonatomic, retain) UIView *bottomView;
 
-@property (nonatomic, retain) UIView *leftOutline;
-@property (nonatomic, retain) UIView *rightOutline;
-
-@property (nonatomic, retain) UIPanGestureRecognizer *leftPan;
-@property (nonatomic, retain) UIPanGestureRecognizer *rightPan;
-
-@property (nonatomic, retain) NSArray *leftSquares;
-@property (nonatomic, retain) NSArray *rightSquares;
 @end
 
 @implementation FRSTrimTool

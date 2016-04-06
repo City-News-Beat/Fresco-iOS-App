@@ -42,6 +42,8 @@
 #define SIDE_PAD 12
 #define PHOTO_FRAME_RATIO 4/3
 
+#import "FRSTrimTool.h"
+
 @interface FRSCameraViewController () <CLLocationManagerDelegate, AVCaptureFileOutputRecordingDelegate>
 
 @property (strong, nonatomic) FRSAVSessionManager *sessionManager;
@@ -150,6 +152,7 @@
     
     self.isRecording = NO;
     
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideoCaptureIfNeeded) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
@@ -257,11 +260,10 @@
     [super viewDidAppear:animated];
 
     [self fadeInPreview];
+    
+    FRSTrimTool *trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(100, 100, self.view.frame.size.width, 50)];
+    [self.view addSubview:trimmer];
 }
-
-
-
-
 
 -(void)viewWillDisappear:(BOOL)animated{
     
