@@ -21,7 +21,6 @@
 #import "FRSScrollViewImageView.h"
 
 //views
-#import "FRSContentActionsBar.h"
 
 #import <Haneke/Haneke.h>
 #import "OEParallax.h"
@@ -32,33 +31,6 @@
 
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
-
-@property (strong, nonatomic) UIScrollView *scrollView;
-
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
-
-@property (strong, nonatomic) UILabel *captionLabel;
-
-@property (strong, nonatomic) UILabel *nameLabel;
-@property (strong, nonatomic) UILabel *locationLabel;
-@property (strong, nonatomic) UILabel *timeLabel;
-
-@property (strong, nonatomic) UIImageView *profileIV;
-@property (strong, nonatomic) UIImageView *locationIV;
-@property (strong, nonatomic) UIImageView *clockIV;
-
-@property (strong, nonatomic) UIPageControl *pageControl;
-
-@property (strong, nonatomic) NSMutableArray *imageViews;
-
-@property (strong, nonatomic) NSArray *orderedPosts;
-
-@property (nonatomic) NSInteger adjustedPage;
-
-
-@property (strong, nonatomic) UIImageView *parallaxImage;
-@property (strong, nonatomic) UIView *container;
-@property (nonatomic) NSInteger currentPage;
 
 @end
 
@@ -72,6 +44,10 @@
     // Drawing code
 }
 */
+
+-(void)loadGallery:(FRSGallery *)gallery {
+    
+}
 
 -(void)handleActionButtonTapped {
     // idk why dan made this method life is a mystery

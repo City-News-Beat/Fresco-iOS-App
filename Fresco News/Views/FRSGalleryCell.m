@@ -25,6 +25,13 @@
 }
 
 -(void)configureCell {
+    
+    if (self.galleryView == Nil) {
+        [self.galleryView loadGallery:self.gallery];
+        
+        return;
+    }
+    
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20) gallery:self.gallery delegate:self];
