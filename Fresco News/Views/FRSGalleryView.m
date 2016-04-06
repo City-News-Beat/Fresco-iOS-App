@@ -46,7 +46,9 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
-    
+    [self adjustHeight];
+    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
+    self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
 }
 
 -(void)handleActionButtonTapped {

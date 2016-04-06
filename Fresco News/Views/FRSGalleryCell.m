@@ -26,7 +26,7 @@
 
 -(void)configureCell {
     
-    if (self.galleryView == Nil) {
+    if (self.galleryView != Nil) {
         [self.galleryView loadGallery:self.gallery];
         
         return;
@@ -46,7 +46,7 @@
 
 -(void)clearCell{
     
-    [self.galleryView removeFromSuperview];
+    //[self.galleryView removeFromSuperview];
 }
 
 #pragma mark - DataSource For Action Bar
