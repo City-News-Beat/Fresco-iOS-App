@@ -60,7 +60,9 @@
 
     self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
     self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
-    
+    [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
+    [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
+
 }
 
 -(void)handleActionButtonTapped {
