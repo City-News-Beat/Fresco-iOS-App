@@ -158,39 +158,42 @@
     
     self.imageViews = [NSMutableArray new];
     
-    for (NSInteger i = 0; i < self.gallery.posts.count; i++){
-        
-        FRSPost *post = self.orderedPosts[i];
-        
-        NSInteger xOrigin = i * self.frame.size.width;
-        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.backgroundColor = [UIColor whiteColor];
-        imageView.clipsToBounds = YES;
-        imageView.indexInScrollView = i;
-        
-        [self.imageViews addObject:imageView];
-        
-        if (i==0) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSInteger i = 0; i < self.gallery.posts.count; i++){
+            
+            FRSPost *post = self.orderedPosts[i];
+            
+            NSInteger xOrigin = i * self.frame.size.width;
+            FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            imageView.backgroundColor = [UIColor whiteColor];
+            imageView.clipsToBounds = YES;
+            imageView.indexInScrollView = i;
+            
+            [self.imageViews addObject:imageView];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];    
+                if (i==0) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+                    });
+                }
+                
+                if ([post.mediaType integerValue] == 1) {
+                    // video
+                    // set up AVPlayer
+                    // add AVPlayerLayer
+                }
+                
+                imageView.userInteractionEnabled = YES;
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
+                tap.numberOfTapsRequired = 1;
+                [imageView addGestureRecognizer:tap];
+                
+                [self.scrollView addSubview:imageView];
             });
         }
-        
-        if ([post.mediaType integerValue] == 1) {
-            // video
-            // set up AVPlayer
-            // add AVPlayerLayer
-        }
-        
-        imageView.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
-        tap.numberOfTapsRequired = 1;
-        [imageView addGestureRecognizer:tap];
-        
-        [self.scrollView addSubview:imageView];
-    }
-    
+    });
     
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
