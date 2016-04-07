@@ -73,7 +73,7 @@
     
     [self.captionLabel sizeToFit];
     
-    [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
+    [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.frame.size.height - self.scrollView.frame.size.height - TEXTVIEW_TOP_PAD)];
     self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
     
     [self adjustHeight];
