@@ -403,7 +403,7 @@
 -(void)configureCaptionLabel{
     self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
-    self.captionLabel.font = [UIFont systemFontOfSize:15 weight:-1];
+    self.captionLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionLabel.text = self.gallery.caption;
     
     if ([self.delegate shouldHaveTextLimit]){

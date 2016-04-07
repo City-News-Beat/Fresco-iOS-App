@@ -43,7 +43,6 @@
     }
     else {
         [self startAuthentication];
-        self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
         return YES; // no other stuff going on (no quick action handling, etc)
     }
   
@@ -66,7 +65,7 @@
 }
 
 -(void)startAuthentication {
-    
+    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
 }
 
 -(BOOL)isAuthenticated {

@@ -96,7 +96,7 @@
 }
 
 -(UIView *)previewImagesForAsset:(AVAsset *)asset {
-    return asset;
+    return Nil;
 }
 
 @end
