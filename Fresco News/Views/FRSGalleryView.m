@@ -33,6 +33,7 @@
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
+@property (nonatomic, retain) UIView *borderLine;
 @end
 
 @implementation FRSGalleryView
@@ -73,7 +74,7 @@
     
     [self.captionLabel sizeToFit];
     
-    [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.frame.size.height - self.scrollView.frame.size.height - TEXTVIEW_TOP_PAD)];
+    [self.captionLabel setFrame:CGRectMake(16, [self imageViewHeight] + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
     self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
     
     [self adjustHeight];
@@ -398,8 +399,12 @@
     
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
     
-    if (!self.bottomLine) {
-        [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height)]];
+    if (!self.borderLine) {
+        self.borderLine = [UIView lineAtPoint:CGPointMake(0, self.frame.size.height)];
+        [self addSubview:self.borderLine];
+    }
+    else {
+        self.borderLine.frame = CGRectMake(0, self.frame.size.height, self.borderLine.frame.size.width, self.borderLine.frame.size.height);
     }
 }
 
