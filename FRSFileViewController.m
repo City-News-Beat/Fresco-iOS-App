@@ -43,7 +43,6 @@ static NSString *imageTile = @"ImageTile";
     
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
 }
 
 -(void)back {
