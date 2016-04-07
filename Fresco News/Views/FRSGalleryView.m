@@ -53,6 +53,10 @@
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     [self adjustHeight];
     [self updateLabels];
+    
+    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
+    self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
+    
 }
 
 -(void)handleActionButtonTapped {
