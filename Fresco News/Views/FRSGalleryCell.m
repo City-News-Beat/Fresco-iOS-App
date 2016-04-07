@@ -26,6 +26,10 @@
 
 -(void)configureCell {
     
+    if (self.gallery == self.galleryView.gallery) {
+        return;
+    }
+    
     if (self.galleryView != Nil) {
         [self.galleryView loadGallery:self.gallery];
         
