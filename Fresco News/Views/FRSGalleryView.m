@@ -49,7 +49,7 @@
 
 -(void)loadGallery:(FRSGallery *)gallery {
     
-    self.clipsToBounds = YES;
+    self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
     [self adjustHeight];
@@ -89,6 +89,20 @@
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
+    
+    [self updateScrollView];
+}
+
+-(void)updateScrollView {
+    if (self.scrollView.contentOffset.x >= 0) {
+        [self.scrollView scrollRectToVisible:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:NO];
+    }
+    
+    for (UIImageView *imageView in self.imageViews) {
+        [imageView removeFromSuperview];
+    }
+    
+    [self configureImageViews];
 }
 
 -(void)handleActionButtonTapped {
