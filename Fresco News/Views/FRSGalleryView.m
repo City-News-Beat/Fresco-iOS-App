@@ -58,6 +58,9 @@
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.scrollView.clipsToBounds = YES;
     [self updateLabels];
+    
+    self.pageControl.numberOfPages = self.gallery.posts.count;
+    [self.pageControl sizeToFit];
     self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
 
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
@@ -92,7 +95,6 @@
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
-    self.pageControl.numberOfPages = self.gallery.posts.count;
 
     [self updateScrollView];
 }
