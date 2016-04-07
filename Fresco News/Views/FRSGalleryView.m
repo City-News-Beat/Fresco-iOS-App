@@ -328,11 +328,13 @@
     //[self.locationLabel sizeToFit];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
-    
     [self.timeLabel sizeToFit];
     
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
+    CGRect timeFrame = self.timeLabel.frame;
+    timeFrame.size.width = 100;
+    self.timeLabel.frame = timeFrame;
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         
