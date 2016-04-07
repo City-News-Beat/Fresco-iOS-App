@@ -297,7 +297,9 @@
     [self addSubview:self.nameLabel];
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+        });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
@@ -327,7 +329,11 @@
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+        });
+        
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
@@ -482,8 +488,10 @@
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];        
+    });
+
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
     
