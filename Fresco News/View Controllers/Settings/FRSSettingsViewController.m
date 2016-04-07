@@ -476,6 +476,7 @@
                 {
                     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We’ll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" delegate:self];
                     [alert show];
+                    
                 }
                     break;
                 case 1:
@@ -485,6 +486,10 @@
 //                    FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
 //                    [self.navigationController pushViewController:disable animated:YES];
                     self.navigationItem.title = @"";
+                    
+                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+                    [alert show];
+                    
                 {
                     
                 }

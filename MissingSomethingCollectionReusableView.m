@@ -40,9 +40,8 @@
         self.textView.gestureRecognizers = mutableArrayOfGestureRecognizers;
     }
     
-    self.textView.font = [UIFont systemFontOfSize:14 weight:UIFontWeightLight];
-    //SYSTEM != SANFRAN
-    //Should be SFUIText-Light size 15
+    self.textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+
 }
 
 -(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
