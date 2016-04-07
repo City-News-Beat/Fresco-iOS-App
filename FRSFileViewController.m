@@ -181,7 +181,11 @@ static NSString *imageTile = @"ImageTile";
 {
 
     if (kind == UICollectionElementKindSectionFooter){
-        return [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
+        MissingSomethingCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
+        
+        [footer setup];
+        
+        return footer;
     }
     
     return Nil;
