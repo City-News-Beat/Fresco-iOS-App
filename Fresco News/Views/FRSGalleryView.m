@@ -81,6 +81,9 @@
     
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
+    CGRect timeFrame = self.timeLabel.frame;
+    timeFrame.size.width = 100;
+    self.timeLabel.frame = timeFrame;
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     self.nameLabel.center = self.profileIV.center;
@@ -89,7 +92,8 @@
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
-    
+    self.pageControl.numberOfPages = self.gallery.posts.count;
+
     [self updateScrollView];
 }
 
