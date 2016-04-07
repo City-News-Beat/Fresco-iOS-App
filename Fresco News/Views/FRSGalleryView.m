@@ -31,7 +31,8 @@
 
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
-
+@property (nonatomic, retain) UIView *topLine;
+@property (nonatomic, retain) UIView *bottomLine;
 @end
 
 @implementation FRSGalleryView
@@ -54,6 +55,9 @@
     [self adjustHeight];
     [self updateLabels];
     
+    self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
+    self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
+
     self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
     self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
     
@@ -145,14 +149,16 @@
         [self.scrollView addSubview:imageView];
     }
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
-    topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [self addSubview:topLine];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
-    [self addSubview:line];
-    
+    if (!self.topLine) {
+        self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
+        self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:self.topLine];
+        
+        self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5)];
+        self.bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:self.bottomLine];
+    }
 }
 
 -(void)configurePageControl{
