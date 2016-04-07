@@ -25,6 +25,7 @@
 }
 
 -(void)configureCell {
+    self.clipsToBounds = YES;
     
     if (self.gallery == self.galleryView.gallery) {
         return;
