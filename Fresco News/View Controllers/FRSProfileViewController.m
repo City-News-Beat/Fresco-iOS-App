@@ -22,6 +22,8 @@
 #import "DGElasticPullToRefresh.h"
 #import "Fresco.h"
 
+#import "FRSTrimTool.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -72,6 +74,10 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.tableView.scrollEnabled = FALSE;
+    FRSTrimTool *trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 50)];
+    self.navigationItem.titleView = trimmer;
+    
     [self addStatusBarNotification];
 }
 

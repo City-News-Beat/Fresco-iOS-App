@@ -47,10 +47,14 @@
 
 -(void)commonInit {
     [self setupUI];
-    [self setupGestureRecognizers];
 }
 
 -(void)setupGestureRecognizers {
+    
+    if (self.leftView.gestureRecognizers.count > 0) {
+        return;
+    }
+    
     UIPanGestureRecognizer *leftRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panLeft:)];
     UIPanGestureRecognizer *rightRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRight:)];
     
@@ -71,6 +75,7 @@
     
     self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 4);
     self.bottomView.frame = CGRectMake(35, self.frame.size.height-14, self.frame.size.width-70, 4);
+    [self setupGestureRecognizers];
 }
 
 -(void)setupUI {
