@@ -489,7 +489,7 @@
     FRSPost *post = self.orderedPosts[page];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];        
+        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     });
 
     NSInteger halfScroll = scrollView.frame.size.width/4;
