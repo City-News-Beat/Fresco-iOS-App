@@ -96,6 +96,7 @@
 -(void)updateScrollView {
     if (self.scrollView.contentOffset.x >= 0) {
         [self.scrollView scrollRectToVisible:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:NO];
+        [self scrollViewDidScroll:self.scrollView];
     }
     
     for (UIImageView *imageView in self.imageViews) {
