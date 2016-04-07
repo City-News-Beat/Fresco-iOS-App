@@ -46,12 +46,12 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
-    [self adjustHeight];
-    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
-    self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.gallery = gallery;
     self.orderedPosts = [self.gallery.posts allObjects];
     
+    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
+    self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
+    [self adjustHeight];
     [self updateLabels];
 }
 
