@@ -61,7 +61,7 @@
     
     self.pageControl.numberOfPages = self.gallery.posts.count;
     
-    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - (self.gallery.posts.count * 5) , self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
+    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - (self.gallery.posts.count * 7) , self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
 
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
