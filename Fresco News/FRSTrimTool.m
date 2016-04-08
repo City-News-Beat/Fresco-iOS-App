@@ -193,12 +193,9 @@
         float newX = self.leftRect.origin.x + xOffset;
         
         CGRect newFrame = CGRectMake(newX, self.leftRect.origin.y, self.leftRect.size.width, self.leftRect.size.height);
+    
         
-        if (![self checkLeft:newFrame]) {
-            return;
-        }
-        
-        self.leftView.frame = newFrame;
+        self.leftView.frame = [self checkLeft:newFrame];
         
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
@@ -208,20 +205,22 @@
     [self handleLeftChange]; // adjust cmtime
 }
 
--(BOOL)checkLeft:(CGRect)left {
+-(CGRect)checkLeft:(CGRect)left {
     float x = left.origin.x;
-    
-    if (x >= self.rightView.frame.origin.x - 15) {
-        return FALSE;
+    if (x > self.rightView.frame.origin.x - 45) {
+        left.origin.x = self.rightView.frame.origin.x - 45;
+    }
+    if (x < 30) {
+        left.origin.x = 30;
     }
     
-    return TRUE;
+    return left;
 }
 
 -(BOOL)checkRight:(CGRect)right {
     float x = right.origin.x;
     
-    if (x <= self.leftView.frame.origin.x) {
+    if (x < self.leftView.frame.origin.x) {
         return FALSE;
     }
     
