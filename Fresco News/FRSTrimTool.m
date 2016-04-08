@@ -46,8 +46,6 @@
 }
 
 -(void)commonInit {
-    self.right = 1;
-    self.left = 0;
     [self setupUI];
 }
 
