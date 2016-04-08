@@ -26,6 +26,8 @@
 @property (strong, nonatomic) UIButton* cancelButton;
 @property (strong, nonatomic) UIButton* actionButton;
 
+//@property (nonatomic())
+
 @property CGFloat height;
 
 
@@ -300,11 +302,15 @@
     return self;
 }
 
--(void)enableLocation{
+-(void)checkLocation{
     
 }
 
--(void)enableNotifications{
+-(void)checkNotifications{
+    
+    if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]){
+//        self.notificationsEnabled = YES;
+    }
     
 }
 
