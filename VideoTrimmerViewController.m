@@ -123,6 +123,8 @@
     
     int32_t timeScale = self.player.currentItem.asset.duration.timescale;
     CMTime time = CMTimeMakeWithSeconds(startTime, timeScale);
+    if (CMTIME_IS_INVALID(time))
+        return;
     [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 
