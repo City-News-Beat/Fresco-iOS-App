@@ -166,12 +166,21 @@
 }
 
 -(void)panRight:(UIPanGestureRecognizer *)sender {
+    
     NSLog(@"PANRIGHT");
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.rightRect = self.rightView.frame;
     }
     else if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [sender translationInView:self];
         
+        float xOffset = translation.x;
+        float newX = self.rightRect.origin.x + xOffset;
+        
+        CGRect newFrame = CGRectMake(newX, self.rightRect.origin.y, self.rightRect.size.width, self.rightRect.size.height);
+        
+        
+        self.rightView.frame = [self checkRight:newFrame];
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
         
@@ -207,24 +216,41 @@
 
 -(CGRect)checkLeft:(CGRect)left {
     float x = left.origin.x;
+    NSLog(@"%f %f", x, self.rightView.frame.origin.x);
     if (x > self.rightView.frame.origin.x - 45) {
         left.origin.x = self.rightView.frame.origin.x - 45;
     }
-    if (x < 30) {
-        left.origin.x = 30;
+    if (x < 0) {
+        left.origin.x = 0;
     }
     
+    float yDiff = self.frame.size.width -self.rightView.frame.origin.x;
+    float xBorder = 30 + left.origin.x;
+    float width = self.frame.size.width - xBorder - yDiff;
+    
+    self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
+     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     return left;
 }
 
--(BOOL)checkRight:(CGRect)right {
+-(CGRect)checkRight:(CGRect)right {
     float x = right.origin.x;
-    
-    if (x < self.leftView.frame.origin.x) {
-        return FALSE;
+    NSLog(@"%f %f", x, self.rightView.frame.origin.x);
+    if (x < self.leftView.frame.origin.x + 45) {
+        right.origin.x = self.leftView.frame.origin.x + 45;
+    }
+    if (x > self.frame.size.width-45) {
+        right.origin.x = self.frame.size.width-45;
     }
     
-    return TRUE;
+    float yDiff = self.frame.size.width - right.origin.x;
+    float xBorder = 30 + self.leftView.frame.origin.x;
+    float width = self.frame.size.width - xBorder - yDiff;
+    
+    self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
+    self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
+    
+    return right;
 }
 
 -(void)handleLeftChange {
