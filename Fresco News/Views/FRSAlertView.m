@@ -26,7 +26,7 @@
 @property (strong, nonatomic) UIButton* cancelButton;
 @property (strong, nonatomic) UIButton* actionButton;
 
-@property (nonatomic())
+//@property (nonatomic())
 
 @property CGFloat height;
 
@@ -309,7 +309,7 @@
 -(void)checkNotifications{
     
     if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]){
-        self.notificationsEnabled = YES;
+//        self.notificationsEnabled = YES;
     }
     
 }
