@@ -83,7 +83,11 @@
     
     [self addStatusBarNotification];
     
+//<<<<<<< HEAD
     [self showNavBarForScrollView:self.scrollView animated:NO];
+//=======
+////    [self showNavBarForScrollView:self.scrollView animated:NO];
+//>>>>>>> 3.0-omar
 }
 
 -(void)viewDidAppear:(BOOL)animated{

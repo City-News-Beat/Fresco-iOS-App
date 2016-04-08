@@ -7,6 +7,7 @@
 //
 
 #import "FRSCheckBox.h"
+#import "UIColor+Fresco.h"
 
 @implementation FRSCheckBox
 @synthesize selected = _selected;
@@ -51,10 +52,18 @@
     return self;
 }
 
+
 -(void)commonInit {
     self.backgroundColor = [UIColor clearColor];
     imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     imageView.image = [UIImage imageNamed:@"checkboxBlankCircleOutline24W2"];
+    
+    imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    imageView.layer.shadowOffset = CGSizeMake(0, 1);
+    imageView.layer.shadowOpacity = 0.2;
+    imageView.layer.shadowRadius = 1;
+    imageView.clipsToBounds = NO;
+    
     [self addSubview:imageView];
 }
 

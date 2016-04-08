@@ -7,10 +7,11 @@
 //
 
 #import "FRSFileViewController.h"
+#import "VideoTrimmerViewController.h"
 #import "UIFont+Fresco.h"
 
 @interface FRSFileViewController ()
-
+@property CMTime currentTime;
 @end
 
 @implementation FRSFileViewController
@@ -118,6 +119,7 @@ static NSString *imageTile = @"ImageTile";
     [self.navigationController setNavigationBarHidden:FALSE animated:YES];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -127,14 +129,12 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 -(void)next:(id)sender {
     
 }
-/*
-    Footer Related */
+/* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -180,7 +180,11 @@ static NSString *imageTile = @"ImageTile";
 {
 
     if (kind == UICollectionElementKindSectionFooter){
-        return [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
+        MissingSomethingCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
+        
+        [footer setup];
+        
+        return footer;
     }
     
     return Nil;
@@ -198,6 +202,7 @@ static NSString *imageTile = @"ImageTile";
     
     if ([selectedAssets containsObject:representedAsset]) {
         [cell selected:TRUE];
+        //if video and if > 60 seconds
     }
     else {
         [cell selected:FALSE];
@@ -215,6 +220,11 @@ static NSString *imageTile = @"ImageTile";
         [cell selected:FALSE];
     }
     else {
+        if (cell.currentAVAsset) {
+            self.currentTime = cell.currentAVAsset.duration;
+            [self presentVideoTrimmerViewController];
+        }
+        
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
     }
@@ -236,6 +246,14 @@ static NSString *imageTile = @"ImageTile";
         [alert addAction:ok];
         [self presentViewController:alert animated:YES completion:nil];
     });
+}
+
+-(void)presentVideoTrimmerViewController {
+    
+    VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
+    [self presentViewController:vc animated:YES completion:nil];
+    
+    [self shouldShowStatusBar:NO animated:YES];
 }
 
 -(void)filesLoaded {

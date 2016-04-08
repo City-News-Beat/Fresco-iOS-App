@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "FRSFileLoader.h"
 #import "FRSImageViewCell.h"
-
+#import "FRSScrollingViewController.h"
+#import "MissingSomethingCollectionReusableView.h"
 /*
  Image / Video file picker, lets user choose what to upload. No limit on selection. Spent a lot of time getting scrolling very smooth, Photos Library offers good support for async asset loading
  
@@ -18,7 +19,7 @@
  */
 
 
-@interface FRSFileViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FRSFileLoaderDelegate>
+@interface FRSFileViewController : FRSBaseViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FRSFileLoaderDelegate>
 {
     FRSFileLoader *fileLoader;
     UICollectionView *fileCollectionView;

@@ -32,5 +32,6 @@
 
 -(void)popViewController;
 
+-(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated;
 
 @end

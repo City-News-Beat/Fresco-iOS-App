@@ -23,4 +23,6 @@
 
 -(void)show;
 
+-(instancetype)initPermissionsAlert;
+
 @end

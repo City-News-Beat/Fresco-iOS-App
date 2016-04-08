@@ -244,10 +244,7 @@
         }];
     }
     
-    [UIView beginAnimations:@"fade-statusbar" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    [UIView commitAnimations];
+    [self shouldShowStatusBar:NO animated:YES];
     
     [self.navigationController setNavigationBarHidden:TRUE animated:YES];
 
@@ -275,7 +272,13 @@
     
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+//<<<<<<< HEAD
+//    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+//=======
+    
+    [self shouldShowStatusBar:YES animated:YES];
+    
+//>>>>>>> 3.0-omar
 }
 
 
@@ -363,6 +366,7 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
 }
 
 
@@ -1779,5 +1783,4 @@
     [self rotateAppForOrientation:orientationNew];
     
 }
-
 @end

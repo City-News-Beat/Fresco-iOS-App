@@ -41,13 +41,7 @@
         
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
-        /* Dark Overlay */
-        CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-        CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-        self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
-        self.overlayView.backgroundColor = [UIColor blackColor];
-        self.overlayView.alpha = 0;
-        [self addSubview:(self.overlayView)];
+        [self configureDarkOverlay];
         
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -197,6 +191,121 @@
                      } completion:^(BOOL finished) {
                          [self removeFromSuperview];
                      }];
+}
+
+-(void)configureDarkOverlay{
+    /* Dark Overlay */
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    self.overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
+    self.overlayView.backgroundColor = [UIColor blackColor];
+    self.overlayView.alpha = 0;
+    [self addSubview:(self.overlayView)];
+}
+
+#pragma mark - Custom Alerts
+
+-(instancetype)initPermissionsAlert{
+    self = [super init];
+    
+    if (self){
+        [self configureDarkOverlay];
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
+        NSInteger yOrigin = (([UIScreen mainScreen].bounds.size.height - 334)/2);
+        self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, 334);
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
+        title.font = [UIFont notaBoldWithSize:17];
+        title.text = @"HOLD UP";
+        title.textAlignment = NSTextAlignmentCenter;
+        title.textColor = [UIColor frescoDarkTextColor];
+        [self addSubview:title];
+        
+        UILabel *subTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, 44, 238, 80)];
+        subTitle.text = @"We need your permission for a few things, so we can verify your submissions and notify you about nearby assignments and news.";
+        subTitle.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        subTitle.numberOfLines = 4;
+        subTitle.textAlignment = NSTextAlignmentCenter;
+        subTitle.textColor = [UIColor frescoMediumTextColor];
+        [self addSubview:subTitle];
+        
+        UIButton *locationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        locationButton.frame = CGRectMake(0, 136, self.frame.size.width, 44);
+        [locationButton setTitle:@"ENABLE LOCATION" forState:UIControlStateNormal];
+        [locationButton setTintColor:[UIColor frescoDarkTextColor]];
+        [locationButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        
+        UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map-marker"]];
+        [locationButton setImage:locationImageView.image forState:UIControlStateNormal];
+        locationButton.imageEdgeInsets = UIEdgeInsetsMake(0, -49, 0, 49);
+        locationButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, -10);
+        [self addSubview:locationButton];
+        
+        UIButton *notificationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        notificationButton.frame = CGRectMake(0, 136+44, self.frame.size.width, 44);
+        [notificationButton setTitle:@"ENABLE NOTIFICATIONS" forState:UIControlStateNormal];
+        [notificationButton setTintColor:[UIColor frescoDarkTextColor]];
+        [notificationButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        
+        UIImageView *notificationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bell"]];
+        [notificationButton setImage:notificationImageView.image forState:UIControlStateNormal];
+        notificationButton.imageEdgeInsets = UIEdgeInsetsMake(0, -32, 0, 32);
+        notificationButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, -10);
+        [self addSubview:notificationButton];
+        
+        UITextView *locationTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 192+44-10, ALERT_WIDTH, 42)];
+        locationTextView.userInteractionEnabled  = NO;
+        locationTextView.clipsToBounds = NO;
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyle.lineSpacing = -2;
+        paragraphStyle.minimumLineHeight = -100;
+        
+        locationTextView.attributedText = [[NSAttributedString alloc] initWithString:@"Your location is only shared when you \n post a gallery to Fresco. In all other cases \n your location is fully anonymous."
+                                                                           attributes:
+                                            @{NSParagraphStyleAttributeName : paragraphStyle,
+                                              NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
+        
+        locationTextView.textAlignment = NSTextAlignmentCenter;
+        locationTextView.textColor = [UIColor frescoMediumTextColor];
+        locationTextView.backgroundColor = [UIColor clearColor];
+        [self addSubview:locationTextView];
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 290, self.frame.size.width, 0.5)];
+        line.backgroundColor = [UIColor frescoShadowColor];
+        [self addSubview:line];
+        
+        UIButton *askLaterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [askLaterButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        askLaterButton.frame = CGRectMake(0, 290, 104, 44);
+        [askLaterButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [askLaterButton setTitle:@"ASK LATER" forState:UIControlStateNormal];
+        [askLaterButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:askLaterButton];
+        
+        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [doneButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        doneButton.frame = CGRectMake(185, 290, 104, 44);
+        [doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
+        [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        doneButton.enabled = NO;
+        [self addSubview:doneButton];
+        
+        [self addShadowAndClip];
+        [self animateIn];
+    }
+    return self;
+}
+
+-(void)enableLocation{
+    
+}
+
+-(void)enableNotifications{
+    
 }
 
 
