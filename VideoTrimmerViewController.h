@@ -10,7 +10,7 @@
 #import "FRSBaseViewController.h"
 #import "FRSTrimTool.h"
 
-@interface VideoTrimmerViewController : FRSBaseViewController
+@interface VideoTrimmerViewController : FRSBaseViewController<FRSTrimToolDelegate>
 {
     FRSTrimTool *trimmer;
 }

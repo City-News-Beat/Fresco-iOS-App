@@ -46,6 +46,7 @@
 
 -(void)configureTrimmer {
     trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(5, [UIScreen mainScreen].bounds.size.height-70, [UIScreen mainScreen].bounds.size.width-10, 60)];
+    trimmer.delegate = self;
     [self.view addSubview:trimmer];
 }
 
@@ -111,5 +112,18 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)trimmersDidAdjust {
+    float videoDuration = CMTimeGetSeconds(self.player.currentItem.duration);
+    
+    float startTime = trimmer.left * videoDuration;
+    float endTime = trimmer.right * videoDuration;
+    
+    NSLog(@"%f", videoDuration);
+    [self.player pause];
+    
+    [self.player.currentItem seekToTime:CMTimeMake(startTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+        
+    }];
+}
 
 @end
