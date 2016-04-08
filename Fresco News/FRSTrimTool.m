@@ -229,8 +229,8 @@
     self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
      self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     
-    x = left.origin.x + 40;
-    float w = self.frame.size.width-30;
+    x = left.origin.x;
+    float w = self.frame.size.width-60-30;
     self.left = x / w;
     
     NSLog(@"LEFT: %f", self.left);
@@ -255,7 +255,7 @@
     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     
     x = right.origin.x;
-    float w = self.frame.size.width-60;
+    float w = self.frame.size.width-60-15;
     self.right = x / w;
     
     NSLog(@"RIGHT: %f", self.right);
