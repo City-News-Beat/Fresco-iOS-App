@@ -162,12 +162,11 @@
     self.backgroundView.frame = CGRectMake(10, 8, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height);
     [self addSubview:self.backgroundView];
     
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width+20, self.backgroundView.frame.size.height+16); // resize to background
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width+60, self.backgroundView.frame.size.height+16); // resize to background
 }
 
 -(void)panRight:(UIPanGestureRecognizer *)sender {
     
-    NSLog(@"PANRIGHT");
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.rightRect = self.rightView.frame;
     }
@@ -191,7 +190,6 @@
 }
 
 -(void)panLeft:(UIPanGestureRecognizer *)sender {
-    NSLog(@"PANLEFT");
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.leftRect = self.leftView.frame;
     }
@@ -230,12 +228,18 @@
     
     self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
      self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
+    
+    x = left.origin.x + 40;
+    float w = self.frame.size.width-30;
+    self.left = x / w;
+    
+    NSLog(@"LEFT: %f", self.left);
+
     return left;
 }
 
 -(CGRect)checkRight:(CGRect)right {
     float x = right.origin.x;
-    NSLog(@"%f %f", x, self.rightView.frame.origin.x);
     if (x < self.leftView.frame.origin.x + 45) {
         right.origin.x = self.leftView.frame.origin.x + 45;
     }
@@ -250,6 +254,11 @@
     self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     
+    x = right.origin.x;
+    float w = self.frame.size.width-60;
+    self.right = x / w;
+    
+    NSLog(@"RIGHT: %f", self.right);
     return right;
 }
 
