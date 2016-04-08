@@ -28,7 +28,12 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    
+    self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
+    self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
+
 }
 
 -(void)setupTableView {
@@ -89,12 +94,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    // add dans stuff here
+    // sloppy not to have a check here
     if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        return;
-    }
-    
-    if (indexPath.row >= self.stories.count) {
         return;
     }
     
@@ -102,27 +103,18 @@ static NSString *galleryCell = @"GalleryCellReuse";
         return;
     }
     
-    [cell clearCell];
-    
     cell.gallery = self.stories[indexPath.row];
-    [cell configureCell];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cell clearCell];
+        [cell configureCell];
+    });
     
     __weak typeof(self) weakSelf = self;
     
     cell.shareBlock = ^void(NSArray *sharedContent) {
         [weakSelf showShareSheetWithContent:sharedContent];
     };
-    
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    
-    self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
-    self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {

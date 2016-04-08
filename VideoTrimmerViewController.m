@@ -96,6 +96,14 @@
     playerLayer.backgroundColor = [UIColor greenColor].CGColor;
 }
 
+-(void)trimmingWillBegin {
+    
+}
+
+-(void)trimmingDidEnd {
+    [self.player play];
+}
+
 
 #pragma mark - Actions
 -(void)tapped:(UITapGestureRecognizer *)sender {

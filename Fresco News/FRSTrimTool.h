@@ -11,7 +11,9 @@
 #import <AVFoundation/AVFoundation.h>
 @protocol FRSTrimToolDelegate
 @optional
+-(void)trimmingWillBegin;
 -(void)trimmersDidAdjust;
+-(void)trimmingDidEnd;
 @end
 @interface FRSTrimTool : UIView
 {

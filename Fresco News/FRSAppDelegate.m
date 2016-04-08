@@ -40,7 +40,7 @@
     [self createItemsWithIcons];
     
     if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
-        self.window.rootViewController = [[VideoTrimmerViewController alloc] init];
+        self.window.rootViewController = [[FRSTabBarController alloc] init];
     }
     else {
         [self startAuthentication];

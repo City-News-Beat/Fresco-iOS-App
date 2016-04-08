@@ -169,6 +169,10 @@
     
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.rightRect = self.rightView.frame;
+        
+        if (self.delegate) {
+            [self.delegate trimmingWillBegin];
+        }
     }
     else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [sender translationInView:self];
@@ -182,7 +186,9 @@
         self.rightView.frame = [self checkRight:newFrame];
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
-        
+        if (self.delegate) {
+            [self.delegate trimmingDidEnd];
+        }
     }
     
     [self handleRightChange]; // adjust cmtime
@@ -192,6 +198,10 @@
 -(void)panLeft:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.leftRect = self.leftView.frame;
+        
+        if (self.delegate) {
+            [self.delegate trimmingWillBegin];
+        }
     }
     else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [sender translationInView:self];
@@ -206,7 +216,9 @@
         
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
-        
+        if (self.delegate) {
+            [self.delegate trimmingDidEnd];
+        }
     }
     
     [self handleLeftChange]; // adjust cmtime
