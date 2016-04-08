@@ -201,17 +201,25 @@
         
         for (NSDictionary *storyDict in stories){
             FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
+            NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
+            
+            NSInteger index = self.stories.count;
             
             if (!story) {
                 story = [FRSStory MR_createEntity];
                 [story configureWithDictionary:storyDict];
                 [self.stories addObject:story];
+                //[storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+                index++;
             }
             else {
                 [self.stories addObject:story];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
+               /* [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexPaths:storiesToLoad withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView endUpdates]; */
                 [self.tableView reloadData];
             });
         }
