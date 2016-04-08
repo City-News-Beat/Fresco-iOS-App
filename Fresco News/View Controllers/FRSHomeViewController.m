@@ -360,17 +360,24 @@
             }
             
             isLoading = FALSE;
+            NSMutableArray *insertIndexPaths = [[NSMutableArray alloc] init];
+            NSInteger index = self.highlights.count;
             
             for (NSDictionary *dict in galleries){
+                [insertIndexPaths addObject:[NSIndexPath indexPathForRow:index inSection:0]];
                 FRSGallery *gallery = [FRSGallery MR_createEntity];
                 [gallery configureWithDictionary:dict];
                 
                 [self.dataSource addObject:gallery];
                 [self.highlights addObject:gallery];
+                index++;
             }
             
-            [self.tableView reloadData];
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView endUpdates];
                 needsUpdate = TRUE;
             });
         }];
