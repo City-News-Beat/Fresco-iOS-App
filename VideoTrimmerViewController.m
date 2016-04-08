@@ -82,7 +82,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [self.view addGestureRecognizer:tap];
     
-    
+    self.player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     [self.player play];
     
     /* DEBUG */
@@ -94,6 +94,11 @@
 -(void)tapped:(UITapGestureRecognizer *)sender {
     
     if (self.player.rate == 0) {
+        
+        if (CMTimeCompare(self.player.currentItem.currentTime, self.player.currentItem.asset.duration) == 0) {
+            [self.player seekToTime:CMTimeMake(0, NSEC_PER_SEC)];
+        }
+        
         [self.player play];
     }
     else {
