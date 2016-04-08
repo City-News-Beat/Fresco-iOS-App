@@ -214,7 +214,6 @@
 
 -(CGRect)checkLeft:(CGRect)left {
     float x = left.origin.x;
-    NSLog(@"%f %f", x, self.rightView.frame.origin.x);
     if (x > self.rightView.frame.origin.x - 45) {
         left.origin.x = self.rightView.frame.origin.x - 45;
     }
@@ -255,7 +254,7 @@
     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     
     x = right.origin.x;
-    float w = self.frame.size.width-60-30;
+    float w = self.frame.size.width-60+15;
     self.right = x / w;
     
     NSLog(@"RIGHT: %f", self.right);
