@@ -278,15 +278,34 @@
         [self addSubview:line];
         
         UIButton *askLaterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        askLaterButton.frame =  CGRectMake(0, 0, 104, 44);
-        [askLaterButton.titleLabel setText:@"ASK LATER"];
-        [askLaterButton.titleLabel setTextColor:[UIColor darkTextColor]];
+        [askLaterButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        askLaterButton.frame = CGRectMake(0, 290, 104, 44);
+        [askLaterButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [askLaterButton setTitle:@"ASK LATER" forState:UIControlStateNormal];
+        [askLaterButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:askLaterButton];
+        
+        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [doneButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        doneButton.frame = CGRectMake(185, 290, 104, 44);
+        [doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
+        [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        doneButton.enabled = NO;
+        [self addSubview:doneButton];
         
         [self addShadowAndClip];
         [self animateIn];
     }
     return self;
+}
+
+-(void)enableLocation{
+    
+}
+
+-(void)enableNotifications{
+    
 }
 
 
