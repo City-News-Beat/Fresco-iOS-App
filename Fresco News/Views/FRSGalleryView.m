@@ -493,9 +493,13 @@
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
     
+    if (self.imageViews.count == 0) {
+        return;
+    }
+    
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     });
