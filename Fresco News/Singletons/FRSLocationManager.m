@@ -142,6 +142,9 @@
     if (self.monitoringState == FRSLocationMonitoringStateForeground){
         [self stopUpdatingLocation];
     }
+    else {
+        
+    }
 }
 
 -(BOOL)significantLocationChangeForLocation:(CLLocation *)location{

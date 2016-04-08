@@ -74,7 +74,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.tableView.scrollEnabled = FALSE;    
     [self addStatusBarNotification];
 }
 
