@@ -211,21 +211,21 @@
 -(BOOL)checkLeft:(CGRect)left {
     float x = left.origin.x;
     
-    if (x >= self.rightView.frame.origin.x) {
-        return TRUE;
+    if (x >= self.rightView.frame.origin.x - 15) {
+        return FALSE;
     }
     
-    return FALSE;
+    return TRUE;
 }
 
 -(BOOL)checkRight:(CGRect)right {
     float x = right.origin.x;
     
     if (x <= self.leftView.frame.origin.x) {
-        return TRUE;
+        return FALSE;
     }
     
-    return FALSE;
+    return TRUE;
 }
 
 -(void)handleLeftChange {
