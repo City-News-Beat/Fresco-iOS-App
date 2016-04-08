@@ -20,6 +20,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FRSLoginViewController.h"
 #import "FRSAPIClient.h"
+#import "VideoTrimmerViewController.h"
 
 #import "Fresco.h"
 @interface FRSAppDelegate (Implement)
@@ -39,7 +40,7 @@
     [self createItemsWithIcons];
     
     if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
-        self.window.rootViewController = [[FRSTabBarController alloc] init];
+        self.window.rootViewController = [[VideoTrimmerViewController alloc] init];
     }
     else {
         [self startAuthentication];

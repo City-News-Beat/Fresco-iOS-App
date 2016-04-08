@@ -75,7 +75,6 @@
     
     self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 4);
     self.bottomView.frame = CGRectMake(35, self.frame.size.height-14, self.frame.size.width-70, 4);
-    [self setupGestureRecognizers];
 }
 
 -(void)setupUI {
@@ -113,6 +112,7 @@
     self.rightOutline.layer.cornerRadius = 2.0;
     
     [self reconfigureUI]; // set frames correctly
+    [self setupGestureRecognizers];
 }
 
 -(void)drawSquares {
