@@ -20,6 +20,8 @@
 
 @property CMTime leftTime;
 @property CMTime rightTime;
+
+
 @property (nonatomic, assign) float right;
 @property (nonatomic, assign) float left;
 @property (nonatomic, weak) AVPlayer *player;

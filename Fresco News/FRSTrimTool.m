@@ -70,8 +70,8 @@
 -(void)reconfigureUI {
     float effectiveWidth = self.frame.size.width-30;
     
-    self.leftView.frame = CGRectMake(0, 0, 30, self.frame.size.height);
-    self.rightView.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 0, 15, self.frame.size.height);
+    self.leftView.frame = CGRectMake(0, 0, 30 + (effectiveWidth * self.left) + 15, self.frame.size.height);
+    self.rightView.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 0, self.leftView.frame.size.width, self.frame.size.height);
     
     self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
     self.rightOutline.frame = CGRectMake(0, 10, 15, self.frame.size.height-20);
@@ -187,6 +187,18 @@
         self.leftRect = self.leftView.frame;
     }
     else if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [sender translationInView:self];
+        
+        float xOffset = translation.x;
+        float newX = self.leftRect.origin.x + xOffset;
+        
+        CGRect newFrame = CGRectMake(newX, self.leftRect.origin.y, self.leftRect.size.width, self.leftRect.size.height);
+        
+        if (![self checkLeft:newFrame]) {
+            return;
+        }
+        
+        self.leftView.frame = newFrame;
         
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
@@ -194,6 +206,26 @@
     }
     
     [self handleLeftChange]; // adjust cmtime
+}
+
+-(BOOL)checkLeft:(CGRect)left {
+    float x = left.origin.x;
+    
+    if (x >= self.rightView.frame.origin.x) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+-(BOOL)checkRight:(CGRect)right {
+    float x = right.origin.x;
+    
+    if (x <= self.leftView.frame.origin.x) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 -(void)handleLeftChange {
