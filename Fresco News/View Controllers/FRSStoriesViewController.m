@@ -201,7 +201,7 @@
         
         for (NSDictionary *storyDict in stories){
             FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
-            NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
+           // NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
             
             NSInteger index = self.stories.count;
             
