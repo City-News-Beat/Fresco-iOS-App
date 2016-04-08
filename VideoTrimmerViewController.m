@@ -118,12 +118,12 @@
     float startTime = trimmer.left * videoDuration;
     float endTime = trimmer.right * videoDuration;
     
-    NSLog(@"%f", videoDuration);
+    NSLog(@"%f", startTime);
     [self.player pause];
     
-    [self.player.currentItem seekToTime:CMTimeMake(startTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-        
-    }];
+    int32_t timeScale = self.player.currentItem.asset.duration.timescale;
+    CMTime time = CMTimeMakeWithSeconds(startTime, timeScale);
+    [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 
 @end
