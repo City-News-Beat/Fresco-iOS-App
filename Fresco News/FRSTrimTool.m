@@ -70,8 +70,11 @@
 -(void)reconfigureUI {
     float effectiveWidth = self.frame.size.width-30;
     
+    self.leftView.frame = CGRectMake(0, 0, 30, self.frame.size.height);
+    self.rightView.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 0, 15, self.frame.size.height);
+    
     self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
-    self.rightOutline.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 10, 15, self.frame.size.height-20);
+    self.rightOutline.frame = CGRectMake(0, 10, 15, self.frame.size.height-20);
     
     self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 4);
     self.bottomView.frame = CGRectMake(35, self.frame.size.height-14, self.frame.size.width-70, 4);
@@ -135,7 +138,7 @@
         for (int i = 0; i < 4; i++) {
             for (int c = 0; c < 2; c++) {
                 float x = 4 * c + 5; // 0 | 4
-                float y = 4 * i + 1 + 7;
+                float y = 4 * i + 1 + 7 + ((self.frame.size.height - 50) / 2);
                 UIView *currentSquare = [[UIView alloc] initWithFrame:CGRectMake(x, y, 2, 2)];
                 currentSquare.backgroundColor = [UIColor whiteColor];
                 [cv addSubview:currentSquare];

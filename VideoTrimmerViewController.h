@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSTrimTool.h"
 
 @interface VideoTrimmerViewController : FRSBaseViewController
-
+{
+    FRSTrimTool *trimmer;
+}
 @end

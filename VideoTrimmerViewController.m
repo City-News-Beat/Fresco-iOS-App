@@ -41,6 +41,12 @@
 
     [self configureTopContainer];
     [self configurePlayer];
+    [self configureTrimmer];
+}
+
+-(void)configureTrimmer {
+    trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(5, [UIScreen mainScreen].bounds.size.height-70, [UIScreen mainScreen].bounds.size.width-10, 60)];
+    [self.view addSubview:trimmer];
 }
 
 -(void)configureTopContainer {
