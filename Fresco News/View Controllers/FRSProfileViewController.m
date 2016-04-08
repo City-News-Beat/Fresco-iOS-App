@@ -74,10 +74,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.tableView.scrollEnabled = FALSE;
-    FRSTrimTool *trimmer = [[FRSTrimTool alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, 50)];
-    self.navigationItem.titleView = trimmer;
-    
+    self.tableView.scrollEnabled = FALSE;    
     [self addStatusBarNotification];
 }
 

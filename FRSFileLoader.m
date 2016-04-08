@@ -87,7 +87,9 @@
         
         // add each asset to our file list
         for (PHAsset *asset in assets) {
-            [allAssets addObject:asset];
+            if (asset.location != Nil) {
+                [allAssets addObject:asset];
+            }
         }
     }
     
