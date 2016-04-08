@@ -255,7 +255,7 @@
     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
     
     x = right.origin.x;
-    float w = self.frame.size.width-60-15;
+    float w = self.frame.size.width-60-30;
     self.right = x / w;
     
     NSLog(@"RIGHT: %f", self.right);
