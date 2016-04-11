@@ -232,9 +232,11 @@
             break;
         case 4:
             switch (indexPath.row) {
-                case 0:
+                case 0: {
                     //Find Friends
                     [cell configureFindFriendsCell];
+                }
+                    
                     break;
                 case 1:
                     [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
@@ -344,8 +346,11 @@
             break;
         case 4:
             switch (indexPath.row) {
-                case 0:
+                case 0:{
                     NSLog(@"find friends");
+                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
+                    [alert show];
+                }
                     break;
                 case 1:
                     NSLog(@"twitter");
