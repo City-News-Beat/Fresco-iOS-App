@@ -46,11 +46,12 @@
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor],
        NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+    
+    [self configureBackButtonAnimated:NO];
 }
 
 -(void)configureNavigationBar{
 //    [super configureNavigationBar];
-    [self configureBackButtonAnimated:NO];
 }
 
 -(void)popViewController{
