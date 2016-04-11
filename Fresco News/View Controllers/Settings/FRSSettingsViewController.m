@@ -41,12 +41,16 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    self.navigationItem.title = @"SETTINGS";
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor],
+       NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
 }
 
 -(void)configureNavigationBar{
 //    [super configureNavigationBar];
     [self configureBackButtonAnimated:NO];
-    self.navigationItem.title = @"SETTINGS";
 }
 
 -(void)popViewController{
