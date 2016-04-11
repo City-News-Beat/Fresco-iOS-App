@@ -416,12 +416,17 @@
 }
 
 -(void)configureFindFriendsCell {
-    
-    self.findFriendsLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
+
+    self.findFriendsLabel  = [[UILabel alloc] initWithFrame:CGRectMake(56, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding+self.leftPadding) - 10, self.frame.size.height)];
     self.findFriendsLabel.text = @"Find Friends";
     self.findFriendsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.findFriendsLabel.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:self.findFriendsLabel];
+    
+    self.twitterIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"friends"]];
+    self.twitterIV.frame = CGRectMake(16, 10 ,24, 24);
+    [self.twitterIV sizeToFit];
+    [self addSubview:self.twitterIV];
     
     self.carrotIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
     self.carrotIV.frame = CGRectMake(self.findFriendsLabel.bounds.size.width + self.leftPadding, self.findFriendsLabel.bounds.size.height/2 -7, 24, 24);

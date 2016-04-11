@@ -326,7 +326,6 @@
                     FRSDebitCardViewController *card = [[FRSDebitCardViewController alloc] init];
                     [self.navigationController pushViewController:card animated:YES];
                     self.navigationItem.title = @"";
-                    
                 }
                     break;
                 case 3:
