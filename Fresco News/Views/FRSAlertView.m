@@ -12,6 +12,8 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
+#import <Contacts/Contacts.h>
+
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
 
@@ -537,7 +539,7 @@
         
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(14, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 85, 44);
         [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"NO THANKS" forState:UIControlStateNormal];
@@ -547,7 +549,7 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
-        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(requestContacts) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"FIND FRIENDS" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -555,14 +557,23 @@
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
         
-        
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 70, ALERT_WIDTH, 140);
         
         [self addShadowAndClip];
-        
         [self animateIn];
     }
     return self;
+}
+
+-(void)requestContacts {
+    
+//    CNAuthorizationStatus status = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
+//    if (status == CNAuthorizationStatusDenied || status == CNAuthorizationStatusRestricted || status == CNAuthorizationStatusNotDetermined) {
+    
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+
+//        return;
+//    }
 }
 
 @end
