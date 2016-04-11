@@ -18,6 +18,7 @@
 #import <MagicalRecord/MagicalRecord.h>
 
 #import "DGElasticPullToRefresh.h"
+#import "FRSLoadingTableViewCell.h"
 
 @interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -143,7 +144,9 @@
     [super configureTableView];
     
     // loading cell
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+//    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    [self.tableView registerClass:[FRSLoadingTableViewCell class] forCellReuseIdentifier:loadingCellIdentifier];
+    
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
