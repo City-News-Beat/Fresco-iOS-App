@@ -28,6 +28,8 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (nonatomic) BOOL firstTime;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSStoriesViewController
@@ -69,12 +71,22 @@
     [self configureNavigationBar];
 }
 
+//-(void)configureSpinner {
+//    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
+//    [self.view addSubview:self.spinner];
+//    
+//    [self.spinner startAnimating];
+//}
+
 -(void)configureSpinner {
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
-    [self.view addSubview:self.spinner];
     
-    [self.spinner startAnimating];
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -166,7 +178,9 @@
             for (NSDictionary *storyDict in stories){
                 FRSStory *story; 
                 
-                [self.spinner stopAnimating];
+//                [self.spinner stopAnimating];
+                [self.loadingView stopLoading];
+                [self.loadingView removeFromSuperview];
                 
                 if (!story) {
                     story = [FRSStory MR_createEntity];
