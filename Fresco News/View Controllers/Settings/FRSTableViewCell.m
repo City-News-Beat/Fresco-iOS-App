@@ -7,10 +7,12 @@
 //
 
 #import "FRSTableViewCell.h"
+
+/* Categories */
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
-
 #import "UIView+Helpers.h"
+
 
 @interface FRSTableViewCell()
 
@@ -46,55 +48,28 @@
 @property (strong, nonatomic) UILabel *disableAccountSubtitleLabel;
 @property (strong, nonatomic) UIImageView *sadEmojiIV;
 
+@property (strong, nonatomic) UILabel *findFriendsLabel;
 
 @end
 
+
 @implementation FRSTableViewCell
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
     if (self){
         
         self.leftPadding = 16;
         self.rightPadding = 10;
         
-        
-        //        if ([reuseIdentifier isEqualToString:@"username-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"email-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"update-password-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"assignment-notifications-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"notification-radius-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"debit-card-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"tax-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"twitter-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"facebook-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"google-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"promo-codes-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"logout-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"email-support-cell"]){
-        //
-        //        } else if ([reuseIdentifier isEqualToString:@"disable-account-cell"]){
-        //
-        //        }
-        //    }
     }
-    
+
     return self;
 }
 
--(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag{
+-(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag {
     
     self.socialTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(56, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding+self.leftPadding) - 10, self.frame.size.height)];
     self.socialTitleLabel.text = title;
@@ -120,7 +95,7 @@
     }
 }
 
--(void)configureAssignmentCell{
+-(void)configureAssignmentCell {
     
     self.assignmentNotificationsLabel = [UILabel new];
     self.assignmentNotificationsLabel.frame = CGRectMake(16, 15, 185, 17);
@@ -146,7 +121,7 @@
 }
 
 
--(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle{
+-(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle {
     
     self.defaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
@@ -169,7 +144,7 @@
     }
 }
 
--(void)configureCellWithUsername:(NSString *)username{
+-(void)configureCellWithUsername:(NSString *)username {
     
     CGFloat leftPadding = 16;
     CGFloat rightPadding = 10;
@@ -187,7 +162,7 @@
     
 }
 
--(void)configureLogOut{
+-(void)configureLogOut {
     
     self.logOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - 27, self.bounds.size.height/2 - 6, 54, 17)];
     self.logOutLabel.text = @"LOG OUT";
@@ -197,7 +172,7 @@
     
 }
 
--(void)configureEmptyCellSpace:(BOOL)yes{
+-(void)configureEmptyCellSpace:(BOOL)yes {
     
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -209,7 +184,7 @@
     }
 }
 
--(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType{
+-(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType {
     
     self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.self.rightPadding+self.leftPadding),44)];
     self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -250,7 +225,7 @@
     return newLength <= 40;
 }
 
--(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color{
+-(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color {
     self.backgroundColor = [UIColor clearColor];
     self.rightAlignedButton = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height)];
     [self.rightAlignedButton setTitle:title forState:UIControlStateNormal];
@@ -260,7 +235,7 @@
 }
 
 
--(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected{
+-(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected {
     
     self.dynamicTitle  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
     self.dynamicTitle.text = title;
@@ -296,7 +271,7 @@
 }
 
 
--(void)configureDisableAccountCell{
+-(void)configureDisableAccountCell {
     
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     
@@ -320,7 +295,7 @@
 }
 
 
--(void)configureSliderCell{
+-(void)configureSliderCell {
     
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
     top.alpha = 0.2;
@@ -347,7 +322,7 @@
 
 }
 
--(void)configureMapCell{
+-(void)configureMapCell {
     
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
@@ -368,7 +343,7 @@
     
 }
 
--(void)configureSettingsHeaderCellWithTitle:(NSString *)title{
+-(void)configureSettingsHeaderCellWithTitle:(NSString *)title {
     
     self.defaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 8, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
@@ -379,7 +354,7 @@
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
--(void)configureSearchSeeAllCellWithTitle:(NSString *)title{
+-(void)configureSearchSeeAllCellWithTitle:(NSString *)title {
     
     self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
@@ -391,7 +366,7 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing{
+-(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
     
     UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -440,12 +415,18 @@
     
 }
 
--(void)clearCell{
+-(void)configureFindFriendsCell {
     
-}
-
--(void)test{
-
+    self.findFriendsLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
+    self.findFriendsLabel.text = @"Find Friends";
+    self.findFriendsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.findFriendsLabel.textColor = [UIColor frescoDarkTextColor];
+    [self addSubview:self.findFriendsLabel];
+    
+    self.carrotIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"disclosure"]];
+    self.carrotIV.frame = CGRectMake(self.findFriendsLabel.bounds.size.width + self.leftPadding, self.findFriendsLabel.bounds.size.height/2 -7, 24, 24);
+    [self.carrotIV sizeToFit];
+    [self addSubview:self.carrotIV];
 }
 
 

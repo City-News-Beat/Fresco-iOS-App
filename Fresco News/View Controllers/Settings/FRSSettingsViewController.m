@@ -6,15 +6,18 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import <MessageUI/MessageUI.h>
 
 #import "FRSSettingsViewController.h"
+
+/* Categories */
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
+
+/* UI Subclasses */
 #import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
 
-//view controllers
+/* View Controllers */
 #import "FRSUsernameViewController.h"
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"
@@ -24,6 +27,9 @@
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"
 
+/* Cocoa Pods */
+#import <MessageUI/MessageUI.h>
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -31,35 +37,34 @@
 
 @end
 
+
 @implementation FRSSettingsViewController
 
--(void)viewDidLoad{
+-(void)viewDidLoad {
     [super viewDidLoad];
+    
     [self configureTableView];
-
 }
 
--(void)viewWillAppear:(BOOL)animated{
+
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.navigationItem.title = @"SETTINGS";
     [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor],
-       NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     
     [self configureBackButtonAnimated:NO];
 }
 
--(void)configureNavigationBar{
-//    [super configureNavigationBar];
-}
 
--(void)popViewController{
+-(void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
 }
 
--(void)configureTableView{
+
+-(void)configureTableView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
@@ -74,11 +79,15 @@
     [self.view addSubview:self.tableView];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+
+#pragma mark - UITableViewDelegate
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 10;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
             return 3;
@@ -115,6 +124,7 @@
             break;
     }
 }
+
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {
@@ -153,130 +163,14 @@
     }
 }
 
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+#pragma mark - UITableViewDataSource
+
+-(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     NSString *cellIdentifier;
-    
-    //    switch (indexPath.section) {
-    //        case 0:
-    //            switch (indexPath.row) {
-    //                case 0:
-    //                {
-    //                    cellIdentifier = @"username-cell";
-    //                    FRSUsernameViewController *username = [[FRSUsernameViewController alloc] init];
-    //                    [self.navigationController pushViewController:username animated:YES];
-    //                    self.navigationItem.title = @"";
-    //                }
-    //                    break;
-    //                case 1:
-    //                {
-    //                    cellIdentifier = @"email-cell";
-    //                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
-    //                    [self.navigationController pushViewController:email animated:YES];
-    //                    self.navigationItem.title = @"";
-    //                }
-    //                    break;
-    //                case 2:
-    //                {
-    //                    cellIdentifier = @"update-password-cell";
-    //                    FRSPasswordChangeViewController *password = [[FRSPasswordChangeViewController alloc] init];
-    //                    [self.navigationController pushViewController:password animated:YES];
-    //                    self.navigationItem.title = @"";
-    //                }
-    //                    break;
-    //                default:
-    //                    break;
-    //            }
-    //            break;
-    //        case 1:
-    //            //Empty
-    //            break;
-    //        case 2:
-    //            switch (indexPath.row) {
-    //                case 1:
-    //                    cellIdentifier = @"assignment-notifications-cell";
-    //                    //assignment notif
-    //                    break;
-    //                case 2:{
-    //                    cellIdentifier = @"notification-radius-cell";
-    //                    //notif radius
-    //                }
-    //                    break;
-    //                case 3:{
-    //                    cellIdentifier = @"debit-card-cell";
-    //                    //debit card
-    //                }
-    //                    break;
-    //                case 4:{
-    //                    cellIdentifier = @"tax-cell";
-    //                    //tax info
-    //                }
-    //                default:
-    //                    break;
-    //            }
-    //            break;
-    //        case 3:
-    //            //Empty
-    //            break;
-    //        case 4:
-    //            switch (indexPath.row) {
-    //                case 0:{
-    //                    cellIdentifier = @"twitter-cell";
-    //                    //twitter
-    //                }
-    //                    break;
-    //                case 1:{
-    //                    cellIdentifier = @"facebook-cell";
-    //                    //facebook
-    //                }
-    //                    break;
-    //                case 2:{
-    //                    cellIdentifier = @"google-cell";
-    //                    //google
-    //                }
-    //                    break;
-    //                default:
-    //                    break;
-    //            }
-    //            break;
-    //        case 5:
-    //            //Empty
-    //            break;
-    //        case 6: {
-    //            cellIdentifier = @"promo-codes-cell";
-    //            //promo
-    //        }
-    //            break;
-    //        case 7:
-    //            //Empty
-    //            break;
-    //        case 8:
-    //            switch (indexPath.row) {
-    //                case 0: {
-    //                    cellIdentifier = @"logout-cell";
-    //                    //logout
-    //                }
-    //                    break;
-    //                case 1: {
-    //                    cellIdentifier = @"email-support-cell";
-    //                    //email support
-    //                }
-    //                    break;
-    //                case 2: {
-    //                    cellIdentifier = @"disable-account-cell";
-    //                    //disable account
-    //                }
-    //                    break;
-    //            }
-    //            break;
-    //        case 9:
-    //            //Empty
-    //            break;
-    //        default:
-    //            break;
-    
-    //            }}
-    
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
     if (cell == nil) {
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
@@ -292,9 +186,9 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    //    [cell clearCell];
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
@@ -339,13 +233,14 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
+                    //Find Friends
+                    [cell configureFindFriendsCell];
                     break;
                 case 1:
-                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2];
+                    [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
                     break;
                 case 2:
-                    [cell configureSocialCellWithTitle:@"Connect Google" andTag:3];
+                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2];
                     break;
                 default:
                     break;
@@ -381,7 +276,9 @@
     }
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     switch (indexPath.section) {
@@ -449,13 +346,13 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-                    NSLog(@"twitter");
+                    NSLog(@"find friends");
                     break;
                 case 1:
-                    NSLog(@"facebook");
+                    NSLog(@"twitter");
                     break;
                 case 2:
-                    NSLog(@"google");
+                    NSLog(@"facebook");
                     break;
                 default:
                     break;
@@ -510,7 +407,10 @@
 }
 
 
-- (void)presentModalMailComposerViewController:(BOOL)animated {
+#pragma mark - MFMailComposeViewControllerDelegate
+
+-(void)presentModalMailComposerViewController:(BOOL)animated {
+    
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] init];
         composeViewController.mailComposeDelegate = self;
@@ -520,12 +420,10 @@
         [composeViewController setToRecipients:@[@"support@fresconews.com"]];
         
         [self presentViewController:composeViewController animated:animated completion:nil];
-    } else {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"<#Cannot Send Mail Message#>", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
     }
 }
 
--(void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -534,16 +432,5 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 @end
+
