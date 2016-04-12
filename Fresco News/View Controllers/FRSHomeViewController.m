@@ -284,7 +284,10 @@
         
         self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
         self.highlights = [[NSMutableArray alloc] initWithArray:temp];
-        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        
+        if (self.tableView.contentOffset.y > 0) {
+            [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        }
         
     });
 }
