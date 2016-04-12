@@ -24,7 +24,7 @@
                     
                     break;
                 case 403:
-                
+                    
                     break;
                 case 404:
                     
@@ -151,6 +151,17 @@
         completion(Nil, error);
     }];
 }
+-(void)put:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    
+    [manager PUT:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        completion(responseObject[@"data"], Nil);
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(Nil, error);
+    }];
+}
 
 /*
  
@@ -242,6 +253,9 @@
         
 }
 
+-(void)uploadPart:(NSInteger)part ofFile:(NSURL *)fileURL toURL:(NSURL *)destinationURL completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
    // [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"]; // no auth token from user defaults, all in keychain now
