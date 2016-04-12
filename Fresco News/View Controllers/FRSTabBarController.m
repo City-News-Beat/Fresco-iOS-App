@@ -229,4 +229,8 @@
     return YES;
 }
 
+-(void)handleNotification:(NSDictionary *)notification {
+    
+}
+
 @end

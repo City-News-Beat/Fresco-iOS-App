@@ -18,7 +18,6 @@
 //- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
 
 - (void)presentAssignments;
-
 -(void)setIrisItemColor:(UIColor *)color;
-
+-(void)handleNotification:(NSDictionary *)notification;
 @end

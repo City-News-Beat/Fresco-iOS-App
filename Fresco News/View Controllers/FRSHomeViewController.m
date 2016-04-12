@@ -286,7 +286,6 @@
         self.highlights = [[NSMutableArray alloc] initWithArray:temp];
         
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
     });
 }
 
