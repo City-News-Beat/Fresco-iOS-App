@@ -219,7 +219,22 @@
 -(void)setupPlayerForPost:(FRSPost *)post {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
+        if (self.playerLayer) {
+            [self breakDownPlayer:self.playerLayer];
+            self.playerLayer = Nil;
+            self.videoPlayer = Nil;
+        }
+        
+        self.videoPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+        self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        
+        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width);
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self.scrollView.layer addSublayer:self.playerLayer];
+            [self.videoPlayer play];
+            
             if (self.delegate) {
                 [self.delegate playerWillPlay];
             }
