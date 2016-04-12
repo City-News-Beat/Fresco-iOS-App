@@ -80,11 +80,10 @@
     leftHeader.textColor = [UIColor frescoMediumTextColor];
     [container addSubview:leftHeader];
     
-    UILabel *leftBulletts = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 100, 40)];
+    UILabel *leftBulletts = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 110, 40)];
     leftBulletts.text = @"• They get $20 \n• You get $10";
     leftBulletts.numberOfLines = 2;
-//    leftBulletts.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    leftBulletts.font = [UIFont fontWithName:@"SanFranciscoText-Light" size:15];
+    leftBulletts.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     leftBulletts.textAlignment = NSTextAlignmentLeft;
     leftBulletts.textColor = [UIColor frescoDarkTextColor];
     [container addSubview:leftBulletts];
@@ -99,11 +98,10 @@
     
     
     
-    UILabel *rightBullets = [[UILabel alloc] initWithFrame:CGRectMake(130, 17, 100, 40)];
+    UILabel *rightBullets = [[UILabel alloc] initWithFrame:CGRectMake(130, 17, 106, 40)];
     rightBullets.text = @"• They get $20 \n• You get $5";
     rightBullets.numberOfLines = 2;
-//        rightBullets.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    rightBullets.font = [UIFont fontWithName:@"SanFranciscoText-Light" size:15];
+    rightBullets.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     rightBullets.textAlignment = NSTextAlignmentLeft;
     rightBullets.textColor = [UIColor frescoDarkTextColor];
     [container addSubview:rightBullets];
@@ -113,9 +111,7 @@
 //    container.backgroundColor = [UIColor redColor];
 //    leftHeader.backgroundColor = [UIColor greenColor];
 //    rightHeader.backgroundColor = [UIColor greenColor];
-//    leftBulletts.backgroundColor = [UIColor greenColor];
-//    rightBullets.backgroundColor = [UIColor greenColor];
-
+gs
 }
 
 
