@@ -9,6 +9,7 @@
 #import "FRSAPIClient.h"
 #import <AFNetworking/AFNetworking.h>
 #import "Fresco.h"
+#import "FRSPost.h"
 
 @implementation FRSAPIClient
 
@@ -263,7 +264,15 @@
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
     
+    for (FRSPost *post in posts) {
+        NSMutableDictionary *currentPost = [[NSMutableDictionary alloc] init];
+        NSString *localVideoURL = post.videoUrl;
+        
+        [postsToSend addObject:currentPost];
+    }
 }
 
 /*  OAUTH 2

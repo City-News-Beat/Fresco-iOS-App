@@ -10,6 +10,7 @@
 #import "UILabel+Custom.h"
 #import "Fresco.h"
 #import "FRSContentActionsBar.h"
+#import <AVKit/AVKit.h>
 
 @class FRSGallery;
 
@@ -18,6 +19,8 @@
 
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
+
+-(BOOL)playerWillPlay;
 
 @end
 
@@ -57,6 +60,8 @@
 @property (strong, nonatomic) UIImageView *parallaxImage;
 
 @property (strong, nonatomic) UIView *container;
+
+@property (strong, nonatomic) AVPlayer *videoPlayer;
 
 @property (nonatomic) NSInteger currentPage;
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
