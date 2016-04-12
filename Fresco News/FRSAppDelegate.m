@@ -38,7 +38,7 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && FALSE) {
         self.window.rootViewController = [[FRSTabBarController alloc] init];
     }
     else {
