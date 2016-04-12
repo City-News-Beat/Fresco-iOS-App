@@ -52,6 +52,7 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
+        
     [self adjustHeight];
 
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);

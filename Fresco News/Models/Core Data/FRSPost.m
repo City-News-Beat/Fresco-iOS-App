@@ -57,6 +57,10 @@
         }
     }*/
     
+    if (dict[@"video"] != Nil && dict[@"video"] != [NSNull null]) {
+        self.videoUrl = dict[@"video"];
+    }
+    
     NSNumber *height = dict[@"meta"][@"height"] ? : @0;
     NSNumber *width = dict[@"meta"][@"width"] ? : @0;
     
