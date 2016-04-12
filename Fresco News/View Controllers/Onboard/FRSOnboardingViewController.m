@@ -18,6 +18,9 @@
 
 #import "FRSContentActionsBar.h"
 
+#import "FRSLoginViewController.h"
+#import "FRSSetupProfileViewController.h"
+
 #import "OEParallax.h"
 
 @interface FRSOnboardingViewController () <UIScrollViewDelegate>
@@ -71,6 +74,7 @@
     self.scrollView.delegate = self;
     self.scrollView.clipsToBounds = NO;
     self.scrollView.delaysContentTouches = NO;
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self.view addSubview:self.scrollView];
 }
 
@@ -132,11 +136,10 @@
     [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
     logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
     [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-    [logIn addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
+    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
     [logIn addTarget:self action:@selector(highlight:) forControlEvents:UIControlEventTouchDown];
     [logIn setTitleEdgeInsets:UIEdgeInsetsMake(-10, 20, -10, 20)];
     [container addSubview:logIn];
-    
     
     UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
     signUp.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
@@ -146,13 +149,12 @@
     [signUp addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
     [container addSubview:signUp];
     
-    //    /* DEBUG */
-        signUp.backgroundColor = [UIColor greenColor];
-        logIn.backgroundColor = [UIColor redColor];
+    /* DEBUG */
+//        signUp.backgroundColor = [UIColor greenColor];
+//        logIn.backgroundColor = [UIColor redColor];
 }
 
 -(void)highlight:(UIButton *)sender {
-    
 }
 
 -(void)configureParallax{
@@ -163,11 +165,13 @@
 #pragma mark - UIButton Actions
 
 -(void)logIn{
-    //Gets called but does not always fade the titleLabel
+    FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
+    [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
 -(void)signUp{
-    NSLog(@"bop");
+    FRSSetupProfileViewController *signUpViewController = [[FRSSetupProfileViewController alloc] init];
+    [self.navigationController pushViewController:signUpViewController animated:YES];
 }
 
 

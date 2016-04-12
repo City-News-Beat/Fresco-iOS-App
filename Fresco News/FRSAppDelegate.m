@@ -65,7 +65,11 @@
 }
 
 -(void)startAuthentication {
-    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+    
+    UINavigationController *mainNav = [[UINavigationController alloc] init];
+    [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
+    [mainNav setNavigationBarHidden:YES];
+    self.window.rootViewController = mainNav;
 }
 
 -(BOOL)isAuthenticated {
