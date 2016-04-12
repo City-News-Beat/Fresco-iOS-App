@@ -554,6 +554,14 @@
     }
 }
 
+-(void)setupPlayer {
+    [self.videoPlayer addObserver:self forKeyPath:@"status" options:0 context:nil];
+}
+
+-(void)breakDownPlayer:(AVPlayer *)player {
+    
+}
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     NSInteger page = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     self.pageControl.currentPage = page;
