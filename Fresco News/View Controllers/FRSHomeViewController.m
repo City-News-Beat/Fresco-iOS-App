@@ -284,7 +284,7 @@
         
         self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
         self.highlights = [[NSMutableArray alloc] initWithArray:temp];
-        [self.tableView reloadData];
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         
     });
 }
