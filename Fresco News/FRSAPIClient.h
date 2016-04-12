@@ -21,7 +21,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
 
-
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
 // generic auth-ed call
@@ -38,5 +37,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(BOOL)isAuthenticated;
 
 -(void)uploadPart:(NSInteger)part ofFile:(NSURL *)fileURL toURL:(NSURL *)destinationURL completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)put:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 @end

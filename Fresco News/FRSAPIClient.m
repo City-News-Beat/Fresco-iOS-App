@@ -262,6 +262,10 @@
     return manager;
 }
 
+-(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 /*  OAUTH 2
  
 - logging in

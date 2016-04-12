@@ -777,10 +777,8 @@
 		1EDA44DF1AA4CD0D0082E08D /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
-				075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */,
-				075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */,
-				65EBEDB71C44197100BE671F /* FRSLocationManager.h */,
-				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
+				D487F1BF1CBD726E005742F3 /* AVSession */,
+				D487F1C01CBD7274005742F3 /* Location Manager */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -1461,6 +1459,24 @@
 				D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */,
 			);
 			name = "Media Scroll";
+			sourceTree = "<group>";
+		};
+		D487F1BF1CBD726E005742F3 /* AVSession */ = {
+			isa = PBXGroup;
+			children = (
+				075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */,
+				075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */,
+			);
+			name = AVSession;
+			sourceTree = "<group>";
+		};
+		D487F1C01CBD7274005742F3 /* Location Manager */ = {
+			isa = PBXGroup;
+			children = (
+				65EBEDB71C44197100BE671F /* FRSLocationManager.h */,
+				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
+			);
+			name = "Location Manager";
 			sourceTree = "<group>";
 		};
 		D4E76A2D1CB423C200AC7A45 /* Trim Tool */ = {
