@@ -191,6 +191,8 @@
                     // video
                     // set up AVPlayer
                     // add AVPlayerLayer
+                    
+                    [self setupPlayerForPost:post];
                 }
                 
                 imageView.userInteractionEnabled = YES;
@@ -212,6 +214,17 @@
         self.bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.bottomLine];
     }
+}
+
+-(void)setupPlayerForPost:(FRSPost *)post {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.delegate) {
+                [self.delegate playerWillPlay];
+            }
+        });
+    });
 }
 
 -(void)configurePageControl{
