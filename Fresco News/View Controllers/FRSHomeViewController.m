@@ -44,6 +44,8 @@
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSHomeViewController
@@ -73,7 +75,9 @@
     
     self.scrollView.delegate = self;
     
-    // Do any additional setup after loading the view.
+    // Do any additional setup after loading the view
+    
+    [self configureSpinner];
     
 }
 
@@ -98,7 +102,7 @@
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self configureSpinner];
+//    [self configureSpinner];
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
@@ -114,13 +118,24 @@
 
 #pragma mark - UI
 
--(void)configureSpinner{
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
-    [self.view addSubview:self.spinner];
+-(void)configureSpinner {
     
-    [self.spinner startAnimating];
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
 }
+
+//-(void)configureSpinner{
+//    
+//    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
+//    [self.view addSubview:self.spinner];
+//    
+//    [self.spinner startAnimating];
+//}
 
 -(void)configurePullToRefresh{
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -201,7 +216,9 @@
         }
         
         [self cacheLocalData:galleries];
-        [self.spinner stopAnimating];
+//        [self.spinner stopAnimating];
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
         [self.tableView reloadData];
     }];
 }
@@ -218,7 +235,9 @@
     
     if ([_dataSource count] > 0) {
         [self.tableView reloadData];
-        [self.spinner stopAnimating];
+//        [self.spinner stopAnimating];
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
     }
 }
 

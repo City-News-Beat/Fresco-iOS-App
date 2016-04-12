@@ -136,7 +136,7 @@
     
     
     if (firstSetup) {
-        [self trackAsActive]; // first initialization, we have foreground (unless the construct of spacetime has changed)
+//        [self trackAsActive]; // first initialization, we have foreground (unless the construct of spacetime has changed)
     }
 }
 
@@ -148,7 +148,7 @@
     NSString *stateType = notification.name;
     
     if (stateType == UIApplicationWillEnterForegroundNotification) {
-        [self trackAsActive];
+//        [self trackAsActive];
     }
     else if (stateType == UIApplicationDidEnterBackgroundNotification) {
         [self trackAsPassive];

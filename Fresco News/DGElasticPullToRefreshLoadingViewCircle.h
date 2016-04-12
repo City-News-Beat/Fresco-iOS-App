@@ -28,4 +28,6 @@
 
 @interface DGElasticPullToRefreshLoadingViewCircle : DGElasticPullToRefreshLoadingView
 
+-(instancetype)init;
+
 @end

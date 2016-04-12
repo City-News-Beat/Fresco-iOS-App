@@ -86,8 +86,8 @@
     
     self.monitoringState = FRSLocationMonitoringStateForeground;
     
-    [self startUpdatingLocation];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
+//    [self startUpdatingLocation];
+//    self.timer = [NSTimer scheduledTimerWithTimeInterval:TIMER_INTERVAL target:self selector:@selector(startUpdatingLocation) userInfo:nil repeats:YES];
 }
 
 -(void)pauseLocationMonitoring{

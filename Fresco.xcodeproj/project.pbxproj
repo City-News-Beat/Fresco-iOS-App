@@ -18,6 +18,7 @@
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
 		078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
+		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
 		07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */; };
 		07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */; };
 		07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */; };
@@ -240,6 +241,8 @@
 		078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
 		079CEEFB1C28740B00E559F3 /* FRSAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAlertView.m; sourceTree = "<group>"; };
+		07A138BD1CBC053C00163BA0 /* FRSLoadingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLoadingTableViewCell.h; sourceTree = "<group>"; };
+		07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLoadingTableViewCell.m; sourceTree = "<group>"; };
 		07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBusinessTypeViewController.h; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.h"; sourceTree = "<group>"; };
 		07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBusinessTypeViewController.m; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.m"; sourceTree = "<group>"; };
 		07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDebitCardViewController.h; path = "Fresco News/View Controllers/Settings/FRSDebitCardViewController.h"; sourceTree = "<group>"; };
@@ -1429,6 +1432,8 @@
 			isa = PBXGroup;
 			children = (
 				D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */,
+				07A138BD1CBC053C00163BA0 /* FRSLoadingTableViewCell.h */,
+				07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */,
 			);
 			name = "Loading Bottom Cell";
 			sourceTree = "<group>";
@@ -2067,6 +2072,7 @@
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
 				D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */,
+				07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */,
 				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,

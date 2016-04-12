@@ -7,6 +7,7 @@
 //
 
 #import "FRSSetupProfileViewController.h"
+#import "FRSBaseViewController.h"
 
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
@@ -44,6 +45,8 @@
     [self addNotifications];
     [self configureImagePicker];
     // Do any additional setup after loading the view.
+    
+    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)addNotifications{

@@ -25,4 +25,6 @@
 
 -(instancetype)initPermissionsAlert;
 
+-(instancetype)initFindFriendsAlert;
+
 @end

@@ -39,7 +39,7 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && FALSE) {
         self.window.rootViewController = [[FRSTabBarController alloc] init];
     }
     else {
@@ -66,7 +66,11 @@
 }
 
 -(void)startAuthentication {
-    self.window.rootViewController = [[FRSOnboardingViewController alloc] init];
+    
+    UINavigationController *mainNav = [[UINavigationController alloc] init];
+    [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
+    [mainNav setNavigationBarHidden:YES];
+    self.window.rootViewController = mainNav;
 }
 
 -(BOOL)isAuthenticated {
