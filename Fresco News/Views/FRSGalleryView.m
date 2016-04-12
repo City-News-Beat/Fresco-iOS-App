@@ -535,6 +535,23 @@
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
         self.profileIV.alpha = 0;
     }
+    
+    if (adjustedPost.videoUrl != Nil) {
+        NSLog(@"POST IS VIDEO");
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change context:(void *)context {
+    if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
+        
+        if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
+
+        }
+        else if (self.videoPlayer.status == AVPlayerStatusFailed) {
+            
+        }
+    }
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{

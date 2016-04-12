@@ -11,6 +11,7 @@
 #import "Fresco.h"
 #import "FRSContentActionsBar.h"
 #import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @class FRSGallery;
 
@@ -64,6 +65,7 @@
 @property (strong, nonatomic) AVPlayer *videoPlayer;
 
 @property (nonatomic) NSInteger currentPage;
+
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
 
