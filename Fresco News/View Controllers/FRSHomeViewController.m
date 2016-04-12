@@ -207,7 +207,7 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAll];
+    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES withPredicate:Nil];
     pulledFromCache = stored;
     
     _dataSource = [[NSMutableArray alloc] init];
@@ -245,6 +245,8 @@
     }
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        NSInteger localIndex = 0;
+        
         for (NSDictionary *gallery in localData) {
             
             NSString *galleryID = [gallery objectForKey:@"_id"];
@@ -257,6 +259,8 @@
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
+            [galleryToSave setValue:@(localIndex) forKey:@"index"];
+            localIndex++;
         }
         
         
