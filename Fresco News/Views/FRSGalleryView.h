@@ -64,6 +64,8 @@
 
 @property (strong, nonatomic) AVPlayer *videoPlayer;
 
+@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+
 @property (nonatomic) NSInteger currentPage;
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;

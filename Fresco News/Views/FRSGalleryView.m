@@ -558,8 +558,10 @@
     [self.videoPlayer addObserver:self forKeyPath:@"status" options:0 context:nil];
 }
 
--(void)breakDownPlayer:(AVPlayer *)player {
-    
+-(void)breakDownPlayer:(AVPlayerLayer *)layer {
+    [layer.player pause];
+    [layer.player replaceCurrentItemWithPlayerItem:Nil];
+    [layer removeFromSuperlayer];
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
