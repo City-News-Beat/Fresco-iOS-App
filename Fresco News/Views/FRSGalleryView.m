@@ -537,9 +537,6 @@
         self.profileIV.alpha = 0;
     }
     
-    if (adjustedPost.videoUrl != Nil) {
-        NSLog(@"POST IS VIDEO");
-    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -571,6 +568,9 @@
     
     self.currentPage = page;
     
+    if ([self.orderedPosts[page] videoUrl] != Nil) {
+        NSLog(@"POST IS VIDEO");
+    }
 }
 
 -(NSInteger)imageViewHeight{
