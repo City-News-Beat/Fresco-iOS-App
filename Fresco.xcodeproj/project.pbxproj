@@ -138,6 +138,7 @@
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
+		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
@@ -456,6 +457,8 @@
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
 		D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSubmissionViewController.m; sourceTree = "<group>"; };
 		D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSubmissionViewController.xib; sourceTree = "<group>"; };
+		D487F1BC1CBD6C2D005742F3 /* FRSMediaScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMediaScroller.h; sourceTree = "<group>"; };
+		D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMediaScroller.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "karmina-bold.otf"; sourceTree = "<group>"; };
@@ -726,6 +729,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
 				D4E76A2D1CB423C200AC7A45 /* Trim Tool */,
 				D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */,
 				D43C7FF51C90745F00A7A7A7 /* Title Nav */,
@@ -1450,6 +1454,15 @@
 			name = Submission;
 			sourceTree = "<group>";
 		};
+		D487F1B81CBD6BE5005742F3 /* Media Scroll */ = {
+			isa = PBXGroup;
+			children = (
+				D487F1BC1CBD6C2D005742F3 /* FRSMediaScroller.h */,
+				D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */,
+			);
+			name = "Media Scroll";
+			sourceTree = "<group>";
+		};
 		D4E76A2D1CB423C200AC7A45 /* Trim Tool */ = {
 			isa = PBXGroup;
 			children = (
@@ -1992,6 +2005,7 @@
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
+				D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */,
 				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
