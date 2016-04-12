@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSPromoCodeViewController : UIViewController
+@interface FRSPromoCodeViewController : FRSBaseViewController
 
 @end

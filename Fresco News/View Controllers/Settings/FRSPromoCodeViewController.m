@@ -10,7 +10,6 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 
-
 @interface FRSPromoCodeViewController()
 @end
 
@@ -29,6 +28,8 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped)];
     
     [self configureLabels];
+
+    [self configureBackButtonAnimated:NO];
 }
 
 -(void)shareTapped{
@@ -111,7 +112,7 @@
 //    container.backgroundColor = [UIColor redColor];
 //    leftHeader.backgroundColor = [UIColor greenColor];
 //    rightHeader.backgroundColor = [UIColor greenColor];
-gs
+
 }
 
 
