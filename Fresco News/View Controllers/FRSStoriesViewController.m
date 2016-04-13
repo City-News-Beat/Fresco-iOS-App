@@ -243,7 +243,7 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stories = [FRSStory MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSArray *stories = [FRSStory MR_findAllSortedBy:@"index" ascending:YES];
     self.stories = [stories mutableCopy];
     [self.tableView reloadData];
 }
@@ -261,7 +261,7 @@
             [storySave configureWithDictionary:story];
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"%d %@", contextDidSave, error);
+
         [self flushCache:localData]; // empty non-remote stories (oos)
     }];
 }

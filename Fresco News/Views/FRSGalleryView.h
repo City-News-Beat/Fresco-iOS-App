@@ -21,7 +21,7 @@
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 
--(BOOL)playerWillPlay;
+-(void)playerWillPlay;
 
 @end
 

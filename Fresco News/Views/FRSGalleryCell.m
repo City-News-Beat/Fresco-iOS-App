@@ -24,6 +24,10 @@
     // Configure the view for the selected state
 }
 
+-(void)playerWillPlay {
+    
+}
+
 -(void)configureCell {
     self.clipsToBounds = YES;
     
