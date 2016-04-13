@@ -19,7 +19,7 @@
 // NOTE last cell in collection view must be the "last 24 hour" prompt
 static NSString *imageTile = @"ImageTile";
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
    
     selectedAssets = [[NSMutableArray alloc] init];
@@ -51,24 +51,43 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)setupSecondaryUI {
-    // boundary
     
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
     
-    line = [[UIView alloc] initWithFrame:CGRectMake(0, fileCollectionView.frame.origin.y + fileCollectionView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 1.5)];
-    line.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:.7];
+    line = [[UIView alloc] initWithFrame:CGRectMake(0, fileCollectionView.frame.origin.y + fileCollectionView.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 1)];
+    line.backgroundColor = [UIColor frescoShadowColor];
     [self.view addSubview:line];
     
-    nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [nextButton setTintColor:[UIColor frescoLightTextColor]];
     nextButton.frame = CGRectMake(screenWidth-64, [UIScreen mainScreen].bounds.size.height-41, 60, 40);
-    nextButton.backgroundColor = [UIColor clearColor];
-    [nextButton setTitleColor:[[UIColor lightGrayColor] colorWithAlphaComponent:.8] forState:UIControlStateNormal];
-    [nextButton setTitleColor:[[UIColor lightGrayColor] colorWithAlphaComponent:.4] forState:UIControlStateHighlighted];
-    
     [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:nextButton];
+    
+    
+    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
+    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [twitterButton setImage:twitter forState:UIControlStateNormal];
+    twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
+    [self.view addSubview:twitterButton];
+    
+    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    [twitterButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
+    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [facebookButton setImage:facebook forState:UIControlStateNormal];
+    facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
+    [self.view addSubview:facebookButton];
+    
+    UIButton *anonymousButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    [twitterButton addTarget:self action:@selector(eyeTapped) forControlEvents:UIControlEventTouchDown];
+    UIImage *eye = [[UIImage imageNamed:@"eye-26"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [anonymousButton setImage:eye forState:UIControlStateNormal];
+    anonymousButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
+    [self.view addSubview:anonymousButton];
+    
 }
 
 -(void)setupCollectionView {
