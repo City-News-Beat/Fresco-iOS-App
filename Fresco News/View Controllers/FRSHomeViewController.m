@@ -396,6 +396,10 @@
     });
 }
 
+-(void)playerWillPlay {
+    
+}
+
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     if (index == self.dataSource.count) {
         return 40;
