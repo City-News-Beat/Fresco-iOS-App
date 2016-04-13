@@ -43,6 +43,7 @@
     [self configureParallax];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -51,6 +52,7 @@
     self.navigationController.navigationBarHidden = YES;
 
 }
+
 
 #pragma mark - UI Configuration
 

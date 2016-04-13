@@ -57,12 +57,18 @@
     [super viewWillAppear:animated];
     self.navigationItem.title = @"SIGN UP";
     [self configureBackButtonAnimated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 -(void)addNotifications{
