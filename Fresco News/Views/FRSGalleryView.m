@@ -236,7 +236,7 @@
             [self.videoPlayer play];
             
             if (self.delegate) {
-                [self.delegate playerWillPlay];
+//                [self.delegate playerWillPlay];
             }
         });
     });

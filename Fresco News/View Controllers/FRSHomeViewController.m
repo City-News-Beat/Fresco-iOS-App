@@ -39,7 +39,6 @@
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
 
-@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property BOOL contentIsEmpty;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -102,7 +101,6 @@
 
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-//    [self configureSpinner];
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
@@ -127,15 +125,6 @@
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
 }
-
-//-(void)configureSpinner{
-//    
-//    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    [self.spinner setCenter: CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 - 44)];
-//    [self.view addSubview:self.spinner];
-//    
-//    [self.spinner startAnimating];
-//}
 
 -(void)configurePullToRefresh{
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -216,7 +205,6 @@
         }
         
         [self cacheLocalData:galleries];
-//        [self.spinner stopAnimating];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
         [self.tableView reloadData];
@@ -235,7 +223,6 @@
     
     if ([_dataSource count] > 0) {
         [self.tableView reloadData];
-//        [self.spinner stopAnimating];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
     }
