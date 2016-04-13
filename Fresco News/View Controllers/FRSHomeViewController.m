@@ -79,7 +79,6 @@
     if ([self.dataSource count] == 0){
     [self configureSpinner];
     }
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{

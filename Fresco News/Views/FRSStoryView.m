@@ -205,7 +205,8 @@
     [self.titleLabel sizeToFit];
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
-
+    [self.titleLabel setSizeWithSize:CGSizeMake(self.frame.size.width - 16, self.titleLabel.frame.size.height+5)];
+    
     [self addShadowToLabel:self.titleLabel];
     
     [self.topContainer addSubview:self.titleLabel];
@@ -264,74 +265,4 @@
     self.actionBlock();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
