@@ -174,7 +174,7 @@
             NSInteger xOrigin = i * self.frame.size.width;
             FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
-            imageView.backgroundColor = [UIColor whiteqColor];
+            imageView.backgroundColor = [UIColor whiteColor];
             imageView.clipsToBounds = YES;
             imageView.indexInScrollView = i;
             
