@@ -19,7 +19,7 @@
 #import "FRSContentActionsBar.h"
 
 #import "FRSLoginViewController.h"
-#import "FRSSetupProfileViewController.h"
+#import "FRSSignUpViewController.h"
 
 #import "OEParallax.h"
 
@@ -41,6 +41,17 @@
     [super viewDidLoad];
     [self configureUI];
     [self configureParallax];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
@@ -95,6 +106,7 @@
 -(void)configurePageControl{
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 3;
+    self.pageControl.userInteractionEnabled = NO;
     [self.pageControl sizeToFit];
     
     [self.pageControl setPageIndicatorTintColor:[UIColor frescoLightTextColor]];
@@ -164,13 +176,13 @@
 
 #pragma mark - UIButton Actions
 
--(void)logIn{
+-(void)logIn {
     FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
     [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
--(void)signUp{
-    FRSSetupProfileViewController *signUpViewController = [[FRSSetupProfileViewController alloc] init];
+-(void)signUp {
+    FRSSignUpViewController *signUpViewController = [[FRSSignUpViewController alloc] init];
     [self.navigationController pushViewController:signUpViewController animated:YES];
 }
 

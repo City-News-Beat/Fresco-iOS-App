@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSLoginViewController : UIViewController
+@interface FRSLoginViewController : FRSBaseViewController
 {
     
 }
