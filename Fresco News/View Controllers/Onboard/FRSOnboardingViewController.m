@@ -104,6 +104,7 @@
 -(void)configurePageControl{
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 3;
+    self.pageControl.userInteractionEnabled = NO;
     [self.pageControl sizeToFit];
     
     [self.pageControl setPageIndicatorTintColor:[UIColor frescoLightTextColor]];
