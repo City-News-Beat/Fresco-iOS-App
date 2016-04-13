@@ -311,7 +311,7 @@
     [self addSubview:self.locationLabel];
 }
 
--(void)configureUserLine{
+-(void)configureUserLine {
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
