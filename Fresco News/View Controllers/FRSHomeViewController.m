@@ -76,7 +76,9 @@
     
     // Do any additional setup after loading the view
     
+    if ([self.dataSource count] == 0){
     [self configureSpinner];
+    }
     
 }
 
