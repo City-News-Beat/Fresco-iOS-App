@@ -67,7 +67,7 @@
 
 -(void)startAuthentication {
     
-    UINavigationController *mainNav = [[UINavigationController alloc] init];
+    FRSNavigationController *mainNav = [[FRSNavigationController alloc] init];
     [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
     [mainNav setNavigationBarHidden:YES];
     self.window.rootViewController = mainNav;

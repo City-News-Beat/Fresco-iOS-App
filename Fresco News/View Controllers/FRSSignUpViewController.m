@@ -56,6 +56,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationItem.title = @"SIGN UP";
+    [self configureBackButtonAnimated:NO];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -312,13 +314,6 @@
     [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:twitterButton];
-    
-    UIButton *googleButton = [[UIButton alloc] initWithFrame:CGRectMake(twitterButton.frame.origin.x + twitterButton.frame.size.width, 1, 24 + 18, 24+18)];
-    [googleButton setImage:[UIImage imageNamed:@"google-icon"] forState:UIControlStateNormal];
-    [googleButton setImage:[UIImage imageNamed:@"google-icon-filled"] forState:UIControlStateHighlighted];
-    [googleButton setImage:[UIImage imageNamed:@"google-icon-filled"] forState:UIControlStateSelected];
-    [googleButton addTarget:self action:@selector(googleTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:googleButton];
 }
 
 #pragma TextField Delegate
@@ -436,14 +431,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

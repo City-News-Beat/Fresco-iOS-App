@@ -19,7 +19,7 @@
 #import "FRSContentActionsBar.h"
 
 #import "FRSLoginViewController.h"
-#import "FRSSetupProfileViewController.h"
+#import "FRSSignUpViewController.h"
 
 #import "OEParallax.h"
 
@@ -43,6 +43,13 @@
     [self configureParallax];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+
 }
 
 #pragma mark - UI Configuration
@@ -164,13 +171,13 @@
 
 #pragma mark - UIButton Actions
 
--(void)logIn{
+-(void)logIn {
     FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
     [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
--(void)signUp{
-    FRSSetupProfileViewController *signUpViewController = [[FRSSetupProfileViewController alloc] init];
+-(void)signUp {
+    FRSSignUpViewController *signUpViewController = [[FRSSignUpViewController alloc] init];
     [self.navigationController pushViewController:signUpViewController animated:YES];
 }
 
