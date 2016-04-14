@@ -95,9 +95,15 @@
     
     NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
     
+    NSString *imageSize = @"images/medium";
+    
+    if (self.story.imageURLs.count > 2) {
+        imageSize = @"images/small";
+    }
+    
     for (NSURL *fullSizeURL in self.story.imageURLs) {
         NSString *fullSizeString = fullSizeURL.absoluteString;
-        NSString *smallString = [fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:@"images/small/"];
+        NSString *smallString = [fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:imageSize];
         [smallImageURLS addObject:[NSURL URLWithString:smallString]];
     }
     

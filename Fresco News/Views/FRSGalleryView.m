@@ -7,28 +7,17 @@
 //
 
 #import "FRSGalleryView.h"
-
-//models
 #import "FRSGallery.h"
 #import "FRSPost.h"
-
-//helper classes and categories
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
 #import "FRSDateFormatter.h"
-
 #import "FRSScrollViewImageView.h"
-
-//views
-
 #import <Haneke/Haneke.h>
 #import "OEParallax.h"
-
 #import "FRSUser+CoreDataProperties.h"
-
 #define TEXTVIEW_TOP_PAD 12
-
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 @property (nonatomic, retain) UIView *topLine;
