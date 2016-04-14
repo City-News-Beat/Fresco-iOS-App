@@ -255,6 +255,7 @@
     self.stories = [stories mutableCopy];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 
+    
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
