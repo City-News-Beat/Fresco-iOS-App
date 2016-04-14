@@ -172,17 +172,15 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (i==0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
-                    });
-                }
-                
-                if ([post.mediaType integerValue] == 1) {
-                    // video
-                    // set up AVPlayer
-                    // add AVPlayerLayer
-                    
-                    [self setupPlayerForPost:post];
+                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+
+                    if (post.videoUrl != Nil) {
+                        // video
+                        // set up AVPlayer
+                        // add AVPlayerLayer
+                        
+                        [self setupPlayerForPost:post];
+                    }
                 }
                 
                 imageView.userInteractionEnabled = YES;
@@ -217,9 +215,18 @@
 
         self.videoPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
         
-        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width);
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerItemDidReachEnd:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:[self.videoPlayer currentItem]];
+        
+        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        UIImageView *imageView  = self.imageViews[0];
+        
+        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.scrollView.layer addSublayer:self.playerLayer];
@@ -230,6 +237,11 @@
             }
         });
     });
+}
+
+-(void)playerItemDidReachEnd:(NSNotification *)notification {
+    [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    [self.videoPlayer play];
 }
 
 -(void)configurePageControl{
@@ -518,11 +530,16 @@
     
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-    });
-
+    
+    if (post.videoUrl != Nil) {
+        
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+        });
+    }
+    
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
     
@@ -562,7 +579,7 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-
+            [self.videoPlayer play];
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
@@ -586,8 +603,8 @@
     
     self.currentPage = page;
     
-    if ([self.orderedPosts[page] videoUrl] != Nil) {
-        NSLog(@"POST IS VIDEO");
+    if (self.videoPlayer) {
+        [self.videoPlayer play];
     }
 }
 
