@@ -231,7 +231,6 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.scrollView.layer addSublayer:self.playerLayer];
-            [self.videoPlayer play];
             
             if (self.delegate) {
                 [self.delegate playerWillPlay:self.videoPlayer];
@@ -577,7 +576,7 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-            [self.videoPlayer play];
+            
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
@@ -692,6 +691,14 @@
     [UIView setAnimationDuration:0];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [UIView commitAnimations];
+}
+
+-(void)play {
+    [self.videoPlayer play];
+}
+
+-(void)pause {
+    [self.videoPlayer pause];
 }
 
 @end

@@ -69,6 +69,8 @@
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
+-(void)play;
+-(void)pause;
 
 //Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.
 
