@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSEmailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSEmailViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

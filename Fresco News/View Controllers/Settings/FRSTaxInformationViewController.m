@@ -68,20 +68,19 @@
     
     
     [self configureTableView];
+    [self configureBackButtonAnimated:NO];
 }
-
-
 
 - (void) incomingNotification:(NSNotification *)notification{
     self.businessType = [notification object];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [self.navigationItem setTitle:@"TAX INFORMATION"];
     [self.tableView reloadData];
 }
 
 -(void)configureTableView{
-    self.title = @"TAX INFORMATION";
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;

@@ -27,6 +27,7 @@
     [self configureView];
     self.title = @"DEBIT CARD";
     
+    [self configureBackButtonAnimated:NO];
 }
 
 

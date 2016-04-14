@@ -31,6 +31,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self configureView];
     
+    [self configureBackButtonAnimated:NO];
 }
 
 

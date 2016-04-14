@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSDebitCardViewController : UIViewController<UITextFieldDelegate>
+@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate>
 
 @end
