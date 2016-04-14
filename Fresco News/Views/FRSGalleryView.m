@@ -34,6 +34,7 @@
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
+@property (nonatomic, retain) NSMutableArray *players;
 @end
 
 @implementation FRSGalleryView
