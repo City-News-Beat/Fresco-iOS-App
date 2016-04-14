@@ -38,6 +38,7 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    [self breakDownPlayer:self.playerLayer];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -514,6 +515,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    
     self.adjustedPage = page;
     
     if (page >= self.gallery.posts.count) return;
@@ -531,13 +533,9 @@
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     if (post.videoUrl != Nil) {
         
-    }
-    else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-        });
     }
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
