@@ -166,4 +166,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     NSLog(@"Follow Story");
 }
 
+-(void)scrollToGalleryIndex:(NSInteger)index {
+    
+}
+
 @end

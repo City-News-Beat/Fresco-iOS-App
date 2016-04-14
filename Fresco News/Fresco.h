@@ -83,6 +83,8 @@ static NSString * const storyCellIdentifier = @"StoryCell";
 static NSString * const settingsCellIdentifier = @"SettingsCell";
 
 // callbacks / blocks
+typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
+
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
 typedef void (^ActionButtonBlock)();
 typedef void (^TransferProgressBlock)(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);

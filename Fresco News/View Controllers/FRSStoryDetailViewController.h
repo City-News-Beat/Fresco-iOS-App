@@ -21,4 +21,5 @@
 @property (nonatomic, weak) FRSStory *story;
 
 -(void)reloadData;
+-(void)scrollToGalleryIndex:(NSInteger)index;
 @end

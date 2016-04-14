@@ -76,7 +76,7 @@
     // only load assets w/ creation date within the last 24 hours (86400 seconds)
     NSDate *today = [NSDate date];
     NSDate *yesterday = [today dateByAddingTimeInterval:-86400];
-    NSPredicate *dayPredicate = [NSPredicate predicateWithFormat: @"creationDate >= %@ && creationDate <= %@ ", yesterday, today];
+    NSPredicate *dayPredicate = [NSPredicate predicateWithFormat: @"creationDate >= %@", yesterday];
     options.predicate = dayPredicate;
     
     
@@ -87,7 +87,7 @@
         
         // add each asset to our file list
         for (PHAsset *asset in assets) {
-            if (asset.location != Nil) {
+            if (asset.location) {
                 [allAssets addObject:asset];
             }
         }

@@ -378,8 +378,16 @@
             [weakSelf readMore:indexPath.row];
         };
         
+        cell.imageBlock = ^(NSInteger imageIndex){
+            [weakSelf handleImagePress:indexPath imageIndex:imageIndex];
+        };
+        
         [cell configureCell];
     }
+}
+
+-(void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {
+    
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{

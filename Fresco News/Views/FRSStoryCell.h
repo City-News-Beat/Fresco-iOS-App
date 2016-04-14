@@ -16,6 +16,7 @@
 @property (strong, nonatomic) FRSStoryView *storyView;
 @property (strong, nonatomic) FRSStory *story;
 @property (strong, nonatomic) ActionButtonBlock actionBlock;
+@property (strong, nonatomic) StoryImageBlock imageBlock;
 
 -(void)clearCell;
 -(void)configureCell;

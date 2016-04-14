@@ -265,4 +265,10 @@
     self.actionBlock();
 }
 
+-(void)clickedImageAtIndex:(NSInteger)imageIndex {
+    if (self.delegate) {
+        [self.delegate clickedImageAtIndex:imageIndex];
+    }
+}
+
 @end

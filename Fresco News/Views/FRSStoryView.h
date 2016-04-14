@@ -16,6 +16,7 @@
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 
+-(void)clickedImageAtIndex:(NSInteger)imageIndex;
 @end
 
 @interface FRSStoryView : UIView
