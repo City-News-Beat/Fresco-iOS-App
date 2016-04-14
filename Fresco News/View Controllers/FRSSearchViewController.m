@@ -148,11 +148,12 @@
     self.tableView.dataSource = self;
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return 2;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
