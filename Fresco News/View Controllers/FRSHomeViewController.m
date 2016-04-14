@@ -39,8 +39,6 @@
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
 
-@property BOOL contentIsEmpty;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
@@ -90,6 +88,14 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self showTabBarAnimated:YES];
+    
+//    [self.navigationItem.titleView setAlpha:1];
+//    self.navigationItem.titleView.alpha = 1;
+//    [self.parentViewController.navigationItem.titleView setAlpha:1];
+//    self.parentViewController.navigationItem.titleView.alpha = 1;
+//    self.navigationController.navigationItem.titleView.alpha = 1;
+//    [self.navigationController.navigationItem.titleView setAlpha:1];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -101,10 +107,7 @@
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
-    
-    
-//    if (self.contentIsEmpty) {
-//    }
+
 }
 
 -(void)addNotificationObservers{
@@ -163,8 +166,40 @@
     [self removeNavigationBarLine];
     
     // Deal with this
-    FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
-    [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
+    //    FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
+    //    [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
+    
+    
+    int offset = 8;
+    
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.navigationItem.titleView = titleView;
+
+    UIButton *highlightsButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
+    [highlightsButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
+    [highlightsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [highlightsButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [highlightsButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:highlightsButton];
+    
+    UIButton *followingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    [followingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [followingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [followingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [followingButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:followingButton];
+    
+    
+    if (IS_IPHONE_6) {
+        highlightsButton.frame = CGRectMake(80.7  - offset, 12, 87, 20);
+        followingButton.frame  = CGRectMake(208.3 - offset, 12, 87, 20);
+    } else if (IS_IPHONE_6_PLUS) {
+        highlightsButton.frame = CGRectMake(93.7  - offset, 12, 87, 20);
+        followingButton.frame  = CGRectMake(234.3 - offset, 12, 87, 20);
+    } else if (IS_IPHONE_5) {
+        highlightsButton.frame = CGRectMake(62.3  - offset, 12, 87, 20);
+        followingButton.frame  = CGRectMake(171.7 - offset, 12, 87, 20);
+    }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
