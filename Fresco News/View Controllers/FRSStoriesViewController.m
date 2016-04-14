@@ -387,7 +387,15 @@
 }
 
 -(void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {
+    NSLog(@"READ MORE: %lu", (long)index);
     
+    //    if (self.navigationController.navigationBarHidden) {
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    //    }
+    
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:cellIndex.row]];
+    [detailView scrollToGalleryIndex:imageIndex];
+    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
