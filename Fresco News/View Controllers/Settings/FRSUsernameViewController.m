@@ -22,7 +22,7 @@
     [super viewDidLoad];
     
     [self configureTableView];
-    
+    [self configureBackButtonAnimated:NO];
 }
 
 -(void)configureTableView{

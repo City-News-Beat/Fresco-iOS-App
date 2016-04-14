@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSDisableAccountViewController : UIViewController
+@interface FRSDisableAccountViewController : FRSBaseViewController
 
 @end

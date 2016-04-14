@@ -54,7 +54,10 @@
     [self selectTag:1]; // Select first row if no other row is selected
     self.tag = [[NSUserDefaults standardUserDefaults] integerForKey:@"selected-tag"];
     [self selectTag:self.tag];
-
+    
+    [self configureBackButtonAnimated:NO];
+    
+    self.title = @"BUSINESS TYPE";
 }
 
 -(void)configureUI{

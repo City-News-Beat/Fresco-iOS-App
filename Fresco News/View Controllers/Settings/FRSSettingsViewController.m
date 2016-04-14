@@ -50,12 +50,12 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationItem.title = @"SETTINGS";
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     
-    [self configureBackButtonAnimated:NO]; 
+    [self configureBackButtonAnimated:NO];
 
+    [self.navigationItem setTitle:@"SETTINGS"];
 }
 
 

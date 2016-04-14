@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSUsernameViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSUsernameViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

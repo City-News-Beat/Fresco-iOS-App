@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSBaseViewController.h"
 
-@interface FRSPasswordChangeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface FRSPasswordChangeViewController : FRSBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end
