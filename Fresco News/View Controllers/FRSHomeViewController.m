@@ -75,10 +75,6 @@
     self.scrollView.delegate = self;
     
     // Do any additional setup after loading the view
-    
-    if ([self.dataSource count] == 0){
-    [self configureSpinner];
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -226,6 +222,11 @@
         [self.tableView reloadData];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
+    }
+    else {
+        if ([self.dataSource count] == 0){
+            [self configureSpinner];
+        }
     }
 }
 

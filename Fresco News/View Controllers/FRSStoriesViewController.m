@@ -59,6 +59,10 @@
     
     [self configureUI];
     [self fetchStories];
+    
+    if ([self.stories count] == 0){
+        [self configureSpinner];
+    }
 }
 
 
@@ -68,7 +72,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configurePullToRefresh];
-    [self configureSpinner];
+//    [self configureSpinner];
     [self configureNavigationBar];
 }
 
@@ -88,6 +92,7 @@
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -176,27 +181,30 @@
         }
         
         [self cacheLocalData:stories];
-
-            for (NSDictionary *storyDict in stories){
-                FRSStory *story; 
-                
-//                [self.spinner stopAnimating];
-                [self.loadingView stopLoading];
-                [self.loadingView removeFromSuperview];
-                
-                if (!story) {
-                    story = [FRSStory MR_createEntity];
-                    [story configureWithDictionary:storyDict];
-                    [self.stories addObject:story];
-                }
-                else {
-                    [self.stories addObject:story];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
+        
+        NSInteger index = 0;
+        
+        for (NSDictionary *storyDict in stories){
+            FRSStory *story;
+            
+            [self.loadingView stopLoading];
+            [self.loadingView removeFromSuperview];
+            
+            if (!story) {
+                story = [FRSStory MR_createEntity];
+                [story configureWithDictionary:storyDict];
+                [self.stories addObject:story];
             }
+            else {
+                [self.stories addObject:story];
+            }
+            
+            index++;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        });
     }];
 }
 
@@ -245,36 +253,44 @@
 -(void)fetchLocalData {
     NSArray *stories = [FRSStory MR_findAllSortedBy:@"index" ascending:YES];
     self.stories = [stories mutableCopy];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        NSInteger index = 0;
+        
         for (NSDictionary *story in localData) {
             NSString *storyID = [story objectForKey:@"_id"];
             
-            if ([self storyExists:storyID]) {
+            FRSStory *storyToSave = [self storyExists:storyID];
+            
+            if (storyToSave) {
+                [storyToSave setValue:@(index) forKey:@"index"];
                 continue;
             }
             
             FRSStory *storySave = [FRSStory MR_createEntityInContext:localContext];
             [storySave configureWithDictionary:story];
         }
+        
+        index++;
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
 
         [self flushCache:localData]; // empty non-remote stories (oos)
     }];
 }
 
--(BOOL)storyExists:(NSString *)storyID {
+-(FRSStory *)storyExists:(NSString *)storyID {
     
     for (FRSStory *story in self.stories) {
         if ([story.uid isEqualToString:storyID]) {
-            return TRUE;
+            return story;
         }
     }
     
-    return FALSE;
+    return Nil;
 }
 
 
