@@ -224,7 +224,7 @@
             self.playerLayer = Nil;
             self.videoPlayer = Nil;
         }
-        
+        return;
         self.videoPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
         NSInteger postIndex = [self.orderedPosts indexOfObject:post];
