@@ -269,6 +269,7 @@
             
             if (storyToSave) {
                 [storyToSave setValue:@(index) forKey:@"index"];
+                [storyToSave configureWithDictionary:story];
                 continue;
             }
             

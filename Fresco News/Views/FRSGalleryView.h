@@ -21,8 +21,7 @@
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 
--(void)playerWillPlay;
-
+-(void)playerWillPlay:(AVPlayer *)player;
 @end
 
 @interface FRSGalleryView : UIView

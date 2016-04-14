@@ -396,8 +396,12 @@
     });
 }
 
--(void)playerWillPlay {
-    
+-(void)playerWillPlay:(AVPlayer *)player {
+    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
+        if (cell.player && cell.player != player) {
+            [cell.player pause];
+        }
+    }
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{

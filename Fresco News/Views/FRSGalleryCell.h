@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
+@property (strong, nonatomic) AVPlayer *player;
 -(void)clearCell;
 -(void)configureCell;
 
