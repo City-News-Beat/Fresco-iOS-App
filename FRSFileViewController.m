@@ -21,7 +21,7 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-   
+    
     selectedAssets = [[NSMutableArray alloc] init];
     
     [self.navigationController.navigationBar setTitleTextAttributes:
