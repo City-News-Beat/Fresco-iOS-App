@@ -387,11 +387,8 @@
 }
 
 -(void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {
-    NSLog(@"READ MORE: %lu", (long)index);
     
-    //    if (self.navigationController.navigationBarHidden) {
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    //    }
     
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:cellIndex.row]];
     [detailView scrollToGalleryIndex:imageIndex];
@@ -400,19 +397,12 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
-    
     self.navigationItem.rightBarButtonItem.customView.alpha = 0;
-    NSLog(@"contentOffset.y = %f", scrollView.contentOffset.y);
-
 }
 
 -(void)readMore:(NSInteger)index {
-    NSLog(@"READ MORE: %lu", (long)index);
     
-//    if (self.navigationController.navigationBarHidden) {
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    }
-    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     [self.navigationController pushViewController:detailView animated:YES];
 }
