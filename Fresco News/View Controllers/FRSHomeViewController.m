@@ -7,25 +7,23 @@
 //
 
 #import "FRSHomeViewController.h"
-
-#import "FRSGalleryExpandedViewController.h"
-
-#import "FRSGalleryCell.h"
-
-#import "FRSTabbedNavigationTitleView.h"
-
-#import <MagicalRecord/MagicalRecord.h>
-
-#import "DGElasticPullToRefresh.h"
-
 #import "Fresco.h"
 
-#import "FRSCoreData.h"
-
+/* View Controllers */
+#import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
+
+/* UI */
+#import "DGElasticPullToRefresh.h"
+#import "FRSGalleryCell.h"
 #import "FRSTrimTool.h"
 
-@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, FRSTabbedNavigationTitleViewDelegate>
+/* Core Data */
+#import <MagicalRecord/MagicalRecord.h>
+#import "FRSCoreData.h"
+
+
+@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 {
     BOOL isLoading;
     NSInteger lastOffset;
@@ -47,23 +45,6 @@
 
 @implementation FRSHomeViewController
 
-
--(UIImage *)imageForLeftBarItem {
-    return Nil;
-}
-
--(void)tabbedNavigationTitleViewDidTapRightBarItem {
-    
-}
-
--(void)tabbedNavigationTitleViewDidTapLeftBarItem {
-    
-}
-
--(void)tabbedNavigationTitleViewDidTapButtonAtIndex:(NSInteger)index {
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -71,48 +52,37 @@
     [self addNotificationObservers];
     
     self.scrollView.delegate = self;
-    
-    // Do any additional setup after loading the view
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
     [self configureNavigationBar];
-    
     [self addStatusBarNotification];
-    
     [self showNavBarForScrollView:self.scrollView animated:NO];
-
 }
 
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     [self showTabBarAnimated:YES];
-    
-//    [self.navigationItem.titleView setAlpha:1];
-//    self.navigationItem.titleView.alpha = 1;
-//    [self.parentViewController.navigationItem.titleView setAlpha:1];
-//    self.parentViewController.navigationItem.titleView.alpha = 1;
-//    self.navigationController.navigationItem.titleView.alpha = 1;
-//    [self.navigationController.navigationItem.titleView setAlpha:1];
-    
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [self removeStatusBarNotification];
 }
 
--(void)configureUI{
+-(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
-
 }
 
--(void)addNotificationObservers{
+-(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
+
 
 #pragma mark - UI
 
@@ -126,7 +96,7 @@
     [self.view addSubview:self.loadingView];
 }
 
--(void)configurePullToRefresh{
+-(void)configurePullToRefresh {
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
     
@@ -140,7 +110,6 @@
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -157,19 +126,14 @@
     }
 }
 
-- (void)dealloc{
+-(void)dealloc {
     [self.tableView dg_removePullToRefresh];
 }
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
     
     [self removeNavigationBarLine];
-    
-    // Deal with this
-    //    FRSNavigationController *frsNav = (FRSNavigationController *)self.navigationController;
-    //    [frsNav configureFRSNavigationBarWithTabs:@[@"HIGHLIGHTS", @"FOLLOWING"]];
-    
-    
+
     int offset = 8;
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
@@ -184,11 +148,10 @@
     
     UIButton *followingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
     [followingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-    [followingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [followingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [followingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [followingButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
     [titleView addSubview:followingButton];
-    
     
     if (IS_IPHONE_6) {
         highlightsButton.frame = CGRectMake(80.7  - offset, 12, 87, 20);
@@ -203,29 +166,20 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
-
 }
 
--(UIImage *)imageForRightBarItem{
-    return [UIImage imageNamed:@"search-icon"];
-}
-
--(void)configureTableView
-{
+-(void)configureTableView {
     [super configureTableView];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64- 49);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
-    
-    // registering nib for bottom cell
-    
-    
     [self.view addSubview:self.tableView];
 }
 
--(void)configureDataSource{
+-(void)configureDataSource {
     
     // make core data fetch
     [self fetchLocalData];
@@ -346,15 +300,15 @@
 
 #pragma mark - UITableView DataSource
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [self heightForItemAtDataSourceIndex:indexPath.row];
 }
 
@@ -488,11 +442,11 @@
 
 #pragma mark - UITableView Delegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     // sloppy not to have a check here
     if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
@@ -548,11 +502,11 @@
 
 #pragma mark - Nav Bar Actions
 
--(void)handleFollowingTabTapped{
+-(void)handleFollowingTabTapped {
     
 }
 
--(void)handleHighlightsTabTapped{
+-(void)handleHighlightsTabTapped {
     
 }
 
