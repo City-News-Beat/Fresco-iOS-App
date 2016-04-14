@@ -533,6 +533,8 @@
         self.locationLabel.alpha = 0;
         self.timeLabel.alpha = 0;
         self.profileIV.alpha = 0;
+        self.locationIV.alpha = 0;
+        self.clockIV.alpha = 0;
         return;
     }
         
@@ -543,6 +545,8 @@
     self.locationLabel.alpha = absAlpha;
     self.timeLabel.alpha = absAlpha;
     self.profileIV.alpha = absAlpha;
+    self.locationIV.alpha = absAlpha;
+    self.clockIV.alpha = absAlpha;
     
     //Profile picture doesn't fade on scroll
     
