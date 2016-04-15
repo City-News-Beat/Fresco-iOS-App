@@ -240,7 +240,7 @@
         UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
         self.videoPlayer.container = container;
         
-        self.playerLayer.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+        self.playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
 
     
         dispatch_async(dispatch_get_main_queue(), ^{
