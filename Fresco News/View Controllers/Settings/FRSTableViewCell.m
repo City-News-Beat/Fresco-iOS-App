@@ -371,6 +371,7 @@
     UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
+    profileIV.clipsToBounds = YES;
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
