@@ -96,6 +96,12 @@
     if (lastLocation) {
         [self locationUpdate:lastLocation];
     }
+    
+    [self setTitle:@"ASSIGNMENTS"];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
 }
 
 -(void)didReceiveLocationUpdate:(NSNotification *)notification {
