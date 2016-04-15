@@ -12,7 +12,7 @@
 #import "FRSContentActionsBar.h"
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
-
+#import "FRSPlayer.h"
 @class FRSGallery;
 
 
@@ -21,7 +21,7 @@
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 
--(void)playerWillPlay:(AVPlayer *)player;
+-(void)playerWillPlay:(FRSPlayer *)player;
 @end
 
 @interface FRSGalleryView : UIView
@@ -61,7 +61,7 @@
 
 @property (strong, nonatomic) UIView *container;
 
-@property (strong, nonatomic) AVPlayer *videoPlayer;
+@property (strong, nonatomic) FRSPlayer *videoPlayer;
 
 @property (strong, nonatomic) AVPlayerLayer *playerLayer;
 

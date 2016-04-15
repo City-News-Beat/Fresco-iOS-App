@@ -24,6 +24,7 @@
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
 @property (nonatomic, retain) NSMutableArray *players;
+@property BOOL playerHasFocus;
 @end
 
 @implementation FRSGalleryView
@@ -125,8 +126,11 @@
     return self;
 }
 
+-(void)contentTap:(UITapGestureRecognizer *)sender {
+    NSLog(@"TAP");
+}
+
 -(void)configureUI{
-    
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureScrollView]; //
@@ -140,6 +144,11 @@
     [self configureActionsBar]; // this will stay similar
     
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentTap:)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [self.scrollView addGestureRecognizer:tapGesture];
 }
 
 -(void)configureScrollView{
@@ -177,9 +186,9 @@
 
                     if (post.videoUrl != Nil) {
                         // video
-                        // set up AVPlayer
+                        // set up FRSPlayer
                         // add AVPlayerLayer
-                        
+                        NSLog(@"TOP LEVEL PLAYER");
                         [self setupPlayerForPost:post];
                     }
                 }
@@ -214,7 +223,7 @@
             self.videoPlayer = Nil;
         }
 
-        self.videoPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+        self.videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
         self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
         
