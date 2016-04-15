@@ -289,7 +289,7 @@
     [self addSubview:self.disableAccountSubtitleLabel];
     
     self.sadEmojiIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sad-emoticon"]];
-    self.sadEmojiIV.frame = CGRectMake(231, 18, 20, 20);
+    self.sadEmojiIV.frame = CGRectMake(231, 16, 24, 24);
     [self addSubview:self.sadEmojiIV];
     
 }

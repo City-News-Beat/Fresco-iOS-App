@@ -389,13 +389,14 @@
                 case 1:
                     [self presentModalMailComposerViewController:YES];
                     break;
-                case 2:
-//                    FRSDisableAccountViewController *disable = [[FRSDisableAccountViewController alloc] init];
-//                    [self.navigationController pushViewController:disable animated:YES];
-                    self.navigationItem.title = @"";
+                case 2:{
                     
-                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-                    [alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+//                    [alert show];
+                    FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
+                    [self.navigationController pushViewController:disableVC animated:YES];
+                }
+                    
                     
                 {
                     
