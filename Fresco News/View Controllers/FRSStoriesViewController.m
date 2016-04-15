@@ -99,20 +99,20 @@
     [super viewWillAppear:animated];
     
     if (!self.firstTime) {
-        [self fetchStories];   
+        [self fetchStories];
     }
     
     self.firstTime = TRUE;
     
-//    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height);
+    id presentingViewController = self.presentingViewController;
+    if ([presentingViewController isKindOfClass:[FRSStoryDetailViewController class]]) {
+        self.tableView.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height);
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    self.tableView.frame = CGRectMake(0, 64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height);
 }
 
 #pragma mark -  UI
