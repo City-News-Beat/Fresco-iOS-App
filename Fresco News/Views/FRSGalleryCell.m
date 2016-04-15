@@ -30,7 +30,7 @@
 
 -(void)configureCell {
     self.clipsToBounds = YES;
-    g
+    
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     if (self.gallery == self.galleryView.gallery) {
