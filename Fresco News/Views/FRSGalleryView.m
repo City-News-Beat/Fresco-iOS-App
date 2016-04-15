@@ -237,9 +237,15 @@
         
         self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
+        self.videoPlayer.container = container;
         
+        self.playerLayer.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+
+    
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.scrollView.layer addSublayer:self.playerLayer];
+            [container.layer addSublayer:self.playerLayer];
+            [self.scrollView addSubview:container];
             
             if (self.delegate) {
                 [self.delegate playerWillPlay:self.videoPlayer];
