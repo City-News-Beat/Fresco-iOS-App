@@ -69,4 +69,10 @@
     return YES;
 }
 
+-(void)play {
+    [self.galleryView play];
+}
+-(void)pause {
+    [self.galleryView pause];
+}
 @end

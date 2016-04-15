@@ -24,6 +24,7 @@
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
 @property (nonatomic, retain) NSMutableArray *players;
+@property BOOL playerHasFocus;
 @end
 
 @implementation FRSGalleryView
@@ -38,6 +39,7 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    [self breakDownPlayer:self.playerLayer];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -124,8 +126,11 @@
     return self;
 }
 
+-(void)contentTap:(UITapGestureRecognizer *)sender {
+    NSLog(@"TAP");
+}
+
 -(void)configureUI{
-    
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureScrollView]; //
@@ -139,6 +144,11 @@
     [self configureActionsBar]; // this will stay similar
     
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentTap:)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [self.scrollView addGestureRecognizer:tapGesture];
 }
 
 -(void)configureScrollView{
@@ -156,7 +166,6 @@
     
     self.imageViews = [NSMutableArray new];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
             FRSPost *post = self.orderedPosts[i];
@@ -170,31 +179,26 @@
             
             [self.imageViews addObject:imageView];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
                 if (i==0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
-                    });
-                }
-                
-                if ([post.mediaType integerValue] == 1) {
+                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+
+                if (post.videoUrl != Nil) {
                     // video
-                    // set up AVPlayer
+                    // set up FRSPlayer
                     // add AVPlayerLayer
-                    
+                    NSLog(@"TOP LEVEL PLAYER");
                     [self setupPlayerForPost:post];
                 }
+            }
                 
-                imageView.userInteractionEnabled = YES;
-                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
-                tap.numberOfTapsRequired = 1;
-                [imageView addGestureRecognizer:tap];
+            imageView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
+            tap.numberOfTapsRequired = 1;
+            [imageView addGestureRecognizer:tap];
                 
-                [self.scrollView addSubview:imageView];
-            });
-        }
-    });
-    
+            [self.scrollView addSubview:imageView];
+    }
+
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
         self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
@@ -215,21 +219,43 @@
             self.videoPlayer = Nil;
         }
 
-        self.videoPlayer = [AVPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+        self.videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+        self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerItemDidReachEnd:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:[self.videoPlayer currentItem]];
+        
         NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        UIImageView *imageView  = self.imageViews[0];
         
-        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width);
+        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         
+        UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
+        container.backgroundColor = [UIColor clearColor];
+        
+        self.videoPlayer.container = container;
+        
+        self.playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
+
+    
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.scrollView.layer addSublayer:self.playerLayer];
-            [self.videoPlayer play];
+            [container.layer addSublayer:self.playerLayer];
+            [self.scrollView addSubview:container];
             
             if (self.delegate) {
                 [self.delegate playerWillPlay:self.videoPlayer];
             }
         });
     });
+}
+
+-(void)playerItemDidReachEnd:(NSNotification *)notification {
+    [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    [self.videoPlayer play];
 }
 
 -(void)configurePageControl{
@@ -502,6 +528,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    
     self.adjustedPage = page;
     
     if (page >= self.gallery.posts.count) return;
@@ -518,11 +545,14 @@
     
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
+    
+    if (post.videoUrl != Nil) {
+        [self setupPlayerForPost:post];
+    }
+    else {
         [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-    });
-
+    }
+    
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
     
@@ -566,7 +596,7 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-
+            
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
@@ -590,8 +620,8 @@
     
     self.currentPage = page;
     
-    if ([self.orderedPosts[page] videoUrl] != Nil) {
-        NSLog(@"POST IS VIDEO");
+    if (self.videoPlayer) {
+        [self.videoPlayer play];
     }
 }
 
@@ -681,6 +711,14 @@
     [UIView setAnimationDuration:0];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [UIView commitAnimations];
+}
+
+-(void)play {
+    [self.videoPlayer play];
+}
+
+-(void)pause {
+    [self.videoPlayer pause];
 }
 
 @end

@@ -140,6 +140,7 @@
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
 		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
+		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
@@ -462,6 +463,8 @@
 		D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSubmissionViewController.xib; sourceTree = "<group>"; };
 		D487F1BC1CBD6C2D005742F3 /* FRSMediaScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMediaScroller.h; sourceTree = "<group>"; };
 		D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMediaScroller.m; sourceTree = "<group>"; };
+		D487F1CC1CC14246005742F3 /* FRSPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayer.h; sourceTree = "<group>"; };
+		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "karmina-bold.otf"; sourceTree = "<group>"; };
@@ -1386,6 +1389,7 @@
 		D43C7FFE1C9074B000A7A7A7 /* Gallery View */ = {
 			isa = PBXGroup;
 			children = (
+				D487F1CB1CC14231005742F3 /* Player */,
 				65201A2F1C3D7D6200B31089 /* FRSGalleryView.h */,
 				65201A301C3D7D6200B31089 /* FRSGalleryView.m */,
 			);
@@ -1482,6 +1486,15 @@
 				65EBEDB81C44197100BE671F /* FRSLocationManager.m */,
 			);
 			name = "Location Manager";
+			sourceTree = "<group>";
+		};
+		D487F1CB1CC14231005742F3 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				D487F1CC1CC14246005742F3 /* FRSPlayer.h */,
+				D487F1CD1CC14246005742F3 /* FRSPlayer.m */,
+			);
+			name = Player;
 			sourceTree = "<group>";
 		};
 		D4E76A2D1CB423C200AC7A45 /* Trim Tool */ = {
@@ -2014,6 +2027,7 @@
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
+				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
 				D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */,
 				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,

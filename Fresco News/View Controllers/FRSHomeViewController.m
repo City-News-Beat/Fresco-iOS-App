@@ -40,7 +40,7 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
-
+@property (strong, nonatomic) NSMutableArray *players;
 @end
 
 @implementation FRSHomeViewController
