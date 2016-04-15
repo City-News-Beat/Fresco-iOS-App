@@ -166,7 +166,6 @@
     
     self.imageViews = [NSMutableArray new];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
             FRSPost *post = self.orderedPosts[i];
@@ -180,29 +179,26 @@
             
             [self.imageViews addObject:imageView];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
                 if (i==0) {
                     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                    if (post.videoUrl != Nil) {
-                        // video
-                        // set up FRSPlayer
-                        // add AVPlayerLayer
-                        NSLog(@"TOP LEVEL PLAYER");
-                        [self setupPlayerForPost:post];
-                    }
+                if (post.videoUrl != Nil) {
+                    // video
+                    // set up FRSPlayer
+                    // add AVPlayerLayer
+                    NSLog(@"TOP LEVEL PLAYER");
+                    [self setupPlayerForPost:post];
                 }
+            }
                 
-                imageView.userInteractionEnabled = YES;
-                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
-                tap.numberOfTapsRequired = 1;
-                [imageView addGestureRecognizer:tap];
+            imageView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
+            tap.numberOfTapsRequired = 1;
+            [imageView addGestureRecognizer:tap];
                 
-                [self.scrollView addSubview:imageView];
-            });
-        }
-    });
-    
+            [self.scrollView addSubview:imageView];
+    }
+
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
         self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
@@ -237,7 +233,10 @@
         
         self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        
         UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
+        container.backgroundColor = [UIColor clearColor];
+        
         self.videoPlayer.container = container;
         
         self.playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
@@ -547,9 +546,11 @@
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     if (post.videoUrl != Nil) {
-        
+        [self setupPlayerForPost:post];
+    }
+    else {
+        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     }
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
