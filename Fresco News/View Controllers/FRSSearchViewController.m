@@ -265,13 +265,13 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
                     break;
                 case 2:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
                     break;
                 case 3:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
                     break;
                 case 4:
                     [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
@@ -288,13 +288,13 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"accepted"] storyName:@"Story name goes here"];
+                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-1"] storyName:@"Mardi Gras Celebration: New Orleans, LA"];
                     break;
                 case 2:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"accepted"] storyName:@"Long story title that should maybe truncate"];
+                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-2"] storyName:@"MLS Finals: Columbus, OH"];
                     break;
                 case 3:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"accepted"] storyName:@"Story name goes here"];
+                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-3"] storyName:@"Warehouse Fire: Hillsborough, NJ"];
                     break;
                 case 4:
                     [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 25 STORIES"];
