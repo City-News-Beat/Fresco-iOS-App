@@ -265,13 +265,13 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-byrn"] fullName:@"First Last" userName:@"@firstLast" isFollowing:YES];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
                     break;
                 case 2:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-grace"] fullName:@"Last First" userName:@"@lastFirst" isFollowing:NO];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
                     break;
                 case 3:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-erik"] fullName:@"Froggy Frog" userName:@"@frog" isFollowing:NO];
+                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
                     break;
                 case 4:
                     [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
