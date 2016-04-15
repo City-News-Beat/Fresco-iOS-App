@@ -23,7 +23,6 @@
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
-@property (nonatomic, retain) NSMutableArray *players;
 @property BOOL playerHasFocus;
 @end
 
@@ -39,6 +38,8 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    self.players = [[NSMutableArray alloc] init];
+    
     [self breakDownPlayer:self.playerLayer];
     
     self.clipsToBounds = NO;
@@ -120,7 +121,7 @@
         self.delegate = delegate;
         self.gallery = gallery;
         self.orderedPosts = [self.gallery.posts allObjects];
-        
+        self.players = [[NSMutableArray alloc] init];
         [self configureUI];
     }
     return self;
@@ -222,6 +223,8 @@
         self.videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
         self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        
+        [self.players addObject:self.videoPlayer];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(playerItemDidReachEnd:)
@@ -546,7 +549,7 @@
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
-    if (post.videoUrl != Nil) {
+    if (post.videoUrl != Nil && !imageView.image) {
         [self setupPlayerForPost:post];
     }
     else {
