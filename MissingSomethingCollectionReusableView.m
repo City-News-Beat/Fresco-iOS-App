@@ -7,6 +7,7 @@
 //
 
 #import "MissingSomethingCollectionReusableView.h"
+#import "UIColor+Fresco.h"
 
 @interface MissingSomethingCollectionReusableView ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -43,10 +44,21 @@
     self.textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textView.textAlignment = NSTextAlignmentCenter;
     
-
-    self.backgroundColor = [UIColor redColor];
-//    CGRect textViewRect = self.textView.frame;
-//    textViewRect.size.width = self.frame.size.width;
+    self.textView.textColor = [UIColor frescoMediumTextColor];
+    self.textView.tintColor = [UIColor frescoDarkTextColor];
+    
+    
+//    NSString *strTextView = @"We can only verify photos and videos from the past 24 hours. If nothing’s showing up, make sure Location Services are turned on in Settings.";
+//    
+//    NSRange rangeBold = [strTextView rangeOfString:@"Settings"];
+//    
+//    UIFont *fontText = [UIFont boldSystemFontOfSize:15];
+//    NSDictionary *dictBoldText = [NSDictionary dictionaryWithObjectsAndKeys:fontText, NSFontAttributeName, nil];
+//    
+//    NSMutableAttributedString *mutAttrTextViewString = [[NSMutableAttributedString alloc] initWithString:strTextView];
+//    [mutAttrTextViewString setAttributes:dictBoldText range:rangeBold];
+//    
+//    [self.textView setAttributedText:mutAttrTextViewString];
 }
 
 -(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
