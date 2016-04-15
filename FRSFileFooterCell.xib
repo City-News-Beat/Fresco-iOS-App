@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -19,35 +18,32 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Missing Something?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mc4-1b-s15">
                     <rect key="frame" x="140" y="48" width="320" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="3hf-gJ-u3N"/>
-                        <constraint firstAttribute="height" constant="30" id="bdS-Eh-QH4"/>
-                        <constraint firstAttribute="width" constant="320" id="c1Z-3j-Swl"/>
+                        <constraint firstAttribute="height" constant="30" id="Kkf-Oj-Yt5"/>
+                        <constraint firstAttribute="width" constant="320" id="ruM-sb-XV1"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Karmina-Bold" family="Karmina" pointSize="22"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iiK-hu-wdc">
-                    <rect key="frame" x="24" y="71" width="552" height="79"/>
+                    <rect key="frame" x="16" y="71" width="568" height="80"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="79" id="JAi-Ng-nUG"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="79" id="MHU-31-v7e"/>
-                        <constraint firstAttribute="height" constant="79" id="ZOc-Xf-M8e"/>
+                        <constraint firstAttribute="height" constant="80" id="GI6-t3-fkh"/>
                     </constraints>
                     <attributedString key="attributedText">
                         <fragment>
                             <string key="content">We can only verify photos and videos from the past 24 hours. If nothing’s showing up, make sure Location Services are turned on in </string>
                             <attributes>
                                 <color key="NSColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
+                                <font key="NSFont" size="15" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="Settings">
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
+                                <font key="NSFont" size="15" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
@@ -56,28 +52,32 @@
 </string>
                             <attributes>
                                 <color key="NSColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="13" name="SFUIText-Regular"/>
+                                <font key="NSFont" size="15" name="SFUIText-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                     </attributedString>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="zQc-XX-SBh"/>
+                    </connections>
                 </textView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="2lt-tV-e4M"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="24" id="2oQ-Mc-JeT"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="6Tc-i5-lMi"/>
-                <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="24" id="bj9-n3-uHV"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="cCd-zR-7Ac"/>
-                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="e3h-1W-uBY"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="ATb-aH-bbw"/>
+                <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="16" id="CZf-3i-oTf"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="Hba-SK-hc0"/>
+                <constraint firstAttribute="bottom" secondItem="mc4-1b-s15" secondAttribute="bottom" constant="522" id="VgN-fn-beC"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="gcA-Hb-mtD"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="16" id="hZU-Za-dlS"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="ua1-0n-NUQ"/>
             </constraints>
             <connections>
                 <outlet property="textView" destination="iiK-hu-wdc" id="NFg-66-RKL"/>
             </connections>
-            <point key="canvasLocation" x="333" y="250"/>
+            <point key="canvasLocation" x="326" y="253"/>
         </view>
     </objects>
 </document>
