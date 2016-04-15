@@ -97,10 +97,12 @@
         [self locationUpdate:lastLocation];
     }
     
-    [self setTitle:@"ASSIGNMENTS"];
+    self.navigationItem.title = @"ASSIGNMENTS";
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [self removeNavigationBarLine];
     
 }
 
@@ -137,10 +139,6 @@
     self.isPresented = NO;
 }
 
--(void)configureNavigationBar {
-
-    self.navigationItem.title = @"ASSIGNMENTS";
-}
 
 -(void)configureMap {
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
