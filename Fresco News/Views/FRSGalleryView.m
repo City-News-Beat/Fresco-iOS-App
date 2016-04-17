@@ -64,7 +64,7 @@
     
     self.pageControl.numberOfPages = self.gallery.posts.count;
     
-    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 16 - (self.gallery.posts.count * 9) , self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
+    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 20 - (self.gallery.posts.count * 8) , self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
     
    // self.pageControl.frame = CGRectMake(0, self.scrollView.frame.size.height - 15, self.pageControl.frame.size.width, 8);
 
@@ -582,7 +582,7 @@
 
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     
-    if (self.imageViews.count> page+1) {
+    if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
         UIImageView *nextImage = self.imageViews[page+1];
         FRSPost *nextPost = self.orderedPosts[page+1];
         [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
