@@ -214,8 +214,6 @@
 }
 
 -(void)setupPlayerForPost:(FRSPost *)post {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
         if (self.playerLayer) {
             [self breakDownPlayer:self.playerLayer];
             self.playerLayer = Nil;
@@ -260,7 +258,6 @@
                 [self.delegate playerWillPlay:self.videoPlayer];
             }
         });
-    });
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
@@ -549,7 +546,7 @@
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
     self.adjustedPage = page;
-    
+
     if (page >= self.gallery.posts.count) return;
     
     if (page != self.pageControl.currentPage){
@@ -573,14 +570,17 @@
     else if (self.players.count > page) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             AVPlayer *player = (AVPlayer *)self.players[page];
-            if (player.rate == 0.0) {
+            if ([player respondsToSelector:@selector(play)] && player.rate == 0.0) {
+                self.videoPlayer = player;
                 [player play];
             }
         });
     }
     else {
-        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+        [self.players addObject:imageView];
     }
+    
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
