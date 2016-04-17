@@ -251,7 +251,7 @@
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     CGPoint point = [tap locationInView:self];
     
-    if (point.y < self.scrollView.frame.size.height) {
+    if (point.y > self.scrollView.frame.size.height) {
         return;
     }
     
@@ -259,6 +259,7 @@
     FRSPlayer *player = self.players[page];
     
     if (![player respondsToSelector:@selector(play)]) {
+        [self handlePhotoTap:page];
         return;
     }
     
@@ -268,6 +269,10 @@
     else {
         [player pause];
     }
+}
+
+-(void)handlePhotoTap:(NSInteger)index {
+    
 }
 
 -(void)playerItemDidReachEnd:(NSNotification *)notification {
