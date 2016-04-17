@@ -148,7 +148,8 @@
     
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(contentTap:)];
+    self.scrollView.delaysContentTouches = FALSE;
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self.scrollView addGestureRecognizer:tapGesture];
@@ -240,11 +241,6 @@
     playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
-        tap.numberOfTouchesRequired = 1;
-        tap.numberOfTapsRequired = 1;
-        [container addGestureRecognizer:tap];
-
         [container.layer addSublayer:playerLayer];
         [self.scrollView addSubview:container];
         
