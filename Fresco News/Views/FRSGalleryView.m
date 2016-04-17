@@ -569,10 +569,13 @@
     }
     else if (self.players.count > page) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            AVPlayer *player = (AVPlayer *)self.players[page];
+            FRSPlayer *player = (FRSPlayer *)self.players[page];
             if ([player respondsToSelector:@selector(play)] && player.rate == 0.0) {
                 self.videoPlayer = player;
                 [player play];
+            }
+            else {
+                self.videoPlayer = Nil;
             }
         });
     }
