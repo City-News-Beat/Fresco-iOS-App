@@ -214,52 +214,60 @@
 }
 
 -(void)setupPlayerForPost:(FRSPost *)post {
-        FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    
+    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    
+    [self.players addObject:videoPlayer];
         
-        [self.players addObject:videoPlayer];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                selector:@selector(playerItemDidReachEnd:)
+                                                    name:AVPlayerItemDidPlayToEndTimeNotification
+                                                object:[videoPlayer currentItem]];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[videoPlayer currentItem]];
+    NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+    UIImageView *imageView  = self.imageViews[0];
         
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-        UIImageView *imageView  = self.imageViews[0];
+    self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
         
-        self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
-        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        
-        UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
-        container.backgroundColor = [UIColor clearColor];
-        
-        videoPlayer.container = container;
-        
-        playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
-        
+    UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
+    container.backgroundColor = [UIColor clearColor];
+    
+    videoPlayer.container = container;
+    playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
         tap.numberOfTouchesRequired = 1;
         tap.numberOfTapsRequired = 1;
         [container addGestureRecognizer:tap];
+
+        [container.layer addSublayer:playerLayer];
+        [self.scrollView addSubview:container];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [container.layer addSublayer:playerLayer];
-            [self.scrollView addSubview:container];
-            
-            if (self.delegate) {
-                [self.delegate playerWillPlay:self.videoPlayer];
-            }
-        });
+        if (self.delegate) {
+            [self.delegate playerWillPlay:self.videoPlayer];
+        }
+    });
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-    if (self.videoPlayer.rate == 0.0) {
-        [self.videoPlayer play];
+    NSLog(@"TAP");
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    FRSPlayer *player = self.players[page];
+    
+    if (![player respondsToSelector:@selector(play)]) {
+        return;
+    }
+    
+    if (player.rate == 0.0) {
+        [player play];
     }
     else {
-        [self.videoPlayer pause];
+        [player pause];
     }
 }
 
