@@ -83,6 +83,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
 
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
+    [galleryCell pause];
+}
+
 
 #pragma mark - UI
 
@@ -470,6 +475,7 @@
         [weakSelf showShareSheetWithContent:sharedContent];
     };
 }
+
 
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
