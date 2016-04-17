@@ -18,6 +18,8 @@
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) AVPlayer *player;
+
+@property BOOL hasVideoAsFirstPost;
 -(void)clearCell;
 -(void)configureCell;
 

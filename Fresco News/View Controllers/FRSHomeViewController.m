@@ -251,18 +251,11 @@
         self.highlights = [[NSMutableArray alloc] init];
     }
     
+    [self flushCache:Nil];
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         NSInteger localIndex = 0;
         
         for (NSDictionary *gallery in localData) {
-            
-            NSString *galleryID = [gallery objectForKey:@"_id"];
-            
-            NSInteger index = [self galleryExists:galleryID];
-            
-            if (index > -1) {
-                continue;
-            }
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
@@ -273,7 +266,6 @@
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"Cache: %d %@", contextDidSave, error);
-        [self flushCache:localData];
     }];
     
     // actual use
@@ -299,9 +291,7 @@
 -(void)flushCache:(NSArray *)received {
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         for (FRSGallery *gallery in pulledFromCache) {
-            if (![self galleryExists:gallery.uid]) {
-                [gallery MR_deleteEntityInContext:localContext];
-            }
+            [gallery MR_deleteEntityInContext:localContext];
         }
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         NSLog(@"Flush: %d %@", contextDidSave, error);
