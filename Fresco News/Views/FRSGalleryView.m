@@ -214,22 +214,16 @@
 }
 
 -(void)setupPlayerForPost:(FRSPost *)post {
-        if (self.playerLayer) {
-            [self breakDownPlayer:self.playerLayer];
-            self.playerLayer = Nil;
-            self.videoPlayer = Nil;
-        }
-
-        self.videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-        self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
-        self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
         
-        [self.players addObject:self.videoPlayer];
+        [self.players addObject:videoPlayer];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(playerItemDidReachEnd:)
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[self.videoPlayer currentItem]];
+                                                   object:[videoPlayer currentItem]];
         
         NSInteger postIndex = [self.orderedPosts indexOfObject:post];
         UIImageView *imageView  = self.imageViews[0];
@@ -241,9 +235,9 @@
         UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
         container.backgroundColor = [UIColor clearColor];
         
-        self.videoPlayer.container = container;
+        videoPlayer.container = container;
         
-        self.playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
+        playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
         tap.numberOfTouchesRequired = 1;
@@ -251,7 +245,7 @@
         [container addGestureRecognizer:tap];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [container.layer addSublayer:self.playerLayer];
+            [container.layer addSublayer:playerLayer];
             [self.scrollView addSubview:container];
             
             if (self.delegate) {
