@@ -661,9 +661,8 @@
     self.pageControl.currentPage = page;
     
     self.currentPage = page;
-    self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
-    
-    if (self.videoPlayer) {
+    if (self.players.count > page) {
+        self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
         [self.videoPlayer play];
     }
 }
