@@ -713,7 +713,12 @@
     if (scrollView == currentScroller) {
         [self handleAssignmentScroll];
     }
+        
+    if (self.scrollView.contentOffset.y <= -80) {
+        [self dismissAssignmentCard];
+    }
 }
+
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (scrollView.contentOffset.y <= -50) {
