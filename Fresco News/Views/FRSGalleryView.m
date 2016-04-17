@@ -648,6 +648,7 @@
     self.pageControl.currentPage = page;
     
     self.currentPage = page;
+    self.videoPlayer = self.players[page];
     
     if (self.videoPlayer) {
         [self.videoPlayer play];
