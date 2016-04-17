@@ -84,6 +84,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == self.dataSource.count) {
+        return;
+    }
+    
     FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
     [galleryCell pause];
 }
