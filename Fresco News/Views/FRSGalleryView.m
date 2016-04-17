@@ -238,6 +238,7 @@
         
         self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
         
         UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
         container.backgroundColor = [UIColor clearColor];
@@ -245,8 +246,12 @@
         self.videoPlayer.container = container;
         
         self.playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
-
-    
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
+        tap.numberOfTouchesRequired = 1;
+        tap.numberOfTapsRequired = 1;
+        [container addGestureRecognizer:tap];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [container.layer addSublayer:self.playerLayer];
             [self.scrollView addSubview:container];
@@ -256,6 +261,15 @@
             }
         });
     });
+}
+
+-(void)playerTap:(UITapGestureRecognizer *)tap {
+    if (self.videoPlayer.rate == 0.0) {
+        [self.videoPlayer play];
+    }
+    else {
+        [self.videoPlayer pause];
+    }
 }
 
 -(void)playerItemDidReachEnd:(NSNotification *)notification {
@@ -540,6 +554,7 @@
     
     if (page != self.pageControl.currentPage){
         [self updateLabels];
+        [self.videoPlayer pause];
     }
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
@@ -553,6 +568,15 @@
     
     if (post.videoUrl != Nil && !imageView.image) {
         [self setupPlayerForPost:post];
+        [self.videoPlayer play];
+    }
+    else if (self.players.count > page) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            AVPlayer *player = (AVPlayer *)self.players[page];
+            if (player.rate == 0.0) {
+                [player play];
+            }
+        });
     }
     else {
         [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
