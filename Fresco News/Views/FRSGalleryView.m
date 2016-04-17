@@ -544,13 +544,16 @@
     //We add half a screen's width so that the image loading occurs half way through the scroll.
 
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    
     if (page < 0) {
         return;
     }
     
     self.adjustedPage = page;
     
-    if (page >= self.gallery.posts.count) return;
+    if (page >= self.gallery.posts.count) {
+        return;
+    }
     
     if (page != self.pageControl.currentPage){
         [self updateLabels];
@@ -559,7 +562,7 @@
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
     
-    if (self.imageViews.count == 0) {
+    if (self.imageViews.count == 0 || self.imageViews.count < page || self.orderedPosts.count < page) {
         return;
     }
     
@@ -568,7 +571,7 @@
     imageView = self.imageViews[page];
     post = self.orderedPosts[page];
 
-    if (self.players.count > 0) {
+    if (self.players.count > page) {
     
     if (post.videoUrl != Nil && self.players.count < page) {
         [self setupPlayerForPost:post];
