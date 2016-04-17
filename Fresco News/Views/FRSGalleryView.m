@@ -542,7 +542,11 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
+
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    if (page < 0) {
+        return;
+    }
     
     self.adjustedPage = page;
     
@@ -559,8 +563,12 @@
         return;
     }
     
-    FRSScrollViewImageView *imageView = self.imageViews[page];
-    FRSPost *post = self.orderedPosts[page];
+    UIImageView *imageView;
+    FRSPost *post;
+    imageView = self.imageViews[page];
+    post = self.orderedPosts[page];
+
+    if (self.players.count > 0) {
     
     if (post.videoUrl != Nil && self.players.count < page) {
         [self setupPlayerForPost:post];
@@ -574,12 +582,15 @@
                 [player play];
             }
         });
-    }
-    else {
-        [self.players addObject:imageView];
-        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+        }
+        else {
+            [self.players addObject:imageView];
+        }
     }
     
+    
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
