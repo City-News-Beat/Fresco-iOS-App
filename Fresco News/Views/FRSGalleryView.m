@@ -147,12 +147,6 @@
     [self configureActionsBar]; // this will stay similar
     
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
-    
-    self.scrollView.delaysContentTouches = FALSE;
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
-    tapGesture.numberOfTapsRequired = 1;
-    tapGesture.numberOfTouchesRequired = 1;
-    [self.scrollView addGestureRecognizer:tapGesture];
 }
 
 -(void)configureScrollView{
@@ -217,7 +211,7 @@
 -(void)setupPlayerForPost:(FRSPost *)post {
     
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
     videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     
     [self.players addObject:videoPlayer];
@@ -230,19 +224,26 @@
     NSInteger postIndex = [self.orderedPosts indexOfObject:post];
     UIImageView *imageView  = self.imageViews[0];
         
-    self.playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
-    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    self.playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+    playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
+    playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    playerLayer.backgroundColor = [UIColor clearColor].CGColor;
         
     UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
     container.backgroundColor = [UIColor clearColor];
     
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    tapGesture.cancelsTouchesInView = FALSE;
+    [container addGestureRecognizer:tapGesture];
+
     videoPlayer.container = container;
-    playerLayer.frame = CGRectMake(0, 0, self.playerLayer.frame.size.width, self.playerLayer.frame.size.height);
+    playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [container.layer addSublayer:playerLayer];
         [self.scrollView addSubview:container];
+        [self.scrollView bringSubviewToFront:container];
         
         if (self.delegate) {
             [self.delegate playerWillPlay:self.videoPlayer];
@@ -251,7 +252,7 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-    NSLog(@"TAP");
+
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
     
@@ -544,7 +545,7 @@
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
     self.adjustedPage = page;
-
+    
     if (page >= self.gallery.posts.count) return;
     
     if (page != self.pageControl.currentPage){
@@ -561,7 +562,7 @@
     FRSScrollViewImageView *imageView = self.imageViews[page];
     FRSPost *post = self.orderedPosts[page];
     
-    if (post.videoUrl != Nil && !imageView.image) {
+    if (post.videoUrl != Nil && self.players.count < page) {
         [self setupPlayerForPost:post];
         [self.videoPlayer play];
     }
@@ -576,9 +577,9 @@
     }
     else {
         [self.players addObject:imageView];
+        [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     }
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
