@@ -38,6 +38,15 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    
+    for (FRSPlayer *player in self.players) {
+        if ([player respondsToSelector:@selector(pause)]) {
+            [player.container removeFromSuperview];
+            [player pause];
+            [player replaceCurrentItemWithPlayerItem:Nil];
+        }
+    }
+    
     self.players = [[NSMutableArray alloc] init];
     
     [self breakDownPlayer:self.playerLayer];
