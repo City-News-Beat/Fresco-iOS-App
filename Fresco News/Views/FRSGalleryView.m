@@ -567,7 +567,7 @@
         [self setupPlayerForPost:post];
         [self.videoPlayer play];
     }
-    else if (self.players.count >= page) {
+    else if (self.imageViews.count > page) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             if ([player respondsToSelector:@selector(play)] && player.rate == 0.0) {
