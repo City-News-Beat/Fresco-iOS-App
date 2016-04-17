@@ -208,6 +208,13 @@
             imageView.userInteractionEnabled = YES;
             [self.scrollView addSubview:imageView];
     }
+    
+    if (self.imageViews.count > 1) {
+        UIImageView *nextImage = self.imageViews[1];
+        FRSPost *nextPost = self.orderedPosts[1];
+        [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+    }
+
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
@@ -564,9 +571,21 @@
     //We add half a screen's width so that the image loading occurs half way through the scroll.
 
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    
     if (page < 0) {
         return;
+    }
+    
+    UIImageView *imageView;
+    FRSPost *post;
+    imageView = self.imageViews[page];
+    post = self.orderedPosts[page];
+
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+    
+    if (self.imageViews.count> page+1) {
+        UIImageView *nextImage = self.imageViews[page+1];
+        FRSPost *nextPost = self.orderedPosts[page+1];
+        [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
     }
     
     self.adjustedPage = page;
@@ -586,11 +605,6 @@
         return;
     }
     
-    UIImageView *imageView;
-    FRSPost *post;
-    imageView = self.imageViews[page];
-    post = self.orderedPosts[page];
-
     if (self.players.count > page) {
     
     if (post.videoUrl != Nil && self.players.count < page) {
@@ -613,10 +627,6 @@
             [self.players addObject:imageView];
         }
     }
-    
-    
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
