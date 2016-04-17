@@ -158,6 +158,13 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     [self addSubview:self.scrollView];
+    
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    tapGesture.cancelsTouchesInView = FALSE;
+    [self addGestureRecognizer:tapGesture];
 }
 
 -(void)configureImageViews{
@@ -190,10 +197,6 @@
             }
                 
             imageView.userInteractionEnabled = YES;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryTapped)];
-            tap.numberOfTapsRequired = 1;
-            [imageView addGestureRecognizer:tap];
-                
             [self.scrollView addSubview:imageView];
     }
 
@@ -230,13 +233,7 @@
         
     UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
     container.backgroundColor = [UIColor clearColor];
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
-    tapGesture.numberOfTapsRequired = 1;
-    tapGesture.numberOfTouchesRequired = 1;
-    tapGesture.cancelsTouchesInView = FALSE;
-    [container addGestureRecognizer:tapGesture];
-
+   
     videoPlayer.container = container;
     playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
     
@@ -252,7 +249,12 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-
+    CGPoint point = [tap locationInView:self];
+    
+    if (point.y < self.scrollView.frame.size.height) {
+        return;
+    }
+    
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
     
