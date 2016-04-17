@@ -783,7 +783,11 @@
 }
 
 -(void)pause {
-    [self.videoPlayer pause];
+    for (AVPlayer *player in self.players) {
+        if ([player respondsToSelector:@selector(pause)]) {
+            [player pause];
+        }
+    }
 }
 
 @end
