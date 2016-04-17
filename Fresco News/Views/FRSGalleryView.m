@@ -256,7 +256,11 @@
     }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    FRSPlayer *player = self.players[page];
+    FRSPlayer *player;
+    
+    if (self.players.count > 0) {
+        player = self.players[page];
+    }
     
     if (![player respondsToSelector:@selector(play)]) {
         [self handlePhotoTap:page];
@@ -587,9 +591,12 @@
     else if (self.players.count > page && self.imageViews.count > page) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             FRSPlayer *player = (FRSPlayer *)self.players[page];
-            if ([player respondsToSelector:@selector(play)] && player.rate == 0.0) {
+            if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
                 self.videoPlayer = player;
                 [player play];
+            }
+            else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
+                [player pause];
             }
         });
         }
