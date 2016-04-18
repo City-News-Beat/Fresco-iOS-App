@@ -175,11 +175,9 @@
 }
 
 -(void)configureImageViews{
-    
     if (!self.players) {
         self.players = [[NSMutableArray alloc] init];
     }
-    
     self.imageViews = [NSMutableArray new];
     
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
@@ -192,7 +190,8 @@
             imageView.backgroundColor = [UIColor whiteColor];
             imageView.clipsToBounds = YES;
             imageView.indexInScrollView = i;
-            
+            [self.scrollView addSubview:imageView];
+
             [self.imageViews addObject:imageView];
             
                 if (i==0) {
@@ -203,8 +202,9 @@
                         // set up FRSPlayer
                         // add AVPlayerLayer
                         NSLog(@"TOP LEVEL PLAYER");
-                        AVPlayer *player = [self setupPlayerForPost:post];
+                        FRSPlayer *player = [self setupPlayerForPost:post];
                         [self.players addObject:player];
+                        [self.scrollView bringSubviewToFront:player.container];
                     }
                     else {
                         [self.players addObject:imageView];
@@ -212,7 +212,6 @@
             }
            
             imageView.userInteractionEnabled = YES;
-            [self.scrollView addSubview:imageView];
     }
     
     if (self.imageViews.count > 1) {
@@ -233,7 +232,7 @@
     }
 }
 
--(AVPlayer *)setupPlayerForPost:(FRSPost *)post {
+-(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -272,8 +271,6 @@
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     
-    NSLog(@"%@", self.players);
-    return;
     CGPoint point = [tap locationInView:self];
     
     if (point.y > self.scrollView.frame.size.height) {
@@ -281,10 +278,6 @@
     }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    
-    if (self.players.count >= page) {
-        return;
-    }
     
     FRSPlayer *player = self.players[page];
     
@@ -592,6 +585,29 @@
     FRSPost *post;
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
+    
+    if (self.players.count <= page) {
+        if (post.videoUrl != Nil && page >= self.players.count) {
+            AVPlayer *player = [self setupPlayerForPost:post];
+            [self.players addObject:player];
+            [self.videoPlayer play];
+        }
+        else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
+            [self.players addObject:imageView];
+        }
+        else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                FRSPlayer *player = (FRSPlayer *)self.players[page];
+                if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
+                    self.videoPlayer = player;
+                    [player play];
+                }
+                else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
+                    [player pause];
+                }
+            });
+        }
+    }
 
 
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
@@ -623,33 +639,6 @@
         return;
     }
     
-    
-    if (self.players.count < page) {
-        if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && page > self.players.count) {
-            NSLog(@"NEW PLAYER");
-            AVPlayer *player = [self setupPlayerForPost:post];
-            [self.players addObject:player];
-            [self.videoPlayer play];
-        }
-        else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
-            [self.players addObject:imageView];
-            NSLog(@"ADDING IMAGE VIEW");
-        }
-        else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
-            NSLog(@"RESUMING PLAYER");
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                FRSPlayer *player = (FRSPlayer *)self.players[page];
-                if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
-                    self.videoPlayer = player;
-                    [player play];
-                }
-                else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
-                    [player pause];
-                }
-            });
-        }
-    }
     
     NSInteger halfScroll = scrollView.frame.size.width/4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
