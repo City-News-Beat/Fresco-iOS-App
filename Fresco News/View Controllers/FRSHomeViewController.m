@@ -31,6 +31,7 @@
     NSInteger lastOffset;
 }
 
+@property (strong, nonatomic) NSManagedObjectContext *temp;
 @property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
 
@@ -55,7 +56,8 @@
     if (!self.appDelegate) {
         self.appDelegate = [[UIApplication sharedApplication] delegate];
     }
-    
+    self.temp = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+
     [self configureUI];
     [self addNotificationObservers];
     
@@ -369,16 +371,14 @@
             }
             
             isLoading = FALSE;
-            NSMutableArray *insertIndexPaths = [[NSMutableArray alloc] init];
             NSInteger index = self.highlights.count;
-            
-            for (NSDictionary *dict in galleries){
-                [insertIndexPaths addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-                FRSGallery *gallery = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
-                [gallery configureWithDictionary:dict];
+            for (NSDictionary *gallery in galleries) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
                 
-                [self.dataSource addObject:gallery];
-                [self.highlights addObject:gallery];
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                [self.dataSource addObject:galleryToSave];
+                [self.highlights addObject:galleryToSave];
                 index++;
             }
             
