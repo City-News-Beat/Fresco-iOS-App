@@ -22,6 +22,7 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import "FRSCoreData.h"
 #import "FRSAppDelegate.h"
+#import "FRSGallery+CoreDataProperties.h"
 
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -51,6 +52,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     reloadedFrom = [[NSMutableArray alloc] init];
+    if (!self.appDelegate) {
+        self.appDelegate = [[UIApplication sharedApplication] delegate];
+    }
     
     [self configureUI];
     [self addNotificationObservers];
@@ -210,12 +214,58 @@
 }
 
 -(void)fetchLocalData {
+    [self flushCache:Nil];
+
+}
+
+-(NSInteger)galleryExists:(NSString *)galleryID {
+    NSInteger index = 0;
     
+    for (FRSGallery *gallery in self.dataSource) {
+        NSString *uid = gallery.uid;
+        if ([uid isEqualToString:galleryID]) {
+            return index;
+        }
+        
+        index++;
+    }
+    
+    return -1;
+}
+
+-(void)cacheLocalData:(NSArray *)localData {
+    
+    self.dataSource = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
+    
+    NSInteger localIndex = 0;
+    for (NSDictionary *gallery in localData) {
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+    
+        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+        [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+        [self.dataSource addObject:galleryToSave];
+        [self.highlights addObject:galleryToSave];
+        localIndex++;
+    }
+    
+    [self.appDelegate.managedObjectContext save:Nil];
+    [self.appDelegate saveContext];
+}
+
+-(void)reloadFromLocal {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
+-(void)flushCache:(NSArray *)received
+{
+    NSManagedObjectContext *moc = [self.appDelegate managedObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
-    request.returnsObjectsAsFaults = NO;
     
-    NSError *fetchError;
-    NSArray *stored = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&fetchError];
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
     
     stored = [stored sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         FRSGallery *gallery1 = obj1;
@@ -245,83 +295,8 @@
             [self configureSpinner];
         }
     }
-    [self reloadFromLocal];
-}
-
--(NSInteger)galleryExists:(NSString *)galleryID {
-    NSInteger index = 0;
     
-    for (FRSGallery *gallery in self.dataSource) {
-        NSString *uid = gallery.uid;
-        if ([uid isEqualToString:galleryID]) {
-            return index;
-        }
-        
-        index++;
-    }
-    
-    return -1;
-}
-
--(void)cacheLocalData:(NSArray *)localData {
-    
-    [self flushCache:Nil];
-    self.dataSource = [[NSMutableArray alloc] init];
-    self.highlights = [[NSMutableArray alloc] init];
-    
-    if (!self.appDelegate) {
-        self.appDelegate = [[UIApplication sharedApplication] delegate];
-    }
-    
-    NSInteger localIndex = 0;
-    for (NSDictionary *gallery in localData) {
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-        
-        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-        [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-        [self.dataSource addObject:galleryToSave];
-        [self.highlights addObject:galleryToSave];
-        localIndex++;
-    }
-    
-    [self.appDelegate saveContext];
-}
-
--(void)reloadFromLocal {
-    
-    BOOL shouldAnimate = TRUE;
-    FRSGallery *currentGallery = self.dataSource.firstObject;
-    FRSGallery *newGallery = [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] gallery];
-    
-    if (newGallery.posts) {
-        
-    }
-    
-    if ([[currentGallery valueForKey:@"index"] integerValue] == [[newGallery valueForKey:@"index"] integerValue]) {
-        shouldAnimate = FALSE;
-    }
-        
-    if (shouldAnimate) {
-        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else {
-        [self.tableView reloadData];
-    }
-}
-
--(void)flushCache:(NSArray *)received
-{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
-    request.returnsObjectsAsFaults = NO;
-    
-    NSError *fetchError;
-    NSArray *stored = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&fetchError];
-    
-    for (FRSGallery *gal in stored) {
-        [[self.appDelegate managedObjectContext] deleteObject:gal];
-    }
-    
-    [self.appDelegate saveContext];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableView DataSource
@@ -399,7 +374,7 @@
             
             for (NSDictionary *dict in galleries){
                 [insertIndexPaths addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-                FRSGallery *gallery = [FRSGallery MR_createEntity];
+                FRSGallery *gallery = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
                 [gallery configureWithDictionary:dict];
                 
                 [self.dataSource addObject:gallery];
@@ -408,7 +383,6 @@
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 [self.tableView reloadData];
                 needsUpdate = TRUE;
             });

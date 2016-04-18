@@ -35,6 +35,7 @@
     
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
+    [self persistentStoreCoordinator];
     
     [self configureCoreDataStack];
     [self createItemsWithIcons];

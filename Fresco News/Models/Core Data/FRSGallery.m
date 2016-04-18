@@ -23,7 +23,21 @@
 @implementation FRSGallery
 @synthesize currentContext = _currentContext;
 
+@dynamic byline;
+@dynamic caption;
+@dynamic createdDate;
+@dynamic editedDate;
+@dynamic relatedStories;
+@dynamic tags;
+@dynamic uid;
+@dynamic visibility;
+@dynamic creator;
+@dynamic posts;
+@dynamic stories;
+@dynamic articles;
+
 -(void)configureWithDictionary:(NSDictionary *)dict{
+    
     self.uid = dict[@"_id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];

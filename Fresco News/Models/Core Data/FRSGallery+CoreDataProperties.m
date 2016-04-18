@@ -13,17 +13,4 @@
 
 @implementation FRSGallery (CoreDataProperties)
 
-@dynamic byline;
-@dynamic caption;
-@dynamic createdDate;
-@dynamic editedDate;
-@dynamic relatedStories;
-@dynamic tags;
-@dynamic uid;
-@dynamic visibility;
-@dynamic creator;
-@dynamic posts;
-@dynamic stories;
-@dynamic articles;
-
 @end
