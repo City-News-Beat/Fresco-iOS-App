@@ -177,6 +177,8 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    
+      
 }
 
 -(void)configureTableView {
@@ -340,6 +342,7 @@
     if (!cell) {
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.navigationController = self.navigationController;
     }
     
     if (indexPath.row == self.dataSource.count-4) {

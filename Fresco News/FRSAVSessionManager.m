@@ -166,7 +166,7 @@
         
         // setup our delegate
         [videoOutput setSampleBufferDelegate:self queue:captureQueue];
-        [self.session addOutput:videoOutput];
+        //[self.session addOutput:videoOutput];
         // configure the pixel format
         // Add the input and output
 

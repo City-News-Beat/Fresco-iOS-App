@@ -17,6 +17,10 @@
 #import <Haneke/Haneke.h>
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
+#import "FRSProfileViewController.h"
+//#import "FRSUserProfileViewController.h"
+
+
 #define TEXTVIEW_TOP_PAD 12
 
 @interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
@@ -391,6 +395,11 @@
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
         self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
     
+    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToProfile)];
+    [bylineTap setNumberOfTapsRequired:1];
+    [self.nameLabel setUserInteractionEnabled:YES];
+    [self.nameLabel addGestureRecognizer:bylineTap];
+    
     [self addShadowToLabel:self.nameLabel];
     
     [self addSubview:self.nameLabel];
@@ -737,6 +746,17 @@
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
     return averageHeight;
+}
+
+-(void)segueToProfile {
+    
+    //make protocol
+//    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] init];
+//    FRSUserProfileViewController *userViewController = [[FRSUserProfileViewController alloc] init];
+    
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:@"USERID"];
+    [self.delegate.navigationController pushViewController:userViewController animated:YES];
+    
 }
 
 -(void)galleryTapped{    

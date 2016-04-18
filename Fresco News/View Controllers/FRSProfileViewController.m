@@ -59,17 +59,22 @@
 
 @property (nonatomic) NSInteger count;
 
+@property (nonatomic) BOOL presentingUser;
+
 @end
 
 @implementation FRSProfileViewController
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     
-    [self configureUI];
-    [self fetchGalleries];
-    
-    // Do any additional setup after loading the view.
+    if (self.presentingUser) {
+        NSLog(@"presentingUser");
+        [self configureWithUser:@"FRSUSER"];
+    } else {
+        [self configureUI];
+        [self fetchGalleries];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -80,6 +85,17 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+}
+
+-(id)initWithUser:(NSString *)user { //UserID should take an FRSUser instead of an NSString
+    
+    if (self) {
+        
+        self.presentingUser = YES;
+        [self configureBackButtonAnimated:YES];        
+        
+    }
+    return self;
 }
 
 #pragma mark - Fetch Methods
@@ -543,6 +559,12 @@
 
 -(void)facebookTapped{
     NSLog(@"facebookTapped");
+}
+
+#pragma mark - User
+
+-(void)configureWithUser:(id)user {
+    
 }
 
 
