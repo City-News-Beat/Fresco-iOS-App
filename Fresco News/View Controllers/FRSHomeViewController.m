@@ -21,6 +21,7 @@
 /* Core Data */
 #import <MagicalRecord/MagicalRecord.h>
 #import "FRSCoreData.h"
+#import "FRSAppDelegate.h"
 
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -42,6 +43,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *pulled;
+@property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @end
 
 @implementation FRSHomeViewController
@@ -208,8 +210,13 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES inContext:[NSManagedObjectContext MR_defaultContext]];
-
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.returnsObjectsAsFaults = NO;
+    
+    NSError *fetchError;
+    NSArray *stored = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&fetchError];
+    
     stored = [stored sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         FRSGallery *gallery1 = obj1;
         FRSGallery *gallery2 = obj2;
@@ -223,11 +230,11 @@
         
         return (NSComparisonResult)NSOrderedSame;
     }];
-
+    
     pulledFromCache = stored;
     
-    _dataSource = [NSMutableArray arrayWithArray:stored];
-    _highlights = _dataSource;
+    self.dataSource = [NSMutableArray arrayWithArray:stored];
+    self.highlights = self.dataSource;
     
     if ([_dataSource count] > 0) {
         [self.loadingView stopLoading];
@@ -262,12 +269,15 @@
     self.dataSource = [[NSMutableArray alloc] init];
     self.highlights = [[NSMutableArray alloc] init];
     
+    if (!self.appDelegate) {
+        self.appDelegate = [[UIApplication sharedApplication] delegate];
+    }
     
     NSInteger localIndex = 0;
     for (NSDictionary *gallery in localData) {
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
         
-        [galleryToSave configureWithDictionary:gallery context:[NSManagedObjectContext MR_defaultContext]];
+        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
         [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
         [self.dataSource addObject:galleryToSave];
         [self.highlights addObject:galleryToSave];
@@ -275,7 +285,7 @@
     }
     
     NSError *cacheError;
-    [[NSManagedObjectContext MR_defaultContext] save:&cacheError];
+    [[self.appDelegate managedObjectContext] save:&cacheError];
 }
 
 -(void)reloadFromLocal {
@@ -302,25 +312,18 @@
 
 -(void)flushCache:(NSArray *)received
 {
-    NSArray *result = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.returnsObjectsAsFaults = NO;
     
-    for (FRSGallery *gal in result) {
-        BOOL toKeep = FALSE;
-        for (FRSGallery *cur in self.dataSource) {
-            if ([cur.uid isEqualToString:gal.uid]) {
-                toKeep = TRUE;
-                NSLog(@"TO KEEP");
-            }
-        }
-        
-        if (!toKeep) {
-            [[NSManagedObjectContext MR_defaultContext] deleteObject:gal];
-        }
-
+    NSError *fetchError;
+    NSArray *stored = [[self.appDelegate managedObjectContext] executeFetchRequest:request error:&fetchError];
+    
+    for (FRSGallery *gal in stored) {
+        [[self.appDelegate managedObjectContext] deleteObject:gal];
     }
     
     NSError *saveError;
-    [[NSManagedObjectContext MR_defaultContext] save:&saveError];
+    [[self.appDelegate managedObjectContext] save:&saveError];
     NSLog(@"FLUSH ERR: %@", saveError);
 }
 
