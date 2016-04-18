@@ -1159,6 +1159,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, self.view.frame.size.width, 24);
+
 }
 
 

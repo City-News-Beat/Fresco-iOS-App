@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 {
     float beginGestureScale;
     float effectiveScale;
+    NSTimer *thumb;
 }
 
 @property (nonatomic) BOOL isPresented;

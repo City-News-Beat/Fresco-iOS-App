@@ -36,6 +36,8 @@
         _sessionQueue = dispatch_queue_create( "session queue", DISPATCH_QUEUE_SERIAL);
     }
     return _sessionQueue;
+    
+    
 }
 
 
@@ -90,24 +92,28 @@
         if (![self videoInputDevice])
             return;
         
-        [self.session beginConfiguration];
-        
         [self configureInputsOutputs];
-        
+        [self checkThumb];
+
         if (captureMode == FRSCaptureModePhoto)
             self.session.sessionPreset = AVCaptureSessionPresetPhoto;
         else
             self.session.sessionPreset = AVCaptureSessionPresetHigh;
         
-        [self.session commitConfiguration];
-        // Set the output
-
-        [self.session startRunning];
 
         if (completion) completion();
     });
 }
 
+-(void)checkThumb {
+    
+}
+
+-(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    
+    NSLog(@"anything");
+    // do the other things you want
+}
 -(void)configureInputsOutputs{
     
     //VIDEO INPUT
@@ -150,6 +156,7 @@
         
         // setup our delegate
         [videoOutput setSampleBufferDelegate:self queue:captureQueue];
+        
         [self.session beginConfiguration];
         [self.session addOutput:videoOutput];
         [self.session commitConfiguration];
@@ -166,10 +173,9 @@
     } else
         self.AVSetupSuccess = NO;
     
-}
+    [self.session startRunning];
 
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"LETS GO");
+    
 }
 
 -(AVCaptureDeviceInput *)videoInputDevice{
