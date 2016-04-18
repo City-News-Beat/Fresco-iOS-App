@@ -141,9 +141,19 @@
     }
     
     //VIDEO OUTPUT
+    
+    AVCaptureVideoDataOutput* videoOutput = [[AVCaptureVideoDataOutput alloc] init];
+    
+    // create a queue to run the capture on
+    dispatch_queue_t captureQueue=dispatch_queue_create("captureQueue", NULL);
+    
+    // setup our delegate
+    [videoOutput setSampleBufferDelegate:self queue:captureQueue];
+
     self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
     if ( [self.session canAddOutput:self.movieFileOutput] ) {
         [self.session addOutput:self.movieFileOutput];
+        [self.session addOutput:videoOutput];
         AVCaptureConnection *connection = [self.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
         if ( connection.isVideoStabilizationSupported ) {
             connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
@@ -156,11 +166,8 @@
         
         // setup our delegate
         [videoOutput setSampleBufferDelegate:self queue:captureQueue];
-        
-        [self.session beginConfiguration];
         [self.session addOutput:videoOutput];
-        [self.session commitConfiguration];
-        // configure the pixel format        
+        // configure the pixel format
         // Add the input and output
 
     } else self.AVSetupSuccess = NO;
