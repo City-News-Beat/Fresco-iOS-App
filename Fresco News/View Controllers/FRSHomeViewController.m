@@ -41,6 +41,7 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) NSMutableArray *players;
+@property (strong, nonatomic) NSMutableArray *pulled;
 @end
 
 @implementation FRSHomeViewController
@@ -244,11 +245,8 @@
 -(void)cacheLocalData:(NSArray *)localData {
     
     [self flushCache:Nil];
-    
-    if (!self.dataSource) {
-        self.dataSource = [[NSMutableArray alloc] init];
-        self.highlights = [[NSMutableArray alloc] init];
-    }
+    self.dataSource = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
     
     
     NSInteger localIndex = 0;
@@ -299,6 +297,7 @@
         for (FRSGallery *cur in self.dataSource) {
             if ([cur.uid isEqualToString:gal.uid]) {
                 toKeep = TRUE;
+                NSLog(@"TO KEEP");
             }
         }
         
@@ -398,7 +397,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadData];
                 needsUpdate = TRUE;
             });
         }];
