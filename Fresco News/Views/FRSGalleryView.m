@@ -46,10 +46,8 @@
             [player replaceCurrentItemWithPlayerItem:Nil];
         }
     }
-    
-    self.players = [[NSMutableArray alloc] init];
-    
     [self breakDownPlayer:self.playerLayer];
+    self.players = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -179,7 +177,6 @@
 -(void)configureImageViews{
     
     self.imageViews = [NSMutableArray new];
-    self.players = [NSMutableArray new];
     
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
@@ -197,8 +194,8 @@
                 if (i==0) {
                     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                if (post.videoUrl != Nil) {
-                    // video
+                if (post.videoUrl != Nil && ![post isEqual:[NSNull null]]) {
+                    // videof
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
@@ -208,7 +205,7 @@
                     [self.players addObject:imageView];
                 }
             }
-                
+           
             imageView.userInteractionEnabled = YES;
             [self.scrollView addSubview:imageView];
     }
@@ -236,6 +233,10 @@
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
     videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    
+    if (!self.players) {
+        self.players = [[NSMutableArray alloc] init];
+    }
     
     [self.players addObject:videoPlayer];
         
@@ -269,6 +270,9 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
+    
+    NSLog(@"%@", self.players);
+    
     CGPoint point = [tap locationInView:self];
     
     if (point.y > self.scrollView.frame.size.height) {
@@ -276,7 +280,8 @@
     }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    if (self.players.count < page) {
+    
+    if (self.players.count >= page) {
         return;
     }
     
@@ -286,7 +291,7 @@
         return;
     }
     
-    if (player.rate == 0.0) {
+    if (player.rate != 1.0) {
         [player play];
     }
     else {
@@ -615,7 +620,7 @@
         [self setupPlayerForPost:post];
         [self.videoPlayer play];
     }
-    else if (self.players.count > page && self.imageViews.count > page) {
+    else if (self.players.count > page && self.imageViews.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
