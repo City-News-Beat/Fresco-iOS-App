@@ -179,6 +179,7 @@
 -(void)configureImageViews{
     
     self.imageViews = [NSMutableArray new];
+    self.players = [NSMutableArray new];
     
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
@@ -202,6 +203,9 @@
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
                     [self setupPlayerForPost:post];
+                }
+                else {
+                    [self.players addObject:imageView];
                 }
             }
                 
@@ -272,14 +276,13 @@
     }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    FRSPlayer *player;
-    
-    if (self.players.count > 0) {
-        player = self.players[page];
+    if (self.players.count < page) {
+        return;
     }
     
+    FRSPlayer *player = self.players[page];
+    
     if (![player respondsToSelector:@selector(play)]) {
-        [self handlePhotoTap:page];
         return;
     }
     
