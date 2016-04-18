@@ -149,29 +149,30 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
 
-    UIButton *highlightsButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
-    [highlightsButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
-    [highlightsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
-    [highlightsButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [highlightsButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:highlightsButton];
+    self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
+    [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
+    [self.highlightTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.highlightTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.highlightTabButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.highlightTabButton];
     
-    UIButton *followingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
-    [followingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-    [followingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
-    [followingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [followingButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:followingButton];
+    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    self.followingTabButton.alpha = 0.7;
+    [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [self.followingTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.followingTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.followingTabButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.followingTabButton];
     
     if (IS_IPHONE_6) {
-        highlightsButton.frame = CGRectMake(80.7  - offset, 12, 87, 20);
-        followingButton.frame  = CGRectMake(208.3 - offset, 12, 87, 20);
+        self.highlightTabButton.frame = CGRectMake(80.7  - offset, 12, 87, 20);
+        self.followingTabButton.frame  = CGRectMake(208.3 - offset, 12, 87, 20);
     } else if (IS_IPHONE_6_PLUS) {
-        highlightsButton.frame = CGRectMake(93.7  - offset, 12, 87, 20);
-        followingButton.frame  = CGRectMake(234.3 - offset, 12, 87, 20);
+        self.highlightTabButton.frame = CGRectMake(93.7  - offset, 12, 87, 20);
+        self.followingTabButton.frame  = CGRectMake(234.3 - offset, 12, 87, 20);
     } else if (IS_IPHONE_5) {
-        highlightsButton.frame = CGRectMake(62.3  - offset, 12, 87, 20);
-        followingButton.frame  = CGRectMake(171.7 - offset, 12, 87, 20);
+        self.highlightTabButton.frame = CGRectMake(62.3  - offset, 12, 87, 20);
+        self.followingTabButton.frame  = CGRectMake(171.7 - offset, 12, 87, 20);
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
@@ -523,11 +524,21 @@
 #pragma mark - Nav Bar Actions
 
 -(void)handleFollowingTabTapped {
-    
+    if (self.followingTabButton.alpha > 0.7) {
+        return; //The button is already selected
+    }
+
+    self.followingTabButton.alpha = 1.0;
+    self.highlightTabButton.alpha = 0.7;
 }
 
 -(void)handleHighlightsTabTapped {
+    if (self.highlightTabButton.alpha > 0.7) {
+        return;
+    }
     
+    self.highlightTabButton.alpha = 1.0;
+    self.followingTabButton.alpha = 0.7;
 }
 
 -(void)searchStories {
