@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
     FRSAVStatusNotDetermined
 };
 
-@interface FRSAVSessionManager : NSObject
+@interface FRSAVSessionManager : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic) FRSAVAuthStatus authStatus;
 

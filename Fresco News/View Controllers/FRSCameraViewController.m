@@ -116,6 +116,8 @@
 
 @property (nonatomic) CGFloat rotationIVOriginalY;
 
+@property (nonatomic, retain) NSMutableArray *positions;
+
 @end
 
 @implementation FRSCameraViewController
@@ -133,6 +135,13 @@
     }
     
     return self;
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection {
+    NSLog(@"TEST");
+
 }
 
 - (void)viewDidLoad {
@@ -1126,7 +1135,7 @@
             //Set the session preset to photo, the default mode we enter in as
             [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
         }
-        
+
         [self.sessionManager.session commitConfiguration];
         
     }
@@ -1136,8 +1145,7 @@
         [self animateVideoRotateHide];
         
         [self.sessionManager.session beginConfiguration];
-    
-        //Change the preset to display properly
+                //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
             //Set the session preset to photo, the default mode we enter in as
             [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
@@ -1152,6 +1160,7 @@
     [self adjustFramesForCaptureState];
     self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, self.view.frame.size.width, 24);
 }
+
 
 #pragma mark - Notifications and Observers
 
@@ -1741,6 +1750,7 @@
 
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
+    [self checkWobble:acceleration];
     UIDeviceOrientation orientationNew;
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
@@ -1777,6 +1787,21 @@
     self.lastOrientation = orientationNew;
     
     [self rotateAppForOrientation:orientationNew];
+    
+}
+
+-(void)checkWobble:(CMAcceleration)acceleration {
+
+    if (!self.positions) {
+        self.positions = [[NSMutableArray alloc] init];
+    }
+    
+    NSDictionary *data = @{@"x":@(acceleration.x), @"y":@(acceleration.y), @"z":@(acceleration.x)};
+    [self.positions addObject:data];
+    [self analyzeMovement:self.positions];
+}
+
+-(void)analyzeMovement:(NSArray *)movement {
     
 }
 @end

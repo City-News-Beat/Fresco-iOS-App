@@ -100,7 +100,7 @@
             self.session.sessionPreset = AVCaptureSessionPresetHigh;
         
         [self.session commitConfiguration];
-        
+        // Set the output
 
         [self.session startRunning];
 
@@ -142,6 +142,20 @@
         if ( connection.isVideoStabilizationSupported ) {
             connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
         }
+        
+        AVCaptureVideoDataOutput* videoOutput = [[AVCaptureVideoDataOutput alloc] init];
+        
+        // create a queue to run the capture on
+        dispatch_queue_t captureQueue=dispatch_queue_create("captureQueue", NULL);
+        
+        // setup our delegate
+        [videoOutput setSampleBufferDelegate:self queue:captureQueue];
+        [self.session beginConfiguration];
+        [self.session addOutput:videoOutput];
+        [self.session commitConfiguration];
+        // configure the pixel format        
+        // Add the input and output
+
     } else self.AVSetupSuccess = NO;
     
     //PHOTO OUTPUT
@@ -152,6 +166,10 @@
     } else
         self.AVSetupSuccess = NO;
     
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    NSLog(@"LETS GO");
 }
 
 -(AVCaptureDeviceInput *)videoInputDevice{
@@ -238,7 +256,6 @@
         
     });
 }
-
 //-(void)startAVCaptureSession{
 //    
 //    // Check for device authorization

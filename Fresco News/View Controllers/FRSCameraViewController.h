@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModeVideo
 };
 
-@interface FRSCameraViewController : FRSBaseViewController
+@interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
 {
     float beginGestureScale;
     float effectiveScale;
