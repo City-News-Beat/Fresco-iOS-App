@@ -505,7 +505,6 @@
     self.assignmentTitleLabel.text = self.assignmentTitle;
 //    [self.assignmentTitleLabel sizeToFit];
     self.assignmentTitleLabel.textColor = [UIColor whiteColor];
-    self.assignmentTitleLabel.text = @"Really long title really long title really long title really long title.";
     self.assignmentTitleLabel.adjustsFontSizeToFitWidth = YES;
     
     if (self.assignmentTitleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
