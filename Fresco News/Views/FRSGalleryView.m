@@ -203,7 +203,11 @@
                         // set up FRSPlayer
                         // add AVPlayerLayer
                         NSLog(@"TOP LEVEL PLAYER");
-                        [self setupPlayerForPost:post];
+                        AVPlayer *player = [self setupPlayerForPost:post];
+                        [self.players addObject:player];
+                    }
+                    else {
+                        [self.players addObject:imageView];
                     }
             }
            
@@ -579,6 +583,10 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
 
+    if (!self.players) {
+        self.players = [[NSMutableArray alloc] init];
+    }
+    
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     if (page < 0) {
         return;
@@ -604,6 +612,10 @@
         return;
     }
     
+    if (page >= self.players.count) {
+        return;
+    }
+    
     if (page != self.pageControl.currentPage){
         [self updateLabels];
         [self.videoPlayer pause];
@@ -617,12 +629,19 @@
     
     if (self.players.count > page) {
     
-    if (post.videoUrl != Nil && self.players.count < page) {
+    if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && self.players.count <= page) {
+        NSLog(@"NEW PLAYER");
         AVPlayer *player = [self setupPlayerForPost:post];
         [self.players addObject:player];
         [self.videoPlayer play];
     }
-    else if (self.players.count > page && self.imageViews.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
+    else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
+        [self.players addObject:imageView];
+        NSLog(@"ADDING IMAGE VIEW");
+    }
+    else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
+        NSLog(@"RESUMING PLAYER");
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
@@ -632,10 +651,7 @@
             else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
                 [player pause];
             }
-        });
-        }
-        else {
-            [self.players addObject:imageView];
+          });
         }
     }
     
