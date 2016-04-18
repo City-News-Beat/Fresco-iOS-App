@@ -265,6 +265,7 @@
 {
     NSManagedObjectContext *moc = [self.appDelegate managedObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSGallery"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE]];
     
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
@@ -276,7 +277,7 @@
         if ([[gallery1 valueForKey:@"index"] intValue] < [[gallery2 valueForKey:@"index"] intValue]) {
             return (NSComparisonResult)NSOrderedAscending;
         }
-        else if ([[gallery1 valueForKey:@"index"] intValue] < [[gallery2 valueForKey:@"index"] intValue]) {
+        else if ([[gallery1 valueForKey:@"index"] intValue] > [[gallery2 valueForKey:@"index"] intValue]) {
             return (NSComparisonResult)NSOrderedDescending;
         }
         
