@@ -67,6 +67,9 @@
 
 @property (strong, nonatomic) UILabel *photoCashLabel;
 @property (strong, nonatomic) UILabel *videoCashLabel;
+
+@property (strong, nonatomic) UIButton *closeButton;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -618,7 +621,17 @@
     warningLabel.text = @"Not all events are safe. Be careful!";
     [assignmentStatsContainer addSubview:warningLabel];
     
+    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.closeButton.tintColor = [UIColor whiteColor];
+    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
+    self.closeButton.frame = CGRectMake(0 , 0, 24, 24);
+    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
     //Configure photo/video labels for animation
+    self.closeButton.alpha    = 0;
     self.photoCashLabel.alpha = 0;
     self.videoCashLabel.alpha = 0;
     self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
@@ -690,6 +703,12 @@
 
         } completion:nil];
     }];
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.closeButton.alpha = 1;
+        
+    } completion:nil];
 }
 
 -(void)dismissAssignmentCard {
@@ -708,6 +727,10 @@
         self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
         self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     }];
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.closeButton.alpha = 0;
+    } completion:nil];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
