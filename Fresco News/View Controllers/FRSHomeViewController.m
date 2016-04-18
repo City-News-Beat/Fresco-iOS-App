@@ -29,8 +29,9 @@
 {
     BOOL isLoading;
     NSInteger lastOffset;
+    BOOL shouldAnimate;
 }
-
+@property (strong, nonatomic) NSMutableArray *cachedData;
 @property (strong, nonatomic) NSManagedObjectContext *temp;
 @property (strong, nonatomic) NSMutableArray *highlights;
 @property (strong, nonatomic) NSArray *followingGalleries;
@@ -52,6 +53,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.cachedData = [[NSMutableArray alloc] init];
+    
     reloadedFrom = [[NSMutableArray alloc] init];
     if (!self.appDelegate) {
         self.appDelegate = [[UIApplication sharedApplication] delegate];
@@ -237,18 +240,39 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     
+    NSString *uid = @"__no__";
+    
+    if (self.dataSource.count > 0) {
+        FRSGallery *gal1 = self.dataSource[0];
+        uid = gal1.uid;
+    }
+    
     self.dataSource = [[NSMutableArray alloc] init];
     self.highlights = [[NSMutableArray alloc] init];
-    
+
     NSInteger localIndex = 0;
     for (NSDictionary *gallery in localData) {
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-    
+        
         [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
         [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
         [self.dataSource addObject:galleryToSave];
         [self.highlights addObject:galleryToSave];
+        
+        if (localIndex == 0) {
+            if ([uid isEqualToString:galleryToSave.uid]) {
+                shouldAnimate = FALSE;
+            }
+            else {
+                shouldAnimate = TRUE;
+            }
+        }
+        
         localIndex++;
+    }
+    
+    for (FRSGallery *gallery in self.cachedData) {
+        [self.appDelegate.managedObjectContext deleteObject:gallery];
     }
     
     [self.appDelegate.managedObjectContext save:Nil];
@@ -257,7 +281,13 @@
 
 -(void)reloadFromLocal {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
+        
+        if (shouldAnimate) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        else {
+            [self.tableView reloadData];
+        }
     });
 }
 
@@ -269,20 +299,6 @@
     
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
-    
-    stored = [stored sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        FRSGallery *gallery1 = obj1;
-        FRSGallery *gallery2 = obj2;
-        
-        if ([[gallery1 valueForKey:@"index"] intValue] < [[gallery2 valueForKey:@"index"] intValue]) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        else if ([[gallery1 valueForKey:@"index"] intValue] > [[gallery2 valueForKey:@"index"] intValue]) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        
-        return (NSComparisonResult)NSOrderedSame;
-    }];
     
     pulledFromCache = stored;
     
@@ -299,6 +315,7 @@
         }
     }
     
+    self.cachedData = [NSMutableArray arrayWithArray:stored];
     [self.tableView reloadData];
 }
 
