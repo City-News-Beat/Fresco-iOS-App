@@ -264,7 +264,6 @@
     
     
     NSInteger localIndex = 0;
-    NSLog(@"%@", localData);
     for (NSDictionary *gallery in localData) {
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         
@@ -277,8 +276,6 @@
     
     NSError *cacheError;
     [[NSManagedObjectContext MR_defaultContext] save:&cacheError];
-    
-    NSLog(@"%@", cacheError);
 }
 
 -(void)reloadFromLocal {
@@ -306,7 +303,6 @@
 -(void)flushCache:(NSArray *)received
 {
     NSArray *result = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    NSMutableArray *toBeDeleted = [[NSMutableArray alloc] init];
     
     for (FRSGallery *gal in result) {
         BOOL toKeep = FALSE;
@@ -318,12 +314,12 @@
         }
         
         if (!toKeep) {
-            [toBeDeleted addObject:gal];
+            [[NSManagedObjectContext MR_defaultContext] deleteObject:gal];
         }
+
     }
     
     NSError *saveError;
-    [[NSManagedObjectContext MR_defaultContext] MR_deleteObjects:toBeDeleted];
     [[NSManagedObjectContext MR_defaultContext] save:&saveError];
     NSLog(@"FLUSH ERR: %@", saveError);
 }

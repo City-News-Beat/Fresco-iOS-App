@@ -1746,6 +1746,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                                      NSLog(@"%@", error);
                                                  }
                                              }];
+    
+    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
+        [self handleGyro:gyroData];
+    }];
+}
+
+-(void)handleGyro:(CMGyroData *)gyroData {
+    
 }
 
 
@@ -1803,6 +1811,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)analyzeMovement:(NSArray *)movement {
-    
+   
 }
 @end
