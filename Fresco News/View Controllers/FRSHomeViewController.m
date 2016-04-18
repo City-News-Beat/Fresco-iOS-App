@@ -248,26 +248,22 @@
         self.highlights = [[NSMutableArray alloc] init];
     }
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        NSInteger localIndex = 0;
-        
-        for (NSDictionary *gallery in localData) {
-            
-            FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
-            [galleryToSave configureWithDictionary:gallery context:localContext];
-            [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-            localIndex++;
-        }
-        
-        
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self reloadFromLocal];
-        });
-    }];
+    NSInteger localIndex = 0;
     
-    // actual use
-
+    for (NSDictionary *gallery in localData) {
+        
+        FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
+        [galleryToSave configureWithDictionary:gallery context:[NSManagedObjectContext MR_defaultContext]];
+        [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+        [self.dataSource addObject:galleryToSave];
+        [self.highlights addObject:galleryToSave];
+        localIndex++;
+    }
+    
+    NSError *cacheError;
+    [[NSManagedObjectContext MR_defaultContext] save:&cacheError];
+    
+    NSLog(@"CACHE ERR: %@", cacheError);
 }
 
 -(void)reloadFromLocal {
@@ -275,6 +271,10 @@
     BOOL shouldAnimate = TRUE;
     FRSGallery *currentGallery = self.dataSource.firstObject;
     FRSGallery *newGallery = [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] gallery];
+    
+    if (newGallery.posts) {
+        
+    }
     
     if ([[currentGallery valueForKey:@"index"] integerValue] == [[newGallery valueForKey:@"index"] integerValue]) {
         shouldAnimate = FALSE;
