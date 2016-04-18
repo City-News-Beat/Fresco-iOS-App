@@ -234,11 +234,7 @@
 }
 
 -(AVPlayer *)setupPlayerForPost:(FRSPost *)post {
-    
-    if (self.players.count > [self.orderedPosts indexOfObject:post]) {
-        return Nil;
-    }
-    
+
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
     videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
@@ -277,7 +273,7 @@
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     
     NSLog(@"%@", self.players);
-    
+    return;
     CGPoint point = [tap locationInView:self];
     
     if (point.y > self.scrollView.frame.size.height) {
@@ -627,31 +623,31 @@
         return;
     }
     
-    if (self.players.count > page) {
     
-    if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && page < self.players.count) {
-        NSLog(@"NEW PLAYER");
-        AVPlayer *player = [self setupPlayerForPost:post];
-        [self.players addObject:player];
-        [self.videoPlayer play];
-    }
-    else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
-        [self.players addObject:imageView];
-        NSLog(@"ADDING IMAGE VIEW");
-    }
-    else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
-        NSLog(@"RESUMING PLAYER");
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            FRSPlayer *player = (FRSPlayer *)self.players[page];
-            if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
-                self.videoPlayer = player;
-                [player play];
-            }
-            else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
-                [player pause];
-            }
-          });
+    if (self.players.count < page) {
+        if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && page > self.players.count) {
+            NSLog(@"NEW PLAYER");
+            AVPlayer *player = [self setupPlayerForPost:post];
+            [self.players addObject:player];
+            [self.videoPlayer play];
+        }
+        else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
+            [self.players addObject:imageView];
+            NSLog(@"ADDING IMAGE VIEW");
+        }
+        else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
+            NSLog(@"RESUMING PLAYER");
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                FRSPlayer *player = (FRSPlayer *)self.players[page];
+                if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
+                    self.videoPlayer = player;
+                    [player play];
+                }
+                else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
+                    [player pause];
+                }
+            });
         }
     }
     
