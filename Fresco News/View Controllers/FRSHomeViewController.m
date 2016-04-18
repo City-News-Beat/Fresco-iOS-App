@@ -222,8 +222,7 @@
             [self configureSpinner];
         }
     }
-    
-    [self flushCache:Nil];
+    [self reloadFromLocal];
 }
 
 -(NSInteger)galleryExists:(NSString *)galleryID {
@@ -243,10 +242,13 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     
+    [self flushCache:Nil];
+    
     if (!self.dataSource) {
         self.dataSource = [[NSMutableArray alloc] init];
         self.highlights = [[NSMutableArray alloc] init];
     }
+    
     
     NSInteger localIndex = 0;
     
@@ -262,8 +264,6 @@
     
     NSError *cacheError;
     [[NSManagedObjectContext MR_defaultContext] save:&cacheError];
-    
-    NSLog(@"CACHE ERR: %@", cacheError);
 }
 
 -(void)reloadFromLocal {
@@ -291,12 +291,23 @@
 -(void)flushCache:(NSArray *)received
 {
     NSArray *result = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    NSError *saveError;
+    NSMutableArray *toBeDeleted = [[NSMutableArray alloc] init];
     
-    for (FRSGallery *gallery in result) {
-        [[NSManagedObjectContext MR_defaultContext] deleteObject:gallery];
+    for (FRSGallery *gal in result) {
+        BOOL toKeep = FALSE;
+        for (FRSGallery *cur in self.dataSource) {
+            if ([cur.uid isEqualToString:gal.uid]) {
+                toKeep = TRUE;
+            }
+        }
+        
+        if (!toKeep) {
+            [toBeDeleted addObject:gal];
+        }
     }
     
+    NSError *saveError;
+    [[NSManagedObjectContext MR_defaultContext] MR_deleteObjects:toBeDeleted];
     [[NSManagedObjectContext MR_defaultContext] save:&saveError];
     NSLog(@"FLUSH ERR: %@", saveError);
 }
