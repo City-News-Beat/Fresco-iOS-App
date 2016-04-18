@@ -15,5 +15,6 @@
     BOOL needsUpdate;
     
     NSArray *pulledFromCache;
+    NSMutableArray *reloadedFrom;
 }
 @end

@@ -47,6 +47,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    reloadedFrom = [[NSMutableArray alloc] init];
     
     [self configureUI];
     [self addNotificationObservers];
@@ -357,6 +358,13 @@
     isLoading = TRUE;
     FRSGallery *lastGallery = [self.dataSource lastObject];
     NSString *offsetID = lastGallery.uid;
+    
+    if ([reloadedFrom containsObject:offsetID]) {
+        return;
+    }
+    
+    [reloadedFrom addObject:offsetID];
+    
     
     if (lastOffset == self.dataSource.count) {
         NSLog(@"NOT RELOADING");
