@@ -203,7 +203,7 @@
         [self cacheLocalData:galleries];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
-        [self.tableView reloadData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }];
 }
 

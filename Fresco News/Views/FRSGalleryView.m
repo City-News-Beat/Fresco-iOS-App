@@ -253,13 +253,15 @@
     videoPlayer.container = container;
     playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
     
-    [container.layer addSublayer:playerLayer];
-    [self.scrollView addSubview:container];
-    [self.scrollView bringSubviewToFront:container];
-    
-    if (self.delegate) {
-        [self.delegate playerWillPlay:self.videoPlayer];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [container.layer addSublayer:playerLayer];
+        [self.scrollView addSubview:container];
+        [self.scrollView bringSubviewToFront:container];
+        
+        if (self.delegate) {
+            [self.delegate playerWillPlay:self.videoPlayer];
+        }
+    });
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
