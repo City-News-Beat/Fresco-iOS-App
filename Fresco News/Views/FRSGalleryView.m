@@ -629,7 +629,7 @@
     
     if (self.players.count > page) {
     
-    if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && self.players.count <= page) {
+    if (post.videoUrl != Nil && ![post.videoUrl isEqual:[NSNull null]] && page < self.players.count) {
         NSLog(@"NEW PLAYER");
         AVPlayer *player = [self setupPlayerForPost:post];
         [self.players addObject:player];
