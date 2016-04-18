@@ -47,6 +47,7 @@
             [player replaceCurrentItemWithPlayerItem:Nil];
         }
     }
+    
     [self breakDownPlayer:self.playerLayer];
     
     self.clipsToBounds = NO;
@@ -129,7 +130,15 @@
     if (self){
         self.delegate = delegate;
         self.gallery = gallery;
-        self.orderedPosts = [self.gallery.posts allObjects];
+        NSMutableArray *posts = [[NSMutableArray alloc] init];
+        
+        for (FRSPost *post in self.gallery.posts) {
+            [posts addObject:post];
+        }
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
+        [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+
+        self.orderedPosts = posts;
         [self configureUI];
     }
     return self;
