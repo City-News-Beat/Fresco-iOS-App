@@ -209,7 +209,21 @@
 
 -(void)fetchLocalData {
     NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES inContext:[NSManagedObjectContext MR_defaultContext]];
-    
+
+    stored = [stored sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        FRSGallery *gallery1 = obj1;
+        FRSGallery *gallery2 = obj2;
+        
+        if ([[gallery1 valueForKey:@"index"] intValue] < [[gallery2 valueForKey:@"index"] intValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        else if ([[gallery1 valueForKey:@"index"] intValue] < [[gallery2 valueForKey:@"index"] intValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+
     pulledFromCache = stored;
     
     _dataSource = [NSMutableArray arrayWithArray:stored];
@@ -250,10 +264,10 @@
     
     
     NSInteger localIndex = 0;
-    
+    NSLog(@"%@", localData);
     for (NSDictionary *gallery in localData) {
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         
-        FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:[NSManagedObjectContext MR_defaultContext]];
         [galleryToSave configureWithDictionary:gallery context:[NSManagedObjectContext MR_defaultContext]];
         [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
         [self.dataSource addObject:galleryToSave];
@@ -263,6 +277,8 @@
     
     NSError *cacheError;
     [[NSManagedObjectContext MR_defaultContext] save:&cacheError];
+    
+    NSLog(@"%@", cacheError);
 }
 
 -(void)reloadFromLocal {

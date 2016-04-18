@@ -166,8 +166,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)addPanGesture {
-    //UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
-   // [self.view addGestureRecognizer:zoomGesture];
+    UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
+   [self.view addGestureRecognizer:zoomGesture];
 }
 
 -(void)zoom:(UIPinchGestureRecognizer *)recognizer {
