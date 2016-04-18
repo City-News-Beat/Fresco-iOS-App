@@ -14,13 +14,14 @@
 
 
 @property (nonatomic, readwrite) BOOL AVSetupSuccess;
-
+@property (nonatomic, retain) AVCaptureVideoDataOutput *videoOutput;
 
 //@property (nonatomic, assign) BOOL capturingStilImage;
 
 @end
 
 @implementation FRSAVSessionManager
+
 
 +(instancetype)defaultManager{
     static FRSAVSessionManager *_manager = nil;
@@ -109,11 +110,6 @@
     
 }
 
--(void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    
-    NSLog(@"anything");
-    // do the other things you want
-}
 -(void)configureInputsOutputs{
     
     //VIDEO INPUT
@@ -142,31 +138,15 @@
     
     //VIDEO OUTPUT
     
-    AVCaptureVideoDataOutput* videoOutput = [[AVCaptureVideoDataOutput alloc] init];
-    
-    // create a queue to run the capture on
-    dispatch_queue_t captureQueue=dispatch_queue_create("captureQueue", NULL);
-    
-    // setup our delegate
-    [videoOutput setSampleBufferDelegate:self queue:captureQueue];
-
     self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
     if ( [self.session canAddOutput:self.movieFileOutput] ) {
         [self.session addOutput:self.movieFileOutput];
-        [self.session addOutput:videoOutput];
+        
         AVCaptureConnection *connection = [self.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
         if ( connection.isVideoStabilizationSupported ) {
             connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
         }
         
-        AVCaptureVideoDataOutput* videoOutput = [[AVCaptureVideoDataOutput alloc] init];
-        
-        // create a queue to run the capture on
-        dispatch_queue_t captureQueue=dispatch_queue_create("captureQueue", NULL);
-        
-        // setup our delegate
-        [videoOutput setSampleBufferDelegate:self queue:captureQueue];
-        [self.session addOutput:videoOutput];
         // configure the pixel format
         // Add the input and output
 
