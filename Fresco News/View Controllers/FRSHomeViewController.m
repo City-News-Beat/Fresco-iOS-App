@@ -284,8 +284,7 @@
         localIndex++;
     }
     
-    NSError *cacheError;
-    [[self.appDelegate managedObjectContext] save:&cacheError];
+    [self.appDelegate saveContext];
 }
 
 -(void)reloadFromLocal {
@@ -322,9 +321,7 @@
         [[self.appDelegate managedObjectContext] deleteObject:gal];
     }
     
-    NSError *saveError;
-    [[self.appDelegate managedObjectContext] save:&saveError];
-    NSLog(@"FLUSH ERR: %@", saveError);
+    [self.appDelegate saveContext];
 }
 
 #pragma mark - UITableView DataSource
