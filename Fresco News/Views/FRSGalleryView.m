@@ -38,6 +38,7 @@
 */
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    self.players = [[NSMutableArray alloc] init];
     
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
@@ -47,7 +48,6 @@
         }
     }
     [self breakDownPlayer:self.playerLayer];
-    self.players = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -130,7 +130,6 @@
         self.delegate = delegate;
         self.gallery = gallery;
         self.orderedPosts = [self.gallery.posts allObjects];
-        self.players = [[NSMutableArray alloc] init];
         [self configureUI];
     }
     return self;
@@ -190,21 +189,20 @@
             imageView.backgroundColor = [UIColor whiteColor];
             imageView.clipsToBounds = YES;
             imageView.indexInScrollView = i;
+            
+            [self.imageViews addObject:imageView];
             [self.scrollView addSubview:imageView];
 
-            [self.imageViews addObject:imageView];
-            
                 if (i==0) {
                     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                    if (post.videoUrl != Nil || [post isEqual:[NSNull null]]) {
+                    if (post.videoUrl != Nil) {
                         // videof
                         // set up FRSPlayer
                         // add AVPlayerLayer
                         NSLog(@"TOP LEVEL PLAYER");
-                        FRSPlayer *player = [self setupPlayerForPost:post];
-                        [self.players addObject:player];
-                        [self.scrollView bringSubviewToFront:player.container];
+                        [self scrollViewDidScroll:self.scrollView];
+                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
                     }
                     else {
                         [self.players addObject:imageView];
@@ -237,34 +235,31 @@
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
     videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self
                                                 selector:@selector(playerItemDidReachEnd:)
-                                                    name:AVPlayerItemDidPlayToEndTimeNotification
+                                                name:AVPlayerItemDidPlayToEndTimeNotification
                                                 object:[videoPlayer currentItem]];
         
     NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-    UIImageView *imageView  = self.imageViews[0];
         
-    playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, imageView.frame.size.height);
-    playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+    playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
         
-    UIView *container = [[UIView alloc] initWithFrame:self.playerLayer.frame];
+    UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
     container.backgroundColor = [UIColor clearColor];
-   
+        
     videoPlayer.container = container;
     playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [container.layer addSublayer:playerLayer];
-        [self.scrollView addSubview:container];
-        [self.scrollView bringSubviewToFront:container];
-        
-        if (self.delegate) {
-            [self.delegate playerWillPlay:self.videoPlayer];
-        }
-    });
+    [container.layer insertSublayer:playerLayer atIndex:1000];
+    [self.scrollView addSubview:container];
+    [self.scrollView bringSubviewToFront:container];
+    
+    if (self.delegate) {
+        [self.delegate playerWillPlay:self.videoPlayer];
+    }
     
     return videoPlayer;
 }
@@ -280,12 +275,12 @@
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
     FRSPlayer *player = self.players[page];
-    
+    NSLog(@"%@", self.players);
     if (![player respondsToSelector:@selector(play)]) {
         return;
     }
     
-    if (player.rate != 1.0) {
+    if (player.rate == 0.0) {
         [player play];
     }
     else {
