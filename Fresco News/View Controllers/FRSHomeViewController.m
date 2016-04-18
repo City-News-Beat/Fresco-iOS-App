@@ -208,17 +208,15 @@
 }
 
 -(void)fetchLocalData {
+    
     NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES withPredicate:Nil];
+
     pulledFromCache = stored;
     
-    _dataSource = [[NSMutableArray alloc] init];
-    _highlights = [[NSMutableArray alloc] init];
-    
-    [_dataSource addObjectsFromArray:stored];
-    [_highlights addObjectsFromArray:stored];
+    _dataSource = [NSMutableArray arrayWithArray:stored];
+    _highlights = _dataSource;
     
     if ([_dataSource count] > 0) {
-        [self.tableView reloadData];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
     }
@@ -227,6 +225,8 @@
             [self configureSpinner];
         }
     }
+    
+    [self flushCache:Nil];
 }
 
 -(NSInteger)galleryExists:(NSString *)galleryID {
@@ -251,7 +251,6 @@
         self.highlights = [[NSMutableArray alloc] init];
     }
     
-    [self flushCache:Nil];
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         NSInteger localIndex = 0;
         
@@ -281,21 +280,33 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        BOOL shouldAnimate = TRUE;
+        FRSGallery *currentGallery = self.dataSource.firstObject;
+        FRSGallery *newGallery = temp.firstObject;
+        
+        if ([[currentGallery valueForKey:@"index"] integerValue] == [[newGallery valueForKey:@"index"] integerValue]) {
+            shouldAnimate = FALSE;
+        }
+        
         self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
         self.highlights = [[NSMutableArray alloc] initWithArray:temp];
         
-        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (shouldAnimate) {
+            [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        else {
+            [self.tableView reloadData];
+        }
     });
 }
 
--(void)flushCache:(NSArray *)received {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        for (FRSGallery *gallery in pulledFromCache) {
-            [gallery MR_deleteEntityInContext:localContext];
-        }
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"Flush: %d %@", contextDidSave, error);
-    }];
+-(void)flushCache:(NSArray *)received
+{
+    NSArray *result = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    for (FRSGallery *gallery in result) {
+        [[NSManagedObjectContext MR_defaultContext] deleteObject:gallery];
+    }
 }
 
 #pragma mark - UITableView DataSource

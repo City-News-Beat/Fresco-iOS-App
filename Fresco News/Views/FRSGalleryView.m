@@ -577,8 +577,9 @@
     
     UIImageView *imageView;
     FRSPost *post;
-    imageView = self.imageViews[page];
-    post = self.orderedPosts[page];
+    imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
+    post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
+
 
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     
