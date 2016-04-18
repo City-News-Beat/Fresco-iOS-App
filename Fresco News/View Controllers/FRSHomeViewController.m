@@ -84,13 +84,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row == self.dataSource.count) {
-        return;
-    }
-    
+
     FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
-    [galleryCell pause];
+    if ([galleryCell respondsToSelector:@selector(pause)]) {
+        [galleryCell pause];
+    }
 }
 
 
@@ -208,9 +206,8 @@
 }
 
 -(void)fetchLocalData {
+    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES inContext:[NSManagedObjectContext MR_defaultContext]];
     
-    NSArray *stored = [FRSGallery MR_findAllSortedBy:@"index" ascending:YES withPredicate:Nil];
-
     pulledFromCache = stored;
     
     _dataSource = [NSMutableArray arrayWithArray:stored];
@@ -258,55 +255,50 @@
             
             FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:localContext];
             [galleryToSave configureWithDictionary:gallery context:localContext];
-            [galleryToSave setValue:@(localIndex) forKey:@"index"];
+            [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
             localIndex++;
         }
         
         
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        NSLog(@"Cache: %d %@", contextDidSave, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadFromLocal];
+        });
     }];
     
     // actual use
+
+}
+
+-(void)reloadFromLocal {
     
-    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    BOOL shouldAnimate = TRUE;
+    FRSGallery *currentGallery = self.dataSource.firstObject;
+    FRSGallery *newGallery = [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] gallery];
     
-    for (NSDictionary *gallery in localData) {
-        FRSGallery *use = [FRSGallery MR_createEntity];
-        [use configureWithDictionary:gallery];
-        [temp addObject:use];
+    if ([[currentGallery valueForKey:@"index"] integerValue] == [[newGallery valueForKey:@"index"] integerValue]) {
+        shouldAnimate = FALSE;
     }
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
         
-        BOOL shouldAnimate = TRUE;
-        FRSGallery *currentGallery = self.dataSource.firstObject;
-        FRSGallery *newGallery = temp.firstObject;
-        
-        if ([[currentGallery valueForKey:@"index"] integerValue] == [[newGallery valueForKey:@"index"] integerValue]) {
-            shouldAnimate = FALSE;
-        }
-        
-        self.dataSource = [[NSMutableArray alloc] initWithArray:temp];
-        self.highlights = [[NSMutableArray alloc] initWithArray:temp];
-        
-        if (shouldAnimate) {
-            [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-        else {
-            [self.tableView reloadData];
-        }
-    });
+    if (shouldAnimate) {
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else {
+        [self.tableView reloadData];
+    }
 }
 
 -(void)flushCache:(NSArray *)received
 {
     NSArray *result = [FRSGallery MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
+    NSError *saveError;
     
     for (FRSGallery *gallery in result) {
         [[NSManagedObjectContext MR_defaultContext] deleteObject:gallery];
     }
+    
+    [[NSManagedObjectContext MR_defaultContext] save:&saveError];
+    NSLog(@"FLUSH ERR: %@", saveError);
 }
 
 #pragma mark - UITableView DataSource
@@ -387,9 +379,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-                [self.tableView endUpdates];
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                 needsUpdate = TRUE;
             });
         }];
@@ -398,7 +388,7 @@
 
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-        if (cell.player && cell.player != player) {
+        if (cell.player && cell.player != player && [cell respondsToSelector:@selector(pause)]) {
             [cell.player pause];
         }
     }
