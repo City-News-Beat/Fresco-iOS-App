@@ -176,6 +176,10 @@
 
 -(void)configureImageViews{
     
+    if (!self.players) {
+        self.players = [[NSMutableArray alloc] init];
+    }
+    
     self.imageViews = [NSMutableArray new];
     
         for (NSInteger i = 0; i < self.gallery.posts.count; i++){
@@ -194,16 +198,13 @@
                 if (i==0) {
                     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                if (post.videoUrl != Nil && ![post isEqual:[NSNull null]]) {
-                    // videof
-                    // set up FRSPlayer
-                    // add AVPlayerLayer
-                    NSLog(@"TOP LEVEL PLAYER");
-                    [self setupPlayerForPost:post];
-                }
-                else {
-                    [self.players addObject:imageView];
-                }
+                    if (post.videoUrl != Nil || [post isEqual:[NSNull null]]) {
+                        // videof
+                        // set up FRSPlayer
+                        // add AVPlayerLayer
+                        NSLog(@"TOP LEVEL PLAYER");
+                        [self setupPlayerForPost:post];
+                    }
             }
            
             imageView.userInteractionEnabled = YES;
@@ -228,18 +229,16 @@
     }
 }
 
--(void)setupPlayerForPost:(FRSPost *)post {
+-(AVPlayer *)setupPlayerForPost:(FRSPost *)post {
+    
+    if (self.players.count > [self.orderedPosts indexOfObject:post]) {
+        return Nil;
+    }
     
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
     videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     
-    if (!self.players) {
-        self.players = [[NSMutableArray alloc] init];
-    }
-    
-    [self.players addObject:videoPlayer];
-        
     [[NSNotificationCenter defaultCenter] addObserver:self
                                                 selector:@selector(playerItemDidReachEnd:)
                                                     name:AVPlayerItemDidPlayToEndTimeNotification
@@ -267,6 +266,8 @@
             [self.delegate playerWillPlay:self.videoPlayer];
         }
     });
+    
+    return videoPlayer;
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
@@ -617,7 +618,8 @@
     if (self.players.count > page) {
     
     if (post.videoUrl != Nil && self.players.count < page) {
-        [self setupPlayerForPost:post];
+        AVPlayer *player = [self setupPlayerForPost:post];
+        [self.players addObject:player];
         [self.videoPlayer play];
     }
     else if (self.players.count > page && self.imageViews.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
