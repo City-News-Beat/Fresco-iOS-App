@@ -1811,6 +1811,30 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)analyzeMovement:(NSArray *)movement {
-   
+    if (movement.count < 3) {
+        return;
+    }
+    
+    NSDictionary *first = [movement lastObject];
+    NSDictionary *second = [movement objectAtIndex:movement.count-2];
+    NSDictionary *third = [movement objectAtIndex:movement.count-3];
+    
+    float x1 = [first[@"x"] floatValue];
+    float x2 = [second[@"x"] floatValue];
+    float x3 = [third[@"x"] floatValue];
+    
+    if (x1 < 0) {
+        x1 *=-1;
+        x2 *=-1;
+        x3 *=-1;
+    }
+    
+    if (x1 > .98) {
+        NSLog(@"Wobble");
+    }
+}
+
+-(void)handleWobble {
+    
 }
 @end
