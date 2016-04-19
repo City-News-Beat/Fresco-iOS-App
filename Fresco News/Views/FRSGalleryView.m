@@ -28,15 +28,6 @@
 
 @implementation FRSGalleryView
 
-/*
-/
- / Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 -(void)loadGallery:(FRSGallery *)gallery {
     self.players = [[NSMutableArray alloc] init];
     
@@ -277,6 +268,7 @@
     
     CGPoint point = [tap locationInView:self];
     
+    // ensures point is in player area
     if (point.y > self.scrollView.frame.size.height) {
         return;
     }
@@ -289,6 +281,7 @@
     
     FRSPlayer *player = self.players[page];
     
+    // ensures FRSPlayer not view
     if (![player respondsToSelector:@selector(play)]) {
         return;
     }
