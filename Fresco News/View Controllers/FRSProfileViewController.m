@@ -23,6 +23,7 @@
 #import "Fresco.h"
 
 #import "FRSTrimTool.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -91,16 +92,18 @@
         }
         
         NSMutableArray *mArr = [NSMutableArray new];
-        
+        FRSAppDelegate  *delegate = [[UIApplication sharedApplication] delegate];
         NSArray *galleries = responseObject;
         for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
+            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
+            [gallery configureWithDictionary:dict context:delegate.managedObjectContext];
             [mArr addObject:gallery];
         }
         
+        
         self.galleries = [mArr copy];
         [self.tableView reloadData];
+        [delegate.managedObjectContext rollback];
 
     }];
 }
