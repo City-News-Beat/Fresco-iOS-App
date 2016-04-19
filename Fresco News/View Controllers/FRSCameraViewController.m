@@ -358,11 +358,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [self luminanceOfImage:outputImage];
     });
 
-    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:1];
+    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];
 }
 
 -(void)luminanceOfImage:(UIImage *)inputImage {
-   
+   //check for thumb
 }
 
 -(void)configurePreviewLayer {

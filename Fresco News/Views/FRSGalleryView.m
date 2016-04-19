@@ -29,8 +29,6 @@
 @implementation FRSGalleryView
 
 -(void)loadGallery:(FRSGallery *)gallery {
-    self.players = [[NSMutableArray alloc] init];
-    
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
             [player.container removeFromSuperview];
