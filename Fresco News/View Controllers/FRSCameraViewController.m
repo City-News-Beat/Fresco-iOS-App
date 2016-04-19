@@ -1787,7 +1787,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             return;
         }
         
-        if (fabs(lastZ-wobbleRate) > .1) {
+        if (fabs(lastZ-wobbleRate) > .15) {
             NSLog(@"STOP WOBBLING");
         }
         
