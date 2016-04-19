@@ -183,39 +183,37 @@
 }
 
 -(void)configureImageViews{
-    if (!self.players) {
-        self.players = [[NSMutableArray alloc] init];
-    }
+    self.players = [[NSMutableArray alloc] init];
     self.imageViews = [NSMutableArray new];
     
-        for (NSInteger i = 0; i < self.gallery.posts.count; i++){
+    for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
-            FRSPost *post = self.orderedPosts[i];
+        FRSPost *post = self.orderedPosts[i];
             
-            NSInteger xOrigin = i * self.frame.size.width;
-            FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            imageView.backgroundColor = [UIColor whiteColor];
-            imageView.clipsToBounds = YES;
-            imageView.indexInScrollView = i;
+        NSInteger xOrigin = i * self.frame.size.width;
+        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.clipsToBounds = YES;
+        imageView.indexInScrollView = i;
             
-            [self.imageViews addObject:imageView];
-            [self.scrollView addSubview:imageView];
+        [self.imageViews addObject:imageView];
+        [self.scrollView addSubview:imageView];
 
-                if (i==0) {
-                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+            if (i==0) {
+                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                    if (post.videoUrl != Nil) {
-                        // videof
-                        // set up FRSPlayer
-                        // add AVPlayerLayer
-                        NSLog(@"TOP LEVEL PLAYER");
-                        [self scrollViewDidScroll:self.scrollView];
-                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
-                    }
-                    else {
-                        [self.players addObject:imageView];
-                    }
+                if (post.videoUrl != Nil) {
+                    // videof
+                    // set up FRSPlayer
+                    // add AVPlayerLayer
+                    NSLog(@"TOP LEVEL PLAYER");
+                    [self scrollViewDidScroll:self.scrollView];
+                    [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                }
+                else {
+                    [self.players addObject:imageView];
+                }
             }
            
             imageView.userInteractionEnabled = YES;
