@@ -281,7 +281,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
-    
+    [self.motionManager stopGyroUpdates];
     [self shouldShowStatusBar:YES animated:YES];
     
 }
@@ -1777,6 +1777,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         if (rotationRate > .5) {
             [self alertUserOfFastPan];
         }
+        
+        CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
+        NSLog(@"%f", wobbleRate);
     }];
 
 }
@@ -1784,7 +1787,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
-    [self checkWobble:acceleration];
     UIDeviceOrientation orientationNew;
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
@@ -1824,56 +1826,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
 }
 
--(void)checkWobble:(CMAcceleration)acceleration {
-
-    if (!self.positions) {
-        self.positions = [[NSMutableArray alloc] init];
-    }
-    
-    NSDictionary *data = @{@"x":@(acceleration.x), @"y":@(acceleration.y), @"z":@(acceleration.x)};
-    [self.positions addObject:data];
-    [self analyzeMovement:self.positions];
-}
-
--(void)analyzeMovement:(NSArray *)movement {
-    [self handleWobble:movement];
-    [self handlePan:movement];
-}
-
--(void)handlePan:(NSArray *)movement {
-    
-}
-
--(void)handleWobble:(NSArray *)movement {
-    if (movement.count < 3) {
-        return;
-    }
-    
-    NSDictionary *first = [movement lastObject];
-    NSDictionary *second = [movement objectAtIndex:movement.count-2];
-    NSDictionary *third = [movement objectAtIndex:movement.count-3];
-    
-    float x1 = [first[@"x"] floatValue];
-    float x2 = [second[@"x"] floatValue];
-    float x3 = [third[@"x"] floatValue];
-    
-    if (x1 < 0) {
-        x1 *=-1;
-    }
-    if (x2 < 0) {
-        x2 *=-1;
-    }
-    if (x3 < 0) {
-        x3 *=-1;
-    }
-    
-    float threshold = 1.1;
-    
-    if (x1 > threshold && x2 > threshold && x3 > threshold) {
-        [self alertUserOfWobble];
-    }
-
-}
 
 -(void)alertUserOfFastPan {
     NSLog(@"PAN SLOWER");
