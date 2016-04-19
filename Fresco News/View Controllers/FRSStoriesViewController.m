@@ -206,6 +206,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.appDelegate.managedObjectContext save:Nil];
+            [self.appDelegate saveContext];
         });
     }];
 }
@@ -225,21 +227,21 @@
             return;
         }
         
+        NSInteger index = self.stories.count;
+        NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
         for (NSDictionary *storyDict in stories){
-            NSInteger index = self.stories.count;
         
             FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
             
             [story configureWithDictionary:storyDict];
             [self.stories addObject:story];
-            //[storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+            [storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
             index++;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-               /* [self.tableView beginUpdates];
+                [self.tableView beginUpdates];
                 [self.tableView insertRowsAtIndexPaths:storiesToLoad withRowAnimation:UITableViewRowAnimationFade];
-                [self.tableView endUpdates]; */
-                [self.tableView reloadData];
+                [self.tableView endUpdates];
             });
         }
     }];
