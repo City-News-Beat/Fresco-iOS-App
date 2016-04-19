@@ -356,54 +356,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self luminanceOfImage:outputImage];
-        [self.view addSubview:outputImage];
     });
 
     [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:1];
 }
 
 -(void)luminanceOfImage:(UIImage *)inputImage {
-    CGImageRef inputCGImage = [inputImage CGImage];
-    NSUInteger width = CGImageGetWidth(inputCGImage);
-    NSUInteger height = CGImageGetHeight(inputCGImage);
-    
-    // 2.
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bytesPerRow = bytesPerPixel * width;
-    NSUInteger bitsPerComponent = 8;
-    
-    UInt32 * pixels;
-    pixels = (UInt32 *) calloc(height * width, sizeof(UInt32));
-    
-    // 3.
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(pixels, width, height, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    
-    // 4.
-    CGContextDrawImage(context, CGRectMake(0, 0, width, height), inputCGImage);
-    
-    // 5. Cleanup
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(context);
    
-#define Mask8(x) ( (x) & 0xFF )
-#define R(x) ( Mask8(x) )
-#define G(x) ( Mask8(x >> 8 ) )
-#define B(x) ( Mask8(x >> 16) )
-    
-    NSLog(@"Brightness of image:");
-    // 2.
-    UInt32 * currentPixel = pixels;
-    for (NSUInteger j = 0; j < height; j++) {
-        for (NSUInteger i = 0; i < width; i++) {
-            // 3.
-            UInt32 color = *currentPixel;
-            printf("%3.0f ", (R(color)+G(color)+B(color))/3.0);
-            // 4.
-            currentPixel++;
-        }
-        printf("\n");
-    }
 }
 
 -(void)configurePreviewLayer {
