@@ -103,8 +103,6 @@
         
         self.galleries = [mArr copy];
         [self.tableView reloadData];
-        [delegate.managedObjectContext rollback];
-
     }];
 }
 
