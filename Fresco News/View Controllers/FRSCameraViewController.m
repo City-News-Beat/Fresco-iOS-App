@@ -1868,7 +1868,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         x3 *=-1;
     }
     
-    float threshold = .9;
+    float threshold = 1.2;
     
     if (x1 > threshold && x2 > threshold && x3 > threshold) {
         [self alertUserOfWobble];
@@ -1877,10 +1877,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)alertUserOfFastPan {
-    
+    NSLog(@"PAN SLOWER");
 }
 
 -(void)alertUserOfWobble {
-    
+    NSLog(@"STOP WOBBLING");
 }
 @end
