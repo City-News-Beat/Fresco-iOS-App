@@ -382,6 +382,8 @@
     lastOffset = self.dataSource.count;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+        
         [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
                         
             if ([galleries count] == 0){
@@ -397,11 +399,14 @@
                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                 [self.dataSource addObject:galleryToSave];
                 [self.highlights addObject:galleryToSave];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
                 index++;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
+                [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView endUpdates];
                 needsUpdate = TRUE;
             });
         }];

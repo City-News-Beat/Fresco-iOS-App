@@ -190,7 +190,9 @@
         [self.scrollView addSubview:imageView];
 
             if (i==0) {
-                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+                });
 
                 if (post.videoUrl != Nil) {
                     // videof
