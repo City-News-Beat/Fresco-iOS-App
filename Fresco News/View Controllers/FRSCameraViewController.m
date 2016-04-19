@@ -1776,7 +1776,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
         if (rotationRate > .5) {
             [self alertUserOfFastPan];
-            NSLog(@"PANNING TOO QUICKLY");
         }
     }];
 
@@ -1868,7 +1867,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         x3 *=-1;
     }
     
-    float threshold = 1.2;
+    float threshold = 1.1;
     
     if (x1 > threshold && x2 > threshold && x3 > threshold) {
         [self alertUserOfWobble];
