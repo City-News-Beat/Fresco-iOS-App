@@ -213,8 +213,16 @@
 }
 
 -(void)fetchLocalAssignments {
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+    NSManagedObjectContext *moc = [delegate managedObjectContext];
     
-
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+    request.predicate = predicate;
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    self.assignments = [NSMutableArray arrayWithArray:stored];
+    [self configureAnnotationsForMap];
 }
 
 -(void)cacheAssignments {
