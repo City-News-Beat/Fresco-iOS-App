@@ -1766,6 +1766,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                                      NSLog(@"%@", error);
                                                  }
                                              }];
+    
+    if (!_motionManager) {
+        _motionManager = [[CMMotionManager alloc] init];
+        _motionManager.gyroUpdateInterval = 2;
+    }
+    
+    [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
+        CGFloat rotationRate = fabs(gyroData.rotationRate.x);
+        if (rotationRate > .3) {
+            NSLog(@"PANNING TOO QUICKLY");
+        }
+    }];
+
 }
 
 
