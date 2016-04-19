@@ -1753,7 +1753,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)handleGyro:(CMGyroData *)gyroData {
-    
+
 }
 
 
@@ -1811,6 +1811,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)analyzeMovement:(NSArray *)movement {
+    NSLog(@"%@", movement);
+}
+
+-(void)handleWobble:(NSArray *)movement {
     if (movement.count < 3) {
         return;
     }
@@ -1832,9 +1836,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (x1 > .98) {
         NSLog(@"Wobble");
     }
-}
 
--(void)handleWobble {
-    
 }
 @end
