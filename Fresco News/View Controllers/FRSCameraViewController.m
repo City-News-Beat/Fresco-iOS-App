@@ -1778,8 +1778,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             [self alertUserOfFastPan];
         }
         
-        CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
-        NSLog(@"%f", wobbleRate);
+        //CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
+        //NSLog(@"%f", wobbleRate);
     }];
 
 }
