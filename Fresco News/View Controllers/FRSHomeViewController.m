@@ -401,6 +401,7 @@
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.appDelegate.managedObjectContext rollback];
                 [self.tableView reloadData];
                 needsUpdate = TRUE;
             });

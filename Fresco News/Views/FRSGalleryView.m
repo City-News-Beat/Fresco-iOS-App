@@ -807,7 +807,7 @@
 -(void)play {
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     
-    if (self.players.count >= page) {
+    if (self.players.count > page) {
         if ([self.players[page] respondsToSelector:@selector(play)]) {
             [(AVPlayer *)self.players[page] play];
         }

@@ -1416,7 +1416,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 }
 
--(void)toggleVideoRecording{
+-(void)toggleVideoRecording {
     
     if (self.sessionManager.movieFileOutput.isRecording) {
     
@@ -1627,7 +1627,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     });
 }
 
-
 -(void)runVideoRecordAnimation{
     
     self.captureModeToggleView.alpha = 0.0;
@@ -1787,7 +1786,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             return;
         }
         
-        if (fabs(lastZ-wobbleRate) > .15) {
+        if (fabs(lastZ-wobbleRate) > .12) {
             NSLog(@"STOP WOBBLING");
         }
         
