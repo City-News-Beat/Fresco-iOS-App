@@ -270,6 +270,8 @@
         [self.delegate playerWillPlay:self.videoPlayer];
     }
     
+    videoPlayer.muted = TRUE;
+    
     return videoPlayer;
 }
 
@@ -291,6 +293,10 @@
     
     if (![player respondsToSelector:@selector(play)]) {
         return;
+    }
+    
+    if (player.muted) {
+        player.muted = FALSE;
     }
     
     if (player.rate == 0.0) {
