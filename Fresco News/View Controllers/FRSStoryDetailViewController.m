@@ -10,6 +10,8 @@
 #import "FRSGalleryCell.h"
 #import <MagicalRecord/MagicalRecord.h>
 #import "FRSStory+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
+
 @interface FRSStoryDetailViewController ()
 
 @end
@@ -135,9 +137,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.stories = [[NSMutableArray alloc] init];
     
     [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid completion:^(NSArray *galleries, NSError *error) {
-        
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         for (NSDictionary *gallery in galleries) {
-            FRSGallery *galleryObject = [FRSGallery MR_createEntity];
+            FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
             [galleryObject configureWithDictionary:gallery];
             [self.stories addObject:galleryObject];
         }
