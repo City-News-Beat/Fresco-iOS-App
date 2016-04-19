@@ -8,6 +8,7 @@
 
 #import "FRSAssignmentsViewController.h"
 #import "FRSTabBarController.h"
+#import "FRSCameraViewController.h"
 
 #import "FRSLocationManager.h"
 
@@ -536,6 +537,7 @@
     [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchDown];
     [self.assignmentBottomBar addSubview:button];
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
@@ -731,6 +733,20 @@
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 0;
     } completion:nil];
+}
+
+-(void)acceptAssignment {
+    NSLog(@"acceptAssignment");
+    
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+        [self.tabBarController setSelectedIndex:3];//should return to assignments 
+    }];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
