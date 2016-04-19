@@ -349,7 +349,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)checkThumb {
     
-    UIGraphicsBeginImageContextWithOptions(self.captureVideoPreviewLayer.frame.size, NO, 0);
+    /*UIGraphicsBeginImageContextWithOptions(self.captureVideoPreviewLayer.frame.size, NO, 0);
     [self.captureVideoPreviewLayer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -358,7 +358,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [self luminanceOfImage:outputImage];
     });
 
-    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];
+    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];*/
 }
 
 -(void)luminanceOfImage:(UIImage *)inputImage {
@@ -1774,7 +1774,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
-        if (rotationRate > .3) {
+        if (rotationRate > .5) {
             NSLog(@"PANNING TOO QUICKLY");
         }
     }];
