@@ -15,6 +15,8 @@
 @property (strong, nonatomic) UITextField *searchTextField;
 @property (strong, nonatomic) UIButton *clearButton;
 
+@property (strong, nonatomic) UIButton *backTapButton;
+
 @end
 
 @implementation FRSSearchViewController
@@ -33,8 +35,8 @@
 }
 
 -(void)dismiss{
-
     [self.navigationController popViewControllerAnimated:YES];
+    [self.backTapButton removeFromSuperview];
 }
 
 -(void)clear{
@@ -50,12 +52,28 @@
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     [container addSubview:backButton];
+    
     backButton.tintColor = [UIColor whiteColor];
-    backButton.frame = CGRectMake(-3, 0, 24, 24);
+//    backButton.backgroundColor = [UIColor redColor];
+    backButton.frame = CGRectMake(-15, -12, 48, 48);
+    backButton.imageView.frame = CGRectMake(-12, 0, 48, 48); //this doesnt change anything
+//    backButton.imageView.backgroundColor = [UIColor greenColor];
     [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
+
+    
+    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+    [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+//    self.backTapButton.backgroundColor = [UIColor blueColor];
+    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+    
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+//    [view addGestureRecognizer:tap];
+    
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
+    
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.navigationItem.titleView = titleView;
