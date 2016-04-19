@@ -1746,14 +1746,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                                      NSLog(@"%@", error);
                                                  }
                                              }];
-    
-    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
-        [self handleGyro:gyroData];
-    }];
-}
-
--(void)handleGyro:(CMGyroData *)gyroData {
-
 }
 
 
@@ -1816,12 +1808,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)handlePan:(NSArray *)movement {
-    float y = [movement[0][@"y"] floatValue];
-    y = (y < 0) ? y * -1 : y;
     
-    if (y > .2) {
-        NSLog(@"PAN TOO FAST");
-    }
 }
 
 -(void)handleWobble:(NSArray *)movement {
@@ -1847,10 +1834,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         x3 *=-1;
     }
     
-    float threshold = .98;
+    float threshold = .9;
     
     if (x1 > threshold && x2 > threshold && x3 > threshold) {
-        NSLog(@"Wobble");
+
     }
 
 }
