@@ -87,16 +87,20 @@
     [self removeStatusBarNotification];
 }
 
--(id)initWithUser:(NSString *)user { //UserID should take an FRSUser instead of an NSString
+-(id)initWithUser:(id)user { //UserID should take an FRSUser instead of an NSString
     
     if (self) {
         
         self.presentingUser = YES;
-        [self configureBackButtonAnimated:YES];        
+        [self configureBackButtonAnimated:YES];
+        [self configureNavigationBarForUserProfile:user];
+        [self configureTableView];
+        [self fetchGalleries];
         
     }
     return self;
 }
+
 
 #pragma mark - Fetch Methods
 
@@ -155,6 +159,25 @@
 
 - (void)dealloc{
     [self.tableView dg_removePullToRefresh];
+}
+
+-(void)configureNavigationBarForUserProfile:(id)user {
+    [super removeNavigationBarLine];
+
+    
+    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
+    titleLabel.text = @"@username"; //user.username
+    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor = [UIColor whiteColor];
+    self.navigationItem.titleView = titleLabel;
+
+    
+    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+    
+    self.navigationItem.rightBarButtonItem = followButton;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
 }
 
 -(void)configureNavigationBar{
@@ -563,7 +586,7 @@
 
 #pragma mark - User
 
--(void)configureWithUser:(id)user {
+-(void)configureWithUser:(id)user{
     
 }
 
